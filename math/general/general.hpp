@@ -1,32 +1,80 @@
-#ifndef GENERAL_INCLUDED_
-#define GENERAL_INCLUDED_
+#ifndef GENERAL_INCLUDED_BA1581F2_35C3_4026_BCDA_6E9EC3CF253E
+#define GENERAL_INCLUDED_BA1581F2_35C3_4026_BCDA_6E9EC3CF253E
 
 
 #include <cmath>
-
-#ifdef CAFF_MATH_SIMD
-#include <xmmintrin.h>
-#endif
+#include <algorithm>
 
 
 namespace caffeine {
 namespace math {
 
 
-float sqrt(const float x)
+// Interface
+
+inline float              sqrt(const float x);
+inline float              clamp(const float x, const float between_a, const float between_b);
+
+inline float              cos(const float radians);
+inline float              a_cos(const float radians);
+inline float              sin(const float radians);
+inline float              a_sin(const float radians);
+
+
+// Impl
+
+
+float
+sqrt(const float x)
 {
-	#ifdef CAFF_MATH_SIMD
+  return std::sqrt(x);
+}
 
-	__m128 val = _mm_load_ps1(&x);
-	_mm_sqrt_ss(val);
 
-	return val[0];
+float
+clamp(const float x, const float between_a, const float between_b)
+{
+  const float highest = between_a >= between_b ? between_a : between_b;
+  const float lowest  = between_a != highest ? between_a : between_b;
 
-	#else
+  if(x >= highest)
+  {
+    return highest;
+  }
+  else if(x <= lowest)
+  {
+    return lowest;
+  }
 
-	return std::sqrt(x);
+  return x;
+}
 
-	#endif
+
+float
+cos(const float radians)
+{
+  return std::cos(radians);
+}
+
+
+float
+a_cos(const float radians)
+{
+  return std::acos(radians);
+}
+
+
+float
+sin(const float radians)
+{
+  return std::sin(radians);
+}
+
+
+float
+a_sin(const float radians)
+{
+  return std::asin(radians);
 }
 
 

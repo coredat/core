@@ -1,78 +1,26 @@
 // Test for vector4
 #include "../math/vector/vector.hpp"
+#include "../math/general/to_string.hpp"
+#include "test_asserts.hpp"
 #include <iostream>
 #include <cmath>	
-
-
-bool vector4_is_equal(const caffmath::vector4 a, const caffmath::vector4 b)
-{
-	if(caffmath::vector4_get_x(a) == caffmath::vector4_get_x(b) &&
-	   caffmath::vector4_get_y(a) == caffmath::vector4_get_y(b) &&
-	   caffmath::vector4_get_z(a) == caffmath::vector4_get_z(b))
-	{
-		return true;
-	}
-
-	return false;
-}
-
-bool vector4_is_not_equal(const caffmath::vector4 a, const caffmath::vector4 b)
-{
-	return !vector4_is_equal(a, b);
-}
-
-bool vector4_components_are(const caffmath::vector4 a, const float x, const float y, const float z, const float w)
-{
-	if(caffmath::vector4_get_x(a) == x && caffmath::vector4_get_y(a) == y && caffmath::vector4_get_z(a) == z && caffmath::vector4_get_w(a) == w)
-	{
-		return true;
-	}
-
-	//std::cout << caffmath::vector4_get_x(a) << ", " << caffmath::vector4_get_y(a) << ", " << caffmath::vector4_get_z(a) << ", " << caffmath::vector4_get_w(a) << std::endl;
-
-	return false;
-}
-
-bool vector4_components_are_near(const caffmath::vector4 a, const float x, const float y, const float z, const float w, const float error)
-{
-	const float x_result = caffmath::vector4_get_x(a) - x;
-	const float y_result = caffmath::vector4_get_y(a) - y;
-	const float z_result = caffmath::vector4_get_z(a) - z;
-	const float w_result = caffmath::vector4_get_w(a) - w;
-
-	if(std::abs(x_result) < error && std::abs(y_result) < error && std::abs(z_result) < error && std::abs(z_result) < error)
-	{
-		return true;
-	}
-
-	//std::cout << caffmath::vector4_get_x(a) << ", " << caffmath::vector4_get_y(a) << ", " << caffmath::vector4_get_z(a) << ", " << caffmath::vector4_get_w(a) << std::endl;
-
-	return false;
-}
-
-void vector4_is_equal(const std::string &test, const caffmath::vector4 a, const float b)
-{
-
-}
-
-void vector4_is_near(const std::string &test, const caffmath::vector4 a, const caffmath::vector4 b, const float error)
-{
-
-}
-
-
-void assert_test(const std::string &test, const bool passed)
-{
-	if(!passed)
-	{
-		std::cout << test << " - failed!" << std::endl;
-	}
-}
 
 
 int main()
 {
 	std::cout << "vector 4 tests - started" << std::endl;
+
+	// Test Constants
+	{
+		const caffmath::vector4 zero_vector4 = caffmath::vector4_zero();
+		assert_test("test vector4 const is all zero", vector4_components_are(zero_vector4, 0,0,0,0));
+
+		const caffmath::vector4 one_vector4 = caffmath::vector4_one();
+		assert_test("test vector4 const is all ones", vector4_components_are(one_vector4, 1,1,1,1));
+
+		const caffmath::vector4 zero_zero_zero_one_vector4 = caffmath::vector4_zero_zero_zero_one();
+		assert_test("test vector4 const is 0,0,0,1", vector4_components_are(zero_zero_zero_one_vector4, 0,0,0,1));
+	}
 
 	// Test Init
 	{
@@ -84,6 +32,13 @@ int main()
 		
 		const caffmath::vector4 one_two_three_four_vector4 = caffmath::vector4_init(1.1f, 2.2f, 3.3f, 4.4f);
 		assert_test("test components", vector4_components_are(one_two_three_four_vector4, 1.1f, 2.2f, 3.3f, 4.4f));
+
+		std::array<float, 4> my_array = {1.1f, 2.2f, 3.3f, 4.4f};
+		const caffmath::vector4 init_with_c_array = caffmath::vector4_init_with_array(&my_array[0]);
+		assert_test("test components", vector4_components_are(init_with_c_array, 1.1f, 2.2f, 3.3f, 4.4f));
+
+		const caffmath::vector4 init_with_std_array = caffmath::vector4_init_with_array(my_array);
+		assert_test("test components", vector4_components_are(init_with_std_array, 1.1f, 2.2f, 3.3f, 4.4f));		
 	}
 
 	// Test Basic Arithmetic
@@ -108,9 +63,46 @@ int main()
 	// Test Special Operations
 	{
 		const caffmath::vector4 one_two_three_four_vector4 = caffmath::vector4_init(1.1f, 2.2f, 3.3f, 4.4f);
+		const caffmath::vector4 one_two_two_two_vector4 = caffmath::vector4_init(1.1f, 2.2f, 2.2f, 2.2f);
 		const float error = 0.0001f;
 
-		
+		// Lerp
+		{
+			const caffmath::vector4 erp_start 	= caffmath::vector4_zero();
+			const caffmath::vector4 erp_end 	= caffmath::vector4_one();
+
+			const caffmath::vector4 dt_0 = vector4_lerp(erp_start, erp_end, 0.f);
+			assert_test("lerp at 0", vector4_components_are_near(dt_0, 0.f, 0.f, 0.f, 0.f, error));
+
+			const caffmath::vector4 dt_025 = vector4_lerp(erp_start, erp_end, 0.25f);
+			assert_test("lerp at 0.25", vector4_components_are_near(dt_025, 0.25f, 0.25f, 0.25f, 0.25f, error));
+
+			const caffmath::vector4 dt_05 = vector4_lerp(erp_start, erp_end, 0.5f);
+			assert_test("lerp at 0.5", vector4_components_are_near(dt_05, 0.5f, 0.5f, 0.5f, 0.5f, error));
+
+			const caffmath::vector4 dt_075 = vector4_lerp(erp_start, erp_end, 0.75f);
+			assert_test("lerp at 0.75", vector4_components_are_near(dt_075, 0.75f, 0.75f, 0.75f, 0.75f, error));
+
+			const caffmath::vector4 dt_1 = vector4_lerp(erp_start, erp_end, 1.f);
+			assert_test("lerp at 1", vector4_components_are_near(dt_1, 1.f, 1.f, 1.f, 1.f, error));
+		}
+
+		// Slerp
+		{
+			assert_test("slerp", float_is_near(1,2,error));
+		}
+
+		const caffmath::vector4 scale_by_2_and_half = vector4_scale(one_two_three_four_vector4, 2.5f);
+		assert_test("test scale", vector4_components_are_near(scale_by_2_and_half, 2.75f, 5.5f, 8.25f, 11.0f, error));
+
+		const float length_of_vec = vector4_length(one_two_three_four_vector4);
+		assert_test("test length", float_is_near(length_of_vec, 6.02495f, error));
+
+		const caffmath::vector4 normalize_vector = vector4_normalize(one_two_three_four_vector4);
+		assert_test("test normalize", vector4_components_are_near(normalize_vector, 0.182574f, 0.365148f, 0.547723f, 0.730297f, error));
+
+		const float dot_prod = vector4_dot(one_two_three_four_vector4, one_two_two_two_vector4);
+		assert_test("test dot product", float_is_near(dot_prod, 22.99f, error));
 	}
 
 	std::cout << "vector 4 tests - finished" << std::endl;

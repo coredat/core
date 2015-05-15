@@ -1,1 +1,0 @@
-clang++ vec4_benchmark.cpp -O2 -std=c++11 -o vec_benchmark && ./vec_benchmark

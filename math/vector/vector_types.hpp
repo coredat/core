@@ -1,53 +1,36 @@
-#ifndef VECTOR_TYPES_INCLUDED_
-#define VECTOR_TYPES_INCLUDED_
-
-
-#ifdef CAFF_MATH_SIMD
-// Include SIMD
-#include <xmmintrin.h>
-#endif
+#ifndef VECTOR_TYPES_INCLUDED_76A0D96A_8385_4283_9EA9_CF89D0D5A10C
+#define VECTOR_TYPES_INCLUDED_76A0D96A_8385_4283_9EA9_CF89D0D5A10C
 
 
 namespace caffeine {
 namespace math {
 
 
-// SIMD Types.
-#ifdef CAFF_MATH_SIMD
-
-using vector4 = __m128;
-using vector3 = __m128;
-using vector2 = __m128;
-
-// Non SIMD
-#else
-
-// The vector elements are private to keep the interface identical to that of
-// their simd counterparts.
-// This library is designed with simd in mind and provides a fallback.
+// To access the components you should go through the vector interface.
 
 class vector4
 {
-	float x, y, z, w;
+  float data[4];
 };
 
 class vector3
 {
-	float x, y, z;
+  float data[3];
 };
 
 class vector2
 {
-	float x, y;
+  float data[2];
 };
 
-#endif
-
-
-
-	
+  
 } // namespace
 } // namespace
+
+
+// aliases
+namespace caffmath = ::caffeine::math;
+namespace caff_math = ::caffeine::math;
 
 
 #endif // include guard
