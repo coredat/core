@@ -3,7 +3,8 @@
 TEST_NAMES = {
 	:vec2 => "vec2_test.cpp",
 	:vec3 => "vec3_test.cpp",
-	:vec4 => "vec4_test.cpp"
+	:vec4 => "vec4_test.cpp",
+	:mat4 => "mat4_test.cpp"
 }
 
 desc "Run a test 'rake run_test[test_name]'"

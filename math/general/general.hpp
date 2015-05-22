@@ -14,7 +14,10 @@ namespace math {
 
 inline float              sqrt(const float x);
 inline float              clamp(const float x, const float between_a, const float between_b);
+inline float              abs(const float x);
 
+inline float              tan(const float x);
+inline float              a_tan2(const float x, const float y);
 inline float              cos(const float radians);
 inline float              a_cos(const float radians);
 inline float              sin(const float radians);
@@ -47,6 +50,27 @@ clamp(const float x, const float between_a, const float between_b)
   }
 
   return x;
+}
+
+
+float
+abs(const float x)
+{
+  return std::abs(x);
+}
+
+
+float
+tan(const float x)
+{
+  return std::tan(x);
+}
+
+
+float
+a_tan2(const float x, const float y)
+{
+  return std::atan2(x, y);
 }
 
 
