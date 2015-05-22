@@ -39,6 +39,13 @@ int main()
 		0,0,0,0,
 	};
 
+	const std::array<float, 16> one_mat_data = {
+		1,1,1,1,
+		1,1,1,1,
+		1,1,1,1,
+		1,1,1,1,
+	};
+
 	const std::array<float, 16> two_mat_data = {
 		2,2,2,2,
 		2,2,2,2,
@@ -47,7 +54,7 @@ int main()
 	};	
 
 	const std::array<float, 16> id_mat_data = {
-		2,0,0,0,
+		1,0,0,0,
 		0,1,0,0,
 		0,0,1,0,
 		0,0,0,1,
@@ -84,7 +91,64 @@ int main()
 		assert_test("matix init value", matrix44_equal(init_with_value, two_mat_data, error));		
 	}
 
-	// 
+	// special mats
+	{
+		// Look at
+		const caffmath::vector3 position = caffmath::vector3_zero();
+		const caffmath::vector3 target = caffmath::vector3_init(1,1,1);
+		const caffmath::vector3 up = caffmath::vector3_init(0,1,0);
+
+		const caffmath::matrix44 look_at_mat = caffmath::matrix44_init_lookat(position, target, up);
+		assert_test("lookat matrix", false);
+
+		// Projection
+		const float width = 800.f;
+		const float height = 600.f;
+		const float near_plane = 1.f;
+		const float far_plane = 100.f;
+		const float field_of_view = caffmath::quart_tau();
+
+		const caffmath::matrix44 proj_mat = caffmath::matrix44_init_projection(width, height, near_plane, far_plane, field_of_view);
+		assert_test("proj matrix", false);
+
+		// Orth
+		assert_test("ortho matrix", false);
+	}
+
+	// Operations
+	{
+		const caffmath::matrix44 one_mat = caffmath::matrix44_init_with_array(one_mat_data);
+		const caffmath::matrix44 two_mat = caffmath::matrix44_init_with_array(two_mat_data);
+
+		const caffmath::matrix44 add_mat = caffmath::matrix44_add(one_mat, one_mat);
+		assert_test("add matrix", matrix44_equal(one_mat, two_mat_data, error));
+
+		const caffmath::matrix44 sub_mat = caffmath::matrix44_subtract(one_mat, one_mat);
+		assert_test("sub matrix", matrix44_equal(sub_mat, zero_mat_data, error));
+
+		const caffmath::matrix44 scale_mat = caffmath::matrix44_scale(0.5f, two_mat);
+		assert_test("scale matrix", matrix44_equal(scale_mat, one_mat_data, error));
+
+		const caffmath::vector4 vec = caffmath::vector4_init(2, 2, 2, 2);
+		const caffmath::vector4 mul_with_vec = caffmath::matrix44_multiply(vec, one_mat);
+		assert_test("mul with vec", false);
+
+		assert_test("mul with mat", false);
+
+		assert_test("translate", false);
+
+		assert_test("rot", false);
+	}
+
+	// Convert to other forms
+	{
+
+	}
+
+	//
+	{
+		
+	} 
 
 	return 0;
 }

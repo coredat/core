@@ -12,6 +12,13 @@ namespace math {
 
 // Interface
 
+inline float              pi() { return 3.142f; }
+inline float              two_pi() { return 2.f * pi(); }
+inline float              tau() { return two_pi(); }
+inline float              half_tau() { return pi(); }
+inline float              quart_tau() { return pi() * 0.5f; }
+
+
 inline float              sqrt(const float x);
 inline float              clamp(const float x, const float between_a, const float between_b);
 inline float              abs(const float x);
