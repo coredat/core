@@ -1,0 +1,43 @@
+
+INC_DIRS = ["../../"]
+OUT_DIR = "./"
+
+CppBuild.build :vec2 do |b|
+
+	b.compiler 	= :clang
+	b.inc_dirs 	= INC_DIRS
+	b.files 	= "vec2_test.cpp"
+	b.config 	= :release
+	b.out_dir 	= OUT_DIR
+
+end
+
+CppBuild.build :vec3 do |b|
+
+	b.compiler 	= :clang
+	b.inc_dirs 	= INC_DIRS
+	b.files 	= "vec3_test.cpp"
+	b.config 	= :release
+	b.out_dir 	= OUT_DIR
+
+end
+
+CppBuild.build :vec4 do |b|
+
+	b.compiler 	= :clang
+	b.inc_dirs 	= INC_DIRS
+	b.files 	= "vec4_test.cpp"
+	b.config 	= :release
+	b.out_dir 	= OUT_DIR
+
+end
+
+CppBuild.build :mat4 do |b|
+
+	b.compiler 	= :clang
+	b.inc_dirs 	= INC_DIRS
+	b.files 	= "mat4_test.cpp"
+	b.config 	= :release
+	b.out_dir 	= OUT_DIR
+
+end

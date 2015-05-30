@@ -138,10 +138,10 @@ int main()
 
 	// Operations
 	{
-		const caffmath::matrix44 one_mat  = caffmath::matrix44_init_with_array(one_mat_data);
-		const caffmath::matrix44 two_mat  = caffmath::matrix44_init_with_array(two_mat_data);
-		const caffmath::vector4 two_vec4  = caffmath::vector4_init(2, 2, 2, 2);
-		const caffmath::vector3 two_vec3  = caffmath::vector3_init(2, 2, 2);
+		const caffmath::matrix44 one_mat = caffmath::matrix44_init_with_array(one_mat_data);
+		const caffmath::matrix44 two_mat = caffmath::matrix44_init_with_array(two_mat_data);
+		const caffmath::vector4 two_vec4 = caffmath::vector4_init(2, 2, 2, 2);
+		const caffmath::vector3 two_vec3 = caffmath::vector3_init(2, 2, 2);
 
 		const caffmath::matrix44 add_mat = caffmath::matrix44_add(one_mat, one_mat);
 		assert_test("add matrix", matrix44_equal(one_mat, two_mat_data, error));
