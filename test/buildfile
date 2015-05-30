@@ -1,3 +1,5 @@
+require 'cpp_build'
+
 
 INC_DIRS = ["../../"]
 OUT_DIR = "./"
