@@ -13,8 +13,8 @@ bool matrix44_equal(caffmath::matrix44 mat, const std::array<float, 16> mat_data
 		const float diff = caffmath::matrix44_get(mat, i) - mat_data.at(i);
 		const float abs_diff = caffmath::abs(diff);
 
-		std::cout << caffmath::matrix44_get(mat, i) << ", " << mat_data.at(i) << std::endl;
-		std::cout << diff << "," << abs_diff << std::endl;
+		//std::cout << caffmath::matrix44_get(mat, i) << ", " << mat_data.at(i) << std::endl;
+		//std::cout << diff << "," << abs_diff << std::endl;
 
 		if(diff > error)
 		{
@@ -51,6 +51,20 @@ int main()
 		2,2,2,2,
 		2,2,2,2,
 		2,2,2,2,
+	};
+
+	const std::array<float, 16> four_mat_data = {
+		4,4,4,4,
+		4,4,4,4,
+		4,4,4,4,
+		4,4,4,4,
+	};
+
+	const std::array<float, 16> sixteen_mat_data = {
+		16,16,16,16,
+		16,16,16,16,
+		16,16,16,16,
+		16,16,16,16,
 	};	
 
 	const std::array<float, 16> id_mat_data = {
@@ -65,6 +79,13 @@ int main()
 		2.f,2.1f,2.2f,2.3f,
 		3.f,3.1f,3.2f,3.3f,
 		4.f,4.1f,4.2f,4.3f,
+	};
+
+	const std::array<float, 16> trans_mat_data = {
+		2,2,2,2,
+		2,2,2,2,
+		2,2,2,2,
+		4,4,4,2,
 	};
 
 	// Mat Constants
@@ -117,8 +138,10 @@ int main()
 
 	// Operations
 	{
-		const caffmath::matrix44 one_mat = caffmath::matrix44_init_with_array(one_mat_data);
-		const caffmath::matrix44 two_mat = caffmath::matrix44_init_with_array(two_mat_data);
+		const caffmath::matrix44 one_mat  = caffmath::matrix44_init_with_array(one_mat_data);
+		const caffmath::matrix44 two_mat  = caffmath::matrix44_init_with_array(two_mat_data);
+		const caffmath::vector4 two_vec4  = caffmath::vector4_init(2, 2, 2, 2);
+		const caffmath::vector3 two_vec3  = caffmath::vector3_init(2, 2, 2);
 
 		const caffmath::matrix44 add_mat = caffmath::matrix44_add(one_mat, one_mat);
 		assert_test("add matrix", matrix44_equal(one_mat, two_mat_data, error));
@@ -129,13 +152,14 @@ int main()
 		const caffmath::matrix44 scale_mat = caffmath::matrix44_scale(0.5f, two_mat);
 		assert_test("scale matrix", matrix44_equal(scale_mat, one_mat_data, error));
 
-		const caffmath::vector4 vec = caffmath::vector4_init(2, 2, 2, 2);
-		const caffmath::vector4 mul_with_vec = caffmath::matrix44_multiply(vec, one_mat);
+		const caffmath::vector4 mul_with_vec = caffmath::matrix44_multiply(two_vec4, one_mat);
 		assert_test("mul with vec", false);
 
-		assert_test("mul with mat", false);
+		const caffmath::matrix44 mul_mat = caffmath::matrix44_multiply(two_mat, two_mat);
+		assert_test("mul with mat", matrix44_equal(mul_mat, sixteen_mat_data, error));
 
-		assert_test("translate", false);
+		const caffmath::matrix44 trans_mat = caffmath::matrix44_translate(two_mat, two_vec3);
+		assert_test("translate", matrix44_equal(trans_mat, trans_mat_data, error));
 
 		assert_test("rot", false);
 	}
