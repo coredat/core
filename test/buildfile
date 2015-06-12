@@ -43,3 +43,13 @@ CppBuild.build :mat4 do |b|
 	b.out_dir 	= OUT_DIR
 
 end
+
+CppBuild.build :aabb2 do |b|
+
+	b.compiler 	= :clang
+	b.inc_dirs 	= INC_DIRS
+	b.files 	= "aabb2_test.cpp"
+	b.config 	= :release
+	b.out_dir 	= OUT_DIR
+
+end
