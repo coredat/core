@@ -89,20 +89,20 @@ int main()
 
 		// Slerp
 		{
-			assert_test("slerp", float_is_near(1,2,error));
+			//assert_test("slerp", float_is_near(1,2,error));
 		}
 
 		const caffmath::vector2 scale_by_2_and_half = vector2_scale(one_two_vector2, 2.5f);
 		assert_test("test scale", vector2_components_are_near(scale_by_2_and_half, 2.75f, 5.5f, error));
 
 		const float length_of_vec = vector2_length(one_two_vector2);
-		assert_test("test length", float_is_near(length_of_vec, 6.02495f, error));
+		assert_test("test length", float_is_near(length_of_vec, 2.4596f, error));
 
 		const caffmath::vector2 normalize_vector = vector2_normalize(one_two_vector2);
-		assert_test("test normalize", vector2_components_are_near(normalize_vector, 0.182574f, 0.365148f, error));
+		assert_test("test normalize", vector2_components_are_near(normalize_vector, 0.4472f, 0.89442f, error));
 
 		const float dot_prod = vector2_dot(one_two_vector2, two_two_vector2);
-		assert_test("test dot product", float_is_near(dot_prod, 22.99f, error));
+		assert_test("test dot product", float_is_near(dot_prod, 7.26f, error));
 	}
 
 	std::cout << "vector 2 tests - finished" << std::endl;

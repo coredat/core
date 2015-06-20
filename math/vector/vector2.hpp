@@ -38,11 +38,11 @@ inline vector2                vector2_divide(const vector2 a, const vector2 b);
 
 // Special operations.
 inline vector2                vector2_lerp(const vector2 start, const vector2 end, const float dt);
-inline vector2                vector2_slerp(); // not impl
+//inline vector2                vector2_slerp(); // not impl
 inline vector2                vector2_scale(const vector2 a, const float scale);
 inline vector2                vector2_normalize(const vector2 a);
 inline float                  vector2_length(const vector2 a);
-inline float 	              vector2_cross(const vector2 a, const vector2 b);
+inline float 	                vector2_cross(const vector2 a, const vector2 b);
 inline float                  vector2_dot(const vector2 a, const vector2 b);
 
 

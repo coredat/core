@@ -31,6 +31,8 @@ inline vector3                vector3_init_with_array(const std::array<float, 3>
 inline float                  vector3_get_x(const vector3 vec);
 inline float                  vector3_get_y(const vector3 vec);
 inline float                  vector3_get_z(const vector3 vec);
+inline vector2                vector3_get_xy(const vector3 vec);
+inline vector2                vector3_get_yz(const vector3 vec);
 inline void                   vector3_to_array(const vector3 a, float *out_array);
 inline std::array<float, 3>   vector3_to_std_array(const vector3 a);
 
@@ -42,7 +44,7 @@ inline vector3                vector3_divide(const vector3 a, const vector3 b);
 
 // Special operations.
 inline vector3                vector3_lerp(const vector3 start, const vector3 end, const float dt);
-inline vector3                vector3_slerp(const vector3 start, const vector3 end, const float dt);
+//inline vector3                vector3_slerp(const vector3 start, const vector3 end, const float dt);
 inline vector3                vector3_scale(const vector3 a, const float scale);
 inline vector3                vector3_normalize(const vector3 a);
 inline float                  vector3_length(const vector3 a);
@@ -163,6 +165,22 @@ vector3_to_array(const vector3 a, float *out_array)
 }
 
 
+vector2
+vector3_get_xy(const vector3 vec)
+{
+  const detail::internal_vec3 *internal_vec = reinterpret_cast<const detail::internal_vec3*>(&vec);
+  return vector2_init(internal_vec->x, internal_vec->y);
+}
+
+
+vector2
+vector3_get_yz(const vector3 vec)
+{
+  const detail::internal_vec3 *internal_vec = reinterpret_cast<const detail::internal_vec3*>(&vec);
+  return vector2_init(internal_vec->y, internal_vec->z);
+}
+
+
 std::array<float, 3>
 vector3_to_std_array(const vector3 a)
 {
@@ -231,25 +249,25 @@ vector3_lerp(const vector3 start, const vector3 end, const float dt)
 }
 
 
-vector3
-vector3_slerp(const vector3 start, const vector3 end, const float dt)
-{
-  const float dot                   = vector3_dot(start, end);
-  const float clamp                 = caffmath::clamp(dot, -1.f, 1.f);
-  const float theta                 = caffmath::a_cos(clamp) * dt;
+// vector3
+// vector3_slerp(const vector3 start, const vector3 end, const float dt)
+// {
+//   const float dot                   = vector3_dot(start, end);
+//   const float clamp                 = caffmath::clamp(dot, -1.f, 1.f);
+//   const float theta                 = caffmath::a_cos(clamp) * dt;
 
-  const vector3 start_scale         = vector3_scale(start, dot);
-  const vector3 relative            = vector3_subtract(end, start_scale);
-  const vector3 normal              = vector3_normalize(relative);
+//   const vector3 start_scale         = vector3_scale(start, dot);
+//   const vector3 relative            = vector3_subtract(end, start_scale);
+//   const vector3 normal              = vector3_normalize(relative);
 
-  const float cos_theta             = caffmath::cos(theta);
-  const float sin_theta             = caffmath::sin(theta);
+//   const float cos_theta             = caffmath::cos(theta);
+//   const float sin_theta             = caffmath::sin(theta);
 
-  const vector3 start_cos_scale     = vector3_scale(start, cos_theta);
-  const vector3 relative_sin_scale  = vector3_scale(normal, sin_theta);
+//   const vector3 start_cos_scale     = vector3_scale(start, cos_theta);
+//   const vector3 relative_sin_scale  = vector3_scale(normal, sin_theta);
 
-  return vector3_add(start_cos_scale, relative_sin_scale);
-}
+//   return vector3_add(start_cos_scale, relative_sin_scale);
+// }
 
 
 vector3

@@ -35,6 +35,11 @@ inline float                  vector4_get_x(const vector4 vec);
 inline float                  vector4_get_y(const vector4 vec);
 inline float                  vector4_get_z(const vector4 vec);
 inline float                  vector4_get_w(const vector4 vec);
+inline vector2                vector4_get_xy(const vector4 vec);
+inline vector2                vector4_get_yz(const vector4 vec);
+inline vector2                vector4_get_zw(const vector4 vec);
+inline vector3                vector4_get_xyz(const vector4 vec);
+inline vector3                vector4_get_yxw(const vector4 vec);
 inline void                   vector4_to_array(const vector4 a, float *out_array);
 inline std::array<float, 4>   vector4_to_std_array(const vector4 a);
 inline vector3                vector4_to_vector3(const vector4 a); // not impl
@@ -47,7 +52,7 @@ inline vector4                vector4_divide(const vector4 a, const vector4 b);
 
 // Special operations.
 inline vector4                vector4_lerp(const vector4 start, const vector4 end, const float dt);
-inline vector4                vector4_slerp(const vector4 start, const vector4 end, const float dt); // not impl
+//inline vector4                vector4_slerp(const vector4 start, const vector4 end, const float dt); // not impl
 inline vector4                vector4_scale(const vector4 a, const float scale);
 inline vector4                vector4_normalize(const vector4 a);
 inline float                  vector4_length(const vector4 a);
@@ -172,6 +177,46 @@ vector4_get_w(const vector4 vec)
 {
   const detail::internal_vec4 *internal_vec = reinterpret_cast<const detail::internal_vec4*>(&vec);
   return internal_vec->w;
+}
+
+
+vector2
+vector4_get_xy(const vector4 vec)
+{
+  const detail::internal_vec4 *internal_vec = reinterpret_cast<const detail::internal_vec4*>(&vec);
+  return vector2_init(internal_vec->x, internal_vec->y);
+}
+
+
+vector2
+vector4_get_yz(const vector4 vec)
+{
+  const detail::internal_vec4 *internal_vec = reinterpret_cast<const detail::internal_vec4*>(&vec);
+  return vector2_init(internal_vec->y, internal_vec->z);
+}
+
+
+vector2
+vector4_get_zw(const vector4 vec)
+{
+  const detail::internal_vec4 *internal_vec = reinterpret_cast<const detail::internal_vec4*>(&vec);
+  return vector2_init(internal_vec->z, internal_vec->w);
+}
+
+
+vector3
+vector4_get_xyz(const vector4 vec)
+{
+  const detail::internal_vec4 *internal_vec = reinterpret_cast<const detail::internal_vec4*>(&vec);
+  return vector3_init(internal_vec->x, internal_vec->y, internal_vec->z);
+}
+
+
+vector3
+vector4_get_yxw(const vector4 vec)
+{
+  const detail::internal_vec4 *internal_vec = reinterpret_cast<const detail::internal_vec4*>(&vec);
+  return vector3_init(internal_vec->y, internal_vec->x, internal_vec->w);
 }
 
 

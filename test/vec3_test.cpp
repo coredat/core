@@ -42,6 +42,11 @@ int main()
 		assert_test("test components", vector3_components_are(init_with_std_array, 1.1f, 2.2f, 3.3f));
 	}
 
+	// Getters
+	{
+		
+	}
+
 	// Test Basic Arithmetic
 	{
 		const caffmath::vector3 one_vector3 = caffmath::vector3_init(1);
@@ -90,20 +95,20 @@ int main()
 
 		// Slerp
 		{
-			assert_test("slerp", float_is_near(1,2,error));
+			//assert_test("slerp", float_is_near(1,2,error));
 		}
 
 		const caffmath::vector3 scale_by_2_and_half = vector3_scale(one_two_three_vector3, 2.5f);
 		assert_test("test scale", vector3_components_are_near(scale_by_2_and_half, 2.75f, 5.5f, 8.25f, error));
 
 		const float length_of_vec = vector3_length(one_two_three_vector3);
-		assert_test("test length", float_is_near(length_of_vec, 6.02495f, error));
+		assert_test("test length", float_is_near(length_of_vec, 4.11582f, error));
 
 		const caffmath::vector3 normalize_vector = vector3_normalize(one_two_three_vector3);
-		assert_test("test normalize", vector3_components_are_near(normalize_vector, 0.182574f, 0.365148f, 0.547723f, error));
+		assert_test("test normalize", vector3_components_are_near(normalize_vector, 0.2672f, 0.5345, 0.80178, error));
 
 		const float dot_prod = vector3_dot(one_two_three_vector3, one_two_two_vector3);
-		assert_test("test dot product", float_is_near(dot_prod, 22.99f, error));
+		assert_test("test dot product", float_is_near(dot_prod, 13.31f, error));
 	}
 
 	std::cout << "vector 3 tests - finished" << std::endl;
