@@ -20,7 +20,7 @@ inline matrix33                   matrix33_zero();
 inline matrix33                   matrix33_init(); // will return an id array
 inline matrix33                   matrix33_init(const float x);
 inline matrix33                   matrix33_init_with_array(const float arr[]);
-inline matrix33                   matrix33_init_with_array(const std::array<float, 16> &array);
+inline matrix33                   matrix33_init_with_array(const std::array<float, 9> &array);
 
 // Operations
 inline matrix33                   matrix33_add(const matrix33 &lhs, const matrix33 &rhs);
@@ -49,67 +49,65 @@ inline vector3                    matrix33_get_scale(const matrix33 &a);
 
 namespace detail
 {
-  struct internal_mat4
+  struct internal_mat3
   {
-    float data[16];
+    float data[9];
   };
 
 }
 
 
-matrix44
-matrix44_id()
+matrix33
+matrix33_id()
 {
-  std::array<float, 16> id_array = {
-    1.f, 0.f, 0.f, 0.f,
-    0.f, 1.f, 0.f, 0.f,
-    0.f, 0.f, 1.f, 0.f,
-    0.f, 0.f, 0.f, 1.f,
+  std::array<float, 9> id_array = {
+    1.f, 0.f, 0.f,
+    0.f, 1.f, 0.f,
+    0.f, 0.f, 1.f,
   };
 
-  return matrix44_init_with_array(&id_array[0]);
+  return matrix33_init_with_array(&id_array[0]);
 }
 
 
-matrix44
-matrix44_zero()
+matrix33
+matrix33_zero()
 {
-  std::array<float, 16> zero_array = {
-    0.f, 0.f, 0.f, 0.f,
-    0.f, 0.f, 0.f, 0.f,
-    0.f, 0.f, 0.f, 0.f,
-    0.f, 0.f, 0.f, 0.f,
+  std::array<float, 9> zero_array = {
+    0.f, 0.f, 0.f,
+    0.f, 0.f, 0.f,
+    0.f, 0.f, 0.f,
   };
 
-  return matrix44_init_with_array(&zero_array[0]);  
+  return matrix33_init_with_array(&zero_array[0]);  
 }
 
 
-matrix44
-matrix44_init()
+matrix33
+matrix33_init()
 {
-  return matrix44_id();
+  return matrix33_id();
 }
 
 
-matrix44
-matrix44_init(const float x)
+matrix33
+matrix33_init(const float x)
 {
-  std::array<float, 16> x_array = {
-    x,x,x,x,
-    x,x,x,x,
-    x,x,x,x,
+  std::array<float, 9> x_array = {
+    x,x,x,
+    x,x,x,
+    x,x,x,
   };
 
-  return matrix44_init_with_array(x_array);
+  return matrix33_init_with_array(x_array);
 }
 
 
-matrix44
-matrix44_init_with_array(const float array[])
+matrix33
+matrix33_init_with_array(const float array[])
 {
-  matrix44 return_mat;
-  detail::internal_mat4 *internal_mat = reinterpret_cast<detail::internal_mat4*>(&return_mat);
+  matrix33 return_mat;
+  detail::internal_mat3 *internal_mat = reinterpret_cast<detail::internal_mat3*>(&return_mat);
 
   memcpy(internal_mat->data, array, sizeof(internal_mat->data));
   
@@ -117,101 +115,24 @@ matrix44_init_with_array(const float array[])
 }
 
 
-matrix44
-matrix44_init_with_array(const std::array<float, 16> &array)
+matrix33
+matrix33_init_with_array(const std::array<float, 9> &array)
 {
-  return matrix44_init_with_array(&array[0]);
-}
-
-
-matrix44
-matrix44_init_lookat(const vector3 eye_position, const vector3 look_at_position, const vector3 up)
-{
-  const vector3 z_axis = vector3_normalize(vector3_subtract(look_at_position, eye_position));
-  const vector3 x_axis = vector3_normalize(vector3_cross(z_axis, up));
-  const vector3 y_axis = vector3_cross(x_axis, z_axis);
-
-  const std::array<float, 16> array_mat =
-  {
-    vector3_get_x(x_axis),
-    vector3_get_x(y_axis),
-    -vector3_get_x(z_axis),
-    0.f,
-
-    vector3_get_y(x_axis),
-    vector3_get_y(y_axis),
-    -vector3_get_y(z_axis),
-    0.f,
-
-    vector3_get_z(x_axis),
-    vector3_get_z(y_axis),
-    -vector3_get_z(z_axis),
-    0.f,
-
-    -(vector3_dot(x_axis, eye_position)),
-    -(vector3_dot(y_axis, eye_position)),
-    +(vector3_dot(z_axis, eye_position)),
-    1.f,
-  };
-
-  return matrix44_init_with_array(&array_mat[0]);
-}
-
-
-matrix44
-matrix44_init_projection(const float width, const float height, const float near_plane, const float far_plane, const float fov)
-{
-  const float aspect_ratio = width / height;
-  const float one_over_tan_half_fov = 1.f / caffmath::tan(fov * 0.5f);
-  const float plane_diff = far_plane - near_plane;
-
-  //matrix44 return_mat = matrix44_zero();
-  std::array<float, 16> proj_mat =
-  {
-    one_over_tan_half_fov / aspect_ratio,
-    0.f,
-    0.f,
-    0.f,
-
-    0.f,
-    one_over_tan_half_fov,
-    0.f,
-    0.f, 
-
-    0.f,
-    0.f,
-    -(far_plane + near_plane) / plane_diff,
-    -1.f,
-
-    0.f,
-    0.f,
-    -(2.f * far_plane * near_plane) / plane_diff,
-    0.f,
-
- };
-
- return matrix44_init_with_array(&proj_mat[0]);
-}
-
-
-matrix44
-matrix44_init_orthographic(const float width, const float height, const float depth)
-{
-  return matrix44_zero();
+  return matrix33_init_with_array(&array[0]);
 }
 
 
 // Operations
-matrix44
-matrix44_add(const matrix44 &lhs, const matrix44 &rhs)
+matrix33
+matrix33_add(const matrix33 &lhs, const matrix33 &rhs)
 {
-  const detail::internal_mat4 *left = reinterpret_cast<const detail::internal_mat4*>(&lhs);
-  const detail::internal_mat4 *right = reinterpret_cast<const detail::internal_mat4*>(&rhs);
+  const detail::internal_mat3 *left = reinterpret_cast<const detail::internal_mat3*>(&lhs);
+  const detail::internal_mat3 *right = reinterpret_cast<const detail::internal_mat3*>(&rhs);
 
-  matrix44 return_mat; 
-  detail::internal_mat4 *internal_mat = reinterpret_cast<detail::internal_mat4*>(&return_mat);
+  matrix33 return_mat; 
+  detail::internal_mat3 *internal_mat = reinterpret_cast<detail::internal_mat3*>(&return_mat);
 
-  for(int i = 0; i < 16; ++i)
+  for(int i = 0; i < 9; ++i)
   {
     internal_mat->data[i] = left->data[0] + right->data[0];
   }
@@ -220,16 +141,16 @@ matrix44_add(const matrix44 &lhs, const matrix44 &rhs)
 }
 
 
-matrix44
-matrix44_subtract(const matrix44 &lhs, const matrix44 &rhs)
+matrix33
+matrix33_subtract(const matrix33 &lhs, const matrix33 &rhs)
 {
-  const detail::internal_mat4 *left = reinterpret_cast<const detail::internal_mat4*>(&lhs);
-  const detail::internal_mat4 *right = reinterpret_cast<const detail::internal_mat4*>(&rhs);
+  const detail::internal_mat3 *left = reinterpret_cast<const detail::internal_mat3*>(&lhs);
+  const detail::internal_mat3 *right = reinterpret_cast<const detail::internal_mat3*>(&rhs);
 
-  matrix44 return_mat; 
-  detail::internal_mat4 *internal_mat = reinterpret_cast<detail::internal_mat4*>(&return_mat);
+  matrix33 return_mat; 
+  detail::internal_mat3 *internal_mat = reinterpret_cast<detail::internal_mat3*>(&return_mat);
 
-  for(int i = 0; i < 16; ++i)
+  for(int i = 0; i < 9; ++i)
   {
     internal_mat->data[i] = left->data[0] - right->data[0];
   }
@@ -238,15 +159,15 @@ matrix44_subtract(const matrix44 &lhs, const matrix44 &rhs)
 }
 
 
-matrix44
-matrix44_scale(const float lhs, const matrix44 &rhs)
+matrix33
+matrix33_scale(const float lhs, const matrix33 &rhs)
 {
-  const detail::internal_mat4 *right = reinterpret_cast<const detail::internal_mat4*>(&rhs);
+  const detail::internal_mat3 *right = reinterpret_cast<const detail::internal_mat3*>(&rhs);
 
-  matrix44 return_mat; 
-  detail::internal_mat4 *internal_mat = reinterpret_cast<detail::internal_mat4*>(&return_mat);
+  matrix33 return_mat; 
+  detail::internal_mat3 *internal_mat = reinterpret_cast<detail::internal_mat3*>(&return_mat);
 
-  for(int i = 0; i < 16; ++i)
+  for(int i = 0; i < 9; ++i)
   {
     internal_mat->data[i] = lhs * right->data[0];
   }
@@ -256,12 +177,12 @@ matrix44_scale(const float lhs, const matrix44 &rhs)
 
 
 vector4
-matrix44_multiply(const vector4 lhs, const matrix44 &rhs)
+matrix33_multiply(const vector4 lhs, const matrix33 &rhs)
 {
-  const detail::internal_mat4 *right = reinterpret_cast<const detail::internal_mat4*>(&rhs);
+  const detail::internal_mat3 *right = reinterpret_cast<const detail::internal_mat3*>(&rhs);
   std::array<float, 4> vec_data;
 
-  for(int i = 0; i < 16; i += 4)
+  for(int i = 0; i < 9; i += 4)
   {
     const vector4 dot_vector = vector4_init(right->data[i + 0], right->data[i + 4], right->data[i + 8], right->data[i + 12]);
 
@@ -272,16 +193,16 @@ matrix44_multiply(const vector4 lhs, const matrix44 &rhs)
 }
 
 
-matrix44
-matrix44_multiply(const matrix44 &lhs, const matrix44 &rhs)
+matrix33
+matrix33_multiply(const matrix33 &lhs, const matrix33 &rhs)
 {
-  const detail::internal_mat4 *left = reinterpret_cast<const detail::internal_mat4*>(&lhs);
-  const detail::internal_mat4 *right = reinterpret_cast<const detail::internal_mat4*>(&rhs);
+  const detail::internal_mat3 *left = reinterpret_cast<const detail::internal_mat3*>(&lhs);
+  const detail::internal_mat3 *right = reinterpret_cast<const detail::internal_mat3*>(&rhs);
 
-  matrix44 return_mat; 
-  detail::internal_mat4 *internal_mat = reinterpret_cast<detail::internal_mat4*>(&return_mat);
+  matrix33 return_mat; 
+  detail::internal_mat3 *internal_mat = reinterpret_cast<detail::internal_mat3*>(&return_mat);
 
-  for(uint32_t i = 0; i < 16; ++i)
+  for(uint32_t i = 0; i < 9; ++i)
   {
     //[0,1,2,3] x [0,4,8,12]
     const uint32_t row = i / 4;
@@ -297,12 +218,12 @@ matrix44_multiply(const matrix44 &lhs, const matrix44 &rhs)
 }
 
 
-matrix44
-matrix44_translate(const matrix44 &mat, const vector3 move)
+matrix33
+matrix33_translate(const matrix33 &mat, const vector3 move)
 {
-  matrix44 copy(mat);
+  matrix33 copy(mat);
 
-  detail::internal_mat4 *translate_me = reinterpret_cast<detail::internal_mat4*>(&copy);
+  detail::internal_mat3 *translate_me = reinterpret_cast<detail::internal_mat3*>(&copy);
 
   translate_me->data[12] += vector3_get_x(move);
   translate_me->data[13] += vector3_get_y(move);
@@ -312,39 +233,39 @@ matrix44_translate(const matrix44 &mat, const vector3 move)
 }
 
 
-matrix44
-matrix44_rotate(const matrix44 &a, const vector3 euler)
+matrix33
+matrix33_rotate(const matrix33 &a, const vector3 euler)
 {
-  return matrix44();
+  return matrix33();
 }
 
 
 float
-matrix44_get(const matrix44 &mat, const uint32_t row, const uint32_t col)
+matrix33_get(const matrix33 &mat, const uint32_t row, const uint32_t col)
 {
   assert(row < 4 && col < 4);
 
   const uint32_t i = (row * 4) + col;
-  return matrix44_get(mat, i);
+  return matrix33_get(mat, i);
 }
 
 
 float
-matrix44_get(const matrix44 &mat, const uint32_t index)
+matrix33_get(const matrix33 &mat, const uint32_t index)
 {
-  assert(index < 16);
+  assert(index < 9);
   
-  const detail::internal_mat4 *internal_mat = reinterpret_cast<const detail::internal_mat4*>(&mat);
+  const detail::internal_mat3 *internal_mat = reinterpret_cast<const detail::internal_mat3*>(&mat);
   return internal_mat->data[index];
 }
 
 
 void
-matrix44_set(matrix44 &mat, const uint32_t row, const uint32_t col, const float set)
+matrix33_set(matrix33 &mat, const uint32_t row, const uint32_t col, const float set)
 {
   assert(row < 4 && col < 4);
 
-  detail::internal_mat4 *internal_mat = reinterpret_cast<detail::internal_mat4*>(&mat);
+  detail::internal_mat3 *internal_mat = reinterpret_cast<detail::internal_mat3*>(&mat);
   internal_mat->data[(row * 4) + col] = set;
 }
 
