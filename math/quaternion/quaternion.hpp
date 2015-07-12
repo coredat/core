@@ -2,6 +2,9 @@
 #define QUATERNION_INCLUDED_ED2C1105_82A1_477F_B62C_5093DE20C971
 
 
+// ** NOT COMPLETE ** //
+
+
 #include "quaternion_types.hpp"
 #include "../general/general.hpp"
 #include "../matrix/matrix44.hpp"
@@ -15,14 +18,18 @@ namespace caffeine {
 namespace math {
 
 
+// Interface
+
 inline quaternion       quaternion_init();
 inline quaternion       quaternion_init(const float x, const float y, const float z, const float w);
 inline quaternion       quaternion_init_with_axis_angle(const float x, const float y, const float z, const float theta_rad);
 inline quaternion       quaternion_init_with_euler_angles(const float pitch_rad, const float yaw_rad, const float roll_rad);
 
-inline quaternion       quaternion_multiply();
-inline quaternion       quaternion_normalize();
-inline quaternion       quaternion_length();
+inline quaternion       quaternion_conjugate(const quaternion to_conj);
+inline quaternion       quaternion_multiply(const quaternion left, const quaternion &right);
+inline quaternion       quaternion_normalize(const quaternion to_conj);
+inline quaternion       quaternion_length(const quaternion to_conj);
+inline vector3          quaternion_rotate_point(const quaternion rotation, const vector3 point);
 
 inline matrix33         quaternion_get_rotation_matrix();
 inline vector3          quaternion_get_axis();
