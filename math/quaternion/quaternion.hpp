@@ -27,13 +27,19 @@ inline quaternion       quaternion_init_with_euler_angles(const float pitch_rad,
 
 inline quaternion       quaternion_conjugate(const quaternion to_conj);
 inline quaternion       quaternion_multiply(const quaternion left, const quaternion &right);
-inline quaternion       quaternion_normalize(const quaternion to_conj);
-inline quaternion       quaternion_length(const quaternion to_conj);
+inline quaternion       quaternion_normalize(const quaternion to_normalize);
+inline float            quaternion_length(const quaternion to_length);
 inline vector3          quaternion_rotate_point(const quaternion rotation, const vector3 point);
 
 inline matrix33         quaternion_get_rotation_matrix();
 inline vector3          quaternion_get_axis();
-inline vector3          quaternion_get_euler_angles();
+inline vector3          quaternion_get_euler_angles_in_radians();
+
+inline float            quaternion_get_x(const quaternion quat);
+inline float            quaternion_get_y(const quaternion quat);
+inline float            quaternion_get_z(const quaternion quat);
+inline float            quaternion_get_w(const quaternion quat);
+inline float            quaternion_get(const quaternion quat, const uint32_t i);
 
 
 // Impl
@@ -107,6 +113,153 @@ quaternion_init_with_euler_angles(const float pitch_rad, const float yaw_rad, co
 
   return quaternion_init(x, y, z, w);
 }
+
+
+quaternion
+quaternion_conjugate(const quaternion to_conj)
+{
+  detail::internal_quat *conj_quat = reinterpret_cast<detail::internal_quat*>(&to_conj);
+  return quaternion_init(-conj_quat->x, -conj_quat->y, -conj_quat->z, conj_quat->w);
+}
+
+
+quaternion
+quaternion_multiply(const quaternion left, const quaternion &right)
+{
+  detail::internal_quat *left_quat  = reinterpret_cast<detail::internal_quat*>(&left);
+  detail::internal_quat *right_quat = reinterpret_cast<detail::internal_quat*>(&right);
+
+  const float w = (left_quat->w * right_quat->w) - (left_quat->x * right_quat->x) - (left_quat->y * right_quat->y) - (left_quat->z * right_quat->z);
+  const float x = (left_quat->w * right_quat->x) + (left_quat->x * right_quat->w) + (left_quat->y * right_quat->z) - (left_quat->z * right_quat->y);
+  const float y = (left_quat->w * right_quat->y) + (left_quat->y * right_quat->w) + (left_quat->z * right_quat->x) - (left_quat->x * right_quat->z);
+  const float z = (left_quat->w * right_quat->z) + (left_quat->z * right_quat->w) + (left_quat->x * right_quat->y) - (left_quat->y * right_quat->x);
+
+  return quaternion_init(x, y, z, w);
+}
+
+
+quaternion
+quaternion_normalize(const quaternion to_normalize)
+{
+  detail::internal_quat *internal_quat = reinterpret_cast<detail::internal_quat*>(&to_normalize);
+
+  const float length = quaternion_length(to_normalize);
+  assert(length); // Can't have zero length.
+
+  Quaternion quat;
+  quat.w = internal_quat->w / length;
+  quat.x = internal_quat->x / length;
+  quat.y = internal_quat->y / length;
+  quat.z = internal_quat->z / length;
+
+  return quat;
+}
+
+
+float
+quaternion_length(const quaternion to_length)
+{
+  detail::internal_quat *length_quat = reinterpret_cast<detail::internal_quat*>(&to_length);
+  return caffmath::sqrt((length_quat->w * length_quat->w) + (length_quat->x * length_quat->x) + (length_quat->y * length_quat->y) + (length_quat->z * length_quat->z));
+}
+
+
+vector3
+quaternion_rotate_point(const quaternion rotation, const vector3 point)
+{
+  detail::internal_quat *rot_quat = reinterpret_cast<detail::internal_quat*>(&rotation);
+
+  const float x = rot_quat->x;
+  const float y = rot_quat->y;
+  const float z = rot_quat->z;
+  const float w = rot_quat->w;
+
+  const float p_x = w*w*point.x + 2*y*w*point.z - 2*z*w*point.y + x*x*point.x + 2*y*x*point.y + 2*z*x*point.z - z*z*point.x - y*y*point.x;
+  const float p_y = 2*x*y*point.x + y*y*point.y + 2*z*y*point.z + 2*w*z*point.x - z*z*point.y + w*w*point.y - 2*x*w*point.z - x*x*point.y;
+  const float p_z = 2*x*z*point.x + 2*y*z*point.y + z*z*point.z - 2*w*y*point.x - y*y*point.z + 2*w*x*point.y - x*x*point.z + w*w*point.z;
+
+  const vector3 rotated_point = vector3_init(p_x, p_y, p_z);
+
+  return rotated_point;
+}
+
+
+// matrix33
+// quaternion_get_rotation_matrix()
+// {
+
+// }
+
+
+// vector3
+// quaternion_get_axis()
+// {
+
+// }
+
+
+// vector3
+// quaternion_get_euler_angles_in_radians()
+// {
+
+// }
+
+
+float
+quaternion_get_x(const quaternion quat)
+{
+  detail::internal_quat *internal_quat = reinterpret_cast<detail::internal_quat*>(&quat);
+  return internal_quat->x;
+}
+
+
+float
+quaternion_get_y(const quaternion quat)
+{
+  detail::internal_quat *internal_quat = reinterpret_cast<detail::internal_quat*>(&quat);
+  return internal_quat->y;
+}
+
+
+float
+quaternion_get_z(const quaternion quat)
+{
+  detail::internal_quat *internal_quat = reinterpret_cast<detail::internal_quat*>(&quat);
+  return internal_quat->z;
+}
+
+
+float
+quaternion_get_w(const quaternion quat)
+{
+  detail::internal_quat *internal_quat = reinterpret_cast<detail::internal_quat*>(&quat);
+  return internal_quat->w;
+}
+
+
+float
+quaternion_get(const quaternion quat, const uint32_t i)
+{
+  assert(i < 4);
+
+  switch(i)
+  {
+    case(0):
+      return quaternion_get_x(quat);
+      break;
+    case(1):
+      return quaternion_get_y(quat);
+      break;
+    case(2):
+      return quaternion_get_z(quat);
+      break;
+    case(3):
+      return quaternion_get_w(quat);
+      break; 
+  }
+}
+
+
 
 
 
