@@ -1,14 +1,14 @@
 require 'cpp_build'
 
 
-INC_DIRS = ["../../"]
+INC_DIRS = ["../../", "/usr/local/include/", "../", "./"]
 OUT_DIR = "./"
 
 CppBuild.build :vec2 do |b|
 
 	b.compiler 	= :clang
 	b.inc_dirs 	= INC_DIRS
-	b.files 	= "vec2_test.cpp"
+	b.files 	= "vec2_unit_test.cpp"
 	b.config 	= :release
 	b.out_dir 	= OUT_DIR
 
