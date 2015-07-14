@@ -2,7 +2,7 @@
 #define TEST_ASSERTS_INCLUDED_E2F2BA2B_C021_4A90_8BFD_945C128208AB
 
 
-#include "../math/vector/vector.hpp"
+#include <math/vector/vector.hpp>
 #include <iostream>
 
 
