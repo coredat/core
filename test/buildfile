@@ -28,7 +28,7 @@ CppBuild.build :vec4 do |b|
 
 	b.compiler 	= :clang
 	b.inc_dirs 	= INC_DIRS
-	b.files 	= "vec4_test.cpp"
+	b.files 	= "vec4_unit_test.cpp"
 	b.config 	= :release
 	b.out_dir 	= OUT_DIR
 
