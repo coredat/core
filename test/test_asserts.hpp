@@ -6,14 +6,6 @@
 #include <iostream>
 
 
-void assert_test(const std::string &test, const bool passed)
-{
-	if(!passed)
-	{
-		std::cout << test << " - failed!" << std::endl;
-	}
-}
-
 // Vector 4
 
 bool vector4_is_equal(const caffmath::vector4 a, const caffmath::vector4 b)

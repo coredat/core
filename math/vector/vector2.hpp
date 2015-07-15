@@ -14,6 +14,9 @@ namespace math {
 
 // ** Interface ** //
 
+// ** Constants ** //
+
+//! 
 inline vector2                vector2_zero();
 inline vector2                vector2_one();
 inline vector2                vector2_zero_one();

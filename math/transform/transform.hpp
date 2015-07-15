@@ -14,6 +14,7 @@ namespace math {
 
 inline matrix44   get_world_matrix(const transform &transform);
 inline void       set_with_world_matrix(transform &transform, const matrix44 &matrix);
+inline transform  inherit_parent_transform(const transform &parent, const transform &child);
 
 
 } // namespace
