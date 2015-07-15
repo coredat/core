@@ -15,31 +15,29 @@ namespace math {
 // ** Interface ** //
 
 // ** Constants ** //
-
-//! 
 inline vector2                vector2_zero();
 inline vector2                vector2_one();
 inline vector2                vector2_zero_one();
 
-// Initialize vector.
+// ** Initialize new vectors ** //
 inline vector2                vector2_init(const float val);
 inline vector2                vector2_init(const float x, const float y);
 inline vector2                vector2_init_with_array(const float *arr);
 inline vector2                vector2_init_with_array(const std::array<float, 2> &vec);
 
-// Get components.
+// ** Get elements ** //
 inline float                  vector2_get_x(const vector2 vec);
 inline float                  vector2_get_y(const vector2 vec);
 inline void                   vector2_to_array(const vector2 a, float *out_array);
 inline std::array<float, 2>   vector2_to_std_array(const vector2 a);
 
-// Component wise arithmetic.
+// ** Arithmetic ** //
 inline vector2                vector2_add(const vector2 a, const vector2 b);
 inline vector2                vector2_subtract(const vector2 a, const vector2 b);
 inline vector2                vector2_multiply(const vector2 a, const vector2 b);
 inline vector2                vector2_divide(const vector2 a, const vector2 b);
 
-// Special operations.
+// ** Special Operations ** //
 inline vector2                vector2_lerp(const vector2 start, const vector2 end, const float dt);
 //inline vector2                vector2_slerp(); // not impl
 inline vector2                vector2_scale(const vector2 a, const float scale);

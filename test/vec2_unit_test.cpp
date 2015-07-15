@@ -7,6 +7,7 @@
 namespace
 {
   // Teest Data
+  const caffmath::vector2 one_vector2     = caffmath::vector2_init(1.f, 1.f);
   const caffmath::vector2 one_two_vector2 = caffmath::vector2_init(1.1f, 2.2f);
   const caffmath::vector2 two_two_vector2 = caffmath::vector2_init(2.2f, 2.2f);
   const float error = 0.0001f;
@@ -46,6 +47,28 @@ TEST(vec2_init)
 }
 
 
+TEST(vec2_get_components)
+{
+  CHECK(test::is_equal<float>(1.1f, caffmath::vector2_get_x(one_two_vector2)));
+  CHECK(test::is_equal<float>(2.2f, caffmath::vector2_get_y(one_two_vector2)));
+}
+
+
+TEST(vec2_to_array)
+{
+  auto std_arr = caffmath::vector2_to_std_array(one_two_vector2);
+
+  CHECK(test::is_equal<float>(1.1f, std_arr.at(0)));
+  CHECK(test::is_equal<float>(2.2f, std_arr.at(1)));
+
+  float c_arr[2];
+  caffmath::vector2_to_array(one_two_vector2, c_arr);
+
+  CHECK(test::is_equal<float>(1.1f, c_arr[0]));
+  CHECK(test::is_equal<float>(2.2f, c_arr[1]));
+}
+
+
 TEST(vec2_arithmetic)
 {
   const caffmath::vector2 add_result = caffmath::vector2_add(one_two_vector2, one_vector2);
@@ -64,7 +87,7 @@ TEST(vec2_arithmetic)
 
 TEST(vec2_lerp)
 {
-  const caffmath::vector2 erp_start   = caffmath::vector2_zero();
+  const caffmath::vector2 erp_start = caffmath::vector2_zero();
   const caffmath::vector2 erp_end   = caffmath::vector2_one();
 
   const caffmath::vector2 dt_0 = vector2_lerp(erp_start, erp_end, 0.f);
