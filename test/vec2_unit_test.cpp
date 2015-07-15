@@ -6,7 +6,7 @@
 
 namespace
 {
-  // Teest Data
+  // Test Data
   const caffmath::vector2 one_vector2     = caffmath::vector2_init(1.f, 1.f);
   const caffmath::vector2 one_two_vector2 = caffmath::vector2_init(1.1f, 2.2f);
   const caffmath::vector2 two_two_vector2 = caffmath::vector2_init(2.2f, 2.2f);
