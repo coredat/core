@@ -2,8 +2,8 @@
 #define TRANSFORM_TYPES_INCLUDED_8D47B2F6_5764_483F_98BA_CE06AEEFB50C
 
 
-#include "../quaternion/quaternion_types.hpp"
-#include "../vector/vector_types.hpp"
+#include "../quaternion/quaternion.hpp"
+#include "../vector/vector3.hpp"
 
 
 namespace caffeine {

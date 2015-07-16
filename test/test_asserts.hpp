@@ -3,6 +3,7 @@
 
 
 #include <math/vector/vector.hpp>
+#include <math/general/to_string.hpp>
 #include <iostream>
 
 

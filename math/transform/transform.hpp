@@ -14,7 +14,7 @@ namespace math {
 
 // ** Interface ** //
 
-inline transform  transform_init(const vector3 position, const vector3 scale, const quaternion &scale);
+inline transform  transform_init(const vector3 position, const vector3 scale, const quaternion &rotation);
 inline matrix44   transform_get_world_matrix(const transform &transform);
 inline void       transform_set_with_world_matrix(transform &transform, const matrix44 &matrix);
 inline transform  transform_inherited(const transform &parent, const transform &child);

@@ -3,7 +3,7 @@
 
 
 #include "matrix_types.hpp"
-#include "../vector/vector4.hpp"
+#include "../vector/vector3.hpp"
 #include <array>
 #include <cstring>
 
@@ -28,7 +28,6 @@ inline matrix33                   matrix33_subtract(const matrix33 &lhs, const m
 inline matrix33                   matrix33_scale(const float scale, const matrix33 &b);
 inline vector3                    matrix33_multiply(const vector3 vector, const matrix33 &b);
 inline matrix33                   matrix33_multiply(const matrix33 &lhs, const matrix33 &rhs);
-inline matrix33                   matrix33_translate(const matrix33 &lhs, const vector3 move);
 inline matrix33                   matrix33_rotate(const matrix33 &lhs, const vector3 euler);
 
 // Transform matrices into other forms
@@ -176,20 +175,20 @@ matrix33_scale(const float lhs, const matrix33 &rhs)
 }
 
 
-vector4
-matrix33_multiply(const vector4 lhs, const matrix33 &rhs)
+vector3
+matrix33_multiply(const vector3 lhs, const matrix33 &rhs)
 {
   const detail::internal_mat3 *right = reinterpret_cast<const detail::internal_mat3*>(&rhs);
-  std::array<float, 4> vec_data;
+  std::array<float, 3> vec_data;
 
   for(int i = 0; i < 9; i += 4)
   {
-    const vector4 dot_vector = vector4_init(right->data[i + 0], right->data[i + 4], right->data[i + 8], right->data[i + 12]);
+    const vector3 dot_vector = vector3_init(right->data[i + 0], right->data[i + 3], right->data[i + 6]);
 
-    vec_data.at(i / 4) = vector4_dot(lhs, dot_vector);
+    vec_data.at(i / 3) = vector3_dot(lhs, dot_vector);
   }
 
-  return vector4_init_with_array(vec_data);
+  return vector3_init_with_array(vec_data);
 }
 
 
@@ -205,31 +204,16 @@ matrix33_multiply(const matrix33 &lhs, const matrix33 &rhs)
   for(uint32_t i = 0; i < 9; ++i)
   {
     //[0,1,2,3] x [0,4,8,12]
-    const uint32_t row = i / 4;
-    const uint32_t col = i % 4;
+    const uint32_t row = i / 3;
+    const uint32_t col = i % 3;
 
-    const vector4 left_vec = vector4_init(left->data[row + 0], left->data[row + 1], left->data[row + 2], left->data[row + 3]);
-    const vector4 right_vec = vector4_init(right->data[col + 0], right->data[col + 4], right->data[col + 8], right->data[col + 12]);
+    const vector3 left_vec = vector3_init(left->data[row + 0], left->data[row + 1], left->data[row + 2]);
+    const vector3 right_vec = vector3_init(right->data[col + 0], right->data[col + 3], right->data[col + 6]);
 
-    internal_mat->data[i] = vector4_dot(left_vec, right_vec);
+    internal_mat->data[i] = vector3_dot(left_vec, right_vec);
   }
 
   return return_mat;
-}
-
-
-matrix33
-matrix33_translate(const matrix33 &mat, const vector3 move)
-{
-  matrix33 copy(mat);
-
-  detail::internal_mat3 *translate_me = reinterpret_cast<detail::internal_mat3*>(&copy);
-
-  translate_me->data[12] += vector3_get_x(move);
-  translate_me->data[13] += vector3_get_y(move);
-  translate_me->data[14] += vector3_get_z(move);
-
-  return copy;
 }
 
 
