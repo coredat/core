@@ -12,6 +12,8 @@ namespace math {
 
 struct transform
 {
+  transform() {}
+
   quaternion  rotation  = quaternion_init(0.f,0.f,0.f,1.f);
   vector3     scale     = vector3_init(1.f,1.f,1.f);
   vector3     position  = vector3_init(0.f,0.f,0.f);
