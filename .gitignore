@@ -26,3 +26,12 @@
 *.exe
 *.out
 *.app
+
+vec2
+vec3
+vec4
+mat3
+mat4
+aabb2
+transform
+quat

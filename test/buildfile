@@ -64,3 +64,14 @@ CppBuild.build :transform do |b|
 	b.out_dir 	= OUT_DIR
 
 end
+
+
+CppBuild.build :quat do |b|
+
+	b.compiler 	= :clang
+	b.inc_dirs 	= INC_DIRS
+	b.files 	= "quaternion_unit_test.cpp"
+	b.config 	= :release
+	b.out_dir 	= OUT_DIR
+
+end
