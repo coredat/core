@@ -2,6 +2,13 @@
 #define MATRIX33_INCLUDED_D6DCE389_FA7C_4C48_A303_C0EDC9A90C8B
 
 
+/*
+  Matrix33
+  Through out this library we consider a 3x3 matrix as a 
+  rotation and scale matrix specifically.
+*/
+
+
 #include "matrix_types.hpp"
 #include "../vector/vector3.hpp"
 #include <array>

@@ -2,6 +2,12 @@
 #define VECTOR2_INCLUDED_077ABD34_E392_49BA_8472_D6541EF2744E
 
 
+/*
+  Vector2
+  2D vector interface and impl.
+*/
+
+
 #include "vector_types.hpp"
 #include "../general/general.hpp"
 #include <array>

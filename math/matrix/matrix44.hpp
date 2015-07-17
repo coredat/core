@@ -2,6 +2,13 @@
 #define MATRIX44_INCLUDED_45952EA8_98A0_40E4_8677_AE79A577E975
 
 
+/*
+  Matrix44
+  Through out this library we consider a 4x4 matrix as a 
+  world matrix.
+*/
+
+
 #include "matrix_types.hpp"
 #include "../vector/vector4.hpp"
 #include <array>

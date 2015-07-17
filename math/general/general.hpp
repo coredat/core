@@ -1,6 +1,10 @@
 #ifndef GENERAL_INCLUDED_BA1581F2_35C3_4026_BCDA_6E9EC3CF253E
 #define GENERAL_INCLUDED_BA1581F2_35C3_4026_BCDA_6E9EC3CF253E
 
+/*
+  These are general math functions and constants.
+  Alot of them are simple stubs to stl functions.
+*/
 
 #include <cmath>
 #include <algorithm>

@@ -1,6 +1,9 @@
 #ifndef TEST_ASSERTS_INCLUDED_E2F2BA2B_C021_4A90_8BFD_945C128208AB
 #define TEST_ASSERTS_INCLUDED_E2F2BA2B_C021_4A90_8BFD_945C128208AB
 
+/*
+	These asserts are for unit tests.
+*/
 
 #include <math/vector/vector.hpp>
 #include <math/general/to_string.hpp>

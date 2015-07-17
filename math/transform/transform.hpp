@@ -2,6 +2,13 @@
 #define TRANSFORM_INCLUDED_E79342EA_D69A_4FEB_BEAD_BA21D7B8B8E6
 
 
+/*
+  Transform
+  --
+  Transform is a position and rotation in 3D space.
+*/
+
+
 #include "../transform/transform_types.hpp"
 #include "../quaternion/quaternion.hpp"
 #include "../vector/vector3.hpp"

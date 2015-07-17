@@ -2,6 +2,12 @@
 #define VECTOR3_INCLUDED_DD26787F_2663_4F50_85D0_7188D23BA64B
 
 
+/*
+  Vector3
+  3D vector interface and impl.
+*/
+
+
 #include "vector_types.hpp"
 #include "vector2.hpp"
 #include "../general/general.hpp"

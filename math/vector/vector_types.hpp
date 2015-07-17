@@ -2,6 +2,12 @@
 #define VECTOR_TYPES_INCLUDED_76A0D96A_8385_4283_9EA9_CF89D0D5A10C
 
 
+/*
+  Vector Types.
+  These are the vector types in caffeine math.
+*/
+
+
 namespace caffeine {
 namespace math {
 

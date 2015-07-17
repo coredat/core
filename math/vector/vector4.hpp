@@ -2,6 +2,12 @@
 #define VECTOR4_INCLUDED_9C1AD544_35E1_456B_B882_DB0C9DAEBF09
 
 
+/*
+  Vector4
+  4D vector interface and impl.
+*/
+
+
 #include "vector_types.hpp"
 #include "vector3.hpp"
 #include "vector2.hpp"
