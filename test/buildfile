@@ -55,6 +55,17 @@ CppBuild.build :aabb2 do |b|
 end
 
 
+CppBuild.build :general do |b|
+
+	b.compiler 	= :clang
+	b.inc_dirs 	= INC_DIRS
+	b.files 	= "general_unit_test.cpp"
+	b.config 	= :release
+	b.out_dir 	= OUT_DIR
+
+end
+
+
 CppBuild.build :transform do |b|
 
 	b.compiler 	= :clang

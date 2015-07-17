@@ -1,10 +1,12 @@
 #ifndef GENERAL_INCLUDED_BA1581F2_35C3_4026_BCDA_6E9EC3CF253E
 #define GENERAL_INCLUDED_BA1581F2_35C3_4026_BCDA_6E9EC3CF253E
 
+
 /*
   These are general math functions and constants.
   Alot of them are simple stubs to stl functions.
 */
+
 
 #include <cmath>
 #include <algorithm>
@@ -28,6 +30,7 @@ inline float              quart_tau()   { return half_pi();       }
 inline float              g_ratio()     { return 1.61803398875f;  }
 inline float              root_two()    { return 1.41421356237f;  }
 inline float              root_three()  { return 1.73205080757f;  }
+
 
 // ** Trig ** //
 

@@ -12,7 +12,7 @@ Some math function maybe missing I tend to add them as required. If something is
 
 
 ## Where are the operators
-I don't use them because it can create a lot of ambigioty. `vec3 * vec3` is the componet multiply or cross product. Cross product you say, then what about `vec4 * vec4`? But what about things like `vec + vec * vec`? Well I think that looks like balls operators aren't hard add, but really breaking it down usually makes it clearer anyway.
+I don't use them because it can create a lot of ambigioty. `vec3 * vec3` is the componet multiply or cross product. Cross product you say, then what about `vec4 * vec4`? But what about things like `vec + vec * vec`? Well I think that looks like balls, operators aren't hard add, but really breaking it down usually makes it clearer anyway.
 
 
 ## SIMD Status
