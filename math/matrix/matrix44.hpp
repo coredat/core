@@ -53,7 +53,7 @@ inline std::array<float, 16>      matrix44_to_array(const matrix44 &m);
 // Get/Set information
 inline float                      matrix44_get(const matrix44 &mat, const uint32_t row, const uint32_t col);
 inline float                      matrix44_get(const matrix44 &mat, const uint32_t i);
-inline float*                     matrix44_get_data(matrix44 &mat);
+inline const float*               matrix44_get_data(const matrix44 &mat);
 inline void                       matrix44_set(matrix44 &mat, const uint32_t row, const uint32_t col, const float set);
 inline matrix33                   matrix44_get_rotation(const matrix44 &a);
 inline vector3                    matrix44_get_position(const matrix44 &a);
@@ -354,10 +354,10 @@ matrix44_get(const matrix44 &mat, const uint32_t index)
 }
 
   
-float*
-matrix44_get_data(matrix44 &mat)
+const float*
+matrix44_get_data(const matrix44 &mat)
 {
-  detail::internal_mat4 *internal_mat = reinterpret_cast<detail::internal_mat4*>(&mat);
+  const detail::internal_mat4 *internal_mat = reinterpret_cast<const detail::internal_mat4*>(&mat);
   return &(internal_mat->data[0]);
 }
 
