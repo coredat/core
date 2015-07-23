@@ -33,6 +33,7 @@ inline matrix33                   matrix33_init_with_array(const std::array<floa
 inline matrix33                   matrix33_add(const matrix33 &lhs, const matrix33 &rhs);
 inline matrix33                   matrix33_subtract(const matrix33 &lhs, const matrix33 &rhs);
 inline matrix33                   matrix33_scale(const float scale, const matrix33 &b);
+inline matrix33                   matrix33_scale(const float x, const float y, const float z, const matrix33 &b);
 inline vector3                    matrix33_multiply(const vector3 vector, const matrix33 &b);
 inline matrix33                   matrix33_multiply(const matrix33 &lhs, const matrix33 &rhs);
 inline matrix33                   matrix33_rotate(const matrix33 &lhs, const vector3 euler);
@@ -168,15 +169,21 @@ matrix33_subtract(const matrix33 &lhs, const matrix33 &rhs)
 matrix33
 matrix33_scale(const float lhs, const matrix33 &rhs)
 {
+  return matrix_scale(lhs, lhs, lhs, rhs);
+}
+
+
+matrix33
+matrix33_scale(const float x, const float y, const float z, const matrix33 &b)
+{
   const detail::internal_mat3 *right = reinterpret_cast<const detail::internal_mat3*>(&rhs);
 
   matrix33 return_mat; 
   detail::internal_mat3 *internal_mat = reinterpret_cast<detail::internal_mat3*>(&return_mat);
 
-  for(int i = 0; i < 9; ++i)
-  {
-    internal_mat->data[i] = lhs * right->data[0];
-  }
+  internal_mat->data[0] = x * right->data[0];
+  internal_mat->data[4] = y * right->data[0];
+  internal_mat->data[9] = z * right->data[0];
 
   return return_mat;
 }
