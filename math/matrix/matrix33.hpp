@@ -182,7 +182,7 @@ matrix33_scale(const float x, const float y, const float z, const matrix33 &b)
   detail::internal_mat3 *internal_mat = reinterpret_cast<detail::internal_mat3*>(&return_mat);
 
   internal_mat->data[0] = x * right->data[0];
-  internal_mat->data[4] = y * right->data[0];
+  internal_mat->data[4] = y * right->data[0];x
   internal_mat->data[9] = z * right->data[0];
 
   return return_mat;
