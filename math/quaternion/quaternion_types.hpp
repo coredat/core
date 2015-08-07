@@ -7,22 +7,16 @@
 */
 
 
-namespace caffeine {
 namespace math {
 
 
-class quaternion
+class quat
 {
 	float data[4]; // x, y, z, w;
 };
 
 
 } // namespace
-} // namespace
-
-
-namespace caffmath = ::caffeine::math;
-
 
 
 #endif // include guard
