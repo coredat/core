@@ -8,35 +8,28 @@
 */
 
 
-namespace caffeine {
 namespace math {
 
 
 // To access the components you should go through the vector interface.
 
-class vector4
+class vec4
 {
   float data[4];
 };
 
-class vector3
+class vec3
 {
   float data[3];
 };
 
-class vector2
+class vec2
 {
   float data[2];
 };
 
   
 } // namespace
-} // namespace
-
-
-// aliases
-namespace caffmath = ::caffeine::math;
-namespace caff_math = ::caffeine::math;
 
 
 #endif // include guard

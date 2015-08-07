@@ -14,43 +14,42 @@
 #include <assert.h>
 
 
-namespace caffeine {
 namespace math {
 
 
 // ** Interface ** //
 
 // ** Constants ** //
-inline vector2                vector2_zero();
-inline vector2                vector2_one();
-inline vector2                vector2_zero_one();
+inline vec2                   vec2_zero();
+inline vec2                   vec2_one();
+inline vec2                   vec2_zero_one();
 
 // ** Initialize new vectors ** //
-inline vector2                vector2_init(const float val);
-inline vector2                vector2_init(const float x, const float y);
-inline vector2                vector2_init_with_array(const float *arr);
-inline vector2                vector2_init_with_array(const std::array<float, 2> &vec);
+inline vec2                   vec2_init(const float val);
+inline vec2                   vec2_init(const float x, const float y);
+inline vec2                   vec2_init_with_array(const float *arr);
+inline vec2                   vec2_init_with_array(const std::array<float, 2> &vec);
 
 // ** Get elements ** //
-inline float                  vector2_get_x(const vector2 vec);
-inline float                  vector2_get_y(const vector2 vec);
-inline void                   vector2_to_array(const vector2 a, float *out_array);
-inline std::array<float, 2>   vector2_to_std_array(const vector2 a);
+inline float                  vec2_get_x(const vec2 vec);
+inline float                  vec2_get_y(const vec2 vec);
+inline void                   vec2_to_array(const vec2 a, float *out_array);
+inline std::array<float, 2>   vec2_to_std_array(const vec2 a);
 
 // ** Arithmetic ** //
-inline vector2                vector2_add(const vector2 a, const vector2 b);
-inline vector2                vector2_subtract(const vector2 a, const vector2 b);
-inline vector2                vector2_multiply(const vector2 a, const vector2 b);
-inline vector2                vector2_divide(const vector2 a, const vector2 b);
+inline vec2                   vec2_add(const vec2 a, const vec2 b);
+inline vec2                   vec2_subtract(const vec2 a, const vec2 b);
+inline vec2                   vec2_multiply(const vec2 a, const vec2 b);
+inline vec2                   vec2_divide(const vec2 a, const vec2 b);
 
 // ** Special Operations ** //
-inline vector2                vector2_lerp(const vector2 start, const vector2 end, const float dt);
-//inline vector2                vector2_slerp(); // not impl
-inline vector2                vector2_scale(const vector2 a, const float scale);
-inline vector2                vector2_normalize(const vector2 a);
-inline float                  vector2_length(const vector2 a);
-inline float 	                vector2_cross(const vector2 a, const vector2 b);
-inline float                  vector2_dot(const vector2 a, const vector2 b);
+inline vec2                   vec2_lerp(const vec2 start, const vec2 end, const float dt);
+//inline vec2                 vec2_slerp(); // not impl
+inline vec2                   vec2_scale(const vec2 a, const float scale);
+inline vec2                   vec2_normalize(const vec2 a);
+inline float                  vec2_length(const vec2 a);
+inline float 	                vec2_cross(const vec2 a, const vec2 b);
+inline float                  vec2_dot(const vec2 a, const vec2 b);
 
 
 // ** Implimentation ** //
@@ -68,39 +67,39 @@ namespace detail
 
 // Constants
 
-vector2
-vector2_zero()
+vec2
+vec2_zero()
 {
-  return vector2_init(0.f);
+  return vec2_init(0.f);
 }
 
 
-vector2
-vector2_one()
+vec2
+vec2_one()
 {
-  return vector2_init(1.f);
+  return vec2_init(1.f);
 }
 
 
-vector2
-vector2_zero_one()
+vec2
+vec2_zero_one()
 {
-  return vector2_init(0.f, 1.f);
+  return vec2_init(0.f, 1.f);
 }
 
 // Initialize
 
-vector2
-vector2_init(const float val)
+vec2
+vec2_init(const float val)
 {
-  return vector2_init(val, val);
+  return vec2_init(val, val);
 }
 
 
-vector2
-vector2_init(const float x, const float y)
+vec2
+vec2_init(const float x, const float y)
 {
-  vector2 return_vec;
+  vec2 return_vec;
   detail::internal_vec2 *internal_vec = reinterpret_cast<detail::internal_vec2*>(&return_vec);
 
   internal_vec->x = x;
@@ -110,24 +109,24 @@ vector2_init(const float x, const float y)
 }
 
 
-vector2
-vector2_init_with_array(const float *arr)
+vec2
+vec2_init_with_array(const float *arr)
 {
-  return vector2_init(arr[0], arr[1]);
+  return vec2_init(arr[0], arr[1]);
 }
 
 
-vector2
-vector2_init_with_array(const std::array<float, 2> &arr)
+vec2
+vec2_init_with_array(const std::array<float, 2> &arr)
 {
-  return vector2_init(arr.at(0), arr.at(1));
+  return vec2_init(arr.at(0), arr.at(1));
 }
 
 
 // Get components.
 
 float
-vector2_get_x(const vector2 vec)
+vec2_get_x(const vec2 vec)
 {
   const detail::internal_vec2 *internal_vec = reinterpret_cast<const detail::internal_vec2*>(&vec);
   return internal_vec->x;
@@ -135,7 +134,7 @@ vector2_get_x(const vector2 vec)
 
 
 float
-vector2_get_y(const vector2 vec)
+vec2_get_y(const vec2 vec)
 {
   const detail::internal_vec2 *internal_vec = reinterpret_cast<const detail::internal_vec2*>(&vec);
   return internal_vec->y;
@@ -143,19 +142,19 @@ vector2_get_y(const vector2 vec)
 
 
 void
-vector2_to_array(const vector2 a, float *out_array)
+vec2_to_array(const vec2 a, float *out_array)
 {
-  out_array[0] = vector2_get_x(a);
-  out_array[1] = vector2_get_y(a);
+  out_array[0] = vec2_get_x(a);
+  out_array[1] = vec2_get_y(a);
 }
 
 
 std::array<float, 2>
-vector2_to_std_array(const vector2 a)
+vec2_to_std_array(const vec2 a)
 {
   std::array<float, 2> return_array = {
-    vector2_get_x(a),
-    vector2_get_y(a),
+    vec2_get_x(a),
+    vec2_get_y(a),
   };
 
   return return_array;
@@ -163,38 +162,38 @@ vector2_to_std_array(const vector2 a)
 
 
 
-vector2
-vector2_add(const vector2 a, const vector2 b)
+vec2
+vec2_add(const vec2 a, const vec2 b)
 {
   const detail::internal_vec2 *vec_a = reinterpret_cast<const detail::internal_vec2*>(&a);
   const detail::internal_vec2 *vec_b = reinterpret_cast<const detail::internal_vec2*>(&b);
 
-  return vector2_init(vec_a->x + vec_b->x, vec_a->y + vec_b->y);
+  return vec2_init(vec_a->x + vec_b->x, vec_a->y + vec_b->y);
 }
 
 
-vector2
-vector2_subtract(const vector2 a, const vector2 b)
+vec2
+vec2_subtract(const vec2 a, const vec2 b)
 {
   const detail::internal_vec2 *vec_a = reinterpret_cast<const detail::internal_vec2*>(&a);
   const detail::internal_vec2 *vec_b = reinterpret_cast<const detail::internal_vec2*>(&b);
 
-  return vector2_init(vec_a->x - vec_b->x, vec_a->y - vec_b->y);
+  return vec2_init(vec_a->x - vec_b->x, vec_a->y - vec_b->y);
 }
 
 
-vector2
-vector2_multiply(const vector2 a, const vector2 b)
+vec2
+vec2_multiply(const vec2 a, const vec2 b)
 {
   const detail::internal_vec2 *vec_a = reinterpret_cast<const detail::internal_vec2*>(&a);
   const detail::internal_vec2 *vec_b = reinterpret_cast<const detail::internal_vec2*>(&b);
 
-  return vector2_init(vec_a->x * vec_b->x, vec_a->y * vec_b->y);
+  return vec2_init(vec_a->x * vec_b->x, vec_a->y * vec_b->y);
 }
 
 
-vector2
-vector2_divide(const vector2 a, const vector2 b)
+vec2
+vec2_divide(const vec2 a, const vec2 b)
 {
   const detail::internal_vec2 *vec_a = reinterpret_cast<const detail::internal_vec2*>(&a);
   const detail::internal_vec2 *vec_b = reinterpret_cast<const detail::internal_vec2*>(&b);
@@ -202,42 +201,42 @@ vector2_divide(const vector2 a, const vector2 b)
   // Divide by zero check.
   assert(vec_b->x != 0 && vec_b->y != 0);
 
-  return vector2_init(vec_a->x / vec_b->x, vec_a->y / vec_b->y);
+  return vec2_init(vec_a->x / vec_b->x, vec_a->y / vec_b->y);
 }
 
 
-vector2
-vector2_lerp(const vector2 start, const vector2 end, const float dt)
+vec2
+vec2_lerp(const vec2 start, const vec2 end, const float dt)
 {
-  const vector2 difference = vector2_subtract(end, start);
-  const vector2 scaled     = vector2_scale(difference, dt);
-  const vector2 position   = vector2_add(start, scaled);
+  const vec2 difference = vec2_subtract(end, start);
+  const vec2 scaled     = vec2_scale(difference, dt);
+  const vec2 position   = vec2_add(start, scaled);
 
   return position;
 }
 
 
-vector2
-vector2_scale(const vector2 a, const float scale)
+vec2
+vec2_scale(const vec2 a, const float scale)
 {
-  const vector2 scale_vec = vector2_init(scale);
-  return vector2_multiply(a, scale_vec);
+  const vec2 scale_vec = vec2_init(scale);
+  return vec2_multiply(a, scale_vec);
 }
 
 
-vector2
-vector2_normalize(const vector2 a)
+vec2
+vec2_normalize(const vec2 a)
 {
-  const float length = vector2_length(a);
+  const float length = vec2_length(a);
 
   assert(length != 0); // Don't pass zero vectors. (0,0);
 
-  return vector2_scale(a, (1.f / length));
+  return vec2_scale(a, (1.f / length));
 }
 
 
 float
-vector2_length(const vector2 a)
+vec2_length(const vec2 a)
 {
   const detail::internal_vec2 *vec_a = reinterpret_cast<const detail::internal_vec2*>(&a);
   const float x = vec_a->x * vec_a->x + vec_a->y * vec_a->y;
@@ -247,22 +246,21 @@ vector2_length(const vector2 a)
 
 
 float
-vector2_cross(const vector2 a, const vector2 b)
+vec2_cross(const vec2 a, const vec2 b)
 {
-  return (vector2_get_x(a) * vector2_get_y(b)) -
-         (vector2_get_y(a) * vector2_get_x(b));
+  return (vec2_get_x(a) * vec2_get_y(b)) -
+         (vec2_get_y(a) * vec2_get_x(b));
 }
 
 
 float
-vector2_dot(const vector2 a, const vector2 b)
+vec2_dot(const vec2 a, const vec2 b)
 {
-  return (vector2_get_x(a) * vector2_get_x(b)) +
-         (vector2_get_y(a) * vector2_get_y(b));
+  return (vec2_get_x(a) * vec2_get_x(b)) +
+         (vec2_get_y(a) * vec2_get_y(b));
 }
 
 
-} // namespace
 } // namespace
 
 
