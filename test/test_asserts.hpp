@@ -5,18 +5,18 @@
 	These asserts are for unit tests.
 */
 
-#include <math/vector/vector.hpp>
+#include <math/vec/vec.hpp>
 #include <math/general/to_string.hpp>
 #include <iostream>
 
 
-// Vector 4
+// vec 4
 
-bool vector4_is_equal(const caffmath::vector4 a, const caffmath::vector4 b)
+bool vec4_is_equal(const math::vec4 a, const math::vec4 b)
 {
-	if(caffmath::vector4_get_x(a) == caffmath::vector4_get_x(b) &&
-	   caffmath::vector4_get_y(a) == caffmath::vector4_get_y(b) &&
-	   caffmath::vector4_get_z(a) == caffmath::vector4_get_z(b))
+	if(math::vec4_get_x(a) == math::vec4_get_x(b) &&
+	   math::vec4_get_y(a) == math::vec4_get_y(b) &&
+	   math::vec4_get_z(a) == math::vec4_get_z(b))
 	{
 		return true;
 	}
@@ -24,46 +24,46 @@ bool vector4_is_equal(const caffmath::vector4 a, const caffmath::vector4 b)
 	return false;
 }
 
-bool vector4_is_not_equal(const caffmath::vector4 a, const caffmath::vector4 b)
+bool vec4_is_not_equal(const math::vec4 a, const math::vec4 b)
 {
-	return !vector4_is_equal(a, b);
+	return !vec4_is_equal(a, b);
 }
 
-bool vector4_components_are(const caffmath::vector4 a, const float x, const float y, const float z, const float w)
+bool vec4_components_are(const math::vec4 a, const float x, const float y, const float z, const float w)
 {
-	if(caffmath::vector4_get_x(a) == x && caffmath::vector4_get_y(a) == y && caffmath::vector4_get_z(a) == z && caffmath::vector4_get_w(a) == w)
+	if(math::vec4_get_x(a) == x && math::vec4_get_y(a) == y && math::vec4_get_z(a) == z && math::vec4_get_w(a) == w)
 	{
 		return true;
 	}
 
-	//std::cout << caffmath::vector4_get_x(a) << ", " << caffmath::vector4_get_y(a) << ", " << caffmath::vector4_get_z(a) << ", " << caffmath::vector4_get_w(a) << std::endl;
+	//std::cout << math::vec4_get_x(a) << ", " << math::vec4_get_y(a) << ", " << math::vec4_get_z(a) << ", " << math::vec4_get_w(a) << std::endl;
 
 	return false;
 }
 
-bool vector4_components_are_near(const caffmath::vector4 a, const float x, const float y, const float z, const float w, const float error)
+bool vec4_components_are_near(const math::vec4 a, const float x, const float y, const float z, const float w, const float error)
 {
-	const float x_result = caffmath::vector4_get_x(a) - x;
-	const float y_result = caffmath::vector4_get_y(a) - y;
-	const float z_result = caffmath::vector4_get_z(a) - z;
-	const float w_result = caffmath::vector4_get_w(a) - w;
+	const float x_result = math::vec4_get_x(a) - x;
+	const float y_result = math::vec4_get_y(a) - y;
+	const float z_result = math::vec4_get_z(a) - z;
+	const float w_result = math::vec4_get_w(a) - w;
 
 	if(std::abs(x_result) < error && std::abs(y_result) < error && std::abs(z_result) < error && std::abs(w_result) < error)
 	{
 		return true;
 	}
 
-	std::cout << caffmath::to_string(a) << std::endl;
+	std::cout << math::to_string(a) << std::endl;
 
 	return false;
 }
 
 
-// Vector3
-bool vector3_is_equal(const caffmath::vector3 a, const caffmath::vector3 b)
+// vec3
+bool vec3_is_equal(const math::vec3 a, const math::vec3 b)
 {
-	if(caffmath::vector3_get_x(a) == caffmath::vector3_get_x(b) &&
-	   caffmath::vector3_get_y(a) == caffmath::vector3_get_y(b))
+	if(math::vec3_get_x(a) == math::vec3_get_x(b) &&
+	   math::vec3_get_y(a) == math::vec3_get_y(b))
 	{
 		return true;
 	}
@@ -71,44 +71,44 @@ bool vector3_is_equal(const caffmath::vector3 a, const caffmath::vector3 b)
 	return false;
 }
 
-bool vector3_is_not_equal(const caffmath::vector3 a, const caffmath::vector3 b)
+bool vec3_is_not_equal(const math::vec3 a, const math::vec3 b)
 {
-	return !vector3_is_equal(a, b);
+	return !vec3_is_equal(a, b);
 }
 
-bool vector3_components_are(const caffmath::vector3 a, const float x, const float y, const float z)
+bool vec3_components_are(const math::vec3 a, const float x, const float y, const float z)
 {
-	if(caffmath::vector3_get_x(a) == x && caffmath::vector3_get_y(a) == y && caffmath::vector3_get_z(a) == z)
+	if(math::vec3_get_x(a) == x && math::vec3_get_y(a) == y && math::vec3_get_z(a) == z)
 	{
 		return true;
 	}
 
-	//std::cout << caffmath::vector4_get_x(a) << ", " << caffmath::vector4_get_y(a) << ", " << caffmath::vector4_get_z(a) << ", " << caffmath::vector4_get_w(a) << std::endl;
+	//std::cout << math::vec4_get_x(a) << ", " << math::vec4_get_y(a) << ", " << math::vec4_get_z(a) << ", " << math::vec4_get_w(a) << std::endl;
 
 	return false;
 }
 
-bool vector3_components_are_near(const caffmath::vector3 a, const float x, const float y, const float z, float error)
+bool vec3_components_are_near(const math::vec3 a, const float x, const float y, const float z, float error)
 {
-	const float x_result = caffmath::vector3_get_x(a) - x;
-	const float y_result = caffmath::vector3_get_y(a) - y;
-	const float z_result = caffmath::vector3_get_z(a) - z;
+	const float x_result = math::vec3_get_x(a) - x;
+	const float y_result = math::vec3_get_y(a) - y;
+	const float z_result = math::vec3_get_z(a) - z;
 
 	if(std::abs(x_result) < error && std::abs(y_result) < error && std::abs(z_result) < error)
 	{
 		return true;
 	}
 
-	std::cout << caffmath::to_string(a) << std::endl;
+	std::cout << math::to_string(a) << std::endl;
 
 	return false;
 }
 
-// Vector 2
-bool vector2_is_equal(const caffmath::vector2 a, const caffmath::vector2 b)
+// vec 2
+bool vec2_is_equal(const math::vec2 a, const math::vec2 b)
 {
-	if(caffmath::vector2_get_x(a) == caffmath::vector2_get_x(b) &&
-	   caffmath::vector2_get_y(a) == caffmath::vector2_get_y(b))
+	if(math::vec2_get_x(a) == math::vec2_get_x(b) &&
+	   math::vec2_get_y(a) == math::vec2_get_y(b))
 	{
 		return true;
 	}
@@ -116,34 +116,34 @@ bool vector2_is_equal(const caffmath::vector2 a, const caffmath::vector2 b)
 	return false;
 }
 
-bool vector2_is_not_equal(const caffmath::vector2 a, const caffmath::vector2 b)
+bool vec2_is_not_equal(const math::vec2 a, const math::vec2 b)
 {
-	return !vector2_is_equal(a, b);
+	return !vec2_is_equal(a, b);
 }
 
-bool vector2_components_are(const caffmath::vector2 a, const float x, const float y)
+bool vec2_components_are(const math::vec2 a, const float x, const float y)
 {
-	if(caffmath::vector2_get_x(a) == x && caffmath::vector2_get_y(a) == y)
+	if(math::vec2_get_x(a) == x && math::vec2_get_y(a) == y)
 	{
 		return true;
 	}
 
-	//std::cout << caffmath::vector4_get_x(a) << ", " << caffmath::vector4_get_y(a) << ", " << caffmath::vector4_get_z(a) << ", " << caffmath::vector4_get_w(a) << std::endl;
+	//std::cout << math::vec4_get_x(a) << ", " << math::vec4_get_y(a) << ", " << math::vec4_get_z(a) << ", " << math::vec4_get_w(a) << std::endl;
 
 	return false;
 }
 
-bool vector2_components_are_near(const caffmath::vector2 a, const float x, const float y, float error)
+bool vec2_components_are_near(const math::vec2 a, const float x, const float y, float error)
 {
-	const float x_result = caffmath::vector2_get_x(a) - x;
-	const float y_result = caffmath::vector2_get_y(a) - y;
+	const float x_result = math::vec2_get_x(a) - x;
+	const float y_result = math::vec2_get_y(a) - y;
 
 	if(std::abs(x_result) < error && std::abs(y_result) < error)
 	{
 		return true;
 	}
 
-	std::cout << caffmath::to_string(a) << std::endl;
+	std::cout << math::to_string(a) << std::endl;
 
 	return false;
 }
