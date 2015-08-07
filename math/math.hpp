@@ -8,8 +8,8 @@
 
 
 #include "vec/vec.hpp"
-#include "matrix/matrix.hpp"
-#include "quaternion/quaternion.hpp"
+#include "mat/mat.hpp"
+#include "quat/quat.hpp"
 #include "transform/transform.hpp"
 
 

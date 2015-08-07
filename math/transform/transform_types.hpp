@@ -2,11 +2,10 @@
 #define TRANSFORM_TYPES_INCLUDED_8D47B2F6_5764_483F_98BA_CE06AEEFB50C
 
 
-#include "../quaternion/quaternion.hpp"
-#include "../vector/vector3.hpp"
+#include "../quat/quat.hpp"
+#include "../vec/vec3.hpp"
 
 
-namespace caffeine {
 namespace math {
 
 
@@ -14,13 +13,12 @@ struct transform
 {
   transform() {}
 
-  quaternion  rotation  = quaternion_init(0.f,0.f,0.f,1.f);
-  vector3     scale     = vector3_init(1.f,1.f,1.f);
-  vector3     position  = vector3_init(0.f,0.f,0.f);
+  quat     rotation  = quat_init(0.f,0.f,0.f,1.f);
+  vec3     scale     = vec3_init(1.f,1.f,1.f);
+  vec3     position  = vec3_init(0.f,0.f,0.f);
 }; // class
 
 
-} // namespace
 } // namespace
 
 
