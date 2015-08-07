@@ -3,13 +3,13 @@
 
 
 /*
-  Matrix44
+  Matrix 44
   Through out this library we consider a 4x4 matrix as a 
   world matrix.
 */
 
 
-#include "matrix_types.hpp"
+#include "mat_types.hpp"
 #include "../vec/vec4.hpp"
 #include <array>
 #include <cstring>
@@ -19,45 +19,45 @@ namespace math {
 
 
 // Constants
-inline matrix44                   matrix44_id();
-inline matrix44                   matrix44_zero();
+inline mat4                       mat4_id();
+inline mat4                       mat4_zero();
 
 // Init
-inline matrix44                   matrix44_init(); // will return an id array
-inline matrix44                   matrix44_init(const float x);
-inline matrix44                   matrix44_init_with_array(const float arr[]);
-inline matrix44                   matrix44_init_with_array(const std::array<float, 16> &array);
+inline mat4                       mat4_init(); // will return an id array
+inline mat4                       mat4_init(const float x);
+inline mat4                       mat4_init_with_array(const float arr[]);
+inline mat4                       mat4_init_with_array(const std::array<float, 16> &array);
 
 // Generate transformation matrices.
-inline matrix44                   matrix44_lookat(const vec3 eye_position, const vec3 look_at_position, const vec3 up);
-inline matrix44                   matrix44_projection(const float width, const float height, const float near_plane, const float far_plane, const float fov);
-inline matrix44                   matrix44_orthographic(const float width, const float height, const float depth); // Not impl
-inline matrix44                   matrix44_scale(const float x, const float y, const float z);
-inline matrix44                   matrix44_translate(const matrix44 &lhs, const vec3 move);
-inline matrix44                   matrix44_rotate_around_axis(const vec3 axis, const float radians);
+inline mat4                       mat4_lookat(const vec3 eye_position, const vec3 look_at_position, const vec3 up);
+inline mat4                       mat4_projection(const float width, const float height, const float near_plane, const float far_plane, const float fov);
+inline mat4                       mat4_orthographic(const float width, const float height, const float depth); // Not impl
+inline mat4                       mat4_scale(const float x, const float y, const float z);
+inline mat4                       mat4_translate(const mat4 &lhs, const vec3 move);
+inline mat4                       mat4_rotate_around_axis(const vec3 axis, const float radians);
 
 // Operations
-inline matrix44                   matrix44_add(const matrix44 &lhs, const matrix44 &rhs);
-inline matrix44                   matrix44_subtract(const matrix44 &lhs, const matrix44 &rhs);
-inline matrix44                   matrix44_multiply(const float val, const matrix44 &b);
-inline vec4                    matrix44_multiply(const vec4 vec, const matrix44 &b);
-inline matrix44                   matrix44_multiply(const matrix44 &lhs, const matrix44 &rhs);
+inline mat4                       mat4_add(const mat4 &lhs, const mat4 &rhs);
+inline mat4                       mat4_subtract(const mat4 &lhs, const mat4 &rhs);
+inline mat4                       mat4_multiply(const float val, const mat4 &b);
+inline vec4                       mat4_multiply(const vec4 vec, const mat4 &b);
+inline mat4                       mat4_multiply(const mat4 &lhs, const mat4 &rhs);
 
 // Transform matrices into other forms
-inline matrix44                   matrix44_get_transpose(const matrix44 &a);
-inline matrix44                   matrix44_get_inverse(const matrix44 &a);
-inline matrix44                   matrix44_get_scale(const matrix44 &a, const vec3 scale);
-inline void                       matrix44_to_array(const matrix44 &m, float *array);
-inline std::array<float, 16>      matrix44_to_array(const matrix44 &m);
+inline mat4                       mat4_get_transpose(const mat4 &a);
+inline mat4                       mat4_get_inverse(const mat4 &a);
+inline mat4                       mat4_get_scale(const mat4 &a, const vec3 scale);
+inline void                       mat4_to_array(const mat4 &m, float *array);
+inline std::array<float, 16>      mat4_to_array(const mat4 &m);
 
 // Get/Set information
-inline float                      matrix44_get(const matrix44 &mat, const uint32_t row, const uint32_t col);
-inline float                      matrix44_get(const matrix44 &mat, const uint32_t i);
-inline const float*               matrix44_get_data(const matrix44 &mat);
-inline void                       matrix44_set(matrix44 &mat, const uint32_t row, const uint32_t col, const float set);
-inline matrix33                   matrix44_get_rotation(const matrix44 &a);
-inline vec3                    matrix44_get_position(const matrix44 &a);
-inline vec3                    matrix44_get_scale(const matrix44 &a);
+inline float                      mat4_get(const mat4 &mat, const uint32_t row, const uint32_t col);
+inline float                      mat4_get(const mat4 &mat, const uint32_t i);
+inline const float*               mat4_get_data(const mat4 &mat);
+inline void                       mat4_set(mat4 &mat, const uint32_t row, const uint32_t col, const float set);
+inline mat3                       mat4_get_rotation(const mat4 &a);
+inline vec3                       mat4_get_position(const mat4 &a);
+inline vec3                       mat4_get_scale(const mat4 &a);
 
 
 // Impl
@@ -72,8 +72,8 @@ namespace detail
 }
 
 
-matrix44
-matrix44_id()
+mat4
+mat4_id()
 {
   std::array<float, 16> id_array = {
     1.f, 0.f, 0.f, 0.f,
@@ -82,12 +82,12 @@ matrix44_id()
     0.f, 0.f, 0.f, 1.f,
   };
 
-  return matrix44_init_with_array(&id_array[0]);
+  return mat4_init_with_array(&id_array[0]);
 }
 
 
-matrix44
-matrix44_zero()
+mat4
+mat4_zero()
 {
   std::array<float, 16> zero_array = {
     0.f, 0.f, 0.f, 0.f,
@@ -96,19 +96,19 @@ matrix44_zero()
     0.f, 0.f, 0.f, 0.f,
   };
 
-  return matrix44_init_with_array(&zero_array[0]);  
+  return mat4_init_with_array(&zero_array[0]);  
 }
 
 
-matrix44
-matrix44_init()
+mat4
+mat4_init()
 {
-  return matrix44_id();
+  return mat4_id();
 }
 
 
-matrix44
-matrix44_init(const float x)
+mat4
+mat4_init(const float x)
 {
   std::array<float, 16> x_array = {
     x,x,x,x,
@@ -116,14 +116,14 @@ matrix44_init(const float x)
     x,x,x,x,
   };
 
-  return matrix44_init_with_array(x_array);
+  return mat4_init_with_array(x_array);
 }
 
 
-matrix44
-matrix44_init_with_array(const float array[])
+mat4
+mat4_init_with_array(const float array[])
 {
-  matrix44 return_mat;
+  mat4 return_mat;
   detail::internal_mat4 *internal_mat = reinterpret_cast<detail::internal_mat4*>(&return_mat);
 
   memcpy(internal_mat->data, array, sizeof(internal_mat->data));
@@ -132,15 +132,15 @@ matrix44_init_with_array(const float array[])
 }
 
 
-matrix44
-matrix44_init_with_array(const std::array<float, 16> &array)
+mat4
+mat4_init_with_array(const std::array<float, 16> &array)
 {
-  return matrix44_init_with_array(&array[0]);
+  return mat4_init_with_array(&array[0]);
 }
 
 
-matrix44
-matrix44_lookat(const vec3 eye_position, const vec3 look_at_position, const vec3 up)
+mat4
+mat4_lookat(const vec3 eye_position, const vec3 look_at_position, const vec3 up)
 {
   const vec3 z_axis = vec3_normalize(vec3_subtract(look_at_position, eye_position));
   const vec3 x_axis = vec3_normalize(vec3_cross(z_axis, up));
@@ -169,18 +169,18 @@ matrix44_lookat(const vec3 eye_position, const vec3 look_at_position, const vec3
     1.f,
   };
 
-  return matrix44_init_with_array(&array_mat[0]);
+  return mat4_init_with_array(&array_mat[0]);
 }
 
 
-matrix44
-matrix44_projection(const float width, const float height, const float near_plane, const float far_plane, const float fov)
+mat4
+mat4_projection(const float width, const float height, const float near_plane, const float far_plane, const float fov)
 {
   const float aspect_ratio = width / height;
   const float one_over_tan_half_fov = 1.f / math::tan(fov * 0.5f);
   const float plane_diff = far_plane - near_plane;
 
-  //matrix44 return_mat = matrix44_zero();
+  //mat4 return_mat = mat4_zero();
   std::array<float, 16> proj_mat =
   {
     one_over_tan_half_fov / aspect_ratio,
@@ -205,25 +205,25 @@ matrix44_projection(const float width, const float height, const float near_plan
 
  };
 
- return matrix44_init_with_array(&proj_mat[0]);
+ return mat4_init_with_array(&proj_mat[0]);
 }
 
 
-matrix44
-matrix44_orthographic(const float width, const float height, const float depth)
+mat4
+mat4_orthographic(const float width, const float height, const float depth)
 {
-  return matrix44_zero();
+  return mat4_zero();
 }
 
 
 // Operations
-matrix44
-matrix44_add(const matrix44 &lhs, const matrix44 &rhs)
+mat4
+mat4_add(const mat4 &lhs, const mat4 &rhs)
 {
   const detail::internal_mat4 *left = reinterpret_cast<const detail::internal_mat4*>(&lhs);
   const detail::internal_mat4 *right = reinterpret_cast<const detail::internal_mat4*>(&rhs);
 
-  matrix44 return_mat; 
+  mat4 return_mat; 
   detail::internal_mat4 *internal_mat = reinterpret_cast<detail::internal_mat4*>(&return_mat);
 
   for(int i = 0; i < 16; ++i)
@@ -235,13 +235,13 @@ matrix44_add(const matrix44 &lhs, const matrix44 &rhs)
 }
 
 
-matrix44
-matrix44_subtract(const matrix44 &lhs, const matrix44 &rhs)
+mat4
+mat4_subtract(const mat4 &lhs, const mat4 &rhs)
 {
   const detail::internal_mat4 *left = reinterpret_cast<const detail::internal_mat4*>(&lhs);
   const detail::internal_mat4 *right = reinterpret_cast<const detail::internal_mat4*>(&rhs);
 
-  matrix44 return_mat; 
+  mat4 return_mat; 
   detail::internal_mat4 *internal_mat = reinterpret_cast<detail::internal_mat4*>(&return_mat);
 
   for(int i = 0; i < 16; ++i)
@@ -253,19 +253,19 @@ matrix44_subtract(const matrix44 &lhs, const matrix44 &rhs)
 }
 
 
-matrix44
-matrix44_multiply(const float lhs, const matrix44 &rhs)
+mat4
+mat4_multiply(const float lhs, const mat4 &rhs)
 {
-  matrix44 multiply_mat = matrix44_init(lhs);
+  mat4 multiply_mat = mat4_init(lhs);
   
-  return matrix44_multiply(multiply_mat, rhs);
+  return mat4_multiply(multiply_mat, rhs);
 }
   
   
-matrix44
-matrix44_scale(const float x, const float y, const float z)
+mat4
+mat4_scale(const float x, const float y, const float z)
 {
-  matrix44 return_mat = matrix44_id();
+  mat4 return_mat = mat4_id();
   detail::internal_mat4 *internal_mat = reinterpret_cast<detail::internal_mat4*>(&return_mat);
   
   internal_mat->data[0]  = x;
@@ -278,7 +278,7 @@ matrix44_scale(const float x, const float y, const float z)
 
 
 vec4
-matrix44_multiply(const vec4 lhs, const matrix44 &rhs)
+mat4_multiply(const vec4 lhs, const mat4 &rhs)
 {
   const detail::internal_mat4 *right = reinterpret_cast<const detail::internal_mat4*>(&rhs);
   std::array<float, 4> vec_data;
@@ -294,13 +294,13 @@ matrix44_multiply(const vec4 lhs, const matrix44 &rhs)
 }
 
 
-matrix44
-matrix44_multiply(const matrix44 &lhs, const matrix44 &rhs)
+mat4
+mat4_multiply(const mat4 &lhs, const mat4 &rhs)
 {
   const detail::internal_mat4 *left = reinterpret_cast<const detail::internal_mat4*>(&lhs);
   const detail::internal_mat4 *right = reinterpret_cast<const detail::internal_mat4*>(&rhs);
 
-  matrix44 return_mat = matrix44_id();
+  mat4 return_mat = mat4_id();
   detail::internal_mat4 *internal_mat = reinterpret_cast<detail::internal_mat4*>(&return_mat);
 
   for(uint32_t i = 0; i < 16; ++i)
@@ -321,10 +321,10 @@ matrix44_multiply(const matrix44 &lhs, const matrix44 &rhs)
 }
 
 
-matrix44
-matrix44_translate(const matrix44 &mat, const vec3 move)
+mat4
+mat4_translate(const mat4 &mat, const vec3 move)
 {
-  matrix44 copy(mat);
+  mat4 copy(mat);
 
   detail::internal_mat4 *translate_me = reinterpret_cast<detail::internal_mat4*>(&copy);
 
@@ -336,10 +336,10 @@ matrix44_translate(const matrix44 &mat, const vec3 move)
 }
   
   
-matrix44
-matrix44_rotate_around_axis(const vec3 axis, const float radians)
+mat4
+mat4_rotate_around_axis(const vec3 axis, const float radians)
 {
-  matrix44 rotation = matrix44_id();
+  mat4 rotation = mat4_id();
   detail::internal_mat4 *rotate_me = reinterpret_cast<detail::internal_mat4*>(&rotation);
   
   const float sin_theta           = math::sin(radians);
@@ -369,17 +369,17 @@ matrix44_rotate_around_axis(const vec3 axis, const float radians)
 
 
 float
-matrix44_get(const matrix44 &mat, const uint32_t row, const uint32_t col)
+mat4_get(const mat4 &mat, const uint32_t row, const uint32_t col)
 {
   assert(row < 4 && col < 4);
 
   const uint32_t i = (row * 4) + col;
-  return matrix44_get(mat, i);
+  return mat4_get(mat, i);
 }
 
 
 float
-matrix44_get(const matrix44 &mat, const uint32_t index)
+mat4_get(const mat4 &mat, const uint32_t index)
 {
   assert(index < 16);
   
@@ -389,7 +389,7 @@ matrix44_get(const matrix44 &mat, const uint32_t index)
 
   
 const float*
-matrix44_get_data(const matrix44 &mat)
+mat4_get_data(const mat4 &mat)
 {
   const detail::internal_mat4 *internal_mat = reinterpret_cast<const detail::internal_mat4*>(&mat);
   return &(internal_mat->data[0]);
@@ -397,7 +397,7 @@ matrix44_get_data(const matrix44 &mat)
 
   
 void
-matrix44_set(matrix44 &mat, const uint32_t row, const uint32_t col, const float set)
+mat4_set(mat4 &mat, const uint32_t row, const uint32_t col, const float set)
 {
   assert(row < 4 && col < 4);
 

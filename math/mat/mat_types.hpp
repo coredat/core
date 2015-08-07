@@ -10,12 +10,12 @@
 namespace math {
 
 
-class matrix33
+class mat3
 {
 	float data[9];
 };
 
-class matrix44
+class mat4
 {
 	float data[16];
 };

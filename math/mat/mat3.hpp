@@ -3,13 +3,13 @@
 
 
 /*
-  Matrix33
+  Matrix 33
   Through out this library we consider a 3x3 matrix as a 
   rotation and scale matrix specifically.
 */
 
 
-#include "matrix_types.hpp"
+#include "mat_types.hpp"
 #include "../vec/vec3.hpp"
 #include <array>
 #include <cstring>
@@ -19,36 +19,36 @@ namespace math {
 
 
 // Constants
-inline matrix33                   matrix33_id();
-inline matrix33                   matrix33_zero();
+inline mat3                       mat3_id();
+inline mat3                       mat3_zero();
 
 // Init
-inline matrix33                   matrix33_init(); // will return an id array
-inline matrix33                   matrix33_init(const float x);
-inline matrix33                   matrix33_init_with_array(const float arr[]);
-inline matrix33                   matrix33_init_with_array(const std::array<float, 9> &array);
+inline mat3                       mat3_init(); // will return an id array
+inline mat3                       mat3_init(const float x);
+inline mat3                       mat3_init_with_array(const float arr[]);
+inline mat3                       mat3_init_with_array(const std::array<float, 9> &array);
 
 // Operations
-inline matrix33                   matrix33_add(const matrix33 &lhs, const matrix33 &rhs);
-inline matrix33                   matrix33_subtract(const matrix33 &lhs, const matrix33 &rhs);
-inline matrix33                   matrix33_scale(const float scale, const matrix33 &b);
-inline matrix33                   matrix33_scale(const float x, const float y, const float z, const matrix33 &b);
-inline vec3                    matrix33_multiply(const vec3 vec, const matrix33 &b);
-inline matrix33                   matrix33_multiply(const matrix33 &lhs, const matrix33 &rhs);
-inline matrix33                   matrix33_rotate(const matrix33 &lhs, const vec3 euler);
+inline mat3                       mat3_add(const mat3 &lhs, const mat3 &rhs);
+inline mat3                       mat3_subtract(const mat3 &lhs, const mat3 &rhs);
+inline mat3                       mat3_scale(const float scale, const mat3 &b);
+inline mat3                       mat3_scale(const float x, const float y, const float z, const mat3 &b);
+inline vec3                       mat3_multiply(const vec3 vec, const mat3 &b);
+inline mat3                       mat3_multiply(const mat3 &lhs, const mat3 &rhs);
+inline mat3                       mat3_rotate(const mat3 &lhs, const vec3 euler);
 
 // Transform matrices into other forms
-inline matrix33                   matrix33_get_transpose(const matrix33 &a);
-inline matrix33                   matrix33_get_inverse(const matrix33 &a);
-inline matrix33                   matrix33_get_scale(const matrix33 &a, const vec3 scale);
-inline void                       matrix33_to_array(const matrix33 &m, float *array);
-inline std::array<float, 9>       matrix33_to_array(const matrix33 &m);
+inline mat3                       mat3_get_transpose(const mat3 &a);
+inline mat3                       mat3_get_inverse(const mat3 &a);
+inline mat3                       mat3_get_scale(const mat3 &a, const vec3 scale);
+inline void                       mat3_to_array(const mat3 &m, float *array);
+inline std::array<float, 9>       mat3_to_array(const mat3 &m);
 
 // Get/Set information
-inline float                      matrix33_get(const matrix33 &mat, const uint32_t row, const uint32_t col);
-inline float                      matrix33_get(const matrix33 &mat, const uint32_t i);
-inline void                       matrix33_set(matrix33 &mat, const uint32_t row, const uint32_t col, const float set);
-inline vec3                    matrix33_get_scale(const matrix33 &a);
+inline float                      mat3_get(const mat3 &mat, const uint32_t row, const uint32_t col);
+inline float                      mat3_get(const mat3 &mat, const uint32_t i);
+inline void                       mat3_set(mat3 &mat, const uint32_t row, const uint32_t col, const float set);
+inline vec3                       mat3_get_scale(const mat3 &a);
 
 
 // Impl
@@ -63,8 +63,8 @@ namespace detail
 }
 
 
-matrix33
-matrix33_id()
+mat3
+mat3_id()
 {
   std::array<float, 9> id_array = {
     1.f, 0.f, 0.f,
@@ -72,12 +72,12 @@ matrix33_id()
     0.f, 0.f, 1.f,
   };
 
-  return matrix33_init_with_array(&id_array[0]);
+  return mat3_init_with_array(&id_array[0]);
 }
 
 
-matrix33
-matrix33_zero()
+mat3
+mat3_zero()
 {
   std::array<float, 9> zero_array = {
     0.f, 0.f, 0.f,
@@ -85,19 +85,19 @@ matrix33_zero()
     0.f, 0.f, 0.f,
   };
 
-  return matrix33_init_with_array(&zero_array[0]);  
+  return mat3_init_with_array(&zero_array[0]);  
 }
 
 
-matrix33
-matrix33_init()
+mat3
+mat3_init()
 {
-  return matrix33_id();
+  return mat3_id();
 }
 
 
-matrix33
-matrix33_init(const float x)
+mat3
+mat3_init(const float x)
 {
   std::array<float, 9> x_array = {
     x,x,x,
@@ -105,14 +105,14 @@ matrix33_init(const float x)
     x,x,x,
   };
 
-  return matrix33_init_with_array(x_array);
+  return mat3_init_with_array(x_array);
 }
 
 
-matrix33
-matrix33_init_with_array(const float array[])
+mat3
+mat3_init_with_array(const float array[])
 {
-  matrix33 return_mat;
+  mat3 return_mat;
   detail::internal_mat3 *internal_mat = reinterpret_cast<detail::internal_mat3*>(&return_mat);
 
   memcpy(internal_mat->data, array, sizeof(internal_mat->data));
@@ -121,21 +121,21 @@ matrix33_init_with_array(const float array[])
 }
 
 
-matrix33
-matrix33_init_with_array(const std::array<float, 9> &array)
+mat3
+mat3_init_with_array(const std::array<float, 9> &array)
 {
-  return matrix33_init_with_array(&array[0]);
+  return mat3_init_with_array(&array[0]);
 }
 
 
 // Operations
-matrix33
-matrix33_add(const matrix33 &lhs, const matrix33 &rhs)
+mat3
+mat3_add(const mat3 &lhs, const mat3 &rhs)
 {
   const detail::internal_mat3 *left = reinterpret_cast<const detail::internal_mat3*>(&lhs);
   const detail::internal_mat3 *right = reinterpret_cast<const detail::internal_mat3*>(&rhs);
 
-  matrix33 return_mat; 
+  mat3 return_mat; 
   detail::internal_mat3 *internal_mat = reinterpret_cast<detail::internal_mat3*>(&return_mat);
 
   for(int i = 0; i < 9; ++i)
@@ -147,13 +147,13 @@ matrix33_add(const matrix33 &lhs, const matrix33 &rhs)
 }
 
 
-matrix33
-matrix33_subtract(const matrix33 &lhs, const matrix33 &rhs)
+mat3
+mat3_subtract(const mat3 &lhs, const mat3 &rhs)
 {
   const detail::internal_mat3 *left = reinterpret_cast<const detail::internal_mat3*>(&lhs);
   const detail::internal_mat3 *right = reinterpret_cast<const detail::internal_mat3*>(&rhs);
 
-  matrix33 return_mat; 
+  mat3 return_mat; 
   detail::internal_mat3 *internal_mat = reinterpret_cast<detail::internal_mat3*>(&return_mat);
 
   for(int i = 0; i < 9; ++i)
@@ -165,19 +165,19 @@ matrix33_subtract(const matrix33 &lhs, const matrix33 &rhs)
 }
 
 
-matrix33
-matrix33_scale(const float lhs, const matrix33 &rhs)
+mat3
+mat3_scale(const float lhs, const mat3 &rhs)
 {
   return matrix_scale(lhs, lhs, lhs, rhs);
 }
 
 
-matrix33
-matrix33_scale(const float x, const float y, const float z, const matrix33 &b)
+mat3
+mat3_scale(const float x, const float y, const float z, const mat3 &b)
 {
   const detail::internal_mat3 *right = reinterpret_cast<const detail::internal_mat3*>(&rhs);
 
-  matrix33 return_mat; 
+  mat3 return_mat; 
   detail::internal_mat3 *internal_mat = reinterpret_cast<detail::internal_mat3*>(&return_mat);
 
   internal_mat->data[0] = x * right->data[0];
@@ -189,7 +189,7 @@ matrix33_scale(const float x, const float y, const float z, const matrix33 &b)
 
 
 vec3
-matrix33_multiply(const vec3 lhs, const matrix33 &rhs)
+mat3_multiply(const vec3 lhs, const mat3 &rhs)
 {
   const detail::internal_mat3 *right = reinterpret_cast<const detail::internal_mat3*>(&rhs);
   std::array<float, 3> vec_data;
@@ -205,13 +205,13 @@ matrix33_multiply(const vec3 lhs, const matrix33 &rhs)
 }
 
 
-matrix33
-matrix33_multiply(const matrix33 &lhs, const matrix33 &rhs)
+mat3
+mat3_multiply(const mat3 &lhs, const mat3 &rhs)
 {
   const detail::internal_mat3 *left = reinterpret_cast<const detail::internal_mat3*>(&lhs);
   const detail::internal_mat3 *right = reinterpret_cast<const detail::internal_mat3*>(&rhs);
 
-  matrix33 return_mat; 
+  mat3 return_mat; 
   detail::internal_mat3 *internal_mat = reinterpret_cast<detail::internal_mat3*>(&return_mat);
 
   for(uint32_t i = 0; i < 9; ++i)
@@ -230,25 +230,25 @@ matrix33_multiply(const matrix33 &lhs, const matrix33 &rhs)
 }
 
 
-matrix33
-matrix33_rotate(const matrix33 &a, const vec3 euler)
+mat3
+mat3_rotate(const mat3 &a, const vec3 euler)
 {
-  return matrix33();
+  return mat3();
 }
 
 
 float
-matrix33_get(const matrix33 &mat, const uint32_t row, const uint32_t col)
+mat3_get(const mat3 &mat, const uint32_t row, const uint32_t col)
 {
   assert(row < 4 && col < 4);
 
   const uint32_t i = (row * 4) + col;
-  return matrix33_get(mat, i);
+  return mat3_get(mat, i);
 }
 
 
 float
-matrix33_get(const matrix33 &mat, const uint32_t index)
+mat3_get(const mat3 &mat, const uint32_t index)
 {
   assert(index < 9);
   
@@ -258,7 +258,7 @@ matrix33_get(const matrix33 &mat, const uint32_t index)
 
 
 void
-matrix33_set(matrix33 &mat, const uint32_t row, const uint32_t col, const float set)
+mat3_set(mat3 &mat, const uint32_t row, const uint32_t col, const float set)
 {
   assert(row < 4 && col < 4);
 

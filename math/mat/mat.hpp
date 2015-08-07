@@ -7,9 +7,9 @@
 */
 
 
-#include "matrix_types.hpp"
-#include "matrix44.hpp"
-#include "matrix33.hpp"
+#include "mat_types.hpp"
+#include "mat4.hpp"
+#include "mat3.hpp"
 
 
 #endif // include guard
