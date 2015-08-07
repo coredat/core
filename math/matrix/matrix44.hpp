@@ -10,12 +10,11 @@
 
 
 #include "matrix_types.hpp"
-#include "../vector/vector4.hpp"
+#include "../vec/vec4.hpp"
 #include <array>
 #include <cstring>
 
 
-namespace caffeine {
 namespace math {
 
 
@@ -30,24 +29,24 @@ inline matrix44                   matrix44_init_with_array(const float arr[]);
 inline matrix44                   matrix44_init_with_array(const std::array<float, 16> &array);
 
 // Generate transformation matrices.
-inline matrix44                   matrix44_lookat(const vector3 eye_position, const vector3 look_at_position, const vector3 up);
+inline matrix44                   matrix44_lookat(const vec3 eye_position, const vec3 look_at_position, const vec3 up);
 inline matrix44                   matrix44_projection(const float width, const float height, const float near_plane, const float far_plane, const float fov);
 inline matrix44                   matrix44_orthographic(const float width, const float height, const float depth); // Not impl
 inline matrix44                   matrix44_scale(const float x, const float y, const float z);
-inline matrix44                   matrix44_translate(const matrix44 &lhs, const vector3 move);
-inline matrix44                   matrix44_rotate_around_axis(const vector3 axis, const float radians);
+inline matrix44                   matrix44_translate(const matrix44 &lhs, const vec3 move);
+inline matrix44                   matrix44_rotate_around_axis(const vec3 axis, const float radians);
 
 // Operations
 inline matrix44                   matrix44_add(const matrix44 &lhs, const matrix44 &rhs);
 inline matrix44                   matrix44_subtract(const matrix44 &lhs, const matrix44 &rhs);
 inline matrix44                   matrix44_multiply(const float val, const matrix44 &b);
-inline vector4                    matrix44_multiply(const vector4 vector, const matrix44 &b);
+inline vec4                    matrix44_multiply(const vec4 vec, const matrix44 &b);
 inline matrix44                   matrix44_multiply(const matrix44 &lhs, const matrix44 &rhs);
 
 // Transform matrices into other forms
 inline matrix44                   matrix44_get_transpose(const matrix44 &a);
 inline matrix44                   matrix44_get_inverse(const matrix44 &a);
-inline matrix44                   matrix44_get_scale(const matrix44 &a, const vector3 scale);
+inline matrix44                   matrix44_get_scale(const matrix44 &a, const vec3 scale);
 inline void                       matrix44_to_array(const matrix44 &m, float *array);
 inline std::array<float, 16>      matrix44_to_array(const matrix44 &m);
 
@@ -57,8 +56,8 @@ inline float                      matrix44_get(const matrix44 &mat, const uint32
 inline const float*               matrix44_get_data(const matrix44 &mat);
 inline void                       matrix44_set(matrix44 &mat, const uint32_t row, const uint32_t col, const float set);
 inline matrix33                   matrix44_get_rotation(const matrix44 &a);
-inline vector3                    matrix44_get_position(const matrix44 &a);
-inline vector3                    matrix44_get_scale(const matrix44 &a);
+inline vec3                    matrix44_get_position(const matrix44 &a);
+inline vec3                    matrix44_get_scale(const matrix44 &a);
 
 
 // Impl
@@ -141,32 +140,32 @@ matrix44_init_with_array(const std::array<float, 16> &array)
 
 
 matrix44
-matrix44_lookat(const vector3 eye_position, const vector3 look_at_position, const vector3 up)
+matrix44_lookat(const vec3 eye_position, const vec3 look_at_position, const vec3 up)
 {
-  const vector3 z_axis = vector3_normalize(vector3_subtract(look_at_position, eye_position));
-  const vector3 x_axis = vector3_normalize(vector3_cross(z_axis, up));
-  const vector3 y_axis = vector3_cross(x_axis, z_axis);
+  const vec3 z_axis = vec3_normalize(vec3_subtract(look_at_position, eye_position));
+  const vec3 x_axis = vec3_normalize(vec3_cross(z_axis, up));
+  const vec3 y_axis = vec3_cross(x_axis, z_axis);
 
   const std::array<float, 16> array_mat =
   {
-    vector3_get_x(x_axis),
-    vector3_get_x(y_axis),
-    -vector3_get_x(z_axis),
+    vec3_get_x(x_axis),
+    vec3_get_x(y_axis),
+    -vec3_get_x(z_axis),
     0.f,
 
-    vector3_get_y(x_axis),
-    vector3_get_y(y_axis),
-    -vector3_get_y(z_axis),
+    vec3_get_y(x_axis),
+    vec3_get_y(y_axis),
+    -vec3_get_y(z_axis),
     0.f,
 
-    vector3_get_z(x_axis),
-    vector3_get_z(y_axis),
-    -vector3_get_z(z_axis),
+    vec3_get_z(x_axis),
+    vec3_get_z(y_axis),
+    -vec3_get_z(z_axis),
     0.f,
 
-    -(vector3_dot(x_axis, eye_position)),
-    -(vector3_dot(y_axis, eye_position)),
-    +(vector3_dot(z_axis, eye_position)),
+    -(vec3_dot(x_axis, eye_position)),
+    -(vec3_dot(y_axis, eye_position)),
+    +(vec3_dot(z_axis, eye_position)),
     1.f,
   };
 
@@ -178,7 +177,7 @@ matrix44
 matrix44_projection(const float width, const float height, const float near_plane, const float far_plane, const float fov)
 {
   const float aspect_ratio = width / height;
-  const float one_over_tan_half_fov = 1.f / caffmath::tan(fov * 0.5f);
+  const float one_over_tan_half_fov = 1.f / math::tan(fov * 0.5f);
   const float plane_diff = far_plane - near_plane;
 
   //matrix44 return_mat = matrix44_zero();
@@ -278,20 +277,20 @@ matrix44_scale(const float x, const float y, const float z)
 }
 
 
-vector4
-matrix44_multiply(const vector4 lhs, const matrix44 &rhs)
+vec4
+matrix44_multiply(const vec4 lhs, const matrix44 &rhs)
 {
   const detail::internal_mat4 *right = reinterpret_cast<const detail::internal_mat4*>(&rhs);
   std::array<float, 4> vec_data;
 
   for(int i = 0; i < 16; i += 4)
   {
-    const vector4 dot_vector = vector4_init(right->data[i + 0], right->data[i + 4], right->data[i + 8], right->data[i + 12]);
+    const vec4 dot_vec = vec4_init(right->data[i + 0], right->data[i + 4], right->data[i + 8], right->data[i + 12]);
 
-    vec_data.at(i / 4) = vector4_dot(lhs, dot_vector);
+    vec_data.at(i / 4) = vec4_dot(lhs, dot_vec);
   }
 
-  return vector4_init_with_array(vec_data);
+  return vec4_init_with_array(vec_data);
 }
 
 
@@ -310,10 +309,10 @@ matrix44_multiply(const matrix44 &lhs, const matrix44 &rhs)
     const uint32_t row = (i / 4) * 4;
     const uint32_t col = (i % 4);
 
-    const vector4 row_vec = vector4_init(left->data[row + 0],  left->data[row + 1],  left->data[row + 2],  left->data[row + 3]);
-    const vector4 col_vec = vector4_init(right->data[col + 0], right->data[col + 4], right->data[col + 8], right->data[col + 12]);
+    const vec4 row_vec = vec4_init(left->data[row + 0],  left->data[row + 1],  left->data[row + 2],  left->data[row + 3]);
+    const vec4 col_vec = vec4_init(right->data[col + 0], right->data[col + 4], right->data[col + 8], right->data[col + 12]);
 
-    const float dot = vector4_dot(row_vec, col_vec);
+    const float dot = vec4_dot(row_vec, col_vec);
     
     internal_mat->data[i] = dot;
   }
@@ -323,33 +322,33 @@ matrix44_multiply(const matrix44 &lhs, const matrix44 &rhs)
 
 
 matrix44
-matrix44_translate(const matrix44 &mat, const vector3 move)
+matrix44_translate(const matrix44 &mat, const vec3 move)
 {
   matrix44 copy(mat);
 
   detail::internal_mat4 *translate_me = reinterpret_cast<detail::internal_mat4*>(&copy);
 
-  translate_me->data[12] += vector3_get_x(move);
-  translate_me->data[13] += vector3_get_y(move);
-  translate_me->data[14] += vector3_get_z(move);
+  translate_me->data[12] += vec3_get_x(move);
+  translate_me->data[13] += vec3_get_y(move);
+  translate_me->data[14] += vec3_get_z(move);
 
   return copy;
 }
   
   
 matrix44
-matrix44_rotate_around_axis(const vector3 axis, const float radians)
+matrix44_rotate_around_axis(const vec3 axis, const float radians)
 {
   matrix44 rotation = matrix44_id();
   detail::internal_mat4 *rotate_me = reinterpret_cast<detail::internal_mat4*>(&rotation);
   
-  const float sin_theta           = caff_math::sin(radians);
-  const float cos_theta           = caff_math::cos(radians);
+  const float sin_theta           = math::sin(radians);
+  const float cos_theta           = math::cos(radians);
   const float one_minus_cos_theta = 1.f - cos_theta;
   
-  const float x = vector3_get_x(axis);
-  const float y = vector3_get_y(axis);
-  const float z = vector3_get_z(axis);
+  const float x = vec3_get_x(axis);
+  const float y = vec3_get_y(axis);
+  const float z = vec3_get_z(axis);
   
   rotate_me->data[0]  = cos_theta + ((x * x) * one_minus_cos_theta);
   rotate_me->data[1]  = ((x * y) * one_minus_cos_theta) - (z * sin_theta);
@@ -407,9 +406,6 @@ matrix44_set(matrix44 &mat, const uint32_t row, const uint32_t col, const float 
 }
 
 
-
-
-} // namespace
 } // namespace
 
 

@@ -7,10 +7,10 @@
 */
 
 
-#include "vector_types.hpp"
-#include "vector2.hpp"
-#include "vector3.hpp"
-#include "vector4.hpp"
+#include "vec_types.hpp"
+#include "vec2.hpp"
+#include "vec3.hpp"
+#include "vec4.hpp"
 
 
 #endif // include guard

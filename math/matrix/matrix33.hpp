@@ -10,12 +10,11 @@
 
 
 #include "matrix_types.hpp"
-#include "../vector/vector3.hpp"
+#include "../vec/vec3.hpp"
 #include <array>
 #include <cstring>
 
 
-namespace caffeine {
 namespace math {
 
 
@@ -34,14 +33,14 @@ inline matrix33                   matrix33_add(const matrix33 &lhs, const matrix
 inline matrix33                   matrix33_subtract(const matrix33 &lhs, const matrix33 &rhs);
 inline matrix33                   matrix33_scale(const float scale, const matrix33 &b);
 inline matrix33                   matrix33_scale(const float x, const float y, const float z, const matrix33 &b);
-inline vector3                    matrix33_multiply(const vector3 vector, const matrix33 &b);
+inline vec3                    matrix33_multiply(const vec3 vec, const matrix33 &b);
 inline matrix33                   matrix33_multiply(const matrix33 &lhs, const matrix33 &rhs);
-inline matrix33                   matrix33_rotate(const matrix33 &lhs, const vector3 euler);
+inline matrix33                   matrix33_rotate(const matrix33 &lhs, const vec3 euler);
 
 // Transform matrices into other forms
 inline matrix33                   matrix33_get_transpose(const matrix33 &a);
 inline matrix33                   matrix33_get_inverse(const matrix33 &a);
-inline matrix33                   matrix33_get_scale(const matrix33 &a, const vector3 scale);
+inline matrix33                   matrix33_get_scale(const matrix33 &a, const vec3 scale);
 inline void                       matrix33_to_array(const matrix33 &m, float *array);
 inline std::array<float, 9>       matrix33_to_array(const matrix33 &m);
 
@@ -49,7 +48,7 @@ inline std::array<float, 9>       matrix33_to_array(const matrix33 &m);
 inline float                      matrix33_get(const matrix33 &mat, const uint32_t row, const uint32_t col);
 inline float                      matrix33_get(const matrix33 &mat, const uint32_t i);
 inline void                       matrix33_set(matrix33 &mat, const uint32_t row, const uint32_t col, const float set);
-inline vector3                    matrix33_get_scale(const matrix33 &a);
+inline vec3                    matrix33_get_scale(const matrix33 &a);
 
 
 // Impl
@@ -189,20 +188,20 @@ matrix33_scale(const float x, const float y, const float z, const matrix33 &b)
 }
 
 
-vector3
-matrix33_multiply(const vector3 lhs, const matrix33 &rhs)
+vec3
+matrix33_multiply(const vec3 lhs, const matrix33 &rhs)
 {
   const detail::internal_mat3 *right = reinterpret_cast<const detail::internal_mat3*>(&rhs);
   std::array<float, 3> vec_data;
 
   for(int i = 0; i < 9; i += 4)
   {
-    const vector3 dot_vector = vector3_init(right->data[i + 0], right->data[i + 3], right->data[i + 6]);
+    const vec3 dot_vec = vec3_init(right->data[i + 0], right->data[i + 3], right->data[i + 6]);
 
-    vec_data.at(i / 3) = vector3_dot(lhs, dot_vector);
+    vec_data.at(i / 3) = vec3_dot(lhs, dot_vec);
   }
 
-  return vector3_init_with_array(vec_data);
+  return vec3_init_with_array(vec_data);
 }
 
 
@@ -221,10 +220,10 @@ matrix33_multiply(const matrix33 &lhs, const matrix33 &rhs)
     const uint32_t row = i / 3;
     const uint32_t col = i % 3;
 
-    const vector3 left_vec = vector3_init(left->data[row + 0], left->data[row + 1], left->data[row + 2]);
-    const vector3 right_vec = vector3_init(right->data[col + 0], right->data[col + 3], right->data[col + 6]);
+    const vec3 left_vec = vec3_init(left->data[row + 0], left->data[row + 1], left->data[row + 2]);
+    const vec3 right_vec = vec3_init(right->data[col + 0], right->data[col + 3], right->data[col + 6]);
 
-    internal_mat->data[i] = vector3_dot(left_vec, right_vec);
+    internal_mat->data[i] = vec3_dot(left_vec, right_vec);
   }
 
   return return_mat;
@@ -232,7 +231,7 @@ matrix33_multiply(const matrix33 &lhs, const matrix33 &rhs)
 
 
 matrix33
-matrix33_rotate(const matrix33 &a, const vector3 euler)
+matrix33_rotate(const matrix33 &a, const vec3 euler)
 {
   return matrix33();
 }
@@ -270,7 +269,6 @@ matrix33_set(matrix33 &mat, const uint32_t row, const uint32_t col, const float 
 
 
 
-} // namespace
 } // namespace
 
 

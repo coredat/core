@@ -7,7 +7,7 @@
 */
 
 
-#include "vector/vector.hpp"
+#include "vec/vec.hpp"
 #include "matrix/matrix.hpp"
 #include "quaternion/quaternion.hpp"
 #include "transform/transform.hpp"

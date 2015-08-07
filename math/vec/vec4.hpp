@@ -8,7 +8,7 @@
 */
 
 
-#include "vector_types.hpp"
+#include "vec_types.hpp"
 #include "vec3.hpp"
 #include "vec2.hpp"
 #include "../general/general.hpp"
@@ -30,8 +30,8 @@ inline vec4                   vec4_zero_zero_zero_one();
 // Initialize vector.
 inline vec4                   vec4_init(const float val);
 inline vec4                   vec4_init(const float x, const float y, const float z, const float w);
-inline vec4                   vec4_init(const vector2 vec, const float z ,const float w);
-inline vec4                   vec4_init(const vector3 vec, const float w);
+inline vec4                   vec4_init(const vec2 vec, const float z ,const float w);
+inline vec4                   vec4_init(const vec3 vec, const float w);
 inline vec4                   vec4_init_with_array(const float *arr);
 inline vec4                   vec4_init_with_array(const std::array<float, 4> &vec);
 
@@ -40,14 +40,14 @@ inline float                  vec4_get_x(const vec4 vec);
 inline float                  vec4_get_y(const vec4 vec);
 inline float                  vec4_get_z(const vec4 vec);
 inline float                  vec4_get_w(const vec4 vec);
-inline vector2                vec4_get_xy(const vec4 vec);
-inline vector2                vec4_get_yz(const vec4 vec);
-inline vector2                vec4_get_zw(const vec4 vec);
-inline vector3                vec4_get_xyz(const vec4 vec);
-inline vector3                vec4_get_yxw(const vec4 vec);
+inline vec2                   vec4_get_xy(const vec4 vec);
+inline vec2                   vec4_get_yz(const vec4 vec);
+inline vec2                   vec4_get_zw(const vec4 vec);
+inline vec3                   vec4_get_xyz(const vec4 vec);
+inline vec3                   vec4_get_yxw(const vec4 vec);
 inline void                   vec4_to_array(const vec4 a, float *out_array);
 inline std::array<float, 4>   vec4_to_std_array(const vec4 a);
-inline vector3                vec4_to_vector3(const vec4 a); // not impl
+inline vec3                   vec4_to_vec3(const vec4 a); // not impl
 
 // Component wise arithmetic.
 inline vec4                   vec4_add(const vec4 a, const vec4 b);
@@ -124,16 +124,16 @@ vec4_init(const float x, const float y, const float z, const float w)
 
 
 vec4
-vec4_init(const vector2 vec, const float z ,const float w)
+vec4_init(const vec2 vec, const float z ,const float w)
 {
-  return vec4_init(vector2_get_x(vec), vector2_get_y(vec), z, w);
+  return vec4_init(vec2_get_x(vec), vec2_get_y(vec), z, w);
 }
 
 
 vec4
-vec4_init(const vector3 vec, const float w)
+vec4_init(const vec3 vec, const float w)
 {
-  return vec4_init(vector3_get_x(vec), vector3_get_y(vec), vector3_get_z(vec), w);
+  return vec4_init(vec3_get_x(vec), vec3_get_y(vec), vec3_get_z(vec), w);
 }
 
 
@@ -185,43 +185,43 @@ vec4_get_w(const vec4 vec)
 }
 
 
-vector2
+vec2
 vec4_get_xy(const vec4 vec)
 {
   const detail::internal_vec4 *internal_vec = reinterpret_cast<const detail::internal_vec4*>(&vec);
-  return vector2_init(internal_vec->x, internal_vec->y);
+  return vec2_init(internal_vec->x, internal_vec->y);
 }
 
 
-vector2
+vec2
 vec4_get_yz(const vec4 vec)
 {
   const detail::internal_vec4 *internal_vec = reinterpret_cast<const detail::internal_vec4*>(&vec);
-  return vector2_init(internal_vec->y, internal_vec->z);
+  return vec2_init(internal_vec->y, internal_vec->z);
 }
 
 
-vector2
+vec2
 vec4_get_zw(const vec4 vec)
 {
   const detail::internal_vec4 *internal_vec = reinterpret_cast<const detail::internal_vec4*>(&vec);
-  return vector2_init(internal_vec->z, internal_vec->w);
+  return vec2_init(internal_vec->z, internal_vec->w);
 }
 
 
-vector3
+vec3
 vec4_get_xyz(const vec4 vec)
 {
   const detail::internal_vec4 *internal_vec = reinterpret_cast<const detail::internal_vec4*>(&vec);
-  return vector3_init(internal_vec->x, internal_vec->y, internal_vec->z);
+  return vec3_init(internal_vec->x, internal_vec->y, internal_vec->z);
 }
 
 
-vector3
+vec3
 vec4_get_yxw(const vec4 vec)
 {
   const detail::internal_vec4 *internal_vec = reinterpret_cast<const detail::internal_vec4*>(&vec);
-  return vector3_init(internal_vec->y, internal_vec->x, internal_vec->w);
+  return vec3_init(internal_vec->y, internal_vec->x, internal_vec->w);
 }
 
 

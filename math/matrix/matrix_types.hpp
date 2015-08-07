@@ -7,7 +7,6 @@
 */
 
 
-namespace caffeine {
 namespace math {
 
 
@@ -22,7 +21,6 @@ class matrix44
 };
 
 
-} // namespace
 } // namespace
 
 

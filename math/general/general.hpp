@@ -12,7 +12,6 @@
 #include <algorithm>
 
 
-namespace caffeine {
 namespace math {
 
 
@@ -140,7 +139,6 @@ a_sin(const float radians)
 }
 
 
-} // namespace
 } // namespace
 
 
