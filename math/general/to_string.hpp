@@ -3,7 +3,7 @@
 
 
 #include "../vec/vec.hpp"
-#include "../matrix/mat.hpp"
+#include "../mat/mat.hpp"
 #include <string>
 
 

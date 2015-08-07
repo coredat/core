@@ -168,21 +168,21 @@ mat3_subtract(const mat3 &lhs, const mat3 &rhs)
 mat3
 mat3_scale(const float lhs, const mat3 &rhs)
 {
-  return matrix_scale(lhs, lhs, lhs, rhs);
+  return mat3_scale(lhs, lhs, lhs, rhs);
 }
 
 
 mat3
 mat3_scale(const float x, const float y, const float z, const mat3 &b)
 {
-  const detail::internal_mat3 *right = reinterpret_cast<const detail::internal_mat3*>(&rhs);
+  const detail::internal_mat3 *right = reinterpret_cast<const detail::internal_mat3*>(&b);
 
   mat3 return_mat; 
   detail::internal_mat3 *internal_mat = reinterpret_cast<detail::internal_mat3*>(&return_mat);
 
   internal_mat->data[0] = x * right->data[0];
-  internal_mat->data[4] = y * right->data[0];x
-  internal_mat->data[9] = z * right->data[0];
+  internal_mat->data[4] = y * right->data[0];
+  internal_mat->data[8] = z * right->data[0];
 
   return return_mat;
 }
