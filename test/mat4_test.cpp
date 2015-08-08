@@ -1,19 +1,20 @@
-// Test for vector2
-#include "../math/matrix/matrix44.hpp"
+// Test for mat4
+#include "../math/mat/mat4.hpp"
 #include "../math/general/to_string.hpp"
 #include "test_asserts.hpp"
+#include <unit_test/unit_test.hpp>
 #include <iostream>
 #include <cmath>
 
 
-bool matrix44_equal(caffmath::matrix44 mat, const std::array<float, 16> mat_data, const float error)
+bool mat4_equal(math::mat4 mat, const std::array<float, 16> mat_data, const float error)
 {
 	for(uint32_t i = 0; i < mat_data.size(); ++i)
 	{
-		const float diff = caffmath::matrix44_get(mat, i) - mat_data.at(i);
-		const float abs_diff = caffmath::abs(diff);
+		const float diff = math::mat4_get(mat, i) - mat_data.at(i);
+		const float abs_diff = math::abs(diff);
 
-		//std::cout << caffmath::matrix44_get(mat, i) << ", " << mat_data.at(i) << std::endl;
+		//std::cout << math::mat4_get(mat, i) << ", " << mat_data.at(i) << std::endl;
 		//std::cout << diff << "," << abs_diff << std::endl;
 
 		if(diff > error)
@@ -28,7 +29,7 @@ bool matrix44_equal(caffmath::matrix44 mat, const std::array<float, 16> mat_data
 
 int main()
 {
-	std::cout << "Matrix44 Test" << std::endl;
+	std::cout << "mat4 Test" << std::endl;
 	const float error = 0.0001f;
 
 	// Test data
@@ -90,78 +91,78 @@ int main()
 
 	// Mat Constants
 	{
-		const caffmath::matrix44 id_mat = caffmath::matrix44_id();
-		assert_test("matrix is id", matrix44_equal(id_mat, id_mat_data, error));
+		const math::mat4 id_mat = math::mat4_id();
+		CHECK("matrix is id", mat4_equal(id_mat, id_mat_data, error));
 
-		const caffmath::matrix44 zero_mat = caffmath::matrix44_zero();
-		assert_test("matrix is zero", matrix44_equal(zero_mat, zero_mat_data, error));
+		const math::mat4 zero_mat = math::mat4_zero();
+		CHECK("matrix is zero", mat4_equal(zero_mat, zero_mat_data, error));
 	}
 
 	// Init Mat
 	{
-		const caffmath::matrix44 init_c_array = caffmath::matrix44_init_with_array(&sequence_mat_data[0]);
-		assert_test("matrix c-array init", matrix44_equal(init_c_array, sequence_mat_data, error));
+		const math::mat4 init_c_array = math::mat4_init_with_array(&sequence_mat_data[0]);
+		CHECK("matrix c-array init", mat4_equal(init_c_array, sequence_mat_data, error));
 
-		const caffmath::matrix44 init_std_array = caffmath::matrix44_init_with_array(sequence_mat_data);
-		assert_test("matrix c-array init", matrix44_equal(init_std_array, sequence_mat_data, error));
+		const math::mat4 init_std_array = math::mat4_init_with_array(sequence_mat_data);
+		CHECK("matrix c-array init", mat4_equal(init_std_array, sequence_mat_data, error));
 
-		const caffmath::matrix44 init_with_no_value = caffmath::matrix44_init();
-		assert_test("matix no init value", matrix44_equal(init_with_no_value, id_mat_data, error));
+		const math::mat4 init_with_no_value = math::mat4_init();
+		CHECK("matix no init value", mat4_equal(init_with_no_value, id_mat_data, error));
 
-		const caffmath::matrix44 init_with_value = caffmath::matrix44_init(2);
-		assert_test("matix init value", matrix44_equal(init_with_value, two_mat_data, error));		
+		const math::mat4 init_with_value = math::mat4_init(2);
+		CHECK("matix init value", mat4_equal(init_with_value, two_mat_data, error));		
 	}
 
 	// special mats
 	{
 		// Look at
-		const caffmath::vector3 position = caffmath::vector3_zero();
-		const caffmath::vector3 target = caffmath::vector3_init(1,1,1);
-		const caffmath::vector3 up = caffmath::vector3_init(0,1,0);
+		const math::vec3 position = math::vec3_zero();
+		const math::vec3 target = math::vec3_init(1,1,1);
+		const math::vec3 up = math::vec3_init(0,1,0);
 
-		const caffmath::matrix44 look_at_mat = caffmath::matrix44_init_lookat(position, target, up);
-		assert_test("lookat matrix", false);
+		const math::mat4 look_at_mat = math::mat4_lookat(position, target, up);
+		CHECK("lookat matrix", false);
 
 		// Projection
 		const float width = 800.f;
 		const float height = 600.f;
 		const float near_plane = 1.f;
 		const float far_plane = 100.f;
-		const float field_of_view = caffmath::quart_tau();
+		const float field_of_view = math::quart_tau();
 
-		const caffmath::matrix44 proj_mat = caffmath::matrix44_init_projection(width, height, near_plane, far_plane, field_of_view);
-		assert_test("proj matrix", false);
+		const math::mat4 proj_mat = math::mat4_projection(width, height, near_plane, far_plane, field_of_view);
+		CHECK("proj matrix", false);
 
 		// Orth
-		assert_test("ortho matrix", false);
+		CHECK("ortho matrix", false);
 	}
 
 	// Operations
 	{
-		const caffmath::matrix44 one_mat = caffmath::matrix44_init_with_array(one_mat_data);
-		const caffmath::matrix44 two_mat = caffmath::matrix44_init_with_array(two_mat_data);
-		const caffmath::vector4 two_vec4 = caffmath::vector4_init(2, 2, 2, 2);
-		const caffmath::vector3 two_vec3 = caffmath::vector3_init(2, 2, 2);
+		const math::mat4 one_mat = math::mat4_init_with_array(one_mat_data);
+		const math::mat4 two_mat = math::mat4_init_with_array(two_mat_data);
+		const math::vec4 two_vec4 = math::vec4_init(2, 2, 2, 2);
+		const math::vec3 two_vec3 = math::vec3_init(2, 2, 2);
 
-		const caffmath::matrix44 add_mat = caffmath::matrix44_add(one_mat, one_mat);
-		assert_test("add matrix", matrix44_equal(one_mat, two_mat_data, error));
+		const math::mat4 add_mat = math::mat4_add(one_mat, one_mat);
+		CHECK("add matrix", mat4_equal(one_mat, two_mat_data, error));
 
-		const caffmath::matrix44 sub_mat = caffmath::matrix44_subtract(one_mat, one_mat);
-		assert_test("sub matrix", matrix44_equal(sub_mat, zero_mat_data, error));
+		const math::mat4 sub_mat = math::mat4_subtract(one_mat, one_mat);
+		CHECK("sub matrix", mat4_equal(sub_mat, zero_mat_data, error));
 
-		const caffmath::matrix44 scale_mat = caffmath::matrix44_scale(0.5f, two_mat);
-		assert_test("scale matrix", matrix44_equal(scale_mat, one_mat_data, error));
+		const math::mat4 scale_mat = math::mat4_scale(0.5f, two_mat);
+		CHECK("scale matrix", mat4_equal(scale_mat, one_mat_data, error));
 
-		const caffmath::vector4 mul_with_vec = caffmath::matrix44_multiply(two_vec4, one_mat);
-		assert_test("mul with vec", false);
+		const math::vec4 mul_with_vec = math::mat4_multiply(two_vec4, one_mat);
+		CHECK("mul with vec", false);
 
-		const caffmath::matrix44 mul_mat = caffmath::matrix44_multiply(two_mat, two_mat);
-		assert_test("mul with mat", matrix44_equal(mul_mat, sixteen_mat_data, error));
+		const math::mat4 mul_mat = math::mat4_multiply(two_mat, two_mat);
+		CHECK("mul with mat", mat4_equal(mul_mat, sixteen_mat_data, error));
 
-		const caffmath::matrix44 trans_mat = caffmath::matrix44_translate(two_mat, two_vec3);
-		assert_test("translate", matrix44_equal(trans_mat, trans_mat_data, error));
+		const math::mat4 trans_mat = math::mat4_translate(two_mat, two_vec3);
+		CHECK("translate", mat4_equal(trans_mat, trans_mat_data, error));
 
-		assert_test("rot", false);
+		CHECK("rot", false);
 	}
 
 	// Convert to other forms
