@@ -11,4 +11,4 @@ branches:
     - short_type_names
 
 before_install:
-  - git clone https://github.com/PhilCK/CppUnitTester.git /usr/local/include/unit_test/
+  - git clone https://github.com/PhilCK/CppUnitTester.git unit_test
