@@ -46,6 +46,28 @@ TEST(vec4_init)
 }
 
 
+TEST(vec4_getters)
+{
+  // Get x,y,z
+  CHECK(vec4_get_x(one_two_three_four_vec4) == 1.1f);
+  CHECK(vec4_get_y(one_two_three_four_vec4) == 2.2f);
+  CHECK(vec4_get_z(one_two_three_four_vec4) == 3.3f);
+  CHECK(vec4_get_w(one_two_three_four_vec4) == 4.4f);
+}
+
+
+TEST(vec4_get_data)
+{
+  std::array<float, 4> out_data;
+  vec4_to_array(one_two_three_four_vec4, &out_data[0]);
+
+  CHECK(out_data.at(0) == 1.1f && out_data.at(1) == 2.2f && out_data.at(2) == 3.3f);
+
+  const std::array<float, 4> out_std_data = vec4_to_std_array(one_two_three_four_vec4);
+  CHECK(out_data.at(0) == 1.1f && out_data.at(1) == 2.2f && out_data.at(2) == 3.3f);
+}
+
+
 TEST(vec4_arithmetic)
 {
   const math::vec4 add_result = math::vec4_add(one_two_three_four_vec4, one_vec4);

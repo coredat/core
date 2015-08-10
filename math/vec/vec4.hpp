@@ -40,11 +40,6 @@ inline float                  vec4_get_x(const vec4 vec);
 inline float                  vec4_get_y(const vec4 vec);
 inline float                  vec4_get_z(const vec4 vec);
 inline float                  vec4_get_w(const vec4 vec);
-inline vec2                   vec4_get_xy(const vec4 vec);
-inline vec2                   vec4_get_yz(const vec4 vec);
-inline vec2                   vec4_get_zw(const vec4 vec);
-inline vec3                   vec4_get_xyz(const vec4 vec);
-inline vec3                   vec4_get_yxw(const vec4 vec);
 inline void                   vec4_to_array(const vec4 a, float *out_array);
 inline std::array<float, 4>   vec4_to_std_array(const vec4 a);
 inline vec3                   vec4_to_vec3(const vec4 a); // not impl
@@ -182,46 +177,6 @@ vec4_get_w(const vec4 vec)
 {
   const detail::internal_vec4 *internal_vec = reinterpret_cast<const detail::internal_vec4*>(&vec);
   return internal_vec->w;
-}
-
-
-vec2
-vec4_get_xy(const vec4 vec)
-{
-  const detail::internal_vec4 *internal_vec = reinterpret_cast<const detail::internal_vec4*>(&vec);
-  return vec2_init(internal_vec->x, internal_vec->y);
-}
-
-
-vec2
-vec4_get_yz(const vec4 vec)
-{
-  const detail::internal_vec4 *internal_vec = reinterpret_cast<const detail::internal_vec4*>(&vec);
-  return vec2_init(internal_vec->y, internal_vec->z);
-}
-
-
-vec2
-vec4_get_zw(const vec4 vec)
-{
-  const detail::internal_vec4 *internal_vec = reinterpret_cast<const detail::internal_vec4*>(&vec);
-  return vec2_init(internal_vec->z, internal_vec->w);
-}
-
-
-vec3
-vec4_get_xyz(const vec4 vec)
-{
-  const detail::internal_vec4 *internal_vec = reinterpret_cast<const detail::internal_vec4*>(&vec);
-  return vec3_init(internal_vec->x, internal_vec->y, internal_vec->z);
-}
-
-
-vec3
-vec4_get_yxw(const vec4 vec)
-{
-  const detail::internal_vec4 *internal_vec = reinterpret_cast<const detail::internal_vec4*>(&vec);
-  return vec3_init(internal_vec->y, internal_vec->x, internal_vec->w);
 }
 
 

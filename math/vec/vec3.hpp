@@ -36,8 +36,6 @@ inline vec3                   vec3_init_with_array(const std::array<float, 3> &v
 inline float                  vec3_get_x(const vec3 vec);
 inline float                  vec3_get_y(const vec3 vec);
 inline float                  vec3_get_z(const vec3 vec);
-inline vec2                   vec3_get_xy(const vec3 vec);
-inline vec2                   vec3_get_yz(const vec3 vec);
 inline void                   vec3_to_array(const vec3 a, float *out_array);
 inline std::array<float, 3>   vec3_to_std_array(const vec3 a);
 
@@ -170,22 +168,6 @@ vec3_to_array(const vec3 a, float *out_array)
 }
 
 
-vec2
-vec3_get_xy(const vec3 vec)
-{
-  const detail::internal_vec3 *internal_vec = reinterpret_cast<const detail::internal_vec3*>(&vec);
-  return vec2_init(internal_vec->x, internal_vec->y);
-}
-
-
-vec2
-vec3_get_yz(const vec3 vec)
-{
-  const detail::internal_vec3 *internal_vec = reinterpret_cast<const detail::internal_vec3*>(&vec);
-  return vec2_init(internal_vec->y, internal_vec->z);
-}
-
-
 std::array<float, 3>
 vec3_to_std_array(const vec3 a)
 {
@@ -197,7 +179,6 @@ vec3_to_std_array(const vec3 a)
 
   return return_array;
 }
-
 
 
 vec3

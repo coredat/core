@@ -44,13 +44,28 @@ TEST(vec3_init)
   CHECK(vec3_components_are(init_with_c_array, 1.1f, 2.2f, 3.3f));
 
   const math::vec3 init_with_std_array = math::vec3_init_with_array(my_array);
-  CHECK(vec3_components_are(init_with_std_array, 1.1f, 2.2f, 3.3f));  
+  CHECK(vec3_components_are(init_with_std_array, 1.1f, 2.2f, 3.3f));
 }
 
 
 TEST(vec3_getters)
 {
-  CHECK(false);
+  // Get x,y,z
+  CHECK(vec3_get_x(one_two_three_vec3) == 1.1f);
+  CHECK(vec3_get_y(one_two_three_vec3) == 2.2f);
+  CHECK(vec3_get_z(one_two_three_vec3) == 3.3f);
+}
+
+
+TEST(vec3_get_data)
+{
+  std::array<float, 3> out_data;
+  vec3_to_array(one_two_three_vec3, &out_data[0]);
+
+  CHECK(out_data.at(0) == 1.1f && out_data.at(1) == 2.2f && out_data.at(2) == 3.3f);
+
+  const std::array<float, 3> out_std_data = vec3_to_std_array(one_two_three_vec3);
+  CHECK(out_data.at(0) == 1.1f && out_data.at(1) == 2.2f && out_data.at(2) == 3.3f);
 }
 
 
