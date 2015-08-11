@@ -46,8 +46,8 @@ transform_inherited(const transform &parent, const transform &child)
 {
   transform inherited;
 
-  inherited.scale    = caffmath::vec3_multiply(parent.scale, child.scale);
-  inherited.position = caffmath::vec3_subtract(parent.position, child.position);
+  inherited.scale    = math::vec3_multiply(parent.scale, child.scale);
+  inherited.position = math::vec3_subtract(parent.position, child.position);
 
   // TODO: Rotation.
 

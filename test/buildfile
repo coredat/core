@@ -38,7 +38,7 @@ CppBuild.build :mat4 do |b|
 
 	b.compiler 	= :clang
 	b.inc_dirs 	= INC_DIRS
-	b.files 	= "mat4_test.cpp"
+	b.files 	= "mat4_unit_test.cpp"
 	b.config 	= :release
 	b.out_dir 	= OUT_DIR
 

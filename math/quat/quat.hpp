@@ -80,12 +80,12 @@ quat_init_with_axis_angle(const float x, const float y, const float z, const flo
   // TODO: Normalize Axis.
 
   const float half_angle = 0.5f * theta_radians;
-  const float sin_angle  = caffmath::sin(half_angle);
+  const float sin_angle  = math::sin(half_angle);
 
   const float qx = sin_angle * x;
   const float qy = sin_angle * y;
   const float qz = sin_angle * z;
-  const float qw = caffmath::cos(half_angle);  
+  const float qw = math::cos(half_angle);
 
   return quat_init(qx, qy, qz, qw);
 }
@@ -98,12 +98,12 @@ quat_init_with_euler_angles(const float pitch_radians, const float yaw_radians, 
   const float half_yaw   = yaw_radians * 0.5f;
   const float half_pitch = pitch_radians * 0.5f;
 
-  const float cz = caffmath::cos(half_roll);
-  const float sz = caffmath::sin(half_roll);
-  const float cy = caffmath::cos(half_yaw);
-  const float sy = caffmath::sin(half_yaw);
-  const float cx = caffmath::cos(half_pitch);
-  const float sx = caffmath::sin(half_pitch);
+  const float cz = math::cos(half_roll);
+  const float sz = math::sin(half_roll);
+  const float cy = math::cos(half_yaw);
+  const float sy = math::sin(half_yaw);
+  const float cx = math::cos(half_pitch);
+  const float sx = math::sin(half_pitch);
 
   const float w = cz * cy * cx + sz * sy * sz;
   const float x = cz * cy * sx - sz * sy * cz;
@@ -158,7 +158,7 @@ float
 quat_length(const quat to_length)
 {
   const detail::internal_quat *length_quat = reinterpret_cast<const detail::internal_quat*>(&to_length);
-  return caffmath::sqrt((length_quat->w * length_quat->w) + (length_quat->x * length_quat->x) + (length_quat->y * length_quat->y) + (length_quat->z * length_quat->z));
+  return math::sqrt((length_quat->w * length_quat->w) + (length_quat->x * length_quat->x) + (length_quat->y * length_quat->y) + (length_quat->z * length_quat->z));
 }
 
 

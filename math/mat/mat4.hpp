@@ -33,7 +33,8 @@ inline mat4                       mat4_lookat(const vec3 eye_position, const vec
 inline mat4                       mat4_projection(const float width, const float height, const float near_plane, const float far_plane, const float fov);
 inline mat4                       mat4_orthographic(const float width, const float height, const float depth); // Not impl
 inline mat4                       mat4_scale(const float x, const float y, const float z);
-inline mat4                       mat4_translate(const mat4 &lhs, const vec3 move);
+inline mat4                       mat4_translate(const vec3 move);
+inline mat4                       mat4_translate(const float x, const float y, const float z);
 inline mat4                       mat4_rotate_around_axis(const vec3 axis, const float radians);
 
 // Operations
@@ -322,17 +323,23 @@ mat4_multiply(const mat4 &lhs, const mat4 &rhs)
 
 
 mat4
-mat4_translate(const mat4 &mat, const vec3 move)
+mat4_translate(const vec3 move)
 {
-  mat4 copy(mat);
+  return mat4_translate(vec3_get_x(move), vec3_get_y(move), vec3_get_z(move));
+}
 
-  detail::internal_mat4 *translate_me = reinterpret_cast<detail::internal_mat4*>(&copy);
 
-  translate_me->data[12] += vec3_get_x(move);
-  translate_me->data[13] += vec3_get_y(move);
-  translate_me->data[14] += vec3_get_z(move);
+mat4
+mat4_translate(const float x, const float y, const float z)
+{
+  mat4 translate_mat = mat4_id();
+  detail::internal_mat4 *translate_me = reinterpret_cast<detail::internal_mat4*>(&translate_mat);
 
-  return copy;
+  translate_me->data[12] += x;
+  translate_me->data[13] += y;
+  translate_me->data[14] += z;
+
+  return translate_mat;
 }
   
   
