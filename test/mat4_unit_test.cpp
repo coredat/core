@@ -49,7 +49,21 @@ namespace
     0,1,0,0,
     0,0,1,0,
     0,0,0,1,
-  };    
+  };
+
+  const std::array<float, 16> trans_mat_data = {
+    1,0,0,0,
+    0,1,0,0,
+    0,0,1,0,
+    10,12,14,1,
+  };
+
+  const std::array<float, 16> scale_mat_data = {
+    1.1f,0,0,0,
+    0,2.2f,0,0,
+    0,0,3.3f,0,
+    0,0,0,1,
+  };
 
   const std::array<float, 16> sequence_mat_data = {
     1.f,1.1f,1.2f,1.3f,
@@ -57,13 +71,6 @@ namespace
     3.f,3.1f,3.2f,3.3f,
     4.f,4.1f,4.2f,4.3f,
   };
-
-  const std::array<float, 16> trans_mat_data = {
-    2,2,2,2,
-    2,2,2,2,
-    2,2,2,2,
-    4,4,4,2,
-  };  
 }
 
 
@@ -102,29 +109,56 @@ TEST(mat4_get_values)
 TEST(mat4_camera)
 {
   // Look at
-  const math::vec3 position = math::vec3_zero();
-  const math::vec3 target = math::vec3_init(1,1,1);
-  const math::vec3 up = math::vec3_init(0,1,0);
+  {
+    const math::vec3 position = math::vec3_zero();
+    const math::vec3 target = math::vec3_init(1,1,1);
+    const math::vec3 up = math::vec3_init(0,1,0);
 
-  const math::mat4 look_at_mat = math::mat4_lookat(position, target, up);
-  CHECK(false);
+    const math::mat4 look_at_mat = math::mat4_lookat(position, target, up);
+    CHECK(false);
+  }
   
   // Projection
-  const float width = 800.f;
-  const float height = 600.f;
-  const float near_plane = 1.f;
-  const float far_plane = 100.f;
-  const float field_of_view = math::quart_tau();
+  {
+    const float width = 800.f;
+    const float height = 600.f;
+    const float near_plane = 1.f;
+    const float far_plane = 100.f;
+    const float field_of_view = math::quart_tau();
 
-  const math::mat4 proj_mat = math::mat4_projection(width, height, near_plane, far_plane, field_of_view);
-  CHECK(false);  
+    const math::mat4 proj_mat = math::mat4_projection(width, height, near_plane, far_plane, field_of_view);
+    CHECK(false);
+  }
 }
 
 
 TEST(mat4_transformations)
 {
-  //const math::mat4 trans_mat = math::mat4_translate(two_vec3);
-  //CHECK(mat4_equal(trans_mat, trans_mat_data, error));
+  // Scale
+  {
+    const math::mat4 scale_with_floats = math::mat4_scale(1.1f, 2.2f, 3.3f);
+    CHECK(mat4_equal(scale_with_floats, scale_mat_data, error));
+  }
+
+  // Scale
+  {
+    const math::vec3 scale_vec = math::vec3_init(1.1f, 2.2f, 3.3f);
+    const math::mat4 scale_with_vec = math::mat4_scale(scale_vec);
+    CHECK(mat4_equal(scale_with_vec, scale_mat_data, error));  
+  }
+
+  // Translate
+  {
+    const math::mat4 trans_with_floats = math::mat4_translate(10, 12, 14);
+    CHECK(mat4_equal(trans_with_floats, trans_mat_data, error));
+  }
+
+  // Translate
+  {
+    const math::vec3 trans_vec = math::vec3_init(10.f, 12.f, 14.f);
+    const math::mat4 trans_with_vec = math::mat4_translate(trans_vec);
+    CHECK(mat4_equal(trans_with_vec, trans_mat_data, error));
+  }  
 }
 
 
