@@ -28,10 +28,11 @@ inline mat4                       mat4_init(const float x);
 inline mat4                       mat4_init_with_array(const float arr[]);
 inline mat4                       mat4_init_with_array(const std::array<float, 16> &array);
 
-// Generate transformation matrices.
+// Generate affine/special transformation matrices.
 inline mat4                       mat4_lookat(const vec3 eye_position, const vec3 look_at_position, const vec3 up);
 inline mat4                       mat4_projection(const float width, const float height, const float near_plane, const float far_plane, const float fov);
 inline mat4                       mat4_orthographic(const float width, const float height, const float depth); // Not impl
+inline mat4                       mat4_scale(const vec3 scale);
 inline mat4                       mat4_scale(const float x, const float y, const float z);
 inline mat4                       mat4_translate(const vec3 move);
 inline mat4                       mat4_translate(const float x, const float y, const float z);
@@ -43,6 +44,7 @@ inline mat4                       mat4_subtract(const mat4 &lhs, const mat4 &rhs
 inline mat4                       mat4_multiply(const float val, const mat4 &b);
 inline vec4                       mat4_multiply(const vec4 vec, const mat4 &b);
 inline mat4                       mat4_multiply(const mat4 &lhs, const mat4 &rhs);
+inline mat4                       mat4_multiply(const mat4 &one, const mat4 &two, const mat4 &three); //!< Handy for WVP type multiplications.
 
 // Transform matrices into other forms
 inline mat4                       mat4_get_transpose(const mat4 &a);
@@ -255,13 +257,11 @@ mat4_subtract(const mat4 &lhs, const mat4 &rhs)
 
 
 mat4
-mat4_multiply(const float lhs, const mat4 &rhs)
+mat4_scale(const vec3 scale_vec)
 {
-  mat4 multiply_mat = mat4_init(lhs);
-  
-  return mat4_multiply(multiply_mat, rhs);
+  return mat4_scale(vec3_get_x(scale_vec), vec3_get_y(scale_vec), vec3_get_z(scale_vec));
 }
-  
+
   
 mat4
 mat4_scale(const float x, const float y, const float z)
@@ -275,6 +275,15 @@ mat4_scale(const float x, const float y, const float z)
   internal_mat->data[15] = 1;
   
   return return_mat;
+}
+
+
+mat4
+mat4_multiply(const float lhs, const mat4 &rhs)
+{
+  mat4 multiply_mat = mat4_init(lhs);
+  
+  return mat4_multiply(multiply_mat, rhs);
 }
 
 
@@ -292,6 +301,13 @@ mat4_multiply(const vec4 lhs, const mat4 &rhs)
   }
 
   return vec4_init_with_array(vec_data);
+}
+
+
+mat4
+mat4_multiply(const mat4 &one, const mat4 &two, const mat4 &three)
+{
+  return mat4_multiply(mat4_multiply(one, two), three);
 }
 
 
