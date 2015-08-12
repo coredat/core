@@ -42,7 +42,6 @@ inline float                  vec4_get_z(const vec4 vec);
 inline float                  vec4_get_w(const vec4 vec);
 inline void                   vec4_to_array(const vec4 a, float *out_array);
 inline std::array<float, 4>   vec4_to_std_array(const vec4 a);
-inline vec3                   vec4_to_vec3(const vec4 a); // not impl
 
 // Component wise arithmetic.
 inline vec4                   vec4_add(const vec4 a, const vec4 b);
