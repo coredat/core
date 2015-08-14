@@ -30,7 +30,7 @@ inline quat             quat_normalize(const quat to_normalize);
 inline float            quat_length(const quat to_length);
 inline vec3             quat_rotate_point(const quat rotation, const vec3 point);
 
-inline mat3             quat_get_rotation_matrix();
+inline mat3             quat_get_rotation_matrix(const quat to_mat3);
 inline vec3             quat_get_axis();
 inline vec3             quat_get_euler_angles_in_radians();
 
@@ -182,11 +182,35 @@ quat_rotate_point(const quat rotation, const vec3 point)
 }
 
 
-// mat3
-// quat_get_rotation_matrix()
-// {
+mat3
+quat_get_rotation_matrix(const quat to_mat3)
+{
+  const float quat_x = quat_get_x(to_mat3);
+  const float quat_y = quat_get_y(to_mat3);
+  const float quat_z = quat_get_z(to_mat3);
+  const float quat_w = quat_get_w(to_mat3);
 
-// }
+  const float x_sq = quat_x * quat_x;
+  const float y_sq = quat_y * quat_y;
+  const float z_sq = quat_z * quat_z;
+  
+	std::array<float, 9> mat_data =
+	{
+		1 - 2 * y_sq - 2 * z_sq,
+    2 * (quat_x * quat_y) - 2 * (quat_z * quat_w),
+		2 * (quat_x * quat_z) + 2 * (quat_y * quat_w),
+        
+		2 * (quat_x * quat_y) + 2 * (quat_z * quat_w),
+		1 - 2 * x_sq - 2 * z_sq,
+		2 * (quat_y * quat_z) - 2 * (quat_x * quat_w),
+        
+		2 * (quat_x * quat_z) - 2 * (quat_y * quat_w),
+		2 * (quat_y * quat_z) + 2 * (quat_x * quat_w),
+		1 - 2 * x_sq - 2 * y_sq,
+	};
+
+  return mat3_init_with_array(&mat_data[0]);
+}
 
 
 // vec3

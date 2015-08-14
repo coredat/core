@@ -10,6 +10,7 @@
 
 
 #include "mat_types.hpp"
+#include "mat3.hpp"
 #include "../vec/vec4.hpp"
 #include <array>
 #include <cstring>
@@ -25,6 +26,7 @@ inline mat4                       mat4_zero();
 // Init
 inline mat4                       mat4_init(); // will return an id array
 inline mat4                       mat4_init(const float x);
+inline mat4                       mat4_init_with_mat3(const mat3 sub_matrix);
 inline mat4                       mat4_init_with_array(const float arr[]);
 inline mat4                       mat4_init_with_array(const std::array<float, 16> &array);
 
@@ -120,6 +122,20 @@ mat4_init(const float x)
   };
 
   return mat4_init_with_array(x_array);
+}
+
+
+mat4
+mat4_init_with_mat3(const mat3 sub_matrix)
+{
+  std::array<float, 16> mat_data = {
+    mat3_get(sub_matrix, 0), mat3_get(sub_matrix, 1), mat3_get(sub_matrix, 2), 0.f,
+    mat3_get(sub_matrix, 3), mat3_get(sub_matrix, 4), mat3_get(sub_matrix, 5), 0.f,
+    mat3_get(sub_matrix, 6), mat3_get(sub_matrix, 7), mat3_get(sub_matrix, 8), 0.f,
+    0.f, 0.f, 0.f, 0.f,
+  };
+  
+  return mat4_init_with_array(&mat_data[0]);
 }
 
 

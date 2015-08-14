@@ -55,6 +55,23 @@ transform_inherited(const transform &parent, const transform &child)
 }
 
 
+mat4
+transform_get_world_matrix(const transform &to_world)
+{
+  // Get scale
+  const mat4 scale = mat4_scale(to_world.scale);
+  
+  // Get rotation
+  mat4 rotation = mat4_init_with_mat3(quat_get_rotation_matrix(to_world.rotation));
+  mat4_set(rotation, 3, 3, 1.f);
+  
+  // Get translation
+  const mat4 translation = mat4_translate(to_world.position);
+  
+  return mat4_multiply(scale, rotation, translation);
+}
+
+
 } // namespace
 
 
