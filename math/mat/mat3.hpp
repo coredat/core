@@ -242,7 +242,7 @@ mat3_get(const mat3 &mat, const uint32_t row, const uint32_t col)
 {
   assert(row < 4 && col < 4);
 
-  const uint32_t i = (row * 4) + col;
+  const uint32_t i = (row * 3) + col;
   return mat3_get(mat, i);
 }
 

@@ -23,6 +23,7 @@ inline quat             quat_init();
 inline quat             quat_init(const float x, const float y, const float z, const float w);
 inline quat             quat_init_with_axis_angle(const float x, const float y, const float z, const float theta_radians);
 inline quat             quat_init_with_euler_angles(const float pitch_radians, const float yaw_radians, const float roll_radians);
+inline quat             quat_init_with_mat3(const mat3 &mat);
 
 inline quat             quat_conjugate(const quat to_conj);
 inline quat             quat_multiply(const quat left, const quat &right);
@@ -109,6 +110,26 @@ quat_init_with_euler_angles(const float pitch_radians, const float yaw_radians, 
   const float x = cz * cy * sx - sz * sy * cz;
   const float y = cz * sy * cx + sz * cy * sz;
   const float z = sz * cy * cx - cz * sy * sz;
+
+  return quat_init(x, y, z, w);
+}
+
+
+quat
+quat_init_with_mat3(const mat3 &mat)
+{
+  const float w = math::sqrt(1.f + mat3_get(mat, 0, 0) + mat3_get(mat, 1, 1) + mat3_get(mat, 2, 2)) * 0.5f;
+  const float div = w * 4.f;
+  
+  const float x = (mat3_get(mat, 2, 1) - mat3_get(mat, 1, 2)) / div;
+  const float y = (mat3_get(mat, 0, 2) - mat3_get(mat, 2, 0)) / div;
+  const float z = (mat3_get(mat, 1, 0) - mat3_get(mat, 0, 1)) / div;
+
+//	w = Math.sqrt(1.0 + m1.m00 + m1.m11 + m1.m22) / 2.0;
+//	double w4 = (4.0 * w);
+//	x = (m1.m21 - m1.m12) / w4 ;
+//	y = (m1.m02 - m1.m20) / w4 ;
+//	z = (m1.m10 - m1.m01) / w4 ;
 
   return quat_init(x, y, z, w);
 }

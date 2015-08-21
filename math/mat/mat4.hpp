@@ -60,7 +60,7 @@ inline float                      mat4_get(const mat4 &mat, const uint32_t row, 
 inline float                      mat4_get(const mat4 &mat, const uint32_t i);
 inline const float*               mat4_get_data(const mat4 &mat);
 inline void                       mat4_set(mat4 &mat, const uint32_t row, const uint32_t col, const float set);
-inline mat3                       mat4_get_rotation(const mat4 &a);
+inline mat3                       mat4_get_sub_mat3(const mat4 &a);
 inline vec3                       mat4_get_position(const mat4 &a);
 inline vec3                       mat4_get_scale(const mat4 &a);
 
@@ -407,6 +407,35 @@ mat4_rotate_around_axis(const vec3 axis, const float radians)
 }
 
 
+std::array<float, 16>
+mat4_to_array(const mat4 &mat)
+{
+  const detail::internal_mat4 *internal_mat = reinterpret_cast<const detail::internal_mat4*>(&mat);
+  
+  std::array<float, 16> data =
+  {
+    internal_mat->data[0],
+    internal_mat->data[1],
+    internal_mat->data[2],
+    internal_mat->data[3],
+    internal_mat->data[4],
+    internal_mat->data[5],
+    internal_mat->data[6],
+    internal_mat->data[7],
+    internal_mat->data[8],
+    internal_mat->data[9],
+    internal_mat->data[10],
+    internal_mat->data[11],
+    internal_mat->data[12],
+    internal_mat->data[13],
+    internal_mat->data[14],
+    internal_mat->data[15],
+  };
+  
+  return data;
+}
+
+
 float
 mat4_get(const mat4 &mat, const uint32_t row, const uint32_t col)
 {
@@ -444,6 +473,20 @@ mat4_set(mat4 &mat, const uint32_t row, const uint32_t col, const float set)
   internal_mat->data[(row * 4) + col] = set;
 }
 
+
+mat3
+mat4_get_sub_mat3(const mat4 &m)
+{
+  const detail::internal_mat4 *internal_mat = reinterpret_cast<const detail::internal_mat4*>(&m);
+  
+  std::array<float, 9> mat_data = {
+    internal_mat->data[0], internal_mat->data[1],  internal_mat->data[2],
+    internal_mat->data[5], internal_mat->data[6],  internal_mat->data[7],
+    internal_mat->data[9], internal_mat->data[10], internal_mat->data[11],
+  };
+  
+  return mat3_init_with_array(mat_data);
+}
 
 } // namespace
 

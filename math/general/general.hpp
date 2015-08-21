@@ -58,6 +58,7 @@ inline bool               is_between(const float to_check, const float a, const 
 inline bool               is_near(const float actual, const float target, const float error_margin); // TODO: 
 inline bool               is_pow_two(const uint32_t i); // TODO: 
 inline bool               fmod(const float x, const float max); // TODO;
+inline float              sign(const float x); // Returns 1 or -1
 
 
 
@@ -138,6 +139,12 @@ a_sin(const float radians)
   return std::asin(radians);
 }
 
+
+float
+sign(const float x)
+{
+  return x >= 0.f ? 1.f : -1.f;
+}
 
 } // namespace
 
