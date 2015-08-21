@@ -480,9 +480,9 @@ mat4_get_sub_mat3(const mat4 &m)
   const detail::internal_mat4 *internal_mat = reinterpret_cast<const detail::internal_mat4*>(&m);
   
   std::array<float, 9> mat_data = {
-    internal_mat->data[0], internal_mat->data[1],  internal_mat->data[2],
-    internal_mat->data[5], internal_mat->data[6],  internal_mat->data[7],
-    internal_mat->data[9], internal_mat->data[10], internal_mat->data[11],
+    internal_mat->data[0], internal_mat->data[1], internal_mat->data[2],
+    internal_mat->data[4], internal_mat->data[5], internal_mat->data[6],
+    internal_mat->data[8], internal_mat->data[9], internal_mat->data[10],
   };
   
   return mat3_init_with_array(mat_data);
