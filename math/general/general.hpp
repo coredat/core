@@ -73,6 +73,20 @@ sqrt(const float x)
 
 
 float
+max(const float x, const float y)
+{
+  return std::max(x, y);
+}
+
+
+float
+min(const float x, const float y)
+{
+  return std::min(x, y);
+}
+
+
+float
 clamp(const float x, const float between_a, const float between_b)
 {
   const float highest = between_a >= between_b ? between_a : between_b;
