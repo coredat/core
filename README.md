@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/PhilCK/caffeine-math.svg?branch=master)](https://travis-ci.org/PhilCK/caffeine-math)
 
+[![codecov.io](https://codecov.io/github/PhilCK/caffeine-math/coverage.svg?branch=master)](https://codecov.io/github/PhilCK/caffeine-math?branch=master)
+
 This is a header only math library that built up in my hobby projects. I've extracted it and put it up here for anybody who wants it use it. Its a no-nonsece floating point math library. I'm porting it over in chunks as I write tests just to double check its working correctly.
 
 

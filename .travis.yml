@@ -12,3 +12,7 @@ branches:
 
 before_install:
   - git clone https://github.com/PhilCK/CppUnitTester.git unit_test
+  - pip install codecov
+
+after_success:
+  - codecov

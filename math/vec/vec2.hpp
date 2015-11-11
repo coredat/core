@@ -9,6 +9,7 @@
 
 
 #include "vec_types.hpp"
+#include "../detail/detail.hpp"
 #include "../general/general.hpp"
 #include <array>
 #include <assert.h>
@@ -20,36 +21,36 @@ namespace math {
 // ** Interface ** //
 
 // ** Constants ** //
-inline vec2                   vec2_zero();
-inline vec2                   vec2_one();
-inline vec2                   vec2_zero_one();
+MATH_INLINE vec2                   vec2_zero();
+MATH_INLINE vec2                   vec2_one();
+MATH_INLINE vec2                   vec2_zero_one();
 
 // ** Initialize new vectors ** //
-inline vec2                   vec2_init(const float val);
-inline vec2                   vec2_init(const float x, const float y);
-inline vec2                   vec2_init_with_array(const float *arr);
-inline vec2                   vec2_init_with_array(const std::array<float, 2> &vec);
+MATH_INLINE vec2                   vec2_init(const float val);
+MATH_INLINE vec2                   vec2_init(const float x, const float y);
+MATH_INLINE vec2                   vec2_init_with_array(const float *arr);
+MATH_INLINE vec2                   vec2_init_with_array(const std::array<float, 2> &vec);
 
 // ** Get elements ** //
-inline float                  vec2_get_x(const vec2 vec);
-inline float                  vec2_get_y(const vec2 vec);
-inline void                   vec2_to_array(const vec2 a, float *out_array);
-inline std::array<float, 2>   vec2_to_std_array(const vec2 a);
+MATH_INLINE float                  vec2_get_x(const vec2 vec);
+MATH_INLINE float                  vec2_get_y(const vec2 vec);
+MATH_INLINE void                   vec2_to_array(const vec2 a, float *out_array);
+MATH_INLINE std::array<float, 2>   vec2_to_std_array(const vec2 a);
 
 // ** Arithmetic ** //
-inline vec2                   vec2_add(const vec2 a, const vec2 b);
-inline vec2                   vec2_subtract(const vec2 a, const vec2 b);
-inline vec2                   vec2_multiply(const vec2 a, const vec2 b);
-inline vec2                   vec2_divide(const vec2 a, const vec2 b);
+MATH_INLINE vec2                   vec2_add(const vec2 a, const vec2 b);
+MATH_INLINE vec2                   vec2_subtract(const vec2 a, const vec2 b);
+MATH_INLINE vec2                   vec2_multiply(const vec2 a, const vec2 b);
+MATH_INLINE vec2                   vec2_divide(const vec2 a, const vec2 b);
 
 // ** Special Operations ** //
-inline vec2                   vec2_lerp(const vec2 start, const vec2 end, const float dt);
-//inline vec2                 vec2_slerp(); // not impl
-inline vec2                   vec2_scale(const vec2 a, const float scale);
-inline vec2                   vec2_normalize(const vec2 a);
-inline float                  vec2_length(const vec2 a);
-inline float 	                vec2_cross(const vec2 a, const vec2 b);
-inline float                  vec2_dot(const vec2 a, const vec2 b);
+MATH_INLINE vec2                   vec2_lerp(const vec2 start, const vec2 end, const float dt);
+//MATH_INLINE vec2                 vec2_slerp(); // not impl
+MATH_INLINE vec2                   vec2_scale(const vec2 a, const float scale);
+MATH_INLINE vec2                   vec2_normalize(const vec2 a);
+MATH_INLINE float                  vec2_length(const vec2 a);
+MATH_INLINE float                  vec2_cross(const vec2 a, const vec2 b);
+MATH_INLINE float                  vec2_dot(const vec2 a, const vec2 b);
 
 
 // ** Implimentation ** //
