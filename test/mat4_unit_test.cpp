@@ -111,8 +111,8 @@ TEST(mat4_camera)
   // Look at
   {
     const math::vec3 position = math::vec3_zero();
-    const math::vec3 target = math::vec3_init(1,1,1);
-    const math::vec3 up = math::vec3_init(0,1,0);
+    const math::vec3 target   = math::vec3_init(1,1,1);
+    const math::vec3 up       = math::vec3_init(0,1,0);
 
     const math::mat4 look_at_mat = math::mat4_lookat(position, target, up);
     CHECK(false);
@@ -120,10 +120,10 @@ TEST(mat4_camera)
   
   // Projection
   {
-    const float width = 800.f;
-    const float height = 600.f;
-    const float near_plane = 1.f;
-    const float far_plane = 100.f;
+    const float width         = 800.f;
+    const float height        = 600.f;
+    const float near_plane    = 1.f;
+    const float far_plane     = 100.f;
     const float field_of_view = math::quart_tau();
 
     const math::mat4 proj_mat = math::mat4_projection(width, height, near_plane, far_plane, field_of_view);
@@ -158,14 +158,24 @@ TEST(mat4_transformations)
     const math::vec3 trans_vec = math::vec3_init(10.f, 12.f, 14.f);
     const math::mat4 trans_with_vec = math::mat4_translate(trans_vec);
     CHECK(mat4_equal(trans_with_vec, trans_mat_data, error));
-  }  
+  }
+
+  // Rotate
+  {
+    CHECK(false);
+  }
+
+  // Rotate
+  {
+    CHECK(false);
+  }
 }
 
 
 TEST(mat4_arithmetic)
 {
-  const math::mat4 one_mat = math::mat4_init_with_array(one_mat_data);
-  const math::mat4 two_mat = math::mat4_init_with_array(two_mat_data);
+  const math::mat4 one_mat  = math::mat4_init_with_array(one_mat_data);
+  const math::mat4 two_mat  = math::mat4_init_with_array(two_mat_data);
   const math::vec4 two_vec4 = math::vec4_init(2, 2, 2, 2);
   const math::vec3 two_vec3 = math::vec3_init(2, 2, 2);
 

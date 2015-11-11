@@ -194,11 +194,11 @@ mat3_multiply(const vec3 lhs, const mat3 &rhs)
   const detail::internal_mat3 *right = reinterpret_cast<const detail::internal_mat3*>(&rhs);
   std::array<float, 3> vec_data;
 
-  for(int i = 0; i < 9; i += 4)
+  for(int i = 0; i < 3; i += 1)
   {
     const vec3 dot_vec = vec3_init(right->data[i + 0], right->data[i + 3], right->data[i + 6]);
 
-    vec_data.at(i / 3) = vec3_dot(lhs, dot_vec);
+    vec_data.at(i) = vec3_dot(lhs, dot_vec);
   }
 
   return vec3_init_with_array(vec_data);
@@ -234,6 +234,21 @@ mat3
 mat3_rotate(const mat3 &a, const vec3 euler)
 {
   return mat3();
+}
+
+
+mat3
+mat3_get_transpose(const mat3 &m)
+{
+  const detail::internal_mat3 *mat = reinterpret_cast<const detail::internal_mat3*>(&m);
+  
+  const std::array<float, 9> transpose_data = {
+    mat->data[0], mat->data[3], mat->data[6],
+    mat->data[1], mat->data[4], mat->data[7],
+    mat->data[2], mat->data[5], mat->data[8],
+  };
+  
+  return mat3_init_with_array(transpose_data);
 }
 
 

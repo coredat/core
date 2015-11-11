@@ -123,19 +123,18 @@ quat_init_with_mat3(const mat3 &mat)
   const float y = math::sqrt(math::max( 0, 1 - mat3_get(mat, 0,0) + mat3_get(mat, 1,1) - mat3_get(mat, 2,2) )) * 0.5;
   const float z = math::sqrt(math::max( 0, 1 - mat3_get(mat, 0,0) - mat3_get(mat, 1,1) + mat3_get(mat, 2,2) )) * 0.5;
   
-  const float q_x = x * math::sign(mat3_get(mat,1,2) - mat3_get(mat,2,1));
-  const float q_y = y * math::sign(mat3_get(mat,2,0) - mat3_get(mat,0,2));
-  const float q_z = z * math::sign(mat3_get(mat,0,1) - mat3_get(mat,1,0));
+  const float q_x = x * math::sign(mat3_get(mat,2,1) - mat3_get(mat,1,2));
+  const float q_y = y * math::sign(mat3_get(mat,0,2) - mat3_get(mat,2,0));
+  const float q_z = z * math::sign(mat3_get(mat,1,0) - mat3_get(mat,0,1));
   
-//  Q.y = ( Q.y, m02 - m20 )
-//  Q.z = ( Q.z, m10 - m01 )
 
 //  const float w = math::sqrt(1.f + mat3_get(mat, 0, 0) + mat3_get(mat, 1, 1) + mat3_get(mat, 2, 2)) * 0.5f;
 //  const float div = w * 4.f;
 //  
-//  const float x = (mat3_get(mat, 2, 1) - mat3_get(mat, 1, 2)) / div;
-//  const float y = (mat3_get(mat, 0, 2) - mat3_get(mat, 2, 0)) / div;
-//  const float z = (mat3_get(mat, 1, 0) - mat3_get(mat, 0, 1)) / div;
+//  const float q_x = (mat3_get(mat, 2, 1) - mat3_get(mat, 1, 2)) / div;
+//  const float q_y = (mat3_get(mat, 0, 2) - mat3_get(mat, 2, 0)) / div;
+//  const float q_z = (mat3_get(mat, 1, 0) - mat3_get(mat, 0, 1)) / div;
+
 
 //	w = Math.sqrt(1.0 + m1.m00 + m1.m11 + m1.m22) / 2.0;
 //	double w4 = (4.0 * w);
@@ -198,20 +197,22 @@ quat_length(const quat to_length)
 vec3
 quat_rotate_point(const quat rotation, const vec3 point)
 {
-  const detail::internal_quat *rot_quat = reinterpret_cast<const detail::internal_quat*>(&rotation);
+//  const detail::internal_quat *rot_quat = reinterpret_cast<const detail::internal_quat*>(&rotation);
+//
+//  const float x = rot_quat->x;
+//  const float y = rot_quat->y;
+//  const float z = rot_quat->z;
+//  const float w = rot_quat->w;
+//
+//  const float p_x = w*w*vec3_get_x(point) + 2*y*w*vec3_get_z(point) - 2*z*w*vec3_get_y(point) + x*x* vec3_get_x(point) + 2*y*x*vec3_get_y(point) + 2*z*x*vec3_get_z(point) - z*z*vec3_get_x(point) - y*y*vec3_get_x(point);
+//  const float p_y = 2*x*y*vec3_get_x(point) + y*y*vec3_get_y(point) + 2*z*y*vec3_get_z(point) + 2*w*z* vec3_get_x(point) - z*z*vec3_get_y(point) + w*w*vec3_get_y(point) - 2*x*w*vec3_get_z(point) - x*x*vec3_get_y(point);
+//  const float p_z = 2*x*z*vec3_get_x(point) + 2*y*z*vec3_get_y(point) + z*z*vec3_get_z(point) - 2*w*y* vec3_get_x(point) - y*y*vec3_get_z(point) + 2*w*x*vec3_get_y(point) - x*x*vec3_get_z(point) + w*w*vec3_get_z(point);
+//
+//  const vec3 rotated_point = vec3_init(p_x, p_y, p_z);
 
-  const float x = rot_quat->x;
-  const float y = rot_quat->y;
-  const float z = rot_quat->z;
-  const float w = rot_quat->w;
+  const auto rot_mat = quat_get_rotation_matrix(rotation);
 
-  const float p_x = w*w*vec3_get_x(point) + 2*y*w*vec3_get_z(point) - 2*z*w*vec3_get_y(point) + x*x* vec3_get_x(point) + 2*y*x*vec3_get_y(point) + 2*z*x*vec3_get_z(point) - z*z*vec3_get_x(point) - y*y*vec3_get_x(point);
-  const float p_y = 2*x*y*vec3_get_x(point) + y*y*vec3_get_y(point) + 2*z*y*vec3_get_z(point) + 2*w*z* vec3_get_x(point) - z*z*vec3_get_y(point) + w*w*vec3_get_y(point) - 2*x*w*vec3_get_z(point) - x*x*vec3_get_y(point);
-  const float p_z = 2*x*z*vec3_get_x(point) + 2*y*z*vec3_get_y(point) + z*z*vec3_get_z(point) - 2*w*y* vec3_get_x(point) - y*y*vec3_get_z(point) + 2*w*x*vec3_get_y(point) - x*x*vec3_get_z(point) + w*w*vec3_get_z(point);
-
-  const vec3 rotated_point = vec3_init(p_x, p_y, p_z);
-
-  return rotated_point;
+  return mat3_multiply(point, rot_mat);
 }
 
 

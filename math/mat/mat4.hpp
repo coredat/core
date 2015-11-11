@@ -355,6 +355,22 @@ mat4_multiply(const mat4 &lhs, const mat4 &rhs)
 
 
 mat4
+mat4_get_transpose(const mat4 &to_transpose)
+{
+  const detail::internal_mat4 *transpose_data = reinterpret_cast<const detail::internal_mat4*>(&to_transpose);
+  
+  std::array<float, 16> mat_transpose = {
+    transpose_data->data[0],  transpose_data->data[4],  transpose_data->data[8],  transpose_data->data[12],
+    transpose_data->data[1],  transpose_data->data[5],  transpose_data->data[9],  transpose_data->data[13],
+    transpose_data->data[2],  transpose_data->data[6],  transpose_data->data[10], transpose_data->data[14],
+    transpose_data->data[3],  transpose_data->data[8],  transpose_data->data[11], transpose_data->data[15],
+  };
+  
+  return mat4_init_with_array(mat_transpose);
+}
+
+
+mat4
 mat4_translate(const vec3 move)
 {
   return mat4_translate(vec3_get_x(move), vec3_get_y(move), vec3_get_z(move));
