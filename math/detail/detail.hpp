@@ -2,11 +2,11 @@
 #define DETAIL_INCLUDED_738ADE13_1093_4593_AF81_2F9CB58DAE42
 
 
-#ifdef(MATH_ENABLE_SIMD)
+#ifdef MATH_ENABLE_SIMD
 #define MATH_NO_SIMD
 #endif
 
-#ifdef(MATH_FORCE_INLINE)
+#ifdef MATH_FORCE_INLINE
 #define MATH_INLINE __forceinline
 #else
 #define MATH_INLINE inline
