@@ -22,7 +22,7 @@ mat4_equal(math::mat4 mat, const std::array<float, 16> mat_data, const float err
 		//std::cout << math::mat4_get(mat, i) << ", " << mat_data.at(i) << std::endl;
 		//std::cout << diff << "," << abs_diff << std::endl;
 
-		if(diff > error)
+		if(abs_diff > error)
 		{
 			return false;
 		}
@@ -31,6 +31,26 @@ mat4_equal(math::mat4 mat, const std::array<float, 16> mat_data, const float err
 	return true;
 }
 
+
+bool
+mat3_equal(math::mat3 mat, const std::array<float, 9> mat_data, const float error)
+{
+	for(uint32_t i = 0; i < mat_data.size(); ++i)
+	{
+		const float diff = math::mat3_get(mat, i) - mat_data.at(i);
+		const float abs_diff = math::abs(diff);
+
+		//std::cout << math::mat4_get(mat, i) << ", " << mat_data.at(i) << std::endl;
+		//std::cout << diff << "," << abs_diff << std::endl;
+
+		if(abs_diff > error)
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
 
 // vec 4
 

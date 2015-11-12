@@ -65,7 +65,7 @@ TEST(vec3_get_data)
   CHECK(out_data.at(0) == 1.1f && out_data.at(1) == 2.2f && out_data.at(2) == 3.3f);
 
   const std::array<float, 3> out_std_data = vec3_to_std_array(one_two_three_vec3);
-  CHECK(out_data.at(0) == 1.1f && out_data.at(1) == 2.2f && out_data.at(2) == 3.3f);
+  CHECK(out_data.at(0) == 1.1f && out_std_data.at(1) == 2.2f && out_std_data.at(2) == 3.3f);
 }
 
 

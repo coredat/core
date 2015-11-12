@@ -176,14 +176,16 @@ TEST(mat4_arithmetic)
 {
   const math::mat4 one_mat  = math::mat4_init_with_array(one_mat_data);
   const math::mat4 two_mat  = math::mat4_init_with_array(two_mat_data);
-  const math::vec4 two_vec4 = math::vec4_init(2, 2, 2, 2);
-  const math::vec3 two_vec3 = math::vec3_init(2, 2, 2);
 
   const math::mat4 add_mat = math::mat4_add(one_mat, one_mat);
-  CHECK(mat4_equal(one_mat, two_mat_data, error));
+  CHECK(mat4_equal(add_mat, two_mat_data, error));
 
   const math::mat4 sub_mat = math::mat4_subtract(one_mat, one_mat);
   CHECK(mat4_equal(sub_mat, zero_mat_data, error));
+
+
+  const math::vec4 two_vec4 = math::vec4_init(2, 2, 2, 2);
+  const math::vec3 two_vec3 = math::vec3_init(2, 2, 2);
 
   //const math::mat4 scale_mat = math::mat4_scale(0.5f, two_mat);
   //CHECK(mat4_equal(scale_mat, one_mat_data, error));
@@ -198,13 +200,48 @@ TEST(mat4_arithmetic)
 
 TEST(mat4_get_mat3)
 {
-  
+  const std::array<float, 16> mat_data = {
+    1,2,3,4,
+    5,6,7,8,
+    9,10,11,12,
+    13,14,15,16,
+  };
+
+  const std::array<float, 9> mat_result_data = {
+    1,2,3,
+    5,6,7,
+    8,9,10
+  };
+
+  const math::mat4 mat = math::mat4_init_with_array(mat_data);
+  const math::mat3 sub_mat = math::mat4_get_sub_mat3(mat);
+
+  CHECK(mat3_equal(sub_mat, mat_result_data, error));
 }
 
 
 TEST(mat4_transpose)
 {
-  
+  const std::array<float, 16> orig_data =
+  {
+    1,2,3,4,
+    5,6,7,8,
+    9,10,11,12,
+    13,14,15,16,
+  };
+  const math::mat4 original_mat = math::mat4_init_with_array(orig_data);
+
+  const std::array<float, 16> result_data =
+  {
+    1,5,9,13,
+    2,6,10,14,
+    3,7,11,15,
+    4,8,12,16,
+  };
+
+  const math::mat4 transpose = math::mat4_get_transpose(original_mat);
+
+  CHECK(mat4_equal(transpose, result_data, error));
 }
 
 

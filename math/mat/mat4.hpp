@@ -115,7 +115,8 @@ mat4_init()
 mat4
 mat4_init(const float x)
 {
-  std::array<float, 16> x_array = {
+  const float x_array[16] = {
+    x,x,x,x,
     x,x,x,x,
     x,x,x,x,
     x,x,x,x,
@@ -128,7 +129,7 @@ mat4_init(const float x)
 mat4
 mat4_init_with_mat3(const mat3 sub_matrix)
 {
-  std::array<float, 16> mat_data = {
+  const float mat_data[16] = {
     mat3_get(sub_matrix, 0), mat3_get(sub_matrix, 1), mat3_get(sub_matrix, 2), 0.f,
     mat3_get(sub_matrix, 3), mat3_get(sub_matrix, 4), mat3_get(sub_matrix, 5), 0.f,
     mat3_get(sub_matrix, 6), mat3_get(sub_matrix, 7), mat3_get(sub_matrix, 8), 0.f,
@@ -154,7 +155,7 @@ mat4_init_with_array(const float array[])
 mat4
 mat4_init_with_array(const std::array<float, 16> &array)
 {
-  return mat4_init_with_array(&array[0]);
+  return mat4_init_with_array(array.data());
 }
 
 
@@ -165,7 +166,7 @@ mat4_lookat(const vec3 eye_position, const vec3 look_at_position, const vec3 up)
   const vec3 x_axis = vec3_normalize(vec3_cross(z_axis, up));
   const vec3 y_axis = vec3_cross(x_axis, z_axis);
 
-  const std::array<float, 16> array_mat =
+  const float array_mat[16] =
   {
     vec3_get_x(x_axis),
     vec3_get_x(y_axis),
@@ -188,7 +189,7 @@ mat4_lookat(const vec3 eye_position, const vec3 look_at_position, const vec3 up)
     1.f,
   };
 
-  return mat4_init_with_array(&array_mat[0]);
+  return mat4_init_with_array(array_mat);
 }
 
 
@@ -200,7 +201,7 @@ mat4_projection(const float width, const float height, const float near_plane, c
   const float plane_diff = far_plane - near_plane;
 
   //mat4 return_mat = mat4_zero();
-  std::array<float, 16> proj_mat =
+  const float proj_mat[16] =
   {
     one_over_tan_half_fov / aspect_ratio,
     0.f,
@@ -359,11 +360,11 @@ mat4_get_transpose(const mat4 &to_transpose)
 {
   const detail::internal_mat4 *transpose_data = reinterpret_cast<const detail::internal_mat4*>(&to_transpose);
   
-  std::array<float, 16> mat_transpose = {
+  const float mat_transpose[16] = {
     transpose_data->data[0],  transpose_data->data[4],  transpose_data->data[8],  transpose_data->data[12],
     transpose_data->data[1],  transpose_data->data[5],  transpose_data->data[9],  transpose_data->data[13],
     transpose_data->data[2],  transpose_data->data[6],  transpose_data->data[10], transpose_data->data[14],
-    transpose_data->data[3],  transpose_data->data[8],  transpose_data->data[11], transpose_data->data[15],
+    transpose_data->data[3],  transpose_data->data[7],  transpose_data->data[11], transpose_data->data[15],
   };
   
   return mat4_init_with_array(mat_transpose);
@@ -423,32 +424,22 @@ mat4_rotate_around_axis(const vec3 axis, const float radians)
 }
 
 
+void
+mat4_to_array(const mat4 &mat, float *out_array)
+{
+  const detail::internal_mat4 *internal_mat = reinterpret_cast<const detail::internal_mat4*>(&mat);
+  memcpy(out_array, internal_mat->data, sizeof(float) * 16);
+}
+
+
 std::array<float, 16>
 mat4_to_array(const mat4 &mat)
 {
-  const detail::internal_mat4 *internal_mat = reinterpret_cast<const detail::internal_mat4*>(&mat);
+  std::array<float, 16> return_arr;
   
-  std::array<float, 16> data =
-  {
-    internal_mat->data[0],
-    internal_mat->data[1],
-    internal_mat->data[2],
-    internal_mat->data[3],
-    internal_mat->data[4],
-    internal_mat->data[5],
-    internal_mat->data[6],
-    internal_mat->data[7],
-    internal_mat->data[8],
-    internal_mat->data[9],
-    internal_mat->data[10],
-    internal_mat->data[11],
-    internal_mat->data[12],
-    internal_mat->data[13],
-    internal_mat->data[14],
-    internal_mat->data[15],
-  };
-  
-  return data;
+  mat4_to_array(mat, return_arr.data());
+
+  return return_arr;
 }
 
 
