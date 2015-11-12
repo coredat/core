@@ -95,7 +95,7 @@ bool vec4_components_are_near(const math::vec4 a, const float x, const float y, 
 		return true;
 	}
 
-	std::cout << math::to_string(a) << std::endl;
+	//std::cout << math::to_string(a) << std::endl;
 
 	return false;
 }

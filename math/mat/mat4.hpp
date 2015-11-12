@@ -307,13 +307,13 @@ vec4
 mat4_multiply(const vec4 lhs, const mat4 &rhs)
 {
   const detail::internal_mat4 *right = reinterpret_cast<const detail::internal_mat4*>(&rhs);
-  std::array<float, 4> vec_data;
+  float vec_data[4];
 
   for(int i = 0; i < 16; i += 4)
   {
     const vec4 dot_vec = vec4_init(right->data[i + 0], right->data[i + 4], right->data[i + 8], right->data[i + 12]);
 
-    vec_data.at(i / 4) = vec4_dot(lhs, dot_vec);
+    vec_data[i / 4] = vec4_dot(lhs, dot_vec);
   }
 
   return vec4_init_with_array(vec_data);
@@ -330,7 +330,7 @@ mat4_multiply(const mat4 &one, const mat4 &two, const mat4 &three)
 mat4
 mat4_multiply(const mat4 &lhs, const mat4 &rhs)
 {
-  const detail::internal_mat4 *left = reinterpret_cast<const detail::internal_mat4*>(&lhs);
+  const detail::internal_mat4 *left  = reinterpret_cast<const detail::internal_mat4*>(&lhs);
   const detail::internal_mat4 *right = reinterpret_cast<const detail::internal_mat4*>(&rhs);
 
   mat4 return_mat = mat4_id();

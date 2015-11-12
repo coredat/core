@@ -168,7 +168,7 @@ TEST(mat4_camera)
 }
 
 
-TEST(mat4_transformations)
+TEST(mat4_scale)
 {
   // Scale
   {
@@ -182,7 +182,11 @@ TEST(mat4_transformations)
     const math::mat4 scale_with_vec = math::mat4_scale(scale_vec);
     CHECK(mat4_equal(scale_with_vec, scale_mat_data, error));  
   }
+}
 
+
+TEST(mat4_translate)
+{
   // Translate
   {
     const math::mat4 trans_with_floats = math::mat4_translate(10, 12, 14);
@@ -195,16 +199,44 @@ TEST(mat4_transformations)
     const math::mat4 trans_with_vec = math::mat4_translate(trans_vec);
     CHECK(mat4_equal(trans_with_vec, trans_mat_data, error));
   }
+}
 
+
+TEST(mat4_rotation)
+{
   // Rotate
   {
-    CHECK(false);
+    const math::vec3 axis             = math::vec3_init(0, 1, 0);
+    const float rotate_rads           = math::pi();
+    const math::mat4 rot_mat          = math::mat4_rotate_around_axis(axis, rotate_rads);
+    const math::vec4 point_to_rotate  = math::vec4_init(1, 0, 0, 0);
+    const math::vec4 result_vec       = math::mat4_multiply(point_to_rotate, rot_mat);
+
+    CHECK(vec4_components_are_near(result_vec, -1, 0, 0, 0, error));
   }
 
   // Rotate
   {
-    CHECK(false);
+    const math::vec3 axis             = math::vec3_init(1, 0, 0);
+    const float rotate_rads           = math::pi();
+    const math::mat4 rot_mat          = math::mat4_rotate_around_axis(axis, rotate_rads);
+    const math::vec4 point_to_rotate  = math::vec4_init(1, 0, 0, 0);
+    const math::vec4 result_vec       = math::mat4_multiply(point_to_rotate, rot_mat);
+
+    CHECK(vec4_components_are_near(result_vec, 1, 0, 0, 0, error));
   }
+
+  // Rotate
+  {
+    const math::vec3 axis             = math::vec3_init(0, 1, 0);
+    const float rotate_rads           = math::tau();
+    const math::mat4 rot_mat          = math::mat4_rotate_around_axis(axis, rotate_rads);
+    const math::vec4 point_to_rotate  = math::vec4_init(0, 0, 1, 0);
+    const math::vec4 result_vec       = math::mat4_multiply(point_to_rotate, rot_mat);
+
+    CHECK(vec4_components_are_near(result_vec, 0, 0, -1, 0, error));
+    std::cout << math::vec4_get_x(result_vec) << ", " << math::vec4_get_y(result_vec) << ", " << math::vec4_get_z(result_vec) << ", " << math::vec4_get_z(result_vec) << std::endl;
+  }  
 }
 
 

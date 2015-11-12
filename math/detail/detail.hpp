@@ -6,13 +6,20 @@
 #define MATH_NO_SIMD
 #endif
 
+
 #ifdef MATH_FORCE_INLINE
 #define MATH_INLINE __forceinline
 #else
 #define MATH_INLINE inline
 #endif
 
+
+#define MATH_VEC2_INLINE inline
+#define MATH_VEC3_INLINE inline
+#define MATH_VEC4_INLINE inline
+#define MATH_MAT3_INLINE inline
 #define MATH_MAT4_INLINE inline
+#define MATH_QUAT_INLINE inline
 
 
 #endif // include guard
