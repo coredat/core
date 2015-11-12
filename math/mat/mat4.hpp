@@ -13,56 +13,55 @@
 #include "mat3.hpp"
 #include "../vec/vec4.hpp"
 #include <array>
-#include <cstring>
 
 
 namespace math {
 
 
 // Constants
-inline mat4                       mat4_id();
-inline mat4                       mat4_zero();
+MATH_MAT4_INLINE mat4                       mat4_id();
+MATH_MAT4_INLINE mat4                       mat4_zero();
 
 // Init
-inline mat4                       mat4_init(); // will return an id array
-inline mat4                       mat4_init(const float x);
-inline mat4                       mat4_init_with_mat3(const mat3 sub_matrix);
-inline mat4                       mat4_init_with_array(const float arr[]);
-inline mat4                       mat4_init_with_array(const std::array<float, 16> &array);
+MATH_MAT4_INLINE mat4                       mat4_init(); // will return an id array
+MATH_MAT4_INLINE mat4                       mat4_init(const float x);
+MATH_MAT4_INLINE mat4                       mat4_init_with_mat3(const mat3 sub_matrix);
+MATH_MAT4_INLINE mat4                       mat4_init_with_array(const float arr[]);
+MATH_MAT4_INLINE mat4                       mat4_init_with_array(const std::array<float, 16> &array);
 
 // Generate affine/special transformation matrices.
-inline mat4                       mat4_lookat(const vec3 eye_position, const vec3 look_at_position, const vec3 up);
-inline mat4                       mat4_projection(const float width, const float height, const float near_plane, const float far_plane, const float fov);
-inline mat4                       mat4_orthographic(const float width, const float height, const float depth); // Not impl
-inline mat4                       mat4_scale(const vec3 scale);
-inline mat4                       mat4_scale(const float x, const float y, const float z);
-inline mat4                       mat4_translate(const vec3 move);
-inline mat4                       mat4_translate(const float x, const float y, const float z);
-inline mat4                       mat4_rotate_around_axis(const vec3 axis, const float radians);
+MATH_MAT4_INLINE mat4                       mat4_lookat(const vec3 eye_position, const vec3 look_at_position, const vec3 up);
+MATH_MAT4_INLINE mat4                       mat4_projection(const float width, const float height, const float near_plane, const float far_plane, const float fov);
+MATH_MAT4_INLINE mat4                       mat4_orthographic(const float width, const float height, const float depth); // Not impl
+MATH_MAT4_INLINE mat4                       mat4_scale(const vec3 scale);
+MATH_MAT4_INLINE mat4                       mat4_scale(const float x, const float y, const float z);
+MATH_MAT4_INLINE mat4                       mat4_translate(const vec3 move);
+MATH_MAT4_INLINE mat4                       mat4_translate(const float x, const float y, const float z);
+MATH_MAT4_INLINE mat4                       mat4_rotate_around_axis(const vec3 axis, const float radians);
 
 // Operations
-inline mat4                       mat4_add(const mat4 &lhs, const mat4 &rhs);
-inline mat4                       mat4_subtract(const mat4 &lhs, const mat4 &rhs);
-inline mat4                       mat4_multiply(const float val, const mat4 &b);
-inline vec4                       mat4_multiply(const vec4 vec, const mat4 &b);
-inline mat4                       mat4_multiply(const mat4 &lhs, const mat4 &rhs);
-inline mat4                       mat4_multiply(const mat4 &one, const mat4 &two, const mat4 &three); //!< Handy for WVP type multiplications.
+MATH_MAT4_INLINE mat4                       mat4_add(const mat4 &lhs, const mat4 &rhs);
+MATH_MAT4_INLINE mat4                       mat4_subtract(const mat4 &lhs, const mat4 &rhs);
+MATH_MAT4_INLINE mat4                       mat4_multiply(const float val, const mat4 &b);
+MATH_MAT4_INLINE vec4                       mat4_multiply(const vec4 vec, const mat4 &b);
+MATH_MAT4_INLINE mat4                       mat4_multiply(const mat4 &lhs, const mat4 &rhs);
+MATH_MAT4_INLINE mat4                       mat4_multiply(const mat4 &one, const mat4 &two, const mat4 &three); //!< Handy for WVP type multiplications.
 
 // Transform matrices into other forms
-inline mat4                       mat4_get_transpose(const mat4 &a);
-inline mat4                       mat4_get_inverse(const mat4 &a);
-inline mat4                       mat4_get_scale(const mat4 &a, const vec3 scale);
-inline void                       mat4_to_array(const mat4 &m, float *array);
-inline std::array<float, 16>      mat4_to_array(const mat4 &m);
-
+MATH_MAT4_INLINE mat4                       mat4_get_transpose(const mat4 &a);
+MATH_MAT4_INLINE mat4                       mat4_get_inverse(const mat4 &a);
+MATH_MAT4_INLINE mat4                       mat4_get_scale(const mat4 &a, const vec3 scale);
 // Get/Set information
-inline float                      mat4_get(const mat4 &mat, const uint32_t row, const uint32_t col);
-inline float                      mat4_get(const mat4 &mat, const uint32_t i);
-inline const float*               mat4_get_data(const mat4 &mat);
-inline void                       mat4_set(mat4 &mat, const uint32_t row, const uint32_t col, const float set);
-inline mat3                       mat4_get_sub_mat3(const mat4 &a);
-inline vec3                       mat4_get_position(const mat4 &a);
-inline vec3                       mat4_get_scale(const mat4 &a);
+MATH_MAT4_INLINE float                      mat4_get(const mat4 &mat, const uint32_t row, const uint32_t col);
+MATH_MAT4_INLINE float                      mat4_get(const mat4 &mat, const uint32_t i);
+MATH_MAT4_INLINE void                       mat4_set(mat4 &mat, const uint32_t row, const uint32_t col, const float set);
+MATH_MAT4_INLINE mat3                       mat4_get_sub_mat3(const mat4 &a);
+MATH_MAT4_INLINE vec3                       mat4_get_position(const mat4 &a);
+MATH_MAT4_INLINE vec3                       mat4_get_scale(const mat4 &a);
+MATH_MAT4_INLINE const float*               mat4_get_data(const mat4 &mat);
+
+MATH_MAT4_INLINE void                       mat4_to_array(const mat4 &m, float *array);
+MATH_MAT4_INLINE std::array<float, 16>      mat4_to_array(const mat4 &m);
 
 
 // Impl

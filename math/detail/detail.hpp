@@ -12,5 +12,7 @@
 #define MATH_INLINE inline
 #endif
 
+#define MATH_MAT4_INLINE inline
+
 
 #endif // include guard
