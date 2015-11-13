@@ -28,18 +28,6 @@ namespace
     2,2,2,
   };
 
-  const std::array<float, 9> four_mat_data = {
-    4,4,4,
-    4,4,4,
-    4,4,4,
-  };
-
-  const std::array<float, 9> sixteen_mat_data = {
-    16,16,16,
-    16,16,16,
-    16,16,16,
-  };  
-
   const std::array<float, 9> id_mat_data = {
     1,0,0,
     0,1,0,
@@ -99,7 +87,6 @@ TEST(mat3_get_values)
     5,6,7,
     9,10,11,
   };
-
 
   // Transpose
   {
@@ -202,7 +189,6 @@ TEST(mat3_rotation)
 {
   // Rotate
   {
-    const float rotate_rads           = math::pi();
     const math::mat3 rot_mat          = math::mat3_rotation_from_euler(math::pi());
     const math::vec3 point_to_rotate  = math::vec3_init(1, 0, 0);
     const math::vec3 result_vec       = math::mat3_multiply(point_to_rotate, rot_mat);
@@ -215,7 +201,6 @@ TEST(mat3_rotation)
 TEST(mat3_basic_arithmetic)
 {
   const math::mat3 one_mat  = math::mat3_init_with_array(one_mat_data);
-  const math::mat3 two_mat  = math::mat3_init_with_array(two_mat_data);
 
   const math::mat3 add_mat = math::mat3_add(one_mat, one_mat);
   CHECK(mat3_equal(add_mat, two_mat_data, error));
