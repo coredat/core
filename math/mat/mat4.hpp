@@ -13,6 +13,7 @@
 #include "mat3.hpp"
 #include "../vec/vec4.hpp"
 #include <array>
+#include <assert.h>
 
 
 namespace math {
@@ -307,16 +308,19 @@ vec4
 mat4_multiply(const vec4 lhs, const mat4 &rhs)
 {
   const detail::internal_mat4 *right = reinterpret_cast<const detail::internal_mat4*>(&rhs);
-  float vec_data[4];
+  float result[4];
 
-  for(int i = 0; i < 16; i += 4)
+  for(uint32_t i = 0; i < 4; ++i)
   {
-    const vec4 dot_vec = vec4_init(right->data[i + 0], right->data[i + 4], right->data[i + 8], right->data[i + 12]);
+    const vec4 dot_vec = vec4_init(right->data[i + 0],
+                                   right->data[i + 4],
+                                   right->data[i + 8],
+                                   right->data[i + 12]);
 
-    vec_data[i / 4] = vec4_dot(lhs, dot_vec);
+    result[i] = vec4_dot(lhs, dot_vec);
   }
 
-  return vec4_init_with_array(vec_data);
+  return vec4_init_with_array(result);
 }
 
 
@@ -397,27 +401,36 @@ mat4_rotate_around_axis(const vec3 axis, const float radians)
   mat4 rotation = mat4_id();
   detail::internal_mat4 *rotate_me = reinterpret_cast<detail::internal_mat4*>(&rotation);
   
+  const math::vec3 norm_axis = math::vec3_normalize(axis);
+  assert(math::vec3_length(norm_axis));
+
   const float sin_theta           = math::sin(radians);
   const float cos_theta           = math::cos(radians);
   const float one_minus_cos_theta = 1.f - cos_theta;
   
-  const float x = vec3_get_x(axis);
-  const float y = vec3_get_y(axis);
-  const float z = vec3_get_z(axis);
+  const float x = vec3_get_x(norm_axis);
+  const float y = vec3_get_y(norm_axis);
+  const float z = vec3_get_z(norm_axis);
   
   rotate_me->data[0]  = cos_theta + ((x * x) * one_minus_cos_theta);
   rotate_me->data[1]  = ((x * y) * one_minus_cos_theta) - (z * sin_theta);
   rotate_me->data[2]  = ((x * z) * one_minus_cos_theta) + (y * sin_theta);
-  
+  rotate_me->data[3]  = 0;
+
   rotate_me->data[4]  = ((y * x) * one_minus_cos_theta) + (z * sin_theta);
   rotate_me->data[5]  = cos_theta + ((y * y) * one_minus_cos_theta);
   rotate_me->data[6]  = ((y * z) * one_minus_cos_theta) - (x * sin_theta);
+  rotate_me->data[7]  = 0;
 
   rotate_me->data[8]  = ((z * x) * one_minus_cos_theta) - (y * sin_theta);
   rotate_me->data[9]  = ((z * y) * one_minus_cos_theta) + (x * sin_theta);
   rotate_me->data[10] = cos_theta + ((z * z) * one_minus_cos_theta);
-  
-  rotate_me->data[15] = 1.f;
+  rotate_me->data[11] = 0;
+
+  rotate_me->data[12] = 0;
+  rotate_me->data[13] = 0;
+  rotate_me->data[14] = 0;
+  rotate_me->data[15] = 1;
   
   return rotation;
 }

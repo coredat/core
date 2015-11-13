@@ -168,6 +168,76 @@ TEST(mat4_camera)
 }
 
 
+TEST(mat4_multiply_mats)
+{
+  const std::array<float, 16> mat_data_one = {
+    1,2,3,4,
+    5,6,7,8,
+    9,10,11,12,
+    13,14,15,16,
+  };
+  const math::mat4 mat_one = math::mat4_init_with_array(mat_data_one);
+
+  const std::array<float, 16> mat_data_two = {
+    1,2,1,2,
+    3,4,3,4,
+    5,6,5,6,
+    7,8,7,8,
+  }; 
+  const math::mat4 mat_two = math::mat4_init_with_array(mat_data_two);
+
+  const std::array<float, 16> mat_data_three = {
+    0.5f, 0.5f, 0.5f, 0.5f,
+    0.5f, 0.5f, 0.5f, 0.5f,
+    0.5f, 0.5f, 0.5f, 0.5f,
+    0.5f, 0.5f, 0.5f, 0.5f,
+  };
+  const math::mat4 mat_three = math::mat4_init_with_array(mat_data_three);
+
+  // two mats
+  {
+    const std::array<float, 16> expected_result = {
+      50, 60, 50, 60,
+      114, 140, 114, 140,
+      178, 220, 178, 220,
+      242, 300, 242, 300,
+    };
+
+    const math::mat4 result_mat = math::mat4_multiply(mat_one, mat_two);
+    CHECK(mat4_equal(result_mat, expected_result, error));
+  }
+
+  // three mats
+  {
+    const std::array<float, 16> expected_result = {
+      110, 110, 110, 110,
+      254, 254, 254, 254,
+      398, 398, 398, 398,
+      542, 542, 542, 542,
+    };
+
+    const math::mat4 result_mat = math::mat4_multiply(mat_one, mat_two, mat_three);
+    CHECK(mat4_equal(result_mat, expected_result, error));
+  }
+}
+
+
+TEST(mat4_multiply_vec)
+{
+  const std::array<float, 16> mat_data = {
+    1,2,3,4,
+    5,6,7,8,
+    9,10,11,12,
+    13,14,15,16,
+  };
+  const math::mat4 mat    = math::mat4_init_with_array(mat_data);
+  const math::vec4 vec    = math::vec4_init(1,2,3,4);
+  const math::vec4 result = math::mat4_multiply(vec, mat);
+
+  CHECK(vec4_components_are_near(result, 90, 100, 110, 120, error))
+}
+
+
 TEST(mat4_scale)
 {
   // Scale
@@ -220,23 +290,22 @@ TEST(mat4_rotation)
     const math::vec3 axis             = math::vec3_init(1, 0, 0);
     const float rotate_rads           = math::pi();
     const math::mat4 rot_mat          = math::mat4_rotate_around_axis(axis, rotate_rads);
-    const math::vec4 point_to_rotate  = math::vec4_init(1, 0, 0, 0);
+    const math::vec4 point_to_rotate  = math::vec4_init(0, 1, 0, 0);
     const math::vec4 result_vec       = math::mat4_multiply(point_to_rotate, rot_mat);
 
-    CHECK(vec4_components_are_near(result_vec, 1, 0, 0, 0, error));
+    CHECK(vec4_components_are_near(result_vec, 0, -1, 0, 0, error));
   }
 
   // Rotate
   {
     const math::vec3 axis             = math::vec3_init(0, 1, 0);
-    const float rotate_rads           = math::tau();
+    const float rotate_rads           = math::pi();
     const math::mat4 rot_mat          = math::mat4_rotate_around_axis(axis, rotate_rads);
     const math::vec4 point_to_rotate  = math::vec4_init(0, 0, 1, 0);
     const math::vec4 result_vec       = math::mat4_multiply(point_to_rotate, rot_mat);
 
     CHECK(vec4_components_are_near(result_vec, 0, 0, -1, 0, error));
-    std::cout << math::vec4_get_x(result_vec) << ", " << math::vec4_get_y(result_vec) << ", " << math::vec4_get_z(result_vec) << ", " << math::vec4_get_z(result_vec) << std::endl;
-  }  
+  }
 }
 
 
