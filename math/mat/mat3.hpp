@@ -32,10 +32,15 @@ inline mat3                       mat3_init_with_array(const std::array<float, 9
 inline mat3                       mat3_add(const mat3 &lhs, const mat3 &rhs);
 inline mat3                       mat3_subtract(const mat3 &lhs, const mat3 &rhs);
 inline mat3                       mat3_scale(const float scale, const mat3 &b);
+inline mat3                       mat3_scale(const float x, const float y) { return mat3_id(); }
+inline mat3                       mat3_scale(const vec2 scale) { return mat3_id(); }
 inline mat3                       mat3_scale(const float x, const float y, const float z, const mat3 &b);
 inline vec3                       mat3_multiply(const vec3 vec, const mat3 &b);
 inline mat3                       mat3_multiply(const mat3 &lhs, const mat3 &rhs);
-inline mat3                       mat3_rotate(const mat3 &lhs, const vec3 euler);
+
+inline mat3                       mat3_translate(const vec2 vec) { return mat3_id(); }
+inline mat3                       mat3_translate(const const float x, const float y) { return mat3_id(); }
+inline mat3                       mat3_rotate_around_axis(const vec2 axis, const float radians) { return mat3_id();}
 
 // Transform matrices into other forms
 inline mat3                       mat3_get_transpose(const mat3 &a);
@@ -227,13 +232,6 @@ mat3_multiply(const mat3 &lhs, const mat3 &rhs)
   }
 
   return return_mat;
-}
-
-
-mat3
-mat3_rotate(const mat3 &a, const vec3 euler)
-{
-  return mat3();
 }
 
 
