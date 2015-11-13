@@ -1,6 +1,6 @@
 
 CC       = "clang++"
-FLAGS    = "-std=c++14 -Wall -Wpedantic"
+FLAGS    = "-std=c++11 -Wall -Wpedantic"
 EX_FLAGS = "-Wno-missing-braces -g" #Missing braces brings up false positives.
 INC_DIRS = [
   "-I./",
