@@ -4,20 +4,12 @@
 
 [![codecov.io](https://codecov.io/github/PhilCK/caffeine-math/coverage.svg?branch=master)](https://codecov.io/github/PhilCK/caffeine-math?branch=master)
 
-This is a header only math library that built up in my hobby projects. I've extracted it and put it up here for anybody who wants it use it. Its a no-nonsece floating point math library. I'm porting it over in chunks as I write tests just to double check its working correctly.
+
+This is a header only math library that built up in my hobby projects. I've extracted it and put it up here for anybody who wants it use it. Its a no-nonsense floating point math library.
 
 
 ## Support For
-floating point vector types (2,3 and 4).
-~~floating point matrix types (3x3 and 4x4).~~ (currently testing before porting over)
-~~floating point quaternion type.~~ (currently testing before porting over)
-general math operations.
-
-Some math function maybe missing I tend to add them as required. If something is missing feel free to submit a pull request or give me a poke.
-
-
-## Where are the operators
-I don't use them because it can create a lot of ambigioty. `vec3 * vec3` is the componet multiply or cross product. Cross product you say, then what about `vec4 * vec4`? But what about things like `vec + vec * vec`? Well I think that looks like balls, operators aren't hard add, but really breaking it down usually makes it clearer anyway.
+floating point vector types (2,3 and 4), floating point matrix types (3x3 and 4x4). (currently testing before porting over), floating point quaternion type, and some general math operations.
 
 
 ## SIMD Status
