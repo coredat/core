@@ -69,26 +69,26 @@ namespace detail
 mat3
 mat3_id()
 {
-  std::array<float, 9> id_array = {
+  const float id_array[9] = {
     1.f, 0.f, 0.f,
     0.f, 1.f, 0.f,
     0.f, 0.f, 1.f,
   };
 
-  return mat3_init_with_array(&id_array[0]);
+  return mat3_init_with_array(id_array);
 }
 
 
 mat3
 mat3_zero()
 {
-  std::array<float, 9> zero_array = {
+  const float zero_array[9] = {
     0.f, 0.f, 0.f,
     0.f, 0.f, 0.f,
     0.f, 0.f, 0.f,
   };
 
-  return mat3_init_with_array(&zero_array[0]);  
+  return mat3_init_with_array(zero_array);
 }
 
 
@@ -102,13 +102,10 @@ mat3_init()
 mat3
 mat3_init(const float x)
 {
-  std::array<float, 9> x_array = {
-    x,x,x,
-    x,x,x,
-    x,x,x,
-  };
-
-  return mat3_init_with_array(x_array);
+  float array[9];
+  std::fill_n(array, 9, x);
+  
+  return mat3_init_with_array(array);
 }
 
 
@@ -127,7 +124,7 @@ mat3_init_with_array(const float array[])
 mat3
 mat3_init_with_array(const std::array<float, 9> &array)
 {
-  return mat3_init_with_array(&array[0]);
+  return mat3_init_with_array(array.data());
 }
 
 
@@ -135,13 +132,13 @@ mat3_init_with_array(const std::array<float, 9> &array)
 mat3
 mat3_add(const mat3 &lhs, const mat3 &rhs)
 {
-  const detail::internal_mat3 *left = reinterpret_cast<const detail::internal_mat3*>(&lhs);
+  const detail::internal_mat3 *left  = reinterpret_cast<const detail::internal_mat3*>(&lhs);
   const detail::internal_mat3 *right = reinterpret_cast<const detail::internal_mat3*>(&rhs);
 
   mat3 return_mat; 
   detail::internal_mat3 *internal_mat = reinterpret_cast<detail::internal_mat3*>(&return_mat);
 
-  for(int i = 0; i < 9; ++i)
+  for(uint32_t i = 0; i < 9; ++i)
   {
     internal_mat->data[i] = left->data[0] + right->data[0];
   }
@@ -153,13 +150,13 @@ mat3_add(const mat3 &lhs, const mat3 &rhs)
 mat3
 mat3_subtract(const mat3 &lhs, const mat3 &rhs)
 {
-  const detail::internal_mat3 *left = reinterpret_cast<const detail::internal_mat3*>(&lhs);
+  const detail::internal_mat3 *left  = reinterpret_cast<const detail::internal_mat3*>(&lhs);
   const detail::internal_mat3 *right = reinterpret_cast<const detail::internal_mat3*>(&rhs);
 
   mat3 return_mat; 
   detail::internal_mat3 *internal_mat = reinterpret_cast<detail::internal_mat3*>(&return_mat);
 
-  for(int i = 0; i < 9; ++i)
+  for(uint32_t i = 0; i < 9; ++i)
   {
     internal_mat->data[i] = left->data[0] - right->data[0];
   }
@@ -194,7 +191,7 @@ mat3_multiply(const vec3 lhs, const mat3 &rhs)
   const detail::internal_mat3 *right = reinterpret_cast<const detail::internal_mat3*>(&rhs);
   float vec_data[9];
 
-  for(int i = 0; i < 3; i += 1)
+  for(uint32_t i = 0; i < 3; ++i)
   {
     const vec3 dot_vec = vec3_init(right->data[i + 0],
                                    right->data[i + 3],
@@ -244,10 +241,10 @@ mat3_rotation_from_euler(const float radians)
   mat3 return_mat = mat3_id();
   detail::internal_mat3 *mat = reinterpret_cast<detail::internal_mat3*>(&return_mat);
 
-  mat->data[0] = math::cos(radians);
+  mat->data[0] = +math::cos(radians);
   mat->data[1] = -math::sin(radians);
-  mat->data[3] = math::sin(radians);
-  mat->data[4] = math::cos(radians);
+  mat->data[3] = +math::sin(radians);
+  mat->data[4] = +math::cos(radians);
 
   return return_mat;
 }
@@ -258,7 +255,7 @@ mat3_get_transpose(const mat3 &m)
 {
   const detail::internal_mat3 *mat = reinterpret_cast<const detail::internal_mat3*>(&m);
   
-  const std::array<float, 9> transpose_data = {
+  const float transpose_data[9] = {
     mat->data[0], mat->data[3], mat->data[6],
     mat->data[1], mat->data[4], mat->data[7],
     mat->data[2], mat->data[5], mat->data[8],

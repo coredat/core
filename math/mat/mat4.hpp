@@ -81,28 +81,28 @@ namespace detail
 mat4
 mat4_id()
 {
-  std::array<float, 16> id_array = {
+  const float id_array[16] = {
     1.f, 0.f, 0.f, 0.f,
     0.f, 1.f, 0.f, 0.f,
     0.f, 0.f, 1.f, 0.f,
     0.f, 0.f, 0.f, 1.f,
   };
 
-  return mat4_init_with_array(&id_array[0]);
+  return mat4_init_with_array(id_array);
 }
 
 
 mat4
 mat4_zero()
 {
-  std::array<float, 16> zero_array = {
+  const float zero_array[16] = {
     0.f, 0.f, 0.f, 0.f,
     0.f, 0.f, 0.f, 0.f,
     0.f, 0.f, 0.f, 0.f,
     0.f, 0.f, 0.f, 0.f,
   };
 
-  return mat4_init_with_array(&zero_array[0]);  
+  return mat4_init_with_array(zero_array);
 }
 
 
@@ -116,20 +116,17 @@ mat4_init()
 mat4
 mat4_init(const float x)
 {
-  const float x_array[16] = {
-    x,x,x,x,
-    x,x,x,x,
-    x,x,x,x,
-    x,x,x,x,
-  };
+  float array[16];
+  std::fill_n(array, 16, x);
 
-  return mat4_init_with_array(x_array);
+  return mat4_init_with_array(array);
 }
 
 
 mat4
 mat4_init_with_mat3(const mat3 sub_matrix)
 {
+  //TODO: Get data directly!
   const float mat_data[16] = {
     mat3_get(sub_matrix, 0), mat3_get(sub_matrix, 1), mat3_get(sub_matrix, 2), 0.f,
     mat3_get(sub_matrix, 3), mat3_get(sub_matrix, 4), mat3_get(sub_matrix, 5), 0.f,
@@ -137,7 +134,7 @@ mat4_init_with_mat3(const mat3 sub_matrix)
     0.f, 0.f, 0.f, 0.f,
   };
   
-  return mat4_init_with_array(&mat_data[0]);
+  return mat4_init_with_array(mat_data);
 }
 
 
@@ -233,6 +230,7 @@ mat4_projection(const float width, const float height, const float near_plane, c
 mat4
 mat4_orthographic(const float width, const float height, const float depth)
 {
+  // TODO: Ortho matrix
   return mat4_zero();
 }
 
@@ -265,7 +263,7 @@ mat4_subtract(const mat4 &lhs, const mat4 &rhs)
   mat4 return_mat; 
   detail::internal_mat4 *internal_mat = reinterpret_cast<detail::internal_mat4*>(&return_mat);
 
-  for(int i = 0; i < 16; ++i)
+  for(uint32_t i = 0; i < 16; ++i)
   {
     internal_mat->data[i] = left->data[0] - right->data[0];
   }
@@ -280,7 +278,7 @@ mat4_scale(const vec3 scale_vec)
   return mat4_scale(vec3_get_x(scale_vec), vec3_get_y(scale_vec), vec3_get_z(scale_vec));
 }
 
-  
+
 mat4
 mat4_scale(const float x, const float y, const float z)
 {
@@ -514,7 +512,7 @@ mat4_get_sub_mat3(const mat4 &m)
 {
   const detail::internal_mat4 *internal_mat = reinterpret_cast<const detail::internal_mat4*>(&m);
   
-  std::array<float, 9> mat_data = {
+  const float mat_data[9] = {
     internal_mat->data[0], internal_mat->data[1], internal_mat->data[2],
     internal_mat->data[4], internal_mat->data[5], internal_mat->data[6],
     internal_mat->data[8], internal_mat->data[9], internal_mat->data[10],
