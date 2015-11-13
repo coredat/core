@@ -30,16 +30,20 @@ task :ci do |t, args|
   sh build_compile_string(["test/mat4_unit_test.cpp"], "mat4", true)
   sh "./mat4"
 
+  sh build_compile_string(["test/mat3_unit_test.cpp"], "mat3", true)
+  sh "./mat3"
+
 end
 
 
 task :scratch do |t, args|
   
   # Copy and paste current test you are working on.
-  sh build_compile_string(["test/mat4_unit_test.cpp"], "scratch_test", false)
+  sh build_compile_string(["test/mat3_unit_test.cpp"], "scratch_test", false)
   sh "./scratch_test"
 
 end
+
 
 task :benchmarks do |t, args|
 end

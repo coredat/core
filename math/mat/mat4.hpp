@@ -51,6 +51,7 @@ MATH_MAT4_INLINE mat4                       mat4_multiply(const mat4 &one, const
 // Transform matrices into other forms
 MATH_MAT4_INLINE mat4                       mat4_get_transpose(const mat4 &a);
 MATH_MAT4_INLINE mat4                       mat4_get_inverse(const mat4 &a);
+MATH_MAT4_INLINE float                      mat4_get_determinant(const mat4 &a);
 MATH_MAT4_INLINE mat4                       mat4_get_scale(const mat4 &a, const vec3 scale);
 // Get/Set information
 MATH_MAT4_INLINE float                      mat4_get(const mat4 &mat, const uint32_t row, const uint32_t col);
@@ -289,7 +290,6 @@ mat4_scale(const float x, const float y, const float z)
   internal_mat->data[0]  = x;
   internal_mat->data[5]  = y;
   internal_mat->data[10] = z;
-  internal_mat->data[15] = 1;
   
   return return_mat;
 }
@@ -371,6 +371,15 @@ mat4_get_transpose(const mat4 &to_transpose)
   };
   
   return mat4_init_with_array(mat_transpose);
+}
+
+
+float
+mat4_get_determinant(const mat4 &a)
+{
+  const detail::internal_mat4 *det = reinterpret_cast<const detail::internal_mat4*>(&a);
+
+  return 0.f;
 }
 
 
