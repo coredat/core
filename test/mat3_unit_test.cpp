@@ -55,7 +55,7 @@ namespace
   const std::array<float, 9> scale_mat_data = {
     1.1f,0,0,
     0,2.2f,0,
-    0,0,3.3f,
+    0,0,1.f,
   };
 
   const std::array<float, 9> sequence_mat_data = {
@@ -135,19 +135,12 @@ TEST(mat3_multiply_mats)
   }; 
   const math::mat3 mat_two = math::mat3_init_with_array(mat_data_two);
 
-  const std::array<float, 9> mat_data_three = {
-    0.5f, 0.5f, 0.5f,
-    0.5f, 0.5f, 0.5f,
-    0.5f, 0.5f, 0.5f,
-  };
-  const math::mat3 mat_three = math::mat3_init_with_array(mat_data_three);
-
   // two mats
   {
     const std::array<float, 9> expected_result = {
-      50, 60, 50,
-      114, 140, 114,
-      178, 220, 178,
+      22, 28, 22,
+      58, 76, 58,
+      94, 124, 94,
     };
 
     const math::mat3 result_mat = math::mat3_multiply(mat_one, mat_two);
@@ -167,7 +160,7 @@ TEST(mat3_multiply_vec)
   const math::vec3 vec    = math::vec3_init(1,2,3);
   const math::vec3 result = math::mat3_multiply(vec, mat);
 
-  CHECK(vec3_components_are_near(result, 90, 100, 110, error))
+  CHECK(vec3_components_are_near(result, 38, 44, 50, error))
 }
 
 
@@ -209,35 +202,12 @@ TEST(mat3_rotation)
 {
   // Rotate
   {
-    const math::vec2 axis             = math::vec2_init(0, 1);
     const float rotate_rads           = math::pi();
-    const math::mat3 rot_mat          = math::mat3_rotate_around_axis(axis, rotate_rads);
+    const math::mat3 rot_mat          = math::mat3_rotation_from_euler(math::pi());
     const math::vec3 point_to_rotate  = math::vec3_init(1, 0, 0);
     const math::vec3 result_vec       = math::mat3_multiply(point_to_rotate, rot_mat);
 
     CHECK(vec3_components_are_near(result_vec, -1, 0, 0, error));
-  }
-
-  // Rotate
-  {
-    const math::vec2 axis             = math::vec2_init(1, 0);
-    const float rotate_rads           = math::pi();
-    const math::mat3 rot_mat          = math::mat3_rotate_around_axis(axis, rotate_rads);
-    const math::vec3 point_to_rotate  = math::vec3_init(0, 1, 0);
-    const math::vec3 result_vec       = math::mat3_multiply(point_to_rotate, rot_mat);
-
-    CHECK(vec3_components_are_near(result_vec, 0, -1, 0, error));
-  }
-
-  // Rotate
-  {
-    const math::vec2 axis             = math::vec2_init(0, 1);
-    const float rotate_rads           = math::pi();
-    const math::mat3 rot_mat          = math::mat3_rotate_around_axis(axis, rotate_rads);
-    const math::vec3 point_to_rotate  = math::vec3_init(0, 0, 1);
-    const math::vec3 result_vec       = math::mat3_multiply(point_to_rotate, rot_mat);
-
-    CHECK(vec3_components_are_near(result_vec, 0, 0, -1, error));
   }
 }
 

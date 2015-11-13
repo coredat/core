@@ -346,8 +346,15 @@ mat4_multiply(const mat4 &lhs, const mat4 &rhs)
     const uint32_t row = (i / 4) * 4;
     const uint32_t col = (i % 4);
 
-    const vec4 row_vec = vec4_init(left->data[row + 0],  left->data[row + 1],  left->data[row + 2],  left->data[row + 3]);
-    const vec4 col_vec = vec4_init(right->data[col + 0], right->data[col + 4], right->data[col + 8], right->data[col + 12]);
+    const vec4 row_vec = vec4_init(left->data[row + 0],
+                                   left->data[row + 1],
+                                   left->data[row + 2],
+                                   left->data[row + 3]);
+
+    const vec4 col_vec = vec4_init(right->data[col + 0],
+                                   right->data[col + 4],
+                                   right->data[col + 8],
+                                   right->data[col + 12]);
 
     const float dot = vec4_dot(row_vec, col_vec);
     

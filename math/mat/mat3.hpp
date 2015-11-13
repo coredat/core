@@ -31,16 +31,14 @@ inline mat3                       mat3_init_with_array(const std::array<float, 9
 // Operations
 inline mat3                       mat3_add(const mat3 &lhs, const mat3 &rhs);
 inline mat3                       mat3_subtract(const mat3 &lhs, const mat3 &rhs);
-inline mat3                       mat3_scale(const float scale, const mat3 &b);
-inline mat3                       mat3_scale(const float x, const float y) { return mat3_id(); }
-inline mat3                       mat3_scale(const vec2 scale) { return mat3_id(); }
-inline mat3                       mat3_scale(const float x, const float y, const float z, const mat3 &b);
+inline mat3                       mat3_scale(const float x, const float y);
+inline mat3                       mat3_scale(const vec2 scale);
 inline vec3                       mat3_multiply(const vec3 vec, const mat3 &b);
 inline mat3                       mat3_multiply(const mat3 &lhs, const mat3 &rhs);
 
 inline mat3                       mat3_translate(const vec2 vec) { return mat3_id(); }
-inline mat3                       mat3_translate(const const float x, const float y) { return mat3_id(); }
-inline mat3                       mat3_rotate_around_axis(const vec2 axis, const float radians) { return mat3_id();}
+inline mat3                       mat3_translate(const float x, const float y) { return mat3_id(); }
+inline mat3                       mat3_rotation_from_euler(const float radians);
 
 // Transform matrices into other forms
 inline mat3                       mat3_get_transpose(const mat3 &a);
@@ -171,23 +169,20 @@ mat3_subtract(const mat3 &lhs, const mat3 &rhs)
 
 
 mat3
-mat3_scale(const float lhs, const mat3 &rhs)
+mat3_scale(const vec2 scale)
 {
-  return mat3_scale(lhs, lhs, lhs, rhs);
+  return mat3_scale(vec2_get_x(scale), vec2_get_y(scale));
 }
 
 
 mat3
-mat3_scale(const float x, const float y, const float z, const mat3 &b)
+mat3_scale(const float x, const float y)
 {
-  const detail::internal_mat3 *right = reinterpret_cast<const detail::internal_mat3*>(&b);
-
-  mat3 return_mat; 
+  mat3 return_mat = mat3_id();
   detail::internal_mat3 *internal_mat = reinterpret_cast<detail::internal_mat3*>(&return_mat);
 
-  internal_mat->data[0] = x * right->data[0];
-  internal_mat->data[4] = y * right->data[0];
-  internal_mat->data[8] = z * right->data[0];
+  internal_mat->data[0] = x;
+  internal_mat->data[4] = y;
 
   return return_mat;
 }
@@ -197,13 +192,15 @@ vec3
 mat3_multiply(const vec3 lhs, const mat3 &rhs)
 {
   const detail::internal_mat3 *right = reinterpret_cast<const detail::internal_mat3*>(&rhs);
-  std::array<float, 3> vec_data;
+  float vec_data[9];
 
   for(int i = 0; i < 3; i += 1)
   {
-    const vec3 dot_vec = vec3_init(right->data[i + 0], right->data[i + 3], right->data[i + 6]);
+    const vec3 dot_vec = vec3_init(right->data[i + 0],
+                                   right->data[i + 3],
+                                   right->data[i + 6]);
 
-    vec_data.at(i) = vec3_dot(lhs, dot_vec);
+    vec_data[i] = vec3_dot(lhs, dot_vec);
   }
 
   return vec3_init_with_array(vec_data);
@@ -216,20 +213,41 @@ mat3_multiply(const mat3 &lhs, const mat3 &rhs)
   const detail::internal_mat3 *left = reinterpret_cast<const detail::internal_mat3*>(&lhs);
   const detail::internal_mat3 *right = reinterpret_cast<const detail::internal_mat3*>(&rhs);
 
-  mat3 return_mat; 
+  mat3 return_mat = mat3_id();
   detail::internal_mat3 *internal_mat = reinterpret_cast<detail::internal_mat3*>(&return_mat);
 
   for(uint32_t i = 0; i < 9; ++i)
   {
     //[0,1,2,3] x [0,4,8,12]
-    const uint32_t row = i / 3;
+    const uint32_t row = (i / 3) * 3;
     const uint32_t col = i % 3;
 
-    const vec3 left_vec = vec3_init(left->data[row + 0], left->data[row + 1], left->data[row + 2]);
-    const vec3 right_vec = vec3_init(right->data[col + 0], right->data[col + 3], right->data[col + 6]);
+    const vec3 left_vec = vec3_init(left->data[row + 0],
+                                    left->data[row + 1],
+                                    left->data[row + 2]);
 
-    internal_mat->data[i] = vec3_dot(left_vec, right_vec);
+    const vec3 right_vec = vec3_init(right->data[col + 0],
+                                     right->data[col + 3],
+                                     right->data[col + 6]);
+
+    const float dot = vec3_dot(left_vec, right_vec);
+    internal_mat->data[i] = dot;
   }
+
+  return return_mat;
+}
+
+
+mat3
+mat3_rotation_from_euler(const float radians)
+{
+  mat3 return_mat = mat3_id();
+  detail::internal_mat3 *mat = reinterpret_cast<detail::internal_mat3*>(&return_mat);
+
+  mat->data[0] = math::cos(radians);
+  mat->data[1] = -math::sin(radians);
+  mat->data[3] = math::sin(radians);
+  mat->data[4] = math::cos(radians);
 
   return return_mat;
 }
