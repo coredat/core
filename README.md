@@ -9,7 +9,7 @@ This is a header only math library that built up in my hobby projects. I've extr
 
 
 ## Support For
-floating point vector types (2,3 and 4), floating point matrix types (3x3 and 4x4). (currently testing before porting over), floating point quaternion type, and some general math operations.
+floating point vector types (2,3 and 4), floating point matrix types (3x3 and 4x4), floating point quaternion type, and some general math operations.
 
 
 ## SIMD Status
