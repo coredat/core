@@ -39,7 +39,7 @@ end
 task :scratch do |t, args|
   
   # Copy and paste current test you are working on.
-  sh build_compile_string(["test/mat4_unit_test.cpp"], "scratch_test", false)
+  sh build_compile_string(["test/mat3_unit_test.cpp"], "scratch_test", false)
   sh "./scratch_test"
 
 end
