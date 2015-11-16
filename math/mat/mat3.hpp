@@ -40,6 +40,8 @@ inline mat3                       mat3_translate(const vec2 vec) { return mat3_i
 inline mat3                       mat3_translate(const float x, const float y) { return mat3_id(); }
 inline mat3                       mat3_rotation_from_euler(const float radians);
 
+inline float                      mat3_get_determinant(const mat3 &a);
+
 // Transform matrices into other forms
 inline mat3                       mat3_get_transpose(const mat3 &a);
 inline mat3                       mat3_get_inverse(const mat3 &a);
@@ -247,6 +249,34 @@ mat3_rotation_from_euler(const float radians)
   mat->data[4] = +math::cos(radians);
 
   return return_mat;
+}
+
+
+float
+mat3_get_determinant(const mat3 &det)
+{
+  /*
+    | i j k |   | 0 1 2 |
+    | a b c | = | 3 4 5 |
+    | d e f |   | 6 7 8 |
+  */
+  const detail::internal_mat3 *mat = reinterpret_cast<const detail::internal_mat3*>(&det);
+
+  const float i = mat->data[0];
+  const float j = mat->data[1];
+  const float k = mat->data[2];
+
+  const float a = mat->data[3];
+  const float b = mat->data[4];
+  const float c = mat->data[5];
+
+  const float d = mat->data[6];
+  const float e = mat->data[7];
+  const float f = mat->data[8];
+
+  return (i * (b * f - c * e)) +
+         (j * (a * f - c * d)) -
+         (k * (a * e - b * d));
 }
 
 

@@ -380,11 +380,38 @@ mat4_get_transpose(const mat4 &to_transpose)
 
 
 float
-mat4_get_determinant(const mat4 &a)
+mat4_get_determinant(const mat4 &det)
 {
-  const detail::internal_mat4 *det = reinterpret_cast<const detail::internal_mat4*>(&a);
+  /*
+    I J K l     0 1 2 3
+    a b c d  =  4 5 6 7
+    e f g h     8 9 10 11
+    i j k l     12 13 14 15
+  */
 
-  return 0.f;
+  const detail::internal_mat3 *mat = reinterpret_cast<const detail::internal_mat3*>(&det);
+
+  const mat3 det_a_mat = mat3_init_with_array({mat->data[5], mat->data[6], mat->data[7],
+                                               mat->data[9], mat->data[10], mat->data[11],
+                                               mat->data[13], mat->data[14], mat->data[15]});
+  const float det_a = mat->data[0] * mat3_get_determinant(det_a_mat);
+
+  const mat3 det_b_mat = mat3_init_with_array({mat->data[4], mat->data[6], mat->data[7],
+                                               mat->data[8], mat->data[10], mat->data[11],
+                                               mat->data[12], mat->data[14], mat->data[15]});
+  const float det_b = mat->data[1] * mat3_get_determinant(det_b_mat);
+
+  const mat3 det_c_mat = mat3_init_with_array({mat->data[4], mat->data[5], mat->data[7],
+                                               mat->data[8], mat->data[9], mat->data[11],
+                                               mat->data[12], mat->data[13], mat->data[15]});
+  const float det_c = mat->data[2] * mat3_get_determinant(det_c_mat);
+
+  const mat3 det_d_mat = mat3_init_with_array({mat->data[4], mat->data[5], mat->data[6],
+                                               mat->data[8], mat->data[9], mat->data[10],
+                                               mat->data[12], mat->data[13], mat->data[14]});
+  const float det_d = mat->data[3] * mat3_get_determinant(det_d_mat);
+
+  return det_a - det_b + det_c - det_d;
 }
 
 
