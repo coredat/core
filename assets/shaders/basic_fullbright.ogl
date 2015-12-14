@@ -1,0 +1,41 @@
+
+[VERTEX]
+
+#version 150 core
+
+in vec3 in_vs_position;
+in vec2 in_vs_texture_coord;
+in vec3 in_vs_normal;
+
+uniform mat4 wvp;
+
+out vec2 in_ps_texture_coord;
+
+void
+main()
+{
+  gl_Position = wvp * vec4(in_vs_position, 1.0);
+
+  in_ps_texture_coord = in_vs_texture_coord;
+}
+
+[/VERTEX]
+
+[PIXEL]
+
+#version 150
+
+in vec2 in_ps_texture_coord;
+
+uniform sampler2D diffuse_map;
+
+out vec4 out_frag_color;
+
+void
+main()
+{
+  vec4 tex_sample = texture(diffuse_map, in_ps_texture_coord);
+  out_frag_color = tex_sample;
+}
+
+[/PIXEL]
