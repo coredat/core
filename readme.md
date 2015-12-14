@@ -1,0 +1,3 @@
+# Wired
+
+All rights reserved.
