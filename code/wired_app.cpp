@@ -4,10 +4,25 @@
 #include <utils/directory.hpp>
 #include <utils/obj_model_loader.hpp>
 #include <math/math.hpp>
+#include <transform/transform.hpp>
+#include <renderer/simple_renderer/simple_renderer.hpp>
+
+
+#define ENTITY_POOL 128
 
 
 namespace
 {
+
+  struct Entity_data
+  {
+    math::transform transform[ENTITY_POOL];
+    renderer::vertex_buffer vbo[ENTITY_POOL];
+    
+    std::size_t number_of_entities = 0;
+  };
+
+
   const math::mat4 proj  = math::mat4_projection(800, 480, 0.1, 1000, math::quart_tau());
   const math::mat4 view  = math::mat4_lookat(math::vec3_one(), math::vec3_zero(), math::vec3_init(0, 1, 0));
   const math::mat4 world = math::mat4_id();
@@ -25,6 +40,22 @@ main()
   {
     std::cout << id << " - " << msg << std::endl;
   });
+  
+  
+  Entity_data data;
+  
+  for(uint32_t i = 0; i < ENTITY_POOL; ++i)
+  {
+    data.transform[i] = math::transform_init(math::vec3_zero(), math::vec3_one(), math::quat_init());
+  }
+  
+  data.number_of_entities = 2;
+  
+  // Transform data
+  std::vector<float> wvps;
+  wvps.resize(data.number_of_entities * 16);
+  
+  Transform::transforms_to_wvp(data.transform, data.number_of_entities, proj, view, wvps.data(), wvps.size() / 16);
   
   const std::string asset_path = util::get_resource_path() + "assets/";
   const auto code = renderer::shader_utils::get_shader_code_from_tagged_file(asset_path + "shaders/basic_fullbright.ogl");
@@ -54,7 +85,7 @@ main()
     
     const math::mat4 wvp = math::mat4_multiply(world, view, proj);
     
-    dir_light.set_raw_data("wvp", &wvp, sizeof(wvp));
+    dir_light.set_raw_data("wvp", wvps.data(), sizeof(wvp));
     
 //    dir_light.set_raw_data("worldMat", &world, sizeof(world));
 //    dir_light.set_raw_data("viewMat", &view, sizeof(view));
