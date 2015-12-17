@@ -25,19 +25,26 @@ main()
   
   std::cout << "Wired" << std::endl;
   
-  renderer::initialize();
-  Simple_renderer::initialize();
-  
   renderer::set_log_callback([](const int32_t id, const std::string &msg)
   {
     std::cout << id << " - " << msg << std::endl;
   });
   
+    
+  renderer::initialize();
+  Simple_renderer::initialize();
+  
   const std::string asset_path = util::get_resource_path() + "assets/";
   
   Data::Texture texture_data;
-  const std::string filename = asset_path + "textures/dev_grid_green_512.png";
-  Data::texture_add_new(&texture_data, 4, filename.c_str());
+  const std::string green_filename = asset_path + "textures/dev_grid_green_512.png";
+  const std::string red_filename = asset_path + "textures/dev_grid_red_512.png";
+  const std::string blue_filename = asset_path + "textures/dev_grid_blue_512.png";
+  const std::string orange_filename = asset_path + "textures/dev_grid_orange_512.png";
+  Data::texture_add_new(&texture_data, 4, green_filename.c_str());
+  Data::texture_add_new(&texture_data, 4, red_filename.c_str());
+  Data::texture_add_new(&texture_data, 4, blue_filename.c_str());
+  Data::texture_add_new(&texture_data, 4, orange_filename.c_str());
   
   // Generic model *hurt*
   const util::obj_model model  = util::load_obj(asset_path + "models/unit_cube.obj");
@@ -59,10 +66,10 @@ main()
                                                              (static_cast<float>(rand()%8) + 1) / 5.0f),
                                              math::quat_init());
     data.vbo[i] = ground_vbo;
-    data.texture[i] = texture_data.tex[0];
+    data.texture[i] = texture_data.tex[rand() % 4];
   }
   
-  data.number_of_entities = 64;
+  data.number_of_entities = 512;
   
   // Transform data
   std::vector<Simple_renderer::Node> renderer_nodes;
@@ -87,6 +94,8 @@ main()
     const float x = math::sin(time) * 9;
     const float z = math::cos(time) * 9;
     
+    const float eye_pos[3] = {x, 3.4f, z};
+    
     const math::mat4 view  = math::mat4_lookat(math::vec3_init(x,3.4f,z), math::vec3_zero(), math::vec3_init(0, 1, 0));
     
     const math::mat4 view_proj = math::mat4_multiply(view, proj); // *hurt* camaera or such.
@@ -103,7 +112,8 @@ main()
                                         renderer_nodes.size(),
                                         sizeof(Simple_renderer::Node));
       
-    Simple_renderer::render_nodes_fullbright(renderer_nodes.data(), renderer_nodes.size());
+    //Simple_renderer::render_nodes_fullbright(renderer_nodes.data(), renderer_nodes.size());
+    Simple_renderer::render_nodes_directional_light(renderer_nodes.data(), renderer_nodes.size(), &eye_pos[0]);
     
     window.flip_buffer();
   }
