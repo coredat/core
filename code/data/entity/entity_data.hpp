@@ -1,0 +1,36 @@
+#ifndef ENTITY_DATA_INCLUDED_BF840C0D_BDAE_446D_92FB_3782559F72D3
+#define ENTITY_DATA_INCLUDED_BF840C0D_BDAE_446D_92FB_3782559F72D3
+
+
+#include "entity_id.hpp"
+#include <math/math.hpp>
+#include <simple_renderer/lazy_include.hpp>
+#include <cstddef>
+
+
+#define ENTITY_POOL 1024 * 3
+
+
+namespace Data {
+
+
+struct Entity
+{
+  Entity_id               entity_id[ENTITY_POOL];
+  math::transform         transform[ENTITY_POOL];
+  renderer::vertex_buffer vbo[ENTITY_POOL];
+  renderer::texture       texture[ENTITY_POOL];
+  std::size_t             number_of_entities = 0;
+  const std::size_t       max_number_of_entities = ENTITY_POOL;
+};
+
+
+
+void entity_set_transform(Entity entities[], const std::size_t size_of_entities, const Entity_id id, math::transform *set_transform);
+void entity_get_transform(const Entity entities[], const std::size_t size_of_entities, const Entity_id id, math::transform *get_transform);
+
+
+} // ns
+
+
+#endif // inc guard
