@@ -18,8 +18,10 @@ entity_set_transform(Entity entities[],
     if(entities->entity_id[e] == id)
     {
       entities->transform[e] = *set_transform;
+      return;
     }
   }
+  assert(false);
 }
 
 
@@ -35,8 +37,10 @@ entity_get_transform(const Entity entities[],
     if(entities->entity_id[e] == id)
     {
       *get_transform = entities->transform[e];
+      return;
     }
   }
+  assert(false);
 }
 
 

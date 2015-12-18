@@ -95,10 +95,10 @@ render_nodes_directional_light(const Node nodes[], const std::size_t number_of_n
     const float dir[3] {0.707,0.707,0.0};
     dir_light.set_raw_data("dir_light.direction", &dir[0], sizeof(float) * 3);
 
-    const float amb = 0.4;
+    const float amb = 1.5f;
     dir_light.set_raw_data("dir_light.ambient", &amb, sizeof(float) * 1);
     
-    const float diff = 0.8f;
+    const float diff = 0.0f;
     dir_light.set_raw_data("dir_light.direction", &diff, sizeof(float) * 1);
     
     curr_node->vbo.bind(vertex_fmt, dir_light);                  // *hurt* need to know if this is a duplicate bind?

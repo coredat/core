@@ -8,6 +8,8 @@
 #include <renderer/simple_renderer/simple_renderer.hpp>
 #include <data/entity/entity_data.hpp>
 #include <data/texture_manager/texture_data.hpp>
+#include <data/mesh_manager/mesh_data.hpp>
+
 
 
 
@@ -22,6 +24,7 @@ main()
 {
   sdl::window window(800, 480, false, "Wired");
   sdl::ogl_context ogl(window);
+  sdl::input input;
   
   std::cout << "Wired" << std::endl;
   
@@ -30,21 +33,38 @@ main()
     std::cout << id << " - " << msg << std::endl;
   });
   
-    
+
   renderer::initialize();
   Simple_renderer::initialize();
   
   const std::string asset_path = util::get_resource_path() + "assets/";
   
+  Data::Mesh mesh_data;
+  Data::mesh_init_data(&mesh_data, 4);
+  {
+    const std::string cube_filename = asset_path + "models/unit_cube.obj";
+    Data::mesh_add_new(&mesh_data, 4, cube_filename.c_str());
+    
+    const std::string plane_filename = asset_path + "models/unit_plane.obj";
+    Data::mesh_add_new(&mesh_data, 4, plane_filename.c_str());
+  }
+  
+  
   Data::Texture texture_data;
-  const std::string green_filename = asset_path + "textures/dev_grid_green_512.png";
-  const std::string red_filename = asset_path + "textures/dev_grid_red_512.png";
-  const std::string blue_filename = asset_path + "textures/dev_grid_blue_512.png";
-  const std::string orange_filename = asset_path + "textures/dev_grid_orange_512.png";
-  Data::texture_add_new(&texture_data, 4, green_filename.c_str());
-  Data::texture_add_new(&texture_data, 4, red_filename.c_str());
-  Data::texture_add_new(&texture_data, 4, blue_filename.c_str());
-  Data::texture_add_new(&texture_data, 4, orange_filename.c_str());
+  Data::texture_init_data(&texture_data, 4);
+  {
+    const std::string green_filename  = asset_path + "textures/dev_grid_green_512.png";
+    Data::texture_add_new(&texture_data, 4, green_filename.c_str());
+    
+    const std::string red_filename    = asset_path + "textures/dev_grid_red_512.png";
+    Data::texture_add_new(&texture_data, 4, red_filename.c_str());
+    
+    const std::string blue_filename   = asset_path + "textures/dev_grid_blue_512.png";
+    Data::texture_add_new(&texture_data, 4, blue_filename.c_str());
+    
+    const std::string orange_filename = asset_path + "textures/dev_grid_orange_512.png";
+    Data::texture_add_new(&texture_data, 4, orange_filename.c_str());
+  }
   
   // Generic model *hurt*
   const util::obj_model model  = util::load_obj(asset_path + "models/unit_cube.obj");
@@ -58,18 +78,19 @@ main()
   for(uint32_t i = 0; i < ENTITY_POOL; ++i)
   {
     data.entity_id[i] = Entity_id{0,0};
-    data.transform[i] = math::transform_init(math::vec3_init((static_cast<float>(rand()%30) - 15) / 5.0f,
-                                                             (static_cast<float>(rand()%30) - 15) / 5.0f,
-                                                             (static_cast<float>(rand()%30) - 15) / 5.0f),
-                                             math::vec3_init((static_cast<float>(rand()%8) + 1) / 5.0f,
-                                                             (static_cast<float>(rand()%8) + 1) / 5.0f,
-                                                             (static_cast<float>(rand()%8) + 1) / 5.0f),
+    data.transform[i] = math::transform_init(math::vec3_init((static_cast<float>(rand()%100) - 50) / 20.0f,
+                                                             (static_cast<float>(rand()%100) - 50) / 20.0f,
+                                                             (static_cast<float>(rand()%100) - 50) / 20.0f),
+                                             math::vec3_init((static_cast<float>(rand()%200) + 10) / 100.0f,
+                                                             (static_cast<float>(rand()%200) + 10) / 100.0f,
+                                                             (static_cast<float>(rand()%200) + 10) / 100.0f),
                                              math::quat_init());
-    data.vbo[i] = ground_vbo;
     data.texture[i] = texture_data.tex[rand() % 4];
+    data.vbo[i] = mesh_data.vbo[rand() % 2];
   }
   
-  data.number_of_entities = 512;
+  data.number_of_entities = 128;
+  data.entity_id[4] = Entity_id{1,0};
   
   // Transform data
   std::vector<Simple_renderer::Node> renderer_nodes;
@@ -88,8 +109,32 @@ main()
     sdl::message_pump();
     renderer::clear();
     
-    static float time = 0;
-    time += 0.004f;
+    // Move a block
+    {
+      if(input.is_key_down(SDLK_w))
+      {
+        math::transform trans;
+        Data::entity_get_transform(&data, data.number_of_entities, Entity_id{1,0}, &trans);
+        
+        const math::vec3 fwd = math::quat_rotate_point(trans.rotation, math::vec3_init(0,0,-0.1f));
+        trans.position = math::vec3_add(trans.position, fwd);
+        
+        Data::entity_set_transform(&data, data.number_of_entities, Entity_id{1,0}, &trans);
+      }
+      if(input.is_key_down(SDLK_s))
+      {
+        math::transform trans;
+        Data::entity_get_transform(&data, data.number_of_entities, Entity_id{1,0}, &trans);
+        
+        const math::vec3 fwd = math::quat_rotate_point(trans.rotation, math::vec3_init(0,0,0.1f));
+        trans.position = math::vec3_add(trans.position, fwd);
+        
+        Data::entity_set_transform(&data, data.number_of_entities, Entity_id{1,0}, &trans);
+      }
+    }
+    
+    static float time = 4;
+    //time += 0.004f;
     
     const float x = math::sin(time) * 9;
     const float z = math::cos(time) * 9;
@@ -112,8 +157,8 @@ main()
                                         renderer_nodes.size(),
                                         sizeof(Simple_renderer::Node));
       
-    //Simple_renderer::render_nodes_fullbright(renderer_nodes.data(), renderer_nodes.size());
-    Simple_renderer::render_nodes_directional_light(renderer_nodes.data(), renderer_nodes.size(), &eye_pos[0]);
+    Simple_renderer::render_nodes_fullbright(renderer_nodes.data(), renderer_nodes.size());
+    //Simple_renderer::render_nodes_directional_light(renderer_nodes.data(), renderer_nodes.size(), &eye_pos[0]);
     
     window.flip_buffer();
   }
