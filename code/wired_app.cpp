@@ -74,11 +74,14 @@ main()
   
   Data::Entity data;
   Data::Physics_world phy_world;
+
   
   // *hurt* better entity loop thing.
   for(uint32_t i = 0; i < ENTITY_POOL; ++i)
   {
-    data.entity_id[i] = Entity_id{0,0};
+    data.number_of_entities++;
+    
+    data.entity_id[i] = Entity_id{0,i};
     data.transform[i] = math::transform_init(math::vec3_init((static_cast<float>(rand()%100) - 50) / 20.0f,
                                                              (static_cast<float>(rand()%100) - 50) / 20.0f,
                                                              (static_cast<float>(rand()%100) - 50) / 20.0f),
@@ -88,10 +91,17 @@ main()
                                              math::quat_init());
     data.texture[i] = texture_data.tex[rand() % 4];
     data.vbo[i] = mesh_data.vbo[rand() % 2];
+    
+    
+    data.rigidbodies[i].motion_state.reset(new Data_detail::Motion_state(data.entity_id[i], &data));
+    
+    Data::physics_add_rigidbody(&phy_world, data.collider[i], &data.rigidbodies[i]);
   }
   
-  data.number_of_entities = 128;
-  data.entity_id[4] = Entity_id{1,0};
+  //data.number_of_entities = 128;
+  //data.entity_id[4] = Entity_id{1,0};
+  
+  //Data::physics_add_rigidbody(&phy_world, data.collider[0], &data.rigidbodies[0]);
   
   // Transform data
   std::vector<Simple_renderer::Node> renderer_nodes;
@@ -109,6 +119,8 @@ main()
   {
     sdl::message_pump();
     renderer::clear();
+    
+    Data::physics_world_step(&phy_world, 0.01);
     
     // Move a block
     {

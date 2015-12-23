@@ -6,10 +6,11 @@
 #include <math/math.hpp>
 #include <simple_renderer/lazy_include.hpp>
 #include <data/physics_world/rigidbody.hpp>
+#include <data/physics_world/collider_data.hpp>
 #include <cstddef>
 
 
-#define ENTITY_POOL 1024 * 3
+#define ENTITY_POOL 128 * 3
 
 
 namespace Data {
@@ -22,6 +23,7 @@ struct Entity
   renderer::vertex_buffer vbo[ENTITY_POOL];
   renderer::texture       texture[ENTITY_POOL];
   Rigidbody               rigidbodies[ENTITY_POOL];
+  Data::Collider_detail   collider[ENTITY_POOL];
   
   
   const std::size_t       max_number_of_entities = ENTITY_POOL;
@@ -41,6 +43,7 @@ public:
 private:
 
   const std::size_t number_of_entities;
+  
 
 };
 

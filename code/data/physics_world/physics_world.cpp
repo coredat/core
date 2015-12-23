@@ -1,4 +1,5 @@
 #include "physics_world.hpp"
+#include <data/entity/entity_data.hpp>
 #include <assert.h>
 
 
@@ -25,10 +26,22 @@ physics_world_step(Physics_world *world, const float dt)
 
 
 void
-physics_add_rigidbody(Physics_world *world, const Entity_id entity, const Data::Entity_data *data)
+physics_add_rigidbody(Physics_world *world, const Collider_detail collider, Rigidbody *out)
 {
-  // TODO: mem leak I know, just want to get this working.
+  const btScalar mass = 1.0;
   
+  btVector3 extents(0.5, 0.5, 0.5);
+  out->shape.reset(new btBoxShape(extents));
+  
+  btVector3 inertia(0, 0, 0);
+  out->shape->calculateLocalInertia(mass, inertia);
+  
+  //rb.motion_state.reset(new Data_detail::Motion_state(entity, data));
+  btRigidBody::btRigidBodyConstructionInfo rigidbody_ci(mass, out->motion_state.get(), out->shape.get(), inertia);
+  
+  out->rigidbody.reset(new btRigidBody(rigidbody_ci));
+  
+  world->dynamics_world.addRigidBody(out->rigidbody.get());
 }
 
 

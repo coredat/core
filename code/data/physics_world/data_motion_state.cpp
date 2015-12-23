@@ -69,7 +69,7 @@ void
 Motion_state::getWorldTransform(btTransform &world_trans) const
 {
   math::transform trans;
-  Data::entity_get_transform(data, 128, m_entity, &trans);
+  Data::entity_get_transform(data, data->number_of_entities, m_entity, &trans);
   
   world_trans = gl_to_bullet(trans);
 }
@@ -79,7 +79,7 @@ void
 Motion_state::setWorldTransform(const btTransform &world_trans)
 {
   math::transform trans = bullet_to_gl(world_trans);
-  Data::entity_set_transform(data, 128, m_entity, &trans);
+  Data::entity_set_transform(data, data->number_of_entities, m_entity, &trans);
 }
 
 
