@@ -9,7 +9,7 @@
 #include <data/entity/entity_data.hpp>
 #include <data/texture_manager/texture_data.hpp>
 #include <data/mesh_manager/mesh_data.hpp>
-
+#include <data/physics_world/physics_world.hpp>
 
 
 
@@ -33,7 +33,7 @@ main()
     std::cout << id << " - " << msg << std::endl;
   });
   
-
+  
   renderer::initialize();
   Simple_renderer::initialize();
   
@@ -73,6 +73,7 @@ main()
   assert(ground_vbo.is_valid());
   
   Data::Entity data;
+  Data::Physics_world phy_world;
   
   // *hurt* better entity loop thing.
   for(uint32_t i = 0; i < ENTITY_POOL; ++i)
