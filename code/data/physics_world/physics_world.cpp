@@ -28,16 +28,41 @@ physics_world_step(Physics_world *world, const float dt)
 void
 physics_add_rigidbody(Physics_world *world, const Collider_detail collider, Rigidbody *out)
 {
-  const btScalar mass = 1.0;
+  assert(world && out);
   
-  btVector3 extents(0.5, 0.5, 0.5);
-  out->shape.reset(new btBoxShape(extents));
+  switch(collider.type)
+  {
+    case(Collider_type::static_plane):
+    {
+      const btVector3 normal(0, 1, 0);
+      const btScalar offset(0);
+      out->shape.reset(new btStaticPlaneShape(normal, offset));
+      break;
+    }
+    
+    case(Collider_type::cube):
+    {
+      const btVector3 extents(collider.collider_info.cube.extents[0],
+                              collider.collider_info.cube.extents[1],
+                              collider.collider_info.cube.extents[2]);
+      out->shape.reset(new btBoxShape(extents));
+      break;
+    }
+    
+    case(Collider_type::unknown):
+    default:
+      assert(false); // oh no you didn't.
+      return;
+  }
   
   btVector3 inertia(0, 0, 0);
-  out->shape->calculateLocalInertia(mass, inertia);
+  out->shape->calculateLocalInertia(collider.mass, inertia);
   
   //rb.motion_state.reset(new Data_detail::Motion_state(entity, data));
-  btRigidBody::btRigidBodyConstructionInfo rigidbody_ci(mass, out->motion_state.get(), out->shape.get(), inertia);
+  const btRigidBody::btRigidBodyConstructionInfo rigidbody_ci(collider.mass,
+                                                              out->motion_state.get(),
+                                                              out->shape.get(),
+                                                              inertia);
   
   out->rigidbody.reset(new btRigidBody(rigidbody_ci));
   

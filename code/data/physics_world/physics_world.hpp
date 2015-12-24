@@ -25,9 +25,6 @@ struct Physics_world
 };
 
 
-
-
-
 void physics_world_init(Physics_world *world);
 void physics_world_step(Physics_world *world, const float dt);
 void physics_add_rigidbody(Physics_world *world, const Collider_detail collider, Rigidbody *dest);

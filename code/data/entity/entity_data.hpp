@@ -31,23 +31,6 @@ struct Entity
 };
 
 
-
-class Entity_data
-{
-public:
-
-  explicit Entity_data(const std::size_t number_of_entities);
-  
-  
-  
-private:
-
-  const std::size_t number_of_entities;
-  
-
-};
-
-
 bool        entity_get_index(const Entity entities[], const std::size_t number_of_entities, const Entity_id id, std::size_t *index);
 void        entity_set_transform(Entity entities[], const std::size_t size_of_entities, const Entity_id id, math::transform *set_transform);
 void        entity_get_transform(const Entity entities[], const std::size_t size_of_entities, const Entity_id id, math::transform *get_transform);

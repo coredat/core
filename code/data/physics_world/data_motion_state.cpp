@@ -78,7 +78,11 @@ Motion_state::getWorldTransform(btTransform &world_trans) const
 void
 Motion_state::setWorldTransform(const btTransform &world_trans)
 {
+  math::transform curr_trans;
+  Data::entity_get_transform(data, data->number_of_entities, m_entity, &curr_trans);
+
   math::transform trans = bullet_to_gl(world_trans);
+  trans.scale = curr_trans.scale;
   Data::entity_set_transform(data, data->number_of_entities, m_entity, &trans);
 }
 

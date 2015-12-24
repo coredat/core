@@ -7,8 +7,6 @@ namespace Data {
 
 struct Entity;
 
-struct Entity_data;
-
 
 } // ns
 

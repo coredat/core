@@ -82,26 +82,50 @@ main()
     data.number_of_entities++;
     
     data.entity_id[i] = Entity_id{0,i};
-    data.transform[i] = math::transform_init(math::vec3_init((static_cast<float>(rand()%100) - 50) / 20.0f,
-                                                             (static_cast<float>(rand()%100) - 50) / 20.0f,
-                                                             (static_cast<float>(rand()%100) - 50) / 20.0f),
-                                             math::vec3_init((static_cast<float>(rand()%200) + 10) / 100.0f,
-                                                             (static_cast<float>(rand()%200) + 10) / 100.0f,
-                                                             (static_cast<float>(rand()%200) + 10) / 100.0f),
+    
+    const float scale_x = (static_cast<float>(rand()%200) + 10) / 150.0f;
+    const float scale_y = (static_cast<float>(rand()%200) + 10) / 150.0f;
+    const float scale_z = (static_cast<float>(rand()%200) + 10) / 150.0f;
+
+    const float pos_x = (static_cast<float>(rand()%100) + 10) / 20.0f;
+    const float pos_y = (static_cast<float>(rand()%100)) / 20.0f;
+    const float pos_z = (static_cast<float>(rand()%100) + 10) / 20.0f;
+    
+    data.transform[i] = math::transform_init(math::vec3_init(pos_x, pos_y, pos_z),
+                                             math::vec3_init(scale_x, scale_y, scale_z),
                                              math::quat_init());
+    
     data.texture[i] = texture_data.tex[rand() % 4];
-    data.vbo[i] = mesh_data.vbo[rand() % 2];
+    data.vbo[i] = mesh_data.vbo[0];
     
-    
+    data.collider[i].type = Data::Collider_type::cube;
+    data.collider[i].mass = 1;
+    data.collider[i].collider_info.cube.extents[0] = scale_x * 0.5f;
+    data.collider[i].collider_info.cube.extents[1] = scale_y * 0.5f;
+    data.collider[i].collider_info.cube.extents[2] = scale_z * 0.5f;
     data.rigidbodies[i].motion_state.reset(new Data_detail::Motion_state(data.entity_id[i], &data));
     
-    Data::physics_add_rigidbody(&phy_world, data.collider[i], &data.rigidbodies[i]);
+    //Data::physics_add_rigidbody(&phy_world, data.collider[i], &data.rigidbodies[i]);
   }
   
   //data.number_of_entities = 128;
   //data.entity_id[4] = Entity_id{1,0};
   
   //Data::physics_add_rigidbody(&phy_world, data.collider[0], &data.rigidbodies[0]);
+  
+  // Set ground
+  {
+    data.transform[0] = math::transform_init(math::vec3_zero(), math::vec3_one(), math::quat_init());
+    data.collider[0].type = Data::Collider_type::static_plane;
+    data.collider[0].mass = 0;
+  }
+  
+  
+  // Add rigidbodies
+  for(std::size_t i = 0; i < data.number_of_entities; ++i)
+  {
+    Data::physics_add_rigidbody(&phy_world, data.collider[i], &data.rigidbodies[i]);
+  }
   
   // Transform data
   std::vector<Simple_renderer::Node> renderer_nodes;
