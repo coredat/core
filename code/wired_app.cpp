@@ -81,6 +81,9 @@ main()
   Entity_factory::create_ground(&world_entities);
   Entity_factory::create_random_cube(&world_entities);
   
+  Physics::world_add_rigidbody(&phy_world, world_entities.get_collider_data()[0], &world_entities.get_rigidbody_data()[0]);
+  Physics::world_add_rigidbody(&phy_world, world_entities.get_collider_data()[1], &world_entities.get_rigidbody_data()[1]);
+  
   world_entities.get_texture_data()[0] = texture_data.tex[0];
   world_entities.get_texture_data()[1] = texture_data.tex[1];
   

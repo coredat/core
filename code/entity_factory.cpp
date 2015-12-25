@@ -35,6 +35,14 @@ create_random_cube(Entity::Data *data)
 {
   const std::size_t index = data->add_entity(Entity_id{2, ++instance});
   
+  data->get_transform_data()[index] = math::transform_init(math::vec3_init(0, 4, 0), math::vec3_one(), math::quat_init());
+  
+  data->get_collider_data()[index].type = Physics::Collider_type::cube;
+  data->get_collider_data()[index].info.cube.extents[0] = 0.5;
+  data->get_collider_data()[index].info.cube.extents[1] = 0.5;
+  data->get_collider_data()[index].info.cube.extents[2] = 0.5;
+  data->get_collider_data()[index].mass = 1;
+  
   data->get_rigidbody_data()[index].motion_state.reset(new Data_detail::Motion_state(data->get_entity_data()[index], data));
 }
 
