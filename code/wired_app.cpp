@@ -75,7 +75,7 @@ main()
   
   Data::Entity data;
   
-  Entity::Data world_entities(128);
+  Entity::Data world_entities(1024);
   Physics::World phy_world;
   
   Entity_factory::create_ground(&world_entities);
@@ -84,7 +84,7 @@ main()
   world_entities.get_texture_data()[0]  = texture_data.tex[0];
   world_entities.get_mesh_data()[0]     = mesh_data.vbo[1];
   
-  for(std::size_t i = 1; i < 100; ++i)
+  for(std::size_t i = 1; i < 64; ++i)
   {
     Entity_factory::create_random_cube(&world_entities);
     Physics::world_add_rigidbody(&phy_world, world_entities.get_collider_data()[i], &world_entities.get_rigidbody_data()[i]);
@@ -109,7 +109,7 @@ main()
     sdl::message_pump();
     renderer::clear();
     
-    Physics::world_step(&phy_world, 0.01);
+    Physics::world_step(&phy_world, 0.002);
     
     static float time = 4;
     //time += 0.004f;
@@ -119,7 +119,9 @@ main()
     
     const float eye_pos[3] = {x, 3.4f, z};
     
-    const math::mat4 view  = math::mat4_lookat(math::vec3_init(x,3.4f,z), math::vec3_zero(), math::vec3_init(0, 1, 0));
+    const math::mat4 view  = math::mat4_lookat(math::vec3_init(x, 3.4f, z),
+                                               math::vec3_zero(),
+                                               math::vec3_init(0, 1, 0));
     
     const math::mat4 view_proj = math::mat4_multiply(view, proj); // *hurt* camaera or such.
     Transform::transforms_to_wvp_mats(world_entities.get_transform_data(),
