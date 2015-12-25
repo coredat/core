@@ -2,6 +2,14 @@
 #define ENTITY_FWD_INCLUDED_
 
 
+namespace Entity
+{
+
+class Data;
+
+} // ns
+
+
 namespace Data {
 
 

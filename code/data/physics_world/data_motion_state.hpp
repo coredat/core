@@ -5,9 +5,9 @@
 #include <btBulletDynamicsCommon.h>
 #include <data/entity/entity_id.hpp>
 
-namespace Data {
+namespace Entity {
 
-  class Entity;
+  class Data;
 
 } // ns
 
@@ -19,7 +19,7 @@ class Motion_state : public btMotionState
 {
 public:
 
-  explicit      Motion_state(const Entity_id e, Data::Entity *data);
+  explicit      Motion_state(const Entity_id e, Entity::Data *data);
   
   void          getWorldTransform(btTransform& world_trans) const override;
   void          setWorldTransform(const btTransform& world_trans) override;
@@ -27,7 +27,7 @@ public:
 private:
 
   const Entity_id m_entity;
-  Data::Entity *data;
+  Entity::Data *data;
 
 }; // class
 

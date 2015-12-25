@@ -1,9 +1,11 @@
 #ifndef RIGIDBODY_INCLUDED_
 #define RIGIDBODY_INCLUDED_
 
+
 #include <btBulletDynamicsCommon.h>
 #include "data_motion_state.hpp"
 #include <memory>
+
 
 struct Rigidbody
 {

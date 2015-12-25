@@ -3,11 +3,11 @@
 #include <assert.h>
 
 
-namespace Data {
+namespace Physics {
 
 
 void
-physics_world_init(Physics_world *world)
+world_init(World *world)
 {
   assert(world);
   
@@ -17,7 +17,7 @@ physics_world_init(Physics_world *world)
 
 
 void
-physics_world_step(Physics_world *world, const float dt)
+world_step(World *world, const float dt)
 {
   assert(world);
 
@@ -26,7 +26,7 @@ physics_world_step(Physics_world *world, const float dt)
 
 
 void
-physics_add_rigidbody(Physics_world *world, const Collider_detail collider, Rigidbody *out)
+world_add_rigidbody(World *world, const Collider_detail collider, Rigidbody *out)
 {
   assert(world && out);
   
@@ -34,17 +34,21 @@ physics_add_rigidbody(Physics_world *world, const Collider_detail collider, Rigi
   {
     case(Collider_type::static_plane):
     {
-      const btVector3 normal(0, 1, 0);
-      const btScalar offset(0);
+      const btVector3 normal(collider.info.static_plane.normal[0],
+                             collider.info.static_plane.normal[1],
+                             collider.info.static_plane.normal[2]);
+      const btScalar offset(collider.info.static_plane.offset);
+      
       out->shape.reset(new btStaticPlaneShape(normal, offset));
       break;
     }
     
     case(Collider_type::cube):
     {
-      const btVector3 extents(collider.collider_info.cube.extents[0],
-                              collider.collider_info.cube.extents[1],
-                              collider.collider_info.cube.extents[2]);
+      const btVector3 extents(collider.info.cube.extents[0],
+                              collider.info.cube.extents[1],
+                              collider.info.cube.extents[2]);
+
       out->shape.reset(new btBoxShape(extents));
       break;
     }
@@ -69,6 +73,12 @@ physics_add_rigidbody(Physics_world *world, const Collider_detail collider, Rigi
   world->dynamics_world.addRigidBody(out->rigidbody.get());
 }
 
+
+void
+world_add_rigidbodies(World *world, const Collider_detail colliders[], const std::size_t number_of_colliders, Rigidbody *destination)
+{
+  
+}
 
 
 } // ns

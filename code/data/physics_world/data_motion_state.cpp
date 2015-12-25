@@ -58,7 +58,7 @@ gl_to_bullet(const math::transform &transform)
 namespace Data_detail {
 
 
-Motion_state::Motion_state(const Entity_id e, Data::Entity *d)
+Motion_state::Motion_state(const Entity_id e, Entity::Data *d)
 : m_entity(e)
 , data(d)
 {
@@ -68,22 +68,22 @@ Motion_state::Motion_state(const Entity_id e, Data::Entity *d)
 void
 Motion_state::getWorldTransform(btTransform &world_trans) const
 {
-  math::transform trans;
-  Data::entity_get_transform(data, data->number_of_entities, m_entity, &trans);
+  const std::size_t index = data->find_index(m_entity);
   
-  world_trans = gl_to_bullet(trans);
+  world_trans = gl_to_bullet(data->get_transform_data()[index]);
 }
 
 
 void
 Motion_state::setWorldTransform(const btTransform &world_trans)
 {
-  math::transform curr_trans;
-  Data::entity_get_transform(data, data->number_of_entities, m_entity, &curr_trans);
+  const std::size_t index = data->find_index(m_entity);
 
+  const math::transform curr_trans = data->get_transform_data()[index];
   math::transform trans = bullet_to_gl(world_trans);
   trans.scale = curr_trans.scale;
-  Data::entity_set_transform(data, data->number_of_entities, m_entity, &trans);
+  
+  data->get_transform_data()[index] = bullet_to_gl(world_trans);
 }
 
 

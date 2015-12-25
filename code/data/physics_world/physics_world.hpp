@@ -11,10 +11,10 @@
 #include <data/physics_world/data_motion_state.hpp>
 
 
-namespace Data {
+namespace Physics {
 
 
-struct Physics_world
+struct World
 {
   btDbvtBroadphase                       broadphase;
   btDefaultCollisionConfiguration        collision_config;
@@ -25,9 +25,10 @@ struct Physics_world
 };
 
 
-void physics_world_init(Physics_world *world);
-void physics_world_step(Physics_world *world, const float dt);
-void physics_add_rigidbody(Physics_world *world, const Collider_detail collider, Rigidbody *dest);
+void world_init(World *world);
+void world_step(World *world, const float dt);
+void world_add_rigidbody(World *world, const Collider_detail collider, Rigidbody *dest);
+void world_add_rigidbodies(World *world, const Collider_detail colliders[], const std::size_t number_of_colliders, Rigidbody *destination);
 
 
 } // ns
