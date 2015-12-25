@@ -49,9 +49,9 @@ namespace Collider
 } // ns
 
 
-struct Collider_detail
+struct Rigidbody_properties
 {
-  Collider_type type;
+  Collider_type collider_type;
  // uint32_t move_axis      = Axis::x | Axis::y | Axis::z;
  // uint32_t rotation_axis  = Axis::x | Axis::y | Axis::z;
   float mass;
@@ -61,7 +61,7 @@ struct Collider_detail
     Collider::Unknown           unknown;
     Collider::Static_plane      static_plane;
     Collider::Cube              cube;
-  } info;
+  } collider_info;
 };
 
 

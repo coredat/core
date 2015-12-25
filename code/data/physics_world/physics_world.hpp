@@ -27,8 +27,8 @@ struct World
 
 void world_init(World *world);
 void world_step(World *world, const float dt);
-void world_add_rigidbody(World *world, const Collider_detail collider, Rigidbody *dest);
-void world_add_rigidbodies(World *world, const Collider_detail colliders[], const std::size_t number_of_colliders, Rigidbody *destination);
+void world_add_rigidbody(World *world, const Rigidbody_properties rb_properties, Rigidbody *dest);
+void world_add_rigidbodies(World *world, const Rigidbody_properties rb_properties[], const std::size_t number_of_rbs, Rigidbody *destination);
 
 
 } // ns

@@ -26,18 +26,18 @@ world_step(World *world, const float dt)
 
 
 void
-world_add_rigidbody(World *world, const Collider_detail collider, Rigidbody *out)
+world_add_rigidbody(World *world, const Rigidbody_properties props, Rigidbody *out)
 {
   assert(world && out);
   
-  switch(collider.type)
+  switch(props.collider_type)
   {
     case(Collider_type::static_plane):
     {
-      const btVector3 normal(collider.info.static_plane.normal[0],
-                             collider.info.static_plane.normal[1],
-                             collider.info.static_plane.normal[2]);
-      const btScalar offset(collider.info.static_plane.offset);
+      const btVector3 normal(props.collider_info.static_plane.normal[0],
+                             props.collider_info.static_plane.normal[1],
+                             props.collider_info.static_plane.normal[2]);
+      const btScalar offset(props.collider_info.static_plane.offset);
       
       out->shape.reset(new btStaticPlaneShape(normal, offset));
       break;
@@ -45,9 +45,9 @@ world_add_rigidbody(World *world, const Collider_detail collider, Rigidbody *out
     
     case(Collider_type::cube):
     {
-      const btVector3 extents(collider.info.cube.extents[0],
-                              collider.info.cube.extents[1],
-                              collider.info.cube.extents[2]);
+      const btVector3 extents(props.collider_info.cube.extents[0],
+                              props.collider_info.cube.extents[1],
+                              props.collider_info.cube.extents[2]);
 
       out->shape.reset(new btBoxShape(extents));
       break;
@@ -60,10 +60,10 @@ world_add_rigidbody(World *world, const Collider_detail collider, Rigidbody *out
   }
   
   btVector3 inertia(0, 0, 0);
-  out->shape->calculateLocalInertia(collider.mass, inertia);
+  out->shape->calculateLocalInertia(props.mass, inertia);
   
   //rb.motion_state.reset(new Data_detail::Motion_state(entity, data));
-  const btRigidBody::btRigidBodyConstructionInfo rigidbody_ci(collider.mass,
+  const btRigidBody::btRigidBodyConstructionInfo rigidbody_ci(props.mass,
                                                               out->motion_state.get(),
                                                               out->shape.get(),
                                                               inertia);
@@ -75,7 +75,7 @@ world_add_rigidbody(World *world, const Collider_detail collider, Rigidbody *out
 
 
 void
-world_add_rigidbodies(World *world, const Collider_detail colliders[], const std::size_t number_of_colliders, Rigidbody *destination)
+world_add_rigidbodies(World *world, const Rigidbody_properties props[], const std::size_t number_of_rbs, Rigidbody *destination)
 {
   
 }

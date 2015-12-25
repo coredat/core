@@ -27,7 +27,7 @@ public:
   renderer::vertex_buffer*    get_mesh_data()           { return m_vertex_buffers.data(); }
   renderer::texture*          get_texture_data()        { return m_textures.data();       }
   Rigidbody*                  get_rigidbody_data()      { return m_rigidbodies.data();    }
-  Physics::Collider_detail*   get_collider_data()       { return m_colliders.data();      }
+  Physics::Rigidbody_properties*   get_collider_data()       { return m_colliders.data();      }
   
   std::size_t                 find_index(const Entity_id id) const;
   std::size_t                 add_entity(const Entity_id id);
@@ -38,12 +38,12 @@ public:
   
 private:
 
-  std::vector<Entity_id>                  m_entities;
-  std::vector<math::transform>            m_transforms;
-  std::vector<renderer::vertex_buffer>    m_vertex_buffers;
-  std::vector<renderer::texture>          m_textures;
-  std::vector<Rigidbody>                  m_rigidbodies;
-  std::vector<Physics::Collider_detail>   m_colliders;
+  std::vector<Entity_id>                        m_entities;
+  std::vector<math::transform>                  m_transforms;
+  std::vector<renderer::vertex_buffer>          m_vertex_buffers;
+  std::vector<renderer::texture>                m_textures;
+  std::vector<Rigidbody>                        m_rigidbodies;
+  std::vector<Physics::Rigidbody_properties>    m_colliders;
 };
 
 }
@@ -59,7 +59,7 @@ struct Entity
   renderer::vertex_buffer   vbo[ENTITY_POOL];
   renderer::texture         texture[ENTITY_POOL];
   Rigidbody                 rigidbodies[ENTITY_POOL];
-  Physics::Collider_detail  collider[ENTITY_POOL];
+  Physics::Rigidbody_properties  collider[ENTITY_POOL];
   
   const std::size_t       max_number_of_entities = ENTITY_POOL;
   std::size_t             number_of_entities = 0;

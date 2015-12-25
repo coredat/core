@@ -77,74 +77,20 @@ main()
   
   Entity::Data world_entities(128);
   Physics::World phy_world;
-
+  
   Entity_factory::create_ground(&world_entities);
-  Entity_factory::create_random_cube(&world_entities);
-  
   Physics::world_add_rigidbody(&phy_world, world_entities.get_collider_data()[0], &world_entities.get_rigidbody_data()[0]);
-  Physics::world_add_rigidbody(&phy_world, world_entities.get_collider_data()[1], &world_entities.get_rigidbody_data()[1]);
+
+  world_entities.get_texture_data()[0]  = texture_data.tex[0];
+  world_entities.get_mesh_data()[0]     = mesh_data.vbo[1];
   
-  world_entities.get_texture_data()[0] = texture_data.tex[0];
-  world_entities.get_texture_data()[1] = texture_data.tex[1];
-  
-  world_entities.get_mesh_data()[0] = mesh_data.vbo[1];
-  world_entities.get_mesh_data()[1] = mesh_data.vbo[0];
-  
-  // *hurt* better entity loop thing.
-//  for(uint32_t i = 0; i < ENTITY_POOL; ++i)
-//  {
-//    data.number_of_entities++;
-//    
-//    data.entity_id[i] = Entity_id{0,i};
-//    
-//    const float scale_x = (static_cast<float>(rand()%200) + 10) / 200.0f;
-//    const float scale_y = (static_cast<float>(rand()%200) + 10) / 200.0f;
-//    const float scale_z = (static_cast<float>(rand()%200) + 10) / 200.0f;
-//
-//    const float pos_x = (static_cast<float>(rand()%100) + 10) / 20.0f;
-//    const float pos_y = (static_cast<float>(rand()%100)) / 20.0f;
-//    const float pos_z = (static_cast<float>(rand()%100) + 10) / 20.0f;
-//    
-//    data.transform[i] = math::transform_init(math::vec3_init(pos_x, pos_y, pos_z),
-//                                             math::vec3_init(scale_x, scale_y, scale_z),
-//                                             math::quat_init());
-//    
-//    data.texture[i] = texture_data.tex[rand() % 4];
-//    data.vbo[i] = mesh_data.vbo[0];
-//    
-//    data.collider[i].type = Physics::Collider_type::cube;
-//    data.collider[i].mass = (rand() % 5 + 1);
-//    data.collider[i].info.cube.extents[0] = scale_x * 0.5f;
-//    data.collider[i].info.cube.extents[1] = scale_y * 0.5f;
-//    data.collider[i].info.cube.extents[2] = scale_z * 0.5f;
-//    //data.rigidbodies[i].motion_state.reset(new Data_detail::Motion_state(data.entity_id[i], &data));
-//    
-//    //Data::physics_add_rigidbody(&phy_world, data.collider[i], &data.rigidbodies[i]);
-//  }
-  
-  //data.number_of_entities = 128;
-  //data.entity_id[4] = Entity_id{1,0};
-  
-  //Data::physics_add_rigidbody(&phy_world, data.collider[0], &data.rigidbodies[0]);
-  
-  // Set ground
-//  {
-//    data.vbo[0] = mesh_data.vbo[1];
-//    data.transform[0] = math::transform_init(math::vec3_zero(), math::vec3_init(10,10,10), math::quat_init());
-//    data.collider[0].type = Physics::Collider_type::static_plane;
-//    data.collider[0].info.static_plane.normal[0] = 0;
-//    data.collider[0].info.static_plane.normal[1] = 1;
-//    data.collider[0].info.static_plane.normal[2] = 0;
-//    data.collider[0].info.static_plane.offset = 0;
-//    data.collider[0].mass = 0;
-//  }
-  
-  
-  // Add rigidbodies
-//  for(std::size_t i = 0; i < data.number_of_entities; ++i)
-//  {
-//    Physics::world_add_rigidbody(&phy_world, data.collider[i], &data.rigidbodies[i]);
-//  }
+  for(std::size_t i = 1; i < 100; ++i)
+  {
+    Entity_factory::create_random_cube(&world_entities);
+    Physics::world_add_rigidbody(&phy_world, world_entities.get_collider_data()[i], &world_entities.get_rigidbody_data()[i]);
+    world_entities.get_texture_data()[i] = texture_data.tex[1];
+    world_entities.get_mesh_data()[i] = mesh_data.vbo[0];
+  }
   
   // Transform data
   std::vector<Simple_renderer::Node> renderer_nodes;
@@ -164,30 +110,6 @@ main()
     renderer::clear();
     
     Physics::world_step(&phy_world, 0.01);
-    
-    // Move a block
-    {
-//      if(input.is_key_down(SDLK_w))
-//      {
-//        math::transform trans;
-//        Data::entity_get_transform(&data, data.number_of_entities, Entity_id{1,0}, &trans);
-//        
-//        const math::vec3 fwd = math::quat_rotate_point(trans.rotation, math::vec3_init(0,0,-0.1f));
-//        trans.position = math::vec3_add(trans.position, fwd);
-//        
-//        Data::entity_set_transform(&data, data.number_of_entities, Entity_id{1,0}, &trans);
-//      }
-//      if(input.is_key_down(SDLK_s))
-//      {
-//        math::transform trans;
-//        Data::entity_get_transform(&data, data.number_of_entities, Entity_id{1,0}, &trans);
-//        
-//        const math::vec3 fwd = math::quat_rotate_point(trans.rotation, math::vec3_init(0,0,0.1f));
-//        trans.position = math::vec3_add(trans.position, fwd);
-//        
-//        Data::entity_set_transform(&data, data.number_of_entities, Entity_id{1,0}, &trans);
-//      }
-    }
     
     static float time = 4;
     //time += 0.004f;

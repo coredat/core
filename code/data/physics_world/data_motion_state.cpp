@@ -83,7 +83,7 @@ Motion_state::setWorldTransform(const btTransform &world_trans)
   math::transform trans = bullet_to_gl(world_trans);
   trans.scale = curr_trans.scale;
   
-  data->get_transform_data()[index] = bullet_to_gl(world_trans);
+  data->get_transform_data()[index] = trans;
 }
 
 
