@@ -8,8 +8,8 @@
 #include <renderer/simple_renderer/simple_renderer.hpp>
 #include <data/entity/entity_data.hpp>
 #include <data/texture_manager/texture_data.hpp>
+#include <data/physics/physics.hpp>
 #include <data/mesh_manager/mesh_data.hpp>
-#include <data/physics_world/physics_world.hpp>
 #include <entity_factory.hpp>
 
 
@@ -77,7 +77,6 @@ main()
   Physics::World phy_world;
   
   Entity_factory::create_ground(&world_entities);
-//  Physics::world_add_rigidbody(&phy_world, world_entities.get_collider_data()[0], &world_entities.get_rigidbody_data()[0]);
 
   world_entities.get_texture_data()[0]  = texture_data.tex[0];
   world_entities.get_mesh_data()[0]     = mesh_data.vbo[1];
@@ -85,7 +84,6 @@ main()
   for(std::size_t i = 1; i < 64; ++i)
   {
     Entity_factory::create_random_cube(&world_entities);
- //   Physics::world_add_rigidbody(&phy_world, world_entities.get_collider_data()[i], &world_entities.get_rigidbody_data()[i]);
     world_entities.get_texture_data()[i] = texture_data.tex[1];
     world_entities.get_mesh_data()[i] = mesh_data.vbo[0];
   }
@@ -94,7 +92,7 @@ main()
                                  world_entities.get_collider_data(),
                                  world_entities.size(),
                                  world_entities.get_rigidbody_data(),
-                                 sizeof(Physics::Rigidbody));
+                                 world_entities.size());
   
   // Transform data
   std::vector<Simple_renderer::Node> renderer_nodes;

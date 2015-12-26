@@ -1,6 +1,5 @@
 #include "entity_data.hpp"
-#include <data/physics_world/rigidbody.hpp>
-#include <data/physics_world/rigidbody_properties.hpp>
+#include <data/physics/physics.hpp>
 #include <assert.h>
 
 

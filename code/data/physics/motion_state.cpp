@@ -62,30 +62,36 @@ namespace Physics {
 
 Motion_state::Motion_state(const Entity_id e, Entity::Data *d)
 : m_entity(e)
-, data(d)
+, m_data(d)
 {
+}
+
+
+Motion_state::~Motion_state()
+{
+
 }
 
 
 void
 Motion_state::getWorldTransform(btTransform &world_trans) const
 {
-  const std::size_t index = data->find_index(m_entity);
+  const std::size_t index = m_data->find_index(m_entity);
   
-  world_trans = gl_to_bullet(data->get_transform_data()[index]);
+  world_trans = gl_to_bullet(m_data->get_transform_data()[index]);
 }
 
 
 void
 Motion_state::setWorldTransform(const btTransform &world_trans)
 {
-  const std::size_t index = data->find_index(m_entity);
+  const std::size_t index = m_data->find_index(m_entity);
 
-  const math::transform curr_trans = data->get_transform_data()[index];
+  const math::transform curr_trans = m_data->get_transform_data()[index];
   math::transform trans = bullet_to_gl(world_trans);
   trans.scale = curr_trans.scale;
   
-  data->get_transform_data()[index] = trans;
+  m_data->get_transform_data()[index] = trans;
 }
 
 

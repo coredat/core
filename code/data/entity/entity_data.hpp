@@ -5,8 +5,7 @@
 #include "entity_id.hpp"
 #include <math/math.hpp>
 #include <simple_renderer/lazy_include.hpp>
-#include <data/physics_world/rigidbody.hpp>
-#include <data/physics_world/physics_fwd.hpp>
+#include <data/physics/physics_fwd.hpp>
 #include <cstddef>
 
 
