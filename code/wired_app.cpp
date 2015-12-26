@@ -109,7 +109,8 @@ main()
     sdl::message_pump();
     renderer::clear();
     
-    Physics::world_step(&phy_world, 0.002);
+    
+        Physics::world_step(&phy_world, 0.01);
     
     static float time = 4;
     //time += 0.004f;
