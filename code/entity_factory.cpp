@@ -1,6 +1,7 @@
 #include "entity_factory.hpp"
+#include <data/physics_world/motion_state.hpp>
 #include <data/entity/entity_data.hpp>
-#include <data/physics_world/collider_data.hpp>
+#include <data/physics_world/rigidbody_properties.hpp>
 
 
 namespace
@@ -26,7 +27,7 @@ create_ground(Entity::Data *data)
   
   data->get_transform_data()[index] = math::transform_init(math::vec3_zero(), math::vec3_init(10,10,10), math::quat_init());
   
-  data->get_rigidbody_data()[index].motion_state.reset(new Data_detail::Motion_state(data->get_entity_data()[index], data));
+  data->get_rigidbody_data()[index].motion_state.reset(new Physics::Motion_state(data->get_entity_data()[index], data));
 }
 
 
@@ -53,7 +54,7 @@ create_random_cube(Entity::Data *data)
   data->get_collider_data()[index].collider_info.cube.extents[2] = scale_z * 0.5;
   data->get_collider_data()[index].mass = 1;
   
-  data->get_rigidbody_data()[index].motion_state.reset(new Data_detail::Motion_state(data->get_entity_data()[index], data));
+  data->get_rigidbody_data()[index].motion_state.reset(new Physics::Motion_state(data->get_entity_data()[index], data));
 }
 
 

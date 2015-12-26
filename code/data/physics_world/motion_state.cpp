@@ -1,12 +1,13 @@
 #include <math/transform/transform.hpp>
 #include <bullet/btBulletDynamicsCommon.h>
 #include <data/entity/entity_data.hpp>
-#include "data_motion_state.hpp"
+#include "motion_state.hpp"
 
 
 
 namespace
 {
+
 inline math::transform
 bullet_to_gl(const btTransform &transform)
 {
@@ -51,11 +52,12 @@ gl_to_bullet(const math::transform &transform)
 
   return adjusted_transform;
 }
-}
+
+} // ns
 
 
 
-namespace Data_detail {
+namespace Physics {
 
 
 Motion_state::Motion_state(const Entity_id e, Entity::Data *d)

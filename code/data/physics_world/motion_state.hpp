@@ -5,6 +5,7 @@
 #include <btBulletDynamicsCommon.h>
 #include <data/entity/entity_id.hpp>
 
+
 namespace Entity {
 
   class Data;
@@ -12,7 +13,7 @@ namespace Entity {
 } // ns
 
 
-namespace Data_detail {
+namespace Physics {
 
 
 class Motion_state : public btMotionState

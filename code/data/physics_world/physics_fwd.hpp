@@ -1,19 +1,13 @@
-#ifndef PHYSICS_FWD_INCLUDED_
-#define PHYSICS_FWD_INCLUDED_
+#ifndef PHYSICS_FWD_INCLUDED_43EE444D_35F1_4F6D_82D3_D7A75C62900E
+#define PHYSICS_FWD_INCLUDED_43EE444D_35F1_4F6D_82D3_D7A75C62900E
 
 
-namespace Data {
+namespace Physics {
 
 
+struct Rigidbody_properties;
 struct Rigidbody;
-
-
-} // ns
-
-
-namespace Data_detail {
-
-
+struct World;
 class Motion_state;
 
 

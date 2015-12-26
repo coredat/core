@@ -2,13 +2,11 @@
 #define PHYSICS_WORLD_INCLUDED_2B7C3AF5_17F9_49E4_8603_7919D93A39F4
 
 
-#include "collider_data.hpp"
-#include "rigidbody.hpp"
+#include "physics_fwd.hpp"
+#include "rigidbody_properties.hpp"
 #include <btBulletCollisionCommon.h>
 #include <BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolver.h>
 #include <BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
-#include <data/entity/entity_fwd.hpp>
-#include <data/physics_world/data_motion_state.hpp>
 
 
 namespace Physics {
@@ -28,7 +26,7 @@ struct World
 void world_init(World *world);
 void world_step(World *world, const float dt);
 void world_add_rigidbody(World *world, const Rigidbody_properties rb_properties, Rigidbody *dest);
-void world_add_rigidbodies(World *world, const Rigidbody_properties rb_properties[], const std::size_t number_of_rbs, Rigidbody *destination);
+void world_add_rigidbodies(World *world, const Rigidbody_properties rb_properties[], const std::size_t number_of_rbs, Rigidbody destination[], const std::size_t stride);
 
 
 } // ns

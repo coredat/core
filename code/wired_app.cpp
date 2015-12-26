@@ -72,14 +72,12 @@ main()
   const util::gl_mesh mesh     = util::convert_to_open_gl_mesh(model.meshes.front());
   renderer::vertex_buffer ground_vbo(mesh.mesh_data);
   assert(ground_vbo.is_valid());
-  
-  Data::Entity data;
-  
+    
   Entity::Data world_entities(1024);
   Physics::World phy_world;
   
   Entity_factory::create_ground(&world_entities);
-  Physics::world_add_rigidbody(&phy_world, world_entities.get_collider_data()[0], &world_entities.get_rigidbody_data()[0]);
+//  Physics::world_add_rigidbody(&phy_world, world_entities.get_collider_data()[0], &world_entities.get_rigidbody_data()[0]);
 
   world_entities.get_texture_data()[0]  = texture_data.tex[0];
   world_entities.get_mesh_data()[0]     = mesh_data.vbo[1];
@@ -87,10 +85,16 @@ main()
   for(std::size_t i = 1; i < 64; ++i)
   {
     Entity_factory::create_random_cube(&world_entities);
-    Physics::world_add_rigidbody(&phy_world, world_entities.get_collider_data()[i], &world_entities.get_rigidbody_data()[i]);
+ //   Physics::world_add_rigidbody(&phy_world, world_entities.get_collider_data()[i], &world_entities.get_rigidbody_data()[i]);
     world_entities.get_texture_data()[i] = texture_data.tex[1];
     world_entities.get_mesh_data()[i] = mesh_data.vbo[0];
   }
+  
+  Physics::world_add_rigidbodies(&phy_world,
+                                 world_entities.get_collider_data(),
+                                 world_entities.size(),
+                                 world_entities.get_rigidbody_data(),
+                                 sizeof(Physics::Rigidbody));
   
   // Transform data
   std::vector<Simple_renderer::Node> renderer_nodes;

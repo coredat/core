@@ -10,12 +10,14 @@ namespace Physics {
 
 namespace Axis {
 
+
 enum ENUM
 {
   x = 1 << 0,
   y = 1 << 1,
   z = 1 << 2,
 };
+
 
 } // ns
 
@@ -28,32 +30,35 @@ enum class Collider_type
 };
 
 
-namespace Collider
+namespace Collider {
+
+
+struct Unknown
 {
-  struct Unknown
-  {
-    float args[4];
-  };
-  
-  struct Static_plane
-  {
-    float normal[3];
-    float offset;
-  };
-  
-  struct Cube
-  {
-    float extents[3];
-    float not_used;
-  };
+  float args[4];
+};
+
+struct Static_plane
+{
+  float normal[3];
+  float offset;
+};
+
+struct Cube
+{
+  float extents[3];
+  float not_used;
+};
+
+
 } // ns
 
 
 struct Rigidbody_properties
 {
   Collider_type collider_type;
- // uint32_t move_axis      = Axis::x | Axis::y | Axis::z;
- // uint32_t rotation_axis  = Axis::x | Axis::y | Axis::z;
+  // uint32_t move_axis      = Axis::x | Axis::y | Axis::z;
+  // uint32_t rotation_axis  = Axis::x | Axis::y | Axis::z;
   float mass;
 
   union
