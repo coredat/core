@@ -17,12 +17,13 @@ namespace Transform {
   \param number_of_output_mats How many wvp matrices will fit into this array.
   \param stride The stride of the output container (defaults to size of a mat4).
 */
-void transforms_to_wvp_mats(const math::transform input_transforms[],
-                            const std::size_t number_of_input_transforms,
-                            const math::mat4 view_proj_mat,
-                            void *output_mats,
-                            const std::size_t number_of_output_mats,
-                            const std::size_t stride = sizeof(float) * 16);
+void
+transforms_to_wvp_mats(const math::transform input_transforms[],
+                       const std::size_t number_of_input_transforms,
+                       const math::mat4 view_proj_mat,
+                       void *output_mats,
+                       const std::size_t number_of_output_mats,
+                       const std::size_t stride = sizeof(float) * 16);
 
 
 /*!
@@ -33,11 +34,12 @@ void transforms_to_wvp_mats(const math::transform input_transforms[],
   \param number_of_output_mats How many wvp matrices will fit into this array.
   \param stride The stride of the output container (defaults to size of a mat4).
 */
-void transforms_to_world_mats(const math::transform input_transforms[],
-                              const std::size_t number_of_input_transforms,
-                              void *output_mats,
-                              const std::size_t number_of_output_mats,
-                              const std::size_t stride = sizeof(float) * 16);
+void
+transforms_to_world_mats(const math::transform input_transforms[],
+                         const std::size_t number_of_input_transforms,
+                         void *output_mats,
+                         const std::size_t number_of_output_mats,
+                         const std::size_t stride = sizeof(float) * 16);
 
 
 } // ns

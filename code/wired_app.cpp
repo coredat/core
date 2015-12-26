@@ -14,6 +14,52 @@
 
 
 
+class Actor
+{
+public:
+
+  explicit Actor()
+  {
+  }
+  
+  
+  void
+  move_forward(const float fwd)
+  {
+  
+  }
+  
+  
+  void
+  turn(const float trn)
+  {
+    accum_radians_turn += trn;
+  }
+  
+  
+  void
+  strafe(const float st)
+  {
+    
+  }
+  
+  
+  void
+  think(const float dt)
+  {
+  }
+  
+  
+private:
+
+  float accum_fwd = 0.f;
+  float accum_strafe = 0.f;
+  float accum_radians_turn = 0.f;
+
+}; // class
+
+
+
 namespace
 {
   const math::mat4 proj  = math::mat4_projection(800, 480, 0.1, 1000, math::quart_tau() * 0.6f);
@@ -33,7 +79,6 @@ main()
   {
     std::cout << id << " - " << msg << std::endl;
   });
-  
   
   renderer::initialize();
   Simple_renderer::initialize();
@@ -77,16 +122,13 @@ main()
   Physics::World phy_world;
   
   Entity_factory::create_ground(&world_entities);
+  Entity_factory::create_actor(&world_entities);
 
   world_entities.get_texture_data()[0]  = texture_data.tex[0];
   world_entities.get_mesh_data()[0]     = mesh_data.vbo[1];
-  
-  for(std::size_t i = 1; i < 64; ++i)
-  {
-    Entity_factory::create_random_cube(&world_entities);
-    world_entities.get_texture_data()[i] = texture_data.tex[1];
-    world_entities.get_mesh_data()[i] = mesh_data.vbo[0];
-  }
+
+  world_entities.get_texture_data()[1]  = texture_data.tex[1];
+  world_entities.get_mesh_data()[1]     = mesh_data.vbo[0];
   
   Physics::world_add_rigidbodies(&phy_world,
                                  world_entities.get_collider_data(),
@@ -111,8 +153,7 @@ main()
     sdl::message_pump();
     renderer::clear();
     
-    
-        Physics::world_step(&phy_world, 0.01);
+    Physics::world_step(&phy_world, 0.01);
     
     static float time = 4;
     //time += 0.004f;

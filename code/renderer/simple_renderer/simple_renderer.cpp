@@ -41,6 +41,7 @@ initialize()
     renderer::attr_format_desc{"in_vs_texture_coord", renderer::attr_type::FLOAT2},
     renderer::attr_format_desc{"in_vs_normal",        renderer::attr_type::FLOAT3},
   });
+
   assert(vertex_fmt.is_valid());
 }
 

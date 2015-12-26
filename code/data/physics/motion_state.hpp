@@ -8,7 +8,7 @@
 
 namespace Entity {
 
-  class Data;
+class Data;
 
 } // ns
 
@@ -23,13 +23,13 @@ public:
   explicit      Motion_state(const Entity_id e, Entity::Data *data);
                 ~Motion_state();
   
-  void          getWorldTransform(btTransform& world_trans) const override;
-  void          setWorldTransform(const btTransform& world_trans) override;
+  void          getWorldTransform(btTransform &world_trans) const override;
+  void          setWorldTransform(const btTransform &world_trans) override;
   
 private:
 
-  const Entity_id m_entity;
-  Entity::Data *m_data;
+  const Entity_id     m_entity;
+  Entity::Data        *m_data;
 
 }; // class
 
