@@ -81,17 +81,57 @@ world_add_rigidbodies(World *world,
     /*
       Create the Rigidbody and add it.
     */
-    btVector3 inertia(0, 0, 0);
-    out_rb->shape->calculateLocalInertia(prop->mass, inertia);
+    {
+      assert(out_rb->shape);
     
-    const btRigidBody::btRigidBodyConstructionInfo rigidbody_ci(prop->mass,
-                                                                out_rb->motion_state.get(),
-                                                                out_rb->shape.get(),
-                                                                inertia);
+      btVector3 inertia(0, 0, 0);
+      out_rb->shape->calculateLocalInertia(prop->mass, inertia);
+      
+      const btRigidBody::btRigidBodyConstructionInfo rigidbody_ci(prop->mass,
+                                                                  out_rb->motion_state.get(),
+                                                                  out_rb->shape.get(),
+                                                                  inertia);
+      
+      out_rb->rigidbody.reset(new btRigidBody(rigidbody_ci));
+    }
     
-    out_rb->rigidbody.reset(new btRigidBody(rigidbody_ci));
+    /*
+      Constrain axis
+    */
+    {
+      assert(out_rb->rigidbody);
+      btRigidBody *rigidbody = out_rb->rigidbody.get();
+      
+      const uint32_t movement_axis = prop->move_axis;
+      const uint32_t rotation_axis = prop->rotation_axis;
     
-    world->dynamics_world.addRigidBody(out_rb->rigidbody.get());
+      const btVector3 axis_movement((btScalar)(movement_axis >> 0 & 1), (btScalar)(movement_axis >> 1 & 1), (btScalar)(movement_axis >> 2 & 1));
+      const btVector3 axis_rotation((btScalar)(rotation_axis >> 0 & 1), (btScalar)(rotation_axis >> 1 & 1), (btScalar)(rotation_axis >> 2 & 1));
+
+      rigidbody->setLinearFactor(axis_movement);
+      rigidbody->setAngularFactor(axis_rotation);
+    }
+    
+    /*
+      General settings
+    */
+    {
+      assert(out_rb->rigidbody);
+      btRigidBody *rigidbody = out_rb->rigidbody.get();
+    
+      rigidbody->setDamping(0.9f, 0.9f);
+      rigidbody->setFriction(0.7f);
+      rigidbody->setRollingFriction(0.4f);
+      rigidbody->setRestitution(0.f);
+    }
+    
+    /*
+      Add Bullet's rigidbody to the world
+    */
+    {
+      assert(out_rb->rigidbody && world);
+      world->dynamics_world.addRigidBody(out_rb->rigidbody.get());
+    }
   }
 }
 

@@ -41,6 +41,13 @@ transforms_to_world_mats(const math::transform input_transforms[],
                          const std::size_t number_of_output_mats,
                          const std::size_t stride = sizeof(float) * 16);
 
+/*!
+  Computes the forward direction.
+  \param transform The currect transform.
+  \param out_vec3 the resulting fwd vector.
+*/
+void
+get_fwd_vec(const math::transform *transform, math::vec3 *out_vec3);
 
 } // ns
 

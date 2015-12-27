@@ -57,8 +57,8 @@ struct Cube
 struct Rigidbody_properties
 {
   Collider_type collider_type;
-  // uint32_t move_axis      = Axis::x | Axis::y | Axis::z;
-  // uint32_t rotation_axis  = Axis::x | Axis::y | Axis::z;
+  uint32_t move_axis      = Axis::x | Axis::y | Axis::z;
+  uint32_t rotation_axis  = Axis::x | Axis::y | Axis::z;
   float mass;
 
   union

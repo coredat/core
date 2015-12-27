@@ -5,8 +5,6 @@
 #include "motion_state.hpp"
 #include <btBulletDynamicsCommon.h>
 #include <memory>
-#include <functional>
-#include <math/math.hpp>
 
 
 namespace Physics {
@@ -21,6 +19,21 @@ struct Rigidbody
   std::unique_ptr<btRigidBody>        rigidbody;
   std::unique_ptr<btCollisionShape>   shape;
 };
+
+
+/*!
+  Apply force to a rigidbody.
+  TODO: Better in a batch???
+*/
+void
+rigidbody_apply_local_force(Rigidbody *rb, const float force[3]);
+
+
+/*!
+  Apply torque to a rigidbody
+*/
+void
+rigidbody_apply_local_torque(Rigidbody *rb, const float torque[3]);
 
 
 } // ns

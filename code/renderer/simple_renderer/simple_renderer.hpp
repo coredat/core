@@ -2,8 +2,8 @@
 #define SIMPLE_RENDERER_INCLUDED_BE3F678A_E796_4175_8064_BFAAD83329BD
 
 
-#include <cstddef>
 #include "simple_renderer_node.hpp"
+#include <cstddef>
 
 
 /*!
@@ -20,7 +20,8 @@ namespace Simple_renderer {
   Initalize the simple renderer.
   This needs to be called before you can start rendering things.
 */
-void initialize();
+void
+initialize();
 
 
 /*!
@@ -28,7 +29,8 @@ void initialize();
   \param nodes[] The rendering nodes which to render.
   \param number_of_nodes How many nodes contained in the array.
 */
-void render_nodes_fullbright(const Node nodes[], const std::size_t number_of_nodes);
+void
+render_nodes_fullbright(const Node nodes[], const std::size_t number_of_nodes);
 
 
 /*!
@@ -36,7 +38,8 @@ void render_nodes_fullbright(const Node nodes[], const std::size_t number_of_nod
   \param nodes[] The rendering nodes which to render.
   \param number_of_nodes How many nodes contained in the array.
 */
-void render_nodes_directional_light(const Node nodes[], const std::size_t number_of_nodes, const float* eye_pos_vec3);
+void
+render_nodes_directional_light(const Node nodes[], const std::size_t number_of_nodes, const float* eye_pos_vec3);
 
 
 } // ns

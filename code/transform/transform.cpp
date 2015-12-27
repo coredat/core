@@ -1,6 +1,14 @@
 #include "transform.hpp"
 
 
+namespace
+{
+  const math::vec3 fwd_dir  = math::vec3_init(0, 0, -1);
+  const math::vec3 up_dir   = math::vec3_init(0, +1, 0);
+  const math::vec3 left_dir = math::vec3_init(+1, 0, 0);
+}
+
+
 namespace Transform {
 
 
@@ -57,5 +65,14 @@ transforms_to_world_mats(const math::transform input_transforms[],
                            }
                          }
 
+
+void
+get_fwd_vec(const math::transform *transform, math::vec3 *out_vec3)
+{
+  // Param check.
+  assert(transform && out_vec3);
+  
+  *out_vec3 = math::quat_rotate_point(transform->rotation, fwd_dir);
+}
 
 } // ns

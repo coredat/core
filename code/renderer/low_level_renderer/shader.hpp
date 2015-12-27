@@ -5,8 +5,6 @@
 namespace Low_level_renderer {
 
 
-// hmmm
-
 inline void       shader_init();
 inline void       shader_get_uniform();
 

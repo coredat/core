@@ -6,58 +6,13 @@
 #include <math/math.hpp>
 #include <transform/transform.hpp>
 #include <renderer/simple_renderer/simple_renderer.hpp>
+#include <renderer/debug_line_renderer/debug_line_renderer.hpp>
 #include <data/entity/entity_data.hpp>
 #include <data/texture_manager/texture_data.hpp>
 #include <data/physics/physics.hpp>
 #include <data/mesh_manager/mesh_data.hpp>
 #include <entity_factory.hpp>
-
-
-
-class Actor
-{
-public:
-
-  explicit Actor()
-  {
-  }
-  
-  
-  void
-  move_forward(const float fwd)
-  {
-  
-  }
-  
-  
-  void
-  turn(const float trn)
-  {
-    accum_radians_turn += trn;
-  }
-  
-  
-  void
-  strafe(const float st)
-  {
-    
-  }
-  
-  
-  void
-  think(const float dt)
-  {
-  }
-  
-  
-private:
-
-  float accum_fwd = 0.f;
-  float accum_strafe = 0.f;
-  float accum_radians_turn = 0.f;
-
-}; // class
-
+#include <data/actor/actor.hpp>
 
 
 namespace
@@ -72,6 +27,8 @@ main()
   sdl::window window(800, 480, false, "Wired");
   sdl::ogl_context ogl(window);
   sdl::input input;
+
+  input.set_mouse_hold(true);
   
   std::cout << "Wired" << std::endl;
   
@@ -82,6 +39,7 @@ main()
   
   renderer::initialize();
   Simple_renderer::initialize();
+  Debug_line_renderer::initialize(128);
   
   const std::string asset_path = util::get_resource_path() + "assets/";
   
@@ -94,7 +52,6 @@ main()
     const std::string plane_filename = asset_path + "models/unit_plane.obj";
     Data::mesh_add_new(&mesh_data, 4, plane_filename.c_str());
   }
-  
   
   Data::Texture texture_data;
   Data::texture_init_data(&texture_data, 4);
@@ -121,8 +78,8 @@ main()
   Entity::Data world_entities(1024);
   Physics::World phy_world;
   
-  Entity_factory::create_ground(&world_entities);
-  Entity_factory::create_actor(&world_entities);
+  Entity_id ground_entity = Entity_factory::create_ground(&world_entities);
+  Entity_id actor_entity = Entity_factory::create_actor(&world_entities);
 
   world_entities.get_texture_data()[0]  = texture_data.tex[0];
   world_entities.get_mesh_data()[0]     = mesh_data.vbo[1];
@@ -147,11 +104,38 @@ main()
     renderer_nodes.at(i).diffuse_id = world_entities.get_texture_data()[i];
   }
   
+  Actor::Actor_base actor;
+  
   // Foop
   while(!window.wants_to_quit())
   {
     sdl::message_pump();
     renderer::clear();
+    
+    if(input.is_key_down(SDLK_w))
+    {
+      actor.move_forward(1);
+      // apply force.
+      //Transform::get_forward(entities, entity);
+      
+      const std::size_t actor_index = world_entities.find_index(actor_entity);
+      Physics::Rigidbody *rb = &world_entities.get_rigidbody_data()[actor_index];
+      const float some_force[3] = {0, 0, -10};
+      
+      Physics::rigidbody_apply_local_force(rb, some_force);
+    }
+    
+    if(input.get_mouse_delta_x())
+    {
+      actor.turn(input.get_mouse_delta_x());
+      
+      const std::size_t actor_index = world_entities.find_index(actor_entity);
+      Physics::Rigidbody *rb = &world_entities.get_rigidbody_data()[actor_index];
+      const float some_force[3] = {0, static_cast<float>(input.get_mouse_delta_x()) / 10.f, 0};
+      
+      Physics::rigidbody_apply_local_torque(rb, some_force);
+    }
+    
     
     Physics::world_step(&phy_world, 0.01);
     
