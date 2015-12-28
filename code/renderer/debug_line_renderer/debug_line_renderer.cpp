@@ -81,7 +81,7 @@ initialize(const std::size_t max_number_of_lines)
   assert(shd.is_valid());
 
   // Did it all load ok?
-  assert(line_shader_id && line_shader_uniform_wvp && line_shader_texture_id);
+  //assert(line_shader_id && line_shader_uniform_wvp && line_shader_texture_id);
 }
 
 
