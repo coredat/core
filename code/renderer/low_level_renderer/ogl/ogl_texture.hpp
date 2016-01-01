@@ -1,8 +1,8 @@
-#ifndef OGL_TEXTURE_INCLUDED_
-#define OGL_TEXTURE_INCLUDED_
+#ifndef OGL_TEXTURE_INCLUDED_530B56CF_2269_430E_ACC6_04D56756ACC4
+#define OGL_TEXTURE_INCLUDED_530B56CF_2269_430E_ACC6_04D56756ACC4
 
 
-#include "common.hpp"
+#include "ogl_common.hpp"
 #include "ogl_pixel_format.hpp"
 #include <stdint.h>
 #include <assert.h>

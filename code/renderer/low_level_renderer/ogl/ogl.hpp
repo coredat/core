@@ -1,8 +1,8 @@
-#ifndef OGL_INCLUDED_
-#define OGL_INCLUDED_
+#ifndef OGL_INCLUDED_136A2E67_6195_4144_8045_DBC6BDE21EA5
+#define OGL_INCLUDED_136A2E67_6195_4144_8045_DBC6BDE21EA5
 
 
-#include "common.hpp"
+#include "ogl_common.hpp"
 
 
 #endif // inc guard

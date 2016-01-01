@@ -1,6 +1,6 @@
 #include "debug_line_renderer.hpp"
 #include <simple_renderer/lazy_include.hpp>
-#include "../low_level_renderer/ogl/common.hpp"
+#include "../low_level_renderer/ogl/ogl_common.hpp"
 #include <assert.h>
 #include <array>
 #include <iostream>
@@ -97,9 +97,9 @@ initialize(const std::size_t max_number_of_lines)
   // Did it all load ok?
   //assert(line_shader_id && line_shader_uniform_wvp && line_shader_texture_id);
   
-  data.resize((16 * 512) * 4, 0);
+  data.resize((16 * 1024) * 4, 0);
   
-  Ogl::texture_create_2d(&data_texture, 16, 512, Ogl::Pixel_format::rgba32f, (void*)data.data(), &std::cout);
+  Ogl::texture_create_2d(&data_texture, 16, 1024, Ogl::Pixel_format::rgba32f, (void*)data.data(), &std::cout);
   
   uniTrans = glGetUniformLocation(shd.get_program_gl_id(), "uni_wvp_mat");
   uni_data = glGetUniformLocation(shd.get_program_gl_id(), "uni_data_lookup");
@@ -114,7 +114,7 @@ add_lines(const Line_node nodes[], const std::size_t number_of_lines)
   // Shit - can do two memcpy's instead
   for(int32_t i = 0; i < number_of_lines; ++i)
   {
-    data_ptr = data_ptr % 512;
+    data_ptr = data_ptr % 1024;
     
     const std::size_t start_index = data_ptr * (16 * 4);
     
@@ -142,7 +142,7 @@ void
 render(const float wvp_mat[16])
 {
   // Update texture
-  Ogl::texture_update_texture_2d(&data_texture, 0, 0, 16, 512, (void*)data.data());
+  Ogl::texture_update_texture_2d(&data_texture, 0, 0, 16, 1024, (void*)data.data());
   Ogl::error_check(&std::cout, "Updating texture");
 
   renderer::reset();

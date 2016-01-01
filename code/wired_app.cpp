@@ -81,12 +81,20 @@ main()
   
   Entity_id ground_entity = Entity_factory::create_ground(&world_entities);
   Entity_id actor_entity = Entity_factory::create_actor(&world_entities);
+  
 
   world_entities.get_texture_data()[0]  = texture_data.tex[0];
   world_entities.get_mesh_data()[0]     = mesh_data.vbo[1];
 
   world_entities.get_texture_data()[1]  = texture_data.tex[1];
   world_entities.get_mesh_data()[1]     = mesh_data.vbo[0];
+  
+  for(int i = 0; i < 10; ++i)
+  {
+    auto ent = Entity_factory::create_random_cube(&world_entities);
+    world_entities.get_texture_data()[i + 2]  = texture_data.tex[1];
+    world_entities.get_mesh_data()[i + 2]     = mesh_data.vbo[0];
+  }
   
   Physics::world_add_rigidbodies(&phy_world,
                                  world_entities.get_collider_data(),
