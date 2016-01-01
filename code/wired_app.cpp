@@ -44,13 +44,13 @@ main()
   const std::string asset_path = util::get_resource_path() + "assets/";
   
   Data::Mesh mesh_data;
-  Data::mesh_init_data(&mesh_data, 4);
+  Data::mesh_init_data(&mesh_data, 2);
   {
     const std::string cube_filename = asset_path + "models/unit_cube.obj";
-    Data::mesh_add_new(&mesh_data, 4, cube_filename.c_str());
+    Data::mesh_add_new(&mesh_data, 2, cube_filename.c_str());
     
     const std::string plane_filename = asset_path + "models/unit_plane.obj";
-    Data::mesh_add_new(&mesh_data, 4, plane_filename.c_str());
+    Data::mesh_add_new(&mesh_data, 2, plane_filename.c_str());
   }
   
   Data::Texture texture_data;
@@ -77,6 +77,7 @@ main()
     
   Entity::Data world_entities(1024);
   Physics::World phy_world;
+  Physics::world_init(&phy_world);
   
   Entity_id ground_entity = Entity_factory::create_ground(&world_entities);
   Entity_id actor_entity = Entity_factory::create_actor(&world_entities);
@@ -168,8 +169,13 @@ main()
     Simple_renderer::render_nodes_fullbright(renderer_nodes.data(), renderer_nodes.size());
     //Simple_renderer::render_nodes_directional_light(renderer_nodes.data(), renderer_nodes.size(), &eye_pos[0]);
     
+    //renderer::clear(false, true);
+    
+    math::mat4 wvp = math::mat4_multiply(math::mat4_id(), view, proj);
+    Debug_line_renderer::render(math::mat4_get_data(wvp));
+    
     window.flip_buffer();
   }
-
+  
   return 0;
 }

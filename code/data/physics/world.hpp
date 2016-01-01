@@ -3,9 +3,11 @@
 
 
 #include "physics_fwd.hpp"
+#include "debug_renderer.hpp"
 #include <btBulletCollisionCommon.h>
 #include <BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolver.h>
 #include <BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
+#include <memory>
 
 
 namespace Physics {
@@ -21,7 +23,7 @@ struct World
   btCollisionDispatcher                  dispatcher = {&collision_config};
   btSequentialImpulseConstraintSolver    solver;
   btDiscreteDynamicsWorld                dynamics_world = {&dispatcher, &broadphase, &solver, &collision_config};
-//  Bullet::Detail::Debug_draw             m_debug_draw;
+  std::unique_ptr<btIDebugDraw>          debug_draw;
 };
 
 

@@ -52,6 +52,8 @@ render_nodes_fullbright(const Node nodes[],
 {
   renderer::reset();
   
+  
+  
   for(std::size_t n = 0; n < number_of_nodes; ++n)
   {
     // Render node.
@@ -59,8 +61,8 @@ render_nodes_fullbright(const Node nodes[],
     assert(curr_node);
     
     fullbright.set_texture("diffuse_map", curr_node->diffuse_id);             // *hurt* need to know if this is a duplicate bind?
+    
     curr_node->vbo.bind(vertex_fmt, fullbright);                              // *hurt* need to know if this is a duplicate bind?
-
     fullbright.bind();
   
     glUniformMatrix4fv(uniTrans, 1, GL_FALSE, curr_node->wvp);

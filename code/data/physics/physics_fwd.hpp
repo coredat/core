@@ -13,6 +13,7 @@ struct Rigidbody_properties;
 struct Rigidbody;
 struct World;
 class Motion_state;
+class Debug_renderer;
 
 
 } // ns

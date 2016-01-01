@@ -35,7 +35,7 @@ mesh_add_new(Mesh *data, const std::size_t number_of_meshes, const char *filepat
     if(data->avail[i] == true)
     {
       const util::obj_model model = util::load_obj(filepath);
-      const util::gl_mesh mesh = util::convert_to_open_gl_mesh(model.meshes.front());
+      const util::gl_mesh mesh    = util::convert_to_open_gl_mesh(model.meshes.front());
       
       const renderer::vertex_buffer vbo(mesh.mesh_data);
       

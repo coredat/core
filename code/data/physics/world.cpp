@@ -14,7 +14,11 @@ world_init(World *world)
   assert(world);
   
   world->dynamics_world.setGravity(btVector3(0, -10, 0));
-  //world->dynamics_world.setDebugDrawer(&debug_draw);
+  
+  //world->debug_draw.setDebugMode(btIDebugDraw::DBG_DrawWireframe);
+  
+  world->debug_draw.reset(new Debug_renderer());
+  world->dynamics_world.setDebugDrawer(world->debug_draw.get());
 }
 
 
@@ -25,6 +29,8 @@ world_step(World *world, const float dt)
 
   world->dynamics_world.stepSimulation(dt, 100  , 1.f / 240.0f);
   //world->dynamics_world.stepSimulation(dt, 1);
+  
+  world->dynamics_world.debugDrawWorld();
 }
 
 
