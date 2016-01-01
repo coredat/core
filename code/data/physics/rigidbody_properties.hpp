@@ -27,6 +27,7 @@ enum class Collider_type
   unknown,
   static_plane,
   cube,
+  capsule,
 };
 
 
@@ -50,6 +51,13 @@ struct Cube
   float not_used;
 };
 
+struct Capsule
+{
+  float radius;
+  float height;
+  float not_used[2];
+};
+
 
 } // ns
 
@@ -66,6 +74,7 @@ struct Rigidbody_properties
     Collider::Unknown           unknown;
     Collider::Static_plane      static_plane;
     Collider::Cube              cube;
+    Collider::Capsule           capsule;
   } collider_info;
 };
 

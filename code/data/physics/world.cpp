@@ -78,6 +78,15 @@ world_add_rigidbodies(World *world,
         break;
       }
       
+      case(Collider_type::capsule):
+      {
+        const btScalar radius(prop->collider_info.capsule.radius);
+        const btScalar height(prop->collider_info.capsule.height);
+        
+        out_rb->shape.reset(new btCapsuleShape(radius, height));
+        break;
+      }
+      
       case(Collider_type::unknown):
       default:
         assert(false); // oh no you didn't.

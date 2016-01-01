@@ -84,10 +84,9 @@ create_actor(Entity::Data *data)
                                                            math::vec3_init(scale_x, scale_y, scale_z),
                                                            math::quat_init());
   
-  data->get_collider_data()[index].collider_type = Physics::Collider_type::cube;
-  data->get_collider_data()[index].collider_info.cube.extents[0] = scale_x * 0.5;
-  data->get_collider_data()[index].collider_info.cube.extents[1] = scale_y * 0.5;
-  data->get_collider_data()[index].collider_info.cube.extents[2] = scale_z * 0.5;
+  data->get_collider_data()[index].collider_type = Physics::Collider_type::capsule;
+  data->get_collider_data()[index].collider_info.capsule.radius = scale_x * 0.5;
+  data->get_collider_data()[index].collider_info.capsule.height = scale_x * 1;
   data->get_collider_data()[index].rotation_axis = Physics::Axis::y;
   data->get_collider_data()[index].mass = 1;
   
