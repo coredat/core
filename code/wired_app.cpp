@@ -89,7 +89,7 @@ main()
   world_entities.get_texture_data()[1]  = texture_data.tex[1];
   world_entities.get_mesh_data()[1]     = mesh_data.vbo[0];
   
-  for(int i = 0; i < 10; ++i)
+  for(int i = 0; i < 1; ++i)
   {
     auto ent = Entity_factory::create_random_cube(&world_entities);
     world_entities.get_texture_data()[i + 2]  = texture_data.tex[1];
@@ -174,7 +174,7 @@ main()
                                         renderer_nodes.size(),
                                         sizeof(Simple_renderer::Node));
       
-    Simple_renderer::render_nodes_fullbright(renderer_nodes.data(), renderer_nodes.size());
+    //Simple_renderer::render_nodes_fullbright(renderer_nodes.data(), renderer_nodes.size());
     //Simple_renderer::render_nodes_directional_light(renderer_nodes.data(), renderer_nodes.size(), &eye_pos[0]);
     
     //renderer::clear(false, true);

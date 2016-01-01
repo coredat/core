@@ -61,16 +61,23 @@ initialize(const std::size_t max_number_of_lines)
 
     void main()
     {
-      vec4 data_chunk_1 = texelFetch(uni_data_lookup, ivec2(0, gs_in_vert_id[0]), 0);
-      vec4 data_chunk_2 = texelFetch(uni_data_lookup, ivec2(1, gs_in_vert_id[0]), 0);
-      vec4 data_chunk_3 = texelFetch(uni_data_lookup, ivec2(2, gs_in_vert_id[0]), 0);
+      int row = gs_in_vert_id[0] / 1024;
+    
+      
+      int col = (gs_in_vert_id[0] % 1024) * 4;
+    
+      vec4 start_point  = texelFetch(uni_data_lookup, ivec2(col + 0, row), 0);
+      vec4 end_point    = texelFetch(uni_data_lookup, ivec2(col + 1, row), 0);
+      vec4 color        = texelFetch(uni_data_lookup, ivec2(col + 2, row), 0);
+      //vec4 padding      = texelFetch(uni_data_lookup, ivec2(col + 4, row), 0);
+      
 
-      ps_in_color = vec3(data_chunk_3.xyz);
+      ps_in_color = vec3(color.xyz);
 
-      gl_Position = uni_wvp_mat * vec4(data_chunk_1.xyz, 1.0);
+      gl_Position = uni_wvp_mat * vec4(start_point);
       EmitVertex();
       
-      gl_Position = uni_wvp_mat * vec4(data_chunk_2.xyz, 1.0);
+      gl_Position = uni_wvp_mat * vec4(end_point);
       EmitVertex();
       
       EndPrimitive();
@@ -94,17 +101,21 @@ initialize(const std::size_t max_number_of_lines)
   shd.load_shader(renderer::shader_utils::build_shader_code_vs_gs_ps(vertex_shader, geometry_shader, fragment_shader));
   assert(shd.is_valid());
 
-  // Did it all load ok?
-  //assert(line_shader_id && line_shader_uniform_wvp && line_shader_texture_id);
+  // Size the data container.
+  {
+    const std::size_t width_of_data         = 1024;
+    const std::size_t height_of_data        = width_of_data;
+    const std::size_t number_of_components  = 4;
+    
+    data.resize((width_of_data * height_of_data) * number_of_components, 0);
   
-  data.resize((16 * 1024) * 4, 0);
-  
-  Ogl::texture_create_2d(&data_texture, 16, 1024, Ogl::Pixel_format::rgba32f, (void*)data.data(), &std::cout);
+    Ogl::texture_create_2d(&data_texture, width_of_data, height_of_data, Ogl::Pixel_format::rgba32f, (void*)data.data(), &std::cout);
+  }
   
   uniTrans = glGetUniformLocation(shd.get_program_gl_id(), "uni_wvp_mat");
   uni_data = glGetUniformLocation(shd.get_program_gl_id(), "uni_data_lookup");
   
-  Ogl::error_check(&std::cout, "Debug Renderer Setup.");
+  Ogl::error_check("Debug Renderer Setup.", &std::cout);
 }
 
 
@@ -114,24 +125,22 @@ add_lines(const Line_node nodes[], const std::size_t number_of_lines)
   // Shit - can do two memcpy's instead
   for(int32_t i = 0; i < number_of_lines; ++i)
   {
-    data_ptr = data_ptr % 1024;
-    
-    const std::size_t start_index = data_ptr * (16 * 4);
+    const std::size_t start_index = (data_ptr * (16)) % data.size();
     
     data.at(start_index + 0) = nodes[i].position_from[0];
     data.at(start_index + 1) = nodes[i].position_from[1];
     data.at(start_index + 2) = nodes[i].position_from[2];
-    data.at(start_index + 3) = 0;
+    data.at(start_index + 3) = 1;
     
     data.at(start_index + 4) = nodes[i].position_to[0];
     data.at(start_index + 5) = nodes[i].position_to[1];
     data.at(start_index + 6) = nodes[i].position_to[2];
-    data.at(start_index + 7) = 0;
+    data.at(start_index + 7) = 1;
     
-    data.at(start_index + 8) = nodes[i].color[0];
-    data.at(start_index + 9) = nodes[i].color[1];
+    data.at(start_index + 8)  = nodes[i].color[0];
+    data.at(start_index + 9)  = nodes[i].color[1];
     data.at(start_index + 10) = nodes[i].color[2];
-    data.at(start_index + 11) = 0;
+    data.at(start_index + 11) = 1;
     
     data_ptr++;
   }
@@ -142,8 +151,11 @@ void
 render(const float wvp_mat[16])
 {
   // Update texture
-  Ogl::texture_update_texture_2d(&data_texture, 0, 0, 16, 1024, (void*)data.data());
-  Ogl::error_check(&std::cout, "Updating texture");
+  Ogl::texture_update_texture_2d(&data_texture, 0, 0, data_texture.width, data_texture.height, (void*)data.data());
+  
+  memset(data.data(), 0, data.size() * sizeof(float));
+  
+  Ogl::error_check("Updating texture", &std::cout);
 
   renderer::reset();
   
@@ -153,11 +165,11 @@ render(const float wvp_mat[16])
   
   glUseProgram(shd.get_program_gl_id());
 
-  Ogl::error_check(&std::cout, "Use program");
+  Ogl::error_check("Use program", &std::cout);
   
   glUniformMatrix4fv(uniTrans, 1, GL_FALSE, wvp_mat);
   
-  Ogl::error_check(&std::cout, "set wvp.");
+  Ogl::error_check("set wvp.", &std::cout);
   
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, data_texture.texture_id);
@@ -170,8 +182,7 @@ render(const float wvp_mat[16])
   glDrawArrays(GL_POINTS, 0, data_ptr);
   data_ptr = 0;
 
-  
-  Ogl::error_check(&std::cout, "Debug line renderer.");
+  Ogl::error_check("Debug line renderer.", &std::cout);
 }
 
 

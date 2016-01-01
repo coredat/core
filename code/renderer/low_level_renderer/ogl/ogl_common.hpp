@@ -10,7 +10,7 @@ namespace Ogl {
 
 
 inline void
-error_check(std::ostream *stream = nullptr, const char* msg = nullptr)
+error_check(const char* msg, std::ostream *stream)
 {
   if(stream) // Check stream first, if none given we don't want to clear the error.
   {

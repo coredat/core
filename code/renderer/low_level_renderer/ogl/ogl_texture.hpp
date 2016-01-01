@@ -53,8 +53,6 @@ texture_create_2d(Texture *out_texture, const uint32_t width, const uint32_t hei
                pixel_format_get_format(format),
                pixel_format_get_type(format),
                data);
-  
-  error_check(log, "Error while creating a texture in 'Ogl::texture_create_2d'.");
 }
 
 
@@ -77,6 +75,8 @@ texture_update_texture_2d(Texture *update_texture,
     {
       (*log) << "Incorrect paramaters given to Ogl::texture_update_texture_2d";
     }
+    
+    return;
   }
   
   glBindTexture(GL_TEXTURE_2D, update_texture->texture_id);
