@@ -11,85 +11,55 @@
 namespace Ogl {
 
 
+/*!
+  Texture Object.
+*/
 struct Texture
 {
   GLuint          texture_id  = 0;
   uint32_t        width       = 0;
   uint32_t        height      = 0;
-  Pixel_format    format      = Pixel_format::rgba8;
+  Pixel_format    format      = Pixel_format::rgba8; // TODO: At this point we don't need the abstraction any more do we?
 }; // struct
 
 
-inline void
-texture_create_2d(Texture *out_texture, const uint32_t width, const uint32_t height, const Pixel_format format, const void *data, std::ostream *log = nullptr)
-{
-  // Param check
-  if(!out_texture || !width || !height || !data)
-  {
-    assert(false); // Param fail
-  
-    if(log)
-    {
-      (*log) << "Incorrect paramaters given to 'Ogl::texture_create_2d'.\n";
-    }
-  
-    return;
-  }
-  
-  // Set some arguments
-  out_texture->format = format;
-  out_texture->width = width;
-  out_texture->height = height;
-  
-  // Open GL
-  glGenTextures(1, &out_texture->texture_id);
-  glBindTexture(GL_TEXTURE_2D, out_texture->texture_id);
-  glTexImage2D(GL_TEXTURE_2D,
-               0,
-               pixel_format_get_internal_format(format),
-               width,
-               height,
-               0,
-               pixel_format_get_format(format),
-               pixel_format_get_type(format),
-               data);
-}
+/*!
+  Creates a texture from the given data.
+  \param out_texture The texture to generate.
+  \param width The width of the texture data.
+  \param height The height of the texture data.
+  \param Pixel_format The desired format of the pixels.
+  \param data Pointer to the raw data in memory.
+  \param log Optional logging stream.
+*/
+void
+texture_create_2d(Texture *out_texture,
+                  const uint32_t width,
+                  const uint32_t height,
+                  const Pixel_format format,
+                  const void *data,
+                  std::ostream *log = nullptr);
 
 
 
-inline void
+/*!
+  Update the data in a texture.
+  \param update_texture The target to update.
+  \param offset_x Starting point of the update.
+  \param offset_y Starting point of the update.
+  \param width Width of the update.
+  \param height Height of the update.
+  \param data Pointer to the raw data in memory.
+  \param log Optional logging stream.
+*/
+void
 texture_update_texture_2d(Texture *update_texture,
                           const uint32_t offset_x,
                           const uint32_t offset_y,
                           const uint32_t width,
                           const uint32_t height,
                           const void *data,
-                          std::ostream *log = nullptr)
-{
-  // Param check
-  if(!update_texture || !data || (width + offset_x) > update_texture->width || (height + offset_y) > update_texture->height)
-  {
-    assert(false); // Param fail
-    
-    if(log)
-    {
-      (*log) << "Incorrect paramaters given to Ogl::texture_update_texture_2d";
-    }
-    
-    return;
-  }
-  
-  glBindTexture(GL_TEXTURE_2D, update_texture->texture_id);
-  glTexSubImage2D(GL_TEXTURE_2D,
-                  0,
-                  offset_x,
-                  offset_y,
-                  width,
-                  height,
-                  pixel_format_get_format(update_texture->format),
-                  pixel_format_get_type(update_texture->format),
-                  data);
-}
+                          std::ostream *log = nullptr);
 
 
 } // ns

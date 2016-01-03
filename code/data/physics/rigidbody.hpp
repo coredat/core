@@ -23,7 +23,6 @@ struct Rigidbody
 
 /*!
   Apply force to a rigidbody.
-  TODO: Better in a batch???
 */
 void
 rigidbody_apply_local_force(Rigidbody *rb, const float force[3]);

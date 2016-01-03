@@ -3,6 +3,7 @@
 
 
 #include "ogl_common.hpp"
+#include <assert.h>
 
 
 namespace Ogl {

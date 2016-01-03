@@ -27,7 +27,7 @@ mesh_is_valid(const Mesh *data, const std::size_t texture_id)
 
 
 std::size_t
-mesh_add_new(Mesh *data, const std::size_t number_of_meshes, const char *filepath)
+mesh_add_new(Mesh *data, const std::size_t number_of_meshes, const char *filepath, const uint32_t mesh_id)
 {
   // Could just memset?
   for(std::size_t i = 0; i < number_of_meshes; ++i)
@@ -39,14 +39,33 @@ mesh_add_new(Mesh *data, const std::size_t number_of_meshes, const char *filepat
       
       const renderer::vertex_buffer vbo(mesh.mesh_data);
       
-      data->avail[i] = false;
-      data->vbo[i] = vbo;
+      data->id[i]     = mesh_id;
+      data->avail[i]  = false;
+      data->vbo[i]    = vbo;
       
       return 0;
     }
   }
   
   return 0;
+}
+
+
+std::size_t
+mesh_find_index(const Mesh *data, const std::size_t number_of_meshes, const uint32_t id)
+{
+  // Param
+  assert(data && number_of_meshes);
+
+  for(std::size_t i = 0; i < number_of_meshes; ++i)
+  {
+    if(data->id[i] == id)
+    {
+      return i;
+    }
+  }
+  
+  return 0; // TODO: urgh can't be 0.
 }
 
 

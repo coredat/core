@@ -87,9 +87,11 @@ world_add_rigidbodies(World *world,
         break;
       }
       
-      case(Collider_type::unknown):
+      case(Collider_type::none):
+        continue; // not a rigidbody
+      
       default:
-        assert(false); // oh no you didn't.
+        assert(false); // unknown collider type.
         return;
     }
     

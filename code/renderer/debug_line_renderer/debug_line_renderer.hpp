@@ -20,7 +20,7 @@ namespace Debug_line_renderer {
   This needs to be called before you can start rendering things.
 */
 void
-initialize(const std::size_t max_number_of_lines);
+initialize();
 
 
 /*!

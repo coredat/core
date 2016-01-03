@@ -13,6 +13,7 @@ texture_init_data(Texture *data, const std::size_t number_of_textures)
   for(std::size_t i = 0; i < number_of_textures; ++i)
   {
     // Uhuh
+    data->id[i] = 0;
   }
 }
 
@@ -35,7 +36,10 @@ texture_get_api_id(const Texture *data, const std::size_t texture_id)
 
 
 std::size_t
-texture_add_new(Texture *data, const std::size_t number_of_textures, const char *filepath)
+texture_add_new(Texture *data,
+                const std::size_t number_of_textures,
+                const char *filepath,
+                const uint32_t id)
 {
   // Danger!
   
@@ -54,12 +58,28 @@ texture_add_new(Texture *data, const std::size_t number_of_textures, const char 
       SOIL_free_image_data(image_data);
       
       data->tex[i] = texture;
+      data->id[i] = id;
       
       return i;
     }
   }
   
   return 0;
+}
+
+
+std::size_t
+texture_find_index(const Texture *data, const std::size_t number_of_textures, const uint32_t id)
+{
+  for(std::size_t i = 0; i < number_of_textures; ++i)
+  {
+    if(data->id[i] == id)
+    {
+      return i;
+    }
+  }
+  
+  return 0; // Errr 0 is valid.
 }
 
 

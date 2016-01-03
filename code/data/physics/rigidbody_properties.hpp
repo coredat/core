@@ -24,7 +24,7 @@ enum ENUM
 
 enum class Collider_type
 {
-  unknown,
+  none,
   static_plane,
   cube,
   capsule,
@@ -64,17 +64,17 @@ struct Capsule
 
 struct Rigidbody_properties
 {
-  Collider_type collider_type;
-  uint32_t move_axis      = Axis::x | Axis::y | Axis::z;
-  uint32_t rotation_axis  = Axis::x | Axis::y | Axis::z;
-  float mass;
+  Collider_type collider_type = Collider_type::none;
+  uint32_t      move_axis     = Axis::x | Axis::y | Axis::z;
+  uint32_t      rotation_axis = Axis::x | Axis::y | Axis::z;
+  float         mass          = 1;
 
   union
   {
-    Collider::Unknown           unknown;
-    Collider::Static_plane      static_plane;
-    Collider::Cube              cube;
-    Collider::Capsule           capsule;
+    Collider::Unknown       unknown;
+    Collider::Static_plane  static_plane;
+    Collider::Cube          cube;
+    Collider::Capsule       capsule;
   } collider_info;
 };
 

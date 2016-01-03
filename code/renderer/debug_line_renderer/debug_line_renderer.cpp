@@ -11,10 +11,6 @@
 
 namespace
 {
-  GLuint line_shader_id           = 0;
-  GLuint line_shader_uniform_wvp  = 0;
-  GLuint line_shader_texture_id   = 0;
-  
   renderer::shader shd;
   renderer::texture texture;
   
@@ -31,7 +27,7 @@ namespace Debug_line_renderer {
 
 
 void
-initialize(const std::size_t max_number_of_lines)
+initialize()
 {
   Ogl::error_clear();
 
