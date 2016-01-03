@@ -136,7 +136,32 @@ create_kinematic_actor(Entity::Data *data, const Data::Mesh *mesh_resources, con
   
   data->get_collider_data()[index].collider_type = Physics::Collider_type::none;
   
+  // Get mesh with mesh id.
+  {
+    const std::size_t mesh_index = Data::mesh_find_index(mesh_resources, mesh_resources->size, Resource::Model::unit_cube);
+    data->get_mesh_data()[index] = mesh_resources->vbo[mesh_index];
+  }
   
+  // Setup texture
+  {
+    const std::size_t texture_index = Data::texture_find_index(texture_resources, texture_resources->size, Resource::Texture::dev_orange);
+    data->get_texture_data()[index] = texture_resources->tex[texture_index];
+  }
+  
+  // Setup transform
+  {
+    const float scale_x = 0.5f;
+    const float scale_y = 0.5f;
+    const float scale_z = 0.5f;
+
+    const float pos_x = 3.f;
+    const float pos_y = 2.5f;
+    const float pos_z = 0.f;
+    
+    data->get_transform_data()[index] = math::transform_init(math::vec3_init(pos_x, pos_y, pos_z),
+                                                             math::vec3_init(scale_x, scale_y, scale_z),
+                                                             math::quat_init());
+  }
   
   return id;
 }

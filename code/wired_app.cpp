@@ -10,6 +10,7 @@
 #include <data/entity/entity_data.hpp>
 #include <data/texture_manager/texture_data.hpp>
 #include <utils/timer.hpp>
+#include <renderer/renderer.hpp>
 #include <data/physics/physics.hpp>
 #include <data/mesh_manager/mesh_data.hpp>
 #include <entity_factory.hpp>
@@ -85,7 +86,8 @@ main()
   
   
   Entity_factory::create_ground(&world_entities, &mesh_data, &texture_data);
-  Entity_id actor_entity = Entity_factory::create_actor(&world_entities, &mesh_data, &texture_data);
+//  Entity_id actor_entity = Entity_factory::create_actor(&world_entities, &mesh_data, &texture_data);
+  Entity_id kine_actor = Entity_factory::create_kinematic_actor(&world_entities, &mesh_data, &texture_data);
   
   
 //  for(int i = 0; i < 1; ++i)
@@ -125,63 +127,152 @@ main()
     sdl::message_pump();
     renderer::clear();
     
-    /* Actor Controls */
+//    /* Actor Controls */
+//    {
+//      math::vec3 move_force = math::vec3_zero();
+//      const std::size_t actor_index = world_entities.find_index(actor_entity);
+//      Physics::Rigidbody *rb = &world_entities.get_rigidbody_data()[actor_index];
+//    
+//      if(input.is_key_down(SDLK_w))
+//      {
+//        actor.move_forward(1);
+//        const math::vec3 move_fwd = math::vec3_init(0,0,-1000 * delta_time);
+//        move_force = math::vec3_add(move_force, move_fwd);
+//      }
+//      
+//      if(input.is_key_down(SDLK_s))
+//      {
+//        actor.move_forward(-1);
+//        const math::vec3 move_fwd = math::vec3_init(0,0,+1000 * delta_time);
+//        move_force = math::vec3_add(move_force, move_fwd);
+//      }
+//      
+//      if(input.is_key_down(SDLK_a))
+//      {
+//        actor.move_forward(-1);
+//        const math::vec3 move_fwd = math::vec3_init(+1000 * delta_time, 0, 0);
+//        move_force = math::vec3_add(move_force, move_fwd);
+//      }
+//      
+//      if(input.is_key_down(SDLK_d))
+//      {
+//        actor.move_forward(-1);
+//        const math::vec3 move_fwd = math::vec3_init(-1000 * delta_time, 0, 0);
+//        move_force = math::vec3_add(move_force, move_fwd);
+//      }
+//      
+//      if(input.is_key_down(SDLK_SPACE))
+//      {
+//        const math::vec3 move_fwd = math::vec3_init(0,+1000 * delta_time, 0);
+//        move_force = math::vec3_add(move_force, move_fwd);
+//      }
+//      
+//      float final_force[3];
+//      math::vec3_to_array(move_force, final_force);
+//      
+//      Physics::rigidbody_apply_local_force(rb, final_force);
+//      
+//      if(input.get_mouse_delta_x())
+//      {
+//        actor.turn(input.get_mouse_delta_x());
+//        
+//        const std::size_t actor_index = world_entities.find_index(actor_entity);
+//        Physics::Rigidbody *rb = &world_entities.get_rigidbody_data()[actor_index];
+//        const float some_force[3] = {0, static_cast<float>(input.get_mouse_delta_x()) / 10.f, 0};
+//        
+//        Physics::rigidbody_apply_local_torque(rb, some_force);
+//      }
+//    }
+//    /* Actor Controls */
+
+    // Kinematic Controller
     {
-      math::vec3 move_force = math::vec3_zero();
-      const std::size_t actor_index = world_entities.find_index(actor_entity);
-      Physics::Rigidbody *rb = &world_entities.get_rigidbody_data()[actor_index];
+      struct Kine_actor
+      {
+        bool is_grounded = false;
+      } act;
     
-      if(input.is_key_down(SDLK_w))
+      // Get transform of controller.
+      const auto index = world_entities.find_index(kine_actor);
+      const math::transform curr_trans = world_entities.get_transform_data()[index];
+      
+      // Cast ray downwards
+      btVector3 btFrom(math::vec3_get_x(curr_trans.position), math::vec3_get_y(curr_trans.position), math::vec3_get_z(curr_trans.position));
+      btVector3 btTo(math::vec3_get_x(curr_trans.position), math::vec3_get_y(curr_trans.position) - 2, math::vec3_get_z(curr_trans.position));
+      btCollisionWorld::ClosestRayResultCallback feet_test(btFrom, btTo);
+      
+      phy_world.dynamics_world.rayTest(btFrom, btTo, feet_test);
+
+      Renderer::debug_line(btFrom, btTo, btVector3(1, 1, 0));
+      
+      // If not hit anything then go downwards.
+      // Gravity
+      if(!feet_test.hasHit())
       {
-        actor.move_forward(1);
-        const math::vec3 move_fwd = math::vec3_init(0,0,-1000 * delta_time);
-        move_force = math::vec3_add(move_force, move_fwd);
-      }
-      
-      if(input.is_key_down(SDLK_s))
-      {
-        actor.move_forward(-1);
-        const math::vec3 move_fwd = math::vec3_init(0,0,+1000 * delta_time);
-        move_force = math::vec3_add(move_force, move_fwd);
-      }
-      
-      if(input.is_key_down(SDLK_a))
-      {
-        actor.move_forward(-1);
-        const math::vec3 move_fwd = math::vec3_init(+1000 * delta_time, 0, 0);
-        move_force = math::vec3_add(move_force, move_fwd);
-      }
-      
-      if(input.is_key_down(SDLK_d))
-      {
-        actor.move_forward(-1);
-        const math::vec3 move_fwd = math::vec3_init(-1000 * delta_time, 0, 0);
-        move_force = math::vec3_add(move_force, move_fwd);
-      }
-      
-      if(input.is_key_down(SDLK_SPACE))
-      {
-        const math::vec3 move_fwd = math::vec3_init(0,+1000 * delta_time, 0);
-        move_force = math::vec3_add(move_force, move_fwd);
-      }
-      
-      float final_force[3];
-      math::vec3_to_array(move_force, final_force);
-      
-      Physics::rigidbody_apply_local_force(rb, final_force);
-      
-      if(input.get_mouse_delta_x())
-      {
-        actor.turn(input.get_mouse_delta_x());
+        const math::vec3 down = math::vec3_init(0, -0.01, 0);
         
-        const std::size_t actor_index = world_entities.find_index(actor_entity);
-        Physics::Rigidbody *rb = &world_entities.get_rigidbody_data()[actor_index];
-        const float some_force[3] = {0, static_cast<float>(input.get_mouse_delta_x()) / 10.f, 0};
+        math::transform new_trans = curr_trans;
+        new_trans.position = math::vec3_add(curr_trans.position, down);
         
-        Physics::rigidbody_apply_local_torque(rb, some_force);
+        world_entities.get_transform_data()[index] = new_trans;
       }
+      else
+      {
+        act.is_grounded = true;
+      }
+
+      if(act.is_grounded)
+      {
+        math::vec3 accum_movement = math::vec3_zero();
+        const math::transform move_trans = world_entities.get_transform_data()[index];
+        
+        if(input.is_key_down(SDLK_w))
+        {
+          const math::vec3 move_fwd = math::vec3_init(0,0,-1);
+          accum_movement = math::vec3_add(accum_movement, move_fwd);
+        }
+
+        if(input.is_key_down(SDLK_s))
+        {
+          const math::vec3 move_fwd = math::vec3_init(0,0,+1);
+          accum_movement = math::vec3_add(accum_movement, move_fwd);
+        }
+        
+        if(input.is_key_down(SDLK_a))
+        {
+          const math::vec3 move_fwd = math::vec3_init(-1,0,0);
+          accum_movement = math::vec3_add(accum_movement, move_fwd);
+        }
+        
+        if(input.is_key_down(SDLK_d))
+        {
+          const math::vec3 move_fwd = math::vec3_init(+1,0,0);
+          accum_movement = math::vec3_add(accum_movement, move_fwd);
+        }
+        
+        if(math::vec3_length(accum_movement) != 0)
+        {
+          accum_movement = math::vec3_normalize(accum_movement);
+          accum_movement = math::vec3_scale(accum_movement, delta_time);
+          accum_movement = math::quat_rotate_point(move_trans.rotation, accum_movement);
+          
+          world_entities.get_transform_data()[index].position = math::vec3_add(move_trans.position, accum_movement);
+        }
+      }
+      
+      // Rotation
+      {
+        if(input.get_mouse_delta_x() != 0)
+        {
+          const math::transform rot_trans = world_entities.get_transform_data()[index];
+          const float rot_rad = static_cast<float>(input.get_mouse_delta_x()) * delta_time;
+          
+          const math::quat rot = math::quat_init_with_axis_angle(0, 1, 0, rot_rad);
+          world_entities.get_transform_data()[index].rotation = math::quat_multiply(rot_trans.rotation, rot);
+        }
+      }
+      
     }
-    /* Actor Controls */
     
     /* Ray test */
     {
@@ -237,6 +328,7 @@ main()
     math::mat4 wvp = math::mat4_multiply(math::mat4_id(), view, proj);
     Debug_line_renderer::render(math::mat4_get_data(wvp));
     
+    input.think();
     window.flip_buffer();
   }
   
