@@ -252,11 +252,13 @@ main()
         
         if(math::vec3_length(accum_movement) != 0)
         {
-          accum_movement = math::vec3_normalize(accum_movement);
-          accum_movement = math::vec3_scale(accum_movement, delta_time);
-          accum_movement = math::quat_rotate_point(move_trans.rotation, accum_movement);
+          const math::vec3 norm_movement            = math::vec3_normalize(accum_movement);
+          const math::vec3 rotated_movement         = math::quat_rotate_point(move_trans.rotation, norm_movement);
+          const math::vec3 corrected_rotation       = math::vec3_init(math::vec3_get_x(rotated_movement), 0.f, math::vec3_get_z(rotated_movement)); // We're not interested in y movement.
+          const math::vec3 norm_corrected_rotation  = math::vec3_normalize(corrected_rotation);
+          const math::vec3 scaled_movement          = math::vec3_scale(norm_corrected_rotation, delta_time);
           
-          world_entities.get_transform_data()[index].position = math::vec3_add(move_trans.position, accum_movement);
+          world_entities.get_transform_data()[index].position = math::vec3_add(move_trans.position, scaled_movement);
         }
       }
       
@@ -268,6 +270,21 @@ main()
           const float rot_rad = static_cast<float>(input.get_mouse_delta_x()) * delta_time;
           
           const math::quat rot = math::quat_init_with_axis_angle(0, 1, 0, rot_rad);
+          world_entities.get_transform_data()[index].rotation = math::quat_multiply(rot_trans.rotation, rot);
+        }
+      }
+      
+      // Head
+      {
+        if(input.get_mouse_delta_y() != 0)
+        {
+          const math::transform rot_trans = world_entities.get_transform_data()[index];
+          const float rot_rad = static_cast<float>(input.get_mouse_delta_y()) * delta_time;
+          
+          const math::vec3 head_axis = math::vec3_init(1,0,0);
+          const math::vec3 adjusted_axis = math::quat_rotate_point(rot_trans.rotation, head_axis);
+          
+          const math::quat rot = math::quat_init_with_axis_angle(adjusted_axis, rot_rad);
           world_entities.get_transform_data()[index].rotation = math::quat_multiply(rot_trans.rotation, rot);
         }
       }
