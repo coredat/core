@@ -16,7 +16,7 @@
 #include <entity_factory.hpp>
 #include <data/actor/actor.hpp>
 #include <resources.hpp>
-#include <network/host.hpp>
+#include <network/network.hpp>
 
 
 namespace
@@ -41,9 +41,9 @@ main()
     std::cout << id << " - " << msg << std::endl;
   });
   
-  setup_network();
-  setup_as_client();
-  connect_to_server("127.0.0.1");
+  Network::setup_network();
+  Network::setup_as_client();
+  Network::connect_to_server("127.0.0.1");
   
   
   renderer::initialize();
@@ -130,10 +130,10 @@ main()
   {
     const float delta_time = static_cast<float>(frame_timer.split()) / 1000.f;
   
-    poll_events();
-    send_unrel_packet();
-    send_rel_packet();
-    send_unrel_packet();
+    Network::poll_events();
+    Network::send_unrel_packet();
+    Network::send_rel_packet();
+    Network::send_unrel_packet();
   
     sdl::message_pump();
     renderer::clear();
@@ -361,7 +361,7 @@ main()
   }
   
   
-  destroy_network();
+  Network::destroy_network();
   
   return 0;
 }

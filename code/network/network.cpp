@@ -1,7 +1,10 @@
-#include "host.hpp"
-#include <enet/enet.h>
+#include "network.hpp"
 #include <iostream>
 #include <stdint.h>
+#include "network_connection.hpp"
+
+
+namespace Network {
 
 
 namespace
@@ -58,9 +61,9 @@ setup_as_server()
 
 
 bool
-connect_to_server(const std::string &str)
+connect_to_server(const char *str)
 {
-  enet_address_set_host (& address, str.c_str());
+  enet_address_set_host (& address, str);
   address.port = 1234;
   /* Initiate the connection, allocating the two channels 0 and 1. */
   peer = enet_host_connect (host, & address, 2, 0);    
@@ -99,7 +102,7 @@ poll_events()
 
   ENetEvent event;
   /* Wait up to 1000 milliseconds for an event. */
-  while (enet_host_service (host, & event, 1000) > 0)
+  while (enet_host_service (host, & event, 0) > 0)
   {
       switch (event.type)
       {
@@ -170,10 +173,11 @@ send_unrel_packet()
 }
 
 
-
 void
 destroy_network()
 {
   enet_host_destroy(host);
 }
 
+
+} // ns

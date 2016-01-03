@@ -21,7 +21,7 @@
 		7E84F1B11C31281E0021BDD2 /* world.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E84F1AD1C31281E0021BDD2 /* world.cpp */; };
 		7EA1A1EF1C3945B5009867BD /* debug_line_renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EA1A1EC1C3945B5009867BD /* debug_line_renderer.cpp */; };
 		7EA1A1F31C3945C2009867BD /* debug_line.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EA1A1F01C3945C2009867BD /* debug_line.cpp */; };
-		7EA1A1F71C398488009867BD /* host.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EA1A1F51C398488009867BD /* host.cpp */; };
+		7EA1A1F71C398488009867BD /* network.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EA1A1F51C398488009867BD /* network.cpp */; };
 		7EA1A1F91C3984D0009867BD /* libenet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EA1A1F81C3984D0009867BD /* libenet.a */; };
 		7EA2C61E1C1F5D4600389748 /* wired_app.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EA2C61D1C1F5D4600389748 /* wired_app.cpp */; };
 		7EA2C6201C1F5E2A00389748 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EA2C61F1C1F5E2A00389748 /* OpenGL.framework */; };
@@ -78,9 +78,11 @@
 		7EA1A1F01C3945C2009867BD /* debug_line.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = debug_line.cpp; sourceTree = "<group>"; };
 		7EA1A1F11C3945C2009867BD /* debug_line.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = debug_line.hpp; sourceTree = "<group>"; };
 		7EA1A1F21C3945C2009867BD /* renderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = renderer.hpp; sourceTree = "<group>"; };
-		7EA1A1F51C398488009867BD /* host.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = host.cpp; sourceTree = "<group>"; };
-		7EA1A1F61C398488009867BD /* host.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = host.hpp; sourceTree = "<group>"; };
+		7EA1A1F51C398488009867BD /* network.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = network.cpp; sourceTree = "<group>"; };
+		7EA1A1F61C398488009867BD /* network.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = network.hpp; sourceTree = "<group>"; };
 		7EA1A1F81C3984D0009867BD /* libenet.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libenet.a; path = ../../../3rdparty/enet/lib/osx/libenet.a; sourceTree = "<group>"; };
+		7EA1A1FA1C39A5ED009867BD /* network_connection.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = network_connection.hpp; sourceTree = "<group>"; };
+		7EA1A1FB1C39A5ED009867BD /* network_fwd.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = network_fwd.hpp; sourceTree = "<group>"; };
 		7EA2C6041C1F5CFC00389748 /* wired.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = wired.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EA2C6121C1F5CFC00389748 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7EA2C61D1C1F5D4600389748 /* wired_app.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wired_app.cpp; sourceTree = "<group>"; };
@@ -257,8 +259,10 @@
 		7EA1A1F41C398488009867BD /* network */ = {
 			isa = PBXGroup;
 			children = (
-				7EA1A1F51C398488009867BD /* host.cpp */,
-				7EA1A1F61C398488009867BD /* host.hpp */,
+				7EA1A1F51C398488009867BD /* network.cpp */,
+				7EA1A1F61C398488009867BD /* network.hpp */,
+				7EA1A1FA1C39A5ED009867BD /* network_connection.hpp */,
+				7EA1A1FB1C39A5ED009867BD /* network_fwd.hpp */,
 			);
 			name = network;
 			path = ../../../../code/network;
@@ -423,7 +427,7 @@
 				7EA2C61E1C1F5D4600389748 /* wired_app.cpp in Sources */,
 				7E2F02491C36807A0072B6B2 /* debug_renderer.cpp in Sources */,
 				7E84F1B01C31281E0021BDD2 /* rigidbody.cpp in Sources */,
-				7EA1A1F71C398488009867BD /* host.cpp in Sources */,
+				7EA1A1F71C398488009867BD /* network.cpp in Sources */,
 				7EA1A1F31C3945C2009867BD /* debug_line.cpp in Sources */,
 				7E2D51D31C21451A002E286D /* entity_data.cpp in Sources */,
 				7E2D51CE1C209C89002E286D /* transform.cpp in Sources */,
