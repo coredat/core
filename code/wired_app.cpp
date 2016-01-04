@@ -135,7 +135,7 @@ main()
   
     uint32_t packet = 8338;
   
-    Network::poll_events(&connection, &std::cout);
+    Network::poll_events(&connection, 0, &std::cout);
     Network::send_packet(&connection, sizeof(packet), (void*)&packet, false, &std::cout);
   
     sdl::message_pump();
