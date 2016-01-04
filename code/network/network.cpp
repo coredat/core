@@ -191,6 +191,23 @@ client_connect_to_server(Connection *connection, const char *ip, const uint32_t 
 bool
 send_packet(Connection *connection, const std::size_t size_of_packet, const void *data, const bool reliable, std::ostream *log)
 {
+  // Param check.
+  if(!connection || !connection->peer)
+  {
+ //   assert(false);
+  
+    if(log && !connection)
+    {
+      (*log) << "connection must be valid in 'Network::send_packet'\n";
+    }
+    if(log && !connection->peer)
+    {
+      (*log) << "peer not set in connection in 'Network::send_packet'\n";
+    }
+    
+    return false;
+  }
+
   const enet_uint32 packet_type = reliable ? ENET_PACKET_FLAG_RELIABLE : ENET_PACKET_FLAG_UNSEQUENCED;
 
   ENetPacket * packet = nullptr;
@@ -198,7 +215,7 @@ send_packet(Connection *connection, const std::size_t size_of_packet, const void
 
   enet_peer_send(connection->peer, 0, packet);
 
-  return false;
+  return true;
 }
 
 

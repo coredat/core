@@ -45,9 +45,15 @@ main()
   Network::Connection connection;
   
   Network::initialize(&std::cout);
-  Network::client_create(&connection, &std::cout);
-  Network::client_connect_to_server(&connection, "127.0.0.1", 1234, 5000, &std::cout);
-  
+  if(true)
+  {
+    Network::client_create(&connection, &std::cout);
+    Network::client_connect_to_server(&connection, "127.0.0.1", 1234, 5000, &std::cout);
+  }
+  else
+  {
+    Network::server_create(&connection, &std::cout);
+  }
   
   renderer::initialize();
   Simple_renderer::initialize();
@@ -96,7 +102,8 @@ main()
   
   Entity_factory::create_ground(&world_entities, &mesh_data, &texture_data);
 //  Entity_id actor_entity = Entity_factory::create_actor(&world_entities, &mesh_data, &texture_data);
-  Entity_id kine_actor = Entity_factory::create_kinematic_actor(&world_entities, &mesh_data, &texture_data);
+  Entity_id kine_actor_local = Entity_factory::create_kinematic_actor(&world_entities, &mesh_data, &texture_data);
+  Entity_id kine_actor_network = Entity_factory::create_kinematic_actor(&world_entities, &mesh_data, &texture_data);
   
   
 //  for(int i = 0; i < 1; ++i)
@@ -133,10 +140,39 @@ main()
   {
     const float delta_time = static_cast<float>(frame_timer.split()) / 1000.f;
   
-    uint32_t packet = 8338;
+    struct Network_transform
+    {
+      float position[3];
+      float rotation[4];
+      float scale[3];
+    };
   
-    Network::poll_events(&connection, 0, &std::cout);
-    Network::send_packet(&connection, sizeof(packet), (void*)&packet, false, &std::cout);
+    Network::poll_events(&connection,
+    0,
+    [&](const Network::Event_id id, const void *data, const std::size_t size_of_data)
+    {
+      const Network_transform *transform = reinterpret_cast<const Network_transform*>(data);
+      const auto index = world_entities.find_index(kine_actor_network);
+      
+      math::transform trans = math::transform_init(
+        math::vec3_init(transform->position[0], transform->position[1], transform->position[2]),
+        math::vec3_init(transform->scale[0], transform->scale[1], transform->scale[2]),
+        math::quat_init(transform->rotation[0], transform->rotation[1], transform->rotation[2], transform->rotation[3])
+      );
+      
+      world_entities.get_transform_data()[index] = trans;
+    },
+    &std::cout);
+    
+    Network_transform net_trans;
+    const auto index = world_entities.find_index(kine_actor_local);
+    const math::transform trans = world_entities.get_transform_data()[index];
+    
+    math::vec3_to_array(trans.position, net_trans.position);
+    math::vec3_to_array(trans.scale, net_trans.scale);
+    math::quat_to_array(trans.rotation, net_trans.rotation);
+    
+    Network::send_packet(&connection, sizeof(net_trans), (void*)&net_trans, false);
   
     sdl::message_pump();
     renderer::clear();
@@ -201,42 +237,46 @@ main()
 
     // Kinematic Controller
     {
-      struct Kine_actor
+      auto apply_gravity = [&](const Entity_id ent)
       {
-        bool is_grounded = false;
-      } act;
-    
-      // Get transform of controller.
-      const auto index = world_entities.find_index(kine_actor);
-      const math::transform curr_trans = world_entities.get_transform_data()[index];
+        struct Kine_actor
+        {
+          bool is_grounded = false;
+        } act;
       
-      // Cast ray downwards
-      btVector3 btFrom(math::vec3_get_x(curr_trans.position), math::vec3_get_y(curr_trans.position), math::vec3_get_z(curr_trans.position));
-      btVector3 btTo(math::vec3_get_x(curr_trans.position), math::vec3_get_y(curr_trans.position) - 2, math::vec3_get_z(curr_trans.position));
-      btCollisionWorld::ClosestRayResultCallback feet_test(btFrom, btTo);
-      
-      phy_world.dynamics_world.rayTest(btFrom, btTo, feet_test);
-
-      Renderer::debug_line(btFrom, btTo, btVector3(1, 1, 0));
-      
-      // If not hit anything then go downwards.
-      // Gravity
-      if(!feet_test.hasHit())
-      {
-        const math::vec3 down = math::vec3_init(0, -0.01, 0);
+        // Get transform of controller.
+        const auto index = world_entities.find_index(ent);
+        const math::transform curr_trans = world_entities.get_transform_data()[index];
         
-        math::transform new_trans = curr_trans;
-        new_trans.position = math::vec3_add(curr_trans.position, down);
+        // Cast ray downwards
+        btVector3 btFrom(math::vec3_get_x(curr_trans.position), math::vec3_get_y(curr_trans.position), math::vec3_get_z(curr_trans.position));
+        btVector3 btTo(math::vec3_get_x(curr_trans.position), math::vec3_get_y(curr_trans.position) - 2, math::vec3_get_z(curr_trans.position));
+        btCollisionWorld::ClosestRayResultCallback feet_test(btFrom, btTo);
         
-        world_entities.get_transform_data()[index] = new_trans;
-      }
-      else
-      {
-        act.is_grounded = true;
-      }
+        phy_world.dynamics_world.rayTest(btFrom, btTo, feet_test);
 
-      if(act.is_grounded)
+        Renderer::debug_line(btFrom, btTo, btVector3(1, 1, 0));
+        
+        // If not hit anything then go downwards.
+        // Gravity
+        if(!feet_test.hasHit())
+        {
+          const math::vec3 down = math::vec3_init(0, -0.01, 0);
+          
+          math::transform new_trans = curr_trans;
+          new_trans.position = math::vec3_add(curr_trans.position, down);
+          
+          world_entities.get_transform_data()[index] = new_trans;
+        }
+        else
+        {
+          act.is_grounded = true;
+        }
+      };
+
+      auto local_controls = [&](const Entity_id ent)
       {
+        const auto index = world_entities.find_index(ent);
         math::vec3 accum_movement = math::vec3_zero();
         const math::transform move_trans = world_entities.get_transform_data()[index];
         
@@ -274,7 +314,6 @@ main()
           
           world_entities.get_transform_data()[index].position = math::vec3_add(move_trans.position, scaled_movement);
         }
-      }
       
       // Rotation
       {
@@ -302,8 +341,12 @@ main()
           world_entities.get_transform_data()[index].rotation = math::quat_multiply(rot_trans.rotation, rot);
         }
       }
+    };
+     
+    apply_gravity(kine_actor_local);
+    local_controls(kine_actor_local);
       
-    }
+    } // Actor test
     
     /* Ray test */
     {
@@ -315,7 +358,7 @@ main()
       
       if(res.hasHit())
       {
-        std::cout << "has_hit" << std::endl;
+        //std::cout << "has_hit" << std::endl;
         res.m_collisionObject->getWorldTransform();
       }
 
