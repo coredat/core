@@ -17,6 +17,7 @@
 #include <data/actor/actor.hpp>
 #include <resources.hpp>
 #include <network/network.hpp>
+#include <network/network_connection.hpp>
 
 
 namespace
@@ -41,9 +42,11 @@ main()
     std::cout << id << " - " << msg << std::endl;
   });
   
-  Network::setup_network();
-  Network::setup_as_client();
-  Network::connect_to_server("127.0.0.1");
+  Network::Connection connection;
+  
+  Network::initialize(&std::cout);
+  Network::client_create(&connection, &std::cout);
+  Network::client_connect_to_server(&connection, "127.0.0.1", 1234, 5000, &std::cout);
   
   
   renderer::initialize();
@@ -130,10 +133,10 @@ main()
   {
     const float delta_time = static_cast<float>(frame_timer.split()) / 1000.f;
   
-    Network::poll_events();
-    Network::send_unrel_packet();
-    Network::send_rel_packet();
-    Network::send_unrel_packet();
+    uint32_t packet = 8338;
+  
+    Network::poll_events(&connection, &std::cout);
+    Network::send_packet(&connection, sizeof(packet), (void*)&packet, false, &std::cout);
   
     sdl::message_pump();
     renderer::clear();
@@ -361,7 +364,7 @@ main()
   }
   
   
-  Network::destroy_network();
+  Network::destroy_connection(&connection);
   
   return 0;
 }
