@@ -23,6 +23,7 @@
 		7EA1A1F31C3945C2009867BD /* debug_line.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EA1A1F01C3945C2009867BD /* debug_line.cpp */; };
 		7EA1A1F71C398488009867BD /* network.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EA1A1F51C398488009867BD /* network.cpp */; };
 		7EA1A1F91C3984D0009867BD /* libenet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EA1A1F81C3984D0009867BD /* libenet.a */; };
+		7EA1A2001C3BA869009867BD /* net_transform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EA1A1FD1C3BA869009867BD /* net_transform.cpp */; };
 		7EA2C61E1C1F5D4600389748 /* wired_app.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EA2C61D1C1F5D4600389748 /* wired_app.cpp */; };
 		7EA2C6201C1F5E2A00389748 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EA2C61F1C1F5E2A00389748 /* OpenGL.framework */; };
 		7EA2C6321C1F61E900389748 /* directory_mac.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7EA2C6251C1F61E900389748 /* directory_mac.mm */; };
@@ -83,6 +84,9 @@
 		7EA1A1F81C3984D0009867BD /* libenet.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libenet.a; path = ../../../3rdparty/enet/lib/osx/libenet.a; sourceTree = "<group>"; };
 		7EA1A1FA1C39A5ED009867BD /* network_connection.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = network_connection.hpp; sourceTree = "<group>"; };
 		7EA1A1FB1C39A5ED009867BD /* network_fwd.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = network_fwd.hpp; sourceTree = "<group>"; };
+		7EA1A1FD1C3BA869009867BD /* net_transform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = net_transform.cpp; sourceTree = "<group>"; };
+		7EA1A1FE1C3BA869009867BD /* net_transform.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = net_transform.hpp; sourceTree = "<group>"; };
+		7EA1A1FF1C3BA869009867BD /* net_transform_structure.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = net_transform_structure.hpp; sourceTree = "<group>"; };
 		7EA2C6041C1F5CFC00389748 /* wired.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = wired.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EA2C6121C1F5CFC00389748 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7EA2C61D1C1F5D4600389748 /* wired_app.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wired_app.cpp; sourceTree = "<group>"; };
@@ -268,6 +272,17 @@
 			path = ../../../../code/network;
 			sourceTree = "<group>";
 		};
+		7EA1A1FC1C3BA869009867BD /* net_transform */ = {
+			isa = PBXGroup;
+			children = (
+				7EA1A1FD1C3BA869009867BD /* net_transform.cpp */,
+				7EA1A1FE1C3BA869009867BD /* net_transform.hpp */,
+				7EA1A1FF1C3BA869009867BD /* net_transform_structure.hpp */,
+			);
+			name = net_transform;
+			path = ../../../../code/net_transform;
+			sourceTree = "<group>";
+		};
 		7EA2C5FB1C1F5CFC00389748 = {
 			isa = PBXGroup;
 			children = (
@@ -290,6 +305,7 @@
 		7EA2C6061C1F5CFC00389748 /* wired */ = {
 			isa = PBXGroup;
 			children = (
+				7EA1A1FC1C3BA869009867BD /* net_transform */,
 				7EA1A1F41C398488009867BD /* network */,
 				7EA2C6181C1F5D4600389748 /* code */,
 				7EA2C60A1C1F5CFC00389748 /* Supporting Files */,
@@ -426,6 +442,7 @@
 				7EE035321C384EC000DAF10E /* resources.cpp in Sources */,
 				7EA2C61E1C1F5D4600389748 /* wired_app.cpp in Sources */,
 				7E2F02491C36807A0072B6B2 /* debug_renderer.cpp in Sources */,
+				7EA1A2001C3BA869009867BD /* net_transform.cpp in Sources */,
 				7E84F1B01C31281E0021BDD2 /* rigidbody.cpp in Sources */,
 				7EA1A1F71C398488009867BD /* network.cpp in Sources */,
 				7EA1A1F31C3945C2009867BD /* debug_line.cpp in Sources */,

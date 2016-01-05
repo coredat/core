@@ -23,6 +23,7 @@
 namespace
 {
   const math::mat4 proj = math::mat4_projection(800, 480, 0.1, 1000, math::quart_tau() * 0.6f);
+  const bool is_client = false;
 }
 
 
@@ -43,9 +44,9 @@ main()
   });
   
   Network::Connection connection;
-  
   Network::initialize(&std::cout);
-  if(true)
+  
+  if(is_client)
   {
     Network::client_create(&connection, &std::cout);
     Network::client_connect_to_server(&connection, "127.0.0.1", 1234, 5000, &std::cout);
@@ -129,8 +130,6 @@ main()
     renderer_nodes.at(i).vbo = world_entities.get_mesh_data()[i];
     renderer_nodes.at(i).diffuse_id = world_entities.get_texture_data()[i];
   }
-  
-  Actor::Actor_base actor;
   
   util::timer frame_timer;
   frame_timer.start();
@@ -237,42 +236,8 @@ main()
 
     // Kinematic Controller
     {
-      auto apply_gravity = [&](const Entity_id ent)
-      {
-        struct Kine_actor
-        {
-          bool is_grounded = false;
-        } act;
-      
-        // Get transform of controller.
-        const auto index = world_entities.find_index(ent);
-        const math::transform curr_trans = world_entities.get_transform_data()[index];
-        
-        // Cast ray downwards
-        btVector3 btFrom(math::vec3_get_x(curr_trans.position), math::vec3_get_y(curr_trans.position), math::vec3_get_z(curr_trans.position));
-        btVector3 btTo(math::vec3_get_x(curr_trans.position), math::vec3_get_y(curr_trans.position) - 2, math::vec3_get_z(curr_trans.position));
-        btCollisionWorld::ClosestRayResultCallback feet_test(btFrom, btTo);
-        
-        phy_world.dynamics_world.rayTest(btFrom, btTo, feet_test);
-
-        Renderer::debug_line(btFrom, btTo, btVector3(1, 1, 0));
-        
-        // If not hit anything then go downwards.
-        // Gravity
-        if(!feet_test.hasHit())
-        {
-          const math::vec3 down = math::vec3_init(0, -0.01, 0);
-          
-          math::transform new_trans = curr_trans;
-          new_trans.position = math::vec3_add(curr_trans.position, down);
-          
-          world_entities.get_transform_data()[index] = new_trans;
-        }
-        else
-        {
-          act.is_grounded = true;
-        }
-      };
+      Actor::update(kine_actor_local,   &world_entities, world_entities.size(), &phy_world);
+      Actor::update(kine_actor_network, &world_entities, world_entities.size(), &phy_world);
 
       auto local_controls = [&](const Entity_id ent)
       {
@@ -343,7 +308,7 @@ main()
       }
     };
      
-    apply_gravity(kine_actor_local);
+//    apply_gravity(kine_actor_local);
     local_controls(kine_actor_local);
       
     } // Actor test
