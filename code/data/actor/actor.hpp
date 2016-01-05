@@ -11,6 +11,17 @@
 namespace Actor {
 
 
+/*
+  Actor Inputs
+*/
+
+struct Input_cmds
+{
+  int fwd   = 0;
+  int right = 0;
+};
+
+
 void
 update(const Entity_id id, Entity::Data *ents, const std::size_t size_of_data_entity_data, Physics::World *phy_world)
 {
