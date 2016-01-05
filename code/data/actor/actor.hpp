@@ -19,7 +19,87 @@ struct Input_cmds
 {
   int fwd   = 0;
   int right = 0;
+  int rot = 0;
+  int pitch = 0;
 };
+
+
+void
+input(Input_cmds input, const float dt, const Entity_id id, Entity::Data *ents, const std::size_t size_of_data_entity_data, Physics::World *phy_world)
+{
+  auto local_controls = [&](const Entity_id ent)
+  {
+    const float delta_time = dt;
+  
+    const auto index = ents->find_index(ent);
+    math::vec3 accum_movement = math::vec3_zero();
+    const math::transform move_trans = ents->get_transform_data()[index];
+    
+    if(input.fwd > 0)
+    {
+      const math::vec3 move_fwd = math::vec3_init(0,0,-1);
+      accum_movement = math::vec3_add(accum_movement, move_fwd);
+    }
+
+    if(input.fwd < 0)
+    {
+      const math::vec3 move_fwd = math::vec3_init(0,0,+1);
+      accum_movement = math::vec3_add(accum_movement, move_fwd);
+    }
+    
+    if(input.right > 0)
+    {
+      const math::vec3 move_fwd = math::vec3_init(-1,0,0);
+      accum_movement = math::vec3_add(accum_movement, move_fwd);
+    }
+    
+    if(input.right < 0)
+    {
+      const math::vec3 move_fwd = math::vec3_init(+1,0,0);
+      accum_movement = math::vec3_add(accum_movement, move_fwd);
+    }
+    
+    if(math::vec3_length(accum_movement) != 0)
+    {
+      const math::vec3 norm_movement            = math::vec3_normalize(accum_movement);
+      const math::vec3 rotated_movement         = math::quat_rotate_point(move_trans.rotation, norm_movement);
+      const math::vec3 corrected_rotation       = math::vec3_init(math::vec3_get_x(rotated_movement), 0.f, math::vec3_get_z(rotated_movement)); // We're not interested in y movement.
+      const math::vec3 norm_corrected_rotation  = math::vec3_normalize(corrected_rotation);
+      const math::vec3 scaled_movement          = math::vec3_scale(norm_corrected_rotation, delta_time);
+      
+      ents->get_transform_data()[index].position = math::vec3_add(move_trans.position, scaled_movement);
+    }
+          // Rotation
+    {
+      if(input.rot != 0)
+      {
+        const math::transform rot_trans = ents->get_transform_data()[index];
+        const float rot_rad = static_cast<float>(input.rot) * delta_time;
+        
+        const math::quat rot = math::quat_init_with_axis_angle(0, 1, 0, rot_rad);
+        ents->get_transform_data()[index].rotation = math::quat_multiply(rot_trans.rotation, rot);
+      }
+    }
+    
+    // Head
+    {
+      if(input.pitch != 0)
+      {
+        const math::transform rot_trans = ents->get_transform_data()[index];
+        const float rot_rad = static_cast<float>(input.pitch) * delta_time;
+        
+        const math::vec3 head_axis = math::vec3_init(1,0,0);
+        const math::vec3 adjusted_axis = math::quat_rotate_point(rot_trans.rotation, head_axis);
+        
+        const math::quat rot = math::quat_init_with_axis_angle(adjusted_axis, rot_rad);
+        ents->get_transform_data()[index].rotation = math::quat_multiply(rot_trans.rotation, rot);
+      }
+    }
+  };
+  
+  local_controls(id);
+  
+}
 
 
 void
