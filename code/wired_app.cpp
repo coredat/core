@@ -4,7 +4,7 @@
 #include <utils/directory.hpp>
 #include <utils/obj_model_loader.hpp>
 #include <math/math.hpp>
-#include <transform/transform.hpp>
+#include <systems/transform/transform.hpp>
 #include <renderer/simple_renderer/simple_renderer.hpp>
 #include <renderer/debug_line_renderer/debug_line_renderer.hpp>
 #include <data/entity/entity_data.hpp>
@@ -13,17 +13,17 @@
 #include <renderer/renderer.hpp>
 #include <data/physics/physics.hpp>
 #include <data/mesh_manager/mesh_data.hpp>
-#include <entity_factory.hpp>
+#include "entity_factory.hpp"
 #include <data/actor/actor.hpp>
-#include <resources.hpp>
-#include <network/network.hpp>
-#include <network/network_connection.hpp>
+#include "resources.hpp"
+#include <systems/network/network.hpp>
+#include <systems/network/network_connection.hpp>
 
 
 namespace
 {
-  const math::mat4 proj = math::mat4_projection(800, 480, 0.1, 1000, math::quart_tau() * 0.6f);
-  const bool is_client = false;
+  const math::mat4  proj      = math::mat4_projection(800, 480, 0.1, 1000, math::quart_tau() * 0.6f);
+  const bool        is_client = false;
 }
 
 
