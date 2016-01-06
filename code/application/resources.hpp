@@ -5,12 +5,13 @@
 namespace Resource {
 namespace Model {
 
-enum ENUM {
 
-  invalid,
+enum ENUM {
 
   unit_cube,
   unit_plane,
+  
+  size
 
 }; // enum
 
@@ -20,13 +21,13 @@ enum ENUM {
 namespace Texture {
 
 enum ENUM {
-
-  invalid,
   
   dev_green,
   dev_red,
   dev_orange,
   dev_blue,
+  
+  size
 
 }; // enum
 

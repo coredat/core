@@ -1,5 +1,5 @@
-#ifndef ACTOR_INCLUDED_
-#define ACTOR_INCLUDED_
+#ifndef ACTOR_INCLUDED_0763D65A_3038_43D9_837E_88628EE7D27F
+#define ACTOR_INCLUDED_0763D65A_3038_43D9_837E_88628EE7D27F
 
 
 #include <renderer/renderer.hpp>
@@ -25,9 +25,14 @@ struct Input_cmds
 
 
 void
-input(Input_cmds input, const float dt, const Entity_id id, Entity::Data *ents, const std::size_t size_of_data_entity_data, Physics::World *phy_world)
+input(Input_cmds input,
+      const float dt,
+      const Entity::Entity_id id,
+      Entity::Data *ents,
+      const std::size_t size_of_data_entity_data,
+      Physics::World *phy_world)
 {
-  auto local_controls = [&](const Entity_id ent)
+  auto local_controls = [&](const Entity::Entity_id ent)
   {
     const float delta_time = dt;
   
@@ -103,9 +108,9 @@ input(Input_cmds input, const float dt, const Entity_id id, Entity::Data *ents, 
 
 
 void
-update(const Entity_id id, Entity::Data *ents, const std::size_t size_of_data_entity_data, Physics::World *phy_world)
+update(const Entity::Entity_id id, Entity::Data *ents, const std::size_t size_of_data_entity_data, Physics::World *phy_world)
 {
-  auto apply_gravity = [&](const Entity_id ent)
+  auto apply_gravity = [&](const Entity::Entity_id ent)
   {
     struct Kine_actor
     {

@@ -33,6 +33,7 @@
 		7ED7BBF11C3CF9C700CE80EA /* logging.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7BBE61C3CF9C700CE80EA /* logging.cpp */; };
 		7ED7BBF21C3CF9C700CE80EA /* obj_model_loader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7BBE81C3CF9C700CE80EA /* obj_model_loader.cpp */; };
 		7ED7BBF31C3CF9C700CE80EA /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7BBEB1C3CF9C700CE80EA /* timer.cpp */; };
+		7ED7BBF71C3DA85700CE80EA /* generic_id.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7BBF51C3DA85700CE80EA /* generic_id.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -109,6 +110,10 @@
 		7ED7BBEC1C3CF9C700CE80EA /* timer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = timer.hpp; sourceTree = "<group>"; };
 		7ED7BBED1C3CF9C700CE80EA /* utils_fwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = utils_fwd.hpp; sourceTree = "<group>"; };
 		7ED7BBEE1C3CF9C700CE80EA /* variant.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = variant.hpp; sourceTree = "<group>"; };
+		7ED7BBF41C3DA72800CE80EA /* texture_pool.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = texture_pool.hpp; sourceTree = "<group>"; };
+		7ED7BBF51C3DA85700CE80EA /* generic_id.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = generic_id.cpp; sourceTree = "<group>"; };
+		7ED7BBF61C3DA85700CE80EA /* generic_id.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = generic_id.hpp; sourceTree = "<group>"; };
+		7ED7BBF81C3DBF8C00CE80EA /* model_pool.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = model_pool.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -196,6 +201,8 @@
 		7ED7BB871C3CF8B100CE80EA /* data */ = {
 			isa = PBXGroup;
 			children = (
+				7ED7BBF81C3DBF8C00CE80EA /* model_pool.hpp */,
+				7ED7BBF41C3DA72800CE80EA /* texture_pool.hpp */,
 				7ED7BB881C3CF8B100CE80EA /* actor */,
 				7ED7BB8A1C3CF8B100CE80EA /* entity */,
 				7ED7BB901C3CF8B100CE80EA /* mesh_manager */,
@@ -222,6 +229,8 @@
 				7ED7BB8D1C3CF8B100CE80EA /* entity_fwd.hpp */,
 				7ED7BB8E1C3CF8B100CE80EA /* entity_id.cpp */,
 				7ED7BB8F1C3CF8B100CE80EA /* entity_id.hpp */,
+				7ED7BBF51C3DA85700CE80EA /* generic_id.cpp */,
+				7ED7BBF61C3DA85700CE80EA /* generic_id.hpp */,
 			);
 			path = entity;
 			sourceTree = "<group>";
@@ -465,6 +474,7 @@
 				7EA2C61E1C1F5D4600389748 /* wired_app.cpp in Sources */,
 				7ED7BBEF1C3CF9C700CE80EA /* directory_mac.mm in Sources */,
 				7ED7BBD71C3CF8B100CE80EA /* simple_renderer.cpp in Sources */,
+				7ED7BBF71C3DA85700CE80EA /* generic_id.cpp in Sources */,
 				7ED7BBD21C3CF8B100CE80EA /* debug_line.cpp in Sources */,
 				7ED7BBC91C3CF8B100CE80EA /* entity_factory.cpp in Sources */,
 				7ED7BBF11C3CF9C700CE80EA /* logging.cpp in Sources */,

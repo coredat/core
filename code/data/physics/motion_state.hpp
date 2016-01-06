@@ -20,7 +20,7 @@ class Motion_state : public btMotionState
 {
 public:
 
-  explicit      Motion_state(const Entity_id e, Entity::Data *data);
+  explicit      Motion_state(const Entity::Entity_id e, Entity::Data *data);
                 ~Motion_state();
   
   void          getWorldTransform(btTransform &world_trans) const override;
@@ -28,7 +28,7 @@ public:
   
 private:
 
-  const Entity_id     m_entity;
+  const Entity::Entity_id     m_entity;
   Entity::Data        *m_data;
 
 }; // class

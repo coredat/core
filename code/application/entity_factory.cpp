@@ -1,6 +1,8 @@
 #include "entity_factory.hpp"
 #include <data/physics/physics.hpp>
 #include <data/entity/entity_data.hpp>
+#include <data/texture_pool.hpp>
+#include <data/entity/generic_id.hpp>
 #include "resources.hpp"
 
 
@@ -13,10 +15,10 @@ namespace
 namespace Entity_factory {
 
 
-Entity_id
-create_ground(Entity::Data *data, const Data::Mesh *mesh_resources, const Data::Texture *texture_resources)
+Entity::Entity_id
+create_ground(Entity::Data *data, const Data::Mesh *mesh_resources, const Data::Texture_pool *texture_resources)
 {
-  const Entity_id id = Entity_id{1, ++instance};
+  const Entity::Entity_id id = Entity::Entity_id{1, ++instance};
   const std::size_t index = data->add_entity(id);
   
   // Setup mesh
@@ -27,8 +29,8 @@ create_ground(Entity::Data *data, const Data::Mesh *mesh_resources, const Data::
   
   // Setup texture
   {
-    const std::size_t texture_index = Data::texture_find_index(texture_resources, texture_resources->size, Resource::Texture::dev_red);
-    data->get_texture_data()[index] = texture_resources->tex[texture_index];
+    assert(Resource::Texture::dev_red < texture_resources->size);
+    data->get_texture_data()[index] = texture_resources->textures[Resource::Texture::dev_red];
   }
   
   // Setup phys
@@ -49,10 +51,10 @@ create_ground(Entity::Data *data, const Data::Mesh *mesh_resources, const Data::
 }
 
 
-Entity_id
-create_random_cube(Entity::Data *data, const Data::Mesh *mesh_resources, const Data::Texture *texture_resources)
+Entity::Entity_id
+create_random_cube(Entity::Data *data, const Data::Mesh *mesh_resources, const Data::Texture_pool *texture_resources)
 {
-  const Entity_id id = Entity_id{2, ++instance};
+  const Entity::Entity_id id = Entity::Entity_id{2, ++instance};
   const std::size_t index = data->add_entity(id);
   
   // Setup phys
@@ -82,10 +84,10 @@ create_random_cube(Entity::Data *data, const Data::Mesh *mesh_resources, const D
 }
 
 
-Entity_id
-create_actor(Entity::Data *data, const Data::Mesh *mesh_resources, const Data::Texture *texture_resources)
+Entity::Entity_id
+create_actor(Entity::Data *data, const Data::Mesh *mesh_resources, const Data::Texture_pool *texture_resources)
 {
-  const Entity_id id = Entity_id{3, ++instance};
+  const Entity::Entity_id id = Entity::Entity_id{3, ++instance};
   const std::size_t index = data->add_entity(id);
 
   // Get mesh with mesh id.
@@ -96,8 +98,8 @@ create_actor(Entity::Data *data, const Data::Mesh *mesh_resources, const Data::T
   
   // Setup texture
   {
-    const std::size_t texture_index = Data::texture_find_index(texture_resources, texture_resources->size, Resource::Texture::dev_green);
-    data->get_texture_data()[index] = texture_resources->tex[texture_index];
+    assert(Resource::Texture::dev_green < texture_resources->size);
+    data->get_texture_data()[index] = texture_resources->textures[Resource::Texture::dev_green];
   }
 
   // Setup phys
@@ -127,10 +129,10 @@ create_actor(Entity::Data *data, const Data::Mesh *mesh_resources, const Data::T
 }
 
 
-Entity_id
-create_kinematic_actor(Entity::Data *data, const Data::Mesh *mesh_resources, const Data::Texture *texture_resources)
+Entity::Entity_id
+create_kinematic_actor(Entity::Data *data, const Data::Mesh *mesh_resources, const Data::Texture_pool *texture_resources)
 {
-  const Entity_id id = Entity_id{4, ++instance};
+  const Entity::Entity_id id = Entity::Entity_id{4, ++instance};
 
   const std::size_t index = data->add_entity(id);
   
@@ -144,8 +146,8 @@ create_kinematic_actor(Entity::Data *data, const Data::Mesh *mesh_resources, con
   
   // Setup texture
   {
-    const std::size_t texture_index = Data::texture_find_index(texture_resources, texture_resources->size, Resource::Texture::dev_orange);
-    data->get_texture_data()[index] = texture_resources->tex[texture_index];
+    assert(Resource::Texture::dev_orange < texture_resources->size);
+    data->get_texture_data()[index] = texture_resources->textures[Resource::Texture::dev_orange];
   }
   
   // Setup transform

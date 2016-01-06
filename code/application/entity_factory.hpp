@@ -5,15 +5,26 @@
 #include <data/entity/entity_fwd.hpp>
 #include <data/mesh_manager/mesh_data.hpp> // fwd dec
 #include <data/texture_manager/texture_data.hpp> // fwd dec
+#include <data/texture_pool.hpp>
 
 
 namespace Entity_factory {
 
 
-Entity_id create_ground(Entity::Data *data, const Data::Mesh *mesh_resources, const Data::Texture *texture_resources);
-Entity_id create_random_cube(Entity::Data *data, const Data::Mesh *mesh_resources, const Data::Texture *texture_resources);
-Entity_id create_actor(Entity::Data *data, const Data::Mesh *mesh_resources, const Data::Texture *texture_resources);
-Entity_id create_kinematic_actor(Entity::Data *data, const Data::Mesh *mesh_resources, const Data::Texture *texture_resources);
+Entity::Entity_id
+create_ground(Entity::Data *data, const Data::Mesh *mesh_resources, const Data::Texture_pool *texture_resources);
+
+
+Entity::Entity_id
+create_random_cube(Entity::Data *data, const Data::Mesh *mesh_resources, const Data::Texture_pool *texture_resources);
+
+
+Entity::Entity_id
+create_actor(Entity::Data *data, const Data::Mesh *mesh_resources, const Data::Texture_pool *texture_resources);
+
+
+Entity::Entity_id
+create_kinematic_actor(Entity::Data *data, const Data::Mesh *mesh_resources, const Data::Texture_pool *texture_resources);
 
 
 } // ns

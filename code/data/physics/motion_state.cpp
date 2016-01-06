@@ -60,7 +60,7 @@ gl_to_bullet(const math::transform &transform)
 namespace Physics {
 
 
-Motion_state::Motion_state(const Entity_id e, Entity::Data *d)
+Motion_state::Motion_state(const Entity::Entity_id e, Entity::Data *d)
 : m_entity(e)
 , m_data(d)
 {

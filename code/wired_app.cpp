@@ -19,6 +19,10 @@
 #include <systems/network/network.hpp>
 #include <systems/network/network_connection.hpp>
 
+#include <data/texture_pool.hpp>
+#include <data/model_pool.hpp>
+#include <data/entity/generic_id.hpp>
+
 
 namespace
 {
@@ -63,6 +67,12 @@ main()
   const std::string asset_path = util::get_resource_path() + "assets/";
   
   // Load resources
+  Data::Model_pool model_pool;
+  {
+    
+    Generic_id::ids_init_sequentially(model_pool.ids, model_pool.size);
+  }
+  
   Data::Mesh mesh_data;
   Data::mesh_init_data(&mesh_data, 2);
   {
@@ -73,20 +83,18 @@ main()
     Data::mesh_add_new(&mesh_data, 2, plane_filename.c_str(), Resource::Model::unit_plane);
   }
   
-  Data::Texture texture_data;
-  Data::texture_init_data(&texture_data, texture_data.size);
+  
+  Data::Texture_pool texture_pool;
   {
-    const std::string green_filename  = asset_path + "textures/dev_grid_green_512.png";
-    Data::texture_add_new(&texture_data, 4, green_filename.c_str(), Resource::Texture::dev_green);
+    const Texture::Load_texture tex[Resource::Texture::size] {
+      Texture::Load_texture{Resource::Texture::dev_green,   std::string(asset_path + "textures/dev_grid_green_512.png").c_str()},
+      Texture::Load_texture{Resource::Texture::dev_red,     std::string(asset_path + "textures/dev_grid_red_512.png").c_str()},
+      Texture::Load_texture{Resource::Texture::dev_blue,    std::string(asset_path + "textures/dev_grid_blue_512.png").c_str()},
+      Texture::Load_texture{Resource::Texture::dev_orange,  std::string(asset_path + "textures/dev_grid_orange_512.png").c_str()},
+    };
     
-    const std::string red_filename    = asset_path + "textures/dev_grid_red_512.png";
-    Data::texture_add_new(&texture_data, 4, red_filename.c_str(), Resource::Texture::dev_red);
-    
-    const std::string blue_filename   = asset_path + "textures/dev_grid_blue_512.png";
-    Data::texture_add_new(&texture_data, 4, blue_filename.c_str(), Resource::Texture::dev_blue);
-    
-    const std::string orange_filename = asset_path + "textures/dev_grid_orange_512.png";
-    Data::texture_add_new(&texture_data, 4, orange_filename.c_str(), Resource::Texture::dev_orange);
+    Generic_id::ids_init_sequentially(texture_pool.ids, texture_pool.size);
+    Texture::texture_init(tex, Resource::Texture::size, texture_pool.textures, texture_pool.size);
   }
   
   // Generic model *hurt*
@@ -101,10 +109,10 @@ main()
   Physics::world_init(&phy_world);
   
   
-  Entity_factory::create_ground(&world_entities, &mesh_data, &texture_data);
+  Entity_factory::create_ground(&world_entities, &mesh_data, &texture_pool);
 //  Entity_id actor_entity = Entity_factory::create_actor(&world_entities, &mesh_data, &texture_data);
-  Entity_id kine_actor_local = Entity_factory::create_kinematic_actor(&world_entities, &mesh_data, &texture_data);
-  Entity_id kine_actor_network = Entity_factory::create_kinematic_actor(&world_entities, &mesh_data, &texture_data);
+  Entity::Entity_id kine_actor_local = Entity_factory::create_kinematic_actor(&world_entities, &mesh_data, &texture_pool);
+  Entity::Entity_id kine_actor_network = Entity_factory::create_kinematic_actor(&world_entities, &mesh_data, &texture_pool);
   
   
 //  for(int i = 0; i < 1; ++i)

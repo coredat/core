@@ -1,5 +1,5 @@
-#ifndef MESH_DATA_INCLUDED_
-#define MESH_DATA_INCLUDED_
+#ifndef MESH_DATA_INCLUDED_A8754D41_F518_4378_A1D4_7B46EEE7387D
+#define MESH_DATA_INCLUDED_A8754D41_F518_4378_A1D4_7B46EEE7387D
 
 
 #include <cstddef>
@@ -9,6 +9,22 @@
 
 
 #define MESH_BUFFER_SIZE 128
+
+
+namespace Model {
+
+
+struct Load_model
+{
+  const std::size_t id;
+  const std::string file_name;
+}; // struct
+
+
+
+
+
+} // ns
 
 
 namespace Data {
