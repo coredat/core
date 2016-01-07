@@ -35,10 +35,12 @@ input(Input_cmds input,
   auto local_controls = [&](const Entity::Entity_id ent)
   {
     const float delta_time = dt;
+    
+    std::size_t index;
+    Entity::find_index_linearly(&index, ent, ents->entity_id, size_of_data_entity_data);
   
-    const auto index = ents->find_index(ent);
     math::vec3 accum_movement = math::vec3_zero();
-    const math::transform move_trans = ents->get_transform_data()[index];
+    const math::transform move_trans = ents->transform[index];
     
     if(input.fwd > 0)
     {
@@ -72,17 +74,17 @@ input(Input_cmds input,
       const math::vec3 norm_corrected_rotation  = math::vec3_normalize(corrected_rotation);
       const math::vec3 scaled_movement          = math::vec3_scale(norm_corrected_rotation, delta_time);
       
-      ents->get_transform_data()[index].position = math::vec3_add(move_trans.position, scaled_movement);
+      ents->transform[index].position = math::vec3_add(move_trans.position, scaled_movement);
     }
           // Rotation
     {
       if(input.rot != 0)
       {
-        const math::transform rot_trans = ents->get_transform_data()[index];
+        const math::transform rot_trans = ents->transform[index];
         const float rot_rad = static_cast<float>(input.rot) * delta_time;
         
         const math::quat rot = math::quat_init_with_axis_angle(0, 1, 0, rot_rad);
-        ents->get_transform_data()[index].rotation = math::quat_multiply(rot_trans.rotation, rot);
+        ents->transform[index].rotation = math::quat_multiply(rot_trans.rotation, rot);
       }
     }
     
@@ -90,20 +92,19 @@ input(Input_cmds input,
     {
       if(input.pitch != 0)
       {
-        const math::transform rot_trans = ents->get_transform_data()[index];
+        const math::transform rot_trans = ents->transform[index];
         const float rot_rad = static_cast<float>(input.pitch) * delta_time;
         
         const math::vec3 head_axis = math::vec3_init(1,0,0);
         const math::vec3 adjusted_axis = math::quat_rotate_point(rot_trans.rotation, head_axis);
         
         const math::quat rot = math::quat_init_with_axis_angle(adjusted_axis, rot_rad);
-        ents->get_transform_data()[index].rotation = math::quat_multiply(rot_trans.rotation, rot);
+        ents->transform[index].rotation = math::quat_multiply(rot_trans.rotation, rot);
       }
     }
   };
   
   local_controls(id);
-  
 }
 
 
@@ -118,8 +119,10 @@ update(const Entity::Entity_id id, Data::Entity_pool *ents, const std::size_t si
     } act;
   
     // Get transform of controller.
-    const auto index = ents->find_index(ent);
-    const math::transform curr_trans = ents->get_transform_data()[index];
+    std::size_t index;
+    Entity::find_index_linearly(&index, ent, ents->entity_id, size_of_data_entity_data);
+
+    const math::transform curr_trans = ents->transform[index];
     
     // Cast ray downwards
     btVector3 btFrom(math::vec3_get_x(curr_trans.position), math::vec3_get_y(curr_trans.position), math::vec3_get_z(curr_trans.position));
@@ -139,7 +142,7 @@ update(const Entity::Entity_id id, Data::Entity_pool *ents, const std::size_t si
       math::transform new_trans = curr_trans;
       new_trans.position = math::vec3_add(curr_trans.position, down);
       
-      ents->get_transform_data()[index] = new_trans;
+      ents->transform[index] = new_trans;
     }
     else
     {

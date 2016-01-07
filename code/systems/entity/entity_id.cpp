@@ -1,9 +1,16 @@
 #include "entity_id.hpp"
 #include <assert.h>
-
+#include <cstring>
 
 
 namespace Entity {
+
+
+void
+init_to_invalid_ids(Entity_id ids[], const std::size_t size_of_entities)
+{
+  memset(ids, 0, size_of_entities * sizeof(Entity_id));
+}
 
 
 bool

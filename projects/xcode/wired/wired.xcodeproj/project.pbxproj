@@ -33,7 +33,6 @@
 		7ED7BC1D1C3E56D000CE80EA /* motion_state.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7BC101C3E56D000CE80EA /* motion_state.cpp */; };
 		7ED7BC1E1C3E56D000CE80EA /* rigidbody.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7BC141C3E56D000CE80EA /* rigidbody.cpp */; };
 		7ED7BC1F1C3E56D000CE80EA /* world.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7BC171C3E56D000CE80EA /* world.cpp */; };
-		7ED7BC221C3E590D00CE80EA /* entity_pool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7BC211C3E590D00CE80EA /* entity_pool.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -115,7 +114,6 @@
 		7ED7BC171C3E56D000CE80EA /* world.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = world.cpp; sourceTree = "<group>"; };
 		7ED7BC181C3E56D000CE80EA /* world.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = world.hpp; sourceTree = "<group>"; };
 		7ED7BC201C3E587D00CE80EA /* entity_pool.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = entity_pool.hpp; sourceTree = "<group>"; };
-		7ED7BC211C3E590D00CE80EA /* entity_pool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = entity_pool.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -206,7 +204,6 @@
 				7EC9B97D1C3E5F2100FBF1D7 /* data_fwd.hpp */,
 				7EC9B97E1C3E5F2100FBF1D7 /* data.hpp */,
 				7ED7BC201C3E587D00CE80EA /* entity_pool.hpp */,
-				7ED7BC211C3E590D00CE80EA /* entity_pool.cpp */,
 				7ED7BBF81C3DBF8C00CE80EA /* model_pool.hpp */,
 				7ED7BBF41C3DA72800CE80EA /* texture_pool.hpp */,
 				7ED7BB881C3CF8B100CE80EA /* actor */,
@@ -475,7 +472,6 @@
 				7ED7BC041C3E566000CE80EA /* model_manager.cpp in Sources */,
 				7ED7BC1A1C3E56D000CE80EA /* entity_id.cpp in Sources */,
 				7ED7BBD21C3CF8B100CE80EA /* debug_line.cpp in Sources */,
-				7ED7BC221C3E590D00CE80EA /* entity_pool.cpp in Sources */,
 				7ED7BC1B1C3E56D000CE80EA /* generic_id.cpp in Sources */,
 				7ED7BBC91C3CF8B100CE80EA /* entity_factory.cpp in Sources */,
 				7ED7BBF11C3CF9C700CE80EA /* logging.cpp in Sources */,

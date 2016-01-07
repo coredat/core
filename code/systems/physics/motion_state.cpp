@@ -1,6 +1,7 @@
 #include <math/transform/transform.hpp>
 #include <bullet/btBulletDynamicsCommon.h>
-#include <systems/entity/entity_data.hpp>
+#include <data/entity_pool.hpp>
+#include <systems/entity/entity_id.hpp>
 #include "motion_state.hpp"
 
 
@@ -76,22 +77,26 @@ Motion_state::~Motion_state()
 void
 Motion_state::getWorldTransform(btTransform &world_trans) const
 {
-  const std::size_t index = m_data->find_index(m_entity);
-  
-  world_trans = gl_to_bullet(m_data->get_transform_data()[index]);
+  std::size_t index;
+  if(Entity::find_index_linearly(&index, m_entity, m_data->entity_id, m_data->size))
+  {
+    world_trans = gl_to_bullet(m_data->transform[index]);
+  }
 }
 
 
 void
 Motion_state::setWorldTransform(const btTransform &world_trans)
 {
-  const std::size_t index = m_data->find_index(m_entity);
-
-  const math::transform curr_trans = m_data->get_transform_data()[index];
-  math::transform trans = bullet_to_gl(world_trans);
-  trans.scale = curr_trans.scale;
+  std::size_t index;
+  if(Entity::find_index_linearly(&index, m_entity, m_data->entity_id, m_data->size))
+  {
+    const math::transform curr_trans = m_data->transform[index];
+    math::transform trans = bullet_to_gl(world_trans);
+    trans.scale = curr_trans.scale;
   
-  m_data->get_transform_data()[index] = trans;
+    m_data->transform[index] = trans;
+  }
 }
 
 

@@ -42,5 +42,18 @@ model_load(const Load_model models_to_load[],
 }
 
 
+void
+find_model_data(renderer::vertex_buffer output_vbo[],
+                const std::size_t size_of_output,
+                const uint32_t input_ids[],
+                const renderer::vertex_buffer input_vbo[],
+                const std::size_t size_of_input)
+{
+  for(std::size_t i = 0; i < size_of_output; ++i)
+  {
+    output_vbo[i] = input_vbo[input_ids[i]];
+  }
+}
+
 
 } // ns

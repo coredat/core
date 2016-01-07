@@ -4,7 +4,7 @@
 
 #include <btBulletDynamicsCommon.h>
 #include <systems/entity/entity_id.hpp>
-#include <data/entity_pool.hpp>
+#include <data/data_fwd.hpp>
 
 
 namespace Entity {

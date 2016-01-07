@@ -39,6 +39,18 @@ is_valid(const Entity_id id)
 }
 
 
+constexpr Entity_id
+invalid_id()
+{
+  return Entity_id{0,0};
+};
+
+
+
+void
+init_to_invalid_ids(Entity_id ids[], const std::size_t size_of_entities);
+
+
 /*!
   Search through a list of id's to find a match linearly.
   \param out_index pointer to the result.

@@ -64,9 +64,21 @@ main()
   Debug_line_renderer::initialize();
   
   // Load resources
-  Data::Entity_pool world_entities(1024);
   Data::Model_pool model_pool;
+  memset(model_pool.vbo, 0, sizeof(model_pool.vbo));
+  
   Data::Texture_pool texture_pool;
+  memset(texture_pool.textures, 0, sizeof(texture_pool.textures));
+  
+  Data::Entity_pool world_entities;
+  memset(world_entities.entity_id, 0, sizeof(world_entities.entity_id));
+  memset(world_entities.model, 0, sizeof(world_entities.model));
+  memset(world_entities.texture, 0, sizeof(world_entities.texture));
+  memset(world_entities.transform, 0, sizeof(world_entities.transform));
+  memset(world_entities.rigidbody, 0, sizeof(world_entities.rigidbody));
+  memset(world_entities.rigidbody_property, 0, sizeof(world_entities.rigidbody_property));
+  
+  Entity::init_to_invalid_ids(world_entities.entity_id, world_entities.size);
   Resource::load_default_resources(&texture_pool, texture_pool.size, &model_pool, model_pool.size);
   
   Physics::World phy_world;
@@ -79,28 +91,21 @@ main()
   Entity::Entity_id kine_actor_network = Entity_factory::create_kinematic_actor(&world_entities, &model_pool, &texture_pool);
   
   
-//  for(int i = 0; i < 1; ++i)
-//  {
-//    auto ent = Entity_factory::create_random_cube(&world_entities, &mesh_data, nullptr);
-//    world_entities.get_texture_data()[i + 2]  = texture_data.tex[1];
-//    world_entities.get_mesh_data()[i + 2]     = mesh_data.vbo[0];
-//  }
-  
   Physics::world_add_rigidbodies(&phy_world,
-                                 world_entities.get_collider_data(),
-                                 world_entities.size(),
-                                 world_entities.get_rigidbody_data(),
-                                 world_entities.size());
+                                 world_entities.rigidbody_property,
+                                 world_entities.size,
+                                 world_entities.rigidbody,
+                                 world_entities.size);
   
   // Transform data
   std::vector<Simple_renderer::Node> renderer_nodes;
-  renderer_nodes.resize(world_entities.size());
+  renderer_nodes.resize(world_entities.size);
 
   // Copy vbo's into node. *hurt*
-  for(std::size_t i = 0; i < world_entities.size(); ++i)
+  for(std::size_t i = 0; i < world_entities.size; ++i)
   {
-    renderer_nodes.at(i).vbo = world_entities.get_mesh_data()[i];
-    renderer_nodes.at(i).diffuse_id = world_entities.get_texture_data()[i];
+    renderer_nodes.at(i).vbo = model_pool.vbo[world_entities.model[i]];
+    renderer_nodes.at(i).diffuse_id = texture_pool.textures[world_entities.texture[i]];
   }
   
   util::timer frame_timer;
@@ -133,16 +138,18 @@ main()
 //      
 //      world_entities.get_transform_data()[index] = trans;
       const Actor::Input_cmds *cmds = reinterpret_cast<const Actor::Input_cmds*>(data);
-      Actor::input(*cmds, delta_time, kine_actor_network, &world_entities, world_entities.size(), &phy_world);
+      Actor::input(*cmds, delta_time, kine_actor_network, &world_entities, world_entities.size, &phy_world);
     },
     &std::cout);
     
     Network_transform net_trans;
-    const auto index = world_entities.find_index(kine_actor_local);
-    const math::transform trans = world_entities.get_transform_data()[index];
+    std::size_t index;
+    Entity::find_index_linearly(&index, kine_actor_local, world_entities.entity_id, world_entities.size);
+
+    const math::transform trans = world_entities.transform[index];
     
     math::vec3_to_array(trans.position, net_trans.position);
-    math::vec3_to_array(trans.scale, net_trans.scale);
+    math::vec3_to_array(trans.scale,    net_trans.scale);
     math::quat_to_array(trans.rotation, net_trans.rotation);
     
     //Network::send_packet(&connection, sizeof(net_trans), (void*)&net_trans, false);
@@ -150,8 +157,8 @@ main()
     sdl::message_pump();
     renderer::clear();
     
-    Actor::update(kine_actor_local,   &world_entities, world_entities.size(), &phy_world);
-    Actor::update(kine_actor_network, &world_entities, world_entities.size(), &phy_world);
+    Actor::update(kine_actor_local,   &world_entities, world_entities.size, &phy_world);
+    Actor::update(kine_actor_network, &world_entities, world_entities.size, &phy_world);
     
     Actor::Input_cmds input_cmds;
     if(input.is_key_down(SDLK_w))
@@ -183,7 +190,7 @@ main()
     }
     else
     {
-      Actor::input(input_cmds, delta_time, kine_actor_local, &world_entities, world_entities.size(), &phy_world);
+      Actor::input(input_cmds, delta_time, kine_actor_local, &world_entities, world_entities.size, &phy_world);
     }
     
     Physics::world_step(&phy_world, delta_time);
@@ -201,18 +208,22 @@ main()
                                                math::vec3_init(0, 1, 0));
     
     const math::mat4 view_proj = math::mat4_multiply(view, proj); // *hurt* camaera or such.
-    Transform::transforms_to_wvp_mats(world_entities.get_transform_data(),
-                                      world_entities.size(),
+    Transform::transforms_to_wvp_mats(world_entities.transform,
+                                      world_entities.size,
                                       view_proj,
                                       renderer_nodes[0].wvp,
                                       renderer_nodes.size(),
                                       sizeof(Simple_renderer::Node));
+    
 
-    Transform::transforms_to_world_mats(world_entities.get_transform_data(),
-                                        world_entities.size(),
+    Transform::transforms_to_world_mats(world_entities.transform,
+                                        world_entities.size,
                                         renderer_nodes[0].world_mat,
                                         renderer_nodes.size(),
                                         sizeof(Simple_renderer::Node));
+    
+    
+    
       
     Simple_renderer::render_nodes_fullbright(renderer_nodes.data(), renderer_nodes.size());
     //Simple_renderer::render_nodes_directional_light(renderer_nodes.data(), renderer_nodes.size(), &eye_pos[0]);
