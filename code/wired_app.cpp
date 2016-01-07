@@ -28,13 +28,15 @@
 namespace
 {
   const math::mat4  proj      = math::mat4_projection(800, 480, 0.1, 1000, math::quart_tau() * 0.6f);
-  const bool        is_client = false;
+  const bool        is_client = true;
 }
 
 
 int
 main()
 {
+  const std::string title = is_client ? "Wired Client" : "Wired Server";
+
   sdl::window window(800, 480, false, "Wired");
   sdl::ogl_context ogl(window);
   sdl::input input;
@@ -127,6 +129,10 @@ main()
     0,
     [&](const Network::Event_id id, const void *data, const std::size_t size_of_data)
     {
+      if(is_client)
+      {
+        memcpy(world_entities.transform, data, size_of_data);
+      }
 //      const Network_transform *transform = reinterpret_cast<const Network_transform*>(data);
 //      const auto index = world_entities.find_index(kine_actor_network);
 //      
@@ -137,8 +143,11 @@ main()
 //      );
 //      
 //      world_entities.get_transform_data()[index] = trans;
-      const Actor::Input_cmds *cmds = reinterpret_cast<const Actor::Input_cmds*>(data);
-      Actor::input(*cmds, delta_time, kine_actor_network, &world_entities, world_entities.size, &phy_world);
+      else
+      {
+        const Actor::Input_cmds *cmds = reinterpret_cast<const Actor::Input_cmds*>(data);
+        Actor::input(*cmds, delta_time, kine_actor_network, &world_entities, world_entities.size, &phy_world);
+      }
     },
     &std::cout);
     
@@ -190,6 +199,7 @@ main()
     }
     else
     {
+      Network::send_packet(&connection, sizeof(world_entities.transform), world_entities.transform, false);
       Actor::input(input_cmds, delta_time, kine_actor_local, &world_entities, world_entities.size, &phy_world);
     }
     
