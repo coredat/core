@@ -26,7 +26,7 @@ load_default_resources(Data::Texture_pool *texture_pool,
       ::Model::Load_model{Resource::Model::unit_plane,  std::string(asset_path + "models/unit_plane.obj")},
     };
     
-    Generic_id::ids_init_sequentially(model_pool->ids, model_pool->size);
+    Generic_id::ids_init_sequentially(model_pool->id, model_pool->size);
     ::Model::model_load(model, Resource::Model::size, model_pool->vbo, model_pool->size);
   }
   
@@ -39,8 +39,8 @@ load_default_resources(Data::Texture_pool *texture_pool,
       ::Texture::Load_texture{Resource::Texture::dev_orange,  std::string(asset_path + "textures/dev_grid_orange_512.png").c_str()},
     };
     
-    Generic_id::ids_init_sequentially(texture_pool->ids, texture_pool->size);
-    ::Texture::texture_load(tex, Resource::Texture::size, texture_pool->textures, texture_pool->size);
+    Generic_id::ids_init_sequentially(texture_pool->id, texture_pool->size);
+    ::Texture::texture_load(tex, Resource::Texture::size, texture_pool->texture, texture_pool->size);
   }
 }
 

@@ -10,6 +10,8 @@ namespace
   renderer::shader fullbright;
   renderer::vertex_format vertex_fmt;
   GLint uniTrans;
+  
+  
 }
 
 
@@ -32,6 +34,8 @@ initialize()
 
 //  dir_light_wvp_mat = glGetUniformLocation(dir_light.get_program_gl_id(), "wvp");
 //  dir_light_world_mat = glGetUniformLocation(dir_light.get_program_gl_id(), "world");
+  
+
   
   vertex_fmt.load_format({
     renderer::attr_format_desc{"in_vs_position",      renderer::attr_type::FLOAT3},
@@ -57,10 +61,20 @@ render_nodes_fullbright(const Node nodes[],
     const Node *curr_node = &nodes[n];
     assert(curr_node);
     
-    fullbright.set_texture("diffuse_map", curr_node->diffuse_id);             // *hurt* need to know if this is a duplicate bind?
+    //fullbright.set_texture("diffuse_map", curr_node->diffuse_id);             // *hurt* need to know if this is a duplicate bind?
     
     curr_node->vbo.bind(vertex_fmt, fullbright);                              // *hurt* need to know if this is a duplicate bind?
     fullbright.bind();
+    
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, curr_node->diffuse_id);
+    
+    glUniform1i(glGetUniformLocation(fullbright.get_program_gl_id(), "diffuse_map"), 0);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   
     glUniformMatrix4fv(uniTrans, 1, GL_FALSE, curr_node->wvp);
     
@@ -78,39 +92,39 @@ render_nodes_directional_light(const Node nodes[], const std::size_t number_of_n
 {
   renderer::reset();
   
-  for(std::size_t n = 0; n < number_of_nodes; ++n)
-  {
-    // Render node.
-    const Node *curr_node = &nodes[n];
-    assert(curr_node);
-    
-    dir_light.set_raw_data("wvp", curr_node->wvp, sizeof(float) * 16);
-    dir_light.set_raw_data("world", curr_node->world_mat, sizeof(float) * 16);
-    dir_light.set_raw_data("eye_position", eye_pos_vec3, sizeof(float) * 3);
-    dir_light.set_texture("diffuse_map", curr_node->diffuse_id);  // *hurt* need to know if this is a duplicate bind?
-    
-    const float color[3] {0.8,0.7,0.7};
-    dir_light.set_raw_data("dir_light.color", &color[0], sizeof(float) * 3);
-    
-    const float dir[3] {0.707,0.707,0.0};
-    dir_light.set_raw_data("dir_light.direction", &dir[0], sizeof(float) * 3);
-
-    const float amb = 1.5f;
-    dir_light.set_raw_data("dir_light.ambient", &amb, sizeof(float) * 1);
-    
-    const float diff = 0.0f;
-    dir_light.set_raw_data("dir_light.direction", &diff, sizeof(float) * 1);
-    
-    curr_node->vbo.bind(vertex_fmt, dir_light);                  // *hurt* need to know if this is a duplicate bind?
-
-    dir_light.bind();
-    
-    const GLsizei count = curr_node->vbo.get_number_entries() / vertex_fmt.get_number_of_entires(); // *hurt* Can be pre processed.
-    
-    /* IBO? */
-
-    glDrawArrays(GL_TRIANGLES, 0, count);
-  }  
+//  for(std::size_t n = 0; n < number_of_nodes; ++n)
+//  {
+//    // Render node.
+//    const Node *curr_node = &nodes[n];
+//    assert(curr_node);
+//    
+//    dir_light.set_raw_data("wvp", curr_node->wvp, sizeof(float) * 16);
+//    dir_light.set_raw_data("world", curr_node->world_mat, sizeof(float) * 16);
+//    dir_light.set_raw_data("eye_position", eye_pos_vec3, sizeof(float) * 3);
+//    dir_light.set_texture("diffuse_map", curr_node->diffuse_id);  // *hurt* need to know if this is a duplicate bind?
+//    
+//    const float color[3] {0.8,0.7,0.7};
+//    dir_light.set_raw_data("dir_light.color", &color[0], sizeof(float) * 3);
+//    
+//    const float dir[3] {0.707,0.707,0.0};
+//    dir_light.set_raw_data("dir_light.direction", &dir[0], sizeof(float) * 3);
+//
+//    const float amb = 1.5f;
+//    dir_light.set_raw_data("dir_light.ambient", &amb, sizeof(float) * 1);
+//    
+//    const float diff = 0.0f;
+//    dir_light.set_raw_data("dir_light.direction", &diff, sizeof(float) * 1);
+//    
+//    curr_node->vbo.bind(vertex_fmt, dir_light);                  // *hurt* need to know if this is a duplicate bind?
+//
+//    dir_light.bind();
+//    
+//    const GLsizei count = curr_node->vbo.get_number_entries() / vertex_fmt.get_number_of_entires(); // *hurt* Can be pre processed.
+//    
+//    /* IBO? */
+//
+//    glDrawArrays(GL_TRIANGLES, 0, count);
+//  }  
 }
 
 

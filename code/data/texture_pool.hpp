@@ -14,11 +14,16 @@ namespace Data {
 
 struct Texture_pool
 {
-  std::size_t         ids[SIZE_OF_TEXTURE_POOL];
-  renderer::texture   textures[SIZE_OF_TEXTURE_POOL];
+  std::size_t         id[SIZE_OF_TEXTURE_POOL];
+  renderer::texture   texture[SIZE_OF_TEXTURE_POOL];
   
   const std::size_t   size = SIZE_OF_TEXTURE_POOL;
 }; // struct
+
+
+
+void
+texture_pool_init(Texture_pool *pool);
 
 
 } // ns

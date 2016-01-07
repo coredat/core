@@ -48,8 +48,8 @@ main()
     std::cout << id << " - " << msg << std::endl;
   });
   
-  Network::Connection connection;
   Network::initialize(&std::cout);
+  Network::Connection connection;
   
   if(is_client)
   {
@@ -65,27 +65,19 @@ main()
   Simple_renderer::initialize();
   Debug_line_renderer::initialize();
   
-  // Load resources
-  Data::Model_pool model_pool;
-  memset(model_pool.vbo, 0, sizeof(model_pool.vbo));
-  
-  Data::Texture_pool texture_pool;
-  memset(texture_pool.textures, 0, sizeof(texture_pool.textures));
-  
-  Data::Entity_pool world_entities;
-  memset(world_entities.entity_id, 0, sizeof(world_entities.entity_id));
-  memset(world_entities.model, 0, sizeof(world_entities.model));
-  memset(world_entities.texture, 0, sizeof(world_entities.texture));
-  memset(world_entities.transform, 0, sizeof(world_entities.transform));
-  memset(world_entities.rigidbody, 0, sizeof(world_entities.rigidbody));
-  memset(world_entities.rigidbody_property, 0, sizeof(world_entities.rigidbody_property));
-  
-  Entity::init_to_invalid_ids(world_entities.entity_id, world_entities.size);
-  Resource::load_default_resources(&texture_pool, texture_pool.size, &model_pool, model_pool.size);
-  
   Physics::World phy_world;
   Physics::world_init(&phy_world);
   
+  Data::Model_pool model_pool;
+  Data::model_pool_init(&model_pool);
+  
+  Data::Texture_pool texture_pool;
+  Data::texture_pool_init(&texture_pool);
+  
+  Data::Entity_pool world_entities;
+  Data::entity_pool_init(&world_entities);
+  
+  Resource::load_default_resources(&texture_pool, texture_pool.size, &model_pool, model_pool.size);
   
   Entity_factory::create_ground(&world_entities, &model_pool, &texture_pool);
 //  Entity_id actor_entity = Entity_factory::create_actor(&world_entities, &model_pool, &texture_pool);
@@ -103,11 +95,10 @@ main()
   std::vector<Simple_renderer::Node> renderer_nodes;
   renderer_nodes.resize(world_entities.size);
 
-  // Copy vbo's into node. *hurt*
   for(std::size_t i = 0; i < world_entities.size; ++i)
   {
-    renderer_nodes.at(i).vbo = model_pool.vbo[world_entities.model[i]];
-    renderer_nodes.at(i).diffuse_id = texture_pool.textures[world_entities.texture[i]];
+    renderer_nodes.at(i).vbo        = model_pool.vbo[world_entities.model[i]];
+    renderer_nodes.at(i).diffuse_id = texture_pool.texture[world_entities.texture[i]].get_gl_id();
   }
   
   util::timer frame_timer;
@@ -117,13 +108,6 @@ main()
   while(!window.wants_to_quit())
   {
     const float delta_time = static_cast<float>(frame_timer.split()) / 1000.f;
-  
-    struct Network_transform
-    {
-      float position[3];
-      float rotation[4];
-      float scale[3];
-    };
   
     Network::poll_events(&connection,
     0,
@@ -151,17 +135,8 @@ main()
     },
     &std::cout);
     
-    Network_transform net_trans;
     std::size_t index;
     Entity::find_index_linearly(&index, kine_actor_local, world_entities.entity_id, world_entities.size);
-
-    const math::transform trans = world_entities.transform[index];
-    
-    math::vec3_to_array(trans.position, net_trans.position);
-    math::vec3_to_array(trans.scale,    net_trans.scale);
-    math::quat_to_array(trans.rotation, net_trans.rotation);
-    
-    //Network::send_packet(&connection, sizeof(net_trans), (void*)&net_trans, false);
   
     sdl::message_pump();
     renderer::clear();

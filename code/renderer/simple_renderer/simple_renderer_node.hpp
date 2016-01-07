@@ -13,7 +13,7 @@ struct Node
 {
   float                     wvp[16];
   float                     world_mat[16];
-  renderer::texture         diffuse_id;
+  GLuint                    diffuse_id;
   renderer::vertex_buffer   vbo;
   uint32_t                  number_of_verts;
 };

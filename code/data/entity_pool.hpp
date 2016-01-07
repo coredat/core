@@ -33,6 +33,10 @@ struct Entity_pool
 };
 
 
+void
+entity_pool_init(Entity_pool *pool);
+
+
 } // ns
 
 

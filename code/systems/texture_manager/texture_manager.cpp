@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <SOIL/SOIL.h>
 #include <assert.h>
+#include <renderer/low_level_renderer/ogl/ogl_texture.hpp>
 
 
 
@@ -33,6 +34,11 @@ texture_load(const Load_texture textures_to_load[],
     uint8_t *image_data = SOIL_load_image(tex.file_path.c_str(), &width, &height, 0, SOIL_LOAD_RGBA);
 
     output[tex.id] = renderer::texture(image_data, width, height);
+    
+//    Ogl::Texture new_texture;
+//    Ogl::texture_create_2d(&new_texture, width, height, Ogl::Pixel_format::rgba8, image_data);
+//    
+//    output[tex.id] = new_texture;
     
     SOIL_free_image_data(image_data);
   }
