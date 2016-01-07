@@ -1,6 +1,6 @@
 #include "entity_factory.hpp"
 #include <systems/physics/physics.hpp>
-#include <systems/entity/entity_data.hpp>
+#include <systems/entity/entity_id.hpp>
 #include <systems/entity/generic_id.hpp>
 #include <data/model_pool.hpp>
 #include <data/entity_pool.hpp>
@@ -74,9 +74,9 @@ create_random_cube(Data::Entity_pool *entity, const Data::Model_pool *mesh_resou
                                                              math::quat_init());
     
     entity->get_collider_data()[index].collider_type = Physics::Collider_type::cube;
-    entity->get_collider_data()[index].collider_info.cube.extents[0] = scale_x * 0.5;
-    entity->get_collider_data()[index].collider_info.cube.extents[1] = scale_y * 0.5;
-    entity->get_collider_data()[index].collider_info.cube.extents[2] = scale_z * 0.5;
+    entity->get_collider_data()[index].collider_info.cube.extents[0] = scale_x * 0.5f;
+    entity->get_collider_data()[index].collider_info.cube.extents[1] = scale_y * 0.5f;
+    entity->get_collider_data()[index].collider_info.cube.extents[2] = scale_z * 0.5f;
     entity->get_collider_data()[index].mass = 1;
     
     entity->get_rigidbody_data()[index].motion_state.reset(new Physics::Motion_state(entity->get_entity_data()[index], entity));

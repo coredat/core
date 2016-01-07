@@ -1,32 +1,28 @@
 #include <application/resources.hpp>
+#include <application/entity_factory.hpp>
 
+#include <systems/transform/transform.hpp>
 #include <systems/network/network.hpp>
 #include <systems/network/network_connection.hpp>
-#include <systems/model_manager/model_manager.hpp>
-#include <systems/texture_manager/texture_manager.hpp>
 #include <systems/physics/physics.hpp>
-
 #include <systems/entity/generic_id.hpp>
+
 #include <data/texture_pool.hpp>
 #include <data/model_pool.hpp>
 #include <data/entity_pool.hpp>
 
-#include <systems/entity/entity_data.hpp> // make into pool like others
-
-#include <iostream>
-#include <sdl_wrapper/sdl_lazy_include.hpp>
-#include <simple_renderer/lazy_include.hpp>
-#include <utils/directory.hpp>
-#include <utils/obj_model_loader.hpp>
-#include <math/math.hpp>
-#include <systems/transform/transform.hpp>
+#include <renderer/renderer.hpp>
 #include <renderer/simple_renderer/simple_renderer.hpp>
 #include <renderer/debug_line_renderer/debug_line_renderer.hpp>
-#include <utils/timer.hpp>
-#include <renderer/renderer.hpp>
-#include "entity_factory.hpp"
-#include <data/actor/actor.hpp>
 
+#include <sdl_wrapper/sdl_lazy_include.hpp>
+#include <simple_renderer/lazy_include.hpp>
+#include <math/math.hpp>
+#include <utils/timer.hpp>
+
+#include <iostream>
+
+#include <data/actor/actor.hpp> // what to do with this.
 
 
 namespace
@@ -44,8 +40,6 @@ main()
   sdl::input input;
 
   input.set_mouse_hold(true);
-  
-  std::cout << "Wired" << std::endl;
   
   renderer::set_log_callback([](const int32_t id, const std::string &msg)
   {
@@ -70,11 +64,11 @@ main()
   Debug_line_renderer::initialize();
   
   // Load resources
+  Data::Entity_pool world_entities(1024);
   Data::Model_pool model_pool;
   Data::Texture_pool texture_pool;
   Resource::load_default_resources(&texture_pool, texture_pool.size, &model_pool, model_pool.size);
   
-  Data::Entity_pool world_entities(1024);
   Physics::World phy_world;
   Physics::world_init(&phy_world);
   
@@ -191,9 +185,6 @@ main()
     {
       Actor::input(input_cmds, delta_time, kine_actor_local, &world_entities, world_entities.size(), &phy_world);
     }
-    
-//    apply_gravity(kine_actor_local);
-//    local_controls(kine_actor_local);
     
     Physics::world_step(&phy_world, delta_time);
     

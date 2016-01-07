@@ -43,6 +43,8 @@
 		7EA2C61D1C1F5D4600389748 /* wired_app.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wired_app.cpp; sourceTree = "<group>"; };
 		7EA2C61F1C1F5E2A00389748 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		7EA2C6541C1F637D00389748 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = ../../../assets; sourceTree = "<group>"; };
+		7EC9B97D1C3E5F2100FBF1D7 /* data_fwd.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = data_fwd.hpp; sourceTree = "<group>"; };
+		7EC9B97E1C3E5F2100FBF1D7 /* data.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = data.hpp; sourceTree = "<group>"; };
 		7ED7BB841C3CF8B100CE80EA /* entity_factory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = entity_factory.cpp; sourceTree = "<group>"; };
 		7ED7BB851C3CF8B100CE80EA /* entity_factory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = entity_factory.hpp; sourceTree = "<group>"; };
 		7ED7BB891C3CF8B100CE80EA /* actor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = actor.hpp; sourceTree = "<group>"; };
@@ -201,12 +203,13 @@
 		7ED7BB871C3CF8B100CE80EA /* data */ = {
 			isa = PBXGroup;
 			children = (
+				7EC9B97D1C3E5F2100FBF1D7 /* data_fwd.hpp */,
+				7EC9B97E1C3E5F2100FBF1D7 /* data.hpp */,
 				7ED7BC201C3E587D00CE80EA /* entity_pool.hpp */,
 				7ED7BC211C3E590D00CE80EA /* entity_pool.cpp */,
 				7ED7BBF81C3DBF8C00CE80EA /* model_pool.hpp */,
 				7ED7BBF41C3DA72800CE80EA /* texture_pool.hpp */,
 				7ED7BB881C3CF8B100CE80EA /* actor */,
-				7ED7BBA21C3CF8B100CE80EA /* transform */,
 			);
 			path = data;
 			sourceTree = "<group>";
@@ -217,13 +220,6 @@
 				7ED7BB891C3CF8B100CE80EA /* actor.hpp */,
 			);
 			path = actor;
-			sourceTree = "<group>";
-		};
-		7ED7BBA21C3CF8B100CE80EA /* transform */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = transform;
 			sourceTree = "<group>";
 		};
 		7ED7BBA31C3CF8B100CE80EA /* renderer */ = {

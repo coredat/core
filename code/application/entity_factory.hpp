@@ -3,9 +3,7 @@
 
 
 #include <systems/entity/entity_fwd.hpp>
-#include <data/texture_pool.hpp> // fwd decs
-#include <data/model_pool.hpp> // fwd decs
-#include <data/entity_pool.hpp> // fwd decs
+#include <data/data_fwd.hpp>
 
 
 namespace Entity_factory {

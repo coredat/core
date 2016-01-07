@@ -17,7 +17,7 @@ struct Entity_id
 
 
 
-inline bool
+constexpr bool
 operator==(const Entity_id left, const Entity_id right)
 {
   return ((left.type_id == right.type_id) && (left.instance_id == right.instance_id));
@@ -25,12 +25,18 @@ operator==(const Entity_id left, const Entity_id right)
 
 
 
-inline bool
+constexpr bool
 operator<(const Entity_id left, const Entity_id right)
 {
   return ((left.type_id < right.type_id) && (left.instance_id < right.instance_id));
 }
 
+
+constexpr bool
+is_valid(const Entity_id id)
+{
+  return id.type_id == 0;
+}
 
 
 /*!

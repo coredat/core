@@ -2,6 +2,8 @@
 #include <systems/model_manager/model_manager.hpp>
 #include <systems/texture_manager/texture_manager.hpp>
 #include <systems/entity/generic_id.hpp>
+#include <data/texture_pool.hpp>
+#include <data/model_pool.hpp>
 #include <string>
 #include <utils/directory.hpp>
 
