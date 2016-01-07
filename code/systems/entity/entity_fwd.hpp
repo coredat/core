@@ -6,18 +6,9 @@ namespace Entity
 {
 
 struct Entity_id;
-class Data;
 
 } // ns
 
-
-namespace Data {
-
-
-struct Entity;
-
-
-} // ns
 
 
 #endif // inc guard

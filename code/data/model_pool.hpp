@@ -15,7 +15,7 @@ namespace Data {
 struct Model_pool
 {
   std::size_t               ids[SIZE_OF_MODEL_POOL];
-  renderer::vertex_buffer   models[SIZE_OF_MODEL_POOL];
+  renderer::vertex_buffer   vbo[SIZE_OF_MODEL_POOL];
   
   const std::size_t         size = SIZE_OF_MODEL_POOL;
 }; // struct

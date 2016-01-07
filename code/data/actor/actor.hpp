@@ -3,9 +3,9 @@
 
 
 #include <renderer/renderer.hpp>
-#include <data/entity/entity_id.hpp>
-#include <data/entity/entity_data.hpp>
-#include <data/physics/physics.hpp>
+#include <systems/entity/entity_id.hpp>
+#include <systems/physics/physics.hpp>
+#include <data/entity_pool.hpp>
 
 
 namespace Actor {
@@ -28,7 +28,7 @@ void
 input(Input_cmds input,
       const float dt,
       const Entity::Entity_id id,
-      Entity::Data *ents,
+      Data::Entity_pool *ents,
       const std::size_t size_of_data_entity_data,
       Physics::World *phy_world)
 {
@@ -108,7 +108,7 @@ input(Input_cmds input,
 
 
 void
-update(const Entity::Entity_id id, Entity::Data *ents, const std::size_t size_of_data_entity_data, Physics::World *phy_world)
+update(const Entity::Entity_id id, Data::Entity_pool *ents, const std::size_t size_of_data_entity_data, Physics::World *phy_world)
 {
   auto apply_gravity = [&](const Entity::Entity_id ent)
   {

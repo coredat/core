@@ -1,3 +1,18 @@
+#include <application/resources.hpp>
+
+#include <systems/network/network.hpp>
+#include <systems/network/network_connection.hpp>
+#include <systems/model_manager/model_manager.hpp>
+#include <systems/texture_manager/texture_manager.hpp>
+#include <systems/physics/physics.hpp>
+
+#include <systems/entity/generic_id.hpp>
+#include <data/texture_pool.hpp>
+#include <data/model_pool.hpp>
+#include <data/entity_pool.hpp>
+
+#include <systems/entity/entity_data.hpp> // make into pool like others
+
 #include <iostream>
 #include <sdl_wrapper/sdl_lazy_include.hpp>
 #include <simple_renderer/lazy_include.hpp>
@@ -7,21 +22,11 @@
 #include <systems/transform/transform.hpp>
 #include <renderer/simple_renderer/simple_renderer.hpp>
 #include <renderer/debug_line_renderer/debug_line_renderer.hpp>
-#include <data/entity/entity_data.hpp>
-#include <data/texture_manager/texture_data.hpp>
 #include <utils/timer.hpp>
 #include <renderer/renderer.hpp>
-#include <data/physics/physics.hpp>
-#include <data/mesh_manager/mesh_data.hpp>
 #include "entity_factory.hpp"
 #include <data/actor/actor.hpp>
-#include "resources.hpp"
-#include <systems/network/network.hpp>
-#include <systems/network/network_connection.hpp>
 
-#include <data/texture_pool.hpp>
-#include <data/model_pool.hpp>
-#include <data/entity/generic_id.hpp>
 
 
 namespace
@@ -64,55 +69,20 @@ main()
   Simple_renderer::initialize();
   Debug_line_renderer::initialize();
   
-  const std::string asset_path = util::get_resource_path() + "assets/";
-  
   // Load resources
   Data::Model_pool model_pool;
-  {
-    
-    Generic_id::ids_init_sequentially(model_pool.ids, model_pool.size);
-  }
-  
-  Data::Mesh mesh_data;
-  Data::mesh_init_data(&mesh_data, 2);
-  {
-    const std::string cube_filename = asset_path + "models/unit_cube.obj";
-    Data::mesh_add_new(&mesh_data, 2, cube_filename.c_str(), Resource::Model::unit_cube);
-    
-    const std::string plane_filename = asset_path + "models/unit_plane.obj";
-    Data::mesh_add_new(&mesh_data, 2, plane_filename.c_str(), Resource::Model::unit_plane);
-  }
-  
-  
   Data::Texture_pool texture_pool;
-  {
-    const Texture::Load_texture tex[Resource::Texture::size] {
-      Texture::Load_texture{Resource::Texture::dev_green,   std::string(asset_path + "textures/dev_grid_green_512.png").c_str()},
-      Texture::Load_texture{Resource::Texture::dev_red,     std::string(asset_path + "textures/dev_grid_red_512.png").c_str()},
-      Texture::Load_texture{Resource::Texture::dev_blue,    std::string(asset_path + "textures/dev_grid_blue_512.png").c_str()},
-      Texture::Load_texture{Resource::Texture::dev_orange,  std::string(asset_path + "textures/dev_grid_orange_512.png").c_str()},
-    };
-    
-    Generic_id::ids_init_sequentially(texture_pool.ids, texture_pool.size);
-    Texture::texture_init(tex, Resource::Texture::size, texture_pool.textures, texture_pool.size);
-  }
+  Resource::load_default_resources(&texture_pool, texture_pool.size, &model_pool, model_pool.size);
   
-  // Generic model *hurt*
-  const util::obj_model model  = util::load_obj(asset_path + "models/unit_cube.obj");
-  const util::gl_mesh mesh     = util::convert_to_open_gl_mesh(model.meshes.front());
-  renderer::vertex_buffer ground_vbo(mesh.mesh_data);
-  assert(ground_vbo.is_valid());
-  
-  
-  Entity::Data world_entities(1024);
+  Data::Entity_pool world_entities(1024);
   Physics::World phy_world;
   Physics::world_init(&phy_world);
   
   
-  Entity_factory::create_ground(&world_entities, &mesh_data, &texture_pool);
-//  Entity_id actor_entity = Entity_factory::create_actor(&world_entities, &mesh_data, &texture_data);
-  Entity::Entity_id kine_actor_local = Entity_factory::create_kinematic_actor(&world_entities, &mesh_data, &texture_pool);
-  Entity::Entity_id kine_actor_network = Entity_factory::create_kinematic_actor(&world_entities, &mesh_data, &texture_pool);
+  Entity_factory::create_ground(&world_entities, &model_pool, &texture_pool);
+//  Entity_id actor_entity = Entity_factory::create_actor(&world_entities, &model_pool, &texture_pool);
+  Entity::Entity_id kine_actor_local = Entity_factory::create_kinematic_actor(&world_entities, &model_pool, &texture_pool);
+  Entity::Entity_id kine_actor_network = Entity_factory::create_kinematic_actor(&world_entities, &model_pool, &texture_pool);
   
   
 //  for(int i = 0; i < 1; ++i)

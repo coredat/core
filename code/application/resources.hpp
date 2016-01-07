@@ -2,6 +2,11 @@
 #define RESOURCES_INCLUDED_8C811BD6_4022_4F06_9C0E_FC8DFEEE4BF4
 
 
+#include <data/texture_pool.hpp>
+#include <data/model_pool.hpp>
+#include <cstddef>
+
+
 namespace Resource {
 namespace Model {
 
@@ -32,6 +37,12 @@ enum ENUM {
 }; // enum
 
 } // ns
+
+
+void
+load_default_resources(Data::Texture_pool *texture_pool, std::size_t size_of_texture_pool, Data::Model_pool *model_pool, std::size_t size_of_model_pool);
+
+
 } // ns
 
 

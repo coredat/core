@@ -2,29 +2,29 @@
 #define ENTITY_FACTORY_INCLUDED_465D023E_7584_4B89_8A1C_92294723073C
 
 
-#include <data/entity/entity_fwd.hpp>
-#include <data/mesh_manager/mesh_data.hpp> // fwd dec
-#include <data/texture_manager/texture_data.hpp> // fwd dec
-#include <data/texture_pool.hpp>
+#include <systems/entity/entity_fwd.hpp>
+#include <data/texture_pool.hpp> // fwd decs
+#include <data/model_pool.hpp> // fwd decs
+#include <data/entity_pool.hpp> // fwd decs
 
 
 namespace Entity_factory {
 
 
 Entity::Entity_id
-create_ground(Entity::Data *data, const Data::Mesh *mesh_resources, const Data::Texture_pool *texture_resources);
+create_ground(Data::Entity_pool *entity, const Data::Model_pool *mesh_resources, const Data::Texture_pool *texture_resources);
 
 
 Entity::Entity_id
-create_random_cube(Entity::Data *data, const Data::Mesh *mesh_resources, const Data::Texture_pool *texture_resources);
+create_random_cube(Data::Entity_pool *entity, const Data::Model_pool *mesh_resources, const Data::Texture_pool *texture_resources);
 
 
 Entity::Entity_id
-create_actor(Entity::Data *data, const Data::Mesh *mesh_resources, const Data::Texture_pool *texture_resources);
+create_actor(Data::Entity_pool *entity, const Data::Model_pool *mesh_resources, const Data::Texture_pool *texture_resources);
 
 
 Entity::Entity_id
-create_kinematic_actor(Entity::Data *data, const Data::Mesh *mesh_resources, const Data::Texture_pool *texture_resources);
+create_kinematic_actor(Data::Entity_pool *entity, const Data::Model_pool *mesh_resources, const Data::Texture_pool *texture_resources);
 
 
 } // ns

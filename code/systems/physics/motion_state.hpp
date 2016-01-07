@@ -3,7 +3,8 @@
 
 
 #include <btBulletDynamicsCommon.h>
-#include <data/entity/entity_id.hpp>
+#include <systems/entity/entity_id.hpp>
+#include <data/entity_pool.hpp>
 
 
 namespace Entity {
@@ -20,7 +21,7 @@ class Motion_state : public btMotionState
 {
 public:
 
-  explicit      Motion_state(const Entity::Entity_id e, Entity::Data *data);
+  explicit      Motion_state(const Entity::Entity_id e, Data::Entity_pool *data);
                 ~Motion_state();
   
   void          getWorldTransform(btTransform &world_trans) const override;
@@ -29,7 +30,7 @@ public:
 private:
 
   const Entity::Entity_id     m_entity;
-  Entity::Data        *m_data;
+  Data::Entity_pool           *m_data;
 
 }; // class
 
