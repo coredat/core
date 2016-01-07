@@ -28,7 +28,7 @@
 namespace
 {
   const math::mat4  proj      = math::mat4_projection(800, 480, 0.1, 1000, math::quart_tau() * 0.6f);
-  const bool        is_client = true;
+  const bool        is_client = false;
 }
 
 
@@ -37,7 +37,7 @@ main()
 {
   const std::string title = is_client ? "Wired Client" : "Wired Server";
 
-  sdl::window window(800, 480, false, "Wired");
+  sdl::window window(800, 480, false, title);
   sdl::ogl_context ogl(window);
   sdl::input input;
 
@@ -211,7 +211,7 @@ main()
     const float x = math::sin(time) * 9;
     const float z = math::cos(time) * 9;
     
-    const float eye_pos[3] = {x, 3.4f, z};
+    //const float eye_pos[3] = {x, 3.4f, z};
     
     const math::mat4 view  = math::mat4_lookat(math::vec3_init(x, 3.4f, z),
                                                math::vec3_zero(),

@@ -175,7 +175,7 @@ render(const float wvp_mat[16])
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   
-  glDrawArrays(GL_POINTS, 0, data_ptr);
+  glDrawArrays(GL_POINTS, 0, static_cast<GLsizei>(data_ptr));
   data_ptr = 0;
 
   Ogl::error_check("Debug line renderer.", &std::cout);

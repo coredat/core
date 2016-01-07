@@ -10,9 +10,6 @@ namespace
   renderer::shader fullbright;
   renderer::vertex_format vertex_fmt;
   GLint uniTrans;
-  
-  GLint dir_light_world_mat;
-  GLint dir_light_wvp_mat;
 }
 
 

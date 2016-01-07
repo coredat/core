@@ -26,8 +26,6 @@ struct Entity_pool
   Resource::Model::ENUM           model[ENTITY_POOL_SIZE];
   Resource::Texture::ENUM         texture[ENTITY_POOL_SIZE];
   
-  renderer::vertex_buffer         model_id[ENTITY_POOL_SIZE];
-  renderer::texture               texture_id[ENTITY_POOL_SIZE];
   Physics::Rigidbody              rigidbody[ENTITY_POOL_SIZE];
   Physics::Rigidbody_properties   rigidbody_property[ENTITY_POOL_SIZE];
   

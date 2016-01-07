@@ -135,10 +135,9 @@
 		7EA2C5FB1C1F5CFC00389748 = {
 			isa = PBXGroup;
 			children = (
-				7EA1A1F81C3984D0009867BD /* libenet.a */,
 				7EA2C6541C1F637D00389748 /* assets */,
-				7EA2C61F1C1F5E2A00389748 /* OpenGL.framework */,
-				7EA2C6061C1F5CFC00389748 /* wired */,
+				7EA2C6061C1F5CFC00389748 /* Wired */,
+				7EC9B9821C3ED7A200FBF1D7 /* Frameworks */,
 				7EA2C6051C1F5CFC00389748 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -151,12 +150,13 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		7EA2C6061C1F5CFC00389748 /* wired */ = {
+		7EA2C6061C1F5CFC00389748 /* Wired */ = {
 			isa = PBXGroup;
 			children = (
 				7EA2C6181C1F5D4600389748 /* code */,
 				7EA2C60A1C1F5CFC00389748 /* Supporting Files */,
 			);
+			name = Wired;
 			path = wired;
 			sourceTree = "<group>";
 		};
@@ -180,6 +180,15 @@
 			);
 			name = code;
 			path = ../../../../code;
+			sourceTree = "<group>";
+		};
+		7EC9B9821C3ED7A200FBF1D7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7EA1A1F81C3984D0009867BD /* libenet.a */,
+				7EA2C61F1C1F5E2A00389748 /* OpenGL.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		7ED7BB831C3CF8B100CE80EA /* application */ = {

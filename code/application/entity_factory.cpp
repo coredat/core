@@ -29,17 +29,11 @@ create_ground(Data::Entity_pool *entity, const Data::Model_pool *mesh_resources,
     // Setup mesh
     {
       entity->model[empty_index] = Resource::Model::unit_plane;
-      
-      assert(Resource::Model::unit_plane < mesh_resources->size);
-      entity->model_id[empty_index] = mesh_resources->vbo[Resource::Model::unit_plane];
     }
     
     // Setup texture
     {
       entity->texture[empty_index] = Resource::Texture::dev_red;
-    
-      assert(Resource::Texture::dev_red < texture_resources->size);
-      entity->texture_id[empty_index] = texture_resources->textures[Resource::Texture::dev_red];
     }
     
     // Setup phys
@@ -114,17 +108,11 @@ create_actor(Data::Entity_pool *entity, const Data::Model_pool *mesh_resources, 
     // Get mesh with mesh id.
     {
       entity->model[empty_index] = Resource::Model::unit_cube;
-    
-      assert(Resource::Model::unit_cube < mesh_resources->size);
-      entity->model_id[empty_index] = mesh_resources->vbo[Resource::Model::unit_cube];
     }
     
     // Setup texture
     {
       entity->texture[empty_index] = Resource::Texture::dev_green;
-    
-      assert(Resource::Texture::dev_green < texture_resources->size);
-      entity->texture_id[empty_index] = texture_resources->textures[Resource::Texture::dev_green];
     }
 
     // Setup phys
@@ -171,17 +159,11 @@ create_kinematic_actor(Data::Entity_pool *entity, const Data::Model_pool *mesh_r
     // Get mesh with mesh id.
     {
       entity->model[empty_index] = Resource::Model::unit_cube;
-    
-      assert(Resource::Model::unit_cube < mesh_resources->size);
-      entity->model_id[empty_index] = mesh_resources->vbo[Resource::Model::unit_cube];
     }
     
     // Setup texture
     {
       entity->texture[empty_index] = Resource::Texture::dev_orange;
-    
-      assert(Resource::Texture::dev_orange < texture_resources->size);
-      entity->texture_id[empty_index] = texture_resources->textures[Resource::Texture::dev_orange];
     }
     
     // Setup transform
