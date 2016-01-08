@@ -30,8 +30,7 @@ texture_load(const Load_texture textures_to_load[],
              const std::size_t number_of_textures_to_load,
              renderer::texture output[],
              const std::size_t size_of_output_pool);
-
-
+  
 } // ns
 
 

@@ -35,8 +35,6 @@ initialize()
 //  dir_light_wvp_mat = glGetUniformLocation(dir_light.get_program_gl_id(), "wvp");
 //  dir_light_world_mat = glGetUniformLocation(dir_light.get_program_gl_id(), "world");
   
-
-  
   vertex_fmt.load_format({
     renderer::attr_format_desc{"in_vs_position",      renderer::attr_type::FLOAT3},
     renderer::attr_format_desc{"in_vs_texture_coord", renderer::attr_type::FLOAT2},

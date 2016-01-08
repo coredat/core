@@ -98,7 +98,7 @@ main()
   for(std::size_t i = 0; i < world_entities.size; ++i)
   {
     renderer_nodes.at(i).vbo        = model_pool.vbo[world_entities.model[i]];
-    renderer_nodes.at(i).diffuse_id = texture_pool.texture[world_entities.texture[i]].get_gl_id();
+    renderer_nodes.at(i).diffuse_id = Data::texture_find(&texture_pool, world_entities.texture[i])->get_gl_id();
   }
   
   util::timer frame_timer;

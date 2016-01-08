@@ -26,6 +26,10 @@ void
 texture_pool_init(Texture_pool *pool);
 
 
+renderer::texture*
+texture_find(Texture_pool *pool, const std::size_t id);
+
+
 } // ns
 
 

@@ -19,9 +19,7 @@ struct Node
 };
 
 
-
 } // ns
-
 
 
 #endif // inc guard

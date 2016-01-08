@@ -30,7 +30,7 @@ model_load(const Load_model models_to_load[],
            const std::size_t number_of_models_to_load,
            renderer::vertex_buffer output_vbo[],
            const std::size_t size_of_output_pool);
-  
+
   
 void
 find_model_data(renderer::vertex_buffer output_vbo[],
