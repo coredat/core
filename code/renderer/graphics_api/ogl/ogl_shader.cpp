@@ -1,6 +1,7 @@
 #include "ogl_shader.hpp"
 #include <assert.h>
 #include <vector>
+#include <string>
 
 
 namespace Ogl {

@@ -1,5 +1,5 @@
 #include <math/transform/transform.hpp>
-#include <bullet/btBulletDynamicsCommon.h>
+#include <btBulletDynamicsCommon.h>
 #include <data/entity_pool.hpp>
 #include <systems/entity/entity_id.hpp>
 #include "motion_state.hpp"

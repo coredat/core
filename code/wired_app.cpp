@@ -31,9 +31,9 @@ namespace
   const bool        is_client = false;
 }
 
-
+#undef main
 int
-main()
+main(int argc, char *argv[])
 {
   const std::string title = is_client ? "Wired Client" : "Wired Server";
 
