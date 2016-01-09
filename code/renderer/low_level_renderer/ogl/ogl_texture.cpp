@@ -8,7 +8,7 @@ void
 texture_create_2d(Texture *out_texture,
                   const uint32_t width,
                   const uint32_t height,
-                  const Pixel_format format,
+                  const GLenum format,
                   const void *data, std::ostream *log)
 {
   // Param check
@@ -50,7 +50,7 @@ texture_create_2d(Texture *out_texture,
   glBindTexture(GL_TEXTURE_2D, out_texture->texture_id);
   glTexImage2D(GL_TEXTURE_2D,
                0,
-               pixel_format_get_internal_format(format),
+               format,
                width,
                height,
                0,

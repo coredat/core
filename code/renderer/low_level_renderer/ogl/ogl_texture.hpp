@@ -19,7 +19,7 @@ struct Texture
   GLuint          texture_id  = 0;
   uint32_t        width       = 0;
   uint32_t        height      = 0;
-  Pixel_format    format      = Pixel_format::rgba8; // TODO: At this point we don't need the abstraction any more do we?
+  GLenum          format      = GL_RGBA;
 }; // struct
 
 
@@ -36,7 +36,7 @@ void
 texture_create_2d(Texture *out_texture,
                   const uint32_t width,
                   const uint32_t height,
-                  const Pixel_format format,
+                  const GLenum format,
                   const void *data,
                   std::ostream *log = nullptr);
 

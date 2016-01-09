@@ -105,7 +105,7 @@ initialize()
     
     data.resize((width_of_data * height_of_data) * number_of_components, 0);
   
-    Ogl::texture_create_2d(&data_texture, width_of_data, height_of_data, Ogl::Pixel_format::rgba32f, (void*)data.data(), &std::cout);
+    Ogl::texture_create_2d(&data_texture, width_of_data, height_of_data, GL_RGBA32F, (void*)data.data(), &std::cout);
   }
   
   uni_wvp  = glGetUniformLocation(debug_line_shader.program_id, "uni_wvp_mat");

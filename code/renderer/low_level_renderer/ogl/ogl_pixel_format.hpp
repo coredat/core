@@ -3,27 +3,23 @@
 
 
 #include "ogl_common.hpp"
+#include "../pixel_format.hpp"
 #include <assert.h>
 
 
 namespace Ogl {
 
 
-enum class Pixel_format
+constexpr GLenum
+gl_pixel_format(const Low_level_renderer::Pixel_format format)
 {
-  rgba8,
-  rgba32f,
-};
+  namespace LLR = Low_level_renderer;
 
-
-inline GLenum
-pixel_format_get_internal_format(const Pixel_format format)
-{
   switch(format)
   {
-  case(Pixel_format::rgba8):
+  case(LLR::Pixel_format::rgba8):
     return GL_RGBA;
-  case(Pixel_format::rgba32f):
+  case(LLR::Pixel_format::rgba32f):
     return GL_RGBA32F;
     break;
 
@@ -34,13 +30,13 @@ pixel_format_get_internal_format(const Pixel_format format)
 }
 
 
-inline GLenum
-pixel_format_get_format(const Pixel_format format)
+constexpr GLenum
+pixel_format_get_format(const GLenum format)
 {
   switch(format)
   {
-  case(Pixel_format::rgba8):
-  case(Pixel_format::rgba32f):
+  case(GL_RGBA):
+  case(GL_RGBA32F):
     return GL_RGBA;
     break;
 
@@ -51,16 +47,16 @@ pixel_format_get_format(const Pixel_format format)
 }
 
 
-inline GLenum
-pixel_format_get_type(const Pixel_format format)
+constexpr GLenum
+pixel_format_get_type(const GLenum format)
 {
   switch(format)
   {
-  case(Pixel_format::rgba8):
+  case(GL_RGBA):
     return GL_UNSIGNED_BYTE;
     break;
     
-  case(Pixel_format::rgba32f):
+  case(GL_RGBA32F):
     return GL_FLOAT;
     break;
 
