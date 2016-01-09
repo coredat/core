@@ -22,6 +22,7 @@ namespace math {
 inline quat             quat_init();
 inline quat             quat_init(const float x, const float y, const float z, const float w);
 inline quat             quat_init_with_axis_angle(const float x, const float y, const float z, const float theta_radians);
+inline quat             quat_init_with_axis_angle(const vec3 axis, const float theta_radians);
 inline quat             quat_init_with_euler_angles(const float pitch_radians, const float yaw_radians, const float roll_radians);
 inline quat             quat_init_with_mat3(const mat3 &mat);
 
@@ -34,6 +35,7 @@ inline vec3             quat_rotate_point(const quat rotation, const vec3 point)
 inline mat3             quat_get_rotation_matrix(const quat to_mat3);
 inline vec3             quat_get_axis();
 inline vec3             quat_get_euler_angles_in_radians();
+inline void             quat_to_array(const quat to_array, float out[4]);
 
 inline float            quat_get_x(const quat quat);
 inline float            quat_get_y(const quat quat);
@@ -89,6 +91,22 @@ quat_init_with_axis_angle(const float x, const float y, const float z, const flo
   const float qw = math::cos(half_angle);
 
   return quat_init(qx, qy, qz, qw);
+}
+
+
+void
+quat_to_array(const quat to_array, float out[4])
+{
+  const detail::internal_quat *array = reinterpret_cast<const detail::internal_quat*>(&to_array);
+  
+  memcpy(out, array, sizeof(float) * 4);
+}
+
+
+quat
+quat_init_with_axis_angle(const vec3 axis, const float theta_radians)
+{
+  return quat_init_with_axis_angle(vec3_get_x(axis), vec3_get_y(axis), vec3_get_z(axis), theta_radians);
 }
 
 

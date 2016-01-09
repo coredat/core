@@ -210,6 +210,14 @@ TEST(mat3_basic_arithmetic)
 }
 
 
+TEST(mat3_determinant)
+{
+  const math::mat3 mat = math::mat3_init_with_array(sequence_mat_data);
+
+  CHECK(float_is_near(mat3_get_determinant(mat), 0.f, error));
+}
+
+
 int main()
 {
   test::run_tests();

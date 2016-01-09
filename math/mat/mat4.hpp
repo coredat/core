@@ -33,7 +33,7 @@ MATH_MAT4_INLINE mat4                       mat4_init_with_array(const std::arra
 // Generate affine/special transformation matrices.
 MATH_MAT4_INLINE mat4                       mat4_lookat(const vec3 eye_position, const vec3 look_at_position, const vec3 up);
 MATH_MAT4_INLINE mat4                       mat4_projection(const float width, const float height, const float near_plane, const float far_plane, const float fov);
-MATH_MAT4_INLINE mat4                       mat4_orthographic(const float width, const float height, const float depth); // Not impl
+MATH_MAT4_INLINE mat4                       mat4_orthographic(const float width, const float height, const float near_plane,  const float far_plane);
 MATH_MAT4_INLINE mat4                       mat4_scale(const vec3 scale);
 MATH_MAT4_INLINE mat4                       mat4_scale(const float x, const float y, const float z);
 MATH_MAT4_INLINE mat4                       mat4_translate(const vec3 move);
@@ -223,15 +223,40 @@ mat4_projection(const float width, const float height, const float near_plane, c
 
  };
 
- return mat4_init_with_array(&proj_mat[0]);
+ return mat4_init_with_array(proj_mat);
 }
 
 
 mat4
-mat4_orthographic(const float width, const float height, const float depth)
+mat4_orthographic(const float width, const float height, const float near_plane, const float far_plane)
 {
-  // TODO: Ortho matrix
-  return mat4_zero();
+  const float depth = far_plane - near_plane;
+  assert(depth > 0);
+
+  const float ortho_mat[16] = 
+  {
+    2.f / width,
+    0.f,
+    0.f,
+    0.f,
+
+    0.f,
+    2.f / height,
+    0.f,
+    0.f,
+    
+    0.f,
+    0.f,
+    1.f / depth,
+    -near_plane / depth,
+ 
+    0.f,
+    0.f,
+    0.f,
+    1.f,
+  };
+
+  return mat4_init_with_array(ortho_mat);
 }
 
 
