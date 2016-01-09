@@ -1,14 +1,15 @@
 #include "debug_line_renderer.hpp"
-#include <simple_renderer/lazy_include.hpp>
-#include "../low_level_renderer/ogl/ogl_common.hpp"
+#include "../graphics_api/ogl/ogl_common.hpp"
+#include "../graphics_api/ogl/ogl_texture.hpp"
+#include "../graphics_api/ogl/ogl_shader.hpp"
+#include "../graphics_api/ogl/ogl_pixel_format.hpp"
+#include "../graphics_api/pixel_format.hpp"
+#include "../graphics_api/ogl/ogl_texture_filtering.hpp"
 #include <assert.h>
 #include <array>
 #include <iostream>
-#include "../low_level_renderer/ogl/ogl_texture.hpp"
-#include "../low_level_renderer/ogl/ogl_shader.hpp"
-#include "../low_level_renderer/ogl/ogl_pixel_format.hpp"
-#include "../low_level_renderer/pixel_format.hpp"
 #include <algorithm>
+#include <vector>
 
 
 namespace
@@ -21,6 +22,8 @@ namespace
   
   std::vector<float> data;
   std::size_t data_ptr = 0;
+  
+  Graphics_api::Texture_filtering filtering;
 }
 
 
@@ -106,7 +109,7 @@ initialize()
     
     data.resize((width_of_data * height_of_data) * number_of_components, 0);
   
-    const auto format = Ogl::pixel_format_get_gl_format(Low_level_renderer::Pixel_format::rgba32f);
+    const auto format = Ogl::pixel_format_get_gl_internal_format(Graphics_api::Pixel_format::rgba32f);
     Ogl::texture_create_2d(&data_texture, width_of_data, height_of_data, format, (void*)data.data(), &std::cout);
   }
   
@@ -114,6 +117,10 @@ initialize()
   uni_data = glGetUniformLocation(debug_line_shader.program_id, "uni_data_lookup");
   
   Ogl::error_check("Debug Renderer Setup.", &std::cout);
+  
+  filtering.wrap_s    = Graphics_api::Wrap_mode::clamp;
+  filtering.wrap_t    = Graphics_api::Wrap_mode::clamp;
+  filtering.filtering = Graphics_api::Filtering_mode::point;
 }
 
 
@@ -164,10 +171,7 @@ render(const float wvp_mat[16])
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, data_texture.texture_id);
 
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  Ogl::filtering_apply(filtering);
   
   glDrawArrays(GL_POINTS, 0, static_cast<GLsizei>(data_ptr));
   data_ptr = 0;

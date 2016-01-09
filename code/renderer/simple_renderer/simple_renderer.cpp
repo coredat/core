@@ -2,6 +2,8 @@
 #include <string>
 #include <utils/directory.hpp>
 #include <assert.h>
+#include "../graphics_api/texture_filtering.hpp"
+#include "../graphics_api/ogl/ogl_texture_filtering.hpp"
 
 
 namespace
@@ -12,6 +14,7 @@ namespace
   GLint uniTrans;
   
   
+  Graphics_api::Texture_filtering filtering;
 }
 
 
@@ -51,7 +54,9 @@ render_nodes_fullbright(const Node nodes[],
 {
   renderer::reset();
   
-  
+  filtering.wrap_s    = Graphics_api::Wrap_mode::clamp;
+  filtering.wrap_t    = Graphics_api::Wrap_mode::clamp;
+  filtering.filtering = Graphics_api::Filtering_mode::bilinear;
   
   for(std::size_t n = 0; n < number_of_nodes; ++n)
   {
@@ -69,10 +74,7 @@ render_nodes_fullbright(const Node nodes[],
     
     glUniform1i(glGetUniformLocation(fullbright.get_program_gl_id(), "diffuse_map"), 0);
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    Ogl::filtering_apply(filtering);
   
     glUniformMatrix4fv(uniTrans, 1, GL_FALSE, curr_node->wvp);
     

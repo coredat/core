@@ -11,18 +11,19 @@ namespace Ogl {
 
 
 constexpr GLenum
-pixel_format_get_gl_format(const Low_level_renderer::Pixel_format format)
+pixel_format_get_gl_internal_format(const Graphics_api::Pixel_format format)
 {
-  namespace LLR = Low_level_renderer;
+  namespace gfx = Graphics_api;
 
   switch(format)
   {
-  case(LLR::Pixel_format::rgba8):
+  case(gfx::Pixel_format::rgba8):
+  case(gfx::Pixel_format::unknown):
     return GL_RGBA;
-  case(LLR::Pixel_format::rgba32f):
+  case(gfx::Pixel_format::rgba32f):
     return GL_RGBA32F;
     break;
-
+  
   default:
     assert(false); // Yikes.
     return GL_RGBA;

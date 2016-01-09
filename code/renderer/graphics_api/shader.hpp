@@ -2,7 +2,7 @@
 #define SHADER_INCLUDED_1074CF4E_A888_4A60_9C2A_CF87CF7C5AB0
 
 
-namespace Low_level_renderer {
+namespace Graphics_api {
 
 
 inline void       shader_init();
