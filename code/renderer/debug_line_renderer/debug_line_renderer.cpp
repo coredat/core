@@ -7,6 +7,7 @@
 #include "../low_level_renderer/ogl/ogl_texture.hpp"
 #include "../low_level_renderer/ogl/ogl_shader.hpp"
 #include "../low_level_renderer/ogl/ogl_pixel_format.hpp"
+#include "../low_level_renderer/pixel_format.hpp"
 #include <algorithm>
 
 
@@ -105,7 +106,8 @@ initialize()
     
     data.resize((width_of_data * height_of_data) * number_of_components, 0);
   
-    Ogl::texture_create_2d(&data_texture, width_of_data, height_of_data, GL_RGBA32F, (void*)data.data(), &std::cout);
+    const auto format = Ogl::pixel_format_get_gl_format(Low_level_renderer::Pixel_format::rgba32f);
+    Ogl::texture_create_2d(&data_texture, width_of_data, height_of_data, format, (void*)data.data(), &std::cout);
   }
   
   uni_wvp  = glGetUniformLocation(debug_line_shader.program_id, "uni_wvp_mat");

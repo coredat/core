@@ -11,7 +11,7 @@ namespace Ogl {
 
 
 constexpr GLenum
-gl_pixel_format(const Low_level_renderer::Pixel_format format)
+pixel_format_get_gl_format(const Low_level_renderer::Pixel_format format)
 {
   namespace LLR = Low_level_renderer;
 
