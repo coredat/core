@@ -29,11 +29,11 @@ struct Shader
   \param log Optional logging stream.
 */
 void
-shader_create_fragment(Shader *out_shader,
-                       const char *vert_shader_code,
-                       const char *geo_shader_code,
-                       const char *frag_shader_code,
-                       std::ostream *log = nullptr);
+shader_create(Shader *out_shader,
+                     const char *vert_shader_code,
+                     const char *geo_shader_code,
+                     const char *frag_shader_code,
+                     std::ostream *log = nullptr);
 
 /*!
   Attempts to create a shader for rendering.

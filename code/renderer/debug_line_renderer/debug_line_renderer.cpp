@@ -5,19 +5,19 @@
 #include <array>
 #include <iostream>
 #include "../low_level_renderer/ogl/ogl_texture.hpp"
+#include "../low_level_renderer/ogl/ogl_shader.hpp"
 #include "../low_level_renderer/ogl/ogl_pixel_format.hpp"
 #include <algorithm>
 
 
 namespace
 {
-  renderer::shader shd;
-  renderer::texture texture;
+  Ogl::Shader debug_line_shader;
+  Ogl::Texture data_texture;
   
-  GLint uniTrans;
+  GLint uni_wvp;
   GLint uni_data;
   
-  Ogl::Texture data_texture;
   std::vector<float> data;
   std::size_t data_ptr = 0;
 }
@@ -93,9 +93,9 @@ initialize()
       ps_out_color = vec4(ps_in_color, 1.0);
     }
   )";
-
-  shd.load_shader(renderer::shader_utils::build_shader_code_vs_gs_ps(vertex_shader, geometry_shader, fragment_shader));
-  assert(shd.is_valid());
+  
+  Ogl::shader_create(&debug_line_shader, vertex_shader, geometry_shader, fragment_shader, &std::cout);
+  Ogl::error_check("Building debug line shader.", &std::cout);
 
   // Size the data container.
   {
@@ -108,8 +108,8 @@ initialize()
     Ogl::texture_create_2d(&data_texture, width_of_data, height_of_data, Ogl::Pixel_format::rgba32f, (void*)data.data(), &std::cout);
   }
   
-  uniTrans = glGetUniformLocation(shd.get_program_gl_id(), "uni_wvp_mat");
-  uni_data = glGetUniformLocation(shd.get_program_gl_id(), "uni_data_lookup");
+  uni_wvp  = glGetUniformLocation(debug_line_shader.program_id, "uni_wvp_mat");
+  uni_data = glGetUniformLocation(debug_line_shader.program_id, "uni_data_lookup");
   
   Ogl::error_check("Debug Renderer Setup.", &std::cout);
 }
@@ -148,23 +148,15 @@ render(const float wvp_mat[16])
 {
   // Update texture
   Ogl::texture_update_texture_2d(&data_texture, 0, 0, data_texture.width, data_texture.height, (void*)data.data());
-  
-  memset(data.data(), 0, data.size() * sizeof(float));
-  
   Ogl::error_check("Updating texture", &std::cout);
-
-  renderer::reset();
   
-  glEnable(GL_PROGRAM_POINT_SIZE);
-  glPointSize(5.0);
-  glDisable(GL_CULL_FACE);
+  // Render
+  Ogl::reset_state();
   
-  glUseProgram(shd.get_program_gl_id());
-
+  glUseProgram(debug_line_shader.program_id);
   Ogl::error_check("Use program", &std::cout);
   
-  glUniformMatrix4fv(uniTrans, 1, GL_FALSE, wvp_mat);
-  
+  glUniformMatrix4fv(uni_wvp, 1, GL_FALSE, wvp_mat);
   Ogl::error_check("set wvp.", &std::cout);
   
   glActiveTexture(GL_TEXTURE0);

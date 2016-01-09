@@ -10,6 +10,16 @@ namespace Ogl {
 
 
 inline void
+reset_state()
+{
+  glEnable(GL_CULL_FACE);
+  glCullFace(GL_BACK);
+  glEnable(GL_DEPTH_TEST);
+  glDisable(GL_STENCIL_TEST);
+}
+
+
+inline void
 error_check(const char* msg, std::ostream *stream)
 {
   if(stream) // Check stream first, if none given we don't want to clear the error.
