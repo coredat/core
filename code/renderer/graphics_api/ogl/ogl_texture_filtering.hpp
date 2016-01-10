@@ -14,7 +14,7 @@ namespace Ogl {
 
 
 
-constexpr void
+inline void
 filtering_apply(const Graphics_api::Texture_filtering settings)
 {
   namespace gfx = Graphics_api;

@@ -31,13 +31,14 @@ namespace
   const bool        is_client = true;
 }
 
+#undef main
 
 int
-main()
+main(int argc, char *argv[])
 {
   const std::string title = is_client ? "Wired Client" : "Wired Server";
 
-  sdl::window window(800, 480, false, title);
+  sdl::window window(1280, 720, false, title);
   sdl::ogl_context ogl(window);
   sdl::input input;
 
@@ -104,6 +105,10 @@ main()
   util::timer frame_timer;
   frame_timer.start();
   
+  renderer::clear_color(1, 0, 0);
+
+  glViewport(0,0,1280, 720);
+
   // Foop
   while(!window.wants_to_quit())
   {

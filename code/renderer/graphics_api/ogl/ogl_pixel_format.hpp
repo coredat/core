@@ -10,7 +10,7 @@
 namespace Ogl {
 
 
-constexpr GLenum
+inline GLenum
 pixel_format_get_gl_internal_format(const Graphics_api::Pixel_format format)
 {
   namespace gfx = Graphics_api;
@@ -31,7 +31,7 @@ pixel_format_get_gl_internal_format(const Graphics_api::Pixel_format format)
 }
 
 
-constexpr GLenum
+inline GLenum
 pixel_format_get_format(const GLenum format)
 {
   switch(format)
@@ -48,7 +48,7 @@ pixel_format_get_format(const GLenum format)
 }
 
 
-constexpr GLenum
+inline GLenum
 pixel_format_get_type(const GLenum format)
 {
   switch(format)
