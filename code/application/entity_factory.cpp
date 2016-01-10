@@ -33,7 +33,7 @@ create_ground(Data::Entity_pool *entity, const Data::Model_pool *mesh_resources,
     
     // Setup texture
     {
-      entity->texture[empty_index] = Resource::Texture::dev_red;
+      entity->texture[empty_index] = Resource::Texture::dev_squares;
     }
     
     // Setup phys

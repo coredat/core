@@ -13,8 +13,7 @@ texture_pool_init(Texture_pool *pool)
 }
 
 
-
-renderer::texture*
+Ogl::Texture*
 texture_pool_find(Texture_pool *pool, const std::size_t id)
 {
   assert(pool);
@@ -29,7 +28,6 @@ texture_pool_find(Texture_pool *pool, const std::size_t id)
   
   return nullptr;
 }
-
 
 
 } // ns

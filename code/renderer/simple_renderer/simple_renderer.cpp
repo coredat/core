@@ -55,7 +55,7 @@ render_nodes_fullbright(const Node nodes[],
   
   filtering.wrap_s    = Graphics_api::Wrap_mode::clamp;
   filtering.wrap_t    = Graphics_api::Wrap_mode::clamp;
-  filtering.filtering = Graphics_api::Filtering_mode::bilinear;
+  filtering.filtering = Graphics_api::Filtering_mode::anisotropic;
   
   for(std::size_t n = 0; n < number_of_nodes; ++n)
   {
@@ -63,19 +63,16 @@ render_nodes_fullbright(const Node nodes[],
     const Node *curr_node = &nodes[n];
     assert(curr_node);
     
-    //fullbright.set_texture("diffuse_map", curr_node->diffuse_id);             // *hurt* need to know if this is a duplicate bind?
-    
     curr_node->vbo.bind(vertex_fmt, fullbright);                                // *hurt* need to know if this is a duplicate bind?
     fullbright.bind();
     
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, curr_node->diffuse_id);
     
-    glUniform1i(glGetUniformLocation(fullbright.get_program_gl_id(), "diffuse_map"), 0);
-
     Ogl::filtering_apply(filtering);
 
-  
+    glUniform1i(glGetUniformLocation(fullbright.get_program_gl_id(), "diffuse_map"), 0);
+
     glUniformMatrix4fv(uniTrans, 1, GL_FALSE, curr_node->wvp);
     
     const GLsizei count = curr_node->vbo.get_number_entries() / vertex_fmt.get_number_of_entires(); // *hurt* Can be pre processed.

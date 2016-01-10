@@ -33,10 +33,12 @@ load_default_resources(Data::Texture_pool *texture_pool,
   // Load textures
   {
     const ::Texture::Load_texture tex[Resource::Texture::size] {
-      ::Texture::Load_texture{Resource::Texture::dev_green,   std::string(asset_path + "textures/dev_grid_green_512.png").c_str()},
-      ::Texture::Load_texture{Resource::Texture::dev_red,     std::string(asset_path + "textures/dev_grid_red_512.png").c_str()},
-      ::Texture::Load_texture{Resource::Texture::dev_blue,    std::string(asset_path + "textures/dev_grid_blue_512.png").c_str()},
-      ::Texture::Load_texture{Resource::Texture::dev_orange,  std::string(asset_path + "textures/dev_grid_orange_512.png").c_str()},
+      ::Texture::Load_texture{Resource::Texture::dev_green,             std::string(asset_path + "textures/dev_grid_green_512.png").c_str()},
+      ::Texture::Load_texture{Resource::Texture::dev_red,               std::string(asset_path + "textures/dev_grid_red_512.png").c_str()},
+      ::Texture::Load_texture{Resource::Texture::dev_blue,              std::string(asset_path + "textures/dev_grid_blue_512.png").c_str()},
+      ::Texture::Load_texture{Resource::Texture::dev_orange,            std::string(asset_path + "textures/dev_grid_orange_512.png").c_str()},
+      ::Texture::Load_texture{Resource::Texture::dev_colored_squares,   std::string(asset_path + "textures/dev_colored_squares_512.png").c_str()},
+      ::Texture::Load_texture{Resource::Texture::dev_squares,           std::string(asset_path + "textures/dev_squares_512.png").c_str()},
     };
     
     Generic_id::ids_init_sequentially(texture_pool->id, texture_pool->size);

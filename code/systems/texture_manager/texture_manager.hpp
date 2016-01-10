@@ -4,7 +4,8 @@
 
 #include <cstddef>
 #include <stdint.h>
-#include <simple_renderer/texture.hpp>
+#include <simple_renderer/texture.hpp> // die
+#include <renderer/graphics_api/ogl/ogl_texture.hpp>
 #include <string>
 
 
@@ -28,7 +29,7 @@ struct Load_texture
 void
 texture_load(const Load_texture textures_to_load[],
              const std::size_t number_of_textures_to_load,
-             renderer::texture output[],
+             Ogl::Texture output[],
              const std::size_t size_of_output_pool);
   
 } // ns

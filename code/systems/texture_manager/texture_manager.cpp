@@ -12,7 +12,7 @@ namespace Texture {
 void
 texture_load(const Load_texture textures_to_load[],
              const std::size_t number_of_textures_to_load,
-             renderer::texture output[],
+             Ogl::Texture output[],
              const std::size_t size_of_output_pool)
 {
   const std::size_t number_to_load = std::min(number_of_textures_to_load, size_of_output_pool);
@@ -33,12 +33,13 @@ texture_load(const Load_texture textures_to_load[],
     
     uint8_t *image_data = SOIL_load_image(tex.file_path.c_str(), &width, &height, 0, SOIL_LOAD_RGBA);
 
-    output[tex.id] = renderer::texture(image_data, width, height);
+    //output[tex.id] = renderer::texture(image_data, width, height);
     
-//    Ogl::Texture new_texture;
-//    Ogl::texture_create_2d(&new_texture, width, height, Ogl::Pixel_format::rgba8, image_data);
-//    
-//    output[tex.id] = new_texture;
+    Ogl::Texture new_texture;
+    const auto pixel_format = Ogl::pixel_format_get_gl_internal_format(Graphics_api::Pixel_format::rgba8);
+    Ogl::texture_create_2d(&new_texture, width, height, pixel_format, image_data);
+    
+    output[tex.id] = new_texture;
     
     SOIL_free_image_data(image_data);
   }

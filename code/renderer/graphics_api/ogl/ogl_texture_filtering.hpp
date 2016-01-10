@@ -17,32 +17,35 @@ namespace Ogl {
 inline void
 filtering_apply(const Graphics_api::Texture_filtering settings)
 {
-  namespace gfx = Graphics_api;
+  namespace Gfx = Graphics_api;
   
-  const auto wrap_s = settings.wrap_s == gfx::Wrap_mode::clamp ? GL_CLAMP_TO_EDGE : GL_REPEAT;
+  const auto wrap_s = settings.wrap_s == Gfx::Wrap_mode::clamp ? GL_CLAMP_TO_EDGE : GL_REPEAT;
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrap_s);
   
-  const auto wrap_t = settings.wrap_t == gfx::Wrap_mode::clamp ? GL_CLAMP_TO_EDGE : GL_REPEAT;
+  const auto wrap_t = settings.wrap_t == Gfx::Wrap_mode::clamp ? GL_CLAMP_TO_EDGE : GL_REPEAT;
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrap_t);
   
   GLenum filtering = GL_LINEAR;
   
   switch(settings.filtering)
   {
-    case(gfx::Filtering_mode::point):
-      filtering = GL_NEAREST;
+    case(Gfx::Filtering_mode::point):
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
       break;
-    case(gfx::Filtering_mode::bilinear):
+    case(Gfx::Filtering_mode::bilinear):
       filtering = GL_LINEAR;
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
       break;
-    case(gfx::Filtering_mode::trilinear):
-      filtering = GL_LINEAR_MIPMAP_LINEAR;
+    case(Gfx::Filtering_mode::trilinear):
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+      break;
+    case(Gfx::Filtering_mode::anisotropic):
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 4);
       break;
   }
-  
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filtering);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filtering);
-
 }
 
 

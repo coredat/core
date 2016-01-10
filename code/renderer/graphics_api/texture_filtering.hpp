@@ -23,9 +23,10 @@ namespace Filtering_mode {
 
 enum ENUM {
 
-  point       = 1 << 0,
-  bilinear    = 1 << 1,
-  trilinear   = 1 << 2,
+  point = 0,
+  bilinear,
+  trilinear,
+  anisotropic,
 
 }; // enum
 
@@ -36,8 +37,8 @@ namespace Wrap_mode {
 
 enum ENUM {
 
-  clamp     = 1 << 0,
-  wrap      = 1 << 1,
+  clamp = 0,
+  wrap,
 
 }; // enum
 
