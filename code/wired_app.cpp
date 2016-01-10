@@ -38,7 +38,7 @@ main(int argc, char *argv[])
 {
   const std::string title = is_client ? "Wired Client" : "Wired Server";
 
-  sdl::window window(1280, 720, false, title);
+  sdl::window window(800, 480, false, title);
   sdl::ogl_context ogl(window);
   sdl::input input;
 
@@ -55,6 +55,7 @@ main(int argc, char *argv[])
   if(is_client)
   {
     Network::client_create(&connection, &std::cout);
+    //Network::client_connect_to_server(&connection, "92.239.13.99", 6112, 15000, &std::cout);
     Network::client_connect_to_server(&connection, "192.168.0.11", 1234, 5000, &std::cout);
   }
   else
@@ -107,7 +108,7 @@ main(int argc, char *argv[])
   
   renderer::clear_color(1, 0, 0);
 
-  glViewport(0,0,1280, 720);
+  //glViewport(0,0,1280, 720);
 
   // Foop
   while(!window.wants_to_quit())

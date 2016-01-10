@@ -1,0 +1,47 @@
+require 'rake'
+require 'net/http'
+require 'zip'
+
+
+Zip.on_exists_proc = true
+
+
+ROOT_DIR = "../"
+
+
+desc "Download assets contents."
+task :download_assets do |t, args|
+
+  # Download Assets
+  asset_uri = URI("https://dl.dropboxusercontent.com/u/2580523/Wired/assets/out.gif.zip")
+
+  zip = Net::HTTP.get(asset_uri);
+
+  download_asset_file_path = "./assets.zip"
+
+  File.open(download_asset_file_path, 'wb') do |f|
+    f.write(zip);
+  end
+
+  # Unzip Assets
+  asset_path = ROOT_DIR + "assets/"
+
+  zip_file = Zip::File.open(download_asset_file_path)
+
+  zip_file.each do |f|
+    next if f.name =~ /__MACOSX/ or f.name =~ /\.DS_Store/ or !f.file?
+    f.extract("#{asset_path}#{f.name}")
+  end
+
+  # Clean up
+  File.delete(download_asset_file_path)
+
+end
+
+
+desc "Download 3rd party libraries."
+task :download_3rdparty do |t, args|
+  THIRDPARTY_DIR = "../3rdparty/"
+
+
+end
