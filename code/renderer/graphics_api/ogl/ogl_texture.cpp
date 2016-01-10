@@ -58,6 +58,8 @@ texture_create_2d(Texture *out_texture,
                pixel_format_get_type(format),
                data);
   
+  glGenerateMipmap(GL_TEXTURE_2D);
+  
   // Calling code checks for error.
 }
 

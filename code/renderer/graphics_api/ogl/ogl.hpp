@@ -3,6 +3,11 @@
 
 
 #include "ogl_common.hpp"
+#include "ogl_fwd.hpp"
+#include "ogl_pixel_format.hpp"
+#include "ogl_shader.hpp"
+#include "ogl_texture.hpp"
+#include "ogl_texture_filtering.hpp"
 
 
 #endif // inc guard

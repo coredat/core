@@ -5,6 +5,7 @@
 #include <cstddef>
 #include <stdint.h>
 #include <simple_renderer/texture.hpp>
+#include <renderer/graphics_api/ogl/ogl.hpp>
 #include <string>
 
 

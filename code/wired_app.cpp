@@ -28,7 +28,7 @@
 namespace
 {
   const math::mat4  proj      = math::mat4_projection(800, 480, 0.1, 1000, math::quart_tau() * 0.6f);
-  const bool        is_client = false;
+  const bool        is_client = true;
 }
 
 
@@ -54,7 +54,7 @@ main()
   if(is_client)
   {
     Network::client_create(&connection, &std::cout);
-    Network::client_connect_to_server(&connection, "127.0.0.1", 1234, 5000, &std::cout);
+    Network::client_connect_to_server(&connection, "192.168.0.11", 1234, 5000, &std::cout);
   }
   else
   {
