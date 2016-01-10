@@ -27,17 +27,18 @@
 
 namespace
 {
-  const math::mat4  proj      = math::mat4_projection(800, 480, 0.1, 1000, math::quart_tau() * 0.6f);
+  const math::mat4  proj      = math::mat4_projection(1280, 720, 0.1, 1000, math::quart_tau() * 0.6f);
   const bool        is_client = false;
 }
 
 #undef main
+
 int
 main(int argc, char *argv[])
 {
   const std::string title = is_client ? "Wired Client" : "Wired Server";
 
-  sdl::window window(800, 480, false, title);
+  sdl::window window(1280, 720, false, title);
   sdl::ogl_context ogl(window);
   sdl::input input;
 
@@ -104,6 +105,10 @@ main(int argc, char *argv[])
   util::timer frame_timer;
   frame_timer.start();
   
+  renderer::clear_color(1, 0, 0);
+
+  glViewport(0,0,1280, 720);
+
   // Foop
   while(!window.wants_to_quit())
   {

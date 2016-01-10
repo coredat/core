@@ -13,7 +13,6 @@ namespace
   renderer::vertex_format vertex_fmt;
   GLint uniTrans;
   
-  
   Graphics_api::Texture_filtering filtering;
 }
 
@@ -66,7 +65,7 @@ render_nodes_fullbright(const Node nodes[],
     
     //fullbright.set_texture("diffuse_map", curr_node->diffuse_id);             // *hurt* need to know if this is a duplicate bind?
     
-    curr_node->vbo.bind(vertex_fmt, fullbright);                              // *hurt* need to know if this is a duplicate bind?
+    curr_node->vbo.bind(vertex_fmt, fullbright);                                // *hurt* need to know if this is a duplicate bind?
     fullbright.bind();
     
     glActiveTexture(GL_TEXTURE0);
@@ -75,6 +74,7 @@ render_nodes_fullbright(const Node nodes[],
     glUniform1i(glGetUniformLocation(fullbright.get_program_gl_id(), "diffuse_map"), 0);
 
     Ogl::filtering_apply(filtering);
+
   
     glUniformMatrix4fv(uniTrans, 1, GL_FALSE, curr_node->wvp);
     

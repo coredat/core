@@ -18,6 +18,8 @@ namespace Physics {
 */
 struct World
 {
+  World() {}
+
   btDbvtBroadphase                       broadphase;
   btDefaultCollisionConfiguration        collision_config;
   btCollisionDispatcher                  dispatcher = {&collision_config};
