@@ -28,10 +28,12 @@
 namespace
 {
   const math::mat4  proj      = math::mat4_projection(800, 480, 0.1, 1000, math::quart_tau() * 0.6f);
-  const bool        is_client = true;
+  const bool        is_client = false;
 }
 
+#ifdef main
 #undef main
+#endif
 
 int
 main(int argc, char *argv[])
@@ -57,6 +59,7 @@ main(int argc, char *argv[])
     Network::client_create(&connection, &std::cout);
     //Network::client_connect_to_server(&connection, "92.239.13.99", 6112, 15000, &std::cout);
     Network::client_connect_to_server(&connection, "192.168.0.11", 1234, 5000, &std::cout);
+    //Network::client_connect_to_server(&connection, "127.0.0.1", 6112, 5000, &std::cout);
   }
   else
   {
@@ -100,13 +103,13 @@ main(int argc, char *argv[])
   for(std::size_t i = 0; i < world_entities.size; ++i)
   {
     renderer_nodes.at(i).vbo        = model_pool.vbo[world_entities.model[i]];
-    renderer_nodes.at(i).diffuse_id = Data::texture_pool_find(&texture_pool, world_entities.texture[i])->get_gl_id();
+    renderer_nodes.at(i).diffuse_id = Data::texture_pool_find(&texture_pool, world_entities.texture[i])->texture_id;
   }
   
   util::timer frame_timer;
   frame_timer.start();
   
-  renderer::clear_color(1, 0, 0);
+  renderer::clear_color(0.4f, 0.2f, 0.2f);
 
   //glViewport(0,0,1280, 720);
 

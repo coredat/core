@@ -30,6 +30,8 @@ enum ENUM {
   dev_red,
   dev_orange,
   dev_blue,
+  dev_colored_squares,
+  dev_squares,
   
   size
 
