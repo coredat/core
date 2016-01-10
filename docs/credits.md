@@ -6,3 +6,5 @@
 
 
 ## QA
+
+- Roisin Cooper-King
