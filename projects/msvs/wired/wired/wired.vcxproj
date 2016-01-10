@@ -1,0 +1,296 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\3rdparty\external\sdl_wrapper\input.cpp" />
+    <ClCompile Include="..\..\..\..\3rdparty\external\sdl_wrapper\message_pump.cpp" />
+    <ClCompile Include="..\..\..\..\3rdparty\external\sdl_wrapper\mixer.cpp" />
+    <ClCompile Include="..\..\..\..\3rdparty\external\sdl_wrapper\ogl_context.cpp" />
+    <ClCompile Include="..\..\..\..\3rdparty\external\sdl_wrapper\sdl_common.cpp" />
+    <ClCompile Include="..\..\..\..\3rdparty\external\sdl_wrapper\window.cpp" />
+    <ClCompile Include="..\..\..\..\3rdparty\external\simple_renderer\common.cpp" />
+    <ClCompile Include="..\..\..\..\3rdparty\external\simple_renderer\draw_call.cpp" />
+    <ClCompile Include="..\..\..\..\3rdparty\external\simple_renderer\frame_buffer.cpp" />
+    <ClCompile Include="..\..\..\..\3rdparty\external\simple_renderer\index_buffer.cpp" />
+    <ClCompile Include="..\..\..\..\3rdparty\external\simple_renderer\ogl\texture_resource.cpp" />
+    <ClCompile Include="..\..\..\..\3rdparty\external\simple_renderer\ogl\vertex_buffer_resource.cpp" />
+    <ClCompile Include="..\..\..\..\3rdparty\external\simple_renderer\rasterizer.cpp" />
+    <ClCompile Include="..\..\..\..\3rdparty\external\simple_renderer\renderer.cpp" />
+    <ClCompile Include="..\..\..\..\3rdparty\external\simple_renderer\shader.cpp" />
+    <ClCompile Include="..\..\..\..\3rdparty\external\simple_renderer\texture.cpp" />
+    <ClCompile Include="..\..\..\..\3rdparty\external\simple_renderer\vertex_buffer.cpp" />
+    <ClCompile Include="..\..\..\..\3rdparty\external\simple_renderer\vertex_format.cpp" />
+    <ClCompile Include="..\..\..\..\3rdparty\external\SOIL\image_DXT.c" />
+    <ClCompile Include="..\..\..\..\3rdparty\external\SOIL\image_helper.c" />
+    <ClCompile Include="..\..\..\..\3rdparty\external\SOIL\SOIL.c" />
+    <ClCompile Include="..\..\..\..\3rdparty\external\SOIL\stb_image_aug.c" />
+    <ClCompile Include="..\..\..\..\3rdparty\external\utils\directory _win.cpp" />
+    <ClCompile Include="..\..\..\..\3rdparty\external\utils\logging.cpp" />
+    <ClCompile Include="..\..\..\..\3rdparty\external\utils\obj_model_loader.cpp" />
+    <ClCompile Include="..\..\..\..\3rdparty\external\utils\timer.cpp" />
+    <ClCompile Include="..\..\..\..\code\application\entity_factory.cpp" />
+    <ClCompile Include="..\..\..\..\code\application\network_events.cpp" />
+    <ClCompile Include="..\..\..\..\code\application\resources.cpp" />
+    <ClCompile Include="..\..\..\..\code\data\entity_pool.cpp" />
+    <ClCompile Include="..\..\..\..\code\data\model_pool.cpp" />
+    <ClCompile Include="..\..\..\..\code\data\texture_pool.cpp" />
+    <ClCompile Include="..\..\..\..\code\renderer\debug_line.cpp" />
+    <ClCompile Include="..\..\..\..\code\renderer\debug_line_renderer\debug_line_renderer.cpp" />
+    <ClCompile Include="..\..\..\..\code\renderer\graphics_api\ogl\ogl_shader.cpp" />
+    <ClCompile Include="..\..\..\..\code\renderer\graphics_api\ogl\ogl_texture.cpp" />
+    <ClCompile Include="..\..\..\..\code\renderer\graphics_api\ogl\ogl_texture_filtering.cpp" />
+    <ClCompile Include="..\..\..\..\code\renderer\simple_renderer\simple_renderer.cpp" />
+    <ClCompile Include="..\..\..\..\code\systems\entity\entity_data.cpp" />
+    <ClCompile Include="..\..\..\..\code\systems\entity\entity_id.cpp" />
+    <ClCompile Include="..\..\..\..\code\systems\entity\generic_id.cpp" />
+    <ClCompile Include="..\..\..\..\code\systems\model_manager\model_manager.cpp" />
+    <ClCompile Include="..\..\..\..\code\systems\network\network.cpp" />
+    <ClCompile Include="..\..\..\..\code\systems\net_transform\net_transform.cpp" />
+    <ClCompile Include="..\..\..\..\code\systems\physics\debug_renderer.cpp" />
+    <ClCompile Include="..\..\..\..\code\systems\physics\motion_state.cpp" />
+    <ClCompile Include="..\..\..\..\code\systems\physics\rigidbody.cpp" />
+    <ClCompile Include="..\..\..\..\code\systems\physics\world.cpp" />
+    <ClCompile Include="..\..\..\..\code\systems\texture_manager\texture_manager.cpp" />
+    <ClCompile Include="..\..\..\..\code\systems\transform\transform.cpp" />
+    <ClCompile Include="..\..\..\..\code\wired_app.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\3rdparty\external\sdl_wrapper\input.hpp" />
+    <ClInclude Include="..\..\..\..\3rdparty\external\sdl_wrapper\message_pump.hpp" />
+    <ClInclude Include="..\..\..\..\3rdparty\external\sdl_wrapper\mixer.hpp" />
+    <ClInclude Include="..\..\..\..\3rdparty\external\sdl_wrapper\ogl_context.hpp" />
+    <ClInclude Include="..\..\..\..\3rdparty\external\sdl_wrapper\sdl_common.hpp" />
+    <ClInclude Include="..\..\..\..\3rdparty\external\sdl_wrapper\sdl_fwd.hpp" />
+    <ClInclude Include="..\..\..\..\3rdparty\external\sdl_wrapper\sdl_lazy_include.hpp" />
+    <ClInclude Include="..\..\..\..\3rdparty\external\sdl_wrapper\window.hpp" />
+    <ClInclude Include="..\..\..\..\3rdparty\external\simple_renderer\common.hpp" />
+    <ClInclude Include="..\..\..\..\3rdparty\external\simple_renderer\draw_call.hpp" />
+    <ClInclude Include="..\..\..\..\3rdparty\external\simple_renderer\frame_buffer.hpp" />
+    <ClInclude Include="..\..\..\..\3rdparty\external\simple_renderer\index_buffer.hpp" />
+    <ClInclude Include="..\..\..\..\3rdparty\external\simple_renderer\lazy_include.hpp" />
+    <ClInclude Include="..\..\..\..\3rdparty\external\simple_renderer\ogl\texture_resource.hpp" />
+    <ClInclude Include="..\..\..\..\3rdparty\external\simple_renderer\ogl\vertex_buffer_resource.hpp" />
+    <ClInclude Include="..\..\..\..\3rdparty\external\simple_renderer\rasterizer.hpp" />
+    <ClInclude Include="..\..\..\..\3rdparty\external\simple_renderer\renderer.hpp" />
+    <ClInclude Include="..\..\..\..\3rdparty\external\simple_renderer\renderer_fwd.hpp" />
+    <ClInclude Include="..\..\..\..\3rdparty\external\simple_renderer\shader.hpp" />
+    <ClInclude Include="..\..\..\..\3rdparty\external\simple_renderer\texture.hpp" />
+    <ClInclude Include="..\..\..\..\3rdparty\external\simple_renderer\version.hpp" />
+    <ClInclude Include="..\..\..\..\3rdparty\external\simple_renderer\vertex_buffer.hpp" />
+    <ClInclude Include="..\..\..\..\3rdparty\external\simple_renderer\vertex_format.hpp" />
+    <ClInclude Include="..\..\..\..\3rdparty\external\SOIL\image_DXT.h" />
+    <ClInclude Include="..\..\..\..\3rdparty\external\SOIL\image_helper.h" />
+    <ClInclude Include="..\..\..\..\3rdparty\external\SOIL\SOIL.h" />
+    <ClInclude Include="..\..\..\..\3rdparty\external\SOIL\stbi_DDS_aug.h" />
+    <ClInclude Include="..\..\..\..\3rdparty\external\SOIL\stbi_DDS_aug_c.h" />
+    <ClInclude Include="..\..\..\..\3rdparty\external\SOIL\stb_image_aug.h" />
+    <ClInclude Include="..\..\..\..\3rdparty\external\utils\alignment.hpp" />
+    <ClInclude Include="..\..\..\..\3rdparty\external\utils\color.hpp" />
+    <ClInclude Include="..\..\..\..\3rdparty\external\utils\directory.hpp" />
+    <ClInclude Include="..\..\..\..\3rdparty\external\utils\logging.hpp" />
+    <ClInclude Include="..\..\..\..\3rdparty\external\utils\obj_model_loader.hpp" />
+    <ClInclude Include="..\..\..\..\3rdparty\external\utils\string_helpers.hpp" />
+    <ClInclude Include="..\..\..\..\3rdparty\external\utils\timer.hpp" />
+    <ClInclude Include="..\..\..\..\3rdparty\external\utils\utils_fwd.hpp" />
+    <ClInclude Include="..\..\..\..\3rdparty\external\utils\variant.hpp" />
+    <ClInclude Include="..\..\..\..\code\application\entity_factory.hpp" />
+    <ClInclude Include="..\..\..\..\code\application\network_events.hpp" />
+    <ClInclude Include="..\..\..\..\code\application\resources.hpp" />
+    <ClInclude Include="..\..\..\..\code\data\actor\actor.hpp" />
+    <ClInclude Include="..\..\..\..\code\data\data.hpp" />
+    <ClInclude Include="..\..\..\..\code\data\data_fwd.hpp" />
+    <ClInclude Include="..\..\..\..\code\data\entity_pool.hpp" />
+    <ClInclude Include="..\..\..\..\code\data\model_pool.hpp" />
+    <ClInclude Include="..\..\..\..\code\data\texture_pool.hpp" />
+    <ClInclude Include="..\..\..\..\code\renderer\debug_line.hpp" />
+    <ClInclude Include="..\..\..\..\code\renderer\debug_line_renderer\debug_line_renderer.hpp" />
+    <ClInclude Include="..\..\..\..\code\renderer\debug_line_renderer\debug_line_renderer_node.hpp" />
+    <ClInclude Include="..\..\..\..\code\renderer\graphics_api\ogl\ogl.hpp" />
+    <ClInclude Include="..\..\..\..\code\renderer\graphics_api\ogl\ogl_common.hpp" />
+    <ClInclude Include="..\..\..\..\code\renderer\graphics_api\ogl\ogl_fwd.hpp" />
+    <ClInclude Include="..\..\..\..\code\renderer\graphics_api\ogl\ogl_pixel_format.hpp" />
+    <ClInclude Include="..\..\..\..\code\renderer\graphics_api\ogl\ogl_shader.hpp" />
+    <ClInclude Include="..\..\..\..\code\renderer\graphics_api\ogl\ogl_texture.hpp" />
+    <ClInclude Include="..\..\..\..\code\renderer\graphics_api\ogl\ogl_texture_filtering.hpp" />
+    <ClInclude Include="..\..\..\..\code\renderer\graphics_api\pixel_format.hpp" />
+    <ClInclude Include="..\..\..\..\code\renderer\graphics_api\shader.hpp" />
+    <ClInclude Include="..\..\..\..\code\renderer\graphics_api\texture_filtering.hpp" />
+    <ClInclude Include="..\..\..\..\code\renderer\renderer.hpp" />
+    <ClInclude Include="..\..\..\..\code\renderer\simple_renderer\simple_renderer.hpp" />
+    <ClInclude Include="..\..\..\..\code\renderer\simple_renderer\simple_renderer_node.hpp" />
+    <ClInclude Include="..\..\..\..\code\systems\entity\entity_data.hpp" />
+    <ClInclude Include="..\..\..\..\code\systems\entity\entity_fwd.hpp" />
+    <ClInclude Include="..\..\..\..\code\systems\entity\entity_id.hpp" />
+    <ClInclude Include="..\..\..\..\code\systems\entity\generic_id.hpp" />
+    <ClInclude Include="..\..\..\..\code\systems\model_manager\model_manager.hpp" />
+    <ClInclude Include="..\..\..\..\code\systems\network\network.hpp" />
+    <ClInclude Include="..\..\..\..\code\systems\network\network_connection.hpp" />
+    <ClInclude Include="..\..\..\..\code\systems\network\network_fwd.hpp" />
+    <ClInclude Include="..\..\..\..\code\systems\net_transform\net_transform.hpp" />
+    <ClInclude Include="..\..\..\..\code\systems\net_transform\net_transform_structure.hpp" />
+    <ClInclude Include="..\..\..\..\code\systems\physics\debug_renderer.hpp" />
+    <ClInclude Include="..\..\..\..\code\systems\physics\motion_state.hpp" />
+    <ClInclude Include="..\..\..\..\code\systems\physics\physics.hpp" />
+    <ClInclude Include="..\..\..\..\code\systems\physics\physics_fwd.hpp" />
+    <ClInclude Include="..\..\..\..\code\systems\physics\rigidbody.hpp" />
+    <ClInclude Include="..\..\..\..\code\systems\physics\rigidbody_properties.hpp" />
+    <ClInclude Include="..\..\..\..\code\systems\physics\world.hpp" />
+    <ClInclude Include="..\..\..\..\code\systems\texture_manager\texture_manager.hpp" />
+    <ClInclude Include="..\..\..\..\code\systems\transform\transform.hpp" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{C952A000-99AF-4A44-9DD7-28CF94CA846A}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>wired</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="default.props" />
+    <Import Project="x86.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="default.props" />
+    <Import Project="x86.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="default.props" />
+    <Import Project="x86.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="default.props" />
+    <Import Project="x86.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreAllDefaultLibraries>
+      </IgnoreAllDefaultLibraries>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreAllDefaultLibraries>
+      </IgnoreAllDefaultLibraries>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

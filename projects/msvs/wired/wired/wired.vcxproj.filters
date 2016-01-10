@@ -1,0 +1,460 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="application">
+      <UniqueIdentifier>{e7715a16-aacf-41ae-a06e-9ee8c8dbac94}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data">
+      <UniqueIdentifier>{6d3e8e01-f46c-4253-a8a4-da9f712fd5eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="renderer">
+      <UniqueIdentifier>{e916eb26-2441-4287-aed5-1a92a9eefd43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="systems">
+      <UniqueIdentifier>{54b4bbbf-5324-4ed4-8371-4bc89a5c41d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\actor">
+      <UniqueIdentifier>{14719ffa-d7ac-418e-baae-cfd290514630}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="renderer\graphics_api">
+      <UniqueIdentifier>{68e9a6ad-c941-4e87-b352-6eb1ab2be0fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="renderer\debug_line_renderer">
+      <UniqueIdentifier>{d4a87610-63d0-4b5d-aabf-1602888ebea6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="renderer\simple_renderer">
+      <UniqueIdentifier>{9718a159-1703-4af0-bac8-e6a7fee935eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="renderer\graphics_api\ogl">
+      <UniqueIdentifier>{143c4c74-21b7-481a-bdbf-9c675f551fb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="systems\entity">
+      <UniqueIdentifier>{3e784dcc-5392-4e68-8002-41926fad7d0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="systems\model_manager">
+      <UniqueIdentifier>{5d55413b-2dc4-438c-a28e-deb689722d23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="systems\net_transform">
+      <UniqueIdentifier>{c71aef8c-ba18-4c46-9003-31bd67ce6642}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="systems\network">
+      <UniqueIdentifier>{608ae234-2d36-4f01-bccf-be2ffcbf4427}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="systems\physics">
+      <UniqueIdentifier>{1e409405-7c54-45d2-8a7b-fc5a99218a9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="systems\texture_manager">
+      <UniqueIdentifier>{f7c04ec5-d25f-4d97-bc5e-581fbfcc2ff9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="systems\transform">
+      <UniqueIdentifier>{594ccf72-eb64-4a52-b1d8-9a753a8d07d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utils">
+      <UniqueIdentifier>{e70cf8a7-8ef2-442f-8558-56f6fcdaf88d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="external">
+      <UniqueIdentifier>{63e88ad3-61bd-423d-a3ad-9fcc85f4cf6a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\code\wired_app.cpp" />
+    <ClCompile Include="..\..\..\..\code\application\entity_factory.cpp">
+      <Filter>application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\application\network_events.cpp">
+      <Filter>application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\application\resources.cpp">
+      <Filter>application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\data\entity_pool.cpp">
+      <Filter>data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\data\model_pool.cpp">
+      <Filter>data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\data\texture_pool.cpp">
+      <Filter>data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\renderer\debug_line.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\renderer\debug_line_renderer\debug_line_renderer.cpp">
+      <Filter>renderer\debug_line_renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\renderer\graphics_api\ogl\ogl_shader.cpp">
+      <Filter>renderer\graphics_api\ogl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\renderer\graphics_api\ogl\ogl_texture.cpp">
+      <Filter>renderer\graphics_api\ogl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\renderer\graphics_api\ogl\ogl_texture_filtering.cpp">
+      <Filter>renderer\graphics_api\ogl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\renderer\simple_renderer\simple_renderer.cpp">
+      <Filter>renderer\simple_renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\systems\entity\entity_data.cpp">
+      <Filter>systems\entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\systems\entity\entity_id.cpp">
+      <Filter>systems\entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\systems\entity\generic_id.cpp">
+      <Filter>systems\entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\systems\model_manager\model_manager.cpp">
+      <Filter>systems\model_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\systems\net_transform\net_transform.cpp">
+      <Filter>systems\net_transform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\systems\network\network.cpp">
+      <Filter>systems\network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\systems\physics\debug_renderer.cpp">
+      <Filter>systems\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\systems\physics\motion_state.cpp">
+      <Filter>systems\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\systems\physics\rigidbody.cpp">
+      <Filter>systems\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\systems\physics\world.cpp">
+      <Filter>systems\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\systems\texture_manager\texture_manager.cpp">
+      <Filter>systems\texture_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\systems\transform\transform.cpp">
+      <Filter>systems\transform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\3rdparty\external\utils\logging.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\3rdparty\external\utils\obj_model_loader.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\3rdparty\external\utils\timer.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\3rdparty\external\utils\directory _win.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\3rdparty\external\simple_renderer\ogl\texture_resource.cpp">
+      <Filter>external</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\3rdparty\external\simple_renderer\ogl\vertex_buffer_resource.cpp">
+      <Filter>external</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\3rdparty\external\simple_renderer\common.cpp">
+      <Filter>external</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\3rdparty\external\simple_renderer\draw_call.cpp">
+      <Filter>external</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\3rdparty\external\simple_renderer\frame_buffer.cpp">
+      <Filter>external</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\3rdparty\external\simple_renderer\index_buffer.cpp">
+      <Filter>external</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\3rdparty\external\simple_renderer\rasterizer.cpp">
+      <Filter>external</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\3rdparty\external\simple_renderer\renderer.cpp">
+      <Filter>external</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\3rdparty\external\simple_renderer\shader.cpp">
+      <Filter>external</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\3rdparty\external\simple_renderer\texture.cpp">
+      <Filter>external</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\3rdparty\external\simple_renderer\vertex_buffer.cpp">
+      <Filter>external</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\3rdparty\external\simple_renderer\vertex_format.cpp">
+      <Filter>external</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\3rdparty\external\SOIL\image_DXT.c">
+      <Filter>external</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\3rdparty\external\SOIL\image_helper.c">
+      <Filter>external</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\3rdparty\external\SOIL\SOIL.c">
+      <Filter>external</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\3rdparty\external\SOIL\stb_image_aug.c">
+      <Filter>external</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\3rdparty\external\sdl_wrapper\input.cpp">
+      <Filter>external</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\3rdparty\external\sdl_wrapper\message_pump.cpp">
+      <Filter>external</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\3rdparty\external\sdl_wrapper\mixer.cpp">
+      <Filter>external</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\3rdparty\external\sdl_wrapper\ogl_context.cpp">
+      <Filter>external</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\3rdparty\external\sdl_wrapper\sdl_common.cpp">
+      <Filter>external</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\3rdparty\external\sdl_wrapper\window.cpp">
+      <Filter>external</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\code\application\entity_factory.hpp">
+      <Filter>application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\application\network_events.hpp">
+      <Filter>application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\application\resources.hpp">
+      <Filter>application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\data\data.hpp">
+      <Filter>data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\data\data_fwd.hpp">
+      <Filter>data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\data\entity_pool.hpp">
+      <Filter>data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\data\model_pool.hpp">
+      <Filter>data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\data\texture_pool.hpp">
+      <Filter>data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\data\actor\actor.hpp">
+      <Filter>data\actor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\renderer\debug_line.hpp">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\renderer\renderer.hpp">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\renderer\debug_line_renderer\debug_line_renderer.hpp">
+      <Filter>renderer\debug_line_renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\renderer\debug_line_renderer\debug_line_renderer_node.hpp">
+      <Filter>renderer\debug_line_renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\renderer\graphics_api\pixel_format.hpp">
+      <Filter>renderer\graphics_api</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\renderer\graphics_api\shader.hpp">
+      <Filter>renderer\graphics_api</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\renderer\graphics_api\texture_filtering.hpp">
+      <Filter>renderer\graphics_api</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\renderer\graphics_api\ogl\ogl.hpp">
+      <Filter>renderer\graphics_api\ogl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\renderer\graphics_api\ogl\ogl_common.hpp">
+      <Filter>renderer\graphics_api\ogl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\renderer\graphics_api\ogl\ogl_fwd.hpp">
+      <Filter>renderer\graphics_api\ogl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\renderer\graphics_api\ogl\ogl_pixel_format.hpp">
+      <Filter>renderer\graphics_api\ogl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\renderer\graphics_api\ogl\ogl_shader.hpp">
+      <Filter>renderer\graphics_api\ogl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\renderer\graphics_api\ogl\ogl_texture.hpp">
+      <Filter>renderer\graphics_api\ogl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\renderer\graphics_api\ogl\ogl_texture_filtering.hpp">
+      <Filter>renderer\graphics_api\ogl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\renderer\simple_renderer\simple_renderer.hpp">
+      <Filter>renderer\simple_renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\renderer\simple_renderer\simple_renderer_node.hpp">
+      <Filter>renderer\simple_renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\systems\entity\entity_data.hpp">
+      <Filter>systems\entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\systems\entity\entity_fwd.hpp">
+      <Filter>systems\entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\systems\entity\entity_id.hpp">
+      <Filter>systems\entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\systems\entity\generic_id.hpp">
+      <Filter>systems\entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\systems\model_manager\model_manager.hpp">
+      <Filter>systems\model_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\systems\net_transform\net_transform.hpp">
+      <Filter>systems\net_transform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\systems\net_transform\net_transform_structure.hpp">
+      <Filter>systems\net_transform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\systems\network\network.hpp">
+      <Filter>systems\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\systems\network\network_connection.hpp">
+      <Filter>systems\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\systems\network\network_fwd.hpp">
+      <Filter>systems\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\systems\physics\debug_renderer.hpp">
+      <Filter>systems\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\systems\physics\motion_state.hpp">
+      <Filter>systems\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\systems\physics\physics.hpp">
+      <Filter>systems\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\systems\physics\physics_fwd.hpp">
+      <Filter>systems\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\systems\physics\rigidbody.hpp">
+      <Filter>systems\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\systems\physics\rigidbody_properties.hpp">
+      <Filter>systems\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\systems\physics\world.hpp">
+      <Filter>systems\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\systems\texture_manager\texture_manager.hpp">
+      <Filter>systems\texture_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\systems\transform\transform.hpp">
+      <Filter>systems\transform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\3rdparty\external\utils\alignment.hpp">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\3rdparty\external\utils\color.hpp">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\3rdparty\external\utils\directory.hpp">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\3rdparty\external\utils\logging.hpp">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\3rdparty\external\utils\obj_model_loader.hpp">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\3rdparty\external\utils\string_helpers.hpp">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\3rdparty\external\utils\timer.hpp">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\3rdparty\external\utils\utils_fwd.hpp">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\3rdparty\external\utils\variant.hpp">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\3rdparty\external\simple_renderer\ogl\texture_resource.hpp">
+      <Filter>external</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\3rdparty\external\simple_renderer\ogl\vertex_buffer_resource.hpp">
+      <Filter>external</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\3rdparty\external\simple_renderer\common.hpp">
+      <Filter>external</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\3rdparty\external\simple_renderer\draw_call.hpp">
+      <Filter>external</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\3rdparty\external\simple_renderer\frame_buffer.hpp">
+      <Filter>external</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\3rdparty\external\simple_renderer\index_buffer.hpp">
+      <Filter>external</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\3rdparty\external\simple_renderer\lazy_include.hpp">
+      <Filter>external</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\3rdparty\external\simple_renderer\rasterizer.hpp">
+      <Filter>external</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\3rdparty\external\simple_renderer\renderer.hpp">
+      <Filter>external</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\3rdparty\external\simple_renderer\renderer_fwd.hpp">
+      <Filter>external</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\3rdparty\external\simple_renderer\shader.hpp">
+      <Filter>external</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\3rdparty\external\simple_renderer\texture.hpp">
+      <Filter>external</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\3rdparty\external\simple_renderer\version.hpp">
+      <Filter>external</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\3rdparty\external\simple_renderer\vertex_buffer.hpp">
+      <Filter>external</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\3rdparty\external\simple_renderer\vertex_format.hpp">
+      <Filter>external</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\3rdparty\external\SOIL\image_DXT.h">
+      <Filter>external</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\3rdparty\external\SOIL\image_helper.h">
+      <Filter>external</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\3rdparty\external\SOIL\SOIL.h">
+      <Filter>external</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\3rdparty\external\SOIL\stb_image_aug.h">
+      <Filter>external</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\3rdparty\external\SOIL\stbi_DDS_aug.h">
+      <Filter>external</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\3rdparty\external\SOIL\stbi_DDS_aug_c.h">
+      <Filter>external</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\3rdparty\external\sdl_wrapper\input.hpp">
+      <Filter>external</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\3rdparty\external\sdl_wrapper\message_pump.hpp">
+      <Filter>external</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\3rdparty\external\sdl_wrapper\mixer.hpp">
+      <Filter>external</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\3rdparty\external\sdl_wrapper\ogl_context.hpp">
+      <Filter>external</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\3rdparty\external\sdl_wrapper\sdl_common.hpp">
+      <Filter>external</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\3rdparty\external\sdl_wrapper\sdl_fwd.hpp">
+      <Filter>external</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\3rdparty\external\sdl_wrapper\sdl_lazy_include.hpp">
+      <Filter>external</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\3rdparty\external\sdl_wrapper\window.hpp">
+      <Filter>external</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
