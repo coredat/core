@@ -7,11 +7,7 @@
 #include <stdint.h>
 
 
-// Some of this should move up a level.
-
-
 namespace Ogl {
-
 
 
 inline void
