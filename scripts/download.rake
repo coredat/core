@@ -65,8 +65,17 @@ task :download_3rdparty do |t, args|
   puts "Getting 3rd Party"
 
   thrid_party_path = ROOT_DIR + "3rdparty/"
-  thrid_party_uri = URI("https://dl.dropboxusercontent.com/u/2580523/Wired/3rdparty/3rdparty.zip")
+  thrid_party_uri = URI("https://dl.dropboxusercontent.com/u/2580523/Wired/3rdparty/3rdparty_01.zip")
 
   download_zip(thrid_party_uri, thrid_party_path)
+
+end
+
+
+desc "Download everything."
+task :download_everything do |t, args|
+
+    Rake::Task["download_assets"].execute
+    Rake::Task["download_3rdparty"].execute
 
 end
