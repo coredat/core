@@ -66,6 +66,11 @@ create_random_cube(Data::Entity_pool *entity, const Data::Model_pool *mesh_resou
     const Entity::Entity_id id = Entity::Entity_id{2, ++instance};
     entity->entity_id[empty_index] = id;
     
+    // Setup texture
+    {
+      entity->texture[empty_index] = static_cast<Resource::Texture::ENUM>(rand() % Resource::Texture::size);
+    }    
+    
     // Setup phys
     {
       const float scale_x = static_cast<float>(rand() % 200 + 10) / 200;
@@ -80,6 +85,8 @@ create_random_cube(Data::Entity_pool *entity, const Data::Model_pool *mesh_resou
                                                                math::vec3_init(scale_x, scale_y, scale_z),
                                                                math::quat_init());
       
+      entity->rigidbody_property[empty_index].move_axis     = Physics::Axis::x | Physics::Axis::y | Physics::Axis::z;
+      entity->rigidbody_property[empty_index].rotation_axis = Physics::Axis::x | Physics::Axis::y | Physics::Axis::z;      
       entity->rigidbody_property[empty_index].collider_type = Physics::Collider_type::cube;
       entity->rigidbody_property[empty_index].collider_info.cube.extents[0] = scale_x * 0.5f;
       entity->rigidbody_property[empty_index].collider_info.cube.extents[1] = scale_y * 0.5f;
