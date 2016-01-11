@@ -89,7 +89,7 @@ main(int argc, char *argv[])
   Entity::Entity_id kine_actor_local = Entity_factory::create_kinematic_actor(&world_entities, &model_pool, &texture_pool);
   Entity::Entity_id kine_actor_network = Entity_factory::create_kinematic_actor(&world_entities, &model_pool, &texture_pool);
   
-  for(uint32_t i = 0; i < 20; ++i)
+  for(uint32_t i = 0; i < 40; ++i)
   {
     Entity_factory::create_random_cube(&world_entities, &model_pool, &texture_pool);
   }

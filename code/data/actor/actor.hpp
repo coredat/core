@@ -125,8 +125,8 @@ update(const Entity::Entity_id id, Data::Entity_pool *ents, const std::size_t si
     const math::transform curr_trans = ents->transform[index];
     
     // Cast ray downwards
-    btVector3 btFrom(math::vec3_get_x(curr_trans.position), math::vec3_get_y(curr_trans.position), math::vec3_get_z(curr_trans.position));
-    btVector3 btTo(math::vec3_get_x(curr_trans.position), math::vec3_get_y(curr_trans.position) - 2, math::vec3_get_z(curr_trans.position));
+    const btVector3 btFrom(math::vec3_get_x(curr_trans.position), math::vec3_get_y(curr_trans.position), math::vec3_get_z(curr_trans.position));
+    const btVector3 btTo(math::vec3_get_x(curr_trans.position), math::vec3_get_y(curr_trans.position) - 2, math::vec3_get_z(curr_trans.position));
     btCollisionWorld::ClosestRayResultCallback feet_test(btFrom, btTo);
     
     phy_world->dynamics_world.rayTest(btFrom, btTo, feet_test);
@@ -146,6 +146,14 @@ update(const Entity::Entity_id id, Data::Entity_pool *ents, const std::size_t si
     }
     else
     {
+      const auto norm = feet_test.m_hitPointWorld;
+
+      math::transform new_trans = curr_trans;
+      math::vec3 pos = math::vec3_init(math::vec3_get_x(curr_trans.position), norm.y() + 2, math::vec3_get_z(curr_trans.position));
+      new_trans.position = pos;
+      
+      ents->transform[index] = new_trans;
+      
       act.is_grounded = true;
     }
   };
