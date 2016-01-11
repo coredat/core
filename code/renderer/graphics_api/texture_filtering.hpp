@@ -9,12 +9,14 @@ namespace Graphics_api {
 
 
 /*!
-  Texture Options
+  Texture Options.
+  Wrap mode can be clamp or wrap.
+  Filtering can be point, bilinear, trilinear or anisotropic.
 */
 struct Texture_filtering
 {
-  uint8_t wrap_s : 2;
-  uint8_t wrap_t : 2;
+  uint8_t wrap_mode_s : 2;
+  uint8_t wrap_mode_t : 2;
   uint8_t filtering : 4;
 };
 

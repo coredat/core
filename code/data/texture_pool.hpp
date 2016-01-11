@@ -23,6 +23,7 @@ struct Texture_pool
 
 /*!
   Initializes the pool, such that the ids will be in sequence.
+  and the contents are zero.
 */
 void
 texture_pool_init(Texture_pool *pool);

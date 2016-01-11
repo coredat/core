@@ -2,13 +2,12 @@
 #include "../graphics_api/ogl/ogl_common.hpp"
 #include "../graphics_api/ogl/ogl_texture.hpp"
 #include "../graphics_api/ogl/ogl_shader.hpp"
+#include "../graphics_api/ogl/ogl_shader_uniform.hpp"
 #include "../graphics_api/ogl/ogl_pixel_format.hpp"
 #include "../graphics_api/pixel_format.hpp"
 #include "../graphics_api/ogl/ogl_texture_filtering.hpp"
 #include <assert.h>
-#include <array>
 #include <iostream>
-#include <algorithm>
 #include <vector>
 #include <cstddef>
 
@@ -101,6 +100,10 @@ initialize()
   
   Ogl::shader_create(&debug_line_shader, vertex_shader, geometry_shader, fragment_shader, &std::cout);
   Ogl::error_check("Building debug line shader.", &std::cout);
+  
+  Ogl::Shader_uniforms uniforms;
+  Ogl::shader_uniforms_retrive(&uniforms, &debug_line_shader);
+  Ogl::error_check("Getting uniforms from debug shader", &std::cout);
 
   // Size the data container.
   {
@@ -114,14 +117,17 @@ initialize()
     Ogl::texture_create_2d(&data_texture, width_of_data, height_of_data, format, (void*)data.data(), &std::cout);
   }
   
-  uni_wvp  = glGetUniformLocation(debug_line_shader.program_id, "uni_wvp_mat");
-  uni_data = glGetUniformLocation(debug_line_shader.program_id, "uni_data_lookup");
+  Ogl::shader_uniforms_get_uniform_index(&uni_wvp, &uniforms, "uni_wvp_mat");
+  Ogl::shader_uniforms_get_uniform_index(&uni_data, &uniforms, "uni_data_lookup");
+  
+  filtering = Graphics_api::Texture_filtering
+  {
+    Graphics_api::Wrap_mode::clamp,
+    Graphics_api::Wrap_mode::clamp,
+    Graphics_api::Filtering_mode::point
+  };
   
   Ogl::error_check("Debug Renderer Setup.", &std::cout);
-  
-  filtering.wrap_s    = Graphics_api::Wrap_mode::clamp;
-  filtering.wrap_t    = Graphics_api::Wrap_mode::clamp;
-  filtering.filtering = Graphics_api::Filtering_mode::point;
 }
 
 
@@ -169,7 +175,7 @@ render(const float wvp_mat[16])
   glUniformMatrix4fv(uni_wvp, 1, GL_FALSE, wvp_mat);
   Ogl::error_check("set wvp.", &std::cout);
   
-  glActiveTexture(GL_TEXTURE0);
+  glActiveTexture(GL_TEXTURE0 + uni_data);
   glBindTexture(GL_TEXTURE_2D, data_texture.texture_id);
 
   Ogl::filtering_apply(filtering);

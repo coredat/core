@@ -1,5 +1,5 @@
-#ifndef DEBUG_RENDERER_INCLUDED_
-#define DEBUG_RENDERER_INCLUDED_
+#ifndef DEBUG_RENDERER_INCLUDED_2A10498F_02F2_403A_A882_D67983FA31D9
+#define DEBUG_RENDERER_INCLUDED_2A10498F_02F2_403A_A882_D67983FA31D9
 
 
 #include <LinearMath/btIDebugDraw.h>
@@ -9,6 +9,11 @@
 namespace Physics {
 
 
+/*!
+  Renders debug information.
+  This is slightly annoying of a class as it needs to integrate
+  with other systems in order to render.
+*/
 class Debug_renderer : public btIDebugDraw
 {
 public:

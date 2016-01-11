@@ -47,6 +47,11 @@ invalid_id()
 
 
 
+/*!
+ Sets an array of ids to invalid.
+ \param ids[] ids to get set to invalid.
+ \param size_of_entities the number of entities to invalidate.
+*/
 void
 init_to_invalid_ids(Entity_id ids[], const std::size_t size_of_entities);
 

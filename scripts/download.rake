@@ -1,3 +1,6 @@
+# download.rake
+# This deals only with downloading items.
+
 require 'rake'
 require 'net/http'
 require 'zip'
@@ -52,7 +55,7 @@ task :download_assets do |t, args|
   puts "Getting Assets"
 
   asset_path = ROOT_DIR + "assets/"
-  asset_uri = URI("https://dl.dropboxusercontent.com/u/2580523/Wired/assets/assets_01.zip")
+  asset_uri = "https://dl.dropboxusercontent.com/u/2580523/Wired/assets/assets_01.zip"
 
   download_zip(asset_uri, asset_path)
 
@@ -65,7 +68,7 @@ task :download_3rdparty do |t, args|
   puts "Getting 3rd Party"
 
   thrid_party_path = ROOT_DIR + "3rdparty/"
-  thrid_party_uri = URI("https://dl.dropboxusercontent.com/u/2580523/Wired/3rdparty/3rdparty_01.zip")
+  thrid_party_uri = "https://dl.dropboxusercontent.com/u/2580523/Wired/3rdparty/3rdparty_01.zip"
 
   download_zip(thrid_party_uri, thrid_party_path)
 

@@ -53,8 +53,8 @@ render_nodes_fullbright(const Node nodes[],
 {
   renderer::reset();
   
-  filtering.wrap_s    = Graphics_api::Wrap_mode::clamp;
-  filtering.wrap_t    = Graphics_api::Wrap_mode::clamp;
+  filtering.wrap_mode_s    = Graphics_api::Wrap_mode::clamp;
+  filtering.wrap_mode_t    = Graphics_api::Wrap_mode::clamp;
   filtering.filtering = Graphics_api::Filtering_mode::anisotropic;
   
   for(std::size_t n = 0; n < number_of_nodes; ++n)

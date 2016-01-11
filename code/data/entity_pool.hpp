@@ -33,6 +33,9 @@ struct Entity_pool
 };
 
 
+/*!
+  Initializes the pool to all zeros
+*/
 void
 entity_pool_init(Entity_pool *pool);
 

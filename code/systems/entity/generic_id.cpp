@@ -1,7 +1,6 @@
 #include "generic_id.hpp"
 
 
-
 namespace Generic_id {
 
 

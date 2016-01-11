@@ -36,6 +36,7 @@ struct World
 void
 world_init(World *world);
 
+
 /*!
   Run the physics simulation.
   \param world a valid instance of the physical world.
@@ -43,6 +44,7 @@ world_init(World *world);
 */
 void
 world_step(World *world, const float dt);
+
 
 /*!
   Run the physics simulation.

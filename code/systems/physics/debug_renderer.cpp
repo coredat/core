@@ -1,7 +1,6 @@
 #include "debug_renderer.hpp"
 #include <renderer/debug_line_renderer/debug_line_renderer.hpp>
 #include <iostream>
-#include <stdint.h>
 
 
 namespace Physics {

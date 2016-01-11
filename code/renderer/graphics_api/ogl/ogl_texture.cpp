@@ -1,4 +1,5 @@
 #include "ogl_texture.hpp"
+#include "ogl_pixel_format.hpp"
 
 
 namespace Ogl {

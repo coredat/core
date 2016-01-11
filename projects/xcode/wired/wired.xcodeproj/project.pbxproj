@@ -18,6 +18,7 @@
 		7EC9B99D1C418A3000FBF1D7 /* ogl_shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EC9B9941C418A3000FBF1D7 /* ogl_shader.cpp */; };
 		7EC9B99E1C418A3000FBF1D7 /* ogl_texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EC9B9961C418A3000FBF1D7 /* ogl_texture.cpp */; };
 		7EC9B99F1C418A3000FBF1D7 /* ogl_texture_filtering.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EC9B9981C418A3000FBF1D7 /* ogl_texture_filtering.cpp */; };
+		7EC9B9A31C43838200FBF1D7 /* ogl_shader_uniform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EC9B9A11C43838200FBF1D7 /* ogl_shader_uniform.cpp */; };
 		7ED7BBC91C3CF8B100CE80EA /* entity_factory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7BB841C3CF8B100CE80EA /* entity_factory.cpp */; };
 		7ED7BBD21C3CF8B100CE80EA /* debug_line.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7BBA41C3CF8B100CE80EA /* debug_line.cpp */; };
 		7ED7BBD31C3CF8B100CE80EA /* debug_line_renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7BBA71C3CF8B100CE80EA /* debug_line_renderer.cpp */; };
@@ -67,6 +68,8 @@
 		7EC9B99A1C418A3000FBF1D7 /* pixel_format.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = pixel_format.hpp; sourceTree = "<group>"; };
 		7EC9B99B1C418A3000FBF1D7 /* shader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = shader.hpp; sourceTree = "<group>"; };
 		7EC9B99C1C418A3000FBF1D7 /* texture_filtering.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = texture_filtering.hpp; sourceTree = "<group>"; };
+		7EC9B9A11C43838200FBF1D7 /* ogl_shader_uniform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ogl_shader_uniform.cpp; sourceTree = "<group>"; };
+		7EC9B9A21C43838200FBF1D7 /* ogl_shader_uniform.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ogl_shader_uniform.hpp; sourceTree = "<group>"; };
 		7ED7BB841C3CF8B100CE80EA /* entity_factory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = entity_factory.cpp; sourceTree = "<group>"; };
 		7ED7BB851C3CF8B100CE80EA /* entity_factory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = entity_factory.hpp; sourceTree = "<group>"; };
 		7ED7BB891C3CF8B100CE80EA /* actor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = actor.hpp; sourceTree = "<group>"; };
@@ -216,16 +219,18 @@
 		7EC9B98F1C418A3000FBF1D7 /* ogl */ = {
 			isa = PBXGroup;
 			children = (
-				7EC9B9901C418A3000FBF1D7 /* ogl.hpp */,
 				7EC9B9911C418A3000FBF1D7 /* ogl_common.hpp */,
 				7EC9B9921C418A3000FBF1D7 /* ogl_fwd.hpp */,
 				7EC9B9931C418A3000FBF1D7 /* ogl_pixel_format.hpp */,
+				7EC9B9A11C43838200FBF1D7 /* ogl_shader_uniform.cpp */,
+				7EC9B9A21C43838200FBF1D7 /* ogl_shader_uniform.hpp */,
 				7EC9B9941C418A3000FBF1D7 /* ogl_shader.cpp */,
 				7EC9B9951C418A3000FBF1D7 /* ogl_shader.hpp */,
-				7EC9B9961C418A3000FBF1D7 /* ogl_texture.cpp */,
-				7EC9B9971C418A3000FBF1D7 /* ogl_texture.hpp */,
 				7EC9B9981C418A3000FBF1D7 /* ogl_texture_filtering.cpp */,
 				7EC9B9991C418A3000FBF1D7 /* ogl_texture_filtering.hpp */,
+				7EC9B9961C418A3000FBF1D7 /* ogl_texture.cpp */,
+				7EC9B9971C418A3000FBF1D7 /* ogl_texture.hpp */,
+				7EC9B9901C418A3000FBF1D7 /* ogl.hpp */,
 			);
 			path = ogl;
 			sourceTree = "<group>";
@@ -254,15 +259,15 @@
 		7ED7BB871C3CF8B100CE80EA /* data */ = {
 			isa = PBXGroup;
 			children = (
-				7EC9B9831C3EF1BA00FBF1D7 /* entity_pool.cpp */,
-				7EC9B9841C3EF1BA00FBF1D7 /* model_pool.cpp */,
-				7EC9B9851C3EF1BA00FBF1D7 /* texture_pool.cpp */,
+				7ED7BB881C3CF8B100CE80EA /* actor */,
 				7EC9B97D1C3E5F2100FBF1D7 /* data_fwd.hpp */,
 				7EC9B97E1C3E5F2100FBF1D7 /* data.hpp */,
+				7EC9B9831C3EF1BA00FBF1D7 /* entity_pool.cpp */,
 				7ED7BC201C3E587D00CE80EA /* entity_pool.hpp */,
+				7EC9B9841C3EF1BA00FBF1D7 /* model_pool.cpp */,
 				7ED7BBF81C3DBF8C00CE80EA /* model_pool.hpp */,
+				7EC9B9851C3EF1BA00FBF1D7 /* texture_pool.cpp */,
 				7ED7BBF41C3DA72800CE80EA /* texture_pool.hpp */,
-				7ED7BB881C3CF8B100CE80EA /* actor */,
 			);
 			path = data;
 			sourceTree = "<group>";
@@ -412,11 +417,11 @@
 				7ED7BC0F1C3E56D000CE80EA /* debug_renderer.hpp */,
 				7ED7BC101C3E56D000CE80EA /* motion_state.cpp */,
 				7ED7BC111C3E56D000CE80EA /* motion_state.hpp */,
-				7ED7BC121C3E56D000CE80EA /* physics.hpp */,
 				7ED7BC131C3E56D000CE80EA /* physics_fwd.hpp */,
+				7ED7BC121C3E56D000CE80EA /* physics.hpp */,
+				7ED7BC161C3E56D000CE80EA /* rigidbody_properties.hpp */,
 				7ED7BC141C3E56D000CE80EA /* rigidbody.cpp */,
 				7ED7BC151C3E56D000CE80EA /* rigidbody.hpp */,
-				7ED7BC161C3E56D000CE80EA /* rigidbody_properties.hpp */,
 				7ED7BC171C3E56D000CE80EA /* world.cpp */,
 				7ED7BC181C3E56D000CE80EA /* world.hpp */,
 			);
@@ -501,6 +506,7 @@
 				7ED7BBEF1C3CF9C700CE80EA /* directory_mac.mm in Sources */,
 				7ED7BBD71C3CF8B100CE80EA /* simple_renderer.cpp in Sources */,
 				7EC9B99D1C418A3000FBF1D7 /* ogl_shader.cpp in Sources */,
+				7EC9B9A31C43838200FBF1D7 /* ogl_shader_uniform.cpp in Sources */,
 				7ED7BC1F1C3E56D000CE80EA /* world.cpp in Sources */,
 				7ED7BC041C3E566000CE80EA /* model_manager.cpp in Sources */,
 				7ED7BC1A1C3E56D000CE80EA /* entity_id.cpp in Sources */,

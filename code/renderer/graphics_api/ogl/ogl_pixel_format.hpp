@@ -22,7 +22,6 @@ pixel_format_get_gl_internal_format(const Graphics_api::Pixel_format format)
     return GL_RGBA;
   case(gfx::Pixel_format::rgba32f):
     return GL_RGBA32F;
-    break;
   
   default:
     assert(false); // Yikes.
@@ -39,7 +38,6 @@ pixel_format_get_format(const GLenum format)
   case(GL_RGBA):
   case(GL_RGBA32F):
     return GL_RGBA;
-    break;
 
   default:
     assert(false); // Yikes.
@@ -55,11 +53,9 @@ pixel_format_get_type(const GLenum format)
   {
   case(GL_RGBA):
     return GL_UNSIGNED_BYTE;
-    break;
     
   case(GL_RGBA32F):
     return GL_FLOAT;
-    break;
 
   default:
     assert(false); // Yikes.

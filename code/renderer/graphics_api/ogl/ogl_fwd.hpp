@@ -7,6 +7,7 @@ namespace Ogl {
 
 struct Texture;
 struct Shader;
+struct Shader_uniforms;
 
 
 } // ns

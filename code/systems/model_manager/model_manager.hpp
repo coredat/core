@@ -5,7 +5,6 @@
 #include <cstddef>
 #include <stdint.h>
 #include <simple_renderer/vertex_buffer.hpp>
-#include <simple_renderer/index_buffer.hpp>
 
 
 namespace Model {

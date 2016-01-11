@@ -14,6 +14,9 @@
 namespace Ogl {
 
 
+/*!
+  Resets the gl states to the applications default.
+*/
 inline void
 reset_state()
 {
@@ -24,6 +27,10 @@ reset_state()
 }
 
 
+/*!
+  Checks glGetError, if an error is found it will push it out
+  in the stream that was provided.
+*/
 inline void
 error_check(const char* msg, std::ostream *stream)
 {
@@ -39,6 +46,9 @@ error_check(const char* msg, std::ostream *stream)
 }
 
 
+/*!
+  Clears any pending error.
+*/
 inline void
 error_clear()
 {

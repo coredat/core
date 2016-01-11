@@ -7,16 +7,13 @@
 #include <data/data_fwd.hpp>
 
 
-namespace Entity {
-
-class Data;
-
-} // ns
-
-
 namespace Physics {
 
 
+/*!
+  This connects bullet and math::transform
+  so that bullet can get/set transform data.
+*/
 class Motion_state : public btMotionState
 {
 public:

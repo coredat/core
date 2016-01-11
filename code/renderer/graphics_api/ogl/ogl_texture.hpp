@@ -3,7 +3,6 @@
 
 
 #include "ogl_common.hpp"
-#include "ogl_pixel_format.hpp"
 #include <stdint.h>
 #include <assert.h>
 
@@ -19,7 +18,9 @@ struct Texture
   GLuint          texture_id  = 0;
   uint32_t        width       = 0;
   uint32_t        height      = 0;
+  //uint32_t        depth       = 0;
   GLenum          format      = GL_RGBA;
+  //GLenum          dimention   = GL_TEXTURE_2D;
 }; // struct
 
 
