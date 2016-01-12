@@ -1,5 +1,6 @@
 #include <application/resources.hpp>
 #include <application/entity_factory.hpp>
+#include <application/game_logic/actor_local_player.hpp>
 
 #include <systems/transform/transform.hpp>
 #include <systems/network/network.hpp>
@@ -7,9 +8,7 @@
 #include <systems/physics/physics.hpp>
 #include <systems/entity/generic_id.hpp>
 
-#include <data/texture_pool.hpp>
-#include <data/model_pool.hpp>
-#include <data/entity_pool.hpp>
+#include <data/data.hpp>
 
 #include <renderer/renderer.hpp>
 #include <renderer/simple_renderer/simple_renderer.hpp>
@@ -76,6 +75,12 @@ main(int argc, char *argv[])
   Data::Model_pool model_pool;
   Data::model_pool_init(&model_pool);
   
+  Data::Logic_pool logic_pool;
+  Data::logic_pool_init(&logic_pool);
+  
+  new(logic_pool.free_list[0]) Actor_local_player();
+  reinterpret_cast<Logic::Base*>(&logic_pool.storage[0])->on_start();
+    
   Data::Texture_pool texture_pool;
   Data::texture_pool_init(&texture_pool);
   

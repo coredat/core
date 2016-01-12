@@ -5,6 +5,7 @@
 #include "entity_pool.hpp"
 #include "model_pool.hpp"
 #include "texture_pool.hpp"
+#include "logic_pool.hpp"
 
 
 #endif // inc guard

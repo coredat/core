@@ -8,6 +8,7 @@ namespace Data {
 struct Entity_pool;
 struct Model_pool;
 struct Texture_pool;
+struct Logic_pool;
 
 
 } // ns
