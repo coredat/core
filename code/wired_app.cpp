@@ -1,6 +1,7 @@
 #include <application/resources.hpp>
 #include <application/entity_factory.hpp>
 #include <application/game_logic/actor_local_player.hpp>
+#include <application/game_logic/actor_network_player.hpp>
 
 #include <systems/transform/transform.hpp>
 #include <systems/network/network.hpp>
@@ -87,15 +88,27 @@ main(int argc, char *argv[])
   Resource::load_default_resources(&texture_pool, texture_pool.size, &model_pool, model_pool.size);
   
   Entity_factory::create_ground(&world_entities, &model_pool, &texture_pool);
-//  Entity_id actor_entity = Entity_factory::create_actor(&world_entities, &model_pool, &texture_pool);
+  //Entity::Entity_id actor_entity = Entity_factory::create_actor(&world_entities, &model_pool, &texture_pool);
   Entity::Entity_id kine_actor_local = Entity_factory::create_kinematic_actor(&world_entities, &model_pool, &texture_pool);
   Entity::Entity_id kine_actor_network = Entity_factory::create_kinematic_actor(&world_entities, &model_pool, &texture_pool);
   
   // Game Logic
   {
-    new(logic_pool.free_list[0]) Actor_local_player();
-    auto base = reinterpret_cast<Logic::Base*>(&logic_pool.storage[0]);
+    const auto free_slot = Data::logic_pool_get_slot(&logic_pool);
+    new(free_slot) Actor_local_player();
+    
+    auto base = reinterpret_cast<Logic::Base*>(&logic_pool.storage[0 * logic_pool.storage_size]);
     base->set_entity(kine_actor_local);
+    base->set_entity_data(&world_entities);
+    base->set_physics_data(&phy_world);
+  }
+  
+  {
+    const auto free_slot = Data::logic_pool_get_slot(&logic_pool);
+    new(free_slot) Actor_network_player();
+    
+    auto base = reinterpret_cast<Logic::Base*>(&logic_pool.storage[1 * logic_pool.storage_size]);
+    base->set_entity(kine_actor_network);
     base->set_entity_data(&world_entities);
     base->set_physics_data(&phy_world);
   }
@@ -104,7 +117,6 @@ main(int argc, char *argv[])
   {
     Entity_factory::create_random_cube(&world_entities, &model_pool, &texture_pool);
   }
-  
   
   Physics::world_add_rigidbodies(&phy_world,
                                  world_entities.rigidbody_property,
@@ -166,10 +178,6 @@ main(int argc, char *argv[])
     sdl::message_pump();
     renderer::clear();
     
-    reinterpret_cast<Logic::Base*>(&logic_pool.storage[0])->on_update(delta_time);
-    
-//    Actor::update(kine_actor_local,   &world_entities, world_entities.size, &phy_world);
-    Actor::update(kine_actor_network, &world_entities, world_entities.size, &phy_world);
     
     Actor::Input_cmds input_cmds;
     if(input.is_key_down(SDLK_w))
@@ -204,6 +212,17 @@ main(int argc, char *argv[])
       Network::send_packet(&connection, sizeof(world_entities.transform), world_entities.transform, false);
       Actor::input(input_cmds, delta_time, kine_actor_local, &world_entities, world_entities.size, &phy_world);
     }
+    
+    
+    // ** Game Logic Update ** //
+  
+    for(auto &obj : logic_pool.objects_in_use)
+    {
+      reinterpret_cast<Logic::Base*>(obj)->on_update(delta_time); // TODO: reinter_cast?
+    }
+    
+    
+    // ** World Update and Render ** //
     
     Physics::world_step(&phy_world, delta_time);
     

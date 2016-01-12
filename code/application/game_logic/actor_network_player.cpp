@@ -1,16 +1,15 @@
-#include "actor_local_player.hpp"
+#include "actor_network_player.hpp"
 #include <renderer/renderer.hpp>
 #include <btBulletCollisionCommon.h>
-#include <systems/transform/transform.hpp>
 
 
-Actor_local_player::Actor_local_player()
+Actor_network_player::Actor_network_player()
 {
 }
 
 
 void
-Actor_local_player::on_update(const float dt)
+Actor_network_player::on_update(const float dt)
 {
   auto apply_gravity = [&](const Entity::Entity_id ent)
   {
@@ -55,21 +54,6 @@ Actor_local_player::on_update(const float dt)
       
       act.is_grounded = true;
     }
-    
-    math::vec3 fwd;
-    Transform::get_fwd_vec(&curr_trans, &fwd);
-    fwd = math::vec3_scale(fwd, 2);
-    
-    const btVector3 fwdVec(math::vec3_get_x(fwd), math::vec3_get_y(fwd), math::vec3_get_z(fwd));
-    const btVector3 btFaceStart(btFrom);
-    const btVector3 btFwd = btFaceStart + fwdVec;
-    
-    btCollisionWorld::ClosestRayResultCallback face_ray(btFaceStart, btFwd);
-    m_world->dynamics_world.rayTest(btFaceStart, btFwd, face_ray);
-    
-    Renderer::debug_line(btFaceStart, btFwd, btVector3(1, 0, 0));
-    
-    
   };
   
   apply_gravity(get_entity());

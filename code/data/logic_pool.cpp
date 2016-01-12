@@ -8,9 +8,9 @@ namespace Data {
 void
 logic_pool_init(Logic_pool *pool)
 {
-  memset(pool->start_ups, 0, sizeof(pool->start_ups));
-  memset(pool->updates, 0, sizeof(pool->updates));
   memset(pool->storage, 0, sizeof(pool->storage));
+  
+  pool->free_list.resize(pool->size);
   
   // Create free list
   for(std::size_t i = 0; i < pool->size; ++i)
@@ -20,7 +20,17 @@ logic_pool_init(Logic_pool *pool)
 }
 
 
-
+void*
+logic_pool_get_slot(Logic_pool *pool)
+{
+  // TODO: Oh my this needs some sorting.
+  void *slot = pool->free_list[0];
+  
+  pool->free_list.erase(std::begin(pool->free_list));
+  pool->objects_in_use.push_back(slot);
+  
+  return slot;
+}
 
 
 
