@@ -3,6 +3,7 @@
 
 
 #include "logic_fwd.hpp"
+#include <cstddef>
 
 
 namespace Logic {

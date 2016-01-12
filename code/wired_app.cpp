@@ -78,9 +78,6 @@ main(int argc, char *argv[])
   Data::Logic_pool logic_pool;
   Data::logic_pool_init(&logic_pool);
   
-  new(logic_pool.free_list[0]) Actor_local_player();
-  reinterpret_cast<Logic::Base*>(&logic_pool.storage[0])->on_start();
-    
   Data::Texture_pool texture_pool;
   Data::texture_pool_init(&texture_pool);
   
@@ -93,6 +90,15 @@ main(int argc, char *argv[])
 //  Entity_id actor_entity = Entity_factory::create_actor(&world_entities, &model_pool, &texture_pool);
   Entity::Entity_id kine_actor_local = Entity_factory::create_kinematic_actor(&world_entities, &model_pool, &texture_pool);
   Entity::Entity_id kine_actor_network = Entity_factory::create_kinematic_actor(&world_entities, &model_pool, &texture_pool);
+  
+  // Game Logic
+  {
+    new(logic_pool.free_list[0]) Actor_local_player();
+    auto base = reinterpret_cast<Logic::Base*>(&logic_pool.storage[0]);
+    base->set_entity(kine_actor_local);
+    base->set_entity_data(&world_entities);
+    base->set_physics_data(&phy_world);
+  }
   
   for(uint32_t i = 0; i < 40; ++i)
   {
@@ -160,7 +166,9 @@ main(int argc, char *argv[])
     sdl::message_pump();
     renderer::clear();
     
-    Actor::update(kine_actor_local,   &world_entities, world_entities.size, &phy_world);
+    reinterpret_cast<Logic::Base*>(&logic_pool.storage[0])->on_update(delta_time);
+    
+//    Actor::update(kine_actor_local,   &world_entities, world_entities.size, &phy_world);
     Actor::update(kine_actor_network, &world_entities, world_entities.size, &phy_world);
     
     Actor::Input_cmds input_cmds;
