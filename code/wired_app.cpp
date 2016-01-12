@@ -101,6 +101,8 @@ main(int argc, char *argv[])
     base->set_entity(kine_actor_local);
     base->set_entity_data(&world_entities);
     base->set_physics_data(&phy_world);
+    base->model_pool = &model_pool;
+    base->texture_pool = &texture_pool;
   }
   
   {
@@ -111,9 +113,16 @@ main(int argc, char *argv[])
     base->set_entity(kine_actor_network);
     base->set_entity_data(&world_entities);
     base->set_physics_data(&phy_world);
+    base->model_pool = &model_pool;
+    base->texture_pool = &texture_pool;    
   }
   
-  for(uint32_t i = 0; i < 40; ++i)
+  for(auto &obj : logic_pool.objects_in_use)
+  {
+    reinterpret_cast<Logic::Base*>(obj)->on_start(); // TODO: reinter_cast?
+  }
+  
+  for(uint32_t i = 0; i < 4; ++i)
   {
     Entity_factory::create_random_cube(&world_entities, &model_pool, &texture_pool);
   }

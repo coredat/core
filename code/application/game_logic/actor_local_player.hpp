@@ -9,11 +9,13 @@ class Actor_local_player : public Logic::Base
 {
 public:
 
-  Actor_local_player();
+  explicit Actor_local_player();
 
-  void on_start() override { std::cout << "player_start" << std::endl; }
+  void on_start() override;
   
   void on_update(const float dt) override;
+  
+  Entity::Entity_id cube_id;
 
 };
 

@@ -37,10 +37,12 @@ public:
 
   Physics::World *m_world; // TODO: Move
   
-private:
+//private:
 
   Entity::Entity_id m_entity = Entity::invalid_id();
   Data::Entity_pool *m_data_pool = nullptr;
+  Data::Model_pool *model_pool = nullptr;
+  Data::Texture_pool *texture_pool = nullptr;
 
 
 

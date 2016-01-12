@@ -25,6 +25,10 @@ Entity::Entity_id
 create_kinematic_actor(Data::Entity_pool *entity, const Data::Model_pool *mesh_resources, const Data::Texture_pool *texture_resources);
 
 
+Entity::Entity_id
+create_placement_cube(Data::Entity_pool *entity, const Data::Model_pool *mesh_resources, const Data::Texture_pool *texture_resources);
+
+
 } // ns
 
 

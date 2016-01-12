@@ -2,10 +2,20 @@
 #include <renderer/renderer.hpp>
 #include <btBulletCollisionCommon.h>
 #include <systems/transform/transform.hpp>
+#include <application/entity_factory.hpp>
+#include <data/entity_pool.hpp>
 
 
 Actor_local_player::Actor_local_player()
 {
+
+}
+
+
+void
+Actor_local_player::on_start()
+{
+ cube_id = Entity_factory::create_placement_cube(this->m_data_pool, this->model_pool, this->texture_pool);
 }
 
 
@@ -58,7 +68,7 @@ Actor_local_player::on_update(const float dt)
     
     math::vec3 fwd;
     Transform::get_fwd_vec(&curr_trans, &fwd);
-    fwd = math::vec3_scale(fwd, 2);
+    fwd = math::vec3_scale(fwd, 3);
     
     const btVector3 fwdVec(math::vec3_get_x(fwd), math::vec3_get_y(fwd), math::vec3_get_z(fwd));
     const btVector3 btFaceStart(btFrom);
@@ -72,6 +82,15 @@ Actor_local_player::on_update(const float dt)
     if(face_ray.hasHit())
     {
       // Draw cube at that point.
+      std::size_t index;
+      if(Entity::find_index_linearly(&index, cube_id, m_data_pool->entity_id, m_data_pool->size))
+      {
+      
+        auto trans = m_data_pool->transform[index];
+        const math::vec3 pos = math::vec3_init(face_ray.m_hitPointWorld.x(), face_ray.m_hitPointWorld.y(), face_ray.m_hitPointWorld.z());
+        trans.position = pos;
+        m_data_pool->transform[index] = trans;
+      }
       
     }
   };

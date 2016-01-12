@@ -195,4 +195,40 @@ create_kinematic_actor(Data::Entity_pool *entity, const Data::Model_pool *mesh_r
 }
 
 
+Entity::Entity_id
+create_placement_cube(Data::Entity_pool *entity, const Data::Model_pool *mesh_resources, const Data::Texture_pool *texture_resources)
+{
+  std::size_t empty_index;
+  if(Entity::find_index_linearly(&empty_index, Entity::invalid_id(), entity->entity_id, entity->size))
+  {
+    const Entity::Entity_id id = Entity::Entity_id{2, ++instance};
+    entity->entity_id[empty_index] = id;
+    
+    // Setup texture
+    {
+      entity->texture[empty_index] = Resource::Texture::dev_green; // static_cast<Resource::Texture::ENUM>(rand() % Resource::Texture::size);
+    }    
+    
+    // Setup phys
+    {
+      const float scale_x = static_cast<float>(rand() % 200 + 10) / 200;
+      const float scale_y = static_cast<float>(rand() % 200 + 10) / 200;
+      const float scale_z = static_cast<float>(rand() % 200 + 10) / 200;
+
+      const float pos_x = static_cast<float>(rand() % 200 + 10) / 200;
+      const float pos_y = static_cast<float>(rand() % 200 + 10) / 200;
+      const float pos_z = static_cast<float>(rand() % 200 + 10) / 200;
+      
+      entity->transform[empty_index] = math::transform_init(math::vec3_init(pos_x, pos_y, pos_z),
+                                                               math::vec3_init(scale_x, scale_y, scale_z),
+                                                               math::quat_init());
+    }
+    
+    return id;
+  }
+  
+  return Entity::invalid_id();
+}
+
+
 } // ns
