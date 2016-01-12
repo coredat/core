@@ -69,7 +69,11 @@ Actor_local_player::on_update(const float dt)
     
     Renderer::debug_line(btFaceStart, btFwd, btVector3(1, 0, 0));
     
-    
+    if(face_ray.hasHit())
+    {
+      // Draw cube at that point.
+      
+    }
   };
   
   apply_gravity(get_entity());
