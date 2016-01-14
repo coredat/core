@@ -62,6 +62,10 @@ struct Capsule
 } // ns
 
 
+// TODO: Make this struct smaller.
+// Can merge axis
+// Can reduce collider_type
+// Might be able to remove a float from collider details.
 struct Rigidbody_properties
 {
   Collider_type collider_type = Collider_type::none;

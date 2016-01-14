@@ -163,10 +163,6 @@ Actor_local_player::on_update(const float dt)
         const math::transform rot_trans = m_data_pool->transform[index];
         const float rot_rad = static_cast<float>(math::vec2_get_x(head_rotations));
         
-        //const math::vec3 head_axis = math::vec3_init(1,0,0);
-        //const math::vec3 adjusted_axis = math::quat_rotate_point(rot_trans.rotation, head_axis);
-        //const math::quat rot = math::quat_init_with_axis_angle(adjusted_axis, rot_rad);
-        
         const math::vec3 axis = math::vec3_init(1,0,0);
         const math::vec3 adjusted_axis = math::quat_rotate_point(rot_trans.rotation, axis);
         const math::quat rot = math::quat_init_with_axis_angle(adjusted_axis, rot_rad);
@@ -200,7 +196,7 @@ Actor_local_player::move_right(const float right)
 void
 Actor_local_player::action()
 {
-  // hmm
+  Entity_factory::create_random_cube(m_data_pool, model_pool, texture_pool);
 }
 
 

@@ -214,6 +214,11 @@ main(int argc, char *argv[])
       actor->move_right(-1.f);
     }
     
+    if(input.is_key_down(SDLK_SPACE))
+    {
+      actor->action();
+    }
+    
     input_cmds.rot   = input.get_mouse_delta_x();
     input_cmds.pitch = input.get_mouse_delta_y();
     
