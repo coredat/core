@@ -206,7 +206,7 @@ create_placement_cube(Data::Entity_pool *entity, const Data::Model_pool *mesh_re
     
     // Setup texture
     {
-      entity->texture[empty_index] = Resource::Texture::dev_green; // static_cast<Resource::Texture::ENUM>(rand() % Resource::Texture::size);
+      entity->texture[empty_index] = static_cast<Resource::Texture::ENUM>(rand() % Resource::Texture::size);
     }    
     
     // Setup phys

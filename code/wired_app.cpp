@@ -187,30 +187,38 @@ main(int argc, char *argv[])
     sdl::message_pump();
     renderer::clear();
     
+    Actor_local_player *actor = reinterpret_cast<Actor_local_player*>(logic_pool.objects_in_use[0]);
     
     Actor::Input_cmds input_cmds;
     if(input.is_key_down(SDLK_w))
     {
       input_cmds.fwd++;
+      actor->move_fwd(1.f);
     }
 
     if(input.is_key_down(SDLK_s))
     {
       input_cmds.fwd--;
+      actor->move_fwd(-1.f);
     }
     
     if(input.is_key_down(SDLK_a))
     {
       input_cmds.right++;
+      actor->move_right(1.f);
     }
     
     if(input.is_key_down(SDLK_d))
     {
       input_cmds.right--;
+      actor->move_right(-1.f);
     }
     
-    input_cmds.rot = input.get_mouse_delta_x();
+    input_cmds.rot   = input.get_mouse_delta_x();
     input_cmds.pitch = input.get_mouse_delta_y();
+    
+    actor->look_up(static_cast<float>(input.get_mouse_delta_y()) * delta_time);
+    actor->turn_right(static_cast<float>(input.get_mouse_delta_x()) * delta_time);
     
     if(is_client)
     {
@@ -219,7 +227,7 @@ main(int argc, char *argv[])
     else
     {
       Network::send_packet(&connection, sizeof(world_entities.transform), world_entities.transform, false);
-      Actor::input(input_cmds, delta_time, kine_actor_local, &world_entities, world_entities.size, &phy_world);
+   //   Actor::input(input_cmds, delta_time, kine_actor_local, &world_entities, world_entities.size, &phy_world);
     }
     
     

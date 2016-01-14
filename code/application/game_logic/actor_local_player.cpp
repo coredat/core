@@ -96,4 +96,125 @@ Actor_local_player::on_update(const float dt)
   };
   
   apply_gravity(get_entity());
+  
+  auto local_controls = [&](const Entity::Entity_id ent)
+  {
+    const float delta_time = dt;
+    
+    std::size_t index;
+    Entity::find_index_linearly(&index, ent, m_data_pool->entity_id, m_data_pool->size);
+  
+    math::vec3 accum_movement = math::vec3_zero();
+    const math::transform move_trans = m_data_pool->transform[index];
+    
+    if(math::vec3_get_z(pending_input) > 0)
+    {
+      const math::vec3 move_fwd = math::vec3_init(0,0,-1);
+      accum_movement = math::vec3_add(accum_movement, move_fwd);
+    }
+
+    if(math::vec3_get_z(pending_input) < 0)
+    {
+      const math::vec3 move_fwd = math::vec3_init(0,0,+1);
+      accum_movement = math::vec3_add(accum_movement, move_fwd);
+    }
+    
+    if(math::vec3_get_x(pending_input) > 0)
+    {
+      const math::vec3 move_fwd = math::vec3_init(-1,0,0);
+      accum_movement = math::vec3_add(accum_movement, move_fwd);
+    }
+    
+    if(math::vec3_get_x(pending_input) < 0)
+    {
+      const math::vec3 move_fwd = math::vec3_init(+1,0,0);
+      accum_movement = math::vec3_add(accum_movement, move_fwd);
+    }
+    
+    pending_input = math::vec3_zero();
+    
+    if(math::vec3_length(accum_movement) != 0)
+    {
+      const math::vec3 norm_movement            = math::vec3_normalize(accum_movement);
+      const math::vec3 rotated_movement         = math::quat_rotate_point(move_trans.rotation, norm_movement);
+      const math::vec3 corrected_rotation       = math::vec3_init(math::vec3_get_x(rotated_movement), 0.f, math::vec3_get_z(rotated_movement)); // We're not interested in y movement.
+      const math::vec3 norm_corrected_rotation  = math::vec3_normalize(corrected_rotation);
+      const math::vec3 scaled_movement          = math::vec3_scale(norm_corrected_rotation, delta_time);
+      
+      m_data_pool->transform[index].position = math::vec3_add(move_trans.position, scaled_movement);
+    }
+    
+    // Rotation
+    {
+      //if(input.rot != 0)
+      {
+        const math::transform rot_trans = m_data_pool->transform[index];
+        const float rot_rad = static_cast<float>(math::vec2_get_y(head_rotations));
+        
+        const math::quat rot = math::quat_init_with_axis_angle(0, 1, 0, rot_rad);
+        m_data_pool->transform[index].rotation = rot; //math::quat_multiply(rot_trans.rotation, rot);
+      }
+    }
+    
+    // Head
+    {
+      //if(input.pitch != 0)
+      {
+        const math::transform rot_trans = m_data_pool->transform[index];
+        const float rot_rad = static_cast<float>(math::vec2_get_x(head_rotations));
+        
+        //const math::vec3 head_axis = math::vec3_init(1,0,0);
+        //const math::vec3 adjusted_axis = math::quat_rotate_point(rot_trans.rotation, head_axis);
+        //const math::quat rot = math::quat_init_with_axis_angle(adjusted_axis, rot_rad);
+        
+        const math::vec3 axis = math::vec3_init(1,0,0);
+        const math::vec3 adjusted_axis = math::quat_rotate_point(rot_trans.rotation, axis);
+        const math::quat rot = math::quat_init_with_axis_angle(adjusted_axis, rot_rad);
+        
+        m_data_pool->transform[index].rotation = math::quat_multiply(rot_trans.rotation, rot);
+      }
+    }
+  };
+  
+  local_controls(get_entity());
+
+}
+
+
+void
+Actor_local_player::move_fwd(const float fwd)
+{
+  const float accum_fwd = math::vec3_get_z(pending_input) + fwd;
+  pending_input = math::vec3_init(math::vec3_get_x(pending_input), math::vec3_get_y(pending_input), accum_fwd);
+}
+
+
+void
+Actor_local_player::move_right(const float right)
+{
+  const float accum_right = math::vec3_get_x(pending_input) + right;
+  pending_input = math::vec3_init(math::vec3_get_x(pending_input), accum_right, math::vec3_get_z(pending_input));
+}
+
+
+void
+Actor_local_player::action()
+{
+  // hmm
+}
+
+
+void
+Actor_local_player::look_up(const float up)
+{
+  const float accum_up = math::vec2_get_x(head_rotations) + up;
+  head_rotations = math::vec2_init(accum_up, math::vec2_get_y(head_rotations));
+}
+
+
+void
+Actor_local_player::turn_right(const float right)
+{
+  const float accum_right = math::vec2_get_y(head_rotations) + right;
+  head_rotations = math::vec2_init(math::vec2_get_x(head_rotations), accum_right);
 }
