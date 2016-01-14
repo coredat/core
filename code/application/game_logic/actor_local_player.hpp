@@ -26,6 +26,7 @@ public:
   Entity::Entity_id cube_id;
   math::vec3 pending_input;
   math::vec2 head_rotations;
+  bool m_place_node;
 
 };
 

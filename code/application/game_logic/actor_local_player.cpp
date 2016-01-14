@@ -90,6 +90,18 @@ Actor_local_player::on_update(const float dt)
         const math::vec3 pos = math::vec3_init(face_ray.m_hitPointWorld.x(), face_ray.m_hitPointWorld.y(), face_ray.m_hitPointWorld.z());
         trans.position = pos;
         m_data_pool->transform[index] = trans;
+        
+        if(m_place_node)
+        {
+          m_place_node = false;
+          
+          const auto ent_id = Entity_factory::create_random_cube(m_data_pool, pending_rbs, model_pool, texture_pool);
+          
+          std::size_t index_of_new_obj;
+          Entity::find_index_linearly(&index_of_new_obj, ent_id, m_data_pool->entity_id, m_data_pool->size);
+          
+          m_data_pool->transform[index_of_new_obj] = m_data_pool->transform[index];
+        }
       }
       
     }
@@ -173,7 +185,6 @@ Actor_local_player::on_update(const float dt)
   };
   
   local_controls(get_entity());
-
 }
 
 
@@ -196,7 +207,8 @@ Actor_local_player::move_right(const float right)
 void
 Actor_local_player::action()
 {
-  Entity_factory::create_random_cube(m_data_pool, pending_rbs, model_pool, texture_pool);
+  //Entity_factory::create_random_cube(m_data_pool, pending_rbs, model_pool, texture_pool);
+  m_place_node = true;
 }
 
 
