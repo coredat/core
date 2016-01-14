@@ -16,7 +16,6 @@
 #include <renderer/debug_line_renderer/debug_line_renderer.hpp>
 
 #include <sdl_wrapper/sdl_lazy_include.hpp>
-#include <simple_renderer/lazy_include.hpp>
 #include <math/math.hpp>
 #include <utils/timer.hpp>
 
@@ -207,7 +206,7 @@ main(int argc, char *argv[])
       actor->move_right(-1.f);
     }
     
-    if(input.is_key_down(SDLK_SPACE))
+    if(input.is_key_down (SDLK_SPACE))
     {
       actor->action();
     }

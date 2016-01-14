@@ -1,0 +1,12 @@
+#ifndef SDL_TYPES_INCLUDED_EEEAFA48_6CD6_44C4_AB18_E0FE2E5AB571
+#define SDL_TYPES_INCLUDED_EEEAFA48_6CD6_44C4_AB18_E0FE2E5AB571
+
+
+namespace Environment {
+
+
+  
+}
+
+
+#endif // inc guard
