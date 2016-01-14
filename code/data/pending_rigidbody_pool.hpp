@@ -18,8 +18,8 @@ struct Pending_rigidbody_pool
   Physics::Rigidbody*             rigidbody_out[PENDING_RIGIDBODY_POOL_SIZE];
   Physics::Rigidbody_properties   rigidbody_property[PENDING_RIGIDBODY_POOL_SIZE];
   
-  std::size_t size = 0;
-  const std::size_t capacity = PENDING_RIGIDBODY_POOL_SIZE;
+  std::size_t                     size = 0;
+  const std::size_t               capacity = PENDING_RIGIDBODY_POOL_SIZE;
 }; // struct
 
 

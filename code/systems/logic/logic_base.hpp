@@ -43,6 +43,7 @@ public:
   Data::Entity_pool *m_data_pool = nullptr;
   Data::Model_pool *model_pool = nullptr;
   Data::Texture_pool *texture_pool = nullptr;
+  Data::Pending_rigidbody_pool *pending_rbs = nullptr;
 
 
 

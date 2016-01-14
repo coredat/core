@@ -15,7 +15,7 @@ Actor_local_player::Actor_local_player()
 void
 Actor_local_player::on_start()
 {
- cube_id = Entity_factory::create_placement_cube(this->m_data_pool, this->model_pool, this->texture_pool);
+ cube_id = Entity_factory::create_placement_cube(this->m_data_pool, this->pending_rbs, this->model_pool, this->texture_pool);
 }
 
 
@@ -196,7 +196,7 @@ Actor_local_player::move_right(const float right)
 void
 Actor_local_player::action()
 {
-  Entity_factory::create_random_cube(m_data_pool, model_pool, texture_pool);
+  Entity_factory::create_random_cube(m_data_pool, pending_rbs, model_pool, texture_pool);
 }
 
 

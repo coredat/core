@@ -8,7 +8,7 @@ namespace Data {
 
 
 void
-pending_rigidbody_pool(Pending_rigidbody_pool *pool)
+pending_rigidbody_pool_init(Pending_rigidbody_pool *pool)
 {
   assert(pool);
 
@@ -40,7 +40,7 @@ pending_rigidbody_pool_push(Pending_rigidbody_pool *pool, const Physics::Rigidbo
 void
 pending_rigidbody_pool_clear(Pending_rigidbody_pool *pool)
 {
-  pending_rigidbody_pool(pool);
+  pending_rigidbody_pool_init(pool);
 }
 
 

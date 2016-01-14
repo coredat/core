@@ -58,7 +58,7 @@ void
 world_add_rigidbodies(World *world,
                       const Rigidbody_properties rb_properties[],
                       const std::size_t number_of_rb_props,
-                      Rigidbody destination[],
+                      Rigidbody* destination[],
                       const std::size_t number_of_rbs);
 
 

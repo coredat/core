@@ -76,6 +76,9 @@ main(int argc, char *argv[])
   Data::Model_pool model_pool;
   Data::model_pool_init(&model_pool);
   
+  Data::Pending_rigidbody_pool rigidbody_loading_pool;
+  Data::pending_rigidbody_pool_init(&rigidbody_loading_pool);
+  
   Data::Logic_pool logic_pool;
   Data::logic_pool_init(&logic_pool);
   
@@ -87,10 +90,10 @@ main(int argc, char *argv[])
   
   Resource::load_default_resources(&texture_pool, texture_pool.size, &model_pool, model_pool.size);
   
-  Entity_factory::create_ground(&world_entities, &model_pool, &texture_pool);
+  Entity_factory::create_ground(&world_entities, &rigidbody_loading_pool, &model_pool, &texture_pool);
   //Entity::Entity_id actor_entity = Entity_factory::create_actor(&world_entities, &model_pool, &texture_pool);
-  Entity::Entity_id kine_actor_local = Entity_factory::create_kinematic_actor(&world_entities, &model_pool, &texture_pool);
-  Entity::Entity_id kine_actor_network = Entity_factory::create_kinematic_actor(&world_entities, &model_pool, &texture_pool);
+  Entity::Entity_id kine_actor_local = Entity_factory::create_kinematic_actor(&world_entities, &rigidbody_loading_pool, &model_pool, &texture_pool);
+  Entity::Entity_id kine_actor_network = Entity_factory::create_kinematic_actor(&world_entities, &rigidbody_loading_pool, &model_pool, &texture_pool);
   
   // Game Logic
   {
@@ -103,6 +106,7 @@ main(int argc, char *argv[])
     base->set_physics_data(&phy_world);
     base->model_pool = &model_pool;
     base->texture_pool = &texture_pool;
+    base->pending_rbs = &rigidbody_loading_pool;
   }
   
   {
@@ -114,7 +118,8 @@ main(int argc, char *argv[])
     base->set_entity_data(&world_entities);
     base->set_physics_data(&phy_world);
     base->model_pool = &model_pool;
-    base->texture_pool = &texture_pool;    
+    base->texture_pool = &texture_pool;
+    base->pending_rbs = &rigidbody_loading_pool;
   }
   
   for(auto &obj : logic_pool.objects_in_use)
@@ -124,24 +129,12 @@ main(int argc, char *argv[])
   
   for(uint32_t i = 0; i < 4; ++i)
   {
-    Entity_factory::create_random_cube(&world_entities, &model_pool, &texture_pool);
+    Entity_factory::create_random_cube(&world_entities, &rigidbody_loading_pool, &model_pool, &texture_pool);
   }
-  
-  Physics::world_add_rigidbodies(&phy_world,
-                                 world_entities.rigidbody_property,
-                                 world_entities.size,
-                                 world_entities.rigidbody,
-                                 world_entities.size);
   
   // Transform data
   std::vector<Simple_renderer::Node> renderer_nodes;
   renderer_nodes.resize(world_entities.size);
-
-  for(std::size_t i = 0; i < world_entities.size; ++i)
-  {
-    renderer_nodes.at(i).vbo        = model_pool.vbo[world_entities.model[i]];
-    renderer_nodes.at(i).diffuse_id = Data::texture_pool_find(&texture_pool, world_entities.texture[i])->texture_id;
-  }
   
   util::timer frame_timer;
   frame_timer.start();
@@ -246,6 +239,17 @@ main(int argc, char *argv[])
     
     // ** World Update and Render ** //
     
+    if(rigidbody_loading_pool.size)
+    {
+      Physics::world_add_rigidbodies(&phy_world,
+                                     rigidbody_loading_pool.rigidbody_property,
+                                     rigidbody_loading_pool.size,
+                                     rigidbody_loading_pool.rigidbody_out,
+                                     rigidbody_loading_pool.size);
+      
+      Data::pending_rigidbody_pool_clear(&rigidbody_loading_pool);
+    }
+    
     Physics::world_step(&phy_world, delta_time);
     
     static float time = 4;
@@ -275,7 +279,12 @@ main(int argc, char *argv[])
                                         renderer_nodes.size(),
                                         sizeof(Simple_renderer::Node));
     
-    
+    // Texture/vbo info
+    for(std::size_t i = 0; i < world_entities.size; ++i)
+    {
+      renderer_nodes.at(i).vbo        = model_pool.vbo[world_entities.model[i]];
+      renderer_nodes.at(i).diffuse_id = Data::texture_pool_find(&texture_pool, world_entities.texture[i])->texture_id;
+    }
     
       
     Simple_renderer::render_nodes_fullbright(renderer_nodes.data(), renderer_nodes.size());

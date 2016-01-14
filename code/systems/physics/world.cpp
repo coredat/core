@@ -38,7 +38,7 @@ void
 world_add_rigidbodies(World *world,
                       const Rigidbody_properties props[],
                       const std::size_t number_of_rbs_props,
-                      Rigidbody destination[],
+                      Rigidbody* destination[],
                       const std::size_t number_of_rbs)
 {
   // Param check
@@ -50,7 +50,7 @@ world_add_rigidbodies(World *world,
   for(std::size_t i = 0; i < number_of_rbs_to_process; ++i)
   {
     const Rigidbody_properties *prop = &props[i];
-    Rigidbody *out_rb = &destination[i];
+    Rigidbody *out_rb = destination[i];
     
     /*
       Create the collision shape.
@@ -93,6 +93,17 @@ world_add_rigidbodies(World *world,
       default:
         assert(false); // unknown collider type.
         return;
+    }
+    
+    /*
+      Check if rb is already in the scene.
+      Currently we shall just pull it from the world.
+      However this might need to change to a nicer update.
+    */
+    if(out_rb->rigidbody)
+    {
+      world->dynamics_world.removeRigidBody(out_rb->rigidbody.get());
+      out_rb->rigidbody.reset();
     }
     
     /*

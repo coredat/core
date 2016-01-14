@@ -2,9 +2,7 @@
 #include <systems/physics/physics.hpp>
 #include <systems/entity/entity_id.hpp>
 #include <systems/entity/generic_id.hpp>
-#include <data/model_pool.hpp>
-#include <data/entity_pool.hpp>
-#include <data/texture_pool.hpp>
+#include <data/data.hpp>
 #include "resources.hpp"
 
 
@@ -18,13 +16,18 @@ namespace Entity_factory {
 
 
 Entity::Entity_id
-create_ground(Data::Entity_pool *entity, const Data::Model_pool *mesh_resources, const Data::Texture_pool *texture_resources)
+create_ground(Data::Entity_pool *entity,
+              Data::Pending_rigidbody_pool *pending_rb_pool,
+              const Data::Model_pool *mesh_resources,
+              const Data::Texture_pool *texture_resources)
 {
   std::size_t empty_index;
   if(Entity::find_index_linearly(&empty_index, Entity::invalid_id(), entity->entity_id, entity->size))
   {
     const Entity::Entity_id id = Entity::Entity_id{1, ++instance};
     entity->entity_id[empty_index] = id;
+   
+    entity->transform[empty_index] = math::transform_init(math::vec3_zero(), math::vec3_init(10,10,10), math::quat_init());
     
     // Setup mesh
     {
@@ -45,9 +48,9 @@ create_ground(Data::Entity_pool *entity, const Data::Model_pool *mesh_resources,
       entity->rigidbody_property[empty_index].collider_info.static_plane.offset = 0;
       entity->rigidbody_property[empty_index].mass = 0;
       
-      entity->transform[empty_index] = math::transform_init(math::vec3_zero(), math::vec3_init(10,10,10), math::quat_init());
-      
       entity->rigidbody[empty_index].motion_state.reset(new Physics::Motion_state(entity->entity_id[empty_index], entity));
+      
+      Data::pending_rigidbody_pool_push(pending_rb_pool, entity->rigidbody_property[empty_index], &entity->rigidbody[empty_index]);
       
       return id;
     }
@@ -58,7 +61,10 @@ create_ground(Data::Entity_pool *entity, const Data::Model_pool *mesh_resources,
 
 
 Entity::Entity_id
-create_random_cube(Data::Entity_pool *entity, const Data::Model_pool *mesh_resources, const Data::Texture_pool *texture_resources)
+create_random_cube(Data::Entity_pool *entity,
+                   Data::Pending_rigidbody_pool *pending_rb_pool,
+                   const Data::Model_pool *mesh_resources,
+                   const Data::Texture_pool *texture_resources)
 {
   std::size_t empty_index;
   if(Entity::find_index_linearly(&empty_index, Entity::invalid_id(), entity->entity_id, entity->size))
@@ -94,6 +100,8 @@ create_random_cube(Data::Entity_pool *entity, const Data::Model_pool *mesh_resou
       entity->rigidbody_property[empty_index].mass = 1;
       
       entity->rigidbody[empty_index].motion_state.reset(new Physics::Motion_state(entity->entity_id[empty_index], entity));
+      
+      Data::pending_rigidbody_pool_push(pending_rb_pool, entity->rigidbody_property[empty_index], &entity->rigidbody[empty_index]);
     }
     
     return id;
@@ -104,7 +112,10 @@ create_random_cube(Data::Entity_pool *entity, const Data::Model_pool *mesh_resou
 
 
 Entity::Entity_id
-create_actor(Data::Entity_pool *entity, const Data::Model_pool *mesh_resources, const Data::Texture_pool *texture_resources)
+create_actor(Data::Entity_pool *entity,
+             Data::Pending_rigidbody_pool *pending_rb_pool,
+             const Data::Model_pool *mesh_resources,
+             const Data::Texture_pool *texture_resources)
 {
   std::size_t empty_index;
   if(Entity::find_index_linearly(&empty_index, Entity::invalid_id(), entity->entity_id, entity->size))
@@ -143,6 +154,8 @@ create_actor(Data::Entity_pool *entity, const Data::Model_pool *mesh_resources, 
       entity->rigidbody_property[empty_index].mass                         = 1;
       
       entity->rigidbody[empty_index].motion_state.reset(new Physics::Motion_state(entity->entity_id[empty_index], entity));
+      
+      Data::pending_rigidbody_pool_push(pending_rb_pool, entity->rigidbody_property[empty_index], &entity->rigidbody[empty_index]);
     }
     
     return id;
@@ -153,7 +166,10 @@ create_actor(Data::Entity_pool *entity, const Data::Model_pool *mesh_resources, 
 
 
 Entity::Entity_id
-create_kinematic_actor(Data::Entity_pool *entity, const Data::Model_pool *mesh_resources, const Data::Texture_pool *texture_resources)
+create_kinematic_actor(Data::Entity_pool *entity,
+                       Data::Pending_rigidbody_pool *pending_rb_pool,
+                       const Data::Model_pool *mesh_resources,
+                       const Data::Texture_pool *texture_resources)
 {
   std::size_t empty_index;
   if(Entity::find_index_linearly(&empty_index, Entity::invalid_id(), entity->entity_id, entity->size))
@@ -196,7 +212,10 @@ create_kinematic_actor(Data::Entity_pool *entity, const Data::Model_pool *mesh_r
 
 
 Entity::Entity_id
-create_placement_cube(Data::Entity_pool *entity, const Data::Model_pool *mesh_resources, const Data::Texture_pool *texture_resources)
+create_placement_cube(Data::Entity_pool *entity,
+                      Data::Pending_rigidbody_pool *pending_rb_pool,
+                      const Data::Model_pool *mesh_resources,
+                      const Data::Texture_pool *texture_resources)
 {
   std::size_t empty_index;
   if(Entity::find_index_linearly(&empty_index, Entity::invalid_id(), entity->entity_id, entity->size))

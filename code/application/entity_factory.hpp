@@ -10,23 +10,38 @@ namespace Entity_factory {
 
 
 Entity::Entity_id
-create_ground(Data::Entity_pool *entity, const Data::Model_pool *mesh_resources, const Data::Texture_pool *texture_resources);
+create_ground(Data::Entity_pool *entity,
+              Data::Pending_rigidbody_pool *pending_rb_pool,
+              const Data::Model_pool *mesh_resources,
+              const Data::Texture_pool *texture_resources);
 
 
 Entity::Entity_id
-create_random_cube(Data::Entity_pool *entity, const Data::Model_pool *mesh_resources, const Data::Texture_pool *texture_resources);
+create_random_cube(Data::Entity_pool *entity,
+                   Data::Pending_rigidbody_pool *pending_rb_pool,
+                   const Data::Model_pool *mesh_resources,
+                   const Data::Texture_pool *texture_resources);
 
 
 Entity::Entity_id
-create_actor(Data::Entity_pool *entity, const Data::Model_pool *mesh_resources, const Data::Texture_pool *texture_resources);
+create_actor(Data::Entity_pool *entity,
+             Data::Pending_rigidbody_pool *pending_rb_pool,
+             const Data::Model_pool *mesh_resources,
+             const Data::Texture_pool *texture_resources);
 
 
 Entity::Entity_id
-create_kinematic_actor(Data::Entity_pool *entity, const Data::Model_pool *mesh_resources, const Data::Texture_pool *texture_resources);
+create_kinematic_actor(Data::Entity_pool *entity,
+                       Data::Pending_rigidbody_pool *pending_rb_pool,
+                       const Data::Model_pool *mesh_resources,
+                       const Data::Texture_pool *texture_resources);
 
 
 Entity::Entity_id
-create_placement_cube(Data::Entity_pool *entity, const Data::Model_pool *mesh_resources, const Data::Texture_pool *texture_resources);
+create_placement_cube(Data::Entity_pool *entity,
+                      Data::Pending_rigidbody_pool *pending_rb_pool,
+                      const Data::Model_pool *mesh_resources,
+                      const Data::Texture_pool *texture_resources);
 
 
 } // ns
