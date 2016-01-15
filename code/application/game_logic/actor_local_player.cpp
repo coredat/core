@@ -100,7 +100,7 @@ Actor_local_player::on_update(const float dt)
           std::size_t index_of_new_obj;
           Entity::find_index_linearly(&index_of_new_obj, ent_id, m_data_pool->entity_id, m_data_pool->size);
           
-          m_data_pool->transform[index_of_new_obj] = m_data_pool->transform[index];
+          m_data_pool->transform[index_of_new_obj].position = m_data_pool->transform[index].position;
         }
       }
       
