@@ -3,6 +3,7 @@
 #include <application/game_logic/actor_local_player.hpp>
 #include <application/game_logic/actor_network_player.hpp>
 
+#include <systems/environment/environment.hpp>
 #include <systems/transform/transform.hpp>
 #include <systems/network/network.hpp>
 #include <systems/network/network_connection.hpp>
@@ -39,8 +40,12 @@ main(int argc, char *argv[])
 {
   const std::string title = is_client ? "Wired Client" : "Wired Server";
 
-  sdl::window window(800, 480, false, title);
-  sdl::ogl_context ogl(window);
+//  sdl::window window(800, 480, false, title);
+//  sdl::ogl_context ogl(window);
+
+  Environment::Window window;
+  Environment::window_create(&window, 800, 480, false, title.c_str());
+
   sdl::input input;
 
   input.set_mouse_hold(true);
@@ -143,7 +148,7 @@ main(int argc, char *argv[])
   //glViewport(0,0,1280, 720);
 
   // Foop
-  while(!window.wants_to_quit())
+  while(true)
   {
     const float delta_time = static_cast<float>(frame_timer.split()) / 1000.f;
   
@@ -295,7 +300,8 @@ main(int argc, char *argv[])
     Debug_line_renderer::render(math::mat4_get_data(wvp));
     
     input.think();
-    window.flip_buffer();
+    Environment::window_think(&window);
+//    window.flip_buffer();
   }
   
   

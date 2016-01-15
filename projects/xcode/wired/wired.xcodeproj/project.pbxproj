@@ -103,6 +103,7 @@
 		7EC9B9C81C4844BE00FBF1D7 /* sdl_input.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sdl_input.cpp; sourceTree = "<group>"; };
 		7EC9B9C91C4844BE00FBF1D7 /* sdl_window.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sdl_window.cpp; sourceTree = "<group>"; };
 		7EC9B9CD1C48481500FBF1D7 /* sdl_types.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = sdl_types.hpp; sourceTree = "<group>"; };
+		7EC9B9CE1C48D1D100FBF1D7 /* sdl_common.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = sdl_common.hpp; sourceTree = "<group>"; };
 		7ED7BB841C3CF8B100CE80EA /* entity_factory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = entity_factory.cpp; sourceTree = "<group>"; };
 		7ED7BB851C3CF8B100CE80EA /* entity_factory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = entity_factory.hpp; sourceTree = "<group>"; };
 		7ED7BB891C3CF8B100CE80EA /* actor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = actor.hpp; sourceTree = "<group>"; };
@@ -298,6 +299,7 @@
 			isa = PBXGroup;
 			children = (
 				7EC9B9CD1C48481500FBF1D7 /* sdl_types.hpp */,
+				7EC9B9CE1C48D1D100FBF1D7 /* sdl_common.hpp */,
 				7EC9B9C71C4844BE00FBF1D7 /* sdl_environment.cpp */,
 				7EC9B9C81C4844BE00FBF1D7 /* sdl_input.cpp */,
 				7EC9B9C91C4844BE00FBF1D7 /* sdl_window.cpp */,
