@@ -44,6 +44,7 @@ main(int argc, char *argv[])
 //  sdl::ogl_context ogl(window);
 
   Environment::Window window;
+  Environment::Input input_devices;
   Environment::window_create(&window, 800, 480, false, title.c_str());
 
   sdl::input input;
@@ -153,10 +154,9 @@ main(int argc, char *argv[])
   while(run_game)
   {
     Environment::window_think(&window);
-
   
     // Environment events.
-    Environment::think(&window, nullptr, [&](Environment::Event_id id)
+    Environment::think(&window, &input_devices, [&](Environment::Event_id id)
     {
       switch(id)
       {
@@ -211,37 +211,45 @@ main(int argc, char *argv[])
     if(input.is_key_down(SDLK_w))
     {
       input_cmds.fwd++;
-      actor->move_fwd(1.f);
+      //actor->move_fwd(1.f);
     }
 
     if(input.is_key_down(SDLK_s))
     {
       input_cmds.fwd--;
-      actor->move_fwd(-1.f);
+      //actor->move_fwd(-1.f);
     }
     
     if(input.is_key_down(SDLK_a))
     {
       input_cmds.right++;
-      actor->move_right(1.f);
+      //actor->move_right(1.f);
     }
     
     if(input.is_key_down(SDLK_d))
     {
       input_cmds.right--;
-      actor->move_right(-1.f);
+      //actor->move_right(-1.f);
     }
     
     if(input.is_key_down (SDLK_SPACE))
     {
+      //actor->action();
+    }
+    
+    actor->move_fwd(input_devices.controllers[0].axis_2[1]);
+    actor->move_right(input_devices.controllers[0].axis_2[0]);
+    
+    if(input_devices.controllers[0].buttons[Environment::Button::action_button] == (uint8_t)Environment::Button_action::on_down)
+    {
       actor->action();
     }
     
-    input_cmds.rot   = input.get_mouse_delta_x();
-    input_cmds.pitch = input.get_mouse_delta_y();
+    input_cmds.rot   = input_devices.controllers[0].axis_1[0];//input.get_mouse_delta_x();
+    input_cmds.pitch = input_devices.controllers[0].axis_1[1];//input.get_mouse_delta_y();
     
-    actor->look_up(static_cast<float>(input.get_mouse_delta_y()) * delta_time);
-    actor->turn_right(static_cast<float>(input.get_mouse_delta_x()) * delta_time);
+    actor->look_up(static_cast<float>(input_devices.controllers[0].axis_1[1]) * delta_time);
+    actor->turn_right(static_cast<float>(input_devices.controllers[0].axis_1[0]) * delta_time);
     
     if(is_client)
     {

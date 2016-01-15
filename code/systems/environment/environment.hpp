@@ -30,7 +30,7 @@ de_initialize();
 
 
 void
-think(const Window *window, const Input *input, const std::function<void(Environment::Event_id id)> &callback);
+think(const Window *window, Input *input, const std::function<void(Environment::Event_id id)> &callback);
 
 
 } // ns

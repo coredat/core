@@ -16,11 +16,11 @@ struct Window
 };
 
 
-struct Input
-{
-  int32_t m_mouse_delta_x;
-  int32_t m_mouse_delta_y;
-};
+//struct Input
+//{
+//  int32_t m_mouse_delta_x;
+//  int32_t m_mouse_delta_y;
+//};
 
   
 }
