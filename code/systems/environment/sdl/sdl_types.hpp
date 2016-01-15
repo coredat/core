@@ -3,6 +3,7 @@
 
 
 #include "sdl_common.hpp"
+#include <stdint.h>
 
 
 namespace Environment {
@@ -10,8 +11,15 @@ namespace Environment {
 
 struct Window
 {
-  SDL_Window *window = nullptr;
+  SDL_Window *window    = nullptr;
   SDL_GLContext context = nullptr;
+};
+
+
+struct Input
+{
+  int32_t m_mouse_delta_x;
+  int32_t m_mouse_delta_y;
 };
 
   

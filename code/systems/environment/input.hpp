@@ -16,10 +16,6 @@ void
 input_destroy(Input *input);
 
 
-void
-input_callbacks(Input *input, const std::function<void()> &callbacks);
-
-
 } // ns
 
 

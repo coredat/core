@@ -9,6 +9,17 @@
 
 namespace Environment {
 
+enum class Event_id
+{
+  window_open,
+  window_close,
+  
+  mouse_move,
+
+  button_pressed,
+  button_up,
+}; // enum
+
 
 void
 initialize();
@@ -19,7 +30,7 @@ de_initialize();
 
 
 void
-think();
+think(const Window *window, const Input *input, const std::function<void(Environment::Event_id id)> &callback);
 
 
 } // ns

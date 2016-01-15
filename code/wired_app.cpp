@@ -148,8 +148,29 @@ main(int argc, char *argv[])
   //glViewport(0,0,1280, 720);
 
   // Foop
-  while(true)
+  bool run_game = true;
+  
+  while(run_game)
   {
+    Environment::window_think(&window);
+
+  
+    // Environment events.
+    Environment::think(&window, nullptr, [&](Environment::Event_id id)
+    {
+      switch(id)
+      {
+        case(Environment::Event_id::window_close):
+          run_game = false;
+          break;
+        case(Environment::Event_id::button_pressed):
+          break;
+          
+        default:
+          assert(true); // shut up the warning.
+      };
+    });
+    
     const float delta_time = static_cast<float>(frame_timer.split()) / 1000.f;
   
     Network::poll_events(&connection,
@@ -181,7 +202,7 @@ main(int argc, char *argv[])
     std::size_t index;
     Entity::find_index_linearly(&index, kine_actor_local, world_entities.entity_id, world_entities.size);
   
-    sdl::message_pump();
+//    sdl::message_pump();
     renderer::clear();
     
     Actor_local_player *actor = reinterpret_cast<Actor_local_player*>(logic_pool.objects_in_use[0]);
@@ -300,7 +321,7 @@ main(int argc, char *argv[])
     Debug_line_renderer::render(math::mat4_get_data(wvp));
     
     input.think();
-    Environment::window_think(&window);
+
 //    window.flip_buffer();
   }
   

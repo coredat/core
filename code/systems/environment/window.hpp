@@ -39,10 +39,6 @@ void
 window_think(const Window *window, std::ostream *log = nullptr);
 
 
-void
-window_callbacks(const Window *window, const std::function<void()> &callback, std::ostream *log = nullptr);
-
-
 } // ns
 
 
