@@ -1,8 +1,13 @@
 #include "../window.hpp"
 #include "sdl_types.hpp"
-#include "sdl_common.hpp"
+#include "sdl_common.hpp" 
 #include <assert.h>
+
+#ifdef WIN32
+#include <GL/glew.h>
+#else
 #include <OpenGL/gl3.h>
+#endif
 
 
 namespace

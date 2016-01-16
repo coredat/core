@@ -55,6 +55,18 @@
     <Filter Include="external">
       <UniqueIdentifier>{63e88ad3-61bd-423d-a3ad-9fcc85f4cf6a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="application\game_logic">
+      <UniqueIdentifier>{f7023cad-087d-4a78-b3a7-bfe733afa99e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="systems\environment">
+      <UniqueIdentifier>{08ff81b8-b01e-48ea-8eec-377fe9f7adab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="systems\environment\sdl">
+      <UniqueIdentifier>{5d3dc3e9-34dd-49a2-9df6-d555b5e57ca5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="systems\logic">
+      <UniqueIdentifier>{e8a13a61-3258-492e-b596-ec28689a21a4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\code\wired_app.cpp" />
@@ -207,6 +219,36 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\3rdparty\external\sdl_wrapper\window.cpp">
       <Filter>external</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\application\game_logic\actor_local_player.cpp">
+      <Filter>application\game_logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\application\game_logic\actor_network_player.cpp">
+      <Filter>application\game_logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\data\pending_rigidbody_pool.cpp">
+      <Filter>data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\data\logic_pool.cpp">
+      <Filter>data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\systems\environment\sdl\sdl_environment.cpp">
+      <Filter>systems\environment\sdl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\systems\environment\sdl\sdl_input.cpp">
+      <Filter>systems\environment\sdl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\systems\environment\sdl\sdl_window.cpp">
+      <Filter>systems\environment\sdl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\systems\logic\logic.cpp">
+      <Filter>systems\logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\systems\logic\logic_base.cpp">
+      <Filter>systems\logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\renderer\graphics_api\ogl\ogl_shader_uniform.cpp">
+      <Filter>renderer\graphics_api\ogl</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -455,6 +497,48 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\3rdparty\external\sdl_wrapper\window.hpp">
       <Filter>external</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\application\game_logic\actor_local_player.hpp">
+      <Filter>application\game_logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\application\game_logic\actor_network_player.hpp">
+      <Filter>application\game_logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\data\pending_rigidbody_pool.hpp">
+      <Filter>data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\data\logic_pool.hpp">
+      <Filter>data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\systems\environment\environment.hpp">
+      <Filter>systems\environment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\systems\environment\environment_fwd.hpp">
+      <Filter>systems\environment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\systems\environment\input.hpp">
+      <Filter>systems\environment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\systems\environment\window.hpp">
+      <Filter>systems\environment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\systems\environment\sdl\sdl_common.hpp">
+      <Filter>systems\environment\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\systems\environment\sdl\sdl_types.hpp">
+      <Filter>systems\environment\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\systems\logic\logic.hpp">
+      <Filter>systems\logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\systems\logic\logic_base.hpp">
+      <Filter>systems\logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\systems\logic\logic_fwd.hpp">
+      <Filter>systems\logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\renderer\graphics_api\ogl\ogl_shader_uniform.hpp">
+      <Filter>renderer\graphics_api\ogl</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
