@@ -27,8 +27,13 @@
 
 namespace
 {
-  const math::mat4  proj      = math::mat4_projection(800, 480, 0.1, 1000, math::quart_tau() * 0.6f);
-  const bool        is_client = false;
+  const math::mat4  proj = math::mat4_projection(800, 480, 0.1, 1000, math::quart_tau() * 0.6f);
+
+#ifdef WIN32
+  const bool is_client = true;
+#else
+  const bool is_client = false;
+#endif
 }
 
 #ifdef main
