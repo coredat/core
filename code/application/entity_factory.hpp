@@ -44,6 +44,12 @@ create_placement_cube(Data::Entity_pool *entity,
                       const Data::Texture_pool *texture_resources);
 
 
+Entity::Entity_id
+create_connection_node(Data::Entity_pool *entity,
+                       Data::Pending_rigidbody_pool *pending_rb_pool,
+                       const Data::Model_pool *mesh_resources,
+                       const Data::Texture_pool *texture_resources);
+
 } // ns
 
 

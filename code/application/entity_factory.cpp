@@ -4,11 +4,12 @@
 #include <systems/entity/generic_id.hpp>
 #include <data/data.hpp>
 #include "resources.hpp"
+#include <atomic>
 
 
 namespace
 {
-  uint32_t instance = 0;
+  std::atomic<uint32_t> instance(0);
 }
 
 
@@ -250,4 +251,54 @@ create_placement_cube(Data::Entity_pool *entity,
 }
 
 
+
+Entity::Entity_id
+create_connection_node(Data::Entity_pool *entity,
+                       Data::Pending_rigidbody_pool *pending_rb_pool,
+                       const Data::Model_pool *mesh_resources,
+                       const Data::Texture_pool *texture_resources)
+{
+  std::size_t empty_index;
+  if(Entity::find_index_linearly(&empty_index, Entity::invalid_id(), entity->entity_id, entity->size))
+  {
+    const Entity::Entity_id id = Entity::Entity_id{2, ++instance};
+    entity->entity_id[empty_index] = id;
+    
+    // Setup texture
+    {
+      entity->texture[empty_index] = static_cast<Resource::Texture::ENUM>(rand() % Resource::Texture::size);
+    }    
+    
+    // Setup phys
+    {
+      const float size = 2.f;
+      const float scale_x = size;
+      const float scale_y = size * math::g_ratio();
+      const float scale_z = size;
+
+      const float pos_x = 0;
+      const float pos_y = scale_x * 0.5f;
+      const float pos_z = 0;
+      
+      entity->transform[empty_index] = math::transform_init(math::vec3_init(pos_x, pos_y, pos_z),
+                                                            math::vec3_init(scale_x, scale_y, scale_z),
+                                                            math::quat_init());
+      
+      entity->rigidbody_property[empty_index].move_axis     = Physics::Axis::x | Physics::Axis::y | Physics::Axis::z;
+      entity->rigidbody_property[empty_index].rotation_axis = Physics::Axis::x | Physics::Axis::y | Physics::Axis::z;
+      entity->rigidbody_property[empty_index].collider_type = Physics::Collider_type::cube;
+      entity->rigidbody_property[empty_index].collider_info.cube.extents[0] = scale_x * 0.5f;
+      entity->rigidbody_property[empty_index].collider_info.cube.extents[1] = scale_y * 0.5f;
+      entity->rigidbody_property[empty_index].collider_info.cube.extents[2] = scale_z * 0.5f;
+      entity->rigidbody_property[empty_index].mass = 0;
+      
+      entity->rigidbody[empty_index].motion_state.reset(new Physics::Motion_state(entity->entity_id[empty_index], entity));
+      
+      Data::pending_rigidbody_pool_push(pending_rb_pool, entity->rigidbody_property[empty_index], &entity->rigidbody[empty_index]);
+    }
+    
+    return id;
+  }
+  
+  return Entity::invalid_id();}
 } // ns

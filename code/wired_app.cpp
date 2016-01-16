@@ -132,7 +132,10 @@ main(int argc, char *argv[])
     reinterpret_cast<Logic::Base*>(obj)->on_start(); // TODO: reinter_cast?
   }
   
-  for(uint32_t i = 0; i < 4; ++i)
+  Entity_factory::create_connection_node(&world_entities, &rigidbody_loading_pool, &model_pool, &texture_pool);
+  
+  const uint32_t number_of_random_cubes = 0;
+  for(uint32_t i = 0; i < number_of_random_cubes; ++i)
   {
     Entity_factory::create_random_cube(&world_entities, &rigidbody_loading_pool, &model_pool, &texture_pool);
   }

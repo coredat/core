@@ -18,6 +18,7 @@ struct Rigidbody
   std::unique_ptr<Motion_state>       motion_state;
   std::unique_ptr<btRigidBody>        rigidbody;
   std::unique_ptr<btCollisionShape>   shape;
+  std::unique_ptr<btCompoundShape>    compound_shape;
 };
 
 

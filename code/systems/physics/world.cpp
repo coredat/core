@@ -107,6 +107,14 @@ world_add_rigidbodies(World *world,
     }
     
     /*
+      Create a compound collider if none exists
+    */
+    if(!out_rb->compound_shape)
+    {
+      out_rb->compound_shape.reset(new btCompoundShape());
+    }
+    
+    /*
       Create the Rigidbody and add it.
     */
     {
@@ -115,9 +123,15 @@ world_add_rigidbodies(World *world,
       btVector3 inertia(0, 0, 0);
       out_rb->shape->calculateLocalInertia(prop->mass, inertia);
       
+      btTransform child_transform ;
+      child_transform.setIdentity(); // Warning do not remove this. It seems to create an AABB overflow in Bullet.
+ 
+      out_rb->compound_shape->addChildShape(child_transform, out_rb->shape.get());
+      out_rb->compound_shape->calculateLocalInertia(prop->mass, inertia);
+      
       const btRigidBody::btRigidBodyConstructionInfo rigidbody_ci(prop->mass,
                                                                   out_rb->motion_state.get(),
-                                                                  out_rb->shape.get(),
+                                                                  out_rb->compound_shape.get(),
                                                                   inertia);
       
       out_rb->rigidbody.reset(new btRigidBody(rigidbody_ci));
@@ -133,8 +147,13 @@ world_add_rigidbodies(World *world,
       const uint32_t movement_axis = prop->move_axis;
       const uint32_t rotation_axis = prop->rotation_axis;
     
-      const btVector3 axis_movement((btScalar)(movement_axis >> 0 & 1), (btScalar)(movement_axis >> 1 & 1), (btScalar)(movement_axis >> 2 & 1));
-      const btVector3 axis_rotation((btScalar)(rotation_axis >> 0 & 1), (btScalar)(rotation_axis >> 1 & 1), (btScalar)(rotation_axis >> 2 & 1));
+      const btVector3 axis_movement((btScalar)(movement_axis >> 0 & 1),
+                                    (btScalar)(movement_axis >> 1 & 1),
+                                    (btScalar)(movement_axis >> 2 & 1));
+      
+      const btVector3 axis_rotation((btScalar)(rotation_axis >> 0 & 1),
+                                    (btScalar)(rotation_axis >> 1 & 1),
+                                    (btScalar)(rotation_axis >> 2 & 1));
 
       rigidbody->setLinearFactor(axis_movement);
       rigidbody->setAngularFactor(axis_rotation);
