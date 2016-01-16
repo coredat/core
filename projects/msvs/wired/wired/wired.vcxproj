@@ -45,6 +45,10 @@
     <ClCompile Include="..\..\..\..\3rdparty\external\utils\logging.cpp" />
     <ClCompile Include="..\..\..\..\3rdparty\external\utils\obj_model_loader.cpp" />
     <ClCompile Include="..\..\..\..\3rdparty\external\utils\timer.cpp" />
+    <ClCompile Include="..\..\..\..\code\application\application_client.cpp" />
+    <ClCompile Include="..\..\..\..\code\application\application_common.cpp" />
+    <ClCompile Include="..\..\..\..\code\application\application_graphics.cpp" />
+    <ClCompile Include="..\..\..\..\code\application\application_host.cpp" />
     <ClCompile Include="..\..\..\..\code\application\entity_factory.cpp" />
     <ClCompile Include="..\..\..\..\code\application\game_logic\actor_local_player.cpp" />
     <ClCompile Include="..\..\..\..\code\application\game_logic\actor_network_player.cpp" />
@@ -120,6 +124,10 @@
     <ClInclude Include="..\..\..\..\3rdparty\external\utils\timer.hpp" />
     <ClInclude Include="..\..\..\..\3rdparty\external\utils\utils_fwd.hpp" />
     <ClInclude Include="..\..\..\..\3rdparty\external\utils\variant.hpp" />
+    <ClInclude Include="..\..\..\..\code\application\application_client.hpp" />
+    <ClInclude Include="..\..\..\..\code\application\application_common.hpp" />
+    <ClInclude Include="..\..\..\..\code\application\application_graphics.hpp" />
+    <ClInclude Include="..\..\..\..\code\application\application_host.hpp" />
     <ClInclude Include="..\..\..\..\code\application\entity_factory.hpp" />
     <ClInclude Include="..\..\..\..\code\application\game_logic\actor_local_player.hpp" />
     <ClInclude Include="..\..\..\..\code\application\game_logic\actor_network_player.hpp" />

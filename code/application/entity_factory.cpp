@@ -266,7 +266,7 @@ create_connection_node(Data::Entity_pool *entity,
     
     // Setup texture
     {
-      entity->texture[empty_index] = static_cast<Resource::Texture::ENUM>(rand() % Resource::Texture::size);
+      entity->texture[empty_index] = static_cast<Resource::Texture::ENUM>(Resource::Texture::dev_red);
     }    
     
     // Setup phys

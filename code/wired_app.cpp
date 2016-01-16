@@ -24,6 +24,11 @@
 
 #include <data/actor/actor.hpp> // what to do with this.
 
+#include <application/application_client.hpp>
+#include <application/application_host.hpp>
+#include <application/application_common.hpp>
+#include <application/application_graphics.hpp>
+
 
 namespace
 {
@@ -68,7 +73,7 @@ main(int argc, char *argv[])
   {
     Network::client_create(&connection, &std::cout);
     //Network::client_connect_to_server(&connection, "92.239.13.99", 6112, 15000, &std::cout);
-    Network::client_connect_to_server(&connection, "192.168.0.11", 1234, 5000, &std::cout);
+    Network::client_connect_to_server(&connection, "192.168.0.8", 1234, 5000, &std::cout);
     //Network::client_connect_to_server(&connection, "127.0.0.1", 6112, 5000, &std::cout);
   }
   else
@@ -102,8 +107,14 @@ main(int argc, char *argv[])
   
   Entity_factory::create_ground(&world_entities, &rigidbody_loading_pool, &model_pool, &texture_pool);
   //Entity::Entity_id actor_entity = Entity_factory::create_actor(&world_entities, &model_pool, &texture_pool);
-  Entity::Entity_id kine_actor_local = Entity_factory::create_kinematic_actor(&world_entities, &rigidbody_loading_pool, &model_pool, &texture_pool);
-  Entity::Entity_id kine_actor_network = Entity_factory::create_kinematic_actor(&world_entities, &rigidbody_loading_pool, &model_pool, &texture_pool);
+
+  Entity::Entity_id kine_actor_network;
+  Entity::Entity_id kine_actor_local;
+
+  {
+    kine_actor_local = Entity_factory::create_kinematic_actor(&world_entities, &rigidbody_loading_pool, &model_pool, &texture_pool);
+    kine_actor_network = Entity_factory::create_kinematic_actor(&world_entities, &rigidbody_loading_pool, &model_pool, &texture_pool);
+  }
   
   // Game Logic
   {
@@ -245,19 +256,19 @@ main(int argc, char *argv[])
       //actor->action();
     }
     
-    actor->move_fwd(input_devices.controllers[0].axis_2[1]);
-    actor->move_right(input_devices.controllers[0].axis_2[0]);
+    //actor->move_fwd(input_devices.controllers[0].axis_2[1]);
+    //actor->move_right(input_devices.controllers[0].axis_2[0]);
     
     if(input_devices.controllers[0].buttons[Environment::Button::action_button] == (uint8_t)Environment::Button_action::on_down)
     {
-      actor->action();
+      //actor->action();
     }
     
     input_cmds.rot   = input_devices.controllers[0].axis_1[0];//input.get_mouse_delta_x();
     input_cmds.pitch = input_devices.controllers[0].axis_1[1];//input.get_mouse_delta_y();
     
-    actor->look_up(static_cast<float>(input_devices.controllers[0].axis_1[1]) * delta_time);
-    actor->turn_right(static_cast<float>(input_devices.controllers[0].axis_1[0]) * delta_time);
+    //actor->look_up(static_cast<float>(input_devices.controllers[0].axis_1[1]) * delta_time);
+    //actor->turn_right(static_cast<float>(input_devices.controllers[0].axis_1[0]) * delta_time);
     
     if(is_client)
     {
@@ -266,15 +277,16 @@ main(int argc, char *argv[])
     else
     {
       Network::send_packet(&connection, sizeof(world_entities.transform), world_entities.transform, false);
-   //   Actor::input(input_cmds, delta_time, kine_actor_local, &world_entities, world_entities.size, &phy_world);
     }
     
     
     // ** Game Logic Update ** //
-  
-    for(auto &obj : logic_pool.objects_in_use)
+    if(!is_client)
     {
-      reinterpret_cast<Logic::Base*>(obj)->on_update(delta_time); // TODO: reinter_cast?
+      for(auto &obj : logic_pool.objects_in_use)
+      {
+        reinterpret_cast<Logic::Base*>(obj)->on_update(delta_time); // TODO: reinter_cast?
+      }
     }
     
     
@@ -293,48 +305,15 @@ main(int argc, char *argv[])
     
     Physics::world_step(&phy_world, delta_time);
     
-    static float time = 4;
-    //time += delta_time / 2;
-    
-    const float x = math::sin(time) * 9;
-    const float z = math::cos(time) * 9;
-    
-    //const float eye_pos[3] = {x, 3.4f, z};
-    
-    const math::mat4 view  = math::mat4_lookat(math::vec3_init(x, 3.4f, z),
-                                               math::vec3_zero(),
-                                               math::vec3_init(0, 1, 0));
-    
-    const math::mat4 view_proj = math::mat4_multiply(view, proj); // *hurt* camaera or such.
-    Transform::transforms_to_wvp_mats(world_entities.transform,
-                                      world_entities.size,
-                                      view_proj,
-                                      renderer_nodes[0].wvp,
-                                      renderer_nodes.size(),
-                                      sizeof(Simple_renderer::Node));
-    
+    // ** Graphics ** //
 
-    Transform::transforms_to_world_mats(world_entities.transform,
-                                        world_entities.size,
-                                        renderer_nodes[0].world_mat,
-                                        renderer_nodes.size(),
-                                        sizeof(Simple_renderer::Node));
-    
-    // Texture/vbo info
-    for(std::size_t i = 0; i < world_entities.size; ++i)
-    {
-      renderer_nodes.at(i).vbo        = model_pool.vbo[world_entities.model[i]];
-      renderer_nodes.at(i).diffuse_id = Data::texture_pool_find(&texture_pool, world_entities.texture[i])->texture_id;
-    }
-    
-      
-    Simple_renderer::render_nodes_fullbright(renderer_nodes.data(), renderer_nodes.size());
-    //Simple_renderer::render_nodes_directional_light(renderer_nodes.data(), renderer_nodes.size(), &eye_pos[0]);
-    
-    //renderer::clear(false, true);
-    
-    math::mat4 wvp = math::mat4_multiply(math::mat4_id(), view, proj);
-    Debug_line_renderer::render(math::mat4_get_data(wvp));
+    Application::graphics_think(
+        &world_entities,
+        &texture_pool,
+        &model_pool,
+        renderer_nodes.data(),
+        renderer_nodes.size()
+      );
     
     input.think();
 

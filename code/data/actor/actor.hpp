@@ -24,7 +24,7 @@ struct Input_cmds
 };
 
 
-void
+inline void
 input(Input_cmds input,
       const float dt,
       const Entity::Entity_id id,
@@ -108,7 +108,7 @@ input(Input_cmds input,
 }
 
 
-void
+inline void
 update(const Entity::Entity_id id, Data::Entity_pool *ents, const std::size_t size_of_data_entity_data, Physics::World *phy_world)
 {
   auto apply_gravity = [&](const Entity::Entity_id ent)

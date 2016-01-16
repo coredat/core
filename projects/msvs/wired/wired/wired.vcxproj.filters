@@ -250,6 +250,18 @@
     <ClCompile Include="..\..\..\..\code\renderer\graphics_api\ogl\ogl_shader_uniform.cpp">
       <Filter>renderer\graphics_api\ogl</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\code\application\application_client.cpp">
+      <Filter>application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\application\application_common.cpp">
+      <Filter>application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\application\application_graphics.cpp">
+      <Filter>application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\application\application_host.cpp">
+      <Filter>application</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\code\application\entity_factory.hpp">
@@ -539,6 +551,18 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\code\renderer\graphics_api\ogl\ogl_shader_uniform.hpp">
       <Filter>renderer\graphics_api\ogl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\application\application_client.hpp">
+      <Filter>application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\application\application_common.hpp">
+      <Filter>application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\application\application_graphics.hpp">
+      <Filter>application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\application\application_host.hpp">
+      <Filter>application</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
