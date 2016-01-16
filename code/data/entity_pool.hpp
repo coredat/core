@@ -21,6 +21,8 @@ namespace Data {
 struct Entity_pool
 {
   Entity::Entity_id               entity_id[ENTITY_POOL_SIZE];
+  Entity::Entity_id               parent_id[ENTITY_POOL_SIZE];
+  
   math::transform                 transform[ENTITY_POOL_SIZE];
   
   bool                            display[ENTITY_POOL_SIZE];
