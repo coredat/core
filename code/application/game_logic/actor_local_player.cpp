@@ -93,8 +93,6 @@ Actor_local_player::on_update(const float dt)
         
         if(m_place_node)
         {
-          m_place_node = false;
-          
           const auto ent_id = Entity_factory::create_random_cube(m_data_pool, pending_rbs, model_pool, texture_pool);
           
           std::size_t index_of_new_obj;
@@ -103,8 +101,9 @@ Actor_local_player::on_update(const float dt)
           m_data_pool->transform[index_of_new_obj].position = m_data_pool->transform[index].position;
         }
       }
-      
     }
+    
+      m_place_node = false;
   };
   
   apply_gravity(get_entity());
