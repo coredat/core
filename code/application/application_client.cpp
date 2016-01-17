@@ -13,6 +13,19 @@ namespace Application {
 
 
 void
+client_initialize(
+  Network::Connection *connection)
+{
+  const char *server_ip = "192.168.0.8";
+  const uint32_t port = 1234;
+  const uint32_t timeout = 5000;
+
+  Network::client_create(connection, &std::cout);
+  Network::client_connect_to_server(connection, server_ip, port, timeout, &std::cout);
+}
+
+
+void
 client_think(
   Data::Entity_pool *entity_pool,
   Data::Logic_pool *logic_pool,

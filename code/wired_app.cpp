@@ -50,9 +50,6 @@ main(int argc, char *argv[])
 {
   const std::string title = is_client ? "Wired Client" : "Wired Server";
 
-//  sdl::window window(800, 480, false, title);
-//  sdl::ogl_context ogl(window);
-
   Environment::Window window;
   Environment::Input input_devices;
   Environment::window_create(&window, 800, 480, false, title.c_str());
@@ -68,18 +65,6 @@ main(int argc, char *argv[])
   
   Network::initialize(&std::cout);
   Network::Connection connection;
-  
-  if(is_client)
-  {
-    Network::client_create(&connection, &std::cout);
-    //Network::client_connect_to_server(&connection, "92.239.13.99", 6112, 15000, &std::cout);
-    Network::client_connect_to_server(&connection, "192.168.0.8", 1234, 5000, &std::cout);
-    //Network::client_connect_to_server(&connection, "127.0.0.1", 6112, 5000, &std::cout);
-  }
-  else
-  {
-    Network::server_create(&connection, &std::cout);
-  }
   
   renderer::initialize();
   Simple_renderer::initialize();
@@ -105,7 +90,18 @@ main(int argc, char *argv[])
   
   Resource::load_default_resources(&texture_pool, texture_pool.size, &model_pool, model_pool.size);
   
+  if (is_client)
+  {
+    Application::client_initialize(&connection);
+  }
+  else
+  {
+    Network::server_create(&connection, &std::cout);
+  }
+  
+
   Application::host_initialize(&world_entities, &logic_pool, &rigidbody_loading_pool, &model_pool, &texture_pool, &phy_world, &connection);
+
   
   // Transform data
   std::vector<Simple_renderer::Node> renderer_nodes;

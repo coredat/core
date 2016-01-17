@@ -34,6 +34,7 @@ host_initialize(
   Physics::World *phy_world,
   Network::Connection *connection)
 {
+  
 //  Entity::Entity_id kine_actor_network;
 //  Entity::Entity_id kine_actor_local;
 
