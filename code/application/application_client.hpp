@@ -12,9 +12,17 @@ namespace Application {
 
 
 /*!
+ init the client
+*/
+void
+client_initialize(Network::Connection *connection);
+
+
+/*!
   client_think() process the incoming entity data from the network.
 */
-void client_think(
+void
+client_think(
   Data::Entity_pool *entity_pool,
   Data::Logic_pool *logic_pool,
   Data::Pending_rigidbody_pool *pending_rbs,
