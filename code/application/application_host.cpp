@@ -25,8 +25,8 @@ host_think(
   const float delta_time)
 {
   // SORT THIS!
-  const Entity::Entity_id kine_actor_local{0,0};
-  const Entity::Entity_id kine_actor_network{0,0};
+  const Entity::Entity_id kine_actor_local{4,1};
+  const Entity::Entity_id kine_actor_network{4,2};
 
   Network::poll_events(connection,
     0,
