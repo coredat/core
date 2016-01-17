@@ -9,8 +9,8 @@
 namespace Application {
 
 
-/*
-  
+/*!
+   Process what to render on the screen.
 */
 void
 graphics_think(const Data::Entity_pool *entities,

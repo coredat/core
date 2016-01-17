@@ -8,6 +8,9 @@
 namespace Application {
 
 
+/*!
+  Common processing accross server and client machines.
+*/
 void common_think(
   Environment::Window *window,
   Environment::Input *input_devices);

@@ -26,6 +26,8 @@ client_think(
     0,
     [&](const Network::Event_id id, const void *data, const std::size_t size_of_data)
     {
+        // We just copy entitiy positions into our entity pool.
+        // So much todo here!
         memcpy(entity_pool->transform, data, size_of_data);
     },
     &std::cout);

@@ -264,7 +264,6 @@ poll_events(Connection *connection,
           //        event.packet -> data,
           //        event.peer -> data,
           //        event.channelID);
-          std::cout << *reinterpret_cast<uint32_t*>(event.packet->data) << std::endl;
 
           if(callback)
           {
