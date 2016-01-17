@@ -5,6 +5,7 @@
 #include <systems/entity/entity_id.hpp>
 #include <systems/physics/physics_fwd.hpp>
 #include <systems/physics/rigidbody_properties.hpp>
+#include <systems/physics/rigidbody_collider.hpp>
 
 
 #define PENDING_RIGIDBODY_POOL_SIZE 128
@@ -17,6 +18,7 @@ struct Pending_rigidbody_pool
 {
   Physics::Rigidbody*             rigidbody_out[PENDING_RIGIDBODY_POOL_SIZE];
   Physics::Rigidbody_properties   rigidbody_property[PENDING_RIGIDBODY_POOL_SIZE];
+  Physics::Rigidbody_collider     rigidbody_collider[PENDING_RIGIDBODY_POOL_SIZE];
   
   std::size_t                     size = 0;
   const std::size_t               capacity = PENDING_RIGIDBODY_POOL_SIZE;
@@ -34,7 +36,7 @@ pending_rigidbody_pool_init(Pending_rigidbody_pool *pool);
   Push new pending rb onto the stack
 */
 void
-pending_rigidbody_pool_push(Pending_rigidbody_pool *pool, const Physics::Rigidbody_properties props, Physics::Rigidbody *output);
+pending_rigidbody_pool_push(Pending_rigidbody_pool *pool, const Physics::Rigidbody_properties props, const Physics::Rigidbody_collider coll, Physics::Rigidbody *output);
 
 
 /*!

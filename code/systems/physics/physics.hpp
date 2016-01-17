@@ -7,6 +7,7 @@
 */
 #include "world.hpp"
 #include "rigidbody_properties.hpp"
+#include "rigidbody_collider.hpp"
 #include "rigidbody.hpp"
 #include "motion_state.hpp"
 

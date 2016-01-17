@@ -137,6 +137,11 @@ host_think(
 
   if (pending_rbs->size)
   {
+    Physics::colliders_generate(pending_rbs->rigidbody_collider,
+                                pending_rbs->size,
+                                pending_rbs->rigidbody_out,
+                                pending_rbs->size);
+    
     Physics::world_add_rigidbodies(phy_world,
       pending_rbs->rigidbody_property,
       pending_rbs->size,

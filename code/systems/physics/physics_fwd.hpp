@@ -10,6 +10,7 @@ namespace Physics {
 
 
 struct Rigidbody_properties;
+struct Rigidbody_collider;
 struct Rigidbody;
 struct World;
 class Motion_state;

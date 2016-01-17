@@ -51,50 +51,7 @@ world_add_rigidbodies(World *world,
   {
     const Rigidbody_properties *prop = &props[i];
     Rigidbody *out_rb = destination[i];
-    
-    /*
-      Create the collision shape.
-    */
-    switch(prop->collider_type)
-    {
-      case(Collider_type::static_plane):
-      {
-        const btVector3 normal(prop->collider_info.static_plane.normal[0],
-                               prop->collider_info.static_plane.normal[1],
-                               prop->collider_info.static_plane.normal[2]);
-        const btScalar offset(prop->collider_info.static_plane.offset);
         
-        out_rb->shape.reset(new btStaticPlaneShape(normal, offset));
-        break;
-      }
-      
-      case(Collider_type::cube):
-      {
-        const btVector3 extents(prop->collider_info.cube.extents[0],
-                                prop->collider_info.cube.extents[1],
-                                prop->collider_info.cube.extents[2]);
-
-        out_rb->shape.reset(new btBoxShape(extents));
-        break;
-      }
-      
-      case(Collider_type::capsule):
-      {
-        const btScalar radius(prop->collider_info.capsule.radius);
-        const btScalar height(prop->collider_info.capsule.height);
-        
-        out_rb->shape.reset(new btCapsuleShape(radius, height));
-        break;
-      }
-      
-      case(Collider_type::none):
-        continue; // not a rigidbody
-      
-      default:
-        assert(false); // unknown collider type.
-        return;
-    }
-    
     /*
       Check if rb is already in the scene.
       Currently we shall just pull it from the world.
@@ -107,7 +64,7 @@ world_add_rigidbodies(World *world,
     }
     
     /*
-      Create a compound collider if none exists
+      If no compound shape make one.
     */
     if(!out_rb->compound_shape)
     {
