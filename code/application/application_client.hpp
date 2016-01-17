@@ -27,5 +27,4 @@ void client_think(
 } // ns
 
 
-
 #endif // inc guard

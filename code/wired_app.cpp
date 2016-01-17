@@ -104,58 +104,8 @@ main(int argc, char *argv[])
   Data::entity_pool_init(&world_entities);
   
   Resource::load_default_resources(&texture_pool, texture_pool.size, &model_pool, model_pool.size);
-
-  Entity::Entity_id kine_actor_network;
-  Entity::Entity_id kine_actor_local;
-
-  {
-    kine_actor_local = Entity_factory::create_kinematic_actor(&world_entities, &rigidbody_loading_pool, &model_pool, &texture_pool);
-    kine_actor_network = Entity_factory::create_kinematic_actor(&world_entities, &rigidbody_loading_pool, &model_pool, &texture_pool);
-  }
   
-  Entity_factory::create_ground(&world_entities, &rigidbody_loading_pool, &model_pool, &texture_pool);
-  //Entity::Entity_id actor_entity = Entity_factory::create_actor(&world_entities, &model_pool, &texture_pool);
-
-  
-  // Game Logic
-  {
-    const auto free_slot = Data::logic_pool_get_slot(&logic_pool);
-    new(free_slot) Actor_local_player();
-    
-    auto base = reinterpret_cast<Logic::Base*>(&logic_pool.storage[0 * logic_pool.storage_size]);
-    base->set_entity(kine_actor_local);
-    base->set_entity_data(&world_entities);
-    base->set_physics_data(&phy_world);
-    base->model_pool = &model_pool;
-    base->texture_pool = &texture_pool;
-    base->pending_rbs = &rigidbody_loading_pool;
-  }
-  
-  {
-    const auto free_slot = Data::logic_pool_get_slot(&logic_pool);
-    new(free_slot) Actor_network_player();
-    
-    auto base = reinterpret_cast<Logic::Base*>(&logic_pool.storage[1 * logic_pool.storage_size]);
-    base->set_entity(kine_actor_network);
-    base->set_entity_data(&world_entities);
-    base->set_physics_data(&phy_world);
-    base->model_pool = &model_pool;
-    base->texture_pool = &texture_pool;
-    base->pending_rbs = &rigidbody_loading_pool;
-  }
-  
-  for(auto &obj : logic_pool.objects_in_use)
-  {
-    reinterpret_cast<Logic::Base*>(obj)->on_start(); // TODO: reinter_cast?
-  }
-  
-  Entity_factory::create_connection_node(&world_entities, &rigidbody_loading_pool, &model_pool, &texture_pool);
-  
-  const uint32_t number_of_random_cubes = 0;
-  for(uint32_t i = 0; i < number_of_random_cubes; ++i)
-  {
-    Entity_factory::create_random_cube(&world_entities, &rigidbody_loading_pool, &model_pool, &texture_pool);
-  }
+  Application::host_initialize(&world_entities, &logic_pool, &rigidbody_loading_pool, &model_pool, &texture_pool, &phy_world, &connection);
   
   // Transform data
   std::vector<Simple_renderer::Node> renderer_nodes;
