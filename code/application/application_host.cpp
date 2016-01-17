@@ -97,6 +97,8 @@ host_think(
   const Environment::Input *inputs,
   const float delta_time)
 {
+  Physics::world_step(phy_world, delta_time);
+
   Network::poll_events(connection,
     0,
     [&](const Network::Event_id id, const void *data, const std::size_t size_of_data)
@@ -122,8 +124,6 @@ host_think(
     actor->action();
   }
 
-  Network::send_packet(connection, sizeof(entity_pool->transform), entity_pool->transform, false);
-
   // ** Game Logic Update ** //
 
   for (auto &obj : logic_pool->objects_in_use)
@@ -145,7 +145,8 @@ host_think(
     Data::pending_rigidbody_pool_clear(pending_rbs);
   }
 
-  Physics::world_step(phy_world, delta_time);
+  Network::send_packet(connection, sizeof(entity_pool->transform), entity_pool->transform, false);
+
 }
 
 
