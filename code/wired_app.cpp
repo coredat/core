@@ -172,138 +172,39 @@ main(int argc, char *argv[])
   
   while(run_game)
   {
-    Environment::window_think(&window);
-  
-    // Environment events.
-    Environment::think(&window, &input_devices, [&](Environment::Event_id id)
-    {
-      switch(id)
-      {
-        case(Environment::Event_id::window_close):
-          run_game = false;
-          break;
-        case(Environment::Event_id::button_pressed):
-          break;
-          
-        default:
-          assert(true); // shut up the warning.
-      };
-    });
-    
     const float delta_time = static_cast<float>(frame_timer.split()) / 1000.f;
   
-    Network::poll_events(&connection,
-    0,
-    [&](const Network::Event_id id, const void *data, const std::size_t size_of_data)
+    // ** Common ** //
+    
+    Application::common_think(
+      &window,
+      &input_devices);
+    
+    // ** Update World ** //
+    
+    // Temp while paramaters change
+    if(!is_client)
     {
-      if(is_client)
-      {
-        memcpy(world_entities.transform, data, size_of_data);
-      }
-//      const Network_transform *transform = reinterpret_cast<const Network_transform*>(data);
-//      const auto index = world_entities.find_index(kine_actor_network);
-//      
-//      math::transform trans = math::transform_init(
-//        math::vec3_init(transform->position[0], transform->position[1], transform->position[2]),
-//        math::vec3_init(transform->scale[0], transform->scale[1], transform->scale[2]),
-//        math::quat_init(transform->rotation[0], transform->rotation[1], transform->rotation[2], transform->rotation[3])
-//      );
-//      
-//      world_entities.get_transform_data()[index] = trans;
-      else
-      {
-        const Actor::Input_cmds *cmds = reinterpret_cast<const Actor::Input_cmds*>(data);
-        Actor::input(*cmds, delta_time, kine_actor_network, &world_entities, world_entities.size, &phy_world);
-      }
-    },
-    &std::cout);
-    
-    std::size_t index;
-    Entity::find_index_linearly(&index, kine_actor_local, world_entities.entity_id, world_entities.size);
-  
-//    sdl::message_pump();
-    renderer::clear();
-    
-    Actor_local_player *actor = reinterpret_cast<Actor_local_player*>(logic_pool.objects_in_use[0]);
-    
-    Actor::Input_cmds input_cmds;
-    if(input.is_key_down(SDLK_w))
-    {
-      input_cmds.fwd++;
-      //actor->move_fwd(1.f);
-    }
-
-    if(input.is_key_down(SDLK_s))
-    {
-      input_cmds.fwd--;
-      //actor->move_fwd(-1.f);
-    }
-    
-    if(input.is_key_down(SDLK_a))
-    {
-      input_cmds.right++;
-      //actor->move_right(1.f);
-    }
-    
-    if(input.is_key_down(SDLK_d))
-    {
-      input_cmds.right--;
-      //actor->move_right(-1.f);
-    }
-    
-    if(input.is_key_down (SDLK_SPACE))
-    {
-      //actor->action();
-    }
-    
-    //actor->move_fwd(input_devices.controllers[0].axis_2[1]);
-    //actor->move_right(input_devices.controllers[0].axis_2[0]);
-    
-    if(input_devices.controllers[0].buttons[Environment::Button::action_button] == (uint8_t)Environment::Button_action::on_down)
-    {
-      //actor->action();
-    }
-    
-    input_cmds.rot   = input_devices.controllers[0].axis_1[0];//input.get_mouse_delta_x();
-    input_cmds.pitch = input_devices.controllers[0].axis_1[1];//input.get_mouse_delta_y();
-    
-    //actor->look_up(static_cast<float>(input_devices.controllers[0].axis_1[1]) * delta_time);
-    //actor->turn_right(static_cast<float>(input_devices.controllers[0].axis_1[0]) * delta_time);
-    
-    if(is_client)
-    {
-      Network::send_packet(&connection, sizeof(input_cmds), &input_cmds, false);
+      Application::host_think(
+        &world_entities,
+        &logic_pool,
+        &rigidbody_loading_pool,
+        &phy_world,
+        &connection,
+        &input_devices,
+        delta_time);
     }
     else
     {
-      Network::send_packet(&connection, sizeof(world_entities.transform), world_entities.transform, false);
+        Application::client_think(
+          &world_entities,
+          &logic_pool,
+          &rigidbody_loading_pool,
+          &phy_world,
+          &connection,
+          &input_devices,
+          delta_time);  
     }
-    
-    
-    // ** Game Logic Update ** //
-    if(!is_client)
-    {
-      for(auto &obj : logic_pool.objects_in_use)
-      {
-        reinterpret_cast<Logic::Base*>(obj)->on_update(delta_time); // TODO: reinter_cast?
-      }
-    }
-    
-    
-    // ** World Update and Render ** //
-    
-    if(rigidbody_loading_pool.size)
-    {
-      Physics::world_add_rigidbodies(&phy_world,
-                                     rigidbody_loading_pool.rigidbody_property,
-                                     rigidbody_loading_pool.size,
-                                     rigidbody_loading_pool.rigidbody_out,
-                                     rigidbody_loading_pool.size);
-      
-      Data::pending_rigidbody_pool_clear(&rigidbody_loading_pool);
-    }
-    
-    Physics::world_step(&phy_world, delta_time);
     
     // ** Graphics ** //
 
@@ -314,12 +215,7 @@ main(int argc, char *argv[])
         renderer_nodes.data(),
         renderer_nodes.size()
       );
-    
-    input.think();
-
-//    window.flip_buffer();
   }
-  
   
   Network::destroy_connection(&connection);
   

@@ -44,6 +44,9 @@ host_think(
 
   actor->move_fwd(inputs->controllers[0].axis_2[1]);
   actor->move_right(inputs->controllers[0].axis_2[0]);
+  
+  actor->look_up(static_cast<float>(inputs->controllers[0].axis_1[1]) * delta_time);
+  actor->turn_right(static_cast<float>(inputs->controllers[0].axis_1[0]) * delta_time);
 
   if (inputs->controllers[0].buttons[Environment::Button::action_button] == (uint8_t)Environment::Button_action::on_down)
   {
