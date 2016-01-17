@@ -104,9 +104,6 @@ main(int argc, char *argv[])
   Data::entity_pool_init(&world_entities);
   
   Resource::load_default_resources(&texture_pool, texture_pool.size, &model_pool, model_pool.size);
-  
-  Entity_factory::create_ground(&world_entities, &rigidbody_loading_pool, &model_pool, &texture_pool);
-  //Entity::Entity_id actor_entity = Entity_factory::create_actor(&world_entities, &model_pool, &texture_pool);
 
   Entity::Entity_id kine_actor_network;
   Entity::Entity_id kine_actor_local;
@@ -115,6 +112,10 @@ main(int argc, char *argv[])
     kine_actor_local = Entity_factory::create_kinematic_actor(&world_entities, &rigidbody_loading_pool, &model_pool, &texture_pool);
     kine_actor_network = Entity_factory::create_kinematic_actor(&world_entities, &rigidbody_loading_pool, &model_pool, &texture_pool);
   }
+  
+  Entity_factory::create_ground(&world_entities, &rigidbody_loading_pool, &model_pool, &texture_pool);
+  //Entity::Entity_id actor_entity = Entity_factory::create_actor(&world_entities, &model_pool, &texture_pool);
+
   
   // Game Logic
   {
@@ -196,14 +197,14 @@ main(int argc, char *argv[])
     }
     else
     {
-        Application::client_think(
-          &world_entities,
-          &logic_pool,
-          &rigidbody_loading_pool,
-          &phy_world,
-          &connection,
-          &input_devices,
-          delta_time);  
+      Application::client_think(
+        &world_entities,
+        &logic_pool,
+        &rigidbody_loading_pool,
+        &phy_world,
+        &connection,
+        &input_devices,
+        delta_time);
     }
     
     // ** Graphics ** //
