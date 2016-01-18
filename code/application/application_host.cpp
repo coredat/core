@@ -39,11 +39,11 @@ host_initialize(
 //  Entity::Entity_id kine_actor_local;
 
   {
-    kine_actor_local = Entity_factory::create_kinematic_actor(entity_pool, pending_rbs, model_pool, texture_pool);
-    kine_actor_network = Entity_factory::create_kinematic_actor(entity_pool, pending_rbs, model_pool, texture_pool);
+    kine_actor_local = Entity_factory::create_kinematic_actor(Entity::invalid_id(), entity_pool, pending_rbs, model_pool, texture_pool);
+    kine_actor_network = Entity_factory::create_kinematic_actor(Entity::invalid_id(), entity_pool, pending_rbs, model_pool, texture_pool);
   }
   
-  Entity_factory::create_ground(entity_pool, pending_rbs, model_pool, texture_pool);
+  Entity_factory::create_ground(Entity::invalid_id(), entity_pool, pending_rbs, model_pool, texture_pool);
 
 
   // Game Logic
@@ -78,12 +78,12 @@ host_initialize(
     reinterpret_cast<Logic::Base*>(obj)->on_start(); // TODO: reinter_cast?
   }
   
-  Entity_factory::create_connection_node(entity_pool, pending_rbs, model_pool, texture_pool);
+  Entity_factory::create_connection_node(Entity::invalid_id(), entity_pool, pending_rbs, model_pool, texture_pool);
   
   const uint32_t number_of_random_cubes = 0;
   for(uint32_t i = 0; i < number_of_random_cubes; ++i)
   {
-    Entity_factory::create_random_cube(entity_pool, pending_rbs, model_pool, texture_pool);
+    Entity_factory::create_random_cube(Entity::invalid_id(), entity_pool, pending_rbs, model_pool, texture_pool);
   }
 }
 

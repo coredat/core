@@ -34,6 +34,8 @@
 		7EC9B9D91C4B785000FBF1D7 /* application_graphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EC9B9D31C4B785000FBF1D7 /* application_graphics.cpp */; };
 		7EC9B9DA1C4B785000FBF1D7 /* application_host.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EC9B9D51C4B785000FBF1D7 /* application_host.cpp */; };
 		7EC9B9DD1C4C305900FBF1D7 /* rigidbody_collider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EC9B9DB1C4C305900FBF1D7 /* rigidbody_collider.cpp */; };
+		7EC9B9E01C4CD03900FBF1D7 /* rigidbody_pool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EC9B9DE1C4CD03900FBF1D7 /* rigidbody_pool.cpp */; };
+		7EC9B9E31C4CD2F500FBF1D7 /* entity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EC9B9E11C4CD2F500FBF1D7 /* entity.cpp */; };
 		7ED7BBC91C3CF8B100CE80EA /* entity_factory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7BB841C3CF8B100CE80EA /* entity_factory.cpp */; };
 		7ED7BBD21C3CF8B100CE80EA /* debug_line.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7BBA41C3CF8B100CE80EA /* debug_line.cpp */; };
 		7ED7BBD31C3CF8B100CE80EA /* debug_line_renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7BBA71C3CF8B100CE80EA /* debug_line_renderer.cpp */; };
@@ -119,6 +121,10 @@
 		7EC9B9D61C4B785000FBF1D7 /* application_host.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = application_host.hpp; sourceTree = "<group>"; };
 		7EC9B9DB1C4C305900FBF1D7 /* rigidbody_collider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = rigidbody_collider.cpp; sourceTree = "<group>"; };
 		7EC9B9DC1C4C305900FBF1D7 /* rigidbody_collider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = rigidbody_collider.hpp; sourceTree = "<group>"; };
+		7EC9B9DE1C4CD03900FBF1D7 /* rigidbody_pool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = rigidbody_pool.cpp; sourceTree = "<group>"; };
+		7EC9B9DF1C4CD03900FBF1D7 /* rigidbody_pool.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = rigidbody_pool.hpp; sourceTree = "<group>"; };
+		7EC9B9E11C4CD2F500FBF1D7 /* entity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = entity.cpp; sourceTree = "<group>"; };
+		7EC9B9E21C4CD2F500FBF1D7 /* entity.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = entity.hpp; sourceTree = "<group>"; };
 		7ED7BB841C3CF8B100CE80EA /* entity_factory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = entity_factory.cpp; sourceTree = "<group>"; };
 		7ED7BB851C3CF8B100CE80EA /* entity_factory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = entity_factory.hpp; sourceTree = "<group>"; };
 		7ED7BB891C3CF8B100CE80EA /* actor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = actor.hpp; sourceTree = "<group>"; };
@@ -358,6 +364,8 @@
 		7ED7BB871C3CF8B100CE80EA /* data */ = {
 			isa = PBXGroup;
 			children = (
+				7EC9B9E11C4CD2F500FBF1D7 /* entity.cpp */,
+				7EC9B9E21C4CD2F500FBF1D7 /* entity.hpp */,
 				7EC9B9AD1C44DA7700FBF1D7 /* logic_pool.cpp */,
 				7EC9B9AE1C44DA7700FBF1D7 /* logic_pool.hpp */,
 				7ED7BB881C3CF8B100CE80EA /* actor */,
@@ -365,6 +373,8 @@
 				7EC9B97E1C3E5F2100FBF1D7 /* data.hpp */,
 				7EC9B9B81C47909C00FBF1D7 /* pending_rigidbody_pool.cpp */,
 				7EC9B9B91C47909C00FBF1D7 /* pending_rigidbody_pool.hpp */,
+				7EC9B9DE1C4CD03900FBF1D7 /* rigidbody_pool.cpp */,
+				7EC9B9DF1C4CD03900FBF1D7 /* rigidbody_pool.hpp */,
 				7EC9B9831C3EF1BA00FBF1D7 /* entity_pool.cpp */,
 				7ED7BC201C3E587D00CE80EA /* entity_pool.hpp */,
 				7EC9B9841C3EF1BA00FBF1D7 /* model_pool.cpp */,
@@ -611,6 +621,7 @@
 				7EC9B9B71C45884200FBF1D7 /* actor_network_player.cpp in Sources */,
 				7EA2C61E1C1F5D4600389748 /* wired_app.cpp in Sources */,
 				7EC9B9D91C4B785000FBF1D7 /* application_graphics.cpp in Sources */,
+				7EC9B9E01C4CD03900FBF1D7 /* rigidbody_pool.cpp in Sources */,
 				7EC9B9CC1C4844BE00FBF1D7 /* sdl_window.cpp in Sources */,
 				7ED7BC001C3E561700CE80EA /* texture_manager.cpp in Sources */,
 				7EC9B9D71C4B785000FBF1D7 /* application_client.cpp in Sources */,
@@ -642,6 +653,7 @@
 				7EC9B9B21C44EBF400FBF1D7 /* actor_local_player.cpp in Sources */,
 				7EC9B9D81C4B785000FBF1D7 /* application_common.cpp in Sources */,
 				7EC9B99F1C418A3000FBF1D7 /* ogl_texture_filtering.cpp in Sources */,
+				7EC9B9E31C4CD2F500FBF1D7 /* entity.cpp in Sources */,
 				7ED7BC1C1C3E56D000CE80EA /* debug_renderer.cpp in Sources */,
 				7EC9B9AC1C44D90600FBF1D7 /* logic.cpp in Sources */,
 				7ED7BBDD1C3CF8FE00CE80EA /* resources.cpp in Sources */,

@@ -15,7 +15,7 @@ Actor_local_player::Actor_local_player()
 void
 Actor_local_player::on_start()
 {
- cube_id = Entity_factory::create_placement_cube(this->m_data_pool, this->pending_rbs, this->model_pool, this->texture_pool);
+ cube_id = Entity_factory::create_placement_cube(Entity::invalid_id(), this->m_data_pool, this->pending_rbs, this->model_pool, this->texture_pool);
 }
 
 
@@ -93,7 +93,7 @@ Actor_local_player::on_update(const float dt)
         
         if(m_place_node)
         {
-          const auto ent_id = Entity_factory::create_random_cube(m_data_pool, pending_rbs, model_pool, texture_pool);
+          const auto ent_id = Entity_factory::create_random_cube(m_data_pool->entity_id[index], m_data_pool, pending_rbs, model_pool, texture_pool);
           
           std::size_t index_of_new_obj;
           Entity::find_index_linearly(&index_of_new_obj, ent_id, m_data_pool->entity_id, m_data_pool->size);

@@ -79,6 +79,9 @@ main(int argc, char *argv[])
   Data::Pending_rigidbody_pool rigidbody_loading_pool;
   Data::pending_rigidbody_pool_init(&rigidbody_loading_pool);
   
+  Data::Rigidbody_pool rigidbody_pool;
+  Data::rigidbody_pool_init(&rigidbody_pool);
+  
   Data::Logic_pool logic_pool;
   Data::logic_pool_init(&logic_pool);
   

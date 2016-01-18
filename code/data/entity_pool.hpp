@@ -30,7 +30,7 @@ struct Entity_pool
   Resource::Model::ENUM           model[ENTITY_POOL_SIZE];
   Resource::Texture::ENUM         texture[ENTITY_POOL_SIZE];
   
-  Physics::Rigidbody              rigidbody[ENTITY_POOL_SIZE];
+  Physics::Rigidbody              rigidbody[ENTITY_POOL_SIZE]; // KILL
   Physics::Rigidbody_properties   rigidbody_property[ENTITY_POOL_SIZE];
   Physics::Rigidbody_collider     rigidbody_collider[ENTITY_POOL_SIZE];
   

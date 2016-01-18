@@ -10,42 +10,48 @@ namespace Entity_factory {
 
 
 Entity::Entity_id
-create_ground(Data::Entity_pool *entity,
+create_ground(const Entity::Entity_id parent,
+              Data::Entity_pool *entity,
               Data::Pending_rigidbody_pool *pending_rb_pool,
               const Data::Model_pool *mesh_resources,
               const Data::Texture_pool *texture_resources);
 
 
 Entity::Entity_id
-create_random_cube(Data::Entity_pool *entity,
+create_random_cube(const Entity::Entity_id parent,
+                   Data::Entity_pool *entity,
                    Data::Pending_rigidbody_pool *pending_rb_pool,
                    const Data::Model_pool *mesh_resources,
                    const Data::Texture_pool *texture_resources);
 
 
 Entity::Entity_id
-create_actor(Data::Entity_pool *entity,
+create_actor(const Entity::Entity_id parent,
+             Data::Entity_pool *entity,
              Data::Pending_rigidbody_pool *pending_rb_pool,
              const Data::Model_pool *mesh_resources,
              const Data::Texture_pool *texture_resources);
 
 
 Entity::Entity_id
-create_kinematic_actor(Data::Entity_pool *entity,
+create_kinematic_actor(const Entity::Entity_id parent,
+                       Data::Entity_pool *entity,
                        Data::Pending_rigidbody_pool *pending_rb_pool,
                        const Data::Model_pool *mesh_resources,
                        const Data::Texture_pool *texture_resources);
 
 
 Entity::Entity_id
-create_placement_cube(Data::Entity_pool *entity,
+create_placement_cube(const Entity::Entity_id parent,
+                      Data::Entity_pool *entity,
                       Data::Pending_rigidbody_pool *pending_rb_pool,
                       const Data::Model_pool *mesh_resources,
                       const Data::Texture_pool *texture_resources);
 
 
 Entity::Entity_id
-create_connection_node(Data::Entity_pool *entity,
+create_connection_node(const Entity::Entity_id parent,
+                       Data::Entity_pool *entity,
                        Data::Pending_rigidbody_pool *pending_rb_pool,
                        const Data::Model_pool *mesh_resources,
                        const Data::Texture_pool *texture_resources);

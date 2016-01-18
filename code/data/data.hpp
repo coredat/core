@@ -7,6 +7,7 @@
 #include "texture_pool.hpp"
 #include "logic_pool.hpp"
 #include "pending_rigidbody_pool.hpp"
+#include "rigidbody_pool.hpp"
 
 
 #endif // inc guard
