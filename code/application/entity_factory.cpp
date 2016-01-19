@@ -1,10 +1,10 @@
 #include "entity_factory.hpp"
+#include "resources.hpp"
+#include "object_types.hpp"
 #include <systems/physics/physics.hpp>
 #include <systems/entity/entity_id.hpp>
 #include <systems/entity/generic_id.hpp>
 #include <data/data.hpp>
-#include "resources.hpp"
-#include "object_types.hpp"
 #include <atomic>
 
 
@@ -21,9 +21,11 @@ namespace Entity_factory {
 Entity::Entity_id
 create_ground(Data::World *data)
 {
-  Data::Entity entity(Object_type::dev_static_ground);
+  Data::Entity entity = Data::world_create_new_entity(data, Object_type::dev_static_ground);
 
-  entity.set_transform(math::transform_init(math::vec3_zero(), math::vec3_init(10,10,10), math::quat_init()));
+  const float scale = 10.f;
+  
+  entity.set_transform(math::transform_init(math::vec3_zero(), math::vec3_init(scale,scale,scale), math::quat_init()));
   entity.set_rigidbody_properties(Physics::Rigidbody_properties{0.f});
   entity.set_rigidbody_collider(Physics::Rigidbody_collider{Physics::Collider_type::static_plane, 0, 1, 0, 0});
   entity.set_material_id(Resource::Texture::dev_squares);
@@ -38,7 +40,7 @@ create_ground(Data::World *data)
 Entity::Entity_id
 create_random_cube(Data::World *world)
 {
-  Data::Entity entity(Object_type::dev_dynamic_cube);
+  Data::Entity entity = Data::world_create_new_entity(world, Object_type::dev_dynamic_cube);
   
   const float scale_x = static_cast<float>(rand() % 200 + 10) / 200;
   const float scale_y = static_cast<float>(rand() % 200 + 10) / 200;
@@ -66,7 +68,7 @@ create_random_cube(Data::World *world)
 Entity::Entity_id
 create_kinematic_actor(Data::World *world)
 {
-  Data::Entity entity(Object_type::dev_static_ground);
+  Data::Entity entity = Data::world_create_new_entity(world, Object_type::dev_static_ground);
   
   const float scale_x = 0.5f;
   const float scale_y = 0.5f;
@@ -92,7 +94,7 @@ create_kinematic_actor(Data::World *world)
 Entity::Entity_id
 create_placement_cube(Data::World *world)
 {
-  Data::Entity entity(Object_type::dev_dynamic_cube);
+  Data::Entity entity = Data::world_create_new_entity(world, Object_type::dev_dynamic_cube);
 
   entity.set_transform(math::transform_init(math::vec3_zero(),
                                             math::vec3_init(0.1f, 0.1f, 0.1f),
@@ -111,7 +113,7 @@ create_placement_cube(Data::World *world)
 Entity::Entity_id
 create_connection_node(Data::World *world)
 {
-  Data::Entity entity(Object_type::dev_dynamic_cube);
+  Data::Entity entity = Data::world_create_new_entity(world, Object_type::dev_dynamic_cube);
 
   const float scale = 1.f;
   const float scale_x = 1.f * scale;

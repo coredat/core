@@ -3,6 +3,7 @@
 
 
 #include "data_fwd.hpp"
+#include <stdint.h>
 
 
 namespace Data {
@@ -21,6 +22,10 @@ struct World
 
 void
 world_push_new_entity(World *world_data, const Entity *entity);
+
+
+Entity
+world_create_new_entity(World *world_data, const uint32_t type_id);
 
 
 } // ns
