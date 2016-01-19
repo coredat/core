@@ -31,8 +31,6 @@ public:
   void                set_entity(const Entity::Entity_id entity) { m_entity = entity; };
   Entity::Entity_id   get_entity() const { return m_entity; }
   
-  void                set_entity_data(Data::Entity_pool *data) { m_data_pool = data; }
-  void                set_physics_data(Physics::World *world) { m_world = world; }
 
 
   Physics::World *m_world; // TODO: Move
@@ -40,13 +38,9 @@ public:
 //private:
 
   Entity::Entity_id m_entity = Entity::invalid_id();
-  Data::Entity_pool *m_data_pool = nullptr;
-  Data::Model_pool *model_pool = nullptr;
-  Data::Texture_pool *texture_pool = nullptr;
-  Data::Pending_rigidbody_pool *pending_rbs = nullptr;
 
-
-
+  Data::World *world_data;
+  
 }; // class
 
 

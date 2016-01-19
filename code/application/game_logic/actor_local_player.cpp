@@ -4,6 +4,7 @@
 #include <systems/transform/transform.hpp>
 #include <application/entity_factory.hpp>
 #include <data/entity_pool.hpp>
+#include <data/world_data.hpp>
 
 
 Actor_local_player::Actor_local_player()
@@ -15,7 +16,7 @@ Actor_local_player::Actor_local_player()
 void
 Actor_local_player::on_start()
 {
- cube_id = Entity_factory::create_placement_cube(Entity::invalid_id(), this->m_data_pool, this->pending_rbs, this->model_pool, this->texture_pool);
+ cube_id = Entity_factory::create_placement_cube(world_data);
 }
 
 
@@ -83,22 +84,22 @@ Actor_local_player::on_update(const float dt)
     {
       // Draw cube at that point.
       std::size_t index;
-      if(Entity::find_index_linearly(&index, cube_id, m_data_pool->entity_id, m_data_pool->size))
+      if(Entity::find_index_linearly(&index, cube_id, world_data->entity_pool->entity_id, world_data->entity_pool->size))
       {
       
-        auto trans = m_data_pool->transform[index];
+        auto trans = world_data->entity_pool->transform[index];
         const math::vec3 pos = math::vec3_init(face_ray.m_hitPointWorld.x(), face_ray.m_hitPointWorld.y(), face_ray.m_hitPointWorld.z());
         trans.position = pos;
-        m_data_pool->transform[index] = trans;
+        world_data->entity_pool->transform[index] = trans;
         
         if(m_place_node)
         {
-          const auto ent_id = Entity_factory::create_random_cube(m_data_pool->entity_id[index], m_data_pool, pending_rbs, model_pool, texture_pool);
+          const auto ent_id = Entity_factory::create_random_cube(world_data);
           
           std::size_t index_of_new_obj;
-          Entity::find_index_linearly(&index_of_new_obj, ent_id, m_data_pool->entity_id, m_data_pool->size);
+          Entity::find_index_linearly(&index_of_new_obj, ent_id, world_data->entity_pool->entity_id, world_data->entity_pool->size);
           
-          m_data_pool->transform[index_of_new_obj].position = m_data_pool->transform[index].position;
+          world_data->entity_pool->transform[index_of_new_obj].position = world_data->entity_pool->transform[index].position;
         }
       }
     }
@@ -113,10 +114,10 @@ Actor_local_player::on_update(const float dt)
     const float delta_time = dt;
     
     std::size_t index;
-    Entity::find_index_linearly(&index, ent, m_data_pool->entity_id, m_data_pool->size);
+    Entity::find_index_linearly(&index, ent, world_data->entity_pool->entity_id, world_data->entity_pool->size);
   
     math::vec3 accum_movement = math::vec3_zero();
-    const math::transform move_trans = m_data_pool->transform[index];
+    const math::transform move_trans = world_data->entity_pool->transform[index];
     
     if(math::vec3_get_z(pending_input) > 0)
     {
@@ -152,18 +153,18 @@ Actor_local_player::on_update(const float dt)
       const math::vec3 norm_corrected_rotation  = math::vec3_normalize(corrected_rotation);
       const math::vec3 scaled_movement          = math::vec3_scale(norm_corrected_rotation, delta_time);
       
-      m_data_pool->transform[index].position = math::vec3_add(move_trans.position, scaled_movement);
+      world_data->entity_pool->transform[index].position = math::vec3_add(move_trans.position, scaled_movement);
     }
     
     // Rotation
     {
       //if(input.rot != 0)
       {
-        const math::transform rot_trans = m_data_pool->transform[index];
+        const math::transform rot_trans = world_data->entity_pool->transform[index];
         const float rot_rad = static_cast<float>(math::vec2_get_y(head_rotations));
         
         const math::quat rot = math::quat_init_with_axis_angle(0, 1, 0, rot_rad);
-        m_data_pool->transform[index].rotation = rot; //math::quat_multiply(rot_trans.rotation, rot);
+        world_data->entity_pool->transform[index].rotation = rot; //math::quat_multiply(rot_trans.rotation, rot);
       }
     }
     
@@ -171,14 +172,14 @@ Actor_local_player::on_update(const float dt)
     {
       //if(input.pitch != 0)
       {
-        const math::transform rot_trans = m_data_pool->transform[index];
+        const math::transform rot_trans = world_data->entity_pool->transform[index];
         const float rot_rad = static_cast<float>(math::vec2_get_x(head_rotations));
         
         const math::vec3 axis = math::vec3_init(1,0,0);
         const math::vec3 adjusted_axis = math::quat_rotate_point(rot_trans.rotation, axis);
         const math::quat rot = math::quat_init_with_axis_angle(adjusted_axis, rot_rad);
         
-        m_data_pool->transform[index].rotation = math::quat_multiply(rot_trans.rotation, rot);
+        world_data->entity_pool->transform[index].rotation = math::quat_multiply(rot_trans.rotation, rot);
       }
     }
   };

@@ -26,6 +26,7 @@ namespace Application {
 
 void
 host_initialize(
+  Data::World *world,
   Data::Entity_pool *entity_pool,
   Data::Logic_pool *logic_pool,
   Data::Pending_rigidbody_pool *pending_rbs,
@@ -39,11 +40,11 @@ host_initialize(
 //  Entity::Entity_id kine_actor_local;
 
   {
-    kine_actor_local = Entity_factory::create_kinematic_actor(Entity::invalid_id(), entity_pool, pending_rbs, model_pool, texture_pool);
-    kine_actor_network = Entity_factory::create_kinematic_actor(Entity::invalid_id(), entity_pool, pending_rbs, model_pool, texture_pool);
+    kine_actor_local = Entity_factory::create_kinematic_actor(world);
+    kine_actor_network = Entity_factory::create_kinematic_actor(world);
   }
   
-  Entity_factory::create_ground(Entity::invalid_id(), entity_pool, pending_rbs, model_pool, texture_pool);
+  Entity_factory::create_ground(world);
 
 
   // Game Logic
@@ -53,11 +54,8 @@ host_initialize(
     
     auto base = reinterpret_cast<Logic::Base*>(logic_pool->objects_in_use[0]);
     base->set_entity(kine_actor_local);
-    base->set_entity_data(entity_pool);
-    base->set_physics_data(phy_world);
-    base->model_pool = model_pool;
-    base->texture_pool = texture_pool;
-    base->pending_rbs = pending_rbs;
+    base->world_data = world;
+    base->m_world = phy_world;
   }
   
   {
@@ -66,11 +64,8 @@ host_initialize(
     
     auto base = reinterpret_cast<Logic::Base*>(logic_pool->objects_in_use[1]);
     base->set_entity(kine_actor_network);
-    base->set_entity_data(entity_pool);
-    base->set_physics_data(phy_world);
-    base->model_pool = model_pool;
-    base->texture_pool = texture_pool;
-    base->pending_rbs = pending_rbs;
+    base->world_data = world;
+    base->m_world = phy_world;
   }
   
   for(auto &obj : logic_pool->objects_in_use)
@@ -78,18 +73,19 @@ host_initialize(
     reinterpret_cast<Logic::Base*>(obj)->on_start(); // TODO: reinter_cast?
   }
   
-  Entity_factory::create_connection_node(Entity::invalid_id(), entity_pool, pending_rbs, model_pool, texture_pool);
+  Entity_factory::create_connection_node(world);
   
   const uint32_t number_of_random_cubes = 0;
   for(uint32_t i = 0; i < number_of_random_cubes; ++i)
   {
-    Entity_factory::create_random_cube(Entity::invalid_id(), entity_pool, pending_rbs, model_pool, texture_pool);
+    Entity_factory::create_random_cube(world);
   }
 }
 
 
 void
 host_think(
+  Data::World *world,
   Data::Entity_pool *entity_pool,
   Data::Logic_pool *logic_pool,
   Data::Pending_rigidbody_pool *pending_rbs,

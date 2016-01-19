@@ -4,7 +4,7 @@
 
 #include <systems/entity/entity_id.hpp>
 #include <systems/physics/physics.hpp>
-#include <cstddef>
+#include <stddef.h>
 
 
 #define RIGIDBODY_POOL_SIZE 512
@@ -15,10 +15,10 @@ namespace Data {
 
 struct Rigidbody_pool
 {
-  Entity::Entity_id         entity_id[RIGIDBODY_POOL_SIZE];
+  ::Entity::Entity_id       entity_id[RIGIDBODY_POOL_SIZE];
   Physics::Rigidbody        rigidbody[RIGIDBODY_POOL_SIZE];
   
-  const std::size_t         size{RIGIDBODY_POOL_SIZE};
+  const size_t              size{RIGIDBODY_POOL_SIZE};
 }; // ns
 
 

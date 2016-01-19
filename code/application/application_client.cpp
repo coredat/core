@@ -27,6 +27,7 @@ client_initialize(
 
 void
 client_think(
+  Data::World *world,
   Data::Entity_pool *entity_pool,
   Data::Logic_pool *logic_pool,
   Data::Pending_rigidbody_pool *pending_rbs,

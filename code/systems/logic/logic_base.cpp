@@ -8,12 +8,12 @@ namespace Logic {
 math::transform
 Base::get_transform() const
 {
-  if(m_data_pool)
+  if(world_data)
   {
     std::size_t index;
-    if(Entity::find_index_linearly(&index, m_entity, m_data_pool->entity_id, m_data_pool->size))
+    if(Entity::find_index_linearly(&index, m_entity, world_data->entity_pool->entity_id, world_data->entity_pool->size))
     {
-      return m_data_pool->transform[index];
+      return world_data->entity_pool->transform[index];
     }
   }
   
@@ -24,12 +24,12 @@ Base::get_transform() const
 void
 Base::set_transform(math::transform &trans)
 {
-  if(m_data_pool)
+  if(world_data)
   {
     std::size_t index;
-    if(Entity::find_index_linearly(&index, m_entity, m_data_pool->entity_id, m_data_pool->size))
+    if(Entity::find_index_linearly(&index, m_entity, world_data->entity_pool->entity_id, world_data->entity_pool->size))
     {
-      m_data_pool->transform[index] = trans;
+      world_data->entity_pool->transform[index] = trans;
     }
   }
 }

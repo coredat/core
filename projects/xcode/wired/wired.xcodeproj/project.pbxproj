@@ -128,6 +128,7 @@
 		7EC9B9E51C4D5D6100FBF1D7 /* world_data.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = world_data.hpp; sourceTree = "<group>"; };
 		7EC9B9E71C4E20F800FBF1D7 /* entity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = entity.cpp; sourceTree = "<group>"; };
 		7EC9B9E81C4E20F800FBF1D7 /* entity.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = entity.hpp; sourceTree = "<group>"; };
+		7EC9B9EA1C4EBD1800FBF1D7 /* object_types.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = object_types.hpp; sourceTree = "<group>"; };
 		7ED7BB841C3CF8B100CE80EA /* entity_factory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = entity_factory.cpp; sourceTree = "<group>"; };
 		7ED7BB851C3CF8B100CE80EA /* entity_factory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = entity_factory.hpp; sourceTree = "<group>"; };
 		7ED7BB891C3CF8B100CE80EA /* actor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = actor.hpp; sourceTree = "<group>"; };
@@ -344,6 +345,7 @@
 				7EC9B9D61C4B785000FBF1D7 /* application_host.hpp */,
 				7EC9B97F1C3ECACA00FBF1D7 /* network_events.cpp */,
 				7EC9B9801C3ECACA00FBF1D7 /* network_events.hpp */,
+				7EC9B9EA1C4EBD1800FBF1D7 /* object_types.hpp */,
 				7ED7BBDB1C3CF8FE00CE80EA /* resources.cpp */,
 				7ED7BBDC1C3CF8FE00CE80EA /* resources.hpp */,
 				7ED7BB841C3CF8B100CE80EA /* entity_factory.cpp */,

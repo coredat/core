@@ -4,8 +4,16 @@
 namespace Data {
 
 
-Entity::Entity()
+Entity::Entity(uint8_t type_id)
+: m_this_id{type_id, 0}
 {
+}
+
+
+::Entity::Entity_id
+Entity::get_id() const
+{
+  return m_this_id;
 }
 
 
@@ -17,9 +25,23 @@ Entity::set_parent(const ::Entity::Entity_id id)
 
 
 ::Entity::Entity_id
-Entity::get_parent() const
+Entity::get_parent_id() const
 {
   return m_parent_id;
+}
+
+
+void
+Entity::set_transform(const math::transform &transform)
+{
+  m_transform = transform;
+}
+
+
+math::transform
+Entity::get_transform() const
+{
+  return m_transform;
 }
 
 

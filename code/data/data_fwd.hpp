@@ -11,6 +11,7 @@ struct Texture_pool;
 struct Logic_pool;
 struct Pending_rigidbody_pool;
 struct Rigidbody_pool;
+struct World;
 
 class Entity;
 

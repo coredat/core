@@ -5,7 +5,9 @@
 #include <systems/entity/entity_id.hpp>
 #include <systems/physics/rigidbody_properties.hpp>
 #include <systems/physics/rigidbody_collider.hpp>
+#include <math/math.hpp>
 #include <stddef.h>
+#include <stdint.h>
 
 
 namespace Data {
@@ -15,10 +17,15 @@ class Entity final
 {
 public:
 
-  explicit                      Entity();
+  explicit                      Entity(const uint8_t type_id = 0);
+  
+  ::Entity::Entity_id           get_id() const;
   
   void                          set_parent(const ::Entity::Entity_id id);
-  ::Entity::Entity_id           get_parent() const;
+  ::Entity::Entity_id           get_parent_id() const;
+
+  void                          set_transform(const math::transform &transform);
+  math::transform               get_transform() const;
 
   void                          set_material_id(const size_t id);
   size_t                        get_material_id() const;
@@ -36,6 +43,8 @@ private:
 
   ::Entity::Entity_id           m_this_id   = ::Entity::invalid_id();
   ::Entity::Entity_id           m_parent_id = ::Entity::invalid_id();
+  
+  math::transform               m_transform;
   
   size_t                        m_material_id = 0;
   size_t                        m_model_id    = 0;

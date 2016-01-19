@@ -97,11 +97,11 @@ main(int argc, char *argv[])
     world_data.entity_pool    = &world_entities;
     world_data.logic_pool     = &logic_pool;
     world_data.rigidbody_pool = &rigidbody_pool;
+    world_data.pending_rbs    = &rigidbody_loading_pool;
     world_data.texture_pool   = &texture_pool;
     world_data.model_pool     = &model_pool;
   }
   
-  Data::Entity entity;
   
   Resource::load_default_resources(&texture_pool, texture_pool.size, &model_pool, model_pool.size);
   
@@ -115,7 +115,7 @@ main(int argc, char *argv[])
   }
   
 
-  Application::host_initialize(&world_entities, &logic_pool, &rigidbody_loading_pool, &model_pool, &texture_pool, &phy_world, &connection);
+  Application::host_initialize(&world_data, &world_entities, &logic_pool, &rigidbody_loading_pool, &model_pool, &texture_pool, &phy_world, &connection);
 
   
   // Transform data
@@ -148,6 +148,7 @@ main(int argc, char *argv[])
     if(!is_client)
     {
       Application::host_think(
+        &world_data,
         &world_entities,
         &logic_pool,
         &rigidbody_loading_pool,
@@ -159,6 +160,7 @@ main(int argc, char *argv[])
     else
     {
       Application::client_think(
+        &world_data,
         &world_entities,
         &logic_pool,
         &rigidbody_loading_pool,
