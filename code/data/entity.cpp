@@ -1,11 +1,17 @@
 #include "entity.hpp"
 
 
+namespace
+{
+  std::atomic<uint32_t> instance(0);
+}
+
+
 namespace Data {
 
 
 Entity::Entity(uint8_t type_id)
-: m_this_id{type_id, 0}
+: m_this_id{type_id, ++instance}
 {
 }
 

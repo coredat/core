@@ -95,7 +95,7 @@ create_placement_cube(Data::World *world)
   Data::Entity entity(Object_type::dev_dynamic_cube);
 
   entity.set_transform(math::transform_init(math::vec3_zero(),
-                                            math::vec3_one(),
+                                            math::vec3_init(0.1f, 0.1f, 0.1f),
                                             math::quat_init()));
   
   entity.set_material_id(Resource::Texture::dev_blue);
@@ -111,7 +111,25 @@ create_placement_cube(Data::World *world)
 Entity::Entity_id
 create_connection_node(Data::World *world)
 {
-  return create_random_cube(world);
+  Data::Entity entity(Object_type::dev_dynamic_cube);
+
+  const float scale = 1.f;
+  const float scale_x = 1.f * scale;
+  const float scale_y = math::g_ratio() * scale;
+  const float scale_z = 1.f * scale;
+
+  entity.set_transform(math::transform_init(math::vec3_zero(),
+                       math::vec3_init(scale_x, scale_y, scale_z),
+                       math::quat_init()));
+  
+  entity.set_rigidbody_properties(Physics::Rigidbody_properties{1.f});
+  entity.set_rigidbody_collider(Physics::Rigidbody_collider{Physics::Collider_type::cube, scale_x * 0.5f, scale_y * 0.5f, scale_z * 0.5f});
+  entity.set_material_id(static_cast<Resource::Texture::ENUM>(rand() % Resource::Texture::size));
+  entity.set_model_id(Resource::Model::unit_cube);
+  
+  Data::world_push_new_entity(world, &entity);
+  
+  return entity.get_id();
 }
 
 

@@ -5,14 +5,6 @@
 
 #include <systems/physics/physics.hpp>
 
-#include <atomic>
-
-
-namespace
-{
-  std::atomic<uint32_t> instance(0);
-}
-
 
 namespace Data {
 
@@ -26,7 +18,7 @@ world_push_new_entity(World *world_data, const Entity *entity)
   ::Entity::find_index_linearly(&empty_index, ::Entity::invalid_id(), entity_pool->entity_id, entity_pool->size);
 
   // Push entity data
-  const ::Entity::Entity_id id = ::Entity::Entity_id{entity->get_id().type_id, ++instance};
+  const ::Entity::Entity_id id = ::Entity::Entity_id{entity->get_id()};
   entity_pool->entity_id[empty_index] = id;
   entity_pool->transform[empty_index] = entity->get_transform();
   entity_pool->model[empty_index] = (Resource::Model::ENUM)entity->get_model_id();
