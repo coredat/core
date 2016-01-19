@@ -9,7 +9,7 @@
 #include <systems/physics/physics_fwd.hpp>
 #include <systems/entity/entity_id.hpp>
 #include <systems/physics/physics.hpp>
-#include <cstddef>
+#include <stddef.h>
 
 
 #define ENTITY_POOL_SIZE 128
@@ -34,7 +34,7 @@ struct Entity_pool
   Physics::Rigidbody_properties   rigidbody_property[ENTITY_POOL_SIZE];
   Physics::Rigidbody_collider     rigidbody_collider[ENTITY_POOL_SIZE];
   
-  const std::size_t               size = ENTITY_POOL_SIZE;
+  const size_t                    size = ENTITY_POOL_SIZE;
 };
 
 

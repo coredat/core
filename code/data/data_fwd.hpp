@@ -12,6 +12,8 @@ struct Logic_pool;
 struct Pending_rigidbody_pool;
 struct Rigidbody_pool;
 
+class Entity;
+
 
 } // ns
 

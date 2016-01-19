@@ -11,6 +11,7 @@
 #include <systems/entity/generic_id.hpp>
 
 #include <data/data.hpp>
+#include <data/entity.hpp>
 
 #include <renderer/renderer.hpp>
 #include <renderer/simple_renderer/simple_renderer.hpp>
@@ -90,6 +91,17 @@ main(int argc, char *argv[])
   
   Data::Entity_pool world_entities;
   Data::entity_pool_init(&world_entities);
+  
+  Data::World world_data;
+  {
+    world_data.entity_pool    = &world_entities;
+    world_data.logic_pool     = &logic_pool;
+    world_data.rigidbody_pool = &rigidbody_pool;
+    world_data.texture_pool   = &texture_pool;
+    world_data.model_pool     = &model_pool;
+  }
+  
+  Data::Entity entity;
   
   Resource::load_default_resources(&texture_pool, texture_pool.size, &model_pool, model_pool.size);
   
