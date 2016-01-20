@@ -20,10 +20,6 @@ struct World
 }; // struct
 
 
-void
-world_push_new_entity(World *world_data, const Entity *entity);
-
-
 Entity
 world_create_new_entity(World *world_data, const uint32_t type_id);
 

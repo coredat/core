@@ -24,8 +24,6 @@ create_ground(Data::World *data)
   entity.set_material_id(Resource::Texture::dev_squares);
   entity.set_model_id(Resource::Model::unit_plane);
   
-  Data::world_push_new_entity(data, &entity);
-  
   return entity.get_id();
 }
 
@@ -52,8 +50,6 @@ create_random_cube(Data::World *world)
   entity.set_material_id(static_cast<Resource::Texture::ENUM>(rand() % Resource::Texture::size));
   entity.set_model_id(Resource::Model::unit_cube);
   
-  Data::world_push_new_entity(world, &entity);
-  
   return entity.get_id();
 }
 
@@ -78,8 +74,6 @@ create_kinematic_actor(Data::World *world)
   entity.set_material_id(Resource::Texture::dev_orange);
   entity.set_model_id(Resource::Model::unit_cube);
   
-  Data::world_push_new_entity(world, &entity);
-  
   return entity.get_id();
 }
 
@@ -95,8 +89,6 @@ create_placement_cube(Data::World *world)
   
   entity.set_material_id(Resource::Texture::dev_blue);
   entity.set_model_id(Resource::Model::unit_cube);
-  
-  Data::world_push_new_entity(world, &entity);
   
   return entity.get_id();
 }
@@ -121,8 +113,6 @@ create_connection_node(Data::World *world)
   entity.set_rigidbody_collider(Physics::Rigidbody_collider{Physics::Collider_type::cube, scale_x * 0.5f, scale_y * 0.5f, scale_z * 0.5f});
   entity.set_material_id(static_cast<Resource::Texture::ENUM>(rand() % Resource::Texture::size));
   entity.set_model_id(Resource::Model::unit_cube);
-  
-  Data::world_push_new_entity(world, &entity);
   
   return entity.get_id();
 }

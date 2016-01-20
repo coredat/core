@@ -1,6 +1,7 @@
 #include "entity.hpp"
 #include "world_data.hpp"
 #include "entity_pool.hpp"
+#include "pending_rigidbody_pool.hpp"
 
 
 namespace
@@ -132,7 +133,19 @@ Entity::set_rigidbody_properties(const Physics::Rigidbody_properties props)
 {
   size_t index;
   assert(get_index(&index, m_this_id, m_world_data));
-  m_world_data->entity_pool->rigidbody_property[index] = props;
+  
+  const auto ent_pool = m_world_data->entity_pool;
+  
+  ent_pool->rigidbody_property[index] = props;
+  if(ent_pool->rigidbody_collider[index].collider_type != Physics::Collider_type::none)
+  {
+    ent_pool->rigidbody[index].motion_state.reset(new Physics::Motion_state(m_this_id, ent_pool));
+  
+    pending_rigidbody_pool_push(m_world_data->pending_rbs,
+                                ent_pool->rigidbody_property[index],
+                                ent_pool->rigidbody_collider[index],
+                                ent_pool->rigidbody);
+  }
 }
 
 
@@ -150,7 +163,17 @@ Entity::set_rigidbody_collider(const Physics::Rigidbody_collider collider)
 {
   size_t index;
   assert(get_index(&index, m_this_id, m_world_data));
-  m_world_data->entity_pool->rigidbody_collider[index] = collider;
+  
+  const auto ent_pool = m_world_data->entity_pool;
+
+  ent_pool->rigidbody_collider[index] = collider;
+  
+  ent_pool->rigidbody[index].motion_state.reset(new Physics::Motion_state(m_this_id, ent_pool));
+  
+  pending_rigidbody_pool_push(m_world_data->pending_rbs,
+                              ent_pool->rigidbody_property[index],
+                              ent_pool->rigidbody_collider[index],
+                              ent_pool->rigidbody);
 }
 
 
