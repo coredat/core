@@ -5,6 +5,7 @@
 #include <application/entity_factory.hpp>
 #include <data/entity_pool.hpp>
 #include <data/world_data.hpp>
+#include <data/entity.hpp>
 
 
 Actor_local_player::Actor_local_player()
@@ -16,7 +17,7 @@ Actor_local_player::Actor_local_player()
 void
 Actor_local_player::on_start()
 {
- cube_id = Entity_factory::create_placement_cube(world_data);
+ cube_id = Entity_factory::create_placement_cube(world_data).get_id();
 }
 
 
@@ -86,6 +87,8 @@ Actor_local_player::on_update(const float dt)
       std::size_t index;
       if(Entity::find_index_linearly(&index, cube_id, world_data->entity_pool->entity_id, world_data->entity_pool->size))
       {
+        void *user_ptr = face_ray.m_collisionObject->getUserPointer();
+        // Store id in this field and retrive the entity.
       
         auto trans = world_data->entity_pool->transform[index];
         const math::vec3 pos = math::vec3_init(face_ray.m_hitPointWorld.x(), face_ray.m_hitPointWorld.y(), face_ray.m_hitPointWorld.z());
@@ -94,12 +97,14 @@ Actor_local_player::on_update(const float dt)
         
         if(m_place_node)
         {
-          const auto ent_id = Entity_factory::create_random_cube(world_data);
+          auto ent = Entity_factory::create_random_cube(world_data);
           
           std::size_t index_of_new_obj;
-          Entity::find_index_linearly(&index_of_new_obj, ent_id, world_data->entity_pool->entity_id, world_data->entity_pool->size);
+          Entity::find_index_linearly(&index_of_new_obj, ent.get_id(), world_data->entity_pool->entity_id, world_data->entity_pool->size);
           
           world_data->entity_pool->transform[index_of_new_obj].position = world_data->entity_pool->transform[index].position;
+          
+
         }
       }
     }

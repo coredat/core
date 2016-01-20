@@ -11,7 +11,7 @@ namespace Entity_factory {
 
 
 
-Entity::Entity_id
+Data::Entity
 create_ground(Data::World *data)
 {
   Data::Entity entity = Data::world_create_new_entity(data, Object_type::dev_static_ground);
@@ -24,11 +24,11 @@ create_ground(Data::World *data)
   entity.set_material_id(Resource::Texture::dev_squares);
   entity.set_model_id(Resource::Model::unit_plane);
   
-  return entity.get_id();
+  return entity;
 }
 
 
-Entity::Entity_id
+Data::Entity
 create_random_cube(Data::World *world)
 {
   Data::Entity entity = Data::world_create_new_entity(world, Object_type::dev_dynamic_cube);
@@ -50,11 +50,11 @@ create_random_cube(Data::World *world)
   entity.set_material_id(static_cast<Resource::Texture::ENUM>(rand() % Resource::Texture::size));
   entity.set_model_id(Resource::Model::unit_cube);
   
-  return entity.get_id();
+  return entity;
 }
 
 
-Entity::Entity_id
+Data::Entity
 create_kinematic_actor(Data::World *world)
 {
   Data::Entity entity = Data::world_create_new_entity(world, Object_type::dev_static_ground);
@@ -74,11 +74,11 @@ create_kinematic_actor(Data::World *world)
   entity.set_material_id(Resource::Texture::dev_orange);
   entity.set_model_id(Resource::Model::unit_cube);
   
-  return entity.get_id();
+  return entity;
 }
 
 
-Entity::Entity_id
+Data::Entity
 create_placement_cube(Data::World *world)
 {
   Data::Entity entity = Data::world_create_new_entity(world, Object_type::dev_dynamic_cube);
@@ -90,12 +90,11 @@ create_placement_cube(Data::World *world)
   entity.set_material_id(Resource::Texture::dev_blue);
   entity.set_model_id(Resource::Model::unit_cube);
   
-  return entity.get_id();
+  return entity;
 }
 
 
-
-Entity::Entity_id
+Data::Entity
 create_connection_node(Data::World *world)
 {
   Data::Entity entity = Data::world_create_new_entity(world, Object_type::dev_dynamic_cube);
@@ -114,7 +113,7 @@ create_connection_node(Data::World *world)
   entity.set_material_id(static_cast<Resource::Texture::ENUM>(rand() % Resource::Texture::size));
   entity.set_model_id(Resource::Model::unit_cube);
   
-  return entity.get_id();
+  return entity;
 }
 
 

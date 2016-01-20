@@ -9,27 +9,27 @@
 namespace Entity_factory {
 
 
-Entity::Entity_id
+Data::Entity
 create_ground(Data::World *world);
 
 
-Entity::Entity_id
+Data::Entity
 create_random_cube(Data::World *world);
 
 
-Entity::Entity_id
+Data::Entity
 create_actor(Data::World *world);
 
 
-Entity::Entity_id
+Data::Entity
 create_kinematic_actor(Data::World *world);
 
 
-Entity::Entity_id
+Data::Entity
 create_placement_cube(Data::World *world);
 
 
-Entity::Entity_id
+Data::Entity
 create_connection_node(Data::World *world);
 
 } // ns

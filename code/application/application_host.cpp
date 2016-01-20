@@ -8,6 +8,7 @@
 #include <data/pending_rigidbody_pool.hpp>
 #include <data/texture_pool.hpp>
 #include <data/model_pool.hpp>
+#include <data/entity.hpp>
 #include <systems/network/network.hpp>
 #include <systems/entity/entity_id.hpp>
 #include <systems/physics/physics.hpp>
@@ -42,8 +43,8 @@ host_initialize(
   Entity_factory::create_ground(world);
 
   {
-    kine_actor_local = Entity_factory::create_kinematic_actor(world);
-    kine_actor_network = Entity_factory::create_kinematic_actor(world);
+    kine_actor_local = Entity_factory::create_kinematic_actor(world).get_id();
+    kine_actor_network = Entity_factory::create_kinematic_actor(world).get_id();
   }
   
 

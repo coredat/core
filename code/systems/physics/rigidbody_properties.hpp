@@ -31,8 +31,8 @@ enum ENUM
 // Might be able to remove a float from collider details.
 struct Rigidbody_properties
 {
-  bool          make_rb       = true;
   float         mass          = 1;
+  bool          make_rb       = true;  
   uint32_t      move_axis     = Axis::x | Axis::y | Axis::z;
   uint32_t      rotation_axis = Axis::x | Axis::y | Axis::z;
 };

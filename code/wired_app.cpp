@@ -118,18 +118,20 @@ main(int argc, char *argv[])
 
   Application::host_initialize(&world_data, &world_entities, &logic_pool, &rigidbody_loading_pool, &model_pool, &texture_pool, &phy_world, &connection);
 
+  Physics::world_step(&phy_world, 0.f);
+  
+    Physics::colliders_generate(rigidbody_loading_pool.rigidbody_collider,
+                                rigidbody_loading_pool.size,
+                                rigidbody_loading_pool.rigidbody_out,
+                                rigidbody_loading_pool.size);
     
-//    Physics::colliders_generate(rigidbody_loading_pool.rigidbody_collider,
-//                                rigidbody_loading_pool.size,
-//                                rigidbody_loading_pool.rigidbody_out,
-//                                rigidbody_loading_pool.size);
-//    
-//    Physics::world_add_rigidbodies(&phy_world,
-//      rigidbody_loading_pool.rigidbody_property,
-//      rigidbody_loading_pool.size,
-//      rigidbody_loading_pool.rigidbody_out,
-//      rigidbody_loading_pool.size);
+    Physics::world_add_rigidbodies(&phy_world,
+      rigidbody_loading_pool.rigidbody_property,
+      rigidbody_loading_pool.size,
+      rigidbody_loading_pool.rigidbody_out,
+      rigidbody_loading_pool.size);
 
+    Data::pending_rigidbody_pool_clear(&rigidbody_loading_pool);
   
   // Transform data
   std::vector<Simple_renderer::Node> renderer_nodes;

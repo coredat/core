@@ -72,7 +72,7 @@ Entity::set_parent(const ::Entity::Entity_id id)
     auto child_rb = &m_world_data->entity_pool->rigidbody[index];
     auto parent_rb = &m_world_data->entity_pool->rigidbody[parent_index];
     
-//    Physics::world_join_rigidbodies(m_phy_world, parent_rb, child_rb);
+    Physics::world_join_rigidbodies(m_phy_world, parent_rb, child_rb);
   }
 }
 
