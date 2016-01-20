@@ -62,6 +62,18 @@ Entity::set_parent(const ::Entity::Entity_id id)
   size_t index;
   assert(get_index(&index, m_this_id, m_world_data));
   m_world_data->entity_pool->parent_id[index] = id;
+  
+  //if(id != ::Entity::invalid_id())
+  {
+    size_t parent_index;
+    assert(get_index(&parent_index, id, m_world_data));
+  
+    // Get Parent rb and child rb and ask physics to attach them.
+    auto child_rb = &m_world_data->entity_pool->rigidbody[index];
+    auto parent_rb = &m_world_data->entity_pool->rigidbody[parent_index];
+    
+//    Physics::world_join_rigidbodies(m_phy_world, parent_rb, child_rb);
+  }
 }
 
 

@@ -62,6 +62,10 @@ world_add_rigidbodies(World *world,
                       const std::size_t number_of_rbs);
 
 
+void
+world_join_rigidbodies(World *world, const Rigidbody* parent, const Rigidbody* child);
+
+
 } // ns
 
 

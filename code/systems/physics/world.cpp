@@ -140,4 +140,19 @@ world_add_rigidbodies(World *world,
 }
 
 
+void
+world_join_rigidbodies(World *world, const Rigidbody* parent, const Rigidbody* child)
+{
+  // Remove child object from the world.
+  world->dynamics_world.removeRigidBody(child->rigidbody.get());
+  world->dynamics_world.removeRigidBody(parent->rigidbody.get());
+
+  btTransform transform;
+  parent->compound_shape->addChildShape(transform, child->shape.get());
+  
+  // Re attach child object to partents collider.
+  world->dynamics_world.addRigidBody(parent->rigidbody.get());
+}
+
+
 } // ns

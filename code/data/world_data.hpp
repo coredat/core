@@ -3,6 +3,7 @@
 
 
 #include "data_fwd.hpp"
+#include <systems/physics/physics_fwd.hpp>
 #include <stdint.h>
 
 
@@ -17,6 +18,7 @@ struct World
   Rigidbody_pool          *rigidbody_pool;
   Texture_pool            *texture_pool;
   Model_pool              *model_pool;
+  Physics::World          *physics_world;
 }; // struct
 
 

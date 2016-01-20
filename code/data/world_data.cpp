@@ -13,6 +13,7 @@ Entity
 world_create_new_entity(World *world_data, const uint32_t type_id)
 {
   Entity new_entity(type_id, world_data);
+  new_entity.m_phy_world = world_data->physics_world;
   
   // Find empty index.
   size_t empty_index;

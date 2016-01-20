@@ -100,6 +100,7 @@ main(int argc, char *argv[])
     world_data.pending_rbs    = &rigidbody_loading_pool;
     world_data.texture_pool   = &texture_pool;
     world_data.model_pool     = &model_pool;
+    world_data.physics_world  = &phy_world;
   }
   
   
@@ -116,6 +117,18 @@ main(int argc, char *argv[])
   
 
   Application::host_initialize(&world_data, &world_entities, &logic_pool, &rigidbody_loading_pool, &model_pool, &texture_pool, &phy_world, &connection);
+
+    
+//    Physics::colliders_generate(rigidbody_loading_pool.rigidbody_collider,
+//                                rigidbody_loading_pool.size,
+//                                rigidbody_loading_pool.rigidbody_out,
+//                                rigidbody_loading_pool.size);
+//    
+//    Physics::world_add_rigidbodies(&phy_world,
+//      rigidbody_loading_pool.rigidbody_property,
+//      rigidbody_loading_pool.size,
+//      rigidbody_loading_pool.rigidbody_out,
+//      rigidbody_loading_pool.size);
 
   
   // Transform data

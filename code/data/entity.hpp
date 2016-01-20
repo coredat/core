@@ -6,6 +6,7 @@
 #include <systems/entity/entity_id.hpp>
 #include <systems/physics/rigidbody_properties.hpp>
 #include <systems/physics/rigidbody_collider.hpp>
+#include <systems/physics/physics_fwd.hpp>
 #include <math/math.hpp>
 #include <stddef.h>
 #include <stdint.h>
@@ -39,6 +40,8 @@ public:
   
   void                          set_rigidbody_collider(const Physics::Rigidbody_collider collider);
   Physics::Rigidbody_collider   get_rigidbody_collider() const;
+  
+  Physics::World                *m_phy_world = nullptr;
   
 private:
 
