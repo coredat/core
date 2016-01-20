@@ -41,7 +41,6 @@ host_initialize(
 
   Entity_factory::create_ground(world);
 
-
   {
     kine_actor_local = Entity_factory::create_kinematic_actor(world);
     kine_actor_network = Entity_factory::create_kinematic_actor(world);

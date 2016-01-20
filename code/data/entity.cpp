@@ -144,7 +144,7 @@ Entity::set_rigidbody_properties(const Physics::Rigidbody_properties props)
     pending_rigidbody_pool_push(m_world_data->pending_rbs,
                                 ent_pool->rigidbody_property[index],
                                 ent_pool->rigidbody_collider[index],
-                                ent_pool->rigidbody);
+                                &ent_pool->rigidbody[index]);
   }
 }
 
@@ -173,7 +173,7 @@ Entity::set_rigidbody_collider(const Physics::Rigidbody_collider collider)
   pending_rigidbody_pool_push(m_world_data->pending_rbs,
                               ent_pool->rigidbody_property[index],
                               ent_pool->rigidbody_collider[index],
-                              ent_pool->rigidbody);
+                              &ent_pool->rigidbody[index]);
 }
 
 
