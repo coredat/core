@@ -5,13 +5,6 @@
 #include <systems/entity/entity_id.hpp>
 #include <systems/entity/generic_id.hpp>
 #include <data/data.hpp>
-#include <atomic>
-
-
-namespace
-{
-  std::atomic<uint32_t> instance(0);
-}
 
 
 namespace Entity_factory {

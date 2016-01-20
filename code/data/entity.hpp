@@ -2,6 +2,7 @@
 #define ENTITY_INCLUDED_EF96529C_E89E_4D4E_9DC2_9988B4774899
 
 
+#include "data_fwd.hpp"
 #include <systems/entity/entity_id.hpp>
 #include <systems/physics/rigidbody_properties.hpp>
 #include <systems/physics/rigidbody_collider.hpp>
@@ -17,7 +18,7 @@ class Entity final
 {
 public:
 
-  explicit                      Entity(const uint8_t type_id = 0);
+  explicit                      Entity(const uint8_t type_id = 0, World *world_data = nullptr);
   
   ::Entity::Entity_id           get_id() const;
   
@@ -42,15 +43,7 @@ public:
 private:
 
   ::Entity::Entity_id           m_this_id   = ::Entity::invalid_id();
-  ::Entity::Entity_id           m_parent_id = ::Entity::invalid_id();
-  
-  math::transform               m_transform;
-  
-  size_t                        m_material_id = 0;
-  size_t                        m_model_id    = 0;
-  
-  Physics::Rigidbody_properties m_rb_props;
-  Physics::Rigidbody_collider   m_rb_collider;
+  Data::World                   *m_world_data = nullptr;
 
 }; // class
 
