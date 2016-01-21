@@ -9,7 +9,7 @@ namespace Physics {
 void
 colliders_generate(const Rigidbody_collider colliders[],
                    const std::size_t number_of_colliders,
-                   Rigidbody* out_rb_info[],
+                   Rigidbody out_rb_info[],
                    const std::size_t number_of_outs)
 {
   const std::size_t number_to_process = std::min(number_of_colliders, number_of_outs);
@@ -17,7 +17,7 @@ colliders_generate(const Rigidbody_collider colliders[],
   for(std::size_t i = 0; i < number_to_process; ++i)
   {
     const auto coll = colliders[i];
-    auto out_rb = out_rb_info[i];
+    auto out_rb = &out_rb_info[i];
   
     /*
       Create the collision shape.

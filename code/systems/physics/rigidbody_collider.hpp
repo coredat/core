@@ -70,7 +70,7 @@ struct Rigidbody_collider
 void
 colliders_generate(const Rigidbody_collider colliders[],
                    const std::size_t number_of_colliders,
-                   Rigidbody* out_rb_info[],
+                   Rigidbody out_rb_info[],
                    const std::size_t number_of_outs);
 
 

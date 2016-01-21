@@ -87,9 +87,6 @@ Actor_local_player::on_update(const float dt)
       std::size_t index;
       if(Entity::find_index_linearly(&index, cube_id, world_data->entity_pool->entity_id, world_data->entity_pool->size))
       {
-        void *user_ptr = face_ray.m_collisionObject->getUserPointer();
-        // Store id in this field and retrive the entity.
-      
         auto trans = world_data->entity_pool->transform[index];
         const math::vec3 pos = math::vec3_init(face_ray.m_hitPointWorld.x(), face_ray.m_hitPointWorld.y(), face_ray.m_hitPointWorld.z());
         trans.position = pos;
@@ -102,9 +99,22 @@ Actor_local_player::on_update(const float dt)
           std::size_t index_of_new_obj;
           Entity::find_index_linearly(&index_of_new_obj, ent.get_id(), world_data->entity_pool->entity_id, world_data->entity_pool->size);
           
-          world_data->entity_pool->transform[index_of_new_obj].position = world_data->entity_pool->transform[index].position;
+          //world_data->entity_pool->transform[index_of_new_obj].position = world_data->entity_pool->transform[index].position;
+          auto trans = ent.get_transform();
+          trans.position = world_data->entity_pool->transform[index].position;
+          ent.set_transform(trans);
           
-
+          // Join rbs.
+          void *user_ptr = face_ray.m_collisionObject->getUserPointer();
+          const std::size_t ent_id = (std::size_t)user_ptr;
+          const Entity::Entity_id collided_id = Entity::uint_as_entity(static_cast<uint32_t>(ent_id));
+          
+          size_t collided_obj_index;
+          Entity::find_index_linearly(&collided_obj_index, collided_id, world_data->entity_pool->entity_id, world_data->entity_pool->size);
+          
+//          Physics::world_join_rigidbodies(m_world,
+//                                          &world_data->entity_pool->rigidbody[collided_obj_index],
+//                                          &world_data->entity_pool->rigidbody[index_of_new_obj]);
         }
       }
     }

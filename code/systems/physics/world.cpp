@@ -38,7 +38,7 @@ void
 world_add_rigidbodies(World *world,
                       const Rigidbody_properties props[],
                       const std::size_t number_of_rbs_props,
-                      Rigidbody* destination[],
+                      Rigidbody destination[],
                       const std::size_t number_of_rbs)
 {
   // Param check
@@ -50,7 +50,7 @@ world_add_rigidbodies(World *world,
   for(std::size_t i = 0; i < number_of_rbs_to_process; ++i)
   {
     const Rigidbody_properties *prop = &props[i];
-    Rigidbody *out_rb = destination[i];
+    Rigidbody *out_rb = &destination[i];
         
     /*
       Check if rb is already in the scene.
@@ -92,6 +92,15 @@ world_add_rigidbodies(World *world,
                                                                   inertia);
       
       out_rb->rigidbody.reset(new btRigidBody(rigidbody_ci));
+      
+      // Convert uint to ptr.
+      {
+        const uint32_t usr = Entity::entity_as_uint(prop->id);
+        std::size_t* ptr = nullptr;
+        ptr = (std::size_t*)usr;
+        
+        out_rb->rigidbody->setUserPointer(ptr);
+      }
     }
     
     /*
@@ -144,14 +153,14 @@ void
 world_join_rigidbodies(World *world, const Rigidbody* parent, const Rigidbody* child)
 {
   // Remove child object from the world.
-//  world->dynamics_world.removeRigidBody(child->rigidbody.get());
-//  world->dynamics_world.removeRigidBody(parent->rigidbody.get());
+  world->dynamics_world.removeRigidBody(child->rigidbody.get());
+  world->dynamics_world.removeRigidBody(parent->rigidbody.get());
 
-//  btTransform transform;
-//  parent->compound_shape->addChildShape(transform, child->shape.get());
+  btTransform transform;
+  parent->compound_shape->addChildShape(transform, child->shape.get());
   
   // Re attach child object to partents collider.
-//  world->dynamics_world.addRigidBody(parent->rigidbody.get());
+  world->dynamics_world.addRigidBody(parent->rigidbody.get());
 }
 
 

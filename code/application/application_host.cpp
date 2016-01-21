@@ -132,21 +132,21 @@ host_think(
 
   // ** World Update and Render ** //
 
-  if (pending_rbs->size)
-  {
-    Physics::colliders_generate(pending_rbs->rigidbody_collider,
-                                pending_rbs->size,
-                                pending_rbs->rigidbody_out,
-                                pending_rbs->size);
-    
-    Physics::world_add_rigidbodies(phy_world,
-      pending_rbs->rigidbody_property,
-      pending_rbs->size,
-      pending_rbs->rigidbody_out,
-      pending_rbs->size);
-
-    Data::pending_rigidbody_pool_clear(pending_rbs);
-  }
+//  if (pending_rbs->size)
+//  {
+//    Physics::colliders_generate(pending_rbs->rigidbody_collider,
+//                                pending_rbs->size,
+//                                pending_rbs->rigidbody_out,
+//                                pending_rbs->size);
+//    
+//    Physics::world_add_rigidbodies(phy_world,
+//      pending_rbs->rigidbody_property,
+//      pending_rbs->size,
+//      pending_rbs->rigidbody_out,
+//      pending_rbs->size);
+//
+//    Data::pending_rigidbody_pool_clear(pending_rbs);
+//  }
 
   Network::send_packet(connection, sizeof(entity_pool->transform), entity_pool->transform, false);
 

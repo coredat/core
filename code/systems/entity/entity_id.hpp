@@ -17,6 +17,23 @@ struct Entity_id
 
 
 
+//! Converts an entity type into a uint32_t type.
+inline uint32_t
+entity_as_uint(const Entity_id e)
+{
+  return (e.type_id << 24) | e.instance_id;
+}
+
+
+//! Converts a uint to an entity
+inline Entity_id
+uint_as_entity(const uint32_t to_e)
+{
+  return Entity_id{(to_e >> 24), (to_e >> 0 & 0xFFFF)};
+}
+
+
+
 constexpr bool
 operator==(const Entity_id left, const Entity_id right)
 {

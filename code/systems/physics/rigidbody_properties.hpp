@@ -3,6 +3,7 @@
 
 
 #include <stdint.h>
+#include <systems/entity/entity_id.hpp>
 
 
 namespace Physics {
@@ -23,8 +24,6 @@ enum ENUM
 
 
 
-
-
 // TODO: Make this struct smaller.
 // Can merge axis
 // Can reduce collider_type
@@ -35,6 +34,7 @@ struct Rigidbody_properties
   bool          make_rb       = true;  
   uint32_t      move_axis     = Axis::x | Axis::y | Axis::z;
   uint32_t      rotation_axis = Axis::x | Axis::y | Axis::z;
+  Entity::Entity_id id;
 };
 
 

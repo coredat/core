@@ -105,8 +105,8 @@ create_connection_node(Data::World *world)
   const float scale_z = 1.f * scale;
 
   entity.set_transform(math::transform_init(math::vec3_zero(),
-                       math::vec3_init(scale_x, scale_y, scale_z),
-                       math::quat_init()));
+                                            math::vec3_init(scale_x, scale_y, scale_z),
+                                            math::quat_init()));
   
   entity.set_rigidbody_properties(Physics::Rigidbody_properties{1.f});
   entity.set_rigidbody_collider(Physics::Rigidbody_collider{Physics::Collider_type::cube, scale_x * 0.5f, scale_y * 0.5f, scale_z * 0.5f});
