@@ -30,6 +30,8 @@ rigidbody_pool_update_rb(Rigidbody_pool *pool,
     pool->entity_id[index] = id;
   }
   
+  Physics::world_remove_rigidbody(world, &pool->rigidbody[index]);
+  
   pool->rigidbody[index].motion_state.reset(new Physics::Motion_state(id, data->entity_pool));
   
   // Generate collider

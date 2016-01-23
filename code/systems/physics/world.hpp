@@ -46,6 +46,10 @@ void
 world_step(World *world, const float dt);
 
 
+void
+world_remove_rigidbody(World *world, Rigidbody *rb);
+
+
 /*!
   Run the physics simulation.
   \param world a valid instance of the physical world.

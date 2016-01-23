@@ -19,8 +19,6 @@ struct Rigidbody_pool
 {
   ::Entity::Entity_id               entity_id[RIGIDBODY_POOL_SIZE];
   Physics::Rigidbody                rigidbody[RIGIDBODY_POOL_SIZE];
-  Physics::Rigidbody_properties     property[RIGIDBODY_POOL_SIZE];
-  Physics::Rigidbody_collider       collider[RIGIDBODY_POOL_SIZE];
   
   const size_t                      size{RIGIDBODY_POOL_SIZE};
 }; // ns
@@ -38,7 +36,6 @@ rigidbody_pool_update_rb(Rigidbody_pool *pool,
                          Data::World *data,                         
                          const Physics::Rigidbody_properties &props,
                          const Physics::Rigidbody_collider &collider);
-
 
 } // ns
 

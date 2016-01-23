@@ -31,9 +31,9 @@ enum ENUM
 struct Rigidbody_properties
 {
   float         mass          = 1;
-  bool          make_rb       = true;  
+  bool          make_rb       = true; // Kill this can be deduced by parent.
   uint32_t      move_axis     = Axis::x | Axis::y | Axis::z;
-  uint32_t      rotation_axis = Axis::x | Axis::y | Axis::z;
+  uint32_t      rotation_axis = Axis::x | Axis::y | Axis::z; // TODO merge all ths into a uchar I think.
   Entity::Entity_id id;
 };
 

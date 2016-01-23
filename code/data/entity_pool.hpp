@@ -20,8 +20,8 @@ namespace Data {
 
 struct Entity_pool
 {
-  ::Entity::Entity_id               entity_id[ENTITY_POOL_SIZE];
-  ::Entity::Entity_id               parent_id[ENTITY_POOL_SIZE];
+  ::Entity::Entity_id             entity_id[ENTITY_POOL_SIZE];
+  ::Entity::Entity_id             parent_id[ENTITY_POOL_SIZE]; // Common case? motion state can't go through children easily.
   
   math::transform                 transform[ENTITY_POOL_SIZE];
   
@@ -30,7 +30,6 @@ struct Entity_pool
   Resource::Model::ENUM           model[ENTITY_POOL_SIZE];
   Resource::Texture::ENUM         texture[ENTITY_POOL_SIZE];
   
-  Physics::Rigidbody              rigidbody[ENTITY_POOL_SIZE]; // KILL
   Physics::Rigidbody_properties   rigidbody_property[ENTITY_POOL_SIZE];
   Physics::Rigidbody_collider     rigidbody_collider[ENTITY_POOL_SIZE];
   

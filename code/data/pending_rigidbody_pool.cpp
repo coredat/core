@@ -1,4 +1,5 @@
 #include "pending_rigidbody_pool.hpp"
+#include "world_data.hpp"
 #include <cstring>
 #include <assert.h>
 
@@ -12,30 +13,10 @@ pending_rigidbody_pool_init(Pending_rigidbody_pool *pool)
 {
   assert(pool);
 
-  memset(pool->rigidbody_out, 0, sizeof(pool->rigidbody_out));
-  memset(pool->rigidbody_property, 0, sizeof(pool->rigidbody_property));
-  memset(pool->rigidbody_collider, 0, sizeof(pool->rigidbody_collider));
+//  memset(pool->rigidbody_out, 0, sizeof(pool->rigidbody_out));
+//  memset(pool->rigidbody_property, 0, sizeof(pool->rigidbody_property));
+//  memset(pool->rigidbody_collider, 0, sizeof(pool->rigidbody_collider));
   pool->size = 0;
-}
-
-
-void
-pending_rigidbody_pool_push(Pending_rigidbody_pool *pool, const Physics::Rigidbody_properties props, const Physics::Rigidbody_collider coll, Physics::Rigidbody *output)
-{
-  const std::size_t size = pool->size;
-
-  assert(size < pool->capacity);
-  
-  if(pool->size >= pool->capacity)
-  {
-    return;
-  }
-
-  pool->rigidbody_out[size] = output;
-  pool->rigidbody_property[size] = props;
-  pool->rigidbody_collider[size] = coll;
-  
-  pool->size = size + 1;
 }
 
 

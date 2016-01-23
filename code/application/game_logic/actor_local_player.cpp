@@ -96,7 +96,7 @@ Actor_local_player::on_update(const float dt)
         {
           auto ent = Entity_factory::create_random_cube(world_data);
           
-          std::size_t index_of_new_obj;
+          size_t index_of_new_obj;
           Entity::find_index_linearly(&index_of_new_obj, ent.get_id(), world_data->entity_pool->entity_id, world_data->entity_pool->size);
           
           //world_data->entity_pool->transform[index_of_new_obj].position = world_data->entity_pool->transform[index].position;

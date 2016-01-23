@@ -35,6 +35,20 @@ world_step(World *world, const float dt)
 
 
 void
+world_remove_rigidbody(World *world, Rigidbody *rb)
+{
+  if(rb->rigidbody)
+  {
+    world->dynamics_world.removeRigidBody(rb->rigidbody.get());
+    rb->rigidbody.reset();
+    rb->motion_state.reset();
+    rb->shape.reset();
+    rb->compound_shape.reset();
+  }
+}
+
+
+void
 world_add_rigidbodies(World *world,
                       const Rigidbody_properties props[],
                       const std::size_t number_of_rbs_props,
@@ -46,12 +60,12 @@ world_add_rigidbodies(World *world,
   assert(number_of_rbs >= number_of_rbs_props); // Will work but likely you didn't mean todo this.
   
   const std::size_t number_of_rbs_to_process = std::min(number_of_rbs_props, number_of_rbs);
-
+  
   for(std::size_t i = 0; i < number_of_rbs_to_process; ++i)
   {
     const Rigidbody_properties *prop = &props[i];
     Rigidbody *out_rb = &destination[i];
-        
+    
     /*
       Check if rb is already in the scene.
       Currently we shall just pull it from the world.
@@ -60,7 +74,6 @@ world_add_rigidbodies(World *world,
     if(out_rb->rigidbody)
     {
       world->dynamics_world.removeRigidBody(out_rb->rigidbody.get());
-      out_rb->rigidbody.reset();
     }
     
     /*
@@ -69,6 +82,11 @@ world_add_rigidbodies(World *world,
     if(!out_rb->compound_shape)
     {
       out_rb->compound_shape.reset(new btCompoundShape());
+      
+      btTransform child_transform;
+      child_transform.setIdentity(); // Warning do not remove this. It seems to create an AABB overflow in Bullet.
+ 
+      out_rb->compound_shape->addChildShape(child_transform, out_rb->shape.get());
     }
     
     /*
@@ -80,10 +98,7 @@ world_add_rigidbodies(World *world,
       btVector3 inertia(0, 0, 0);
       out_rb->shape->calculateLocalInertia(prop->mass, inertia);
       
-      btTransform child_transform ;
-      child_transform.setIdentity(); // Warning do not remove this. It seems to create an AABB overflow in Bullet.
- 
-      out_rb->compound_shape->addChildShape(child_transform, out_rb->shape.get());
+
       out_rb->compound_shape->calculateLocalInertia(prop->mass, inertia);
       
       const btRigidBody::btRigidBodyConstructionInfo rigidbody_ci(prop->mass,
@@ -92,7 +107,6 @@ world_add_rigidbodies(World *world,
                                                                   inertia);
       
       out_rb->rigidbody.reset(new btRigidBody(rigidbody_ci));
-      
       // Convert uint to ptr.
       {
         const uint32_t usr = Entity::entity_as_uint(prop->id);
@@ -112,7 +126,7 @@ world_add_rigidbodies(World *world,
       
       const uint32_t movement_axis = prop->move_axis;
       const uint32_t rotation_axis = prop->rotation_axis;
-    
+      
       const btVector3 axis_movement((btScalar)(movement_axis >> 0 & 1),
                                     (btScalar)(movement_axis >> 1 & 1),
                                     (btScalar)(movement_axis >> 2 & 1));
@@ -120,7 +134,7 @@ world_add_rigidbodies(World *world,
       const btVector3 axis_rotation((btScalar)(rotation_axis >> 0 & 1),
                                     (btScalar)(rotation_axis >> 1 & 1),
                                     (btScalar)(rotation_axis >> 2 & 1));
-
+      
       rigidbody->setLinearFactor(axis_movement);
       rigidbody->setAngularFactor(axis_rotation);
     }
@@ -131,7 +145,7 @@ world_add_rigidbodies(World *world,
     {
       assert(out_rb->rigidbody);
       btRigidBody *rigidbody = out_rb->rigidbody.get();
-    
+      
       rigidbody->setDamping(0.9f, 0.9f);
       rigidbody->setFriction(0.7f);
       rigidbody->setRollingFriction(0.4f);

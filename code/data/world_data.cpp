@@ -2,8 +2,13 @@
 #include "entity_pool.hpp"
 #include "pending_rigidbody_pool.hpp"
 #include "entity.hpp"
-
 #include <systems/physics/physics.hpp>
+#include <atomic>
+
+namespace
+{
+  std::atomic<uint32_t> instance(0);
+}
 
 
 namespace Data {
@@ -12,8 +17,16 @@ namespace Data {
 Entity
 world_create_new_entity(World *world_data, const uint32_t type_id)
 {
-  Entity new_entity(type_id, world_data);
-  new_entity.m_phy_world = world_data->physics_world;
+  struct Private_access
+  {
+    ENTITY_MEMBERS
+  };
+
+  Entity new_entity;
+  
+  Private_access *set = reinterpret_cast<Private_access*>(&new_entity);
+  set->m_this_id      = ::Entity::Entity_id{type_id, ++instance};
+  set->m_world_data   = world_data;
   
   // Find empty index.
   size_t empty_index;

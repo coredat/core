@@ -12,6 +12,14 @@
 #include <stdint.h>
 
 
+// This is used to allow the factory to make a public version
+// of the object to set members. Keeping setters etc out of the
+// objects interface.
+#define ENTITY_MEMBERS                                                  \
+  ::Entity::Entity_id           m_this_id     = ::Entity::invalid_id(); \
+  Data::World                   *m_world_data = nullptr;                \
+
+
 namespace Data {
 
 
@@ -19,12 +27,12 @@ class Entity final
 {
 public:
 
-  explicit                      Entity(const uint8_t type_id = 0, World *world_data = nullptr);
+  explicit                      Entity();
   
   ::Entity::Entity_id           get_id() const;
   
   void                          set_parent(const ::Entity::Entity_id id);
-  ::Entity::Entity_id           get_parent_id() const;
+  Entity                        get_parent() const;
 
   void                          set_transform(const math::transform &transform);
   math::transform               get_transform() const;
@@ -41,12 +49,9 @@ public:
   void                          set_rigidbody_collider(const Physics::Rigidbody_collider collider);
   Physics::Rigidbody_collider   get_rigidbody_collider() const;
   
-  Physics::World                *m_phy_world = nullptr;
-  
 private:
 
-  ::Entity::Entity_id           m_this_id   = ::Entity::invalid_id();
-  Data::World                   *m_world_data = nullptr;
+  ENTITY_MEMBERS
 
 }; // class
 
