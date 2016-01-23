@@ -77,9 +77,6 @@ main(int argc, char *argv[])
   Data::Model_pool model_pool;
   Data::model_pool_init(&model_pool);
   
-  Data::Pending_rigidbody_pool rigidbody_loading_pool;
-  Data::pending_rigidbody_pool_init(&rigidbody_loading_pool);
-  
   Data::Rigidbody_pool rigidbody_pool;
   Data::rigidbody_pool_init(&rigidbody_pool);
   
@@ -97,7 +94,6 @@ main(int argc, char *argv[])
     world_data.entity_pool    = &world_entities;
     world_data.logic_pool     = &logic_pool;
     world_data.rigidbody_pool = &rigidbody_pool;
-    world_data.pending_rbs    = &rigidbody_loading_pool;
     world_data.texture_pool   = &texture_pool;
     world_data.model_pool     = &model_pool;
     world_data.physics_world  = &phy_world;
@@ -116,22 +112,9 @@ main(int argc, char *argv[])
   }
   
 
-  Application::host_initialize(&world_data, &world_entities, &logic_pool, &rigidbody_loading_pool, &model_pool, &texture_pool, &phy_world, &connection);
+  Application::host_initialize(&world_data, &connection);
 
   Physics::world_step(&phy_world, 0.f);
-  
-//    Physics::colliders_generate(rigidbody_loading_pool.rigidbody_collider,
-//                                rigidbody_loading_pool.size,
-//                                rigidbody_loading_pool.rigidbody_out,
-//                                rigidbody_loading_pool.size);
-//    
-//    Physics::world_add_rigidbodies(&phy_world,
-//      rigidbody_loading_pool.rigidbody_property,
-//      rigidbody_loading_pool.size,
-//      rigidbody_loading_pool.rigidbody_out,
-//      rigidbody_loading_pool.size);
-
-//    Data::pending_rigidbody_pool_clear(&rigidbody_loading_pool);
   
   // Transform data
   std::vector<Simple_renderer::Node> renderer_nodes;
@@ -164,10 +147,6 @@ main(int argc, char *argv[])
     {
       Application::host_think(
         &world_data,
-        &world_entities,
-        &logic_pool,
-        &rigidbody_loading_pool,
-        &phy_world,
         &connection,
         &input_devices,
         delta_time);
@@ -176,10 +155,6 @@ main(int argc, char *argv[])
     {
       Application::client_think(
         &world_data,
-        &world_entities,
-        &logic_pool,
-        &rigidbody_loading_pool,
-        &phy_world,
         &connection,
         &input_devices,
         delta_time);

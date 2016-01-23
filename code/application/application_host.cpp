@@ -2,13 +2,8 @@
 #include "entity_factory.hpp"
 #include "game_logic/actor_local_player.hpp" // KILL!
 #include "game_logic/actor_network_player.hpp" // KILL!
-#include <data/actor/actor.hpp> // KILL!!!
-#include <data/entity_pool.hpp>
-#include <data/logic_pool.hpp>
-#include <data/pending_rigidbody_pool.hpp>
-#include <data/texture_pool.hpp>
-#include <data/model_pool.hpp>
-#include <data/entity.hpp>
+#include <data/actor/actor.hpp>
+#include <data/data.hpp>
 #include <systems/network/network.hpp>
 #include <systems/entity/entity_id.hpp>
 #include <systems/physics/physics.hpp>
@@ -28,12 +23,6 @@ namespace Application {
 void
 host_initialize(
   Data::World *world,
-  Data::Entity_pool *entity_pool,
-  Data::Logic_pool *logic_pool,
-  Data::Pending_rigidbody_pool *pending_rbs,
-  Data::Model_pool *model_pool,
-  Data::Texture_pool *texture_pool,
-  Physics::World *phy_world,
   Network::Connection *connection)
 {
   
@@ -50,26 +39,26 @@ host_initialize(
 
   // Game Logic
   {
-    const auto free_slot = Data::logic_pool_get_slot(logic_pool);
+    const auto free_slot = Data::logic_pool_get_slot(world->logic_pool);
     new(free_slot) Actor_local_player();
     
-    auto base = reinterpret_cast<Logic::Base*>(logic_pool->objects_in_use[0]);
+    auto base = reinterpret_cast<Logic::Base*>(world->logic_pool->objects_in_use[0]);
     base->set_entity(kine_actor_local);
     base->world_data = world;
-    base->m_world = phy_world;
+    base->m_world = world->physics_world;
   }
   
   {
-    const auto free_slot = Data::logic_pool_get_slot(logic_pool);
+    const auto free_slot = Data::logic_pool_get_slot(world->logic_pool);
     new(free_slot) Actor_network_player();
     
-    auto base = reinterpret_cast<Logic::Base*>(logic_pool->objects_in_use[1]);
+    auto base = reinterpret_cast<Logic::Base*>(world->logic_pool->objects_in_use[1]);
     base->set_entity(kine_actor_network);
     base->world_data = world;
-    base->m_world = phy_world;
+    base->m_world = world->physics_world;
   }
   
-  for(auto &obj : logic_pool->objects_in_use)
+  for(auto &obj : world->logic_pool->objects_in_use)
   {
     reinterpret_cast<Logic::Base*>(obj)->on_start(); // TODO: reinter_cast?
   }
@@ -87,29 +76,25 @@ host_initialize(
 void
 host_think(
   Data::World *world,
-  Data::Entity_pool *entity_pool,
-  Data::Logic_pool *logic_pool,
-  Data::Pending_rigidbody_pool *pending_rbs,
-  Physics::World *phy_world,
   Network::Connection *connection,
   const Environment::Input *inputs,
   const float delta_time)
 {
-  Physics::world_step(phy_world, delta_time);
+  Physics::world_step(world->physics_world, delta_time);
 
   Network::poll_events(connection,
     0,
     [&](const Network::Event_id id, const void *data, const std::size_t size_of_data)
   {
     const Actor::Input_cmds *cmds = reinterpret_cast<const Actor::Input_cmds*>(data);
-    Actor::input(*cmds, delta_time, kine_actor_network, entity_pool, entity_pool->size, phy_world);
+    Actor::input(*cmds, delta_time, kine_actor_network, world->entity_pool, world->entity_pool->size, world->physics_world);
   },
     &std::cout);
 
   std::size_t index;
-  Entity::find_index_linearly(&index, kine_actor_local, entity_pool->entity_id, entity_pool->size);
+  Entity::find_index_linearly(&index, kine_actor_local, world->entity_pool->entity_id, world->entity_pool->size);
 
-  Actor_local_player *actor = reinterpret_cast<Actor_local_player*>(logic_pool->objects_in_use[0]);
+  Actor_local_player *actor = reinterpret_cast<Actor_local_player*>(world->logic_pool->objects_in_use[0]);
 
   actor->move_fwd(inputs->controllers[0].axis_2[1]);
   actor->move_right(inputs->controllers[0].axis_2[0]);
@@ -124,31 +109,13 @@ host_think(
 
   // ** Game Logic Update ** //
 
-  for (auto &obj : logic_pool->objects_in_use)
+  for (auto &obj : world->logic_pool->objects_in_use)
   {
     reinterpret_cast<Logic::Base*>(obj)->on_update(delta_time); // TODO: reinter_cast?
   }
 
 
-  // ** World Update and Render ** //
-
-//  if (pending_rbs->size)
-//  {
-//    Physics::colliders_generate(pending_rbs->rigidbody_collider,
-//                                pending_rbs->size,
-//                                pending_rbs->rigidbody_out,
-//                                pending_rbs->size);
-//    
-//    Physics::world_add_rigidbodies(phy_world,
-//      pending_rbs->rigidbody_property,
-//      pending_rbs->size,
-//      pending_rbs->rigidbody_out,
-//      pending_rbs->size);
-//
-//    Data::pending_rigidbody_pool_clear(pending_rbs);
-//  }
-
-  Network::send_packet(connection, sizeof(entity_pool->transform), entity_pool->transform, false);
+  Network::send_packet(connection, sizeof(world->entity_pool->transform), world->entity_pool->transform, false);
 
 }
 

@@ -24,10 +24,6 @@ client_initialize(Network::Connection *connection);
 void
 client_think(
   Data::World *world,
-  Data::Entity_pool *entity_pool,
-  Data::Logic_pool *logic_pool,
-  Data::Pending_rigidbody_pool *pending_rbs,
-  Physics::World *phy_world,
   Network::Connection *connection,
   const Environment::Input *inputs,
   const float delta_time);

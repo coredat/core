@@ -1,7 +1,6 @@
 #include "application_client.hpp"
 #include <data/entity_pool.hpp>
 #include <data/logic_pool.hpp>
-#include <data/pending_rigidbody_pool.hpp>
 #include <data/actor/actor.hpp> // KILL!!!
 #include <systems/network/network.hpp>
 #include <systems/entity/entity_id.hpp>
@@ -30,7 +29,6 @@ client_think(
   Data::World *world,
   Data::Entity_pool *entity_pool,
   Data::Logic_pool *logic_pool,
-  Data::Pending_rigidbody_pool *pending_rbs,
   Physics::World *phy_world,
   Network::Connection *connection,
   const Environment::Input *inputs,

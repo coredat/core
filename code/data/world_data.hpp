@@ -14,7 +14,6 @@ struct World
 {
   Entity_pool             *entity_pool;
   Logic_pool              *logic_pool;
-  Pending_rigidbody_pool  *pending_rbs;
   Rigidbody_pool          *rigidbody_pool;
   Texture_pool            *texture_pool;
   Model_pool              *model_pool;

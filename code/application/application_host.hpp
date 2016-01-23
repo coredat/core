@@ -17,12 +17,6 @@ namespace Application {
 void
 host_initialize(
   Data::World *world,
-  Data::Entity_pool *entity_pool,
-  Data::Logic_pool *logic_pool,
-  Data::Pending_rigidbody_pool *pending_rbs,
-  Data::Model_pool *model_pool,
-  Data::Texture_pool *texture_pool,
-  Physics::World *phy_world,
   Network::Connection *connection);
 
 
@@ -33,10 +27,6 @@ host_initialize(
 void
 host_think(
   Data::World *world,
-  Data::Entity_pool *entity_pool,
-  Data::Logic_pool *logic_pool,
-  Data::Pending_rigidbody_pool *pending_rbs,
-  Physics::World *phy_world,
   Network::Connection *connection,
   const Environment::Input *inputs,
   const float delta_time);
