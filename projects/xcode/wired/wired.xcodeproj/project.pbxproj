@@ -126,6 +126,7 @@
 		7EC9B9E71C4E20F800FBF1D7 /* entity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = entity.cpp; sourceTree = "<group>"; };
 		7EC9B9E81C4E20F800FBF1D7 /* entity.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = entity.hpp; sourceTree = "<group>"; };
 		7EC9B9EA1C4EBD1800FBF1D7 /* object_types.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = object_types.hpp; sourceTree = "<group>"; };
+		7EC9B9EB1C557F3D00FBF1D7 /* entity_detail.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = entity_detail.hpp; sourceTree = "<group>"; };
 		7ED7BB841C3CF8B100CE80EA /* entity_factory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = entity_factory.cpp; sourceTree = "<group>"; };
 		7ED7BB851C3CF8B100CE80EA /* entity_factory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = entity_factory.hpp; sourceTree = "<group>"; };
 		7ED7BBA41C3CF8B100CE80EA /* debug_line.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = debug_line.cpp; sourceTree = "<group>"; };
@@ -367,6 +368,7 @@
 			children = (
 				7EC9B9E71C4E20F800FBF1D7 /* entity.cpp */,
 				7EC9B9E81C4E20F800FBF1D7 /* entity.hpp */,
+				7EC9B9EB1C557F3D00FBF1D7 /* entity_detail.hpp */,
 				7EC9B9E41C4D5D6100FBF1D7 /* world_data.cpp */,
 				7EC9B9E51C4D5D6100FBF1D7 /* world_data.hpp */,
 				7EC9B9AD1C44DA7700FBF1D7 /* logic_pool.cpp */,

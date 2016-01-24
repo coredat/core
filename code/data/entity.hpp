@@ -3,42 +3,18 @@
 
 
 #include "data_fwd.hpp"
-#include <systems/entity/entity_id.hpp>
-#include <systems/physics/rigidbody_properties.hpp>
-#include <systems/physics/rigidbody_collider.hpp>
-#include <systems/physics/physics_fwd.hpp>
-#include <math/math.hpp>
+#include "entity_detail.hpp"
 #include <stddef.h>
 #include <stdint.h>
 
 
-// This is used to allow the factory to make a public version
-// of the object to set members. Keeping setters etc out of the
-// objects interface.
-#define ENTITY_MEMBERS                                                  \
-  ::Entity::Entity_id           m_this_id     = ::Entity::invalid_id(); \
-  Data::World                   *m_world_data = nullptr;                \
-
-
 namespace Data {
 
-namespace Detail
-{
-  struct Private_entity
-  {
-    ENTITY_MEMBERS
-  };
-  
-  inline void
-  set_entity_members(Data::Entity *ent, Data::World *world_data, ::Entity::Entity_id id)
-  {
-    auto private_entity          = reinterpret_cast<Private_entity*>(ent);
-    private_entity->m_world_data = world_data;
-    private_entity->m_this_id    = id;
-  }
-} // ns
 
-
+/*!
+  Entity is how we access the properties of an entity.
+  This abstracts how all the data is handled underneath.
+*/
 class Entity final
 {
 public:

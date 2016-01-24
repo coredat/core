@@ -1,6 +1,5 @@
 #include "application_client.hpp"
-#include <data/entity_pool.hpp>
-#include <data/logic_pool.hpp>
+#include <data/data.hpp>
 #include <systems/network/network.hpp>
 #include <systems/entity/entity_id.hpp>
 #include <systems/physics/physics.hpp>

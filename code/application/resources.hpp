@@ -3,9 +3,12 @@
 
 
 #include <data/data_fwd.hpp>
-#include <cstddef>
+#include <stddef.h>
 
 
+/*!
+  Asset ids, and loading assets.
+*/
 namespace Resource {
 namespace Model {
 
@@ -40,8 +43,18 @@ enum ENUM {
 } // ns
 
 
+/*!
+  loads the resources we will use for the game.
+  \param texture_pool the desintation of the textures.
+  \param size_of_texture_pool how big this pool is.
+  \param model_pool the desintation of the model pool.
+  \param size_of_model_pool size of the model pool.
+*/
 void
-load_default_resources(Data::Texture_pool *texture_pool, std::size_t size_of_texture_pool, Data::Model_pool *model_pool, std::size_t size_of_model_pool);
+load_default_resources(Data::Texture_pool *texture_pool,
+                       const size_t size_of_texture_pool,
+                       Data::Model_pool *model_pool,
+                       const size_t size_of_model_pool);
 
 
 } // ns

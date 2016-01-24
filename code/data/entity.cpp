@@ -1,7 +1,5 @@
 #include "entity.hpp"
-#include "world_data.hpp"
-#include "entity_pool.hpp"
-#include "rigidbody_pool.hpp"
+#include "data.hpp"
 
 
 namespace Data {
@@ -98,21 +96,20 @@ Entity::set_transform(const math::transform &transform)
 {
   if(!is_valid()) { return; }
 
+  auto ent_pool = m_world_data->entity_pool;
+
   size_t index;
-  assert(get_index(&index, m_this_id, m_world_data->entity_pool->entity_id, m_world_data->entity_pool->size));
-  m_world_data->entity_pool->transform[index] = transform;
+  assert(get_index(&index, m_this_id, ent_pool->entity_id, ent_pool->size));
+  ent_pool->transform[index] = transform;
   
-  const auto ent_pool = m_world_data->entity_pool;
+  // If this object has a colldier attached to it,
+  // we need to update the rb.
+  auto rb_coll = &ent_pool->rigidbody_collider[index];
   
-  if(ent_pool->rigidbody_collider[index].collider_type != Physics::Collider_type::none)
+  if(rb_coll->collider_type != Physics::Collider_type::none)
   {
-    rigidbody_update_pool_add_update(m_world_data->rigidbody_update_pool, m_this_id, ent_pool->rigidbody_collider[index], ent_pool->rigidbody_property[index]);
-//    rigidbody_pool_update_rb(m_world_data->rigidbody_pool,
-//                             m_this_id,
-//                             m_world_data->physics_world,
-//                             m_world_data,
-//                             ent_pool->rigidbody_property[index],
-//                             ent_pool->rigidbody_collider[index]);
+    auto rb_prop = &ent_pool->rigidbody_property[index];
+    rigidbody_update_pool_add_update(m_world_data->rigidbody_update_pool, m_this_id, *rb_coll, *rb_prop);
   }
 }
 
@@ -121,10 +118,12 @@ math::transform
 Entity::get_transform() const
 {
   if(!is_valid()) { return math::transform(); }
+  
+  auto ent_pool = m_world_data->entity_pool;
 
   size_t index;
-  assert(get_index(&index, m_this_id, m_world_data->entity_pool->entity_id, m_world_data->entity_pool->size));
-  return m_world_data->entity_pool->transform[index];
+  assert(get_index(&index, m_this_id, ent_pool->entity_id, ent_pool->size));
+  return ent_pool->transform[index];
 }
 
 
@@ -132,10 +131,12 @@ void
 Entity::set_material_id(const size_t id)
 {
   if(!is_valid()) { return; }
+  
+  auto ent_pool = m_world_data->entity_pool;
 
   size_t index;
-  assert(get_index(&index, m_this_id, m_world_data->entity_pool->entity_id, m_world_data->entity_pool->size));
-  m_world_data->entity_pool->texture[index] = (Resource::Texture::ENUM)id;
+  assert(get_index(&index, m_this_id, ent_pool->entity_id, ent_pool->size));
+  ent_pool->texture[index] = (Resource::Texture::ENUM)id;
 }
 
 
@@ -144,9 +145,11 @@ Entity::get_material_id() const
 {
   if(!is_valid()) { return 0; }
 
+  auto ent_pool = m_world_data->entity_pool;
+
   size_t index;
-  assert(get_index(&index, m_this_id, m_world_data->entity_pool->entity_id, m_world_data->entity_pool->size));
-  return (size_t)m_world_data->entity_pool->texture[index];
+  assert(get_index(&index, m_this_id, ent_pool->entity_id, ent_pool->size));
+  return (size_t)ent_pool->texture[index];
 }
 
 
@@ -154,10 +157,12 @@ void
 Entity::set_model_id(const size_t id)
 {
   if(!is_valid()) { return; }
+  
+  auto ent_pool = m_world_data->entity_pool;
 
   size_t index;
-  assert(get_index(&index, m_this_id, m_world_data->entity_pool->entity_id, m_world_data->entity_pool->size));
-  m_world_data->entity_pool->model[index] = (Resource::Model::ENUM)id;
+  assert(get_index(&index, m_this_id, ent_pool->entity_id, ent_pool->size));
+  ent_pool->model[index] = (Resource::Model::ENUM)id;
 }
 
 
@@ -165,10 +170,12 @@ size_t
 Entity::get_model_id() const
 {
   if(!is_valid()) { return 0; }
+  
+  auto ent_pool = m_world_data->entity_pool;
 
   size_t index;
-  assert(get_index(&index, m_this_id, m_world_data->entity_pool->entity_id, m_world_data->entity_pool->size));
-  return (size_t)m_world_data->entity_pool->model[index];
+  assert(get_index(&index, m_this_id, ent_pool->entity_id, ent_pool->size));
+  return (size_t)ent_pool->model[index];
 }
 
 
@@ -176,23 +183,22 @@ void
 Entity::set_rigidbody_properties(const Physics::Rigidbody_properties props)
 {
   if(!is_valid()) { return; }
+  
+  auto ent_pool = m_world_data->entity_pool;
 
   size_t index;
-  assert(get_index(&index, m_this_id, m_world_data->entity_pool->entity_id, m_world_data->entity_pool->size));
+  assert(get_index(&index, m_this_id, ent_pool->entity_id, ent_pool->size));
   
-  const auto ent_pool = m_world_data->entity_pool;
+  auto rb_prop = &ent_pool->rigidbody_property[index];
+
+  *rb_prop = props;
+  rb_prop->id = m_this_id;
   
-  ent_pool->rigidbody_property[index] = props;
-  ent_pool->rigidbody_property[index].id = m_this_id;
-  if(ent_pool->rigidbody_collider[index].collider_type != Physics::Collider_type::none)
+  auto rb_coll = &ent_pool->rigidbody_collider[index];
+  
+  if(rb_coll->collider_type != Physics::Collider_type::none)
   {
-    rigidbody_update_pool_add_update(m_world_data->rigidbody_update_pool, m_this_id, ent_pool->rigidbody_collider[index], ent_pool->rigidbody_property[index]);
-//    rigidbody_pool_update_rb(m_world_data->rigidbody_pool,
-//                             m_this_id,
-//                             m_world_data->physics_world,
-//                             m_world_data,
-//                             ent_pool->rigidbody_property[index],
-//                             ent_pool->rigidbody_collider[index]);
+    rigidbody_update_pool_add_update(m_world_data->rigidbody_update_pool, m_this_id, *rb_coll, *rb_prop);
   }
 }
 
@@ -213,21 +219,17 @@ Entity::set_rigidbody_collider(const Physics::Rigidbody_collider collider)
 {
   if(!is_valid()) { return; }
 
-  size_t index;
-  assert(get_index(&index, m_this_id, m_world_data->entity_pool->entity_id, m_world_data->entity_pool->size));
-  
-  const auto ent_pool = m_world_data->entity_pool;
+  auto ent_pool = m_world_data->entity_pool;
 
-  ent_pool->rigidbody_collider[index] = collider;
+  size_t index;
+  assert(get_index(&index, m_this_id, ent_pool->entity_id, ent_pool->size));
   
-  rigidbody_update_pool_add_update(m_world_data->rigidbody_update_pool, m_this_id, ent_pool->rigidbody_collider[index], ent_pool->rigidbody_property[index]);
-//  
-//  rigidbody_pool_update_rb(m_world_data->rigidbody_pool,
-//                           m_this_id,
-//                           m_world_data->physics_world,
-//                           m_world_data,
-//                           ent_pool->rigidbody_property[index],
-//                           ent_pool->rigidbody_collider[index]);
+  auto rb_coll = &ent_pool->rigidbody_collider[index];
+  auto rb_prop = &ent_pool->rigidbody_property[index];
+  
+  *rb_coll = collider;
+  
+  rigidbody_update_pool_add_update(m_world_data->rigidbody_update_pool, m_this_id, *rb_coll, *rb_prop);
 }
 
 
@@ -236,8 +238,10 @@ Entity::get_rigidbody_collider() const
 {
   if(!is_valid()) { return Physics::Rigidbody_collider(); }
 
+  auto ent_pool = m_world_data->entity_pool;
+
   size_t index;
-  assert(get_index(&index, m_this_id, m_world_data->entity_pool->entity_id, m_world_data->entity_pool->size));
+  assert(get_index(&index, m_this_id, ent_pool->entity_id, ent_pool->size));
   return m_world_data->entity_pool->rigidbody_collider[index];
 }
 

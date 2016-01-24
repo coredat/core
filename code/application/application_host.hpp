@@ -12,7 +12,7 @@ namespace Application {
 
 
 /*!
-  Init's the host things.s
+  Init's the host things.
 */
 void
 host_initialize(
@@ -31,7 +31,8 @@ host_think(
   const Environment::Input *inputs,
   const float delta_time);
 
-}
+
+} // ns
 
 
 #endif // inc guard
