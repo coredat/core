@@ -52,6 +52,8 @@ namespace
 void
 Entity::set_parent(const ::Entity::Entity_id id)
 {
+  if(!is_valid()) { return; }
+
   size_t index;
   assert(get_index(&index, m_this_id, m_world_data->entity_pool->entity_id, m_world_data->entity_pool->size));
   m_world_data->entity_pool->parent_id[index] = id;
@@ -61,8 +63,10 @@ Entity::set_parent(const ::Entity::Entity_id id)
 Entity
 Entity::get_parent() const
 {
+  if(!is_valid()) { return Entity(); }
+
   Entity parent;
-  Detail::set_members(&parent, m_world_data, m_this_id);
+  Detail::set_entity_members(&parent, m_world_data, m_this_id);
   
   return parent;
 }
@@ -71,6 +75,8 @@ Entity::get_parent() const
 size_t
 Entity::get_number_of_children() const
 {
+  if(!is_valid()) { return 0; }
+
   size_t children_count(0);
   
   for(size_t i = 0; i < m_world_data->entity_pool->size; ++i)
@@ -90,6 +96,8 @@ Entity::get_number_of_children() const
 void
 Entity::set_transform(const math::transform &transform)
 {
+  if(!is_valid()) { return; }
+
   size_t index;
   assert(get_index(&index, m_this_id, m_world_data->entity_pool->entity_id, m_world_data->entity_pool->size));
   m_world_data->entity_pool->transform[index] = transform;
@@ -111,6 +119,8 @@ Entity::set_transform(const math::transform &transform)
 math::transform
 Entity::get_transform() const
 {
+  if(!is_valid()) { return math::transform(); }
+
   size_t index;
   assert(get_index(&index, m_this_id, m_world_data->entity_pool->entity_id, m_world_data->entity_pool->size));
   return m_world_data->entity_pool->transform[index];
@@ -120,6 +130,8 @@ Entity::get_transform() const
 void
 Entity::set_material_id(const size_t id)
 {
+  if(!is_valid()) { return; }
+
   size_t index;
   assert(get_index(&index, m_this_id, m_world_data->entity_pool->entity_id, m_world_data->entity_pool->size));
   m_world_data->entity_pool->texture[index] = (Resource::Texture::ENUM)id;
@@ -129,6 +141,8 @@ Entity::set_material_id(const size_t id)
 size_t
 Entity::get_material_id() const
 {
+  if(!is_valid()) { return 0; }
+
   size_t index;
   assert(get_index(&index, m_this_id, m_world_data->entity_pool->entity_id, m_world_data->entity_pool->size));
   return (size_t)m_world_data->entity_pool->texture[index];
@@ -138,6 +152,8 @@ Entity::get_material_id() const
 void
 Entity::set_model_id(const size_t id)
 {
+  if(!is_valid()) { return; }
+
   size_t index;
   assert(get_index(&index, m_this_id, m_world_data->entity_pool->entity_id, m_world_data->entity_pool->size));
   m_world_data->entity_pool->model[index] = (Resource::Model::ENUM)id;
@@ -147,6 +163,8 @@ Entity::set_model_id(const size_t id)
 size_t
 Entity::get_model_id() const
 {
+  if(!is_valid()) { return 0; }
+
   size_t index;
   assert(get_index(&index, m_this_id, m_world_data->entity_pool->entity_id, m_world_data->entity_pool->size));
   return (size_t)m_world_data->entity_pool->model[index];
@@ -156,6 +174,8 @@ Entity::get_model_id() const
 void
 Entity::set_rigidbody_properties(const Physics::Rigidbody_properties props)
 {
+  if(!is_valid()) { return; }
+
   size_t index;
   assert(get_index(&index, m_this_id, m_world_data->entity_pool->entity_id, m_world_data->entity_pool->size));
   
@@ -178,6 +198,8 @@ Entity::set_rigidbody_properties(const Physics::Rigidbody_properties props)
 Physics::Rigidbody_properties
 Entity::get_rigidbody_properties() const
 {
+  if(!is_valid()) { return Physics::Rigidbody_properties(); }
+
   size_t index;
   assert(get_index(&index, m_this_id, m_world_data->entity_pool->entity_id, m_world_data->entity_pool->size));
   return m_world_data->entity_pool->rigidbody_property[index];
@@ -187,6 +209,8 @@ Entity::get_rigidbody_properties() const
 void
 Entity::set_rigidbody_collider(const Physics::Rigidbody_collider collider)
 {
+  if(!is_valid()) { return; }
+
   size_t index;
   assert(get_index(&index, m_this_id, m_world_data->entity_pool->entity_id, m_world_data->entity_pool->size));
   
@@ -206,6 +230,8 @@ Entity::set_rigidbody_collider(const Physics::Rigidbody_collider collider)
 Physics::Rigidbody_collider
 Entity::get_rigidbody_collider() const
 {
+  if(!is_valid()) { return Physics::Rigidbody_collider(); }
+
   size_t index;
   assert(get_index(&index, m_this_id, m_world_data->entity_pool->entity_id, m_world_data->entity_pool->size));
   return m_world_data->entity_pool->rigidbody_collider[index];

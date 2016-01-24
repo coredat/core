@@ -17,7 +17,7 @@ Entity
 world_create_new_entity(World *world_data, const uint32_t type_id)
 {
   Entity new_entity;
-  Detail::set_members(&new_entity, world_data, ::Entity::Entity_id{type_id, ++instance});
+  Detail::set_entity_members(&new_entity, world_data, ::Entity::Entity_id{type_id, ++instance});
   
   // Find empty index.
   size_t empty_index;
@@ -38,7 +38,7 @@ world_find_entity(Entity *out_entity, World *world_data, const ::Entity::Entity_
   size_t index;
   if(::Entity::find_index_linearly(&index, id, world_data->entity_pool->entity_id, world_data->entity_pool->size))
   {
-    Detail::set_members(out_entity, world_data, id);
+    Detail::set_entity_members(out_entity, world_data, id);
   }
 }
 

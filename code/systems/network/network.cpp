@@ -283,6 +283,10 @@ poll_events(Connection *connection,
           event.peer -> data = NULL;
           break;
         }
+        
+        default:
+          break; // Just to stop warning.
+        
       }
   }
 }

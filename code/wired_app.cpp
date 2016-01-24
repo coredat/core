@@ -11,7 +11,6 @@
 #include <systems/entity/generic_id.hpp>
 
 #include <data/data.hpp>
-#include <data/entity.hpp>
 
 #include <renderer/renderer.hpp>
 #include <renderer/simple_renderer/simple_renderer.hpp>

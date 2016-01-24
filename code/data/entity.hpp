@@ -30,7 +30,7 @@ namespace Detail
   };
   
   inline void
-  set_members(Data::Entity *ent, Data::World *world_data, ::Entity::Entity_id id)
+  set_entity_members(Data::Entity *ent, Data::World *world_data, ::Entity::Entity_id id)
   {
     auto private_entity          = reinterpret_cast<Private_entity*>(ent);
     private_entity->m_world_data = world_data;

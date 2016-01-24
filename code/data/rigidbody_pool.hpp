@@ -24,9 +24,36 @@ struct Rigidbody_pool
 }; // ns
 
 
+struct Rigidbody_update
+{
+  ::Entity::Entity_id             parent_id;
+  Physics::Rigidbody_collider     collider_info;
+  Physics::Rigidbody_properties   properties;
+};
+
+
+struct Rigidbody_update_pool
+{
+  ::Entity::Entity_id entity_id[RIGIDBODY_POOL_SIZE];
+  Rigidbody_update    rb_updates[RIGIDBODY_POOL_SIZE];
+  
+  size_t              size = {0};
+  const size_t        capacity = RIGIDBODY_POOL_SIZE;
+};
+
 
 void
 rigidbody_pool_init(Rigidbody_pool *pool);
+
+
+void
+rigidbody_pool_add_update(Rigidbody_update_pool *update_pool,
+                          const ::Entity::Entity_id id,
+                          const Physics::Rigidbody_collider collider,
+                          const Physics::Rigidbody_properties props);
+
+void
+rigidbody_pool_process_updates(Physics::World *phy_world, Data::World *data, Rigidbody_update_pool *update_pool, Rigidbody_pool *rb_pool);
 
 
 void
