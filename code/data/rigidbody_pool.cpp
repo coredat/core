@@ -35,13 +35,13 @@ rigidbody_update_pool_add_update(Rigidbody_update_pool *update_pool,
   size_t index;
   if(!::Entity::find_index_linearly(&index, id, update_pool->entity_id, update_pool->size))
   {
-    if(!::Entity::find_index_linearly(&index, ::Entity::invalid_id(), update_pool->entity_id, update_pool->size))
+    if(!::Entity::find_index_linearly(&index, ::Entity::invalid_id(), update_pool->entity_id, update_pool->capacity))
     {
       // Failed to find space.
       assert(false);
       return;
     }
-    
+    update_pool->size++;
     update_pool->entity_id[index] = id;
   }
   
@@ -50,8 +50,6 @@ rigidbody_update_pool_add_update(Rigidbody_update_pool *update_pool,
   rb_update->parent_id     = ::Entity::invalid_id();
   rb_update->collider_info = collider;
   rb_update->properties    = props;
-  
-  update_pool->size++;
 }
 
 
@@ -60,23 +58,25 @@ rigidbody_pool_process_updates(Physics::World *phy_world, Data::World *data, Rig
 {
   for(size_t i = 0; i < update_pool->size; ++i)
   {
-    auto rb = &update_pool[i];
+    auto rb = &update_pool->rb_updates[i];
   
     // Find entity in rb_pool
     size_t index;
     if(!::Entity::find_index_linearly(&index, update_pool->entity_id[i], rb_pool->entity_id, rb_pool->size))
     {
       ::Entity::find_index_linearly(&index, ::Entity::invalid_id(), rb_pool->entity_id, rb_pool->size);
+      rb_pool->entity_id[index] = update_pool->entity_id[i];
     }
     
     // Create motion
-    rb_pool[index].rigidbody->motion_state.reset(new Physics::Motion_state(update_pool->entity_id[i], data->entity_pool));
+    rb_pool->rigidbody[index].motion_state.reset(new Physics::Motion_state(update_pool->entity_id[i], data->entity_pool));
     
     // Create collider.
-    Physics::colliders_generate(&rb->rb_updates->collider_info, 1, rb_pool[index].rigidbody, 1);
+    Physics::colliders_generate(&rb->collider_info, 1, &rb_pool->rigidbody[index], 1);
     
     // Add to world.
-    Physics::world_add_rigidbodies(phy_world, &rb->rb_updates->properties, 1, &rb_pool->rigidbody[index], 1);
+    
+    Physics::world_add_rigidbodies(phy_world, &rb->properties, 1, &rb_pool->rigidbody[index], 1);
   }
 }
 

@@ -79,6 +79,9 @@ main(int argc, char *argv[])
   Data::Rigidbody_pool rigidbody_pool;
   Data::rigidbody_pool_init(&rigidbody_pool);
   
+  Data::Rigidbody_update_pool rigidbody_update_pool;
+  Data::rigidbody_update_pool_init(&rigidbody_update_pool);
+  
   Data::Logic_pool logic_pool;
   Data::logic_pool_init(&logic_pool);
   
@@ -93,6 +96,7 @@ main(int argc, char *argv[])
     world_data.entity_pool    = &world_entities;
     world_data.logic_pool     = &logic_pool;
     world_data.rigidbody_pool = &rigidbody_pool;
+    world_data.rigidbody_update_pool = &rigidbody_update_pool;
     world_data.texture_pool   = &texture_pool;
     world_data.model_pool     = &model_pool;
     world_data.physics_world  = &phy_world;

@@ -10,6 +10,7 @@ struct Model_pool;
 struct Texture_pool;
 struct Logic_pool;
 struct Rigidbody_pool;
+struct Rigidbody_update_pool;
 struct World;
 
 class Entity;

@@ -106,12 +106,13 @@ Entity::set_transform(const math::transform &transform)
   
   if(ent_pool->rigidbody_collider[index].collider_type != Physics::Collider_type::none)
   {
-    rigidbody_pool_update_rb(m_world_data->rigidbody_pool,
-                             m_this_id,
-                             m_world_data->physics_world,
-                             m_world_data,
-                             ent_pool->rigidbody_property[index],
-                             ent_pool->rigidbody_collider[index]);
+    rigidbody_update_pool_add_update(m_world_data->rigidbody_update_pool, m_this_id, ent_pool->rigidbody_collider[index], ent_pool->rigidbody_property[index]);
+//    rigidbody_pool_update_rb(m_world_data->rigidbody_pool,
+//                             m_this_id,
+//                             m_world_data->physics_world,
+//                             m_world_data,
+//                             ent_pool->rigidbody_property[index],
+//                             ent_pool->rigidbody_collider[index]);
   }
 }
 
@@ -185,12 +186,13 @@ Entity::set_rigidbody_properties(const Physics::Rigidbody_properties props)
   ent_pool->rigidbody_property[index].id = m_this_id;
   if(ent_pool->rigidbody_collider[index].collider_type != Physics::Collider_type::none)
   {
-    rigidbody_pool_update_rb(m_world_data->rigidbody_pool,
-                             m_this_id,
-                             m_world_data->physics_world,
-                             m_world_data,
-                             ent_pool->rigidbody_property[index],
-                             ent_pool->rigidbody_collider[index]);
+    rigidbody_update_pool_add_update(m_world_data->rigidbody_update_pool, m_this_id, ent_pool->rigidbody_collider[index], ent_pool->rigidbody_property[index]);
+//    rigidbody_pool_update_rb(m_world_data->rigidbody_pool,
+//                             m_this_id,
+//                             m_world_data->physics_world,
+//                             m_world_data,
+//                             ent_pool->rigidbody_property[index],
+//                             ent_pool->rigidbody_collider[index]);
   }
 }
 
@@ -218,12 +220,14 @@ Entity::set_rigidbody_collider(const Physics::Rigidbody_collider collider)
 
   ent_pool->rigidbody_collider[index] = collider;
   
-  rigidbody_pool_update_rb(m_world_data->rigidbody_pool,
-                           m_this_id,
-                           m_world_data->physics_world,
-                           m_world_data,
-                           ent_pool->rigidbody_property[index],
-                           ent_pool->rigidbody_collider[index]);
+  rigidbody_update_pool_add_update(m_world_data->rigidbody_update_pool, m_this_id, ent_pool->rigidbody_collider[index], ent_pool->rigidbody_property[index]);
+//  
+//  rigidbody_pool_update_rb(m_world_data->rigidbody_pool,
+//                           m_this_id,
+//                           m_world_data->physics_world,
+//                           m_world_data,
+//                           ent_pool->rigidbody_property[index],
+//                           ent_pool->rigidbody_collider[index]);
 }
 
 

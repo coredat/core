@@ -47,11 +47,15 @@ rigidbody_pool_init(Rigidbody_pool *pool);
 
 
 void
-rigidbody_pool_add_update(Rigidbody_update_pool *update_pool,
-                          const ::Entity::Entity_id id,
-                          const Physics::Rigidbody_collider collider,
-                          const Physics::Rigidbody_properties props);
+rigidbody_update_pool_init(Rigidbody_update_pool *pool);
 
+
+void
+rigidbody_update_pool_add_update(Rigidbody_update_pool *update_pool,
+                                 const ::Entity::Entity_id id,
+                                 const Physics::Rigidbody_collider collider,
+                                 const Physics::Rigidbody_properties props);
+                                 
 void
 rigidbody_pool_process_updates(Physics::World *phy_world, Data::World *data, Rigidbody_update_pool *update_pool, Rigidbody_pool *rb_pool);
 

@@ -114,6 +114,9 @@ host_think(
     reinterpret_cast<Logic::Base*>(obj)->on_update(delta_time); // TODO: reinter_cast?
   }
 
+  // Push in new phy entities.
+  Data::rigidbody_pool_process_updates(world->physics_world, world, world->rigidbody_update_pool, world->rigidbody_pool);
+  Data::rigidbody_update_pool_init(world->rigidbody_update_pool);
 
   Network::send_packet(connection, sizeof(world->entity_pool->transform), world->entity_pool->transform, false);
 
