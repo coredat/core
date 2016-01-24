@@ -21,8 +21,8 @@ struct Logic_pool
   std::vector<void*> objects_in_use; // Using vectors while prototyping.
   std::vector<void*> free_list;
   
-  const std::size_t storage_size = LOGIC_POOL_STORAGE_SIZE;
-  const std::size_t size = LOGIC_POOL_SIZE;
+  const std::size_t storage_size  = LOGIC_POOL_STORAGE_SIZE;
+  const std::size_t size          = LOGIC_POOL_SIZE;
 };
 
 

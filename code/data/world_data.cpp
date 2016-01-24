@@ -16,16 +16,8 @@ namespace Data {
 Entity
 world_create_new_entity(World *world_data, const uint32_t type_id)
 {
-  struct Private_access
-  {
-    ENTITY_MEMBERS
-  };
-
   Entity new_entity;
-  
-  Private_access *set = reinterpret_cast<Private_access*>(&new_entity);
-  set->m_this_id      = ::Entity::Entity_id{type_id, ++instance};
-  set->m_world_data   = world_data;
+  Detail::set_members(&new_entity, world_data, ::Entity::Entity_id{type_id, ++instance});
   
   // Find empty index.
   size_t empty_index;
@@ -37,6 +29,17 @@ world_create_new_entity(World *world_data, const uint32_t type_id)
   world_data->entity_pool->entity_id[empty_index] = new_entity.get_id();
   
   return new_entity;
+}
+
+
+void
+world_find_entity(Entity *out_entity, World *world_data, const ::Entity::Entity_id id)
+{
+  size_t index;
+  if(::Entity::find_index_linearly(&index, id, world_data->entity_pool->entity_id, world_data->entity_pool->size))
+  {
+    Detail::set_members(out_entity, world_data, id);
+  }
 }
 
 

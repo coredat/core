@@ -19,6 +19,13 @@ Entity::get_id() const
 }
 
 
+bool
+Entity::is_valid() const
+{
+  return !(m_this_id == ::Entity::invalid_id());
+}
+
+
 namespace
 {
   inline bool
@@ -45,35 +52,39 @@ namespace
 void
 Entity::set_parent(const ::Entity::Entity_id id)
 {
-  // TODO: Check id is a valid parent.
-  // TODO: Need to queue this change as rbs will need sorting.
-  // TODO: Param check.
-  
   size_t index;
   assert(get_index(&index, m_this_id, m_world_data->entity_pool->entity_id, m_world_data->entity_pool->size));
   m_world_data->entity_pool->parent_id[index] = id;
-  
-//  //if(id != ::Entity::invalid_id())
-//  {
-//    size_t parent_index;
-//    assert(get_index(&parent_index, id, m_world_data));
-//  
-//    // Get Parent rb and child rb and ask physics to attach them.
-//    auto child_rb = &m_world_data->entity_pool->rigidbody[index];
-//    auto parent_rb = &m_world_data->entity_pool->rigidbody[parent_index];
-//    
-//    Physics::world_join_rigidbodies(m_world_data->physics_world, parent_rb, child_rb);
-//  }
 }
 
 
-//::Entity::Entity_id
-//Entity::get_parent() const
-//{
-//  size_t index;
-//  assert(get_index(&index, m_this_id, m_world_data));
-//  return m_world_data->entity_pool->parent_id[index];
-//}
+Entity
+Entity::get_parent() const
+{
+  Entity parent;
+  Detail::set_members(&parent, m_world_data, m_this_id);
+  
+  return parent;
+}
+
+
+size_t
+Entity::get_number_of_children() const
+{
+  size_t children_count(0);
+  
+  for(size_t i = 0; i < m_world_data->entity_pool->size; ++i)
+  {
+    const ::Entity::Entity_id id = m_world_data->entity_pool->parent_id[i];
+  
+    if(id == m_this_id)
+    {
+      ++children_count;
+    }
+  }
+  
+  return children_count;
+}
 
 
 void
@@ -87,19 +98,12 @@ Entity::set_transform(const math::transform &transform)
   
   if(ent_pool->rigidbody_collider[index].collider_type != Physics::Collider_type::none)
   {
-    //m_world_data->rigidbody_pool->rigidbody[index].motion_state.reset(new Physics::Motion_state(m_this_id, ent_pool));
-    
     rigidbody_pool_update_rb(m_world_data->rigidbody_pool,
                              m_this_id,
                              m_world_data->physics_world,
                              m_world_data,
                              ent_pool->rigidbody_property[index],
                              ent_pool->rigidbody_collider[index]);
-  
-//    pending_rigidbody_pool_push(m_world_data->pending_rbs,
-//                                ent_pool->rigidbody_property[index],
-//                                ent_pool->rigidbody_collider[index],
-//                                &ent_pool->rigidbody[index]);
   }
 }
 
@@ -196,11 +200,6 @@ Entity::set_rigidbody_collider(const Physics::Rigidbody_collider collider)
                            m_world_data,
                            ent_pool->rigidbody_property[index],
                            ent_pool->rigidbody_collider[index]);
-  
-//  pending_rigidbody_pool_push(m_world_data->pending_rbs,
-//                              ent_pool->rigidbody_property[index],
-//                              ent_pool->rigidbody_collider[index],
-//                              &ent_pool->rigidbody[index]);
 }
 
 

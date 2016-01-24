@@ -1,5 +1,6 @@
 #include "rigidbody.hpp"
 #include <assert.h>
+#include <algorithm>
 
 
 namespace Physics {

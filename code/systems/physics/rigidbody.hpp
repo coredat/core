@@ -3,8 +3,10 @@
 
 
 #include "motion_state.hpp"
+#include "rigidbody_properties.hpp"
 #include <btBulletDynamicsCommon.h>
 #include <memory>
+#include <stddef.h>
 
 
 namespace Physics {
@@ -17,7 +19,7 @@ struct Rigidbody
 {
   std::unique_ptr<Motion_state>       motion_state;
   std::unique_ptr<btRigidBody>        rigidbody;
-  std::unique_ptr<btCollisionShape>   shape;
+  std::unique_ptr<btCollisionShape>   shape; // Collider shapes? Perhaps move these into the entity.
   std::unique_ptr<btCompoundShape>    compound_shape;
 };
 

@@ -22,6 +22,22 @@
 
 namespace Data {
 
+namespace Detail
+{
+  struct Private_entity
+  {
+    ENTITY_MEMBERS
+  };
+  
+  inline void
+  set_members(Data::Entity *ent, Data::World *world_data, ::Entity::Entity_id id)
+  {
+    auto private_entity          = reinterpret_cast<Private_entity*>(ent);
+    private_entity->m_world_data = world_data;
+    private_entity->m_this_id    = id;
+  }
+} // ns
+
 
 class Entity final
 {
@@ -30,9 +46,11 @@ public:
   explicit                      Entity();
   
   ::Entity::Entity_id           get_id() const;
+  bool                          is_valid() const;
   
   void                          set_parent(const ::Entity::Entity_id id);
   Entity                        get_parent() const;
+  size_t                        get_number_of_children() const;
 
   void                          set_transform(const math::transform &transform);
   math::transform               get_transform() const;

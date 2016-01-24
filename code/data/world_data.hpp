@@ -4,6 +4,7 @@
 
 #include "data_fwd.hpp"
 #include <systems/physics/physics_fwd.hpp>
+#include <systems/entity/entity_id.hpp>
 #include <stdint.h>
 
 
@@ -23,6 +24,10 @@ struct World
 
 Entity
 world_create_new_entity(World *world_data, const uint32_t type_id);
+
+
+void
+world_find_entity(Entity *out_entity, World *world_data, const ::Entity::Entity_id id);
 
 
 
