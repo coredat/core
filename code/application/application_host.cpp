@@ -2,7 +2,6 @@
 #include "entity_factory.hpp"
 #include "game_logic/actor_local_player.hpp" // KILL!
 #include "game_logic/actor_network_player.hpp" // KILL!
-#include <data/actor/actor.hpp>
 #include <data/data.hpp>
 #include <systems/network/network.hpp>
 #include <systems/entity/entity_id.hpp>
@@ -86,8 +85,8 @@ host_think(
     0,
     [&](const Network::Event_id id, const void *data, const std::size_t size_of_data)
   {
-    const Actor::Input_cmds *cmds = reinterpret_cast<const Actor::Input_cmds*>(data);
-    Actor::input(*cmds, delta_time, kine_actor_network, world->entity_pool, world->entity_pool->size, world->physics_world);
+//    const Actor::Input_cmds *cmds = reinterpret_cast<const Actor::Input_cmds*>(data);
+//    Actor::input(*cmds, delta_time, kine_actor_network, world->entity_pool, world->entity_pool->size, world->physics_world);
   },
     &std::cout);
 

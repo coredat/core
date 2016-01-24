@@ -22,8 +22,6 @@
 
 #include <iostream>
 
-#include <data/actor/actor.hpp> // what to do with this.
-
 #include <application/application_client.hpp>
 #include <application/application_host.hpp>
 #include <application/application_common.hpp>
