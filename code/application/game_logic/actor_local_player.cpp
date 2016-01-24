@@ -83,7 +83,7 @@ Actor_local_player::on_update(const float dt)
     {
       // Draw cube at that point.
       Data::Entity cube_entity;
-      Data::world_find_entity(&cube_entity, world_data, cube_id);
+      Data::world_find_entity(world_data, &cube_entity, cube_id);
       
       if(cube_entity.is_valid())
       {
@@ -118,7 +118,7 @@ Actor_local_player::on_update(const float dt)
     const float delta_time = dt;
     
     Data::Entity ent;
-    Data::world_find_entity(&ent, world_data, id);
+    Data::world_find_entity(world_data, &ent, id);
     
     math::vec3 accum_movement = math::vec3_zero();
     const math::transform move_trans = ent.get_transform();

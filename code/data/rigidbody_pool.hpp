@@ -15,6 +15,11 @@
 namespace Data {
 
 
+/*!
+  Holds the rigidbodies active in the scene.
+  We only need to hold on to these for cleanup,
+  as bullet will deal with everything else.
+*/
 struct Rigidbody_pool
 {
   ::Entity::Entity_id               entity_id[RIGIDBODY_POOL_SIZE];
@@ -24,6 +29,11 @@ struct Rigidbody_pool
 }; // ns
 
 
+
+/*!
+  Update structure holds the things we need
+  to update a rigidbody.
+*/
 struct Rigidbody_update
 {
   ::Entity::Entity_id             parent_id;
@@ -32,6 +42,11 @@ struct Rigidbody_update
 };
 
 
+/*!
+  Rigidbodies that need to be updated.
+  this is a temp storage place. The engine will
+  pick up these at a later date.
+*/
 struct Rigidbody_update_pool
 {
   ::Entity::Entity_id entity_id[RIGIDBODY_POOL_SIZE];
@@ -42,31 +57,49 @@ struct Rigidbody_update_pool
 };
 
 
+/*!
+ Initialises the entire rb pool.
+*/
 void
 rigidbody_pool_init(Rigidbody_pool *pool);
 
 
+/*!
+ Initialises the entire pending rb pool.
+*/
 void
 rigidbody_update_pool_init(Rigidbody_update_pool *pool);
 
 
+/*!
+  Clears out the data that has been used.
+*/
 void
+rigidbody_update_pool_clear(Rigidbody_update_pool *pool);
+
+
+/*!
+  Pushes a new entity into the update pool so it can be
+  created later.
+ 
+  \return true of false if it was a success or failure.
+*/
+bool
 rigidbody_update_pool_add_update(Rigidbody_update_pool *update_pool,
                                  const ::Entity::Entity_id id,
                                  const Physics::Rigidbody_collider collider,
                                  const Physics::Rigidbody_properties props);
-                                 
+
+/*!
+  Process thes pending updates.
+*/
 void
-rigidbody_pool_process_updates(Physics::World *phy_world, Data::World *data, Rigidbody_update_pool *update_pool, Rigidbody_pool *rb_pool);
+rigidbody_pool_process_updates(Physics::World *phy_world,
+                               Data::World *data,
+                               Rigidbody_update_pool *update_pool,
+                               Rigidbody_pool *rb_pool);
 
 
-void
-rigidbody_pool_update_rb(Rigidbody_pool *pool,
-                         const ::Entity::Entity_id id,
-                         Physics::World *world,
-                         Data::World *data,                         
-                         const Physics::Rigidbody_properties &props,
-                         const Physics::Rigidbody_collider &collider);
 
 } // ns
 

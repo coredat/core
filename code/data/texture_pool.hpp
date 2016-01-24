@@ -3,7 +3,7 @@
 
 
 #include <renderer/graphics_api/ogl/ogl_texture.hpp>
-#include <cstddef>
+#include <stddef.h>
 
 
 #define SIZE_OF_TEXTURE_POOL 64
@@ -17,7 +17,7 @@ struct Texture_pool
   std::size_t         id[SIZE_OF_TEXTURE_POOL];
   Ogl::Texture        texture[SIZE_OF_TEXTURE_POOL];
   
-  const std::size_t   size = SIZE_OF_TEXTURE_POOL;
+  const size_t        size = SIZE_OF_TEXTURE_POOL;
 }; // struct
 
 
@@ -33,7 +33,7 @@ texture_pool_init(Texture_pool *pool);
   Find the texture for the given id.
 */
 const Ogl::Texture*
-texture_pool_find(const Texture_pool *pool, const std::size_t id);
+texture_pool_find(const Texture_pool *pool, const size_t id);
 
 
 } // ns

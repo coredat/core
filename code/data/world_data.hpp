@@ -23,12 +23,28 @@ struct World
 }; // struct
 
 
-Entity
-world_create_new_entity(World *world_data, const uint32_t type_id);
+
+/*!
+ Create a new entity. This abstraction will insert the correct
+ data elements into to the world.
+ \param world_data Is the world in which we are entering data.
+ \param out_entity is the result of the find.
+ \param type_id The id of the element we are inserting into the world.
+ \return returns true if we created the entity.
+*/
+bool
+world_create_new_entity(World *world_data, Entity *out_entity, const uint32_t type_id);
 
 
-void
-world_find_entity(Entity *out_entity, World *world_data, const ::Entity::Entity_id id);
+/*!
+  Find an existing entity.
+  \param world_data is the world in which to search.
+  \param out_entity is the result of the find.
+  \param id is the entity we are searching.
+  \return true or false depending on if we found it or not.
+*/
+bool
+world_find_entity(World *world_data, Entity *out_entity, const ::Entity::Entity_id id);
 
 
 

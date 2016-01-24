@@ -25,6 +25,16 @@ rigidbody_update_pool_init(Rigidbody_update_pool *pool)
 
 
 void
+rigidbody_update_pool_clear(Rigidbody_update_pool *pool)
+{
+  // Only clear out what was used in the pool
+  memset(pool->entity_id, 0, sizeof(pool->entity_id[0]) * pool->size);
+  memset(pool->rb_updates, 0, sizeof(pool->rb_updates[0]) * pool->size);
+  pool->size = 0;
+}
+
+
+bool
 rigidbody_update_pool_add_update(Rigidbody_update_pool *update_pool,
                                  const ::Entity::Entity_id id,
                                  const Physics::Rigidbody_collider collider,
@@ -39,7 +49,7 @@ rigidbody_update_pool_add_update(Rigidbody_update_pool *update_pool,
     {
       // Failed to find space.
       assert(false);
-      return;
+      return false;
     }
     update_pool->size++;
     update_pool->entity_id[index] = id;
@@ -50,11 +60,16 @@ rigidbody_update_pool_add_update(Rigidbody_update_pool *update_pool,
   rb_update->parent_id     = ::Entity::invalid_id();
   rb_update->collider_info = collider;
   rb_update->properties    = props;
+  
+  return true;
 }
 
 
 void
-rigidbody_pool_process_updates(Physics::World *phy_world, Data::World *data, Rigidbody_update_pool *update_pool, Rigidbody_pool *rb_pool)
+rigidbody_pool_process_updates(Physics::World *phy_world,
+                               Data::World *data,
+                               Rigidbody_update_pool *update_pool,
+                               Rigidbody_pool *rb_pool)
 {
   for(size_t i = 0; i < update_pool->size; ++i)
   {
@@ -79,36 +94,6 @@ rigidbody_pool_process_updates(Physics::World *phy_world, Data::World *data, Rig
     Physics::world_add_rigidbodies(phy_world, &rb->properties, 1, &rb_pool->rigidbody[index], 1);
   }
 }
-
-
-void
-rigidbody_pool_update_rb(Rigidbody_pool *pool,
-                         const ::Entity::Entity_id id,
-                         Physics::World *world,
-                         Data::World *data,
-                         const Physics::Rigidbody_properties &props,
-                         const Physics::Rigidbody_collider &collider)
-{
-  // Find index or a new space.
-  size_t index;
-  if(!::Entity::find_index_linearly(&index, id, pool->entity_id, pool->size))
-  {
-    ::Entity::find_index_linearly(&index, ::Entity::invalid_id(), pool->entity_id, pool->size);
-    pool->entity_id[index] = id;
-  }
-  
-  Physics::world_remove_rigidbody(world, &pool->rigidbody[index]);
-  
-  pool->rigidbody[index].motion_state.reset(new Physics::Motion_state(id, data->entity_pool));
-  
-  // Generate collider
-  Physics::colliders_generate(&collider, 1, &pool->rigidbody[index], 1);
-  
-  // Add rigidbody
-  Physics::world_add_rigidbodies(world, &props, 1, &pool->rigidbody[index], 1);
-}
-
-
 
 
 } // ns

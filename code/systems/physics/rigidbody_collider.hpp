@@ -3,7 +3,7 @@
 
 
 #include "physics_fwd.hpp"
-#include <cstddef>
+#include <stddef.h>
 
 
 namespace Physics {
@@ -26,17 +26,21 @@ struct Unknown
   float args[4];
 };
 
+
 struct Static_plane
 {
+
   float normal[3];
   float offset;
 };
+
 
 struct Cube
 {
   float extents[3];
   float not_used;
 };
+
 
 struct Capsule
 {
@@ -69,9 +73,9 @@ struct Rigidbody_collider
 */
 void
 colliders_generate(const Rigidbody_collider colliders[],
-                   const std::size_t number_of_colliders,
+                   const size_t number_of_colliders,
                    Rigidbody out_rb_info[],
-                   const std::size_t number_of_outs);
+                   const size_t number_of_outs);
 
 
 } // ns

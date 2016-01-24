@@ -14,7 +14,7 @@ texture_pool_init(Texture_pool *pool)
 
 
 const Ogl::Texture*
-texture_pool_find(const Texture_pool *pool, const std::size_t id)
+texture_pool_find(const Texture_pool *pool, const size_t id)
 {
   assert(pool);
 

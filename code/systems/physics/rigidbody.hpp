@@ -11,9 +11,16 @@
 
 namespace Physics {
 
+
 /*!
   Bullet has a you allocate you destroy policy.
   We are just holing on to these so we can clean up memory.
+  
+  TODO:
+    We know the size of these things, unique_ptr is not required.
+    We could also split this up so we can build colliders in batches,
+    this could be handy if we wish to stream content in and out.
+
 */
 struct Rigidbody
 {

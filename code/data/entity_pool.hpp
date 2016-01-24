@@ -18,10 +18,13 @@
 namespace Data {
 
 
+/*!
+  Generic entity storeage.
+*/
 struct Entity_pool
 {
   ::Entity::Entity_id             entity_id[ENTITY_POOL_SIZE];
-  ::Entity::Entity_id             parent_id[ENTITY_POOL_SIZE]; // Common case? motion state can't go through children easily.
+  ::Entity::Entity_id             parent_id[ENTITY_POOL_SIZE];
   
   math::transform                 transform[ENTITY_POOL_SIZE];
   
@@ -38,7 +41,7 @@ struct Entity_pool
 
 
 /*!
-  Initializes the pool to all zeros
+  Initializes the pool to all zeros.
 */
 void
 entity_pool_init(Entity_pool *pool);

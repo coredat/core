@@ -46,6 +46,11 @@ void
 world_step(World *world, const float dt);
 
 
+/*!
+  Remove a rigidbody from the physics world.
+  \param world physics world.
+  \param rb rigidbody to be removed.
+*/
 void
 world_remove_rigidbody(World *world, Rigidbody *rb);
 
