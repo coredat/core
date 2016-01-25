@@ -19,7 +19,7 @@ namespace Data {
 
 
 /*!
-  Generic entity storeage.
+  Generic entity storeage. aka the scene graph.
 */
 struct Entity_pool
 {
@@ -41,10 +41,51 @@ struct Entity_pool
 
 
 /*!
+  Entities that have 'changed' in the tree in the last frame.
+*/
+
+enum class Entity_graph_change
+{
+  inserted,
+  moved,
+  removed,
+};
+
+
+struct Entity_change
+{
+  Entity_graph_change change_type;
+  ::Entity::Entity_id entity_id;
+};
+
+
+struct Entity_graph_changes_pool
+{
+  Entity_change       entity_event[ENTITY_POOL_SIZE];
+  size_t              size;
+  const size_t        capacity = ENTITY_POOL_SIZE;
+};
+
+
+/*!
   Initializes the pool to all zeros.
 */
 void
 entity_pool_init(Entity_pool *pool);
+
+
+/*!
+  Graph changes events
+*/
+void
+entity_graph_change_pool_init(Entity_graph_changes_pool *pool);
+
+
+/*!
+  Push pending graph changes in
+*/
+void
+entity_graph_change_push(Entity_graph_changes_pool *pool, const ::Entity::Entity_id entity_id, Entity_graph_change change_type);
 
 
 } // ns

@@ -6,6 +6,7 @@ namespace Data {
 
 
 struct Entity_pool;
+struct Entity_graph_changes_pool;
 struct Model_pool;
 struct Texture_pool;
 struct Logic_pool;

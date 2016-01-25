@@ -79,6 +79,9 @@ host_think(
   const Environment::Input *inputs,
   const float delta_time)
 {
+  // Reset the entity pool for new changes.
+  Data::entity_graph_change_pool_init(world->entity_graph_changes);
+  
   Physics::world_step(world->physics_world, delta_time);
 
   Network::poll_events(connection,

@@ -13,13 +13,14 @@ namespace Data {
 
 struct World
 {
-  Entity_pool             *entity_pool;
-  Logic_pool              *logic_pool;
-  Rigidbody_pool          *rigidbody_pool;
-  Rigidbody_update_pool   *rigidbody_update_pool;
-  Texture_pool            *texture_pool;
-  Model_pool              *model_pool;
-  Physics::World          *physics_world;
+  Entity_pool                 *entity_pool;
+  Entity_graph_changes_pool   *entity_graph_changes;
+  Logic_pool                  *logic_pool;
+  Rigidbody_pool              *rigidbody_pool;
+  Rigidbody_update_pool       *rigidbody_update_pool;
+  Texture_pool                *texture_pool;
+  Model_pool                  *model_pool;
+  Physics::World              *physics_world;
 }; // struct
 
 

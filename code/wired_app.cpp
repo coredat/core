@@ -89,15 +89,19 @@ main(int argc, char *argv[])
   Data::Entity_pool world_entities;
   Data::entity_pool_init(&world_entities);
   
+  Data::Entity_graph_changes_pool graph_changes;
+  Data::entity_graph_change_pool_init(&graph_changes);
+  
   Data::World world_data;
   {
-    world_data.entity_pool    = &world_entities;
-    world_data.logic_pool     = &logic_pool;
-    world_data.rigidbody_pool = &rigidbody_pool;
-    world_data.rigidbody_update_pool = &rigidbody_update_pool;
-    world_data.texture_pool   = &texture_pool;
-    world_data.model_pool     = &model_pool;
-    world_data.physics_world  = &phy_world;
+    world_data.entity_pool            = &world_entities;
+    world_data.entity_graph_changes   = &graph_changes;
+    world_data.logic_pool             = &logic_pool;
+    world_data.rigidbody_pool         = &rigidbody_pool;
+    world_data.rigidbody_update_pool  = &rigidbody_update_pool;
+    world_data.texture_pool           = &texture_pool;
+    world_data.model_pool             = &model_pool;
+    world_data.physics_world          = &phy_world;
   }
   
   

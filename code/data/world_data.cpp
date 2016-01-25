@@ -25,7 +25,13 @@ world_create_new_entity(World *world_data, Entity *out_entity, const uint32_t ty
                                    world_data->entity_pool->size))
   {
     Detail::set_entity_members(out_entity, world_data, ::Entity::Entity_id{type_id, ++instance});
+    
     world_data->entity_pool->entity_id[empty_index] = out_entity->get_id();
+
+    entity_graph_change_push(world_data->entity_graph_changes,
+                             out_entity->get_id(),
+                             Entity_graph_change::inserted);
+
     return true;
   }
   
