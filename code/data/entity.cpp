@@ -34,14 +34,11 @@ namespace
       return false;
     }
     
-    if(::Entity::find_index_linearly(index,
-                                     id,
-                                     ents,
-                                     size))
-                                     {
-                                        return true;
-                                     }
-      
+    if(::Entity::find_index_linearly(index, id, ents, size))
+    {
+      return true;
+    }
+    
     return false;
   }
 }
@@ -52,9 +49,40 @@ Entity::set_parent(const ::Entity::Entity_id id)
 {
   if(!is_valid()) { return; }
 
+  auto ent_pool = m_world_data->entity_pool;
+
   size_t index;
-  assert(get_index(&index, m_this_id, m_world_data->entity_pool->entity_id, m_world_data->entity_pool->size));
-  m_world_data->entity_pool->parent_id[index] = id;
+  assert(get_index(&index, m_this_id, ent_pool->entity_id, ent_pool->size));
+  ent_pool->parent_id[index] = id;
+  
+  // If this object has a colldier attached to it,
+  // we need to update the rb.
+  auto rb_coll = &ent_pool->rigidbody_collider[index];
+  
+  if(rb_coll->collider_type != Physics::Collider_type::none)
+  {
+    // Add parents
+    // TODO We will need to do this with all the children also.
+    ::Entity::Entity_id parent = id;
+    while(parent != ::Entity::invalid_id())
+    {
+      // The parent is also added to the update.
+      size_t parent_index;
+      assert(get_index(&parent_index, parent, ent_pool->entity_id, ent_pool->size));
+      
+      // TODO: We are assuming that the parent is an rb.
+      auto parent_rb_coll = &ent_pool->rigidbody_collider[parent_index];
+      auto parent_rb_prop = &ent_pool->rigidbody_property[parent_index];
+      
+      rigidbody_update_pool_add_update(m_world_data->rigidbody_update_pool, parent, *parent_rb_coll, *parent_rb_prop);
+      
+      parent = ent_pool->parent_id[parent_index]; // Next parent.
+    }
+  
+    auto rb_prop = &ent_pool->rigidbody_property[index];
+    rigidbody_update_pool_add_update(m_world_data->rigidbody_update_pool, m_this_id, *rb_coll, *rb_prop);
+  }
+
 }
 
 
@@ -75,11 +103,13 @@ Entity::get_number_of_children() const
 {
   if(!is_valid()) { return 0; }
 
+  auto ent_pool = m_world_data->entity_pool;
+
   size_t children_count(0);
   
-  for(size_t i = 0; i < m_world_data->entity_pool->size; ++i)
+  for(size_t i = 0; i < ent_pool->size; ++i)
   {
-    const ::Entity::Entity_id id = m_world_data->entity_pool->parent_id[i];
+    const ::Entity::Entity_id id = ent_pool->parent_id[i];
   
     if(id == m_this_id)
     {
@@ -88,6 +118,37 @@ Entity::get_number_of_children() const
   }
   
   return children_count;
+}
+
+
+Entity
+Entity::get_child(const size_t index) const
+{
+  if(!is_valid()) { return Entity(); }
+
+  auto ent_pool = m_world_data->entity_pool;
+
+  size_t children_count(0);
+  
+  for(size_t i = 0; i < ent_pool->size; ++i)
+  {
+    const ::Entity::Entity_id id = ent_pool->parent_id[i];
+  
+    if(id == m_this_id)
+    {
+      if(index == children_count)
+      {
+        Entity child;
+        Detail::set_entity_members(&child, m_world_data, m_this_id);
+        
+        return child;
+      }
+    
+      ++children_count;
+    }
+  }
+  
+  return Entity();
 }
 
 

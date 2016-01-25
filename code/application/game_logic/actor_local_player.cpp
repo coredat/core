@@ -101,9 +101,11 @@ Actor_local_player::on_update(const float dt)
           ent.set_transform(trans);
           
           // Join rbs.
-//          void *user_ptr = face_ray.m_collisionObject->getUserPointer();
-//          const std::size_t ent_id = (std::size_t)user_ptr;
-//          const Entity::Entity_id collided_id = Entity::uint_as_entity(static_cast<uint32_t>(ent_id));
+          void *user_ptr = face_ray.m_collisionObject->getUserPointer();
+          const std::size_t ent_id = (std::size_t)user_ptr;
+          const Entity::Entity_id collided_id = Entity::uint_as_entity(static_cast<uint32_t>(ent_id));
+          
+          ent.set_parent(collided_id);
         }
       }
     }

@@ -74,7 +74,7 @@ rigidbody_pool_process_updates(Physics::World *phy_world,
   for(size_t i = 0; i < update_pool->size; ++i)
   {
     auto rb = &update_pool->rb_updates[i];
-  
+    
     // Find entity in rb_pool
     size_t index;
     if(!::Entity::find_index_linearly(&index, update_pool->entity_id[i], rb_pool->entity_id, rb_pool->size))
@@ -88,9 +88,16 @@ rigidbody_pool_process_updates(Physics::World *phy_world,
     
     // Create collider.
     Physics::colliders_generate(&rb->collider_info, 1, &rb_pool->rigidbody[index], 1);
-    
+  }
+  
+  for(size_t i = 0; i < update_pool->size; ++i)
+  {
+    auto rb = &update_pool->rb_updates[i];
+  
+    size_t index;
+    assert(::Entity::find_index_linearly(&index, update_pool->entity_id[i], rb_pool->entity_id, rb_pool->size));
+
     // Add to world.
-    
     Physics::world_add_rigidbodies(phy_world, &rb->properties, 1, &rb_pool->rigidbody[index], 1);
   }
 }

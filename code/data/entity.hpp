@@ -26,7 +26,9 @@ public:
   
   void                          set_parent(const ::Entity::Entity_id id);
   Entity                        get_parent() const;
+  
   size_t                        get_number_of_children() const;
+  Entity                        get_child(const size_t index) const;
 
   void                          set_transform(const math::transform &transform);
   math::transform               get_transform() const;

@@ -43,6 +43,13 @@ operator==(const Entity_id left, const Entity_id right)
 
 
 constexpr bool
+operator!=(const Entity_id left, const Entity_id right)
+{
+  return !operator==(left, right);
+}
+
+
+constexpr bool
 operator<(const Entity_id left, const Entity_id right)
 {
   return ((left.type_id < right.type_id) && (left.instance_id < right.instance_id));

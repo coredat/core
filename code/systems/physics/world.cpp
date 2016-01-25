@@ -74,6 +74,8 @@ world_add_rigidbodies(World *world,
     if(out_rb->rigidbody)
     {
       world->dynamics_world.removeRigidBody(out_rb->rigidbody.get());
+      out_rb->rigidbody.reset();
+      out_rb->compound_shape.reset();
     }
     
     /*
