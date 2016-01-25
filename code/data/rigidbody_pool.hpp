@@ -87,6 +87,7 @@ rigidbody_update_pool_clear(Rigidbody_update_pool *pool);
 bool
 rigidbody_update_pool_add_update(Rigidbody_update_pool *update_pool,
                                  const ::Entity::Entity_id id,
+                                 const ::Entity::Entity_id parent_id,
                                  const Physics::Rigidbody_collider collider,
                                  const Physics::Rigidbody_properties props);
 

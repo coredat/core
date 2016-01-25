@@ -37,6 +37,7 @@ rigidbody_update_pool_clear(Rigidbody_update_pool *pool)
 bool
 rigidbody_update_pool_add_update(Rigidbody_update_pool *update_pool,
                                  const ::Entity::Entity_id id,
+                                 const ::Entity::Entity_id parent_id,
                                  const Physics::Rigidbody_collider collider,
                                  const Physics::Rigidbody_properties props)
 {
@@ -57,7 +58,7 @@ rigidbody_update_pool_add_update(Rigidbody_update_pool *update_pool,
   
   auto *rb_update = &update_pool->rb_updates[index];
   
-  rb_update->parent_id     = ::Entity::invalid_id();
+  rb_update->parent_id     = parent_id;
   rb_update->collider_info = collider;
   rb_update->properties    = props;
   
@@ -84,6 +85,8 @@ rigidbody_pool_process_updates(Physics::World *phy_world,
       rb_pool->entity_id[index] = update_pool->entity_id[i];
     }
     
+    Physics::world_remove_rigidbody(phy_world, &rb_pool->rigidbody[index]);
+    
     // Create motion
     rb_pool->rigidbody[index].motion_state.reset(new Physics::Motion_state(update_pool->entity_id[i], data->entity_pool));
     
@@ -108,6 +111,9 @@ rigidbody_pool_process_updates(Physics::World *phy_world,
       btTransform trans;
       trans.setIdentity();
       
+      btVector3 offset(1,1,1);
+      trans.setOrigin(offset);
+      
       rb_pool->rigidbody[parent_index].compound_shape->addChildShape(trans,
                                                                      rb_pool->rigidbody[child_index].shape.get());
     }
@@ -121,8 +127,11 @@ rigidbody_pool_process_updates(Physics::World *phy_world,
     size_t index;
     assert(::Entity::find_index_linearly(&index, update_pool->entity_id[i], rb_pool->entity_id, rb_pool->size));
 
-    // Add to world.
-    Physics::world_add_rigidbodies(phy_world, &rb->properties, 1, &rb_pool->rigidbody[index], 1);
+    if(rb->parent_id == ::Entity::invalid_id())
+    {
+      // Add to world.
+      Physics::world_add_rigidbodies(phy_world, &rb->properties, 1, &rb_pool->rigidbody[index], 1);
+    }
   }
 }
 

@@ -71,16 +71,17 @@ Entity::set_parent(const ::Entity::Entity_id id)
       assert(get_index(&parent_index, parent, ent_pool->entity_id, ent_pool->size));
       
       // TODO: We are assuming that the parent is an rb.
-      auto parent_rb_coll = &ent_pool->rigidbody_collider[parent_index];
-      auto parent_rb_prop = &ent_pool->rigidbody_property[parent_index];
+      auto parent_rb_coll   = &ent_pool->rigidbody_collider[parent_index];
+      auto parent_rb_prop   = &ent_pool->rigidbody_property[parent_index];
+      auto parent_parent_id = ent_pool->parent_id[parent_index];
       
-      rigidbody_update_pool_add_update(m_world_data->rigidbody_update_pool, parent, *parent_rb_coll, *parent_rb_prop);
+      rigidbody_update_pool_add_update(m_world_data->rigidbody_update_pool, parent, parent_parent_id, *parent_rb_coll, *parent_rb_prop);
       
       parent = ent_pool->parent_id[parent_index]; // Next parent.
     }
   
     auto rb_prop = &ent_pool->rigidbody_property[index];
-    rigidbody_update_pool_add_update(m_world_data->rigidbody_update_pool, m_this_id, *rb_coll, *rb_prop);
+    rigidbody_update_pool_add_update(m_world_data->rigidbody_update_pool, m_this_id, id, *rb_coll, *rb_prop);
   }
 
 }
@@ -170,7 +171,11 @@ Entity::set_transform(const math::transform &transform)
   if(rb_coll->collider_type != Physics::Collider_type::none)
   {
     auto rb_prop = &ent_pool->rigidbody_property[index];
-    rigidbody_update_pool_add_update(m_world_data->rigidbody_update_pool, m_this_id, *rb_coll, *rb_prop);
+    rigidbody_update_pool_add_update(m_world_data->rigidbody_update_pool,
+                                     m_this_id,
+                                     ent_pool->parent_id[index],
+                                     *rb_coll,
+                                     *rb_prop);
   }
 }
 
@@ -259,7 +264,11 @@ Entity::set_rigidbody_properties(const Physics::Rigidbody_properties props)
   
   if(rb_coll->collider_type != Physics::Collider_type::none)
   {
-    rigidbody_update_pool_add_update(m_world_data->rigidbody_update_pool, m_this_id, *rb_coll, *rb_prop);
+    rigidbody_update_pool_add_update(m_world_data->rigidbody_update_pool,
+                                     m_this_id,
+                                     ent_pool->parent_id[index],
+                                     *rb_coll,
+                                     *rb_prop);
   }
 }
 
@@ -290,7 +299,11 @@ Entity::set_rigidbody_collider(const Physics::Rigidbody_collider collider)
   
   *rb_coll = collider;
   
-  rigidbody_update_pool_add_update(m_world_data->rigidbody_update_pool, m_this_id, *rb_coll, *rb_prop);
+  rigidbody_update_pool_add_update(m_world_data->rigidbody_update_pool,
+                                   m_this_id,
+                                   ent_pool->parent_id[index],
+                                   *rb_coll,
+                                   *rb_prop);
 }
 
 
