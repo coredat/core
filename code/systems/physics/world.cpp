@@ -86,7 +86,7 @@ world_add_rigidbodies(World *world,
       out_rb->compound_shape.reset(new btCompoundShape());
       
       btTransform child_transform;
-      child_transform.setIdentity(); // Warning do not remove this. It seems to create an AABB overflow in Bullet.
+      child_transform.setIdentity(); // Warning do not remove this. It seems to create an AABB overflow in Bullet!
  
       out_rb->compound_shape->addChildShape(child_transform, out_rb->shape.get());
     }
@@ -99,6 +99,11 @@ world_add_rigidbodies(World *world,
     
       btVector3 inertia(0, 0, 0);
       out_rb->shape->calculateLocalInertia(prop->mass, inertia);
+
+      btTransform child_transform;
+      child_transform.setIdentity(); // Warning do not remove this. It seems to create an AABB overflow in Bullet!
+ 
+      out_rb->compound_shape->addChildShape(child_transform, out_rb->shape.get());
       
 
       out_rb->compound_shape->calculateLocalInertia(prop->mass, inertia);

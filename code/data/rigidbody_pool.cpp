@@ -71,6 +71,7 @@ rigidbody_pool_process_updates(Physics::World *phy_world,
                                Rigidbody_update_pool *update_pool,
                                Rigidbody_pool *rb_pool)
 {
+  // Create motion states, colliders.
   for(size_t i = 0; i < update_pool->size; ++i)
   {
     auto rb = &update_pool->rb_updates[i];
@@ -88,6 +89,29 @@ rigidbody_pool_process_updates(Physics::World *phy_world,
     
     // Create collider.
     Physics::colliders_generate(&rb->collider_info, 1, &rb_pool->rigidbody[index], 1);
+  }
+  
+  // Attach all colliders to their parents.
+  for(size_t i = 0; i < update_pool->size; ++i)
+  {
+    auto rb = &update_pool->rb_updates[i];
+    
+    if(rb->parent_id != ::Entity::invalid_id())
+    {
+      // Get index of output
+      size_t child_index;
+      assert(::Entity::find_index_linearly(&child_index, update_pool->entity_id[i], rb_pool->entity_id, rb_pool->size));
+    
+      size_t parent_index;
+      assert(::Entity::find_index_linearly(&parent_index, rb->parent_id, rb_pool->entity_id, rb_pool->size));
+      
+      btTransform trans;
+      trans.setIdentity();
+      
+      rb_pool->rigidbody[parent_index].compound_shape->addChildShape(trans,
+                                                                     rb_pool->rigidbody[child_index].shape.get());
+    }
+    
   }
   
   for(size_t i = 0; i < update_pool->size; ++i)

@@ -61,6 +61,8 @@ colliders_generate(const Rigidbody_collider colliders[],
         assert(false); // unknown collider type.
         return;
     }
+    
+    out_rb->compound_shape.reset(new btCompoundShape());
   }
 }
 
