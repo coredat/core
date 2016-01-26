@@ -55,35 +55,9 @@ Entity::set_parent(const ::Entity::Entity_id id)
   assert(get_index(&index, m_this_id, ent_pool->entity_id, ent_pool->size));
   ent_pool->parent_id[index] = id;
   
-  // If this object has a colldier attached to it,
-  // we need to update the rb.
-  auto rb_coll = &ent_pool->rigidbody_collider[index];
-  
-  if(rb_coll->collider_type != Physics::Collider_type::none)
-  {
-    // Add parents
-    // TODO We will need to do this with all the children also.
-    ::Entity::Entity_id parent = id;
-    while(parent != ::Entity::invalid_id())
-    {
-      // The parent is also added to the update.
-      size_t parent_index;
-      assert(get_index(&parent_index, parent, ent_pool->entity_id, ent_pool->size));
-      
-      // TODO: We are assuming that the parent is an rb.
-      auto parent_rb_coll   = &ent_pool->rigidbody_collider[parent_index];
-      auto parent_rb_prop   = &ent_pool->rigidbody_property[parent_index];
-      auto parent_parent_id = ent_pool->parent_id[parent_index];
-      
-      rigidbody_update_pool_add_update(m_world_data->rigidbody_update_pool, parent, parent_parent_id, *parent_rb_coll, *parent_rb_prop);
-      
-      parent = ent_pool->parent_id[parent_index]; // Next parent.
-    }
-  
-    auto rb_prop = &ent_pool->rigidbody_property[index];
-    rigidbody_update_pool_add_update(m_world_data->rigidbody_update_pool, m_this_id, id, *rb_coll, *rb_prop);
-  }
-
+  // TODO: Need to check parent is valid?
+  Data::entity_graph_change_push(m_world_data->entity_graph_changes, id, Data::Entity_graph_change::moved);
+  Data::entity_graph_change_push(m_world_data->entity_graph_changes, m_this_id, Data::Entity_graph_change::updated);
 }
 
 
@@ -164,19 +138,7 @@ Entity::set_transform(const math::transform &transform)
   assert(get_index(&index, m_this_id, ent_pool->entity_id, ent_pool->size));
   ent_pool->transform[index] = transform;
   
-  // If this object has a colldier attached to it,
-  // we need to update the rb.
-  auto rb_coll = &ent_pool->rigidbody_collider[index];
-  
-  if(rb_coll->collider_type != Physics::Collider_type::none)
-  {
-    auto rb_prop = &ent_pool->rigidbody_property[index];
-    rigidbody_update_pool_add_update(m_world_data->rigidbody_update_pool,
-                                     m_this_id,
-                                     ent_pool->parent_id[index],
-                                     *rb_coll,
-                                     *rb_prop);
-  }
+  Data::entity_graph_change_push(m_world_data->entity_graph_changes, m_this_id, Data::Entity_graph_change::updated);
 }
 
 
@@ -260,16 +222,7 @@ Entity::set_rigidbody_properties(const Physics::Rigidbody_properties props)
   *rb_prop = props;
   rb_prop->id = m_this_id;
   
-  auto rb_coll = &ent_pool->rigidbody_collider[index];
-  
-  if(rb_coll->collider_type != Physics::Collider_type::none)
-  {
-    rigidbody_update_pool_add_update(m_world_data->rigidbody_update_pool,
-                                     m_this_id,
-                                     ent_pool->parent_id[index],
-                                     *rb_coll,
-                                     *rb_prop);
-  }
+  Data::entity_graph_change_push(m_world_data->entity_graph_changes, m_this_id, Data::Entity_graph_change::moved);
 }
 
 
@@ -295,15 +248,10 @@ Entity::set_rigidbody_collider(const Physics::Rigidbody_collider collider)
   assert(get_index(&index, m_this_id, ent_pool->entity_id, ent_pool->size));
   
   auto rb_coll = &ent_pool->rigidbody_collider[index];
-  auto rb_prop = &ent_pool->rigidbody_property[index];
   
   *rb_coll = collider;
   
-  rigidbody_update_pool_add_update(m_world_data->rigidbody_update_pool,
-                                   m_this_id,
-                                   ent_pool->parent_id[index],
-                                   *rb_coll,
-                                   *rb_prop);
+  Data::entity_graph_change_push(m_world_data->entity_graph_changes, m_this_id, Data::Entity_graph_change::moved);
 }
 
 

@@ -71,6 +71,12 @@ void
 rigidbody_update_pool_init(Rigidbody_update_pool *pool);
 
 
+void
+rigidbody_pool_update_scene_graph_changes(Rigidbody_pool *pool,
+                                          Data::World *world_data,
+                                          const Entity_graph_changes_pool *graph_changes);
+
+
 /*!
   Clears out the data that has been used.
 */

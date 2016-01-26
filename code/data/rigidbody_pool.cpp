@@ -1,5 +1,6 @@
 #include "rigidbody_pool.hpp"
 #include "world_data.hpp"
+#include "entity.hpp"
 #include "entity_pool.hpp"
 #include <systems/physics/world.hpp>
 
@@ -63,6 +64,72 @@ rigidbody_update_pool_add_update(Rigidbody_update_pool *update_pool,
   rb_update->properties    = props;
   
   return true;
+}
+
+
+void
+rigidbody_pool_update_scene_graph_changes(Rigidbody_pool *pool,
+                                          Data::World *world_data,
+                                          const Entity_graph_changes_pool *graph_changes)
+{
+  // TODO: Keep an eye on this I can't imagine this is partcularly fast way of doing things.
+  // But we do feesibly work with small amounts of data.
+  
+  // Remove all the rbs that exist **TODO** Change this to remove all graph removals.
+  for(size_t i = 0; i < graph_changes->size; ++i)
+  {
+    size_t index;
+    if(::Entity::find_index_linearly(&index,
+                                     graph_changes->entity_event[i].entity_id,
+                                     world_data->entity_pool->entity_id,
+                                     world_data->entity_pool->size))
+    {
+      Physics::world_remove_rigidbody(world_data->physics_world, &pool->rigidbody[index]);
+      pool->entity_id[index] = ::Entity::invalid_id();
+    }
+  }
+  
+  // Get a list of Entities that have not been removed.
+  // And have no parents
+  Data::Entity ent[128];
+  size_t ent_count(0);
+  
+  for(size_t i = 0; i < graph_changes->size; ++i)
+  {
+    const auto graph_change = graph_changes->entity_event[i];
+    
+    if(graph_change.change_type != Data::Entity_graph_change::removed)
+    {
+      Data::Entity entity;
+      Data::world_find_entity(world_data, &entity, graph_change.entity_id);
+      
+      // Is valid? Then get the top most entity.
+      if(entity.is_valid())
+      {
+        while(entity.get_parent().get_id() != ::Entity::invalid_id())
+        {
+          entity = entity.get_parent();
+        }
+        
+        ent[ent_count++] = entity;
+      }
+    }
+  }
+  
+  // Remove all entities attached to these parents.
+  {
+  
+  }
+  
+  // Build colliders etc.
+  {
+  
+  }
+  
+  // Add the rigidbodies to the world.
+  {
+  
+  }
 }
 
 

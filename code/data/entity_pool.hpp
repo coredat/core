@@ -48,6 +48,7 @@ enum class Entity_graph_change
 {
   inserted,
   moved,
+  updated,
   removed,
 };
 

@@ -79,9 +79,6 @@ host_think(
   const Environment::Input *inputs,
   const float delta_time)
 {
-  // Reset the entity pool for new changes.
-  Data::entity_graph_change_pool_init(world->entity_graph_changes);
-  
   Physics::world_step(world->physics_world, delta_time);
 
   Network::poll_events(connection,
@@ -119,6 +116,11 @@ host_think(
   // Push in new phy entities.
   Data::rigidbody_pool_process_updates(world->physics_world, world, world->rigidbody_update_pool, world->rigidbody_pool);
   Data::rigidbody_update_pool_clear(world->rigidbody_update_pool);
+  
+  Data::rigidbody_pool_update_scene_graph_changes(world->rigidbody_pool, world, world->entity_graph_changes);
+  
+  // Reset the entity pool for new changes.
+  Data::entity_graph_change_pool_init(world->entity_graph_changes);
 
   Network::send_packet(connection, sizeof(world->entity_pool->transform), world->entity_pool->transform, false);
 
