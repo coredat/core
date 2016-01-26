@@ -65,11 +65,17 @@ Entity
 Entity::get_parent() const
 {
   if(!is_valid()) { return Entity(); }
-
-  Entity parent;
-  Detail::set_entity_members(&parent, m_world_data, m_this_id);
   
-  return parent;
+  size_t index;
+  if(::Entity::find_index_linearly(&index, m_this_id, m_world_data->entity_pool->parent_id, m_world_data->entity_pool->size))
+  {
+    Entity parent;
+    Detail::set_entity_members(&parent, m_world_data, m_world_data->entity_pool->entity_id[index]);
+    
+    return parent;
+  }
+  
+  return Entity(); // has no parent.
 }
 
 

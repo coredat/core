@@ -116,19 +116,48 @@ rigidbody_pool_update_scene_graph_changes(Rigidbody_pool *pool,
     }
   }
   
-  // Remove all entities attached to these parents.
+  // Remove all entities attached to these parents. TODO just going to remove parents atm.
+  for(size_t i = 0; i < ent_count; ++i)
   {
-  
+    Entity parent = ent[i];
+    
+    // Find index in rb and remove it.
+    size_t index;
+    if(::Entity::find_index_linearly(&index, parent.get_id(), world_data->rigidbody_pool->entity_id, world_data->rigidbody_pool->size))
+    {
+      Physics::world_remove_rigidbody(world_data->physics_world, &world_data->rigidbody_pool->rigidbody[index]);
+      world_data->rigidbody_pool->entity_id[index] = ::Entity::invalid_id();
+    }
   }
   
-  // Build colliders etc.
+  // Build colliders and insert into world.
+  // TODO: Maybe have to split this up into two steps, would be better cache stoof.
+  for(size_t i = 0; i < ent_count; ++i)
   {
+    Entity entity = ent[i];
+    
+    auto rb_collider = entity.get_rigidbody_collider();
+    
+    
+    if(rb_collider.collider_type == Physics::Collider_type::none)
+    {
+      continue;
+    }
   
-  }
-  
-  // Add the rigidbodies to the world.
-  {
-  
+    // Get an empty slot in rb.
+    size_t index;
+    assert(::Entity::find_index_linearly(&index, ::Entity::invalid_id(), world_data->rigidbody_pool->entity_id, world_data->rigidbody_pool->size));
+    Physics::world_remove_rigidbody(world_data->physics_world, &world_data->rigidbody_pool->rigidbody[index]);
+    world_data->rigidbody_pool->entity_id[index] = ::Entity::invalid_id();
+    
+    // Create required thingies.
+    auto rb = &world_data->rigidbody_pool->rigidbody[index];
+    auto rb_props = entity.get_rigidbody_properties();
+
+    rb->motion_state.reset(new Physics::Motion_state(entity.get_id(), world_data->entity_pool));
+    
+    Physics::colliders_generate(&rb_collider, 1, rb, 1);
+    Physics::world_add_rigidbodies(world_data->physics_world, &rb_props, 1, rb, 1);
   }
 }
 
