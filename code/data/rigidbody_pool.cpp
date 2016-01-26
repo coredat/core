@@ -143,12 +143,21 @@ rigidbody_pool_update_scene_graph_changes(Rigidbody_pool *pool,
     {
       continue;
     }
+    
+    // Search to see if we already added it.
+    {
+      size_t check_index;
+      if(::Entity::find_index_linearly(&check_index, entity.get_id(), world_data->rigidbody_pool->entity_id, world_data->rigidbody_pool->size))
+      {
+        continue;
+      }
+    }
   
     // Get an empty slot in rb.
     size_t index;
     assert(::Entity::find_index_linearly(&index, ::Entity::invalid_id(), world_data->rigidbody_pool->entity_id, world_data->rigidbody_pool->size));
     Physics::world_remove_rigidbody(world_data->physics_world, &world_data->rigidbody_pool->rigidbody[index]);
-    world_data->rigidbody_pool->entity_id[index] = ::Entity::invalid_id();
+    world_data->rigidbody_pool->entity_id[index] = entity.get_id();
     
     // Create required thingies.
     auto rb = &world_data->rigidbody_pool->rigidbody[index];
