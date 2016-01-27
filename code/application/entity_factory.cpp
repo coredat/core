@@ -10,7 +10,6 @@
 namespace Entity_factory {
 
 
-
 Data::Entity
 create_ground(Data::World *data)
 {
@@ -85,12 +84,13 @@ Data::Entity
 create_placement_cube(Data::World *world)
 {
   Data::Entity entity;
-  assert(Data::world_create_new_entity(world, &entity, Object_type::dev_dynamic_cube));
+  assert(Data::world_create_new_entity(world, &entity, Object_type::dev_view_cube));
 
   entity.set_transform(math::transform_init(math::vec3_zero(),
                                             math::vec3_init(0.1f, 0.1f, 0.1f),
                                             math::quat_init()));
-  
+
+  entity.set_rigidbody_properties(Physics::Rigidbody_properties{0});
   entity.set_material_id(Resource::Texture::dev_blue);
   entity.set_model_id(Resource::Model::unit_cube);
   

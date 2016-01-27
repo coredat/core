@@ -9,9 +9,11 @@ namespace Object_type {
 enum ENUM {
 
   null_type = 0,
-
-  dev_static_ground,
+  
   dev_dynamic_cube,
+  dev_view_cube,
+  
+  dev_static_ground,
   
   dev_actor,
 

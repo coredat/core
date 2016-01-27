@@ -29,34 +29,6 @@ struct Rigidbody_pool
 }; // ns
 
 
-
-/*!
-  Update structure holds the things we need
-  to update a rigidbody.
-*/
-struct Rigidbody_update
-{
-  ::Entity::Entity_id             parent_id;
-  Physics::Rigidbody_collider     collider_info;
-  Physics::Rigidbody_properties   properties;
-};
-
-
-/*!
-  Rigidbodies that need to be updated.
-  this is a temp storage place. The engine will
-  pick up these at a later date.
-*/
-struct Rigidbody_update_pool
-{
-  ::Entity::Entity_id entity_id[RIGIDBODY_POOL_SIZE];
-  Rigidbody_update    rb_updates[RIGIDBODY_POOL_SIZE];
-  
-  size_t              size = {0};
-  const size_t        capacity = RIGIDBODY_POOL_SIZE;
-};
-
-
 /*!
  Initialises the entire rb pool.
 */
@@ -65,50 +37,60 @@ rigidbody_pool_init(Rigidbody_pool *pool);
 
 
 /*!
- Initialises the entire pending rb pool.
+  Find an rb inside the pool.
+  \param pool of rbs.
+  \param id is the entity_id you wish to find.
+  \param out_rb is the entity that was found.
+  \return true on success.
 */
-void
-rigidbody_update_pool_init(Rigidbody_update_pool *pool);
+bool
+rigidbody_pool_find(Rigidbody_pool *pool,
+                    const ::Entity::Entity_id id,
+                    Physics::Rigidbody *out_rb);
+
+/*!
+  Removes an entity from the pool.
+  Does not remove it from the physics simulation.
+  Its id will be set to invalid_id.
+  \param pool or rbs.
+  \param id you wish to remove.
+  \return true if we found an id to remove.
+*/
+bool
+rigidbody_pool_remove(Rigidbody_pool *pool,
+                      const ::Entity::Entity_id id);
 
 
+/*!
+  Checks to see if an entity exists in the pool.
+  \param pool or rbs.
+  \param id you wish to remove.
+  \return true if we found an id to remove.
+*/
+bool
+rigidbody_pool_exits(Rigidbody_pool *pool,
+                     const ::Entity::Entity_id id);
+
+
+/*!
+  Allocate a new place for the entity.
+  Optinally you may add an rigidbody to get the result position.
+*/
+bool
+rigidbody_pool_push(Rigidbody_pool *pool,
+                    const ::Entity::Entity_id id,
+                    Physics::Rigidbody *out_rb);
+
+
+/*!
+  We want to know about updates to the scene graph.
+*/
 void
 rigidbody_pool_update_scene_graph_changes(Rigidbody_pool *pool,
                                           Data::World *world_data,
                                           const Entity_graph_changes_pool *graph_changes);
 
 
-/*!
-  Clears out the data that has been used.
-*/
-void
-rigidbody_update_pool_clear(Rigidbody_update_pool *pool);
-
-
-/*!
-  Pushes a new entity into the update pool so it can be
-  created later.
- 
-  \return true of false if it was a success or failure.
-*/
-bool
-rigidbody_update_pool_add_update(Rigidbody_update_pool *update_pool,
-                                 const ::Entity::Entity_id id,
-                                 const ::Entity::Entity_id parent_id,
-                                 const Physics::Rigidbody_collider collider,
-                                 const Physics::Rigidbody_properties props);
-
-/*!
-  Process thes pending updates.
-*/
-void
-rigidbody_pool_process_updates(Physics::World *phy_world,
-                               Data::World *data,
-                               Rigidbody_update_pool *update_pool,
-                               Rigidbody_pool *rb_pool);
-
-
-
 } // ns
-
 
 #endif // inc guard

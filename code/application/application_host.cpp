@@ -113,10 +113,7 @@ host_think(
     reinterpret_cast<Logic::Base*>(obj)->on_update(delta_time); // TODO: reinter_cast?
   }
 
-  // Push in new phy entities.
-  Data::rigidbody_pool_process_updates(world->physics_world, world, world->rigidbody_update_pool, world->rigidbody_pool);
-  Data::rigidbody_update_pool_clear(world->rigidbody_update_pool);
-  
+  // Push in new phy entities.  
   Data::rigidbody_pool_update_scene_graph_changes(world->rigidbody_pool, world, world->entity_graph_changes);
   
   // Reset the entity pool for new changes.

@@ -16,7 +16,6 @@ struct Entity_id
 }; // Entity_id
 
 
-
 //! Converts an entity type into a uint32_t type.
 inline uint32_t
 entity_as_uint(const Entity_id e)
@@ -33,13 +32,11 @@ uint_as_entity(const uint32_t to_e)
 }
 
 
-
 constexpr bool
 operator==(const Entity_id left, const Entity_id right)
 {
   return ((left.type_id == right.type_id) && (left.instance_id == right.instance_id));
 }
-
 
 
 constexpr bool
@@ -70,7 +67,6 @@ invalid_id()
 };
 
 
-
 /*!
  Sets an array of ids to invalid.
  \param ids[] ids to get set to invalid.
@@ -92,9 +88,7 @@ bool
 find_index_linearly(std::size_t *out_index, const Entity_id id_to_find, const Entity_id ids[], const std::size_t number_of_entities);
 
 
-
 } // ns
-
 
 
 #endif // include

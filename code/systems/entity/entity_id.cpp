@@ -34,5 +34,4 @@ find_index_linearly(std::size_t *out_index,
 }
 
 
-
 } // ns
