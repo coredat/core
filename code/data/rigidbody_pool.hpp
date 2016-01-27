@@ -75,11 +75,15 @@ rigidbody_pool_exits(Rigidbody_pool *pool,
 /*!
   Allocate a new place for the entity.
   Optinally you may add an rigidbody to get the result position.
+  \param pool of rbs
+  \param id of where we wish to push the new data.
+  \param new_rb the new rb we wish to push.
+  \return true if we found the requeseted index and pushed new data.
 */
 bool
 rigidbody_pool_push(Rigidbody_pool *pool,
                     const ::Entity::Entity_id id,
-                    Physics::Rigidbody *out_rb);
+                    Physics::Rigidbody **new_rb);
 
 
 /*!

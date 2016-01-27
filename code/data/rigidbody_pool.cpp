@@ -24,7 +24,7 @@ rigidbody_pool_find(Rigidbody_pool *pool,
   size_t index;
   if(::Entity::find_index_linearly(&index, id, pool->entity_id, pool->size))
   {
-    out_rb = &pool->rigidbody[index];
+    out_rb = &(pool->rigidbody[index]);
     return true;
   }
   
@@ -59,11 +59,19 @@ rigidbody_pool_exists(Rigidbody_pool *pool,
 bool
 rigidbody_pool_push(Rigidbody_pool *pool,
                     const ::Entity::Entity_id id,
-                    Physics::Rigidbody *out_rb)
+                    Physics::Rigidbody **new_rb)
 {
   // This is there I am at.
+  size_t index;
+  if(::Entity::find_index_linearly(&index, ::Entity::invalid_id(), pool->entity_id, pool->size))
+  {
+    pool->entity_id[index] = id;
+    *new_rb = &pool->rigidbody[index];
+    
+    return true;
+  }
   
-  return "Don't return a string you fool!"
+  return false;
 }
 
 
@@ -120,6 +128,7 @@ rigidbody_pool_update_scene_graph_changes(Rigidbody_pool *pool,
     Entity parent = ent[i];
     
     // Find index in rb and remove it.
+    
     size_t index;
     if(::Entity::find_index_linearly(&index, parent.get_id(), world_data->rigidbody_pool->entity_id, world_data->rigidbody_pool->size))
     {
@@ -151,14 +160,17 @@ rigidbody_pool_update_scene_graph_changes(Rigidbody_pool *pool,
     }
   
     // Get an empty slot in rb.
+//    size_t index;
+//    assert(::Entity::find_index_linearly(&index, ::Entity::invalid_id(), world_data->rigidbody_pool->entity_id, world_data->rigidbody_pool->size));
+//    Physics::world_remove_rigidbody(world_data->physics_world, &world_data->rigidbody_pool->rigidbody[index]);
+//    world_data->rigidbody_pool->entity_id[index] = entity.get_id();
 
-    size_t index;
-    assert(::Entity::find_index_linearly(&index, ::Entity::invalid_id(), world_data->rigidbody_pool->entity_id, world_data->rigidbody_pool->size));
-    Physics::world_remove_rigidbody(world_data->physics_world, &world_data->rigidbody_pool->rigidbody[index]);
-    world_data->rigidbody_pool->entity_id[index] = entity.get_id();
+    Physics::Rigidbody *rb = nullptr;
+    rigidbody_pool_push(world_data->rigidbody_pool, entity.get_id(), &rb);
+    //rigidbody_pool_find(world_data->rigidbody_pool, entity.get_id(), rb);
     
     // Create required thingies.
-    auto rb = &world_data->rigidbody_pool->rigidbody[index];
+//    auto rb = &world_data->rigidbody_pool->rigidbody[index];
     auto rb_props = entity.get_rigidbody_properties();
 
     rb->motion_state.reset(new Physics::Motion_state(entity.get_id(), world_data->entity_pool));
