@@ -18,8 +18,7 @@
 
 
 namespace Data {
-namespace Detail
-{
+namespace Detail {
   
   /*
     This is used to allow us to set the

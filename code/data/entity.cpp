@@ -56,8 +56,8 @@ Entity::set_parent(const ::Entity::Entity_id parent_id)
   ent_pool->parent_id[index] = parent_id;
   
   // TODO: Need to check parent is valid?
-//  Data::entity_graph_change_push(m_world_data->entity_graph_changes, parent_id, Data::Entity_graph_change::moved);
-  Data::entity_graph_change_push(m_world_data->entity_graph_changes, m_this_id, Data::Entity_graph_change::updated);
+  Data::entity_graph_change_push(m_world_data->entity_graph_changes, parent_id, Data::Entity_graph_change::updated);
+  Data::entity_graph_change_push(m_world_data->entity_graph_changes, m_this_id, Data::Entity_graph_change::moved);
 }
 
 

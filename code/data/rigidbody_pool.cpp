@@ -3,6 +3,7 @@
 #include "entity.hpp"
 #include "entity_pool.hpp"
 #include <systems/physics/world.hpp>
+#include <functional>
 
 
 namespace Data {
@@ -19,12 +20,12 @@ rigidbody_pool_init(Rigidbody_pool *pool)
 bool
 rigidbody_pool_find(Rigidbody_pool *pool,
                     const ::Entity::Entity_id id,
-                    Physics::Rigidbody *out_rb)
+                    Physics::Rigidbody **out_rb)
 {
   size_t index;
   if(::Entity::find_index_linearly(&index, id, pool->entity_id, pool->size))
   {
-    out_rb = &(pool->rigidbody[index]);
+    *out_rb = &(pool->rigidbody[index]);
     return true;
   }
   
@@ -84,15 +85,15 @@ rigidbody_pool_update_scene_graph_changes(Rigidbody_pool *pool,
   // But we do feesibly work with small amounts of data.
   
   // Remove all the rbs that exist **TODO** Change this to remove all graph removals.
-  for(size_t i = 0; i < graph_changes->size; ++i)
-  {
-    Physics::Rigidbody* rb = nullptr;
-    if(rigidbody_pool_find(world_data->rigidbody_pool, graph_changes->entity_event[i].entity_id, rb) && rb)
-    {
-      Physics::world_remove_rigidbody(world_data->physics_world, rb);
-      rigidbody_pool_remove(world_data->rigidbody_pool, graph_changes->entity_event[i].entity_id);
-    }
-  }
+//  for(size_t i = 0; i < graph_changes->size; ++i)
+//  {
+//    Physics::Rigidbody* rb = nullptr;
+//    if(rigidbody_pool_find(world_data->rigidbody_pool, graph_changes->entity_event[i].entity_id, &rb) && rb)
+//    {
+//      Physics::world_remove_rigidbody(world_data->physics_world, rb);
+//      rigidbody_pool_remove(world_data->rigidbody_pool, graph_changes->entity_event[i].entity_id);
+//    }
+//  }
   
   // Get a list of Entities that have not been removed.
   // And have no parents
@@ -129,53 +130,116 @@ rigidbody_pool_update_scene_graph_changes(Rigidbody_pool *pool,
     
     // Find index in rb and remove it.
     
-    size_t index;
-    if(::Entity::find_index_linearly(&index, parent.get_id(), world_data->rigidbody_pool->entity_id, world_data->rigidbody_pool->size))
+    Physics::Rigidbody *rb = nullptr;
+    rigidbody_pool_find(world_data->rigidbody_pool, parent.get_id(), &rb);
+    
+    if(rb)
     {
-      Physics::world_remove_rigidbody(world_data->physics_world, &world_data->rigidbody_pool->rigidbody[index]);
-      world_data->rigidbody_pool->entity_id[index] = ::Entity::invalid_id();
+      Physics::world_remove_rigidbody(world_data->physics_world, rb);
+      rigidbody_pool_remove(world_data->rigidbody_pool, parent.get_id());
     }
   }
   
-  // Build colliders and insert into world.
-  // TODO: Maybe have to split this up into two steps, would be better cache stoof.
+  // Build colliders.
   for(size_t i = 0; i < ent_count; ++i)
   {
     Entity entity = ent[i];
     
     auto rb_collider = entity.get_rigidbody_collider();
     
-    
+    // Legit collider?
     if(rb_collider.collider_type == Physics::Collider_type::none)
     {
       continue;
     }
     
-    // Search to see if we already added it.
+    // Not a duplicate is it? Hate those!
+    if(rigidbody_pool_exists(world_data->rigidbody_pool, entity.get_id()))
     {
-      if(rigidbody_pool_exists(world_data->rigidbody_pool, entity.get_id()))
-      {
-        continue;
-      }
+      continue;
     }
-  
-    // Get an empty slot in rb.
-//    size_t index;
-//    assert(::Entity::find_index_linearly(&index, ::Entity::invalid_id(), world_data->rigidbody_pool->entity_id, world_data->rigidbody_pool->size));
-//    Physics::world_remove_rigidbody(world_data->physics_world, &world_data->rigidbody_pool->rigidbody[index]);
-//    world_data->rigidbody_pool->entity_id[index] = entity.get_id();
-
+    
+    // Get Rb and generate its colldier.
     Physics::Rigidbody *rb = nullptr;
     rigidbody_pool_push(world_data->rigidbody_pool, entity.get_id(), &rb);
-    //rigidbody_pool_find(world_data->rigidbody_pool, entity.get_id(), rb);
-    
-    // Create required thingies.
-//    auto rb = &world_data->rigidbody_pool->rigidbody[index];
-    auto rb_props = entity.get_rigidbody_properties();
 
     rb->motion_state.reset(new Physics::Motion_state(entity.get_id(), world_data->entity_pool));
     
     Physics::colliders_generate(&rb_collider, 1, rb, 1);
+  }
+  
+  // Stick them into the world.
+  for(size_t i = 0; i < ent_count; ++i)
+  {
+    Entity entity = ent[i];
+    
+    auto rb_collider = entity.get_rigidbody_collider();
+
+    if(rb_collider.collider_type == Physics::Collider_type::none)
+    {
+      continue;
+    }
+    
+    Physics::Rigidbody *rb = nullptr;
+    rigidbody_pool_find(world_data->rigidbody_pool, entity.get_id(), &rb);
+    assert(rb);
+    
+    // If has children we need to collect all the colliders.
+//    auto get_child_colliders = [&](Entity e, btCompoundShape *parent_compound)
+//    {
+//      for(size_t c = 0; c < e.get_number_of_children(); ++c)
+//      {
+//        Entity child = e.get_child(c);
+//      
+//        get_child_colliders(child, parent_compound);
+//      }
+//      
+//      auto parent = e.get_parent();
+//      
+//      if(parent.is_valid())
+//      {
+//        btTransform transform;
+//        transform.setIdentity();
+//        
+//        Physics::Rigidbody *rb = nullptr;
+//        rigidbody_pool_find(world_data->rigidbody_pool, e.get_id(), &rb);
+//      
+//        parent_compound->addChildShape(transform, rb->shape.get());
+//      }
+//    };
+
+    auto get_child_colliders = [&](Entity e, btCompoundShape *parent_compound)
+    {
+        auto lambda = [&](Entity e, btCompoundShape *parent_compound, const auto& ff) -> void
+        {  
+          for(size_t c = 0; c < e.get_number_of_children(); ++c)
+          {
+            Entity child = e.get_child(c);
+          
+            return ff(child, parent_compound, ff);
+          }
+          
+          auto parent = e.get_parent();
+          
+          if(parent.is_valid())
+          {
+            btTransform transform;
+            transform.setIdentity();
+            
+            Physics::Rigidbody *rb = nullptr;
+            rigidbody_pool_find(world_data->rigidbody_pool, e.get_id(), &rb);
+          
+            parent_compound->addChildShape(transform, rb->shape.get());
+          }
+        };
+          
+        return lambda(e, parent_compound, lambda);
+    };
+    
+    get_child_colliders(entity, rb->compound_shape.get());
+    
+    auto rb_props = entity.get_rigidbody_properties();
+    
     Physics::world_add_rigidbodies(world_data->physics_world, &rb_props, 1, rb, 1);
   }
 }

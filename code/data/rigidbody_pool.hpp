@@ -46,7 +46,7 @@ rigidbody_pool_init(Rigidbody_pool *pool);
 bool
 rigidbody_pool_find(Rigidbody_pool *pool,
                     const ::Entity::Entity_id id,
-                    Physics::Rigidbody *out_rb);
+                    Physics::Rigidbody **out_rb);
 
 /*!
   Removes an entity from the pool.
@@ -68,8 +68,8 @@ rigidbody_pool_remove(Rigidbody_pool *pool,
   \return true if we found an id to remove.
 */
 bool
-rigidbody_pool_exits(Rigidbody_pool *pool,
-                     const ::Entity::Entity_id id);
+rigidbody_pool_exists(Rigidbody_pool *pool,
+                      const ::Entity::Entity_id id);
 
 
 /*!
