@@ -112,10 +112,10 @@ rigidbody_pool_update_scene_graph_changes(Rigidbody_pool *pool,
       // Is valid? Then get the top most entity.
       if(entity.is_valid())
       {
-        while(entity.get_parent().get_id() != ::Entity::invalid_id())
-        {
-          entity = entity.get_parent();
-        }
+//        while(entity.get_parent().get_id() != ::Entity::invalid_id())
+//        {
+//          entity = entity.get_parent();
+//        }
         
         ent[ent_count++] = entity;
       }
@@ -226,6 +226,10 @@ rigidbody_pool_update_scene_graph_changes(Rigidbody_pool *pool,
             btTransform transform;
             transform.setIdentity();
             
+            assert(false);
+            // Need to get new transform.
+            // Of the nested entity.
+            
             Physics::Rigidbody *rb = nullptr;
             rigidbody_pool_find(world_data->rigidbody_pool, e.get_id(), &rb);
           
@@ -236,11 +240,14 @@ rigidbody_pool_update_scene_graph_changes(Rigidbody_pool *pool,
         return lambda(e, parent_compound, lambda);
     };
     
-    get_child_colliders(entity, rb->compound_shape.get());
-    
-    auto rb_props = entity.get_rigidbody_properties();
-    
-    Physics::world_add_rigidbodies(world_data->physics_world, &rb_props, 1, rb, 1);
+    if(entity.get_parent().get_id() == ::Entity::invalid_id())
+    {
+      get_child_colliders(entity, rb->compound_shape.get());
+      
+      auto rb_props = entity.get_rigidbody_properties();
+      
+      Physics::world_add_rigidbodies(world_data->physics_world, &rb_props, 1, rb, 1);
+    }
   }
 }
 

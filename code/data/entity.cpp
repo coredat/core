@@ -67,10 +67,10 @@ Entity::get_parent() const
   if(!is_valid()) { return Entity(); }
   
   size_t index;
-  if(::Entity::find_index_linearly(&index, m_this_id, m_world_data->entity_pool->parent_id, m_world_data->entity_pool->size))
+  if(::Entity::find_index_linearly(&index, m_this_id, m_world_data->entity_pool->entity_id, m_world_data->entity_pool->size))
   {
     Entity parent;
-    Detail::set_entity_members(&parent, m_world_data, m_world_data->entity_pool->entity_id[index]);
+    Detail::set_entity_members(&parent, m_world_data, m_world_data->entity_pool->parent_id[index]);
     
     return parent;
   }
@@ -114,13 +114,15 @@ Entity::get_child(const size_t index) const
   for(size_t i = 0; i < ent_pool->size; ++i)
   {
     const ::Entity::Entity_id id = ent_pool->parent_id[i];
-  
+
     if(id == m_this_id)
     {
       if(index == children_count)
       {
+        ::Entity::Entity_id child_id = ent_pool->entity_id[i];
+      
         Entity child;
-        Detail::set_entity_members(&child, m_world_data, m_this_id);
+        Detail::set_entity_members(&child, m_world_data, child_id);
         
         return child;
       }
