@@ -223,10 +223,17 @@ rigidbody_pool_update_scene_graph_changes(Rigidbody_pool *pool,
           
           if(parent.is_valid())
           {
+            auto parent_trans = parent.get_transform().position;
+            auto child_trans = e.get_transform().position;
+            auto pos = math::vec3_subtract(child_trans, parent_trans);
+          
             btTransform transform;
             transform.setIdentity();
+            transform.setOrigin(btVector3(math::vec3_get_x(pos), math::vec3_get_y(pos), math::vec3_get_z(pos)));
             
-            assert(false);
+    
+            
+            //assert(false);
             // Need to get new transform.
             // Of the nested entity.
             
