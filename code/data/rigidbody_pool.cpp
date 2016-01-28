@@ -76,6 +76,45 @@ rigidbody_pool_push(Rigidbody_pool *pool,
 }
 
 
+namespace
+{
+  void
+  add_child_colliders(Data::World *world_data, Data::Entity e, btCompoundShape *parent_compound)
+  {  
+    for(size_t c = 0; c < e.get_number_of_children(); ++c)
+    {
+      Entity child = e.get_child(c);
+    
+      add_child_colliders(world_data, child, parent_compound);
+    }
+    
+    auto parent = e.get_parent();
+    
+    if(parent.is_valid())
+    {
+      auto parent_trans = parent.get_transform().position;
+      auto child_trans = e.get_transform().position;
+      auto pos = math::vec3_subtract(child_trans, parent_trans);
+    
+      btTransform transform;
+      transform.setIdentity();
+      transform.setOrigin(btVector3(math::vec3_get_x(pos), math::vec3_get_y(pos), math::vec3_get_z(pos)));
+
+      
+      
+      //assert(false);
+      // Need to get new transform.
+      // Of the nested entity.
+      
+      Physics::Rigidbody *rb = nullptr;
+      rigidbody_pool_find(world_data->rigidbody_pool, e.get_id(), &rb);
+    
+      parent_compound->addChildShape(transform, rb->shape.get());
+    }
+  };
+}
+
+
 void
 rigidbody_pool_update_scene_graph_changes(Rigidbody_pool *pool,
                                           Data::World *world_data,
@@ -230,8 +269,8 @@ rigidbody_pool_update_scene_graph_changes(Rigidbody_pool *pool,
             btTransform transform;
             transform.setIdentity();
             transform.setOrigin(btVector3(math::vec3_get_x(pos), math::vec3_get_y(pos), math::vec3_get_z(pos)));
-            
     
+            
             
             //assert(false);
             // Need to get new transform.
@@ -249,7 +288,8 @@ rigidbody_pool_update_scene_graph_changes(Rigidbody_pool *pool,
     
     if(entity.get_parent().get_id() == ::Entity::invalid_id())
     {
-      get_child_colliders(entity, rb->compound_shape.get());
+      //get_child_colliders(entity, rb->compound_shape.get());
+      add_child_colliders(world_data, entity, rb->compound_shape.get());
       
       auto rb_props = entity.get_rigidbody_properties();
       
