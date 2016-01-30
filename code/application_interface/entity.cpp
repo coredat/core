@@ -1,5 +1,5 @@
 #include "entity.hpp"
-#include "data.hpp"
+#include <data/data.hpp>
 
 
 namespace Data {

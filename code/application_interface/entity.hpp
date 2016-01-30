@@ -2,14 +2,15 @@
 #define ENTITY_INCLUDED_EF96529C_E89E_4D4E_9DC2_9988B4774899
 
 
-#include "data_fwd.hpp"
-#include "entity_detail.hpp"
-#include "logic_pool.hpp"
+#include "detail/entity_detail.hpp"
+#include <data/data_fwd.hpp>
+#include <data/logic_pool.hpp>
 #include <systems/logic/logic_base.hpp>
 #include <stddef.h>
 #include <stdint.h>
 
 
+// namespace Terminal {
 namespace Data {
 
 

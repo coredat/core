@@ -1,7 +1,7 @@
 #include "rigidbody_pool.hpp"
 #include "world_data.hpp"
-#include "entity.hpp"
 #include "entity_pool.hpp"
+#include <application_interface/entity.hpp>
 #include <systems/physics/world.hpp>
 #include <functional>
 

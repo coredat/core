@@ -5,6 +5,7 @@
 #include <systems/entity/entity_id.hpp>
 #include <systems/entity/generic_id.hpp>
 #include <data/data.hpp>
+#include <application_interface/entity.hpp>
 #include <application/game_logic/actor_local_player.hpp>
 #include <application/game_logic/actor_network_player.hpp>
 

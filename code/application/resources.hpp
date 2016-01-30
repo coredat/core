@@ -30,7 +30,7 @@ namespace Texture {
 enum ENUM {
   
   // Speical dev textures.
-  dev_no_texture,
+  //dev_no_texture, // TODO: This crashes the system 
   
   // Temp textures for dev.
   dev_green,
