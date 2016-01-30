@@ -10,19 +10,18 @@ namespace Transform {
 /*!
   Gets the world up vector.
 */
-math::vec3 get_world_up();
-
+inline math::vec3 world_up() { return math::vec3_init(0, +1, 0); }
 
 /*!
   Gets the world left vector.
 */
-math::vec3 get_world_left();
-
+inline math::vec3 world_left() { return math::vec3_init(+1, 0, 0); }
 
 /*!
   Gets the world forward vector.
 */
-math::vec3 get_world_fwd();
+inline math::vec3 world_forward() { return math::vec3_init(0, 0, -1); }
+
 
 
 /*!

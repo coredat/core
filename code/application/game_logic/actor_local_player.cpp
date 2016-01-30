@@ -156,11 +156,7 @@ Actor_local_player::on_update(const float dt)
       math::vec3 left;
       Transform::get_left_vec(&move_trans, &left);
       
-      math::vec3 fwd = math::vec3_cross(Transform::get_world_up(), left);
-    
-//      const math::vec3 norm_movement            = math::vec3_normalize(accum_movement);
- //     const math::vec3 rotated_movement         = math::quat_rotate_point(move_trans.rotation, norm_movement);
-//      const math::vec3 corrected_rotation       = math::vec3_init(math::vec3_get_x(rotated_movement), 0.f, math::vec3_get_z(rotated_movement)); // We're not interested in y movement.
+      const math::vec3 fwd                      = math::vec3_cross(Transform::world_up(), left);
       const math::vec3 norm_corrected_rotation  = math::vec3_normalize(fwd);
       const math::vec3 scaled_movement          = math::vec3_scale(norm_corrected_rotation, delta_time);
       const math::vec3 new_pos                  = math::vec3_add(move_trans.position, scaled_movement);
