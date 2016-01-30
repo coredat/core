@@ -38,7 +38,7 @@ Actor_local_player::on_update(const float dt)
     const btVector3 btTo(math::vec3_get_x(curr_trans.position), math::vec3_get_y(curr_trans.position) - 2, math::vec3_get_z(curr_trans.position));
     btCollisionWorld::ClosestRayResultCallback feet_test(btFrom, btTo);
     
-    m_world->dynamics_world.rayTest(btFrom, btTo, feet_test);
+    world_data->physics_world->dynamics_world.rayTest(btFrom, btTo, feet_test);
 
     Renderer::debug_line(btFrom, btTo, btVector3(1, 1, 0));
     
@@ -75,7 +75,7 @@ Actor_local_player::on_update(const float dt)
     const btVector3 btFwd = btFaceStart + fwdVec;
     
     btCollisionWorld::ClosestRayResultCallback face_ray(btFaceStart, btFwd);
-    m_world->dynamics_world.rayTest(btFaceStart, btFwd, face_ray);
+    world_data->physics_world->dynamics_world.rayTest(btFaceStart, btFwd, face_ray);
     
     Renderer::debug_line(btFaceStart, btFwd, btVector3(1, 0, 0));
     

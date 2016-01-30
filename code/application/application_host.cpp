@@ -24,37 +24,11 @@ host_initialize(
   Data::World *world,
   Network::Connection *connection)
 {
-  
-//  Entity::Entity_id kine_actor_network;
-//  Entity::Entity_id kine_actor_local;
-
   Entity_factory::create_ground(world);
 
   {
-    kine_actor_local = Entity_factory::create_kinematic_actor(world).get_id();
-    kine_actor_network = Entity_factory::create_kinematic_actor(world).get_id();
-  }
-  
-
-  // Game Logic
-  {
-    const auto free_slot = Data::logic_pool_get_slot(world->logic_pool, kine_actor_local);
-    new(free_slot) Actor_local_player();
-    
-    auto base = reinterpret_cast<Logic::Base*>(free_slot);
-    base->set_entity(kine_actor_local);
-    base->world_data = world;
-    base->m_world = world->physics_world;
-  }
-  
-  {
-    const auto free_slot = Data::logic_pool_get_slot(world->logic_pool, kine_actor_network);
-    new(free_slot) Actor_network_player();
-    
-    auto base = reinterpret_cast<Logic::Base*>(free_slot);
-    base->set_entity(kine_actor_network);
-    base->world_data = world;
-    base->m_world = world->physics_world;
+    kine_actor_local   = Entity_factory::create_local_kinematic_actor(world).get_id();
+    kine_actor_network = Entity_factory::create_network_kinematic_actor(world).get_id();
   }
   
   Entity_factory::create_connection_node(world);
@@ -88,6 +62,7 @@ host_think(
   std::size_t index;
   Entity::find_index_linearly(&index, kine_actor_local, world->entity_pool->entity_id, world->entity_pool->size);
 
+  // Kill me!!!!
   Actor_local_player *actor = reinterpret_cast<Actor_local_player*>(world->logic_pool->objects_in_use[0]);
 
   actor->move_fwd(inputs->controllers[0].axis_2[1]);

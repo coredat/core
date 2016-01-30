@@ -22,7 +22,11 @@ create_actor(Data::World *world);
 
 
 Data::Entity
-create_kinematic_actor(Data::World *world);
+create_local_kinematic_actor(Data::World *world);
+
+
+Data::Entity
+create_network_kinematic_actor(Data::World *world);
 
 
 Data::Entity

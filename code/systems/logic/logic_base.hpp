@@ -3,8 +3,9 @@
 
 
 #include <iostream>
-#include <systems/entity/entity_id.hpp>
 #include <data/data_fwd.hpp> // TODO: Stink! This isn't nice.
+#include <data/world_data.hpp>
+#include <systems/entity/entity_id.hpp>
 #include <systems/physics/physics.hpp>
 #include <math/transform/transform.hpp>
 
@@ -30,10 +31,6 @@ public:
   
   void                set_entity(const Entity::Entity_id entity) { m_entity = entity; };
   Entity::Entity_id   get_entity() const { return m_entity; }
-  
-
-
-  Physics::World *m_world; // TODO: Move
   
 //private:
 

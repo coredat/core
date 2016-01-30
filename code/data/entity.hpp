@@ -4,6 +4,8 @@
 
 #include "data_fwd.hpp"
 #include "entity_detail.hpp"
+#include "logic_pool.hpp"
+#include <systems/logic/logic_base.hpp>
 #include <stddef.h>
 #include <stdint.h>
 
@@ -44,6 +46,20 @@ public:
   
   void                          set_rigidbody_collider(const Physics::Rigidbody_collider collider);
   Physics::Rigidbody_collider   get_rigidbody_collider() const;
+  
+  template<typename T>
+  T*
+  add_component()
+  {
+    const auto free_slot = Data::logic_pool_get_slot(m_world_data->logic_pool, get_id());
+    auto comp = new(free_slot) T();
+
+    auto base = reinterpret_cast<Logic::Base*>(free_slot);
+    base->set_entity(get_id());
+    base->world_data = m_world_data;
+    
+    return comp;
+  }
   
 private:
 

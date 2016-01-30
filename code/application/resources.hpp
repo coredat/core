@@ -29,6 +29,10 @@ namespace Texture {
 
 enum ENUM {
   
+  // Speical dev textures.
+  dev_no_texture,
+  
+  // Temp textures for dev.
   dev_green,
   dev_red,
   dev_orange,
@@ -36,6 +40,8 @@ enum ENUM {
   dev_colored_squares,
   dev_squares,
   
+  
+  // Number of textures.
   size
 
 }; // enum

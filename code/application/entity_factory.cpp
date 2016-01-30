@@ -5,6 +5,8 @@
 #include <systems/entity/entity_id.hpp>
 #include <systems/entity/generic_id.hpp>
 #include <data/data.hpp>
+#include <application/game_logic/actor_local_player.hpp>
+#include <application/game_logic/actor_network_player.hpp>
 
 
 namespace Entity_factory {
@@ -56,10 +58,10 @@ create_random_cube(Data::World *world)
 
 
 Data::Entity
-create_kinematic_actor(Data::World *world)
+create_local_kinematic_actor(Data::World *world)
 {
   Data::Entity entity;
-  assert(Data::world_create_new_entity(world, &entity, Object_type::dev_static_ground));
+  assert(Data::world_create_new_entity(world, &entity, Object_type::dev_actor));
   
   const float scale_x = 0.5f;
   const float scale_y = 0.5f;
@@ -75,6 +77,35 @@ create_kinematic_actor(Data::World *world)
   
   entity.set_material_id(Resource::Texture::dev_orange);
   entity.set_model_id(Resource::Model::unit_cube);
+  
+  entity.add_component<Actor_local_player>();
+  
+  return entity;
+}
+
+
+Data::Entity
+create_network_kinematic_actor(Data::World *world)
+{
+  Data::Entity entity;
+  assert(Data::world_create_new_entity(world, &entity, Object_type::dev_actor));
+  
+  const float scale_x = 0.5f;
+  const float scale_y = 0.5f;
+  const float scale_z = 0.5f;
+
+  const float pos_x = 3.f;
+  const float pos_y = 2.5f;
+  const float pos_z = 0.f;
+
+  entity.set_transform(math::transform_init(math::vec3_init(pos_x, pos_y, pos_z),
+                                            math::vec3_init(scale_x, scale_y, scale_z),
+                                            math::quat_init()));
+  
+  entity.set_material_id(Resource::Texture::dev_red);
+  entity.set_model_id(Resource::Model::unit_cube);
+  
+  entity.add_component<Actor_network_player>();
   
   return entity;
 }
