@@ -7,6 +7,23 @@
 
 namespace Transform {
 
+/*!
+  Gets the world up vector.
+*/
+math::vec3 get_world_up();
+
+
+/*!
+  Gets the world left vector.
+*/
+math::vec3 get_world_left();
+
+
+/*!
+  Gets the world forward vector.
+*/
+math::vec3 get_world_fwd();
+
 
 /*!
   Computes the wvp mats.
@@ -48,6 +65,25 @@ transforms_to_world_mats(const math::transform input_transforms[],
 */
 void
 get_fwd_vec(const math::transform *transform, math::vec3 *out_vec3);
+
+
+/*!
+  Computes the left direction.
+  \param transform The currect transform.
+  \param out_vec3 the resulting left vector.
+*/
+void
+get_left_vec(const math::transform *transform, math::vec3 *out_vec3);
+
+
+/*!
+  Computes the up direction.
+  \param transform The currect transform.
+  \param out_vec3 the resulting up vector.
+*/
+void
+get_up_vec(const math::transform *transform, math::vec3 *out_vec3);
+
 
 } // ns
 

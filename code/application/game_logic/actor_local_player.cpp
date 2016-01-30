@@ -153,10 +153,15 @@ Actor_local_player::on_update(const float dt)
     
     if(math::vec3_length(accum_movement) != 0)
     {
-      const math::vec3 norm_movement            = math::vec3_normalize(accum_movement);
-      const math::vec3 rotated_movement         = math::quat_rotate_point(move_trans.rotation, norm_movement);
-      const math::vec3 corrected_rotation       = math::vec3_init(math::vec3_get_x(rotated_movement), 0.f, math::vec3_get_z(rotated_movement)); // We're not interested in y movement.
-      const math::vec3 norm_corrected_rotation  = math::vec3_normalize(corrected_rotation);
+      math::vec3 left;
+      Transform::get_left_vec(&move_trans, &left);
+      
+      math::vec3 fwd = math::vec3_cross(Transform::get_world_up(), left);
+    
+//      const math::vec3 norm_movement            = math::vec3_normalize(accum_movement);
+ //     const math::vec3 rotated_movement         = math::quat_rotate_point(move_trans.rotation, norm_movement);
+//      const math::vec3 corrected_rotation       = math::vec3_init(math::vec3_get_x(rotated_movement), 0.f, math::vec3_get_z(rotated_movement)); // We're not interested in y movement.
+      const math::vec3 norm_corrected_rotation  = math::vec3_normalize(fwd);
       const math::vec3 scaled_movement          = math::vec3_scale(norm_corrected_rotation, delta_time);
       const math::vec3 new_pos                  = math::vec3_add(move_trans.position, scaled_movement);
       const math::transform new_trans           = math::transform_init(new_pos, move_trans.scale, move_trans.rotation);
@@ -219,8 +224,10 @@ Actor_local_player::action()
 void
 Actor_local_player::look_up(const float up)
 {
-  const float accum_up = math::vec2_get_x(head_rotations) + up;
-  head_rotations = math::vec2_init(accum_up, math::vec2_get_y(head_rotations));
+  const float accum_up      = math::vec2_get_x(head_rotations) + up;
+  const float clamped_accum = math::clamp(accum_up, +math::quart_tau(), -math::quart_tau());
+  
+  head_rotations = math::vec2_init(clamped_accum, math::vec2_get_y(head_rotations));
 }
 
 

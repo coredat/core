@@ -12,6 +12,25 @@ namespace
 namespace Transform {
 
 
+// TODO Make these constexpr or something in header.
+math::vec3 get_world_up()
+{
+  return up_dir;
+}
+
+
+math::vec3 get_world_left()
+{
+  return left_dir;
+}
+
+
+math::vec3 get_world_fwd()
+{
+  return fwd_dir;
+}
+
+
 void
 transforms_to_wvp_mats(const math::transform input_transforms[],
                        const std::size_t number_of_input_transforms,
@@ -74,5 +93,26 @@ get_fwd_vec(const math::transform *transform, math::vec3 *out_vec3)
   
   *out_vec3 = math::quat_rotate_point(transform->rotation, fwd_dir);
 }
+
+
+void
+get_left_vec(const math::transform *transform, math::vec3 *out_vec3)
+{
+  // Param check.
+  assert(transform && out_vec3);
+  
+  *out_vec3 = math::quat_rotate_point(transform->rotation, left_dir);
+}
+
+
+void
+get_up_vec(const math::transform *transform, math::vec3 *out_vec3)
+{
+  // Param check.
+  assert(transform && out_vec3);
+  
+  *out_vec3 = math::quat_rotate_point(transform->rotation, up_dir);
+}
+
 
 } // ns
