@@ -38,28 +38,23 @@ host_initialize(
 
   // Game Logic
   {
-    const auto free_slot = Data::logic_pool_get_slot(world->logic_pool);
+    const auto free_slot = Data::logic_pool_get_slot(world->logic_pool, kine_actor_local);
     new(free_slot) Actor_local_player();
     
-    auto base = reinterpret_cast<Logic::Base*>(world->logic_pool->objects_in_use[0]);
+    auto base = reinterpret_cast<Logic::Base*>(free_slot);
     base->set_entity(kine_actor_local);
     base->world_data = world;
     base->m_world = world->physics_world;
   }
   
   {
-    const auto free_slot = Data::logic_pool_get_slot(world->logic_pool);
+    const auto free_slot = Data::logic_pool_get_slot(world->logic_pool, kine_actor_network);
     new(free_slot) Actor_network_player();
     
-    auto base = reinterpret_cast<Logic::Base*>(world->logic_pool->objects_in_use[1]);
+    auto base = reinterpret_cast<Logic::Base*>(free_slot);
     base->set_entity(kine_actor_network);
     base->world_data = world;
     base->m_world = world->physics_world;
-  }
-  
-  for(auto &obj : world->logic_pool->objects_in_use)
-  {
-    reinterpret_cast<Logic::Base*>(obj)->on_start(); // TODO: reinter_cast?
   }
   
   Entity_factory::create_connection_node(world);
@@ -107,11 +102,8 @@ host_think(
   }
 
   // ** Game Logic Update ** //
-
-  for (auto &obj : world->logic_pool->objects_in_use)
-  {
-    reinterpret_cast<Logic::Base*>(obj)->on_update(delta_time); // TODO: reinter_cast?
-  }
+  Data::logic_pool_on_start_hook(world->logic_pool);
+  Data::logic_pool_on_update_hook(world->logic_pool, delta_time);
 
   // Push in new phy entities.  
   Data::rigidbody_pool_update_scene_graph_changes(world->rigidbody_pool, world, world->entity_graph_changes);

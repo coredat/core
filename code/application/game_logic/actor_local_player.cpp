@@ -110,7 +110,7 @@ Actor_local_player::on_update(const float dt)
       }
     }
     
-      m_place_node = false;
+    m_place_node = false;
   };
   
   apply_gravity(get_entity());
@@ -127,13 +127,13 @@ Actor_local_player::on_update(const float dt)
     
     if(math::vec3_get_z(pending_input) > 0)
     {
-      const math::vec3 move_fwd = math::vec3_init(0,0,-1);
+      const math::vec3 move_fwd = math::vec3_init(0,0,+1);
       accum_movement = math::vec3_add(accum_movement, move_fwd);
     }
 
     if(math::vec3_get_z(pending_input) < 0)
     {
-      const math::vec3 move_fwd = math::vec3_init(0,0,+1);
+      const math::vec3 move_fwd = math::vec3_init(0,0,-1);
       accum_movement = math::vec3_add(accum_movement, move_fwd);
     }
     
@@ -157,7 +157,10 @@ Actor_local_player::on_update(const float dt)
       Transform::get_left_vec(&move_trans, &left);
       
       const math::vec3 fwd                      = math::vec3_cross(Transform::world_up(), left);
-      const math::vec3 norm_corrected_rotation  = math::vec3_normalize(fwd);
+      const math::vec3 norm_fwd                 = math::vec3_normalize(fwd);
+      const math::vec3 scaled_fwd               = math::vec3_scale(norm_fwd, math::vec3_get_z(accum_movement));
+      
+      const math::vec3 norm_corrected_rotation  = math::vec3_normalize(scaled_fwd);
       const math::vec3 scaled_movement          = math::vec3_scale(norm_corrected_rotation, delta_time);
       const math::vec3 new_pos                  = math::vec3_add(move_trans.position, scaled_movement);
       const math::transform new_trans           = math::transform_init(new_pos, move_trans.scale, move_trans.rotation);
