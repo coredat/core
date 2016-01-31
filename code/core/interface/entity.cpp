@@ -20,7 +20,7 @@ Entity::get_id() const
 bool
 Entity::is_valid() const
 {
-  return !(m_this_id == Core::invalid_id());
+  return !(m_this_id == Core::entity_invalid_id());
 }
 
 

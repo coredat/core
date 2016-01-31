@@ -97,7 +97,7 @@ void
 Actor_base::move_forward(const float fwd)
 {
   const float accum_fwd = math::vec3_get_z(m_pending_move) + fwd;
-  m_pending_move = math::vec3_init(math::vec3_get_x(m_pending_move), math::vec3_get_y(m_pending_move), accum_fwd);
+  m_pending_move        = math::vec3_init(math::vec3_get_x(m_pending_move), math::vec3_get_y(m_pending_move), accum_fwd);
 }
 
 
@@ -105,7 +105,7 @@ void
 Actor_base::move_left(const float left)
 {
   const float accum_right = math::vec3_get_x(m_pending_move) + left;
-  m_pending_move = math::vec3_init(math::vec3_get_x(m_pending_move), accum_right, math::vec3_get_z(m_pending_move));
+  m_pending_move          = math::vec3_init(math::vec3_get_x(m_pending_move), accum_right, math::vec3_get_z(m_pending_move));
 }
 
 
@@ -114,8 +114,7 @@ Actor_base::look_up(const float pitch)
 {
   const float accum_up      = math::vec3_get_x(m_acuumulated_rotations) + pitch;
   const float clamped_accum = math::clamp(accum_up, +math::quart_tau(), -math::quart_tau());
-  
-  m_acuumulated_rotations = math::vec3_init(clamped_accum, math::vec3_get_y(m_acuumulated_rotations), math::vec3_get_z(m_acuumulated_rotations));
+  m_acuumulated_rotations   = math::vec3_init(clamped_accum, math::vec3_get_y(m_acuumulated_rotations), math::vec3_get_z(m_acuumulated_rotations));
 }
 
 

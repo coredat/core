@@ -13,8 +13,8 @@
 
 namespace
 {
-  Core::Entity_id kine_actor_local = Core::invalid_id();
-  Core::Entity_id kine_actor_network = Core::invalid_id();
+  Core::Entity_id kine_actor_local = Core::entity_invalid_id();
+  Core::Entity_id kine_actor_network = Core::entity_invalid_id();
 }
 
 
@@ -30,7 +30,7 @@ host_initialize(
 
   {
     kine_actor_local   = Entity_factory::create_local_kinematic_actor(world).get_id();
-//    kine_actor_network = Entity_factory::create_network_kinematic_actor(world).get_id();
+    kine_actor_network = Entity_factory::create_network_kinematic_actor(world).get_id();
   }
   
   Entity_factory::create_connection_node(world);

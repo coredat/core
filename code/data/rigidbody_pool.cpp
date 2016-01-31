@@ -40,7 +40,7 @@ rigidbody_pool_remove(Rigidbody_pool *pool,
   size_t index;
   if(Core::find_index_linearly(&index, id, pool->entity_id, pool->size))
   {
-    pool->entity_id[index] = Core::invalid_id();
+    pool->entity_id[index] = Core::entity_invalid_id();
     return true;
   }
   
@@ -64,7 +64,7 @@ rigidbody_pool_push(Rigidbody_pool *pool,
 {
   // This is there I am at.
   size_t index;
-  if(Core::find_index_linearly(&index, Core::invalid_id(), pool->entity_id, pool->size))
+  if(Core::find_index_linearly(&index, Core::entity_invalid_id(), pool->entity_id, pool->size))
   {
     pool->entity_id[index] = id;
     *new_rb = &pool->rigidbody[index];
@@ -286,7 +286,7 @@ rigidbody_pool_update_scene_graph_changes(Rigidbody_pool *pool,
         return lambda(e, parent_compound, lambda);
     };
     
-    if(entity.get_parent().get_id() == Core::invalid_id())
+    if(entity.get_parent().get_id() == Core::entity_invalid_id())
     {
       //get_child_colliders(entity, rb->compound_shape.get());
       add_child_colliders(world_data, entity, rb->compound_shape.get());

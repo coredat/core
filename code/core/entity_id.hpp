@@ -54,14 +54,14 @@ operator<(const Entity_id left, const Entity_id right)
 
 
 constexpr bool
-is_valid(const Entity_id id)
+entity_is_valid(const Entity_id id)
 {
   return id.type_id == 0;
 }
 
 
 constexpr Entity_id
-invalid_id()
+entity_invalid_id()
 {
   return Entity_id{0,0};
 };

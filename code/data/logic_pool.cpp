@@ -29,7 +29,7 @@ logic_pool_get_slot(Logic_pool *pool,
 {
   size_t index;
   if(Core::find_index_linearly(&index,
-                               Core::invalid_id(),
+                               Core::entity_invalid_id(),
                                pool->entity_id,
                                pool->size))
   {

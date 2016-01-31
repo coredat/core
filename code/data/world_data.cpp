@@ -28,7 +28,7 @@ world_create_new_entity(World *world_data, Core::Entity *out_entity, const uint3
 
     size_t empty_index;
     if(Core::find_index_linearly(&empty_index,
-                                 Core::invalid_id(),
+                                 Core::entity_invalid_id(),
                                  entity_pool->entity_id,
                                  entity_pool->size))
     {
@@ -53,7 +53,7 @@ bool
 world_find_entity(World *world_data, Core::Entity *out_entity, const Core::Entity_id id)
 {
   assert(world_data);
-  assert(id != Core::invalid_id());
+  assert(id != Core::entity_invalid_id());
 
   auto entity_pool = world_data->entity_pool;
 
