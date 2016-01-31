@@ -1,6 +1,7 @@
 #include "entity_id.hpp"
 #include <assert.h>
 #include <cstring>
+#include <math/math.hpp>
 
 
 namespace Core {

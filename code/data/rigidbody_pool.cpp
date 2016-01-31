@@ -100,8 +100,6 @@ namespace
       transform.setIdentity();
       transform.setOrigin(btVector3(math::vec3_get_x(pos), math::vec3_get_y(pos), math::vec3_get_z(pos)));
 
-      
-      
       //assert(false);
       // Need to get new transform.
       // Of the nested entity.

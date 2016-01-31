@@ -538,11 +538,11 @@
 		7EFB9B021C5E620C00A838C7 /* interface */ = {
 			isa = PBXGroup;
 			children = (
+				7EFB9B071C5E620C00A838C7 /* detail */,
 				7EFB9B031C5E620C00A838C7 /* interface.hpp */,
 				7EFB9B041C5E620C00A838C7 /* interface_fwd.hpp */,
 				7EFB9B051C5E620C00A838C7 /* component.cpp */,
 				7EFB9B061C5E620C00A838C7 /* component.hpp */,
-				7EFB9B071C5E620C00A838C7 /* detail */,
 				7EFB9B0A1C5E620C00A838C7 /* entity.cpp */,
 				7EFB9B0B1C5E620C00A838C7 /* entity.hpp */,
 			);
