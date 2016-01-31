@@ -3,7 +3,7 @@
 
 
 #include <data/data_fwd.hpp>
-#include <systems/entity/entity_id.hpp>
+#include <core/entity_id.hpp>
 
 
 // This is used to allow the factory to make a public version

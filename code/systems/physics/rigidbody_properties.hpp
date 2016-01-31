@@ -2,7 +2,7 @@
 #define COLLIDER_INCLUDED_991C680D_ABCA_4E7A_A742_8E324B855F1F
 
 
-#include <systems/entity/entity_id.hpp>
+#include <core/entity_id.hpp>
 #include <stdint.h>
 
 

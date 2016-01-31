@@ -2,10 +2,10 @@
 #define COMPONENT_INCLUDED_4D9CAF99_66F7_47AA_8460_AEDF08D1BB35
 
 
-#include "application_interface_fwd.hpp"
+#include "interface_fwd.hpp"
 #include "detail/component_detail.hpp"
 #include <data/data_fwd.hpp>
-#include <systems/entity/entity_id.hpp>
+#include <core/entity_id.hpp>
 
 
 namespace Core {

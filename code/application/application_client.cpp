@@ -1,7 +1,7 @@
 #include "application_client.hpp"
 #include <data/data.hpp>
 #include <systems/network/network.hpp>
-#include <systems/entity/entity_id.hpp>
+#include <core/entity_id.hpp>
 #include <systems/physics/physics.hpp>
 #include <systems/environment/environment.hpp>
 #include <iostream>

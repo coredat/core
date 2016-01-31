@@ -3,6 +3,7 @@
 
 
 #include "component.hpp"
+#include "../entity_id.hpp"
 #include "detail/entity_detail.hpp"
 #include <systems/physics/rigidbody_properties.hpp>
 #include <systems/physics/rigidbody_collider.hpp>

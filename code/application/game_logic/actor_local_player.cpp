@@ -4,7 +4,7 @@
 #include <systems/transform/transform.hpp>
 #include <application/entity_factory.hpp>
 #include <data/data.hpp>
-#include <application_interface/entity.hpp>
+#include <core/interface/entity.hpp>
 
 
 Actor_local_player::Actor_local_player()

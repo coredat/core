@@ -1,7 +1,7 @@
 #include <math/transform/transform.hpp>
 #include <btBulletDynamicsCommon.h>
 #include <data/entity_pool.hpp>
-#include <systems/entity/entity_id.hpp>
+#include <core/entity_id.hpp>
 #include "motion_state.hpp"
 
 

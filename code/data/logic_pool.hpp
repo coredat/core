@@ -2,8 +2,8 @@
 #define LOGIC_POOL_INCLUDED_2879D607_1430_4D5C_8806_974D5294E9F5
 
 
-#include <application_interface/component.hpp>
-#include <systems/entity/entity_id.hpp>
+#include <core/interface/component.hpp>
+#include <core/entity_id.hpp>
 #include <stddef.h>
 
 

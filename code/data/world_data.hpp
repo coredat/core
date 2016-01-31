@@ -3,9 +3,9 @@
 
 
 #include "data_fwd.hpp"
-#include <application_interface/application_interface_fwd.hpp>
+#include <core/interface/interface_fwd.hpp>
 #include <systems/physics/physics_fwd.hpp>
-#include <systems/entity/entity_id.hpp>
+#include <core/entity_id.hpp>
 #include <stdint.h>
 
 

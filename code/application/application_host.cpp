@@ -4,10 +4,10 @@
 #include "game_logic/actor_network_player.hpp" // KILL!
 #include <data/data.hpp>
 #include <systems/network/network.hpp>
-#include <systems/entity/entity_id.hpp>
+#include <core/entity_id.hpp>
 #include <systems/physics/physics.hpp>
 #include <systems/environment/environment.hpp>
-#include <application_interface/entity.hpp>
+#include <core/interface/entity.hpp>
 #include <iostream>
 
 

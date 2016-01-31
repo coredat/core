@@ -4,7 +4,7 @@
 
 #include "component.hpp"
 #include <data/data_fwd.hpp>
-#include <systems/entity/entity_id.hpp>
+#include <core/entity_id.hpp>
 
 
 #define COMPONENT_MEMBERS                            \

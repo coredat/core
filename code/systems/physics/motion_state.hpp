@@ -3,7 +3,7 @@
 
 
 #include <btBulletDynamicsCommon.h>
-#include <systems/entity/entity_id.hpp>
+#include <core/entity_id.hpp>
 #include <data/data_fwd.hpp>
 
 

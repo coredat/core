@@ -3,7 +3,7 @@
 
 
 #include <application/ids_component_types.hpp>
-#include <application_interface/component.hpp>
+#include <core/interface/component.hpp>
 #include <math/math.hpp>
 
 

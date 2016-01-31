@@ -1,6 +1,6 @@
 #include "world_data.hpp"
 #include "entity_pool.hpp"
-#include <application_interface/entity.hpp>
+#include <core/interface/entity.hpp>
 #include <systems/physics/physics.hpp>
 #include <atomic>
 

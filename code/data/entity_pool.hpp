@@ -3,11 +3,11 @@
 
 
 #include <application/resources.hpp>
-#include <systems/entity/entity_id.hpp>
+#include <core/entity_id.hpp>
 #include <math/math.hpp>
 #include <simple_renderer/lazy_include.hpp>
 #include <systems/physics/physics_fwd.hpp>
-#include <systems/entity/entity_id.hpp>
+#include <core/entity_id.hpp>
 #include <systems/physics/physics.hpp>
 #include <stddef.h>
 
@@ -23,8 +23,8 @@ namespace Data {
 */
 struct Entity_pool
 {
-  Core::Entity_id             entity_id[ENTITY_POOL_SIZE];
-  Core::Entity_id             parent_id[ENTITY_POOL_SIZE];
+  Core::Entity_id                 entity_id[ENTITY_POOL_SIZE];
+  Core::Entity_id                 parent_id[ENTITY_POOL_SIZE];
   
   math::transform                 transform[ENTITY_POOL_SIZE];
   

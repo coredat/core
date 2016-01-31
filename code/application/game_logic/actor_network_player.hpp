@@ -3,8 +3,8 @@
 
 
 #include <application/ids_component_types.hpp>
-#include <application_interface/component.hpp>
-#include <application_interface/entity.hpp>
+#include <core/interface/component.hpp>
+#include <core/interface/entity.hpp>
 
 
 class Actor_network_player : public Core::Component
