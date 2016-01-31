@@ -17,7 +17,7 @@ namespace Data {
 
 
 bool
-world_create_new_entity(World *world_data, Entity *out_entity, const uint32_t type_id)
+world_create_new_entity(World *world_data, Core::Entity *out_entity, const uint32_t type_id)
 {
   // Param check.
   assert(world_data && out_entity && type_id);
@@ -32,7 +32,7 @@ world_create_new_entity(World *world_data, Entity *out_entity, const uint32_t ty
                                      entity_pool->entity_id,
                                      entity_pool->size))
     {
-      Detail::set_entity_members(out_entity, world_data, ::Entity::Entity_id{type_id, ++instance});
+      Core::Detail::set_entity_members(out_entity, world_data, ::Entity::Entity_id{type_id, ++instance});
       
       entity_pool->entity_id[empty_index] = out_entity->get_id();
 
@@ -50,7 +50,7 @@ world_create_new_entity(World *world_data, Entity *out_entity, const uint32_t ty
 
 
 bool
-world_find_entity(World *world_data, Entity *out_entity, const ::Entity::Entity_id id)
+world_find_entity(World *world_data, Core::Entity *out_entity, const ::Entity::Entity_id id)
 {
   assert(world_data);
   assert(id != ::Entity::invalid_id());
@@ -64,7 +64,7 @@ world_find_entity(World *world_data, Entity *out_entity, const ::Entity::Entity_
                                    entity_pool->entity_id,
                                    entity_pool->size))
   {
-    Detail::set_entity_members(out_entity, world_data, id);
+    Core::Detail::set_entity_members(out_entity, world_data, id);
     return true;
   }
   

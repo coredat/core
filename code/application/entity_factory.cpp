@@ -13,10 +13,10 @@
 namespace Entity_factory {
 
 
-Data::Entity
+Core::Entity
 create_ground(Data::World *data)
 {
-  Data::Entity entity;
+  Core::Entity entity;
   assert(Data::world_create_new_entity(data, &entity, Object_type::dev_static_ground));
 
   const float scale = 10.f;
@@ -31,10 +31,10 @@ create_ground(Data::World *data)
 }
 
 
-Data::Entity
+Core::Entity
 create_random_cube(Data::World *world)
 {
-  Data::Entity entity;
+  Core::Entity entity;
   assert(Data::world_create_new_entity(world, &entity, Object_type::dev_dynamic_cube));
   
   const float scale_x = static_cast<float>(rand() % 200 + 10) / 200;
@@ -58,10 +58,10 @@ create_random_cube(Data::World *world)
 }
 
 
-Data::Entity
+Core::Entity
 create_local_kinematic_actor(Data::World *world)
 {
-  Data::Entity entity;
+  Core::Entity entity;
   assert(Data::world_create_new_entity(world, &entity, Object_type::dev_actor));
   
   const float scale_x = 0.5f;
@@ -85,10 +85,10 @@ create_local_kinematic_actor(Data::World *world)
 }
 
 
-Data::Entity
+Core::Entity
 create_network_kinematic_actor(Data::World *world)
 {
-  Data::Entity entity;
+  Core::Entity entity;
   assert(Data::world_create_new_entity(world, &entity, Object_type::dev_actor));
   
   const float scale_x = 0.5f;
@@ -112,10 +112,10 @@ create_network_kinematic_actor(Data::World *world)
 }
 
 
-Data::Entity
+Core::Entity
 create_placement_cube(Data::World *world)
 {
-  Data::Entity entity;
+  Core::Entity entity;
   assert(Data::world_create_new_entity(world, &entity, Object_type::dev_view_cube));
 
   entity.set_transform(math::transform_init(math::vec3_zero(),
@@ -130,10 +130,10 @@ create_placement_cube(Data::World *world)
 }
 
 
-Data::Entity
+Core::Entity
 create_connection_node(Data::World *world)
 {
-  Data::Entity entity;
+  Core::Entity entity;
   assert(Data::world_create_new_entity(world, &entity, Object_type::dev_dynamic_cube));
 
   const float scale = 1.f;

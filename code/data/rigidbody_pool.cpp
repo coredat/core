@@ -79,11 +79,11 @@ rigidbody_pool_push(Rigidbody_pool *pool,
 namespace
 {
   void
-  add_child_colliders(Data::World *world_data, Data::Entity e, btCompoundShape *parent_compound)
+  add_child_colliders(Data::World *world_data, Core::Entity e, btCompoundShape *parent_compound)
   {  
     for(size_t c = 0; c < e.get_number_of_children(); ++c)
     {
-      Entity child = e.get_child(c);
+      Core::Entity child = e.get_child(c);
     
       add_child_colliders(world_data, child, parent_compound);
     }
@@ -136,7 +136,7 @@ rigidbody_pool_update_scene_graph_changes(Rigidbody_pool *pool,
   
   // Get a list of Entities that have not been removed.
   // And have no parents
-  Data::Entity ent[128];
+  Core::Entity ent[128];
   size_t ent_count(0);
   
   for(size_t i = 0; i < graph_changes->size; ++i)
@@ -145,7 +145,7 @@ rigidbody_pool_update_scene_graph_changes(Rigidbody_pool *pool,
     
     if(graph_change.change_type != Data::Entity_graph_change::removed)
     {
-      Data::Entity entity;
+      Core::Entity entity;
       Data::world_find_entity(world_data, &entity, graph_change.entity_id);
       
       // Is valid? Then get the top most entity.
@@ -165,7 +165,7 @@ rigidbody_pool_update_scene_graph_changes(Rigidbody_pool *pool,
   // TODO: Didn't we just do removals huh?
   for(size_t i = 0; i < ent_count; ++i)
   {
-    Entity parent = ent[i];
+    Core::Entity parent = ent[i];
     
     // Find index in rb and remove it.
     
@@ -182,7 +182,7 @@ rigidbody_pool_update_scene_graph_changes(Rigidbody_pool *pool,
   // Build colliders.
   for(size_t i = 0; i < ent_count; ++i)
   {
-    Entity entity = ent[i];
+    Core::Entity entity = ent[i];
     
     auto rb_collider = entity.get_rigidbody_collider();
     
@@ -210,7 +210,7 @@ rigidbody_pool_update_scene_graph_changes(Rigidbody_pool *pool,
   // Stick them into the world.
   for(size_t i = 0; i < ent_count; ++i)
   {
-    Entity entity = ent[i];
+    Core::Entity entity = ent[i];
     
     auto rb_collider = entity.get_rigidbody_collider();
 
@@ -247,13 +247,13 @@ rigidbody_pool_update_scene_graph_changes(Rigidbody_pool *pool,
 //      }
 //    };
 
-    auto get_child_colliders = [&](Entity e, btCompoundShape *parent_compound)
+    auto get_child_colliders = [&](Core::Entity e, btCompoundShape *parent_compound)
     {
-        auto lambda = [&](Entity e, btCompoundShape *parent_compound, const auto& ff) -> void
+        auto lambda = [&](Core::Entity e, btCompoundShape *parent_compound, const auto& ff) -> void
         {  
           for(size_t c = 0; c < e.get_number_of_children(); ++c)
           {
-            Entity child = e.get_child(c);
+            Core::Entity child = e.get_child(c);
           
             return ff(child, parent_compound, ff);
           }

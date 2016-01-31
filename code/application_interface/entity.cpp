@@ -2,7 +2,7 @@
 #include <data/data.hpp>
 
 
-namespace Data {
+namespace Core {
 
 
 Entity::Entity()

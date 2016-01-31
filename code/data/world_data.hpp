@@ -3,6 +3,7 @@
 
 
 #include "data_fwd.hpp"
+#include <application_interface/application_interface_fwd.hpp>
 #include <systems/physics/physics_fwd.hpp>
 #include <systems/entity/entity_id.hpp>
 #include <stdint.h>
@@ -33,7 +34,7 @@ struct World
  \return returns true if we created the entity.
 */
 bool
-world_create_new_entity(World *world_data, Entity *out_entity, const uint32_t type_id);
+world_create_new_entity(World *world_data, Core::Entity *out_entity, const uint32_t type_id);
 
 
 /*!
@@ -44,7 +45,7 @@ world_create_new_entity(World *world_data, Entity *out_entity, const uint32_t ty
   \return true or false depending on if we found it or not.
 */
 bool
-world_find_entity(World *world_data, Entity *out_entity, const ::Entity::Entity_id id);
+world_find_entity(World *world_data, Core::Entity *out_entity, const ::Entity::Entity_id id);
 
 
 

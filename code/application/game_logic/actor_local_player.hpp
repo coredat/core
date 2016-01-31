@@ -2,10 +2,11 @@
 #define ACTOR_PLAYER_INCLUDED_BF0E0298_8B5D_4307_985A_5CDD26FD16BF
 
 
-#include <systems/logic/logic_base.hpp>
+#include <application_interface/component.hpp>
+#include <math/math.hpp>
 
 
-class Actor_local_player : public Logic::Base
+class Actor_local_player : public Core::Component
 {
 public:
 

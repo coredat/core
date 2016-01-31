@@ -65,7 +65,7 @@ logic_pool_on_start_hook(Logic_pool *pool)
     for(size_t i = 0; i < pending; ++i)
     {
       auto obj = pool->objects_on_start_pending_hooks[i];
-      reinterpret_cast<Logic::Base*>(obj)->on_start();
+      reinterpret_cast<Core::Component*>(obj)->on_start();
     }
   }
   
@@ -83,7 +83,7 @@ logic_pool_on_update_hook(Logic_pool *pool, const float delta_time)
     for(size_t i = 0; i < pending; ++i)
     {
       auto obj = pool->objects_in_use[i];
-      reinterpret_cast<Logic::Base*>(obj)->on_update(delta_time);
+      reinterpret_cast<Core::Component*>(obj)->on_update(delta_time);
     }
   }
 }

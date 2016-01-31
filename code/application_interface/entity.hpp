@@ -2,16 +2,19 @@
 #define ENTITY_INCLUDED_EF96529C_E89E_4D4E_9DC2_9988B4774899
 
 
+#include "component.hpp"
 #include "detail/entity_detail.hpp"
+#include <systems/physics/rigidbody_properties.hpp>
+#include <systems/physics/rigidbody_collider.hpp>
+#include <systems/physics/physics_fwd.hpp>
+#include <math/math.hpp>
 #include <data/data_fwd.hpp>
-#include <data/logic_pool.hpp>
-#include <systems/logic/logic_base.hpp>
+#include <data/data.hpp>
 #include <stddef.h>
 #include <stdint.h>
 
 
-// namespace Terminal {
-namespace Data {
+namespace Core {
 
 
 /*!
@@ -55,9 +58,9 @@ public:
     const auto free_slot = Data::logic_pool_get_slot(m_world_data->logic_pool, get_id());
     auto comp = new(free_slot) T();
 
-    auto base = reinterpret_cast<Logic::Base*>(free_slot);
-    base->set_entity(get_id());
-    base->world_data = m_world_data;
+    auto base = reinterpret_cast<Core::Component*>(free_slot);
+    base->m_world_data = m_world_data;
+    base->m_entity_id  = this->get_id();
     
     return comp;
   }

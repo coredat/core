@@ -8,6 +8,7 @@
 #include <systems/physics/physics.hpp>
 #include <systems/environment/environment.hpp>
 #include <application_interface/entity.hpp>
+#include <iostream>
 
 
 namespace

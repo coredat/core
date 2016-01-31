@@ -16,7 +16,7 @@ Actor_local_player::Actor_local_player()
 void
 Actor_local_player::on_start()
 {
- cube_id = Entity_factory::create_placement_cube(world_data).get_id();
+ cube_id = Entity_factory::create_placement_cube(m_world_data).get_id();
 }
 
 
@@ -32,14 +32,14 @@ Actor_local_player::on_update(const float dt)
   
     // Get transform of controller.
 
-    const math::transform curr_trans = get_transform();
+    const math::transform curr_trans = get_entity().get_transform();
     
     // Cast ray downwards
     const btVector3 btFrom(math::vec3_get_x(curr_trans.position), math::vec3_get_y(curr_trans.position), math::vec3_get_z(curr_trans.position));
     const btVector3 btTo(math::vec3_get_x(curr_trans.position), math::vec3_get_y(curr_trans.position) - 2, math::vec3_get_z(curr_trans.position));
     btCollisionWorld::ClosestRayResultCallback feet_test(btFrom, btTo);
     
-    world_data->physics_world->dynamics_world.rayTest(btFrom, btTo, feet_test);
+    m_world_data->physics_world->dynamics_world.rayTest(btFrom, btTo, feet_test);
 
     Renderer::debug_line(btFrom, btTo, btVector3(1, 1, 0));
     
@@ -52,7 +52,7 @@ Actor_local_player::on_update(const float dt)
       math::transform new_trans = curr_trans;
       new_trans.position = math::vec3_add(curr_trans.position, down);
       
-      set_transform(new_trans);
+      get_entity().set_transform(new_trans);
     }
     else
     {
@@ -62,7 +62,7 @@ Actor_local_player::on_update(const float dt)
       math::vec3 pos = math::vec3_init(math::vec3_get_x(curr_trans.position), norm.y() + 2, math::vec3_get_z(curr_trans.position));
       new_trans.position = pos;
       
-     set_transform(new_trans);
+     get_entity().set_transform(new_trans);
       
       act.is_grounded = true;
     }
@@ -76,15 +76,15 @@ Actor_local_player::on_update(const float dt)
     const btVector3 btFwd = btFaceStart + fwdVec;
     
     btCollisionWorld::ClosestRayResultCallback face_ray(btFaceStart, btFwd);
-    world_data->physics_world->dynamics_world.rayTest(btFaceStart, btFwd, face_ray);
+    m_world_data->physics_world->dynamics_world.rayTest(btFaceStart, btFwd, face_ray);
     
     Renderer::debug_line(btFaceStart, btFwd, btVector3(1, 0, 0));
     
     if(face_ray.hasHit())
     {
       // Draw cube at that point.
-      Data::Entity cube_entity;
-      Data::world_find_entity(world_data, &cube_entity, cube_id);
+      Core::Entity cube_entity;
+      Data::world_find_entity(m_world_data, &cube_entity, cube_id);
       
       if(cube_entity.is_valid())
       {
@@ -95,7 +95,7 @@ Actor_local_player::on_update(const float dt)
         
         if(m_place_node)
         {
-          auto ent = Entity_factory::create_random_cube(world_data);
+          auto ent = Entity_factory::create_random_cube(m_world_data);
           
           auto trans = ent.get_transform();
           trans.position = cube_entity.get_transform().position;
@@ -114,14 +114,14 @@ Actor_local_player::on_update(const float dt)
     m_place_node = false;
   };
   
-  apply_gravity(get_entity());
+  apply_gravity(get_entity().get_id());
   
   auto local_controls = [&](const Entity::Entity_id id)
   {
     const float delta_time = dt;
     
-    Data::Entity ent;
-    Data::world_find_entity(world_data, &ent, id);
+    Core::Entity ent;
+    Data::world_find_entity(m_world_data, &ent, id);
     
     math::vec3 accum_movement = math::vec3_zero();
     const math::transform move_trans = ent.get_transform();
@@ -193,7 +193,7 @@ Actor_local_player::on_update(const float dt)
     }
   };
   
-  local_controls(get_entity());
+  local_controls(get_entity().get_id());
 }
 
 

@@ -4,6 +4,7 @@
 #include <systems/entity/entity_id.hpp>
 #include <systems/physics/physics.hpp>
 #include <systems/environment/environment.hpp>
+#include <iostream>
 
 
 namespace Application {

@@ -13,8 +13,6 @@ struct Logic_pool;
 struct Rigidbody_pool;
 struct World;
 
-class Entity;
-
 
 } // ns
 
