@@ -3,7 +3,7 @@
 
 
 #include "actor_base.hpp"
-#include <application/ids_component_types.hpp>
+#include <application/common/ids_component_types.hpp>
 
 
 class Actor_network_player : public Actor_base
