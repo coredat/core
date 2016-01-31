@@ -6,9 +6,7 @@
 #include "detail/entity_detail.hpp"
 #include <systems/physics/rigidbody_properties.hpp>
 #include <systems/physics/rigidbody_collider.hpp>
-#include <systems/physics/physics_fwd.hpp>
 #include <math/math.hpp>
-#include <data/data_fwd.hpp>
 #include <data/data.hpp>
 #include <stddef.h>
 #include <stdint.h>
@@ -27,10 +25,10 @@ public:
 
   explicit                      Entity();
   
-  ::Entity::Entity_id           get_id() const;
+  Core::Entity_id               get_id() const;
   bool                          is_valid() const;
   
-  void                          set_parent(const ::Entity::Entity_id id);
+  void                          set_parent(const Core::Entity_id id);
   Entity                        get_parent() const;
   
   size_t                        get_number_of_children() const;
@@ -64,6 +62,11 @@ public:
     
     return comp;
   }
+  
+  template<typename T>
+  T* get_component(const uint32_t rtti_id) { assert(false); /* todo */ return nullptr; }
+  
+  size_t get_number_of_components() const { assert(false); /* todo */ return 0; }
   
 private:
 

@@ -22,7 +22,7 @@ namespace Data {
 */
 struct Rigidbody_pool
 {
-  ::Entity::Entity_id               entity_id[RIGIDBODY_POOL_SIZE];
+  Core::Entity_id               entity_id[RIGIDBODY_POOL_SIZE];
   Physics::Rigidbody                rigidbody[RIGIDBODY_POOL_SIZE];
   
   const size_t                      size{RIGIDBODY_POOL_SIZE};
@@ -45,7 +45,7 @@ rigidbody_pool_init(Rigidbody_pool *pool);
 */
 bool
 rigidbody_pool_find(Rigidbody_pool *pool,
-                    const ::Entity::Entity_id id,
+                    const Core::Entity_id id,
                     Physics::Rigidbody **out_rb);
 
 /*!
@@ -58,7 +58,7 @@ rigidbody_pool_find(Rigidbody_pool *pool,
 */
 bool
 rigidbody_pool_remove(Rigidbody_pool *pool,
-                      const ::Entity::Entity_id id);
+                      const Core::Entity_id id);
 
 
 /*!
@@ -69,7 +69,7 @@ rigidbody_pool_remove(Rigidbody_pool *pool,
 */
 bool
 rigidbody_pool_exists(Rigidbody_pool *pool,
-                      const ::Entity::Entity_id id);
+                      const Core::Entity_id id);
 
 
 /*!
@@ -82,7 +82,7 @@ rigidbody_pool_exists(Rigidbody_pool *pool,
 */
 bool
 rigidbody_pool_push(Rigidbody_pool *pool,
-                    const ::Entity::Entity_id id,
+                    const Core::Entity_id id,
                     Physics::Rigidbody **new_rb);
 
 

@@ -7,9 +7,9 @@
 #include <systems/entity/entity_id.hpp>
 
 
-#define COMPONENT_MEMBERS                                    \
-  ::Entity::Entity_id m_entity_id = ::Entity::invalid_id();  \
-  Data::World *m_world_data;                                 \
+#define COMPONENT_MEMBERS                            \
+  Core::Entity_id m_entity_id = Core::invalid_id();  \
+  Data::World *m_world_data;                         \
 
 
 #endif // inc gaurd

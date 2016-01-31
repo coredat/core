@@ -23,7 +23,7 @@ namespace Data {
 */
 struct Logic_pool
 {
-  ::Entity::Entity_id       entity_id[LOGIC_POOL_NUMBER_OF_SCRIPTS];
+  Core::Entity_id           entity_id[LOGIC_POOL_NUMBER_OF_SCRIPTS];
   void*                     object_locations[LOGIC_POOL_NUMBER_OF_SCRIPTS];
   
   void*                     objects_in_use[LOGIC_POOL_NUMBER_OF_SCRIPTS]; // This is a stack type thing.
@@ -50,7 +50,7 @@ logic_pool_init(Logic_pool *pool);
   Returns a pointer to a valid location for a new object
 */
 void*
-logic_pool_get_slot(Logic_pool *pool, const ::Entity::Entity_id id);
+logic_pool_get_slot(Logic_pool *pool, const Core::Entity_id id);
 
 
 // ** EVENT HOOKS ** //

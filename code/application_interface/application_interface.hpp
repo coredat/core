@@ -3,6 +3,7 @@
 
 
 #include "entity.hpp"
+#include "component.hpp"
 
 
 #endif // inc guard

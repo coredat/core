@@ -10,7 +10,7 @@ Entity::Entity()
 }
 
 
-::Entity::Entity_id
+Core::Entity_id
 Entity::get_id() const
 {
   return m_this_id;
@@ -20,21 +20,21 @@ Entity::get_id() const
 bool
 Entity::is_valid() const
 {
-  return !(m_this_id == ::Entity::invalid_id());
+  return !(m_this_id == Core::invalid_id());
 }
 
 
 namespace
 {
   inline bool
-  get_index(size_t *index, const ::Entity::Entity_id id, const ::Entity::Entity_id ents[], const size_t size)
+  get_index(size_t *index, const Core::Entity_id id, const Core::Entity_id ents[], const size_t size)
   {
     if(!ents)
     {
       return false;
     }
     
-    if(::Entity::find_index_linearly(index, id, ents, size))
+    if(Core::find_index_linearly(index, id, ents, size))
     {
       return true;
     }
@@ -45,7 +45,7 @@ namespace
 
 
 void
-Entity::set_parent(const ::Entity::Entity_id parent_id)
+Entity::set_parent(const Core::Entity_id parent_id)
 {
   if(!is_valid()) { return; }
 
@@ -67,7 +67,7 @@ Entity::get_parent() const
   if(!is_valid()) { return Entity(); }
   
   size_t index;
-  if(::Entity::find_index_linearly(&index, m_this_id, m_world_data->entity_pool->entity_id, m_world_data->entity_pool->size))
+  if(Core::find_index_linearly(&index, m_this_id, m_world_data->entity_pool->entity_id, m_world_data->entity_pool->size))
   {
     Entity parent;
     Detail::set_entity_members(&parent, m_world_data, m_world_data->entity_pool->parent_id[index]);
@@ -90,7 +90,7 @@ Entity::get_number_of_children() const
   
   for(size_t i = 0; i < ent_pool->size; ++i)
   {
-    const ::Entity::Entity_id id = ent_pool->parent_id[i];
+    const Core::Entity_id id = ent_pool->parent_id[i];
   
     if(id == m_this_id)
     {
@@ -113,13 +113,13 @@ Entity::get_child(const size_t index) const
   
   for(size_t i = 0; i < ent_pool->size; ++i)
   {
-    const ::Entity::Entity_id id = ent_pool->parent_id[i];
+    const Core::Entity_id id = ent_pool->parent_id[i];
 
     if(id == m_this_id)
     {
       if(index == children_count)
       {
-        ::Entity::Entity_id child_id = ent_pool->entity_id[i];
+        Core::Entity_id child_id = ent_pool->entity_id[i];
       
         Entity child;
         Detail::set_entity_members(&child, m_world_data, child_id);

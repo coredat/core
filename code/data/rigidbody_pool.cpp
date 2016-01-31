@@ -19,11 +19,11 @@ rigidbody_pool_init(Rigidbody_pool *pool)
 
 bool
 rigidbody_pool_find(Rigidbody_pool *pool,
-                    const ::Entity::Entity_id id,
+                    const Core::Entity_id id,
                     Physics::Rigidbody **out_rb)
 {
   size_t index;
-  if(::Entity::find_index_linearly(&index, id, pool->entity_id, pool->size))
+  if(Core::find_index_linearly(&index, id, pool->entity_id, pool->size))
   {
     *out_rb = &(pool->rigidbody[index]);
     return true;
@@ -35,12 +35,12 @@ rigidbody_pool_find(Rigidbody_pool *pool,
 
 bool
 rigidbody_pool_remove(Rigidbody_pool *pool,
-                      const ::Entity::Entity_id id)
+                      const Core::Entity_id id)
 {
   size_t index;
-  if(::Entity::find_index_linearly(&index, id, pool->entity_id, pool->size))
+  if(Core::find_index_linearly(&index, id, pool->entity_id, pool->size))
   {
-    pool->entity_id[index] = ::Entity::invalid_id();
+    pool->entity_id[index] = Core::invalid_id();
     return true;
   }
   
@@ -50,21 +50,21 @@ rigidbody_pool_remove(Rigidbody_pool *pool,
 
 bool
 rigidbody_pool_exists(Rigidbody_pool *pool,
-                      const ::Entity::Entity_id id)
+                      const Core::Entity_id id)
 {
   size_t index;
-  return ::Entity::find_index_linearly(&index, id, pool->entity_id, pool->size);
+  return Core::find_index_linearly(&index, id, pool->entity_id, pool->size);
 }
 
 
 bool
 rigidbody_pool_push(Rigidbody_pool *pool,
-                    const ::Entity::Entity_id id,
+                    const Core::Entity_id id,
                     Physics::Rigidbody **new_rb)
 {
   // This is there I am at.
   size_t index;
-  if(::Entity::find_index_linearly(&index, ::Entity::invalid_id(), pool->entity_id, pool->size))
+  if(Core::find_index_linearly(&index, Core::invalid_id(), pool->entity_id, pool->size))
   {
     pool->entity_id[index] = id;
     *new_rb = &pool->rigidbody[index];
@@ -286,7 +286,7 @@ rigidbody_pool_update_scene_graph_changes(Rigidbody_pool *pool,
         return lambda(e, parent_compound, lambda);
     };
     
-    if(entity.get_parent().get_id() == ::Entity::invalid_id())
+    if(entity.get_parent().get_id() == Core::invalid_id())
     {
       //get_child_colliders(entity, rb->compound_shape.get());
       add_child_colliders(world_data, entity, rb->compound_shape.get());

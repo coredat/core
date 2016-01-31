@@ -13,8 +13,8 @@
 
 namespace
 {
-  Entity::Entity_id kine_actor_local{4,1};
-  Entity::Entity_id kine_actor_network{4,2};
+  Core::Entity_id kine_actor_local{4,1};
+  Core::Entity_id kine_actor_network{4,2};
 }
 
 
@@ -62,7 +62,7 @@ host_think(
     &std::cout);
 
   std::size_t index;
-  Entity::find_index_linearly(&index, kine_actor_local, world->entity_pool->entity_id, world->entity_pool->size);
+  Core::find_index_linearly(&index, kine_actor_local, world->entity_pool->entity_id, world->entity_pool->size);
 
   // Kill me!!!!
   Actor_local_player *actor = reinterpret_cast<Actor_local_player*>(world->logic_pool->objects_in_use[0]);

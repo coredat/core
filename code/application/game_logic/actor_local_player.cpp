@@ -23,7 +23,7 @@ Actor_local_player::on_start()
 void
 Actor_local_player::on_update(const float dt)
 {
-  auto apply_gravity = [&](const Entity::Entity_id ent)
+  auto apply_gravity = [&](const Core::Entity_id ent)
   {
     struct Kine_actor
     {
@@ -104,7 +104,7 @@ Actor_local_player::on_update(const float dt)
           // Join rbs.
           void *user_ptr = face_ray.m_collisionObject->getUserPointer();
           const std::size_t ent_id = (std::size_t)user_ptr;
-          const Entity::Entity_id collided_id = Entity::uint_as_entity(static_cast<uint32_t>(ent_id));
+          const Core::Entity_id collided_id = Core::uint_as_entity(static_cast<uint32_t>(ent_id));
           
           ent.set_parent(collided_id);
         }
@@ -116,7 +116,7 @@ Actor_local_player::on_update(const float dt)
   
   apply_gravity(get_entity().get_id());
   
-  auto local_controls = [&](const Entity::Entity_id id)
+  auto local_controls = [&](const Core::Entity_id id)
   {
     const float delta_time = dt;
     

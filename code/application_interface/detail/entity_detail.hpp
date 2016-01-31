@@ -10,7 +10,7 @@
 // of the object to set members. Keeping setters etc out of the
 // objects interface.
 #define ENTITY_MEMBERS                                                  \
-  ::Entity::Entity_id           m_this_id     = ::Entity::invalid_id(); \
+  Core::Entity_id           m_this_id     = Core::invalid_id(); \
   ::Data::World                 *m_world_data = nullptr;                \
 
 
@@ -30,7 +30,7 @@ struct Private_entity
 
 
 inline void
-set_entity_members(void *ent, ::Data::World *world_data, ::Entity::Entity_id id)
+set_entity_members(void *ent, ::Data::World *world_data, Core::Entity_id id)
 {
   auto private_entity          = reinterpret_cast<Private_entity*>(ent);
   private_entity->m_world_data = world_data;

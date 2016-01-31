@@ -61,7 +61,7 @@ gl_to_bullet(const math::transform &transform)
 namespace Physics {
 
 
-Motion_state::Motion_state(const Entity::Entity_id e, Data::Entity_pool *d)
+Motion_state::Motion_state(const Core::Entity_id e, Data::Entity_pool *d)
 : btMotionState()
 , m_entity(e)
 , m_data(d)
@@ -79,7 +79,7 @@ void
 Motion_state::getWorldTransform(btTransform &world_trans) const
 {
   size_t index;
-  if(Entity::find_index_linearly(&index, m_entity, m_data->entity_id, m_data->size))
+  if(Core::find_index_linearly(&index, m_entity, m_data->entity_id, m_data->size))
   {
     world_trans = gl_to_bullet(m_data->transform[index]);
   }
@@ -90,7 +90,7 @@ void
 Motion_state::setWorldTransform(const btTransform &world_trans)
 {
   std::size_t index;
-  if(Entity::find_index_linearly(&index, m_entity, m_data->entity_id, m_data->size))
+  if(Core::find_index_linearly(&index, m_entity, m_data->entity_id, m_data->size))
   {
     const math::transform curr_trans = m_data->transform[index];
     math::transform trans = bullet_to_gl(world_trans);

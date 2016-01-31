@@ -29,6 +29,8 @@ public:
   explicit            Component()  {}
   virtual             ~Component() {} //!< Dtor is not guarteed to be called.
   
+  virtual uint32_t    get_rtti() const = 0;
+  
   // Event hooks
   virtual void        on_start()                  {} //!< Called when the object is ready.
   virtual void        on_update(const float dt)   {} //!< Called when the object is being updated.

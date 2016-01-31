@@ -45,7 +45,7 @@ world_create_new_entity(World *world_data, Core::Entity *out_entity, const uint3
   \return true or false depending on if we found it or not.
 */
 bool
-world_find_entity(World *world_data, Core::Entity *out_entity, const ::Entity::Entity_id id);
+world_find_entity(World *world_data, Core::Entity *out_entity, const Core::Entity_id id);
 
 
 

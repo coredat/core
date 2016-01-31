@@ -6,7 +6,7 @@
 #include <cstddef>
 
 
-namespace Entity {
+namespace Core {
 
 
 struct Entity_id

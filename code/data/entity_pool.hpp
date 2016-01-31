@@ -23,8 +23,8 @@ namespace Data {
 */
 struct Entity_pool
 {
-  ::Entity::Entity_id             entity_id[ENTITY_POOL_SIZE];
-  ::Entity::Entity_id             parent_id[ENTITY_POOL_SIZE];
+  Core::Entity_id             entity_id[ENTITY_POOL_SIZE];
+  Core::Entity_id             parent_id[ENTITY_POOL_SIZE];
   
   math::transform                 transform[ENTITY_POOL_SIZE];
   
@@ -56,7 +56,7 @@ enum class Entity_graph_change
 struct Entity_change
 {
   Entity_graph_change change_type;
-  ::Entity::Entity_id entity_id;
+  Core::Entity_id entity_id;
 };
 
 
@@ -86,7 +86,7 @@ entity_graph_change_pool_init(Entity_graph_changes_pool *pool);
   Push pending graph changes in
 */
 void
-entity_graph_change_push(Entity_graph_changes_pool *pool, const ::Entity::Entity_id entity_id, Entity_graph_change change_type);
+entity_graph_change_push(Entity_graph_changes_pool *pool, const Core::Entity_id entity_id, Entity_graph_change change_type);
 
 
 } // ns

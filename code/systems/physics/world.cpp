@@ -116,7 +116,7 @@ world_add_rigidbodies(World *world,
       out_rb->rigidbody.reset(new btRigidBody(rigidbody_ci));
       // Convert uint to ptr.
       {
-        const uint32_t usr = Entity::entity_as_uint(prop->id);
+        const uint32_t usr = Core::entity_as_uint(prop->id);
         std::size_t* ptr = nullptr;
         ptr = (std::size_t*)usr;
         

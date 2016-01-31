@@ -11,7 +11,7 @@ Actor_network_player::Actor_network_player()
 void
 Actor_network_player::on_update(const float dt)
 {
-  auto apply_gravity = [&](const Entity::Entity_id ent)
+  auto apply_gravity = [&](const Core::Entity_id ent)
   {
     struct Kine_actor
     {

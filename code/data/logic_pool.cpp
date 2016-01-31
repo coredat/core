@@ -25,13 +25,13 @@ logic_pool_init(Logic_pool *pool)
 
 void*
 logic_pool_get_slot(Logic_pool *pool,
-                    const ::Entity::Entity_id id)
+                    const Core::Entity_id id)
 {
   size_t index;
-  if(::Entity::find_index_linearly(&index,
-                                   ::Entity::invalid_id(),
-                                   pool->entity_id,
-                                   pool->size))
+  if(Core::find_index_linearly(&index,
+                               Core::invalid_id(),
+                               pool->entity_id,
+                               pool->size))
   {
     pool->entity_id[index] = id;
     

@@ -3,7 +3,7 @@
 #include <cstring>
 
 
-namespace Entity {
+namespace Core {
 
 
 void

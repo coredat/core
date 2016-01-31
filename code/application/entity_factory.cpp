@@ -1,6 +1,6 @@
 #include "entity_factory.hpp"
 #include "resources.hpp"
-#include "object_types.hpp"
+#include "ids_object_types.hpp"
 #include <systems/physics/physics.hpp>
 #include <systems/entity/entity_id.hpp>
 #include <systems/entity/generic_id.hpp>
