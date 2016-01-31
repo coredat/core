@@ -2,12 +2,11 @@
 #define ACTOR_NETWORK_PLAYER_INCLUDED_0331D020_FA3D_4C41_85C6_42CE25D21639
 
 
+#include "actor_base.hpp"
 #include <application/ids_component_types.hpp>
-#include <core/interface/component.hpp>
-#include <core/interface/entity.hpp>
 
 
-class Actor_network_player : public Core::Component
+class Actor_network_player : public Actor_base
 {
 public:
 
@@ -18,7 +17,6 @@ public:
   /** Hooks **/
   void on_start() override {}
   void on_update(const float dt) override;
-
 };
 
 

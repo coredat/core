@@ -1,6 +1,7 @@
 #include "actor_network_player.hpp"
 #include <renderer/renderer.hpp>
 #include <btBulletCollisionCommon.h>
+#include <core/interface/entity.hpp>
 
 
 Actor_network_player::Actor_network_player()
