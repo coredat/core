@@ -19,10 +19,12 @@ public:
   /** Hooks **/
   void on_start() override;
   void on_update(const float dt) override;
-  
+
+  /** Actions **/
   void action();
   
-  /** Actions **/
+private:
+  
   Core::Entity_id cube_id;
   bool m_place_node;
 
