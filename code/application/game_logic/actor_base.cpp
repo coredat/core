@@ -192,8 +192,10 @@ Actor_base::on_update(const float dt)
         btCollisionObject* obj0 = static_cast<btCollisionObject*>(collisionPair->m_pProxy0->m_clientObject);
         btCollisionObject* obj1 = static_cast<btCollisionObject*>(collisionPair->m_pProxy1->m_clientObject);
 
-//        if ((obj0 && !obj0->hasContactResponse()) || (obj1 && !obj1->hasContactResponse()))
-//          continue;
+        if ((obj0 && !obj0->hasContactResponse()) || (obj1 && !obj1->hasContactResponse()))
+        {
+          continue;
+        }
         
         if (collisionPair->m_algorithm)
         {
@@ -226,7 +228,7 @@ Actor_base::on_update(const float dt)
             }
           }
           
-          //manifold->clearManifold();
+          manifold->clearManifold();
         }
       }
       
