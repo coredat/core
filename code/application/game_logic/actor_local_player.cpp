@@ -69,12 +69,8 @@ Actor_local_player::Actor_local_player()
 void
 Actor_local_player::on_start()
 {
+  Actor_base::on_start();
   cube_id = Entity_factory::create_placement_cube(m_world_data).get_id();
- 
-  obj->setCollisionShape(new btSphereShape(0.7));
-  m_world_data->physics_world->dynamics_world.addCollisionObject(obj);
-  
-  m_world_data->physics_world->dynamics_world.getPairCache()->setInternalGhostPairCallback(cb);
 }
 
 void
@@ -84,87 +80,88 @@ Actor_local_player::on_update(const float dt)
 
   // ** TODO ** // Make this part of the base actor might get rid of the wibble.
   math::transform curr_trans = get_entity().get_transform();
-  obj->setWorldTransform(gl_to_bullet(curr_trans));
   
-  for(size_t i = 0; i < obj->getNumOverlappingObjects(); i++)
-  {
-    
-  }
-  
-  auto resolve_overlap = [&]()
-  {
-    btManifoldArray manifoldArray;
-    auto pairArray = obj->getOverlappingPairCache()->getOverlappingPairArray();
-    
-    int numPairs = pairArray.size();
-
-    for (int i = 0; i < numPairs; ++i)
-    {
-      manifoldArray.clear();
-
-      const btBroadphasePair& pair = pairArray[i];
-
-      btBroadphasePair* collisionPair = m_world_data->physics_world->dynamics_world.getPairCache()->findPair(pair.m_pProxy0,pair.m_pProxy1);
-
-      if (!collisionPair)
-      {
-        continue;
-      }
-
-      if (collisionPair->m_algorithm)
-      {
-        collisionPair->m_algorithm->getAllContactManifolds(manifoldArray);
-      }
-
-      for(int j=0;j<manifoldArray.size();j++)
-      {
-        btPersistentManifold* manifold = manifoldArray[j];
-
-        //bool isFirstBody = manifold->getBody0() == obj;
-
-        //btScalar direction = isFirstBody ? btScalar(-1.0) : btScalar(1.0);
-
-        for(int p = 0; p < manifold->getNumContacts(); ++p)
-        {
-          const btManifoldPoint&pt = manifold->getContactPoint(p);
-
-          if(pt.getDistance() < 0.f)
-          {
-            // Get current position and move back on normal.
-            const float scale_of_full_normal = pt.m_normalWorldOnB.length();
-            const float pen_leng = pt.getDistance();
-            
-            math::vec3 norm = math::vec3_init(pt.m_normalWorldOnB.x(), 0, pt.m_normalWorldOnB.z()); // I think this normal needs corrected.
-            math::vec3 corrected_norm = math::vec3_normalize(norm);
-        
-            math::vec3 scaled_offset = math::vec3_scale(corrected_norm, (pt.getDistance()));
-          
-            math::vec3 new_pos = math::vec3_add(curr_trans.position, scaled_offset);
-            curr_trans.position = new_pos;
-          
-            // Ghost object needs to be updated.
-            
-            obj->setWorldTransform(gl_to_bullet(curr_trans));
-            get_entity().set_transform(curr_trans);
-            
-            return false;
-          }
-        }
-      }
-    }
-  
-    return true;
-  };
-  
-  
-  for(int i = 0; i < 1; ++i)
-  {
-    if(resolve_overlap())
-    {
-      break;
-    }
-  }
-  
+//  obj->setWorldTransform(gl_to_bullet(curr_trans));
+//  
+//  for(size_t i = 0; i < obj->getNumOverlappingObjects(); i++)
+//  {
+//    
+//  }
+//  
+//  auto resolve_overlap = [&]()
+//  {
+//    btManifoldArray manifoldArray;
+//    auto pairArray = obj->getOverlappingPairCache()->getOverlappingPairArray();
+//    
+//    int numPairs = pairArray.size();
+//
+//    for (int i = 0; i < numPairs; ++i)
+//    {
+//      manifoldArray.clear();
+//
+//      const btBroadphasePair& pair = pairArray[i];
+//
+//      btBroadphasePair* collisionPair = m_world_data->physics_world->dynamics_world.getPairCache()->findPair(pair.m_pProxy0,pair.m_pProxy1);
+//
+//      if (!collisionPair)
+//      {
+//        continue;
+//      }
+//
+//      if (collisionPair->m_algorithm)
+//      {
+//        collisionPair->m_algorithm->getAllContactManifolds(manifoldArray);
+//      }
+//
+//      for(int j=0;j<manifoldArray.size();j++)
+//      {
+//        btPersistentManifold* manifold = manifoldArray[j];
+//
+//        //bool isFirstBody = manifold->getBody0() == obj;
+//
+//        //btScalar direction = isFirstBody ? btScalar(-1.0) : btScalar(1.0);
+//
+//        for(int p = 0; p < manifold->getNumContacts(); ++p)
+//        {
+//          const btManifoldPoint&pt = manifold->getContactPoint(p);
+//
+//          if(pt.getDistance() < 0.f)
+//          {
+//            // Get current position and move back on normal.
+//            const float scale_of_full_normal = pt.m_normalWorldOnB.length();
+//            const float pen_leng = pt.getDistance();
+//            
+//            math::vec3 norm = math::vec3_init(pt.m_normalWorldOnB.x(), 0, pt.m_normalWorldOnB.z()); // I think this normal needs corrected.
+//            math::vec3 corrected_norm = math::vec3_normalize(norm);
+//        
+//            math::vec3 scaled_offset = math::vec3_scale(corrected_norm, (pt.getDistance()));
+//          
+//            math::vec3 new_pos = math::vec3_add(curr_trans.position, scaled_offset);
+//            curr_trans.position = new_pos;
+//          
+//            // Ghost object needs to be updated.
+//            
+//            obj->setWorldTransform(gl_to_bullet(curr_trans));
+//            get_entity().set_transform(curr_trans);
+//            
+//            return false;
+//          }
+//        }
+//      }
+//    }
+//  
+//    return true;
+//  };
+//  
+//  
+//  for(int i = 0; i < 1; ++i)
+//  {
+//    if(resolve_overlap())
+//    {
+//      break;
+//    }
+//  }
+//  
 
   math::vec3 fwd;
   Transform::get_fwd_vec(&curr_trans, &fwd);

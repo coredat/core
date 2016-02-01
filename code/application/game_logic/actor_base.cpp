@@ -5,6 +5,54 @@
 #include <systems/transform/transform.hpp>
 
 
+namespace
+{
+  inline math::transform
+  bullet_to_gl(const btTransform &transform)
+  {
+    const auto rotation         = transform.getRotation();
+    const math::quat rb_quat    = math::quat_init(rotation.x(), rotation.y(), rotation.z(), rotation.w());
+    const math::mat3 rot_mat    = math::quat_get_rotation_matrix(rb_quat);
+    const math::mat3 rot_mat_tr = math::mat3_get_transpose(rot_mat);
+    const math::quat rb_quat2   = math::quat_init_with_mat3(rot_mat_tr);
+    
+    const auto pos_data         = transform.getOrigin();
+    const math::vec3 rb_pos     = math::vec3_init(pos_data.x(), pos_data.y(), pos_data.z());
+    
+    math::transform adjusted_transform;
+    adjusted_transform.rotation = rb_quat2;
+    adjusted_transform.position = rb_pos;
+    adjusted_transform.scale    = math::vec3_one(); // This might not be correct, Assuming that no scale from bullet.
+    
+    return adjusted_transform;
+  }
+  
+  inline btTransform
+  gl_to_bullet(const math::transform &transform)
+  {
+    math::quat bt_friendly_rot;
+    {
+      const math::mat3 rot_mat    = math::quat_get_rotation_matrix(transform.rotation);
+      const math::mat3 rot_mat_tr = math::mat3_get_transpose(rot_mat);
+      
+      bt_friendly_rot = math::quat_init_with_mat3(rot_mat_tr);
+    }
+    
+    btTransform adjusted_transform;
+    adjusted_transform.setOrigin(btVector3(math::vec3_get_x(transform.position),
+                                           math::vec3_get_y(transform.position),
+                                           math::vec3_get_z(transform.position)));
+
+    adjusted_transform.setRotation(btQuaternion(math::quat_get_x(bt_friendly_rot),
+                                                math::quat_get_y(bt_friendly_rot),
+                                                math::quat_get_z(bt_friendly_rot),
+                                                math::quat_get_w(bt_friendly_rot)));
+
+    return adjusted_transform;
+  }
+}
+
+
 Actor_base::Actor_base()
 {
 }
@@ -12,6 +60,22 @@ Actor_base::Actor_base()
 
 Actor_base::~Actor_base()
 {
+}
+
+
+void
+Actor_base::on_start()
+{
+  m_ghost_obj.reset(new btPairCachingGhostObject());
+  m_pair_cb.reset(new btGhostPairCallback());
+  
+  btVector3 extents(0.5, 1, 0.5);
+  
+  m_collisionshape.reset(new btCylinderShape(extents));
+  m_ghost_obj->setCollisionShape(m_collisionshape.get());
+  
+  m_world_data->physics_world->dynamics_world.addCollisionObject(m_ghost_obj.get());
+  m_world_data->physics_world->dynamics_world.getPairCache()->setInternalGhostPairCallback(m_pair_cb.get());
 }
 
 
@@ -90,6 +154,105 @@ Actor_base::on_update(const float dt)
   }
   
   get_entity().set_transform(curr_trans);
+  
+  if(m_ghost_obj)
+  {
+    //curr_trans.rotation = math::quat_init();
+    math::transform collider_trans = curr_trans;
+    collider_trans.rotation = math::quat_init();
+    m_ghost_obj->setWorldTransform(gl_to_bullet(collider_trans));
+  
+    //** testing ghost stuff **//
+    
+    for(size_t i = 0; i < m_ghost_obj->getNumOverlappingObjects(); i++)
+    {
+      
+    }
+    
+    auto resolve_overlap = [&]()
+    {
+      btVector3 offset(0,0,0);
+      
+      btManifoldArray manifoldArray;
+      auto pairArray = m_ghost_obj->getOverlappingPairCache()->getOverlappingPairArray();
+      
+      int numPairs = pairArray.size();
+
+      btScalar maxPen = btScalar(0.0);
+      for (int i = 0; i < m_ghost_obj->getOverlappingPairCache()->getNumOverlappingPairs(); i++)
+      {
+        const btBroadphasePair& pair = pairArray[i];
+        btBroadphasePair* collisionPair = m_world_data->physics_world->dynamics_world.getPairCache()->findPair(pair.m_pProxy0,pair.m_pProxy1);
+
+      
+        manifoldArray.resize(0);
+
+//        btBroadphasePair* collisionPair = &m_ghost_obj->getOverlappingPairCache()->getOverlappingPairArray()[i];
+
+        btCollisionObject* obj0 = static_cast<btCollisionObject*>(collisionPair->m_pProxy0->m_clientObject);
+        btCollisionObject* obj1 = static_cast<btCollisionObject*>(collisionPair->m_pProxy1->m_clientObject);
+
+//        if ((obj0 && !obj0->hasContactResponse()) || (obj1 && !obj1->hasContactResponse()))
+//          continue;
+        
+        if (collisionPair->m_algorithm)
+        {
+          collisionPair->m_algorithm->getAllContactManifolds(manifoldArray);
+        }
+
+        
+        for (int j=0;j<manifoldArray.size();j++)
+        {
+          btPersistentManifold* manifold = manifoldArray[j];
+          btScalar directionSign = manifold->getBody0() == m_ghost_obj.get() ? btScalar(-1.0) : btScalar(1.0);
+          for (int p=0;p<manifold->getNumContacts();p++)
+          {
+            const btManifoldPoint&pt = manifold->getContactPoint(p);
+
+            btScalar dist = pt.getDistance();
+
+            if (dist < 0.0)
+            {
+              if (dist < maxPen)
+              {
+                maxPen = dist;
+    //						m_touchingNormal = pt.m_normalWorldOnB * directionSign;//??
+
+              }
+              offset += pt.m_normalWorldOnB * directionSign * dist * btScalar(0.2);
+    //          penetration = true;
+            } else {
+              //printf("touching %f\n", dist);
+            }
+          }
+          
+          //manifold->clearManifold();
+        }
+      }
+      
+      // Ghost object needs to be updated.
+      math::vec3 final_offset = math::vec3_init(offset.x(), 0, offset.z());
+      collider_trans.position = math::vec3_add(curr_trans.position, final_offset);
+      
+      curr_trans.position = collider_trans.position;
+      
+      m_ghost_obj->setWorldTransform(gl_to_bullet(collider_trans));
+      get_entity().set_transform(curr_trans);
+      
+      return false;
+    
+    //  return true;
+    };
+    
+    
+    for(int i = 0; i < 1; ++i)
+    {
+      if(resolve_overlap())
+      {
+        break;
+      }
+    }
+  }
 }
 
 
