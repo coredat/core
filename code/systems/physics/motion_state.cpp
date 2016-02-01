@@ -9,6 +9,7 @@
 namespace
 {
 
+// These need to be promoted some where I think.
 inline math::transform
 bullet_to_gl(const btTransform &transform)
 {

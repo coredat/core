@@ -58,13 +58,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7E687DAA1C5EAC2900E13BB6 /* ids_component_types.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ids_component_types.hpp; sourceTree = "<group>"; };
+		7E687DAB1C5EAC2900E13BB6 /* ids_object_types.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ids_object_types.hpp; sourceTree = "<group>"; };
 		7EA1A1F81C3984D0009867BD /* libenet.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libenet.a; path = ../../../3rdparty/enet/lib/osx/libenet.a; sourceTree = "<group>"; };
 		7EA2C6041C1F5CFC00389748 /* wired.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = wired.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EA2C6121C1F5CFC00389748 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7EA2C61D1C1F5D4600389748 /* wired_app.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wired_app.cpp; sourceTree = "<group>"; };
 		7EA2C61F1C1F5E2A00389748 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		7EA2C6541C1F637D00389748 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = ../../../assets; sourceTree = "<group>"; };
-		7EAD8B9E1C5E49720039BA28 /* ids_component_types.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ids_component_types.hpp; sourceTree = "<group>"; };
 		7EC9B97D1C3E5F2100FBF1D7 /* data_fwd.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = data_fwd.hpp; sourceTree = "<group>"; };
 		7EC9B97E1C3E5F2100FBF1D7 /* data.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = data.hpp; sourceTree = "<group>"; };
 		7EC9B97F1C3ECACA00FBF1D7 /* network_events.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = network_events.cpp; sourceTree = "<group>"; };
@@ -116,7 +117,6 @@
 		7EC9B9DF1C4CD03900FBF1D7 /* rigidbody_pool.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = rigidbody_pool.hpp; sourceTree = "<group>"; };
 		7EC9B9E41C4D5D6100FBF1D7 /* world_data.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = world_data.cpp; sourceTree = "<group>"; };
 		7EC9B9E51C4D5D6100FBF1D7 /* world_data.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = world_data.hpp; sourceTree = "<group>"; };
-		7EC9B9EA1C4EBD1800FBF1D7 /* ids_object_types.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ids_object_types.hpp; sourceTree = "<group>"; };
 		7ED7BB841C3CF8B100CE80EA /* entity_factory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = entity_factory.cpp; sourceTree = "<group>"; };
 		7ED7BB851C3CF8B100CE80EA /* entity_factory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = entity_factory.hpp; sourceTree = "<group>"; };
 		7ED7BBA41C3CF8B100CE80EA /* debug_line.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = debug_line.cpp; sourceTree = "<group>"; };
@@ -203,6 +203,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7E687DA91C5EAC2900E13BB6 /* common */ = {
+			isa = PBXGroup;
+			children = (
+				7E687DAA1C5EAC2900E13BB6 /* ids_component_types.hpp */,
+				7E687DAB1C5EAC2900E13BB6 /* ids_object_types.hpp */,
+			);
+			path = common;
+			sourceTree = "<group>";
+		};
 		7EA2C5FB1C1F5CFC00389748 = {
 			isa = PBXGroup;
 			children = (
@@ -320,8 +329,7 @@
 		7ED7BB831C3CF8B100CE80EA /* application */ = {
 			isa = PBXGroup;
 			children = (
-				7EAD8B9E1C5E49720039BA28 /* ids_component_types.hpp */,
-				7EC9B9EA1C4EBD1800FBF1D7 /* ids_object_types.hpp */,
+				7E687DA91C5EAC2900E13BB6 /* common */,
 				7EC9B9CF1C4B785000FBF1D7 /* application_client.cpp */,
 				7EC9B9D01C4B785000FBF1D7 /* application_client.hpp */,
 				7EC9B9D11C4B785000FBF1D7 /* application_common.cpp */,
