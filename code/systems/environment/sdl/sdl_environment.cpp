@@ -51,19 +51,19 @@ think(const Window *window,
           
           if(key == SDLK_w)
           {
-            input->controllers[0].axis_2[1] += 1;
+            input->controllers[0].axis_2[1] = 1;
           }
           else if(key == SDLK_s)
           {
-            input->controllers[0].axis_2[1] -= 1;
+            input->controllers[0].axis_2[1] = -1;
           }
           else if(key == SDLK_a)
           {
-            input->controllers[0].axis_2[0] += 1;
+            input->controllers[0].axis_2[0] = 1;
           }
           else if(key == SDLK_d)
           {
-            input->controllers[0].axis_2[0] -= 1;
+            input->controllers[0].axis_2[0] = -1;
           }
           
           break;

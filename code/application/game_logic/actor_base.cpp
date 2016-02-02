@@ -4,6 +4,7 @@
 #include <renderer/renderer.hpp>
 #include <systems/transform/transform.hpp>
 #include "../common/ids_object_tags.hpp"
+#include <iostream>
 
 
 namespace
@@ -122,7 +123,8 @@ Actor_base::on_update(const float dt)
   
   // Apply positional movements
   {
-    const auto move_fwd = math::vec3_get_z(m_pending_move);
+    const auto move_fwd  = math::vec3_get_z(m_pending_move);
+    const auto move_left = math::vec3_get_x(m_pending_move);
   
     if(move_fwd != 0)
     {
@@ -133,9 +135,19 @@ Actor_base::on_update(const float dt)
       const math::vec3 norm_fwd                = math::vec3_normalize(fwd);
       const math::vec3 scaled_fwd              = math::vec3_scale(norm_fwd, move_fwd);
       const math::vec3 norm_corrected_rotation = math::vec3_normalize(scaled_fwd);
-      const math::vec3 positional_movement     = math::vec3_scale(norm_corrected_rotation, dt);
+      const math::vec3 positional_movement     = math::vec3_scale(norm_corrected_rotation, (dt * 4));
       
       curr_trans.position = math::vec3_add(positional_movement, curr_trans.position);
+    }
+    
+    if(move_left != 0)
+    {
+      math::vec3 left;
+      Transform::get_left_vec(&curr_trans, &left);
+      
+      const math::vec3 scaled_left = math::vec3_scale(left, move_left * dt * 4);
+      
+      curr_trans.position = math::vec3_add(curr_trans.position, scaled_left);
     }
     
     m_pending_move = math::vec3_zero();
@@ -278,8 +290,8 @@ Actor_base::move_forward(const float fwd)
 void
 Actor_base::move_left(const float left)
 {
-  const float accum_right = math::vec3_get_x(m_pending_move) + left;
-  m_pending_move          = math::vec3_init(math::vec3_get_x(m_pending_move), accum_right, math::vec3_get_z(m_pending_move));
+  const float accum_left = math::vec3_get_x(m_pending_move) + left;
+  m_pending_move         = math::vec3_init(accum_left, math::vec3_get_y(m_pending_move), math::vec3_get_z(m_pending_move));
 }
 
 
