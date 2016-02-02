@@ -67,14 +67,14 @@ void
 Actor_base::on_start()
 {
   m_ghost_obj.reset(new btPairCachingGhostObject());
+  m_ghost_obj->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
+  
   m_pair_cb.reset(new btGhostPairCallback());
   
-  btVector3 extents(0.5, 1, 0.5);
-  
-  m_collisionshape.reset(new btCylinderShape(extents));
+  m_collisionshape.reset(new btCapsuleShape(0.35,0.75));
   m_ghost_obj->setCollisionShape(m_collisionshape.get());
   
-  m_world_data->physics_world->dynamics_world.addCollisionObject(m_ghost_obj.get());
+  m_world_data->physics_world->dynamics_world.addCollisionObject(m_ghost_obj.get(), btBroadphaseProxy::AllFilter, btBroadphaseProxy::AllFilter);
   m_world_data->physics_world->dynamics_world.getPairCache()->setInternalGhostPairCallback(m_pair_cb.get());
 }
 
@@ -87,11 +87,13 @@ Actor_base::on_update(const float dt)
   // Apply gravity
   {
     const auto actor_length = math::vec3_get_y(m_size);
-  
-    // Cast ray downwards
-    const btVector3 btFrom(math::vec3_get_x(curr_trans.position), math::vec3_get_y(curr_trans.position), math::vec3_get_z(curr_trans.position));
+    
+    // Cast ray downwards from feet
+    const btVector3 btFrom(math::vec3_get_x(curr_trans.position), math::vec3_get_y(curr_trans.position) - actor_length + 0.2, math::vec3_get_z(curr_trans.position));
     const btVector3 btTo(math::vec3_get_x(curr_trans.position), math::vec3_get_y(curr_trans.position) - actor_length, math::vec3_get_z(curr_trans.position));
     btCollisionWorld::ClosestRayResultCallback feet_test(btFrom, btTo);
+    
+    m_ghost_obj->setWorldTransform(gl_to_bullet(curr_trans)); // move outta the way.
     
     m_world_data->physics_world->dynamics_world.rayTest(btFrom, btTo, feet_test);
 
@@ -99,6 +101,7 @@ Actor_base::on_update(const float dt)
     
     // If hit something apply any adjustments.
     if(feet_test.hasHit())
+    //if(false)
     {
       const auto hit_point          = math::vec3_init(feet_test.m_hitPointWorld.x(), feet_test.m_hitPointWorld.y(), feet_test.m_hitPointWorld.z());
       const auto corrected_position = math::vec3_init(math::vec3_get_x(hit_point), math::vec3_get_y(hit_point) + actor_length, math::vec3_get_z(hit_point));
@@ -123,11 +126,11 @@ Actor_base::on_update(const float dt)
       math::vec3 left;
       Transform::get_left_vec(&curr_trans, &left);
 
-      const math::vec3 fwd                      = math::vec3_cross(Transform::world_up(), left);
-      const math::vec3 norm_fwd                 = math::vec3_normalize(fwd);
-      const math::vec3 scaled_fwd               = math::vec3_scale(norm_fwd, move_fwd * dt);
-      const math::vec3 norm_corrected_rotation  = math::vec3_normalize(scaled_fwd);
-      const math::vec3 positional_movement      = math::vec3_scale(norm_corrected_rotation, dt);
+      const math::vec3 fwd                     = math::vec3_cross(Transform::world_up(), left);
+      const math::vec3 norm_fwd                = math::vec3_normalize(fwd);
+      const math::vec3 scaled_fwd              = math::vec3_scale(norm_fwd, move_fwd);
+      const math::vec3 norm_corrected_rotation = math::vec3_normalize(scaled_fwd);
+      const math::vec3 positional_movement     = math::vec3_scale(norm_corrected_rotation, dt);
       
       curr_trans.position = math::vec3_add(positional_movement, curr_trans.position);
     }
@@ -155,11 +158,14 @@ Actor_base::on_update(const float dt)
   
   get_entity().set_transform(curr_trans);
   
+  const float ghost_offset = -0.55;
+  
   if(m_ghost_obj)
   {
     //curr_trans.rotation = math::quat_init();
     math::transform collider_trans = curr_trans;
     collider_trans.rotation = math::quat_init();
+    collider_trans.position = math::vec3_add(curr_trans.position, math::vec3_init(0, ghost_offset, 0));
     m_ghost_obj->setWorldTransform(gl_to_bullet(collider_trans));
   
     //** testing ghost stuff **//
@@ -184,24 +190,22 @@ Actor_base::on_update(const float dt)
         const btBroadphasePair& pair = pairArray[i];
         btBroadphasePair* collisionPair = m_world_data->physics_world->dynamics_world.getPairCache()->findPair(pair.m_pProxy0,pair.m_pProxy1);
 
-      
         manifoldArray.resize(0);
 
-//        btBroadphasePair* collisionPair = &m_ghost_obj->getOverlappingPairCache()->getOverlappingPairArray()[i];
+        //btBroadphasePair* collisionPair = &m_ghost_obj->getOverlappingPairCache()->getOverlappingPairArray()[i];
 
         btCollisionObject* obj0 = static_cast<btCollisionObject*>(collisionPair->m_pProxy0->m_clientObject);
         btCollisionObject* obj1 = static_cast<btCollisionObject*>(collisionPair->m_pProxy1->m_clientObject);
 
         if ((obj0 && !obj0->hasContactResponse()) || (obj1 && !obj1->hasContactResponse()))
         {
-          continue;
+         // continue;
         }
         
         if (collisionPair->m_algorithm)
         {
           collisionPair->m_algorithm->getAllContactManifolds(manifoldArray);
         }
-
         
         for (int j=0;j<manifoldArray.size();j++)
         {
@@ -218,12 +222,12 @@ Actor_base::on_update(const float dt)
               if (dist < maxPen)
               {
                 maxPen = dist;
-    //						m_touchingNormal = pt.m_normalWorldOnB * directionSign;//??
-
+                //m_touchingNormal = pt.m_normalWorldOnB * directionSign;//??
               }
               offset += pt.m_normalWorldOnB * directionSign * dist * btScalar(0.2);
-    //          penetration = true;
-            } else {
+              //penetration = true;
+            }
+            else {
               //printf("touching %f\n", dist);
             }
           }
@@ -233,10 +237,12 @@ Actor_base::on_update(const float dt)
       }
       
       // Ghost object needs to be updated.
-      math::vec3 final_offset = math::vec3_init(offset.x(), 0, offset.z());
+      math::vec3 final_offset = math::vec3_init(offset.x(), offset.y(), offset.z());
       collider_trans.position = math::vec3_add(curr_trans.position, final_offset);
       
       curr_trans.position = collider_trans.position;
+      
+      collider_trans.position = math::vec3_add(curr_trans.position, math::vec3_init(0, ghost_offset, 0));
       
       m_ghost_obj->setWorldTransform(gl_to_bullet(collider_trans));
       get_entity().set_transform(curr_trans);
@@ -247,7 +253,7 @@ Actor_base::on_update(const float dt)
     };
     
     
-    for(int i = 0; i < 1; ++i)
+    for(int i = 0; i < 5; ++i)
     {
       if(resolve_overlap())
       {

@@ -29,6 +29,12 @@ public:
   Core::Entity_id               get_id() const;
   bool                          is_valid() const;
   
+  uint32_t                      get_tags() const;
+  bool                          has_tag(const uint32_t tag_id);
+  void                          set_tags(const uint32_t set_tags);
+  void                          add_tag(const uint32_t add_tag);
+  void                          remove_tag(const uint32_t tag);
+  
   void                          set_parent(const Core::Entity_id id);
   Entity                        get_parent() const;
   

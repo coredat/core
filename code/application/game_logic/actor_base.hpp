@@ -36,7 +36,7 @@ private:
   
   std::unique_ptr<btPairCachingGhostObject> m_ghost_obj;
   std::unique_ptr<btGhostPairCallback> m_pair_cb;
-  std::unique_ptr<btCylinderShape> m_collisionshape;
+  std::unique_ptr<btCollisionShape> m_collisionshape;
   
 }; // class
 

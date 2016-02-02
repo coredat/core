@@ -24,6 +24,71 @@ Entity::is_valid() const
 }
 
 
+uint32_t
+Entity::get_tags() const
+{
+  if(!is_valid()) { return 0; }
+  
+  size_t index;
+  if(Core::find_index_linearly(&index,
+                               m_this_id,
+                               m_world_data->entity_pool->entity_id,
+                               m_world_data->entity_pool->size))
+  {
+    return m_world_data->entity_pool->entity_properties[index].tags;
+  }
+  
+  return 0;
+}
+
+
+bool
+Entity::has_tag(const uint32_t tag_id)
+{
+  if(!is_valid()) { return 0; }
+  
+  const uint32_t tags = get_tags();
+  
+  return !!(tags & tag_id);
+}
+
+
+void
+Entity::set_tags(const uint32_t set_tags)
+{
+  if(!is_valid()) { return; }
+  
+  size_t index;
+  if(Core::find_index_linearly(&index,
+                               m_this_id,
+                               m_world_data->entity_pool->entity_id,
+                               m_world_data->entity_pool->size))
+  {
+    m_world_data->entity_pool->entity_properties[index].tags = set_tags;
+  }
+}
+
+
+void
+Entity::add_tag(const uint32_t add_tag)
+{
+  if(!is_valid()) { return; }
+
+  const uint32_t tags = get_tags();
+  set_tags(tags | add_tag);
+}
+
+
+void
+Entity::remove_tag(const uint32_t tag)
+{
+  if(!is_valid()) { return; }
+
+  const uint32_t tags = get_tags();
+  set_tags(tags &~ tag);
+}
+
+
 namespace
 {
   inline bool

@@ -19,12 +19,22 @@ namespace Data {
 
 
 /*!
+  Generic entity properties.
+*/
+struct Entity_properties
+{
+  uint32_t tags;
+};
+
+
+/*!
   Generic entity storeage. aka the scene graph.
 */
 struct Entity_pool
 {
   Core::Entity_id                 entity_id[ENTITY_POOL_SIZE];
   Core::Entity_id                 parent_id[ENTITY_POOL_SIZE];
+  Entity_properties               entity_properties[ENTITY_POOL_SIZE];
   
   math::transform                 transform[ENTITY_POOL_SIZE];
   

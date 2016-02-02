@@ -9,6 +9,7 @@ entity_pool_init(Entity_pool *pool)
 {
   memset(pool->entity_id,          0, sizeof(pool->entity_id));
   memset(pool->parent_id,          0, sizeof(pool->parent_id));
+  memset(pool->entity_properties,  0, sizeof(pool->entity_properties));
   memset(pool->model,              0, sizeof(pool->model));
   memset(pool->display,            0, sizeof(pool->display));
   memset(pool->texture,            0, sizeof(pool->texture));
