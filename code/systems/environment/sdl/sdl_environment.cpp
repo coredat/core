@@ -49,6 +49,7 @@ think(const Window *window,
         {
           const SDL_Keycode key = evt.key.keysym.sym;
           
+          // Input directions are based of a normal cartesian grid.
           if(key == SDLK_w)
           {
             input->controllers[0].axis_2[1] = 1;
@@ -59,11 +60,11 @@ think(const Window *window,
           }
           else if(key == SDLK_a)
           {
-            input->controllers[0].axis_2[0] = 1;
+            input->controllers[0].axis_2[0] = -1;
           }
           else if(key == SDLK_d)
           {
-            input->controllers[0].axis_2[0] = -1;
+            input->controllers[0].axis_2[0] = 1;
           }
           
           break;
@@ -131,8 +132,9 @@ think(const Window *window,
   {
     if(input->controllers[0].axis_2[0] != 0 && input->controllers[0].axis_2[1] != 0)
     {
-      input->controllers[0].axis_2[0] *= 0.7071f;
-      input->controllers[0].axis_2[1] *= 0.7071f;
+    // TODO: Normalise this.
+//      input->controllers[0].axis_2[0] *= 0.7071f;
+//      input->controllers[0].axis_2[1] *= 0.7071f;
     }
   }
   

@@ -13,6 +13,13 @@
 namespace Data {
 
 
+/*!
+  Holding camera properties?
+  
+  TODO:
+    setter method that take properties but just generates the projection matrix.
+    This data will not change much.
+*/
 struct Camera_pool
 {
   Core::Entity_id             entity_id[MAX_CAMERAS];

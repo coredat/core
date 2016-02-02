@@ -125,23 +125,29 @@ Actor_base::on_update(const float dt)
   {
     const auto move_fwd  = math::vec3_get_z(m_pending_move);
     const auto move_left = math::vec3_get_x(m_pending_move);
+    
+    // TODO:
+    // We will want to normalise or at least clamp this.
+    // 1 forward and 1 left makes movement 1.4. it should be 0.7
   
     if(move_fwd != 0)
     {
-      math::vec3 left;
-      Transform::get_left_vec(&curr_trans, &left);
+      // Need to do cross product method to get vector
+      // in the x,z plane
+    
+      math::vec3 fwd;
+      Transform::get_fwd_vec(&curr_trans, &fwd);
 
-      const math::vec3 fwd                     = math::vec3_cross(Transform::world_up(), left);
-      const math::vec3 norm_fwd                = math::vec3_normalize(fwd);
-      const math::vec3 scaled_fwd              = math::vec3_scale(norm_fwd, move_fwd);
-      const math::vec3 norm_corrected_rotation = math::vec3_normalize(scaled_fwd);
-      const math::vec3 positional_movement     = math::vec3_scale(norm_corrected_rotation, (dt * 4));
+      const math::vec3 scaled_fwd = math::vec3_scale(fwd, move_fwd * dt * 4);
       
-      curr_trans.position = math::vec3_add(positional_movement, curr_trans.position);
+      curr_trans.position = math::vec3_add(curr_trans.position, scaled_fwd);
     }
     
     if(move_left != 0)
     {
+      // Need to do cross product method to get vector
+      // in the x,z plane
+      
       math::vec3 left;
       Transform::get_left_vec(&curr_trans, &left);
       
@@ -158,7 +164,7 @@ Actor_base::on_update(const float dt)
     const float rot_rad   = static_cast<float>(math::vec3_get_y(m_acuumulated_rotations));
     math::quat turn_actor = math::quat_init_with_axis_angle(0, 1, 0, rot_rad);
     
-    curr_trans.rotation   = turn_actor;
+    curr_trans.rotation = turn_actor;
   }
   
   // Apply head movements
