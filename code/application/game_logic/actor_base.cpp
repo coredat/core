@@ -132,26 +132,24 @@ Actor_base::on_update(const float dt)
   
     if(move_fwd != 0)
     {
-      // Need to do cross product method to get vector
-      // in the x,z plane
-    
-      math::vec3 fwd;
-      Transform::get_fwd_vec(&curr_trans, &fwd);
-
-      const math::vec3 scaled_fwd = math::vec3_scale(fwd, move_fwd * dt * 4);
+      math::vec3 left;
+      Transform::get_left_vec(&curr_trans, &left);
+      
+      const math::vec3 fwd = math::vec3_cross(Transform::world_up(), left);
+      const math::vec3 fwd_norm = math::vec3_normalize(fwd);
+      const math::vec3 scaled_fwd = math::vec3_scale(fwd_norm, move_fwd * dt * 4);
       
       curr_trans.position = math::vec3_add(curr_trans.position, scaled_fwd);
     }
     
     if(move_left != 0)
     {
-      // Need to do cross product method to get vector
-      // in the x,z plane
+      math::vec3 fwd;
+      Transform::get_fwd_vec(&curr_trans, &fwd);
       
-      math::vec3 left;
-      Transform::get_left_vec(&curr_trans, &left);
-      
-      const math::vec3 scaled_left = math::vec3_scale(left, move_left * dt * 4);
+      const math::vec3 left = math::vec3_cross(fwd, Transform::world_up());
+      const math::vec3 left_norm = math::vec3_normalize(left);
+      const math::vec3 scaled_left = math::vec3_scale(left_norm, move_left * dt * 4);
       
       curr_trans.position = math::vec3_add(curr_trans.position, scaled_left);
     }
