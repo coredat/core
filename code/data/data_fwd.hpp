@@ -12,6 +12,7 @@ struct Texture_pool;
 struct Logic_pool;
 struct Rigidbody_pool;
 struct World;
+struct Camera_pool;
 
 
 } // ns

@@ -113,6 +113,33 @@ create_network_kinematic_actor(Data::World *world)
 
 
 Core::Entity
+create_npc_actor(Data::World *world)
+{
+  Core::Entity entity;
+  assert(Data::world_create_new_entity(world, &entity, Object_type::dev_npc_actor));
+  
+  const float scale_x = 0.5f;
+  const float scale_y = 0.5f;
+  const float scale_z = 0.5f;
+
+  const float pos_x = 3.f;
+  const float pos_y = 2.5f;
+  const float pos_z = 0.f;
+
+  entity.set_transform(math::transform_init(math::vec3_init(pos_x, pos_y, pos_z),
+                                            math::vec3_init(scale_x, scale_y, scale_z),
+                                            math::quat_init()));
+  
+  entity.set_material_id(Resource::Texture::dev_squares);
+  entity.set_model_id(Resource::Model::unit_cube);
+  
+  entity.add_component<Actor_network_player>();
+  
+  return entity;
+}
+
+
+Core::Entity
 create_placement_cube(Data::World *world)
 {
   Core::Entity entity;

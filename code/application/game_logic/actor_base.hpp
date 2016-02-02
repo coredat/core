@@ -16,7 +16,7 @@ public:
   explicit              Actor_base();
   virtual               ~Actor_base();
   
-  virtual void          on_start();
+  virtual void          on_start() override;
   virtual void          on_update(const float dt) override;
   
   void                  move_forward(const float fwd);

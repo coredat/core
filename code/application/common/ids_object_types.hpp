@@ -2,11 +2,14 @@
 #define IDS_OBJECT_TYPES_INCLUDED_C2D671C0_55D7_4C53_BB36_DCDDA9922DB0
 
 
+#include <stdint.h>
+
+
 /*
   Type ids.
 */
 namespace Object_type {
-enum ENUM {
+enum ENUM : uint32_t {
 
   null_type = 0,
   
@@ -16,6 +19,7 @@ enum ENUM {
   dev_static_ground,
   
   dev_actor,
+  dev_npc_actor,
 
 }; // enum
 } // ns

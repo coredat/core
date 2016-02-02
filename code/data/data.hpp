@@ -8,6 +8,7 @@
 #include "logic_pool.hpp"
 #include "world_data.hpp"
 #include "rigidbody_pool.hpp"
+#include "camera_pool.hpp"
 
 
 #endif // inc guard

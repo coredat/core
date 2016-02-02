@@ -15,7 +15,6 @@ public:
   uint32_t get_rtti() const override { return Component_type::actor_network; }
 
   /** Hooks **/
-  void on_start() override {}
   void on_update(const float dt) override;
 };
 

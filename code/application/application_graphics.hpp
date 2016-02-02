@@ -13,9 +13,7 @@ namespace Application {
    Process what to render on the screen.
 */
 void
-graphics_think(const Data::Entity_pool *entities,
-               const Data::Texture_pool *texture_pool,
-               const Data::Model_pool *model_pool,
+graphics_think(Data::World *world,
                Simple_renderer::Node nodes[],
                const std::size_t size_of_node_pool);
 

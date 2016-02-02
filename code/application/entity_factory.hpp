@@ -18,15 +18,15 @@ create_random_cube(Data::World *world);
 
 
 Core::Entity
-create_actor(Data::World *world);
-
-
-Core::Entity
 create_local_kinematic_actor(Data::World *world);
 
 
 Core::Entity
 create_network_kinematic_actor(Data::World *world);
+
+
+Core::Entity
+create_npc_actor(Data::World *world);
 
 
 Core::Entity

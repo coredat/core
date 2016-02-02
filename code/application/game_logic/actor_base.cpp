@@ -3,6 +3,7 @@
 #include <core/interface/entity.hpp>
 #include <renderer/renderer.hpp>
 #include <systems/transform/transform.hpp>
+#include "../common/ids_object_tags.hpp"
 
 
 namespace
@@ -76,6 +77,8 @@ Actor_base::on_start()
   
   m_world_data->physics_world->dynamics_world.addCollisionObject(m_ghost_obj.get(), btBroadphaseProxy::AllFilter, btBroadphaseProxy::AllFilter);
   m_world_data->physics_world->dynamics_world.getPairCache()->setInternalGhostPairCallback(m_pair_cb.get());
+  
+  get_entity().add_tag(Tag::actor);
 }
 
 

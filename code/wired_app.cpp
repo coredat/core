@@ -30,7 +30,6 @@
 
 namespace
 {
-  const math::mat4 proj = math::mat4_projection(800, 480, 0.1, 1000, math::quart_tau() * 0.6f);
 
 #ifdef WIN32
   const bool is_client = true;
@@ -89,6 +88,19 @@ main(int argc, char *argv[])
   Data::Entity_graph_changes_pool graph_changes;
   Data::entity_graph_change_pool_init(&graph_changes);
   
+  Data::Camera_pool camera_pool;
+  // init
+  {
+    Camera::Camera_propertiess cam_props;
+    cam_props.fov = math::quart_tau() * 0.6f;
+    cam_props.near_plane = 0.1f;
+    cam_props.far_plane = 1000.f;
+    cam_props.viewport_width = 800;
+    cam_props.viewport_height = 480;
+    
+    camera_pool.camera[0] = cam_props;
+  }
+  
   Data::World world_data;
   {
     world_data.entity_pool            = &world_entities;
@@ -96,6 +108,7 @@ main(int argc, char *argv[])
     world_data.logic_pool             = &logic_pool;
     world_data.rigidbody_pool         = &rigidbody_pool;
     world_data.texture_pool           = &texture_pool;
+    world_data.camera_pool            = &camera_pool;
     world_data.model_pool             = &model_pool;
     world_data.physics_world          = &phy_world;
   }
@@ -164,9 +177,7 @@ main(int argc, char *argv[])
     // ** Graphics ** //
 
     Application::graphics_think(
-        &world_entities,
-        &texture_pool,
-        &model_pool,
+        &world_data,
         renderer_nodes.data(),
         renderer_nodes.size()
       );

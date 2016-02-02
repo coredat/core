@@ -11,6 +11,7 @@
 		7EA2C61E1C1F5D4600389748 /* wired_app.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EA2C61D1C1F5D4600389748 /* wired_app.cpp */; };
 		7EA2C6201C1F5E2A00389748 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EA2C61F1C1F5E2A00389748 /* OpenGL.framework */; };
 		7EA2C6551C1F637D00389748 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 7EA2C6541C1F637D00389748 /* assets */; };
+		7EAD4CC71C61258A007F6A9C /* camera_pool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EAD4CC51C61258A007F6A9C /* camera_pool.cpp */; };
 		7EC9B9811C3ECACA00FBF1D7 /* network_events.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EC9B97F1C3ECACA00FBF1D7 /* network_events.cpp */; };
 		7EC9B9861C3EF1BA00FBF1D7 /* entity_pool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EC9B9831C3EF1BA00FBF1D7 /* entity_pool.cpp */; };
 		7EC9B9871C3EF1BA00FBF1D7 /* model_pool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EC9B9841C3EF1BA00FBF1D7 /* model_pool.cpp */; };
@@ -67,6 +68,11 @@
 		7EA2C61F1C1F5E2A00389748 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		7EA2C6541C1F637D00389748 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = ../../../assets; sourceTree = "<group>"; };
 		7EAD4CC01C609C6E007F6A9C /* ids_object_tags.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ids_object_tags.hpp; sourceTree = "<group>"; };
+		7EAD4CC21C6123F1007F6A9C /* camera.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = camera.hpp; sourceTree = "<group>"; };
+		7EAD4CC31C6123F1007F6A9C /* camera_fwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = camera_fwd.hpp; sourceTree = "<group>"; };
+		7EAD4CC41C6123F1007F6A9C /* camera_properties.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = camera_properties.hpp; sourceTree = "<group>"; };
+		7EAD4CC51C61258A007F6A9C /* camera_pool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = camera_pool.cpp; sourceTree = "<group>"; };
+		7EAD4CC61C61258A007F6A9C /* camera_pool.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = camera_pool.hpp; sourceTree = "<group>"; };
 		7EC9B97D1C3E5F2100FBF1D7 /* data_fwd.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = data_fwd.hpp; sourceTree = "<group>"; };
 		7EC9B97E1C3E5F2100FBF1D7 /* data.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = data.hpp; sourceTree = "<group>"; };
 		7EC9B97F1C3ECACA00FBF1D7 /* network_events.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = network_events.cpp; sourceTree = "<group>"; };
@@ -265,6 +271,16 @@
 			path = ../../../../code;
 			sourceTree = "<group>";
 		};
+		7EAD4CC11C6123F1007F6A9C /* camera */ = {
+			isa = PBXGroup;
+			children = (
+				7EAD4CC21C6123F1007F6A9C /* camera.hpp */,
+				7EAD4CC31C6123F1007F6A9C /* camera_fwd.hpp */,
+				7EAD4CC41C6123F1007F6A9C /* camera_properties.hpp */,
+			);
+			path = camera;
+			sourceTree = "<group>";
+		};
 		7EC9B9821C3ED7A200FBF1D7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -367,6 +383,8 @@
 		7ED7BB871C3CF8B100CE80EA /* data */ = {
 			isa = PBXGroup;
 			children = (
+				7EAD4CC51C61258A007F6A9C /* camera_pool.cpp */,
+				7EAD4CC61C61258A007F6A9C /* camera_pool.hpp */,
 				7EC9B9E41C4D5D6100FBF1D7 /* world_data.cpp */,
 				7EC9B9E51C4D5D6100FBF1D7 /* world_data.hpp */,
 				7EC9B9AD1C44DA7700FBF1D7 /* logic_pool.cpp */,
@@ -421,6 +439,7 @@
 		7ED7BBBC1C3CF8B100CE80EA /* systems */ = {
 			isa = PBXGroup;
 			children = (
+				7EAD4CC11C6123F1007F6A9C /* camera */,
 				7EC9B9BB1C48370700FBF1D7 /* environment */,
 				7ED7BC051C3E56D000CE80EA /* entity */,
 				7ED7BC011C3E566000CE80EA /* model_manager */,
@@ -676,6 +695,7 @@
 				7EC9B9B21C44EBF400FBF1D7 /* actor_local_player.cpp in Sources */,
 				7EC9B9D81C4B785000FBF1D7 /* application_common.cpp in Sources */,
 				7EC9B99F1C418A3000FBF1D7 /* ogl_texture_filtering.cpp in Sources */,
+				7EAD4CC71C61258A007F6A9C /* camera_pool.cpp in Sources */,
 				7EFB9B0C1C5E620C00A838C7 /* entity_id.cpp in Sources */,
 				7ED7BC1C1C3E56D000CE80EA /* debug_renderer.cpp in Sources */,
 				7ED7BBDD1C3CF8FE00CE80EA /* resources.cpp in Sources */,
@@ -754,6 +774,7 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 2;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -783,6 +804,11 @@
 				LIBRARY_SEARCH_PATHS = (
 					/usr/local/lib,
 					"\"$(SRCROOT)/../../../3rdparty/enet/lib/osx\"",
+				);
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-fno-exceptions",
+					"-fno-rtti",
 				);
 				OTHER_LDFLAGS = (
 					"-lsimple_renderer",
@@ -820,6 +846,11 @@
 				LIBRARY_SEARCH_PATHS = (
 					/usr/local/lib,
 					"\"$(SRCROOT)/../../../3rdparty/enet/lib/osx\"",
+				);
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-fno-exceptions",
+					"-fno-rtti",
 				);
 				OTHER_LDFLAGS = (
 					"-lsimple_renderer",
