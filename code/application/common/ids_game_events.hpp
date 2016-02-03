@@ -6,7 +6,7 @@
 #include <stdint.h>
 
 
-namespace Event_id {
+namespace Game_event_id {
 enum ENUM : uint32_t {
 
   null_event   = Core::Event_id::end_of_core_events,
