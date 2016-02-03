@@ -215,7 +215,7 @@ Actor_local_player::on_update(const float dt)
           if(hit_ent.has_tag(Tag::actor))
           {
             std::cout << "has_actor_tag" << std::endl;
-            Actor_base *actor = hit_ent.get_component<Actor_base>(Component_type::actor_network);
+            Actor_base *actor = hit_ent.get_component<Actor_base>(Component_type::actor);
             
             if(actor)
             {

@@ -10,8 +10,7 @@ enum ENUM : uint32_t {
 
   invalid,    // zero 
 
-  actor_local,
-  actor_network,
+  actor,
 
 }; // enum
 } // ns

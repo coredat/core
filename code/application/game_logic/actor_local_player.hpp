@@ -14,8 +14,6 @@ public:
 
   explicit Actor_local_player();
   
-  uint32_t get_rtti() const override { return Component_type::actor_local; }
-
   /** Hooks **/
   void on_start() override;
   void on_update(const float dt) override;

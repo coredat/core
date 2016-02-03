@@ -2,6 +2,7 @@
 #define ACTOR_BASE_INCLUDED_67983ACD_4D6D_4A09_9F50_DB189567416C
 
 
+#include "../common/ids_component_types.hpp"
 #include <core/interface/component.hpp>
 #include <math/vec/vec3.hpp>
 #include <btBulletCollisionCommon.h>
@@ -15,6 +16,8 @@ public:
 
   explicit              Actor_base();
   virtual               ~Actor_base();
+  
+  uint32_t              get_rtti() const override { return Component_type::actor; }
   
   virtual void          on_start() override;
   virtual void          on_update(const float dt) override;
