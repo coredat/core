@@ -5,6 +5,7 @@
 #include <application/entity_factory.hpp>
 #include <data/data.hpp>
 #include <core/interface/entity.hpp>
+#include "actor_base.hpp"
 #include <btBulletCollisionCommon.h>
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
 #include "../common/ids_object_tags.hpp"
@@ -214,6 +215,16 @@ Actor_local_player::on_update(const float dt)
           if(hit_ent.has_tag(Tag::actor))
           {
             std::cout << "has_actor_tag" << std::endl;
+            Actor_base *actor = hit_ent.get_component<Actor_base>(Component_type::actor_network);
+            
+            if(actor)
+            {
+              actor->take_damage();
+            }
+            else
+            {
+              std::cout << "noo" << std::endl;
+            }
           }
           else
           {

@@ -73,7 +73,23 @@ public:
   template<typename T>
   T* get_component(const uint32_t rtti_id)
   {
-    assert(false); /* todo */ return nullptr;
+    const size_t count = m_world_data->logic_pool->size;
+    
+    for(size_t i = 0; i < count; ++i)
+    {
+      if(m_world_data->logic_pool->entity_id[i] == get_id())
+      {
+        // Get script.
+        void *comp = m_world_data->logic_pool->object_locations[i];
+      
+        if(reinterpret_cast<Core::Component*>(comp)->get_rtti() == rtti_id)
+        {
+          return reinterpret_cast<T*>(comp);
+        }
+      }
+    }
+    
+    return nullptr;
   }
   
   size_t get_number_of_components() const;

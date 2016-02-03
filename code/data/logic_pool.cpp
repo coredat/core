@@ -59,8 +59,17 @@ logic_pool_get_slot(Logic_pool *pool,
 size_t
 logic_pool_get_slot_count(Logic_pool *pool, const Core::Entity_id id)
 {
-  assert(false);
-  return 0;
+  size_t count(0);
+  
+  for(size_t i = 0; i < pool->size; ++i)
+  {
+    if(pool->entity_id[i] == id)
+    {
+      ++count;
+    }
+  }
+  
+  return count;
 }
 
 
