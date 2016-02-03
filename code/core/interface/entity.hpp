@@ -71,9 +71,12 @@ public:
   }
   
   template<typename T>
-  T* get_component(const uint32_t rtti_id) { assert(false); /* todo */ return nullptr; }
+  T* get_component(const uint32_t rtti_id)
+  {
+    assert(false); /* todo */ return nullptr;
+  }
   
-  size_t get_number_of_components() const { assert(false); /* todo */ return 0; }
+  size_t get_number_of_components() const;
   
 private:
 

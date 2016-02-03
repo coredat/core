@@ -341,4 +341,13 @@ Entity::get_rigidbody_collider() const
 }
 
 
+size_t
+Entity::get_number_of_components() const
+{
+  const size_t count = Data::logic_pool_get_slot_count(m_world_data->logic_pool, m_this_id);
+
+  return count;
+}
+
+
 } // ns

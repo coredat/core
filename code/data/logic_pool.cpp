@@ -1,5 +1,6 @@
 #include "logic_pool.hpp"
 #include <cstring>
+#include <assert.h>
 
 
 namespace Data {
@@ -52,6 +53,14 @@ logic_pool_get_slot(Logic_pool *pool,
   
   
   return nullptr;
+}
+
+
+size_t
+logic_pool_get_slot_count(Logic_pool *pool, const Core::Entity_id id)
+{
+  assert(false);
+  return 0;
 }
 
 

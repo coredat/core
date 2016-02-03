@@ -39,7 +39,7 @@ host_initialize(
   
   Entity_factory::create_connection_node(world);
   
-  const uint32_t number_of_random_cubes = 0;
+  volatile const uint32_t number_of_random_cubes = 0;
   for(uint32_t i = 0; i < number_of_random_cubes; ++i)
   {
     Entity_factory::create_random_cube(world);

@@ -53,6 +53,13 @@ void*
 logic_pool_get_slot(Logic_pool *pool, const Core::Entity_id id);
 
 
+/*!
+  Return how many components are attached to an entity.
+*/
+size_t
+logic_pool_get_slot_count(Logic_pool *pool, const Core::Entity_id id);
+
+
 // ** EVENT HOOKS ** //
 /* These methods call logic event hooks. */
 

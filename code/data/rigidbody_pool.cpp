@@ -220,30 +220,6 @@ rigidbody_pool_update_scene_graph_changes(Rigidbody_pool *pool,
     Physics::Rigidbody *rb = nullptr;
     rigidbody_pool_find(world_data->rigidbody_pool, entity.get_id(), &rb);
     assert(rb);
-    
-    // If has children we need to collect all the colliders.
-//    auto get_child_colliders = [&](Entity e, btCompoundShape *parent_compound)
-//    {
-//      for(size_t c = 0; c < e.get_number_of_children(); ++c)
-//      {
-//        Entity child = e.get_child(c);
-//      
-//        get_child_colliders(child, parent_compound);
-//      }
-//      
-//      auto parent = e.get_parent();
-//      
-//      if(parent.is_valid())
-//      {
-//        btTransform transform;
-//        transform.setIdentity();
-//        
-//        Physics::Rigidbody *rb = nullptr;
-//        rigidbody_pool_find(world_data->rigidbody_pool, e.get_id(), &rb);
-//      
-//        parent_compound->addChildShape(transform, rb->shape.get());
-//      }
-//    };
 
     auto get_child_colliders = [&](Core::Entity e, btCompoundShape *parent_compound)
     {
