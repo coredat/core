@@ -21,6 +21,7 @@ public:
   
   virtual void          on_start() override;
   virtual void          on_update(const float dt) override;
+  virtual void          on_event(const uint32_t id, const void *data, const size_t size_of_data) override;
   
   /* Interface */
   

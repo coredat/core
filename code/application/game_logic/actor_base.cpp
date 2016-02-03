@@ -285,6 +285,13 @@ Actor_base::on_update(const float dt)
 
 
 void
+Actor_base::on_event(const uint32_t id, const void *data, const size_t size_of_data)
+{
+  std::cout << "evt yo!" << std::endl;
+}
+
+
+void
 Actor_base::move_forward(const float fwd)
 {
   const float accum_fwd = math::vec3_get_z(m_pending_move) + fwd;

@@ -220,6 +220,7 @@ Actor_local_player::on_update(const float dt)
             if(actor)
             {
               actor->take_damage();
+              hit_ent.send_event(0, nullptr, 0);
             }
             else
             {

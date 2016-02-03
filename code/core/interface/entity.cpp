@@ -201,6 +201,24 @@ Entity::get_child(const size_t index) const
 
 
 void
+Entity::send_event(const uint32_t id,
+                   const void *data,
+                   const size_t size_of_data)
+{
+  // Find all components and send an event to.
+  auto pool = m_world_data->logic_pool;
+  
+  for(size_t i = 0; i < pool->size; ++i)
+  {
+    if(pool->entity_id[i] == m_this_id)
+    {
+      reinterpret_cast<Core::Component*>(pool->object_locations[i])->on_event(id, data, size_of_data);
+    }
+  }
+}
+
+
+void
 Entity::set_transform(const math::transform &transform)
 {
   if(!is_valid()) { return; }
