@@ -26,6 +26,8 @@ public:
   void                  move_left(const float left);
   void                  look_up(const float pitch);
   void                  turn_left(const float left);
+  void                  jump();
+  void                  crouch();
   
   bool                  is_grounded() const;
   

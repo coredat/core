@@ -321,4 +321,12 @@ void
 Actor_base::take_damage()
 {
   std::cout << "yo" << std::endl;
+
+  size_t index;
+  Core::Entity_id_util::find_index_linearly(&index,
+                                            get_entity().get_id(),
+                                            m_world_data->entity_pool->entity_id,
+                                            m_world_data->entity_pool->size);
+
+  m_world_data->entity_pool->texture[index] = Resource::Texture::dev_green;
 }
