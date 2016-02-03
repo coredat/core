@@ -3,7 +3,7 @@
 
 
 #include <stdint.h>
-#include <cstddef>
+#include <stddef.h>
 
 
 namespace Core {
@@ -16,9 +16,12 @@ struct Entity_id
 }; // Entity_id
 
 
+namespace Entity_id_util {
+
+
 //! Converts an entity type into a uint32_t type.
 inline uint32_t
-entity_as_uint(const Entity_id e)
+convert_entity_to_uint(const Entity_id e)
 {
   return (e.type_id << 24) | e.instance_id;
 }
@@ -26,42 +29,44 @@ entity_as_uint(const Entity_id e)
 
 //! Converts a uint to an entity
 inline Entity_id
-uint_as_entity(const uint32_t to_e)
+convert_uint_to_entity(const uint32_t to_e)
 {
   return Entity_id{(to_e >> 24), (to_e >> 0 & 0xFFFF)};
 }
 
 
-constexpr bool
-operator==(const Entity_id left, const Entity_id right)
+inline void*
+convert_entity_to_ptr(const Entity_id to_ptr)
 {
-  return ((left.type_id == right.type_id) && (left.instance_id == right.instance_id));
+  const uint32_t usr = convert_entity_to_uint(to_ptr);
+  const uintptr_t warn = static_cast<uintptr_t>(usr);
+  size_t* ptr = nullptr;
+  
+  ptr = (size_t*)warn;
+  
+  return ptr;
+}
+
+
+inline Entity_id
+convert_ptr_to_entity(const void *to_ent)
+{
+  const size_t ptr = (size_t)to_ent;
+  const Core::Entity_id id = convert_uint_to_entity(static_cast<uint32_t>(ptr));
+  
+  return id;
 }
 
 
 constexpr bool
-operator!=(const Entity_id left, const Entity_id right)
-{
-  return !operator==(left, right);
-}
-
-
-constexpr bool
-operator<(const Entity_id left, const Entity_id right)
-{
-  return ((left.type_id < right.type_id) && (left.instance_id < right.instance_id));
-}
-
-
-constexpr bool
-entity_is_valid(const Entity_id id)
+is_valid(const Entity_id id)
 {
   return id.type_id == 0;
 }
 
 
 constexpr Entity_id
-entity_invalid_id()
+invalid_id()
 {
   return Entity_id{0,0};
 };
@@ -73,7 +78,7 @@ entity_invalid_id()
  \param size_of_entities the number of entities to invalidate.
 */
 void
-init_to_invalid_ids(Entity_id ids[], const std::size_t size_of_entities);
+init_to_invalid_ids(Entity_id ids[], const size_t size_of_entities);
 
 
 /*!
@@ -85,10 +90,32 @@ init_to_invalid_ids(Entity_id ids[], const std::size_t size_of_entities);
   \return return true if an index has been found.
 */
 bool
-find_index_linearly(std::size_t *out_index, const Entity_id id_to_find, const Entity_id ids[], const std::size_t number_of_entities);
+find_index_linearly(size_t *out_index, const Entity_id id_to_find, const Entity_id ids[], const size_t number_of_entities);
 
 
 } // ns
+} // ns
+
+
+constexpr bool
+operator==(const Core::Entity_id left, const Core::Entity_id right)
+{
+  return ((left.type_id == right.type_id) && (left.instance_id == right.instance_id));
+}
+
+
+constexpr bool
+operator!=(const Core::Entity_id left, const Core::Entity_id right)
+{
+  return !operator==(left, right);
+}
+
+
+constexpr bool
+operator<(const Core::Entity_id left, const Core::Entity_id right)
+{
+  return ((left.type_id < right.type_id) && (left.instance_id < right.instance_id));
+}
 
 
 #endif // include

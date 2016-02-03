@@ -113,15 +113,8 @@ world_add_rigidbodies(World *world,
                                                                   out_rb->compound_shape.get(),
                                                                   inertia);
       
-      out_rb->rigidbody.reset(new btRigidBody(rigidbody_ci));
-      // Convert uint to ptr.
-      {
-        const uint32_t usr = Core::entity_as_uint(prop->id);
-        std::size_t* ptr = nullptr;
-        ptr = (std::size_t*)usr;
-        
-        out_rb->rigidbody->setUserPointer(ptr);
-      }
+      out_rb->rigidbody.reset(new btRigidBody(rigidbody_ci));        
+      out_rb->rigidbody->setUserPointer(Core::Entity_id_util::convert_entity_to_ptr(prop->id));
     }
     
     /*

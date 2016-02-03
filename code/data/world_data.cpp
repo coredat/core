@@ -27,10 +27,10 @@ world_create_new_entity(World *world_data, Core::Entity *out_entity, const uint3
     auto entity_pool = world_data->entity_pool;
 
     size_t empty_index;
-    if(Core::find_index_linearly(&empty_index,
-                                 Core::entity_invalid_id(),
-                                 entity_pool->entity_id,
-                                 entity_pool->size))
+    if(Core::Entity_id_util::find_index_linearly(&empty_index,
+                                                 Core::Entity_id_util::invalid_id(),
+                                                 entity_pool->entity_id,
+                                                 entity_pool->size))
     {
       Core::Detail::set_entity_members(out_entity, world_data, Core::Entity_id{type_id, ++instance});
       
@@ -53,16 +53,16 @@ bool
 world_find_entity(World *world_data, Core::Entity *out_entity, const Core::Entity_id id)
 {
   assert(world_data);
-  assert(id != Core::entity_invalid_id());
+  assert(id != Core::Entity_id_util::invalid_id());
 
   auto entity_pool = world_data->entity_pool;
 
   // Search the list for the entity.
   size_t index;
-  if(Core::find_index_linearly(&index,
-                               id,
-                               entity_pool->entity_id,
-                               entity_pool->size))
+  if(Core::Entity_id_util::find_index_linearly(&index,
+                                               id,
+                                               entity_pool->entity_id,
+                                               entity_pool->size))
   {
     Core::Detail::set_entity_members(out_entity, world_data, id);
     return true;

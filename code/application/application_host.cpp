@@ -13,8 +13,8 @@
 
 namespace
 {
-  Core::Entity_id kine_actor_local = Core::entity_invalid_id();
-  Core::Entity_id kine_actor_network = Core::entity_invalid_id();
+  Core::Entity_id kine_actor_local = Core::Entity_id_util::invalid_id();
+  Core::Entity_id kine_actor_network = Core::Entity_id_util::invalid_id();
 }
 
 
@@ -66,7 +66,7 @@ host_think(
     &std::cout);
 
   std::size_t index;
-  Core::find_index_linearly(&index, kine_actor_local, world->entity_pool->entity_id, world->entity_pool->size);
+  Core::Entity_id_util::find_index_linearly(&index, kine_actor_local, world->entity_pool->entity_id, world->entity_pool->size);
 
   // Kill me!!!!
   Actor_local_player *actor = reinterpret_cast<Actor_local_player*>(world->logic_pool->objects_in_use[0]);

@@ -70,6 +70,7 @@ Actor_base::on_start()
 {
   m_ghost_obj.reset(new btPairCachingGhostObject());
   m_ghost_obj->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
+  m_ghost_obj->setUserPointer(Core::Entity_id_util::convert_entity_to_ptr(get_entity().get_id()));
   
   m_pair_cb.reset(new btGhostPairCallback());
   
@@ -313,4 +314,11 @@ Actor_base::turn_left(const float turn)
 {
   const float accum_right = math::vec3_get_y(m_acuumulated_rotations) + turn;
   m_acuumulated_rotations = math::vec3_init(math::vec3_get_x(m_acuumulated_rotations), accum_right, math::vec3_get_z(m_acuumulated_rotations));
+}
+
+
+void
+Actor_base::take_damage()
+{
+  std::cout << "yo" << std::endl;
 }

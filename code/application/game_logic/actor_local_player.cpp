@@ -7,6 +7,8 @@
 #include <core/interface/entity.hpp>
 #include <btBulletCollisionCommon.h>
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
+#include "../common/ids_object_tags.hpp"
+#include <iostream>
 
 
 namespace
@@ -70,6 +72,8 @@ void
 Actor_local_player::on_start()
 {
   Actor_base::on_start();
+  get_entity().add_tag(Tag::player);
+  
   cube_id = Entity_factory::create_placement_cube(m_world_data).get_id();
 }
 
@@ -193,21 +197,51 @@ Actor_local_player::on_update(const float dt)
       trans.position = pos;
       cube_entity.set_transform(trans);
       
-      if(m_place_node)
+      // See if we can get the entity of the object
+      const auto hit_obj = face_ray.m_collisionObject;
+      const Core::Entity_id id = Core::Entity_id_util::convert_ptr_to_entity(hit_obj->getUserPointer());
+
+      if(id != Core::Entity_id_util::invalid_id())
       {
-        auto ent = Entity_factory::create_random_cube(m_world_data);
+        Core::Entity hit_ent;
+      
+        Data::world_find_entity(m_world_data, &hit_ent, id);
         
-        auto trans = ent.get_transform();
-        trans.position = cube_entity.get_transform().position;
-        ent.set_transform(trans);
-        
-        // Join rbs.
-        void *user_ptr = face_ray.m_collisionObject->getUserPointer();
-        const std::size_t ent_id = (std::size_t)user_ptr;
-        const Core::Entity_id collided_id = Core::uint_as_entity(static_cast<uint32_t>(ent_id));
-        
-        ent.set_parent(collided_id);
+        if(hit_ent.is_valid())
+        {
+          std::cout << "is_valid" << std::endl;
+          
+          if(hit_ent.has_tag(Tag::actor))
+          {
+            std::cout << "has_actor_tag" << std::endl;
+          }
+          else
+          {
+            std::cout << "no actor tag" << std::endl;
+          }
+        }
+        else
+        {
+          std::cout << "is_not_valid" << std::endl;
+          std::cout << "" << std::endl;
+        }
       }
+      
+//      if(m_place_node)
+//      {
+//        auto ent = Entity_factory::create_random_cube(m_world_data);
+//        
+//        auto trans = ent.get_transform();
+//        trans.position = cube_entity.get_transform().position;
+//        ent.set_transform(trans);
+//        
+//        // Join rbs.
+//        void *user_ptr = face_ray.m_collisionObject->getUserPointer();
+//        const std::size_t ent_id = (std::size_t)user_ptr;
+//        const Core::Entity_id collided_id = Core::uint_as_entity(static_cast<uint32_t>(ent_id));
+//        
+//        ent.set_parent(collided_id);
+//      }
     }
   }
   

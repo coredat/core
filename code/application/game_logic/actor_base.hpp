@@ -26,6 +26,8 @@ public:
   
   bool                  is_grounded() const;
   
+  void                  take_damage();
+  
 private:
 
   math::vec3            m_pending_move = math::vec3_zero();

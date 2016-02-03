@@ -9,9 +9,9 @@
 // This is used to allow the factory to make a public version
 // of the object to set members. Keeping setters etc out of the
 // objects interface.
-#define ENTITY_MEMBERS                                                  \
-  Core::Entity_id           m_this_id     = Core::entity_invalid_id();  \
-  ::Data::World             *m_world_data = nullptr;                    \
+#define ENTITY_MEMBERS                                                           \
+  Core::Entity_id           m_this_id     = Core::Entity_id_util::invalid_id();  \
+  ::Data::World             *m_world_data = nullptr;                             \
 
 
 namespace Core {

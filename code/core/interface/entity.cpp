@@ -20,7 +20,7 @@ Entity::get_id() const
 bool
 Entity::is_valid() const
 {
-  return !(m_this_id == Core::entity_invalid_id());
+  return !(m_this_id == Core::Entity_id_util::invalid_id());
 }
 
 
@@ -30,10 +30,10 @@ Entity::get_tags() const
   if(!is_valid()) { return 0; }
   
   size_t index;
-  if(Core::find_index_linearly(&index,
-                               m_this_id,
-                               m_world_data->entity_pool->entity_id,
-                               m_world_data->entity_pool->size))
+  if(Entity_id_util::find_index_linearly(&index,
+                                         m_this_id,
+                                         m_world_data->entity_pool->entity_id,
+                                         m_world_data->entity_pool->size))
   {
     return m_world_data->entity_pool->entity_properties[index].tags;
   }
@@ -59,10 +59,10 @@ Entity::set_tags(const uint32_t set_tags)
   if(!is_valid()) { return; }
   
   size_t index;
-  if(Core::find_index_linearly(&index,
-                               m_this_id,
-                               m_world_data->entity_pool->entity_id,
-                               m_world_data->entity_pool->size))
+  if(Entity_id_util::find_index_linearly(&index,
+                                         m_this_id,
+                                         m_world_data->entity_pool->entity_id,
+                                         m_world_data->entity_pool->size))
   {
     m_world_data->entity_pool->entity_properties[index].tags = set_tags;
   }
@@ -99,7 +99,7 @@ namespace
       return false;
     }
     
-    if(Core::find_index_linearly(index, id, ents, size))
+    if(Entity_id_util::find_index_linearly(index, id, ents, size))
     {
       return true;
     }
@@ -132,7 +132,7 @@ Entity::get_parent() const
   if(!is_valid()) { return Entity(); }
   
   size_t index;
-  if(Core::find_index_linearly(&index, m_this_id, m_world_data->entity_pool->entity_id, m_world_data->entity_pool->size))
+  if(Entity_id_util::find_index_linearly(&index, m_this_id, m_world_data->entity_pool->entity_id, m_world_data->entity_pool->size))
   {
     Entity parent;
     Detail::set_entity_members(&parent, m_world_data, m_world_data->entity_pool->parent_id[index]);

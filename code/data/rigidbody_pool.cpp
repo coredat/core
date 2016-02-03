@@ -23,7 +23,7 @@ rigidbody_pool_find(Rigidbody_pool *pool,
                     Physics::Rigidbody **out_rb)
 {
   size_t index;
-  if(Core::find_index_linearly(&index, id, pool->entity_id, pool->size))
+  if(Core::Entity_id_util::find_index_linearly(&index, id, pool->entity_id, pool->size))
   {
     *out_rb = &(pool->rigidbody[index]);
     return true;
@@ -38,9 +38,9 @@ rigidbody_pool_remove(Rigidbody_pool *pool,
                       const Core::Entity_id id)
 {
   size_t index;
-  if(Core::find_index_linearly(&index, id, pool->entity_id, pool->size))
+  if(Core::Entity_id_util::find_index_linearly(&index, id, pool->entity_id, pool->size))
   {
-    pool->entity_id[index] = Core::entity_invalid_id();
+    pool->entity_id[index] = Core::Entity_id_util::invalid_id();
     return true;
   }
   
@@ -53,7 +53,7 @@ rigidbody_pool_exists(Rigidbody_pool *pool,
                       const Core::Entity_id id)
 {
   size_t index;
-  return Core::find_index_linearly(&index, id, pool->entity_id, pool->size);
+  return Core::Entity_id_util::find_index_linearly(&index, id, pool->entity_id, pool->size);
 }
 
 
@@ -64,7 +64,7 @@ rigidbody_pool_push(Rigidbody_pool *pool,
 {
   // This is there I am at.
   size_t index;
-  if(Core::find_index_linearly(&index, Core::entity_invalid_id(), pool->entity_id, pool->size))
+  if(Core::Entity_id_util::find_index_linearly(&index, Core::Entity_id_util::invalid_id(), pool->entity_id, pool->size))
   {
     pool->entity_id[index] = id;
     *new_rb = &pool->rigidbody[index];
@@ -284,7 +284,7 @@ rigidbody_pool_update_scene_graph_changes(Rigidbody_pool *pool,
         return lambda(e, parent_compound, lambda);
     };
     
-    if(entity.get_parent().get_id() == Core::entity_invalid_id())
+    if(entity.get_parent().get_id() == Core::Entity_id_util::invalid_id())
     {
       //get_child_colliders(entity, rb->compound_shape.get());
       add_child_colliders(world_data, entity, rb->compound_shape.get());
