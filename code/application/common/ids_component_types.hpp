@@ -11,6 +11,8 @@ enum ENUM : uint32_t {
   invalid,    // zero 
 
   actor,
+  
+  local_player_input,
 
 }; // enum
 } // ns

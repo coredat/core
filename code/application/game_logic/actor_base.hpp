@@ -22,15 +22,16 @@ public:
   virtual void          on_start() override;
   virtual void          on_update(const float dt) override;
   
+  /* Interface */
+  
   void                  move_forward(const float fwd);
   void                  move_left(const float left);
   void                  look_up(const float pitch);
   void                  turn_left(const float left);
-  void                  jump();
-  void                  crouch();
-  
   bool                  is_grounded() const;
   
+  void                  jump();
+  void                  crouch();
   void                  take_damage();
   
 private:
@@ -40,7 +41,7 @@ private:
   math::vec3            m_size = math::vec3_init(0.5, 2, 0.5);
   const float           m_gravity = -0.5f;
   
-  
+  // Urgh these need to go into the rb system unfort.
   std::unique_ptr<btPairCachingGhostObject> m_ghost_obj;
   std::unique_ptr<btGhostPairCallback> m_pair_cb;
   std::unique_ptr<btCollisionShape> m_collisionshape;
