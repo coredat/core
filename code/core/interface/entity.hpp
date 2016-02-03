@@ -41,6 +41,8 @@ public:
   size_t                        get_number_of_children() const;
   Entity                        get_child(const size_t index) const;
 
+  void                          send_event(const uint32_t id, const void *data, const size_t size_of_data);
+
   void                          set_transform(const math::transform &transform);
   math::transform               get_transform() const;
 
