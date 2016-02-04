@@ -2,11 +2,11 @@
 #include <assert.h>
 
 
-namespace Data {
+namespace Core_data {
 
 
 Input_data*
-get_input_data(Data::Core *core_data)
+get_input_data(Core_data::Core *core_data)
 {
   assert(core_data && core_data->input_data);
   return core_data->input_data;

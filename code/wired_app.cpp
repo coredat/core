@@ -11,6 +11,7 @@
 #include <systems/entity/generic_id.hpp>
 
 #include <data/data.hpp>
+#include <data/core_data/core_data.hpp>
 
 #include <renderer/renderer.hpp>
 #include <renderer/simple_renderer/simple_renderer.hpp>
@@ -114,6 +115,13 @@ main(int argc, char *argv[])
   }
   
   
+  // Core Data
+  Core_data::Core core_data;
+  Core_data::Input_data core_input;
+  
+  core_data.input_data = &core_input;
+  
+  
   Resource::load_default_resources(&texture_pool, texture_pool.size, &model_pool, model_pool.size);
   
   if (is_client)
@@ -152,7 +160,8 @@ main(int argc, char *argv[])
     
     Application::common_think(
       &window,
-      &input_devices);
+      &input_devices,
+      &core_data);
     
     // ** Update World ** //
     
