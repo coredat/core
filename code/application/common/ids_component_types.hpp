@@ -12,7 +12,8 @@ enum ENUM : uint32_t {
 
   actor,
   
-  local_player_input,
+  local_player_controller,
+  npc_actor_controller,
 
 }; // enum
 } // ns

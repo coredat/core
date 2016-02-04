@@ -136,6 +136,10 @@ Actor_base::on_update(const float dt)
       math::vec3 left;
       Transform::get_left_vec(&curr_trans, &left);
       
+      // TODO:
+      // Can the player's 'left' ever point directly up?
+      // If it does we'll get a zero cross product.
+      
       const math::vec3 fwd = math::vec3_cross(Transform::world_up(), left);
       const math::vec3 fwd_norm = math::vec3_normalize(fwd);
       const math::vec3 scaled_fwd = math::vec3_scale(fwd_norm, move_fwd * dt * 4);
@@ -147,6 +151,10 @@ Actor_base::on_update(const float dt)
     {
       math::vec3 fwd;
       Transform::get_fwd_vec(&curr_trans, &fwd);
+      
+      // TODO
+      // If player looks up we get a 0 cross product.
+      // Don't use world up.
       
       const math::vec3 left = math::vec3_cross(fwd, Transform::world_up());
       const math::vec3 left_norm = math::vec3_normalize(left);
@@ -327,8 +335,6 @@ Actor_base::turn_left(const float turn)
 void
 Actor_base::take_damage()
 {
-  std::cout << "yo" << std::endl;
-
   size_t index;
   Core::Entity_id_util::find_index_linearly(&index,
                                             get_entity().get_id(),

@@ -34,7 +34,8 @@ host_initialize(
     // * Set camera * //
     world->camera_pool->entity_id[0] = kine_actor_local;
     
-    kine_actor_network = Entity_factory::create_network_kinematic_actor(world).get_id();
+//    kine_actor_network = Entity_factory::create_network_kinematic_actor(world).get_id();
+    kine_actor_local = Entity_factory::create_npc_actor(world).get_id();
   }
   
   Entity_factory::create_connection_node(world);

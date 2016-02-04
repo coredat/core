@@ -8,6 +8,8 @@
 #include <core/interface/entity.hpp>
 #include <application/game_logic/actor_local_player.hpp>
 #include <application/game_logic/actor_network_player.hpp>
+#include <application/game_logic/local_player_controller.hpp>
+#include <application/game_logic/npc_actor_controller.hpp>
 
 
 namespace Entity_factory {
@@ -80,6 +82,7 @@ create_local_kinematic_actor(Data::World *world)
   entity.set_model_id(Resource::Model::unit_cube);
   
   entity.add_component<Actor_local_player>();
+  entity.add_component<Local_player_controller>();
   
   return entity;
 }
@@ -116,7 +119,7 @@ Core::Entity
 create_npc_actor(Data::World *world)
 {
   Core::Entity entity;
-  assert(Data::world_create_new_entity(world, &entity, Object_type::dev_npc_actor));
+  assert(Data::world_create_new_entity(world, &entity, Object_type::dev_actor));
   
   const float scale_x = 0.5f;
   const float scale_y = 0.5f;
@@ -130,10 +133,11 @@ create_npc_actor(Data::World *world)
                                             math::vec3_init(scale_x, scale_y, scale_z),
                                             math::quat_init()));
   
-  entity.set_material_id(Resource::Texture::dev_squares);
+  entity.set_material_id(Resource::Texture::dev_orange);
   entity.set_model_id(Resource::Model::unit_cube);
   
-  entity.add_component<Actor_network_player>();
+  entity.add_component<Actor_base>();
+  entity.add_component<Npc_actor_controller>();
   
   return entity;
 }

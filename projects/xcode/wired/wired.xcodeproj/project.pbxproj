@@ -16,6 +16,7 @@
 		7EAD4CD61C628524007F6A9C /* event.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EAD4CCF1C628524007F6A9C /* event.cpp */; };
 		7EAD4CD71C628524007F6A9C /* event_controller.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EAD4CD11C628524007F6A9C /* event_controller.cpp */; };
 		7EAD4CD81C628524007F6A9C /* event_manager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EAD4CD41C628524007F6A9C /* event_manager.cpp */; };
+		7EAD4CDD1C63340D007F6A9C /* npc_actor_controller.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EAD4CDB1C63340D007F6A9C /* npc_actor_controller.cpp */; };
 		7EC9B9811C3ECACA00FBF1D7 /* network_events.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EC9B97F1C3ECACA00FBF1D7 /* network_events.cpp */; };
 		7EC9B9861C3EF1BA00FBF1D7 /* entity_pool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EC9B9831C3EF1BA00FBF1D7 /* entity_pool.cpp */; };
 		7EC9B9871C3EF1BA00FBF1D7 /* model_pool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EC9B9841C3EF1BA00FBF1D7 /* model_pool.cpp */; };
@@ -88,6 +89,8 @@
 		7EAD4CD51C628524007F6A9C /* event_manager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = event_manager.hpp; sourceTree = "<group>"; };
 		7EAD4CD91C628A51007F6A9C /* ids_core_events.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ids_core_events.hpp; sourceTree = "<group>"; };
 		7EAD4CDA1C628E86007F6A9C /* ids_game_events.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ids_game_events.hpp; sourceTree = "<group>"; };
+		7EAD4CDB1C63340D007F6A9C /* npc_actor_controller.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = npc_actor_controller.cpp; sourceTree = "<group>"; };
+		7EAD4CDC1C63340D007F6A9C /* npc_actor_controller.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = npc_actor_controller.hpp; sourceTree = "<group>"; };
 		7EC9B97D1C3E5F2100FBF1D7 /* data_fwd.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = data_fwd.hpp; sourceTree = "<group>"; };
 		7EC9B97E1C3E5F2100FBF1D7 /* data.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = data.hpp; sourceTree = "<group>"; };
 		7EC9B97F1C3ECACA00FBF1D7 /* network_events.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = network_events.cpp; sourceTree = "<group>"; };
@@ -400,6 +403,8 @@
 		7ED7BB861C3CF8B100CE80EA /* game_logic */ = {
 			isa = PBXGroup;
 			children = (
+				7EAD4CDB1C63340D007F6A9C /* npc_actor_controller.cpp */,
+				7EAD4CDC1C63340D007F6A9C /* npc_actor_controller.hpp */,
 				7EAD4CC81C623C97007F6A9C /* local_player_controller.cpp */,
 				7EAD4CC91C623C97007F6A9C /* local_player_controller.hpp */,
 				7EFB9B111C5E78CB00A838C7 /* actor_base.cpp */,
@@ -736,6 +741,7 @@
 				7EAD4CC71C61258A007F6A9C /* camera_pool.cpp in Sources */,
 				7EFB9B0C1C5E620C00A838C7 /* entity_id.cpp in Sources */,
 				7ED7BC1C1C3E56D000CE80EA /* debug_renderer.cpp in Sources */,
+				7EAD4CDD1C63340D007F6A9C /* npc_actor_controller.cpp in Sources */,
 				7ED7BBDD1C3CF8FE00CE80EA /* resources.cpp in Sources */,
 				7ED7BBDA1C3CF8B100CE80EA /* transform.cpp in Sources */,
 				7ED7BC1E1C3E56D000CE80EA /* rigidbody.cpp in Sources */,

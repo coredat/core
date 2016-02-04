@@ -1,26 +1,26 @@
 #include <core/interface/entity.hpp>
 #include "../common/ids_component_types.hpp"
-#include "local_player_controller.hpp"
+#include "npc_actor_controller.hpp"
 #include "actor_base.hpp"
 #include "../common/ids_game_events.hpp"
 #include <iostream>
 
 
-Local_player_controller::Local_player_controller()
+Npc_actor_controller::Npc_actor_controller()
 {
   
 }
 
 
 void
-Local_player_controller::on_update(const float dt)
+Npc_actor_controller::on_update(const float dt)
 {
   
 }
 
 
 void
-Local_player_controller::on_event(const uint32_t id,
+Npc_actor_controller::on_event(const uint32_t id,
                                   const void *data,
                                   const size_t size_of_data)
 {

@@ -1,4 +1,5 @@
 #include "actor_local_player.hpp"
+#include "../common/ids_game_events.hpp"
 #include <renderer/renderer.hpp>
 #include <btBulletCollisionCommon.h>
 #include <systems/transform/transform.hpp>
@@ -216,11 +217,10 @@ Actor_local_player::on_update(const float dt)
           {
             std::cout << "has_actor_tag" << std::endl;
             Actor_base *actor = hit_ent.get_component<Actor_base>(Component_type::actor);
-            
-            if(actor)
+          
+            if(actor && m_place_node)
             {
-              actor->take_damage();
-              hit_ent.send_event(0, nullptr, 0);
+              hit_ent.send_event(Game_event_id::got_shot, nullptr, 0);
             }
             else
             {
