@@ -15,7 +15,12 @@ Local_player_controller::Local_player_controller()
 void
 Local_player_controller::on_update(const float dt)
 {
-  
+  // Input
+  // Movement axis
+  {
+    Core::Input::get_controller(0).get_axis(0).get_x();
+    Core::Input::get_controller(0).get_axis(0).get_y();
+  }
 }
 
 

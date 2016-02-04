@@ -177,7 +177,7 @@ Actor_local_player::on_update(const float dt)
 
   const btVector3 fwdVec(math::vec3_get_x(fwd), math::vec3_get_y(fwd), math::vec3_get_z(fwd));
   const btVector3 btFaceStart(btFrom);
-  const btVector3 btFwd = btFaceStart + fwdVec;
+  const btVector3 btFwd = btFaceStart + fwdVec * 3;
   
   btCollisionWorld::ClosestRayResultCallback face_ray(btFaceStart, btFwd);
   m_world_data->physics_world->dynamics_world.rayTest(btFaceStart, btFwd, face_ray);
