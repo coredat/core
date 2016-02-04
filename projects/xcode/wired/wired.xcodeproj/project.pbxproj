@@ -100,9 +100,10 @@
 		7EAD4CE71C638F8E007F6A9C /* buttons.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = buttons.hpp; sourceTree = "<group>"; };
 		7EAD4CE81C638F8E007F6A9C /* controller.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = controller.cpp; sourceTree = "<group>"; };
 		7EAD4CE91C638F8E007F6A9C /* controller.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = controller.hpp; sourceTree = "<group>"; };
-		7EAD4CEB1C638F8E007F6A9C /* members.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = members.hpp; sourceTree = "<group>"; };
+		7EAD4CEB1C638F8E007F6A9C /* input_access.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = input_access.hpp; sourceTree = "<group>"; };
 		7EAD4CEC1C638F8E007F6A9C /* input.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = input.cpp; sourceTree = "<group>"; };
 		7EAD4CED1C638F8E007F6A9C /* input.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = input.hpp; sourceTree = "<group>"; };
+		7EAD4CF01C63D42B007F6A9C /* controller_members.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = controller_members.hpp; sourceTree = "<group>"; };
 		7EC9B97D1C3E5F2100FBF1D7 /* data_fwd.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = data_fwd.hpp; sourceTree = "<group>"; };
 		7EC9B97E1C3E5F2100FBF1D7 /* data.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = data.hpp; sourceTree = "<group>"; };
 		7EC9B97F1C3ECACA00FBF1D7 /* network_events.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = network_events.cpp; sourceTree = "<group>"; };
@@ -352,7 +353,8 @@
 		7EAD4CEA1C638F8E007F6A9C /* detail */ = {
 			isa = PBXGroup;
 			children = (
-				7EAD4CEB1C638F8E007F6A9C /* members.hpp */,
+				7EAD4CEB1C638F8E007F6A9C /* input_access.hpp */,
+				7EAD4CF01C63D42B007F6A9C /* controller_members.hpp */,
 			);
 			path = detail;
 			sourceTree = "<group>";

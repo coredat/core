@@ -13,7 +13,7 @@ namespace Input {
 namespace Player {
 enum ENUM {
 
-  player_one,
+  one,
 
 }; // enum
 } // ns

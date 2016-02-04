@@ -1,9 +1,8 @@
-#ifndef INPUT_INCLUDED_98612EE1_83F4_4CC9_9D9B_757ABB3ACB76
-#define INPUT_INCLUDED_98612EE1_83F4_4CC9_9D9B_757ABB3ACB76
+#ifndef CONTROLLER_INCLUDED_19652084_EF01_45A5_B098_E66B2AB39399
+#define CONTROLLER_INCLUDED_19652084_EF01_45A5_B098_E66B2AB39399
 
 
-#include "buttons.hpp"
-#include "axis.hpp"
+#include "detail/controller_members.hpp"
 #include <stdint.h>
 
 
@@ -20,8 +19,8 @@ public:
 
 private:
 
-  Axis axis[2];
-  Button_state buttons[16];
+  INPUT_CONTROLLER_MEMBERS
+  
 }; // classs
 
 

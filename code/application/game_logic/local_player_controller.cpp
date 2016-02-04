@@ -1,8 +1,9 @@
-#include <core/interface/entity.hpp>
 #include "../common/ids_component_types.hpp"
+#include "../common/ids_game_events.hpp"
 #include "local_player_controller.hpp"
 #include "actor_base.hpp"
-#include "../common/ids_game_events.hpp"
+#include <core/interface/entity.hpp>
+#include <core/input/input.hpp>
 #include <iostream>
 
 
@@ -18,8 +19,8 @@ Local_player_controller::on_update(const float dt)
   // Input
   // Movement axis
   {
-    Core::Input::get_controller(0).get_axis(0).get_x();
-    Core::Input::get_controller(0).get_axis(0).get_y();
+    Core::Input::get_controller(Core::Input::Player::one).get_axis(0).x;
+    Core::Input::get_controller(Core::Input::Player::one).get_axis(0).x;
   }
 }
 
