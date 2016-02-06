@@ -21,10 +21,10 @@
 
 #include <iostream>
 
-#include <application/application_client.hpp>
-#include <application/application_host.hpp>
-#include <application/application_common.hpp>
-#include <application/application_graphics.hpp>
+#include <application/engine/application_client.hpp>
+#include <application/engine/application_host.hpp>
+#include <application/engine/application_common.hpp>
+#include <application/engine/application_graphics.hpp>
 
 
 namespace
