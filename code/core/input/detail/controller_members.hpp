@@ -2,8 +2,8 @@
 #define CONTROLLER_MEMBERS_INCLUDED_EE7B41B6_627C_4D4B_87A1_FA67F472B999
 
 
-#include "buttons.hpp"
-#include "axis.hpp"
+#include "../buttons.hpp"
+#include "../axis.hpp"
 
 
 #define INPUT_CONTROLLER_MEMBERS              \

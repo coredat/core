@@ -14,6 +14,8 @@ class Controller
 {
 public:
 
+  Controller();
+
   Axis get_axis(const uint8_t axis) const;
   bool is_button_down(const Button::ENUM button) const;
 

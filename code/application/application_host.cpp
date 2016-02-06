@@ -72,11 +72,11 @@ host_think(
   // Kill me!!!!
   Actor_local_player *actor = reinterpret_cast<Actor_local_player*>(world->logic_pool->objects_in_use[0]);
 
-  actor->move_forward(inputs->controllers[0].axis_2[1]);
-  actor->move_left(inputs->controllers[0].axis_2[0]);
-  
-  actor->look_up(static_cast<float>(inputs->controllers[0].axis_1[1]) * delta_time);
-  actor->turn_left(static_cast<float>(inputs->controllers[0].axis_1[0]) * delta_time);
+//  actor->move_forward(inputs->controllers[0].axis_2[1]);
+//  actor->move_left(inputs->controllers[0].axis_2[0]);
+//  
+//  actor->look_up(static_cast<float>(inputs->controllers[0].axis_1[1]) * delta_time);
+//  actor->turn_left(static_cast<float>(inputs->controllers[0].axis_1[0]) * delta_time);
 
   if (inputs->controllers[0].buttons[Environment::Button::action_button] == (uint8_t)Environment::Button_action::on_down)
   {

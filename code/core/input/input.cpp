@@ -1,6 +1,8 @@
 #include "input.hpp"
-#include "detail/input_access.hpp"
+#include "detail/controller_members.hpp"
+#include <data/core_data/core_data.hpp>
 #include <stddef.h>
+#include <string.h>
 
 
 namespace
@@ -16,11 +18,20 @@ namespace Input {
 Controller
 get_controller(const Player::ENUM player)
 {
-//  auto core_data  = Data::get_core_data();
-//  auto input_data = Data::get_input_data(core_data);
+  auto core_data  = Core_data::get_core_data();
+  auto input_data = Core_data::get_input_data(core_data);
+
+  struct Private_access
+  {
+    INPUT_CONTROLLER_MEMBERS
+  };
 
   Controller controller;
-//  Detail::set_members(&controller, input_data, (size_t)player);
+  Private_access *access = reinterpret_cast<Private_access*>(&controller);
+  
+  access->m_axis[0] = input_data->axis[0];
+  access->m_axis[1] = input_data->axis[1];
+  memcpy(&access->m_buttons[0], &input_data->buttons[0], sizeof(access->m_buttons));
 
   return controller;
 }

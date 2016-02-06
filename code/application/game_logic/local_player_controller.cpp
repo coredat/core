@@ -27,8 +27,8 @@ Local_player_controller::on_update(const float dt)
     base->move_forward(controller.get_axis(0).x);
     base->move_left(controller.get_axis(0).y);
     
-    base->turn_left(controller.get_axis(1).x);
-    base->look_up(controller.get_axis(1).y);
+    base->turn_left(controller.get_axis(1).x * 0.5f * dt);
+    base->look_up(controller.get_axis(1).y * 0.5f * dt);
   }
 }
 

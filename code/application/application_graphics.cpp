@@ -40,18 +40,18 @@ graphics_think(Data::World *world,
     Transform::get_up_vec(&camera_transform, &cam_up);
     
     view = math::mat4_lookat(camera_transform.position, math::vec3_add(camera_transform.position, cam_fwd), cam_up);
+    
+    static float time = 4;
+    //time += delta_time / 2;
+
+    const float x = math::sin(time) * 9;
+    const float z = math::cos(time) * 9;
+    
+//    math::mat4 view = math::mat4_lookat(math::vec3_init(5, 5, 0),
+//      math::vec3_zero(),
+//      math::vec3_init(0, 1, 0));
+
   }
-  
-
-  static float time = 4;
-  //time += delta_time / 2;
-
-  const float x = math::sin(time) * 9;
-  const float z = math::cos(time) * 9;
-
-//  const math::mat4 view = math::mat4_lookat(math::vec3_init(x, 3.4f, z),
-//    math::vec3_zero(),
-//    math::vec3_init(0, 1, 0));
 
   const math::mat4 view_proj = math::mat4_multiply(view, proj); // *hurt* camaera or such.
   Transform::transforms_to_wvp_mats(world->entity_pool->transform,

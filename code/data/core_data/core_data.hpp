@@ -23,6 +23,14 @@ struct Core
 }; // struct
 
 
+Core*
+get_core_data();
+
+
+void
+set_core_data(Core_data::Core *core);
+
+
 Input_data*
 get_input_data(Core_data::Core *core_data);
 

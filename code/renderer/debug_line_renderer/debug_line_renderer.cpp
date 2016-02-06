@@ -163,7 +163,7 @@ void
 render(const float wvp_mat[16])
 {
   // Update texture
-  Ogl::texture_update_texture_2d(&data_texture, 0, 0, data_texture.width, data_texture.height, (void*)data.data());
+  Ogl::texture_update_texture_2d(&data_texture, 0, 0, data_texture.width, data_texture.height, (void*)data.data(), &std::cout);
   Ogl::error_check("Updating texture", &std::cout);
   
   // Render

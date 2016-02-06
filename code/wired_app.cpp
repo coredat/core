@@ -121,6 +121,8 @@ main(int argc, char *argv[])
   
   core_data.input_data = &core_input;
   
+  Core_data::set_core_data(&core_data);
+  
   
   Resource::load_default_resources(&texture_pool, texture_pool.size, &model_pool, model_pool.size);
   
