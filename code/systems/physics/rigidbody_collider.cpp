@@ -1,6 +1,7 @@
 #include "rigidbody_collider.hpp"
 #include "rigidbody.hpp"
 #include <algorithm>
+#include <assert.h>
 
 
 namespace Physics {

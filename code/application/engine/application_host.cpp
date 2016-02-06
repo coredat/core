@@ -1,5 +1,5 @@
 #include "application_host.hpp"
-#include "entity_factory.hpp"
+#include "../entity_factory.hpp"
 #include <data/data.hpp>
 #include <systems/network/network.hpp>
 #include <core/entity_id.hpp>

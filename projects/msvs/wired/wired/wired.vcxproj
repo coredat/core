@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\3rdparty\external\sdl_wrapper\input.cpp" />
+    <ClCompile Include="..\..\..\..\3rdparty\external\sdl_wrapper\sdl_input.cpp" />
     <ClCompile Include="..\..\..\..\3rdparty\external\sdl_wrapper\message_pump.cpp" />
     <ClCompile Include="..\..\..\..\3rdparty\external\sdl_wrapper\mixer.cpp" />
     <ClCompile Include="..\..\..\..\3rdparty\external\sdl_wrapper\ogl_context.cpp" />
@@ -45,20 +45,33 @@
     <ClCompile Include="..\..\..\..\3rdparty\external\utils\logging.cpp" />
     <ClCompile Include="..\..\..\..\3rdparty\external\utils\obj_model_loader.cpp" />
     <ClCompile Include="..\..\..\..\3rdparty\external\utils\timer.cpp" />
-    <ClCompile Include="..\..\..\..\code\application\application_client.cpp" />
-    <ClCompile Include="..\..\..\..\code\application\application_common.cpp" />
-    <ClCompile Include="..\..\..\..\code\application\application_graphics.cpp" />
-    <ClCompile Include="..\..\..\..\code\application\application_host.cpp" />
+    <ClCompile Include="..\..\..\..\code\application\engine\application_client.cpp" />
+    <ClCompile Include="..\..\..\..\code\application\engine\application_common.cpp" />
+    <ClCompile Include="..\..\..\..\code\application\engine\application_graphics.cpp" />
+    <ClCompile Include="..\..\..\..\code\application\engine\application_host.cpp" />
     <ClCompile Include="..\..\..\..\code\application\entity_factory.cpp" />
-    <ClCompile Include="..\..\..\..\code\application\game_logic\actor_local_player.cpp" />
-    <ClCompile Include="..\..\..\..\code\application\game_logic\actor_network_player.cpp" />
+    <ClCompile Include="..\..\..\..\code\application\game_logic\actor.cpp" />
+    <ClCompile Include="..\..\..\..\code\application\game_logic\local_player_controller.cpp" />
+    <ClCompile Include="..\..\..\..\code\application\game_logic\npc_actor_controller.cpp" />
     <ClCompile Include="..\..\..\..\code\application\network_events.cpp" />
     <ClCompile Include="..\..\..\..\code\application\resources.cpp" />
+    <ClCompile Include="..\..\..\..\code\core\entity_id.cpp" />
+    <ClCompile Include="..\..\..\..\code\core\event\event.cpp" />
+    <ClCompile Include="..\..\..\..\code\core\event\event_controller.cpp" />
+    <ClCompile Include="..\..\..\..\code\core\event\event_manager.cpp" />
+    <ClCompile Include="..\..\..\..\code\core\input\controller.cpp" />
+    <ClCompile Include="..\..\..\..\code\core\input\input.cpp" />
+    <ClCompile Include="..\..\..\..\code\core\interface\component.cpp" />
+    <ClCompile Include="..\..\..\..\code\core\interface\entity.cpp" />
+    <ClCompile Include="..\..\..\..\code\core\physics\ray.cpp" />
+    <ClCompile Include="..\..\..\..\code\data\camera_pool.cpp" />
+    <ClCompile Include="..\..\..\..\code\data\core_data\core_data.cpp" />
     <ClCompile Include="..\..\..\..\code\data\entity_pool.cpp" />
     <ClCompile Include="..\..\..\..\code\data\logic_pool.cpp" />
     <ClCompile Include="..\..\..\..\code\data\model_pool.cpp" />
-    <ClCompile Include="..\..\..\..\code\data\pending_rigidbody_pool.cpp" />
+    <ClCompile Include="..\..\..\..\code\data\rigidbody_pool.cpp" />
     <ClCompile Include="..\..\..\..\code\data\texture_pool.cpp" />
+    <ClCompile Include="..\..\..\..\code\data\world_data.cpp" />
     <ClCompile Include="..\..\..\..\code\renderer\debug_line.cpp" />
     <ClCompile Include="..\..\..\..\code\renderer\debug_line_renderer\debug_line_renderer.cpp" />
     <ClCompile Include="..\..\..\..\code\renderer\graphics_api\ogl\ogl_shader.cpp" />
@@ -66,20 +79,17 @@
     <ClCompile Include="..\..\..\..\code\renderer\graphics_api\ogl\ogl_texture.cpp" />
     <ClCompile Include="..\..\..\..\code\renderer\graphics_api\ogl\ogl_texture_filtering.cpp" />
     <ClCompile Include="..\..\..\..\code\renderer\simple_renderer\simple_renderer.cpp" />
-    <ClCompile Include="..\..\..\..\code\systems\entity\entity_data.cpp" />
-    <ClCompile Include="..\..\..\..\code\systems\entity\entity_id.cpp" />
     <ClCompile Include="..\..\..\..\code\systems\entity\generic_id.cpp" />
     <ClCompile Include="..\..\..\..\code\systems\environment\sdl\sdl_environment.cpp" />
     <ClCompile Include="..\..\..\..\code\systems\environment\sdl\sdl_input.cpp" />
     <ClCompile Include="..\..\..\..\code\systems\environment\sdl\sdl_window.cpp" />
-    <ClCompile Include="..\..\..\..\code\systems\logic\logic.cpp" />
-    <ClCompile Include="..\..\..\..\code\systems\logic\logic_base.cpp" />
     <ClCompile Include="..\..\..\..\code\systems\model_manager\model_manager.cpp" />
     <ClCompile Include="..\..\..\..\code\systems\network\network.cpp" />
     <ClCompile Include="..\..\..\..\code\systems\net_transform\net_transform.cpp" />
     <ClCompile Include="..\..\..\..\code\systems\physics\debug_renderer.cpp" />
     <ClCompile Include="..\..\..\..\code\systems\physics\motion_state.cpp" />
     <ClCompile Include="..\..\..\..\code\systems\physics\rigidbody.cpp" />
+    <ClCompile Include="..\..\..\..\code\systems\physics\rigidbody_collider.cpp" />
     <ClCompile Include="..\..\..\..\code\systems\physics\world.cpp" />
     <ClCompile Include="..\..\..\..\code\systems\texture_manager\texture_manager.cpp" />
     <ClCompile Include="..\..\..\..\code\systems\transform\transform.cpp" />
@@ -124,23 +134,52 @@
     <ClInclude Include="..\..\..\..\3rdparty\external\utils\timer.hpp" />
     <ClInclude Include="..\..\..\..\3rdparty\external\utils\utils_fwd.hpp" />
     <ClInclude Include="..\..\..\..\3rdparty\external\utils\variant.hpp" />
-    <ClInclude Include="..\..\..\..\code\application\application_client.hpp" />
-    <ClInclude Include="..\..\..\..\code\application\application_common.hpp" />
-    <ClInclude Include="..\..\..\..\code\application\application_graphics.hpp" />
-    <ClInclude Include="..\..\..\..\code\application\application_host.hpp" />
+    <ClInclude Include="..\..\..\..\code\application\common\ids_component_types.hpp" />
+    <ClInclude Include="..\..\..\..\code\application\common\ids_game_events.hpp" />
+    <ClInclude Include="..\..\..\..\code\application\common\ids_object_tags.hpp" />
+    <ClInclude Include="..\..\..\..\code\application\common\ids_object_types.hpp" />
+    <ClInclude Include="..\..\..\..\code\application\engine\application_client.hpp" />
+    <ClInclude Include="..\..\..\..\code\application\engine\application_common.hpp" />
+    <ClInclude Include="..\..\..\..\code\application\engine\application_graphics.hpp" />
+    <ClInclude Include="..\..\..\..\code\application\engine\application_host.hpp" />
     <ClInclude Include="..\..\..\..\code\application\entity_factory.hpp" />
-    <ClInclude Include="..\..\..\..\code\application\game_logic\actor_local_player.hpp" />
-    <ClInclude Include="..\..\..\..\code\application\game_logic\actor_network_player.hpp" />
+    <ClInclude Include="..\..\..\..\code\application\game_logic\actor.hpp" />
+    <ClInclude Include="..\..\..\..\code\application\game_logic\local_player_controller.hpp" />
+    <ClInclude Include="..\..\..\..\code\application\game_logic\npc_actor_controller.hpp" />
     <ClInclude Include="..\..\..\..\code\application\network_events.hpp" />
     <ClInclude Include="..\..\..\..\code\application\resources.hpp" />
-    <ClInclude Include="..\..\..\..\code\data\actor\actor.hpp" />
+    <ClInclude Include="..\..\..\..\code\core\core.hpp" />
+    <ClInclude Include="..\..\..\..\code\core\core_fwd.hpp" />
+    <ClInclude Include="..\..\..\..\code\core\entity_id.hpp" />
+    <ClInclude Include="..\..\..\..\code\core\event\event.hpp" />
+    <ClInclude Include="..\..\..\..\code\core\event\event_controller.hpp" />
+    <ClInclude Include="..\..\..\..\code\core\event\event_fwd.hpp" />
+    <ClInclude Include="..\..\..\..\code\core\event\event_manager.hpp" />
+    <ClInclude Include="..\..\..\..\code\core\ids_core_events.hpp" />
+    <ClInclude Include="..\..\..\..\code\core\input\axis.hpp" />
+    <ClInclude Include="..\..\..\..\code\core\input\buttons.hpp" />
+    <ClInclude Include="..\..\..\..\code\core\input\controller.hpp" />
+    <ClInclude Include="..\..\..\..\code\core\input\detail\controller_members.hpp" />
+    <ClInclude Include="..\..\..\..\code\core\input\detail\input_access.hpp" />
+    <ClInclude Include="..\..\..\..\code\core\input\input.hpp" />
+    <ClInclude Include="..\..\..\..\code\core\interface\component.hpp" />
+    <ClInclude Include="..\..\..\..\code\core\interface\detail\component_detail.hpp" />
+    <ClInclude Include="..\..\..\..\code\core\interface\detail\entity_detail.hpp" />
+    <ClInclude Include="..\..\..\..\code\core\interface\entity.hpp" />
+    <ClInclude Include="..\..\..\..\code\core\interface\interface.hpp" />
+    <ClInclude Include="..\..\..\..\code\core\interface\interface_fwd.hpp" />
+    <ClInclude Include="..\..\..\..\code\core\physics\ray.hpp" />
+    <ClInclude Include="..\..\..\..\code\data\camera_pool.hpp" />
+    <ClInclude Include="..\..\..\..\code\data\core_data\core_data.hpp" />
+    <ClInclude Include="..\..\..\..\code\data\core_data\core_data_fwd.hpp" />
     <ClInclude Include="..\..\..\..\code\data\data.hpp" />
     <ClInclude Include="..\..\..\..\code\data\data_fwd.hpp" />
     <ClInclude Include="..\..\..\..\code\data\entity_pool.hpp" />
     <ClInclude Include="..\..\..\..\code\data\logic_pool.hpp" />
     <ClInclude Include="..\..\..\..\code\data\model_pool.hpp" />
-    <ClInclude Include="..\..\..\..\code\data\pending_rigidbody_pool.hpp" />
+    <ClInclude Include="..\..\..\..\code\data\rigidbody_pool.hpp" />
     <ClInclude Include="..\..\..\..\code\data\texture_pool.hpp" />
+    <ClInclude Include="..\..\..\..\code\data\world_data.hpp" />
     <ClInclude Include="..\..\..\..\code\renderer\debug_line.hpp" />
     <ClInclude Include="..\..\..\..\code\renderer\debug_line_renderer\debug_line_renderer.hpp" />
     <ClInclude Include="..\..\..\..\code\renderer\debug_line_renderer\debug_line_renderer_node.hpp" />
@@ -158,9 +197,9 @@
     <ClInclude Include="..\..\..\..\code\renderer\renderer.hpp" />
     <ClInclude Include="..\..\..\..\code\renderer\simple_renderer\simple_renderer.hpp" />
     <ClInclude Include="..\..\..\..\code\renderer\simple_renderer\simple_renderer_node.hpp" />
-    <ClInclude Include="..\..\..\..\code\systems\entity\entity_data.hpp" />
-    <ClInclude Include="..\..\..\..\code\systems\entity\entity_fwd.hpp" />
-    <ClInclude Include="..\..\..\..\code\systems\entity\entity_id.hpp" />
+    <ClInclude Include="..\..\..\..\code\systems\camera\camera.hpp" />
+    <ClInclude Include="..\..\..\..\code\systems\camera\camera_fwd.hpp" />
+    <ClInclude Include="..\..\..\..\code\systems\camera\camera_properties.hpp" />
     <ClInclude Include="..\..\..\..\code\systems\entity\generic_id.hpp" />
     <ClInclude Include="..\..\..\..\code\systems\environment\environment.hpp" />
     <ClInclude Include="..\..\..\..\code\systems\environment\environment_fwd.hpp" />
@@ -168,9 +207,6 @@
     <ClInclude Include="..\..\..\..\code\systems\environment\sdl\sdl_common.hpp" />
     <ClInclude Include="..\..\..\..\code\systems\environment\sdl\sdl_types.hpp" />
     <ClInclude Include="..\..\..\..\code\systems\environment\window.hpp" />
-    <ClInclude Include="..\..\..\..\code\systems\logic\logic.hpp" />
-    <ClInclude Include="..\..\..\..\code\systems\logic\logic_base.hpp" />
-    <ClInclude Include="..\..\..\..\code\systems\logic\logic_fwd.hpp" />
     <ClInclude Include="..\..\..\..\code\systems\model_manager\model_manager.hpp" />
     <ClInclude Include="..\..\..\..\code\systems\network\network.hpp" />
     <ClInclude Include="..\..\..\..\code\systems\network\network_connection.hpp" />
@@ -182,6 +218,7 @@
     <ClInclude Include="..\..\..\..\code\systems\physics\physics.hpp" />
     <ClInclude Include="..\..\..\..\code\systems\physics\physics_fwd.hpp" />
     <ClInclude Include="..\..\..\..\code\systems\physics\rigidbody.hpp" />
+    <ClInclude Include="..\..\..\..\code\systems\physics\rigidbody_collider.hpp" />
     <ClInclude Include="..\..\..\..\code\systems\physics\rigidbody_properties.hpp" />
     <ClInclude Include="..\..\..\..\code\systems\physics\world.hpp" />
     <ClInclude Include="..\..\..\..\code\systems\texture_manager\texture_manager.hpp" />
@@ -265,6 +302,9 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>false</ExceptionHandling>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -295,6 +335,9 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>false</ExceptionHandling>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
