@@ -26,9 +26,6 @@ client_initialize(
 void
 client_think(
   Data::World *world,
-  Data::Entity_pool *entity_pool,
-  Data::Logic_pool *logic_pool,
-  Physics::World *phy_world,
   Network::Connection *connection,
   const Environment::Input *inputs,
   const float delta_time)
@@ -39,7 +36,7 @@ client_think(
     {
         // We just copy entitiy positions into our entity pool.
         // So much todo here!
-        memcpy(entity_pool->transform, data, size_of_data);
+        memcpy(world->entity_pool->transform, data, size_of_data);
     },
     &std::cout);
 

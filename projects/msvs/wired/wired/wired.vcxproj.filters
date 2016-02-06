@@ -13,9 +13,6 @@
     <Filter Include="systems">
       <UniqueIdentifier>{54b4bbbf-5324-4ed4-8371-4bc89a5c41d3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="data\actor">
-      <UniqueIdentifier>{14719ffa-d7ac-418e-baae-cfd290514630}</UniqueIdentifier>
-    </Filter>
     <Filter Include="renderer\graphics_api">
       <UniqueIdentifier>{68e9a6ad-c941-4e87-b352-6eb1ab2be0fb}</UniqueIdentifier>
     </Filter>
@@ -64,30 +61,42 @@
     <Filter Include="systems\environment\sdl">
       <UniqueIdentifier>{5d3dc3e9-34dd-49a2-9df6-d555b5e57ca5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="systems\logic">
-      <UniqueIdentifier>{e8a13a61-3258-492e-b596-ec28689a21a4}</UniqueIdentifier>
+    <Filter Include="core">
+      <UniqueIdentifier>{6a5dffd6-bb77-4fcd-b89f-8163e4daa090}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\event">
+      <UniqueIdentifier>{dc4e045d-03ba-4039-bf56-9227bb82ad8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\physics">
+      <UniqueIdentifier>{2311dddd-489a-40ec-bab6-a3252547fb47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\interface">
+      <UniqueIdentifier>{df4e4d78-58ae-4601-84f6-8580910e1b30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\input">
+      <UniqueIdentifier>{ffd6a21f-de10-4875-9613-4d0c6bd1d1e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\interface\detail">
+      <UniqueIdentifier>{e81db1dc-4664-48fa-b8a0-8b9b4b333d23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\input\detail">
+      <UniqueIdentifier>{2b5a61f7-a3c3-4c0b-ad84-54d49b7f86b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\common">
+      <UniqueIdentifier>{0ad680df-03bd-4150-a032-6d7b917ab8d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application\engine">
+      <UniqueIdentifier>{1391213f-a4c2-4feb-8042-589d23d201ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\core_data">
+      <UniqueIdentifier>{43cfcc39-c3d0-4379-a58b-32d4ed72b868}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="systems\camera">
+      <UniqueIdentifier>{c0ff8c4c-82e8-45a4-974d-fc6e5426106a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\code\wired_app.cpp" />
-    <ClCompile Include="..\..\..\..\code\application\entity_factory.cpp">
-      <Filter>application</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\code\application\network_events.cpp">
-      <Filter>application</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\code\application\resources.cpp">
-      <Filter>application</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\code\data\entity_pool.cpp">
-      <Filter>data</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\code\data\model_pool.cpp">
-      <Filter>data</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\code\data\texture_pool.cpp">
-      <Filter>data</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\code\renderer\debug_line.cpp">
       <Filter>renderer</Filter>
     </ClCompile>
@@ -106,15 +115,6 @@
     <ClCompile Include="..\..\..\..\code\renderer\simple_renderer\simple_renderer.cpp">
       <Filter>renderer\simple_renderer</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\code\systems\entity\entity_data.cpp">
-      <Filter>systems\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\code\systems\entity\entity_id.cpp">
-      <Filter>systems\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\code\systems\entity\generic_id.cpp">
-      <Filter>systems\entity</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\code\systems\model_manager\model_manager.cpp">
       <Filter>systems\model_manager</Filter>
     </ClCompile>
@@ -123,18 +123,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\code\systems\network\network.cpp">
       <Filter>systems\network</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\code\systems\physics\debug_renderer.cpp">
-      <Filter>systems\physics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\code\systems\physics\motion_state.cpp">
-      <Filter>systems\physics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\code\systems\physics\rigidbody.cpp">
-      <Filter>systems\physics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\code\systems\physics\world.cpp">
-      <Filter>systems\physics</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\code\systems\texture_manager\texture_manager.cpp">
       <Filter>systems\texture_manager</Filter>
@@ -202,9 +190,6 @@
     <ClCompile Include="..\..\..\..\3rdparty\external\SOIL\stb_image_aug.c">
       <Filter>external</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\3rdparty\external\sdl_wrapper\input.cpp">
-      <Filter>external</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\3rdparty\external\sdl_wrapper\message_pump.cpp">
       <Filter>external</Filter>
     </ClCompile>
@@ -220,18 +205,6 @@
     <ClCompile Include="..\..\..\..\3rdparty\external\sdl_wrapper\window.cpp">
       <Filter>external</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\code\application\game_logic\actor_local_player.cpp">
-      <Filter>application\game_logic</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\code\application\game_logic\actor_network_player.cpp">
-      <Filter>application\game_logic</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\code\data\pending_rigidbody_pool.cpp">
-      <Filter>data</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\code\data\logic_pool.cpp">
-      <Filter>data</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\code\systems\environment\sdl\sdl_environment.cpp">
       <Filter>systems\environment\sdl</Filter>
     </ClCompile>
@@ -241,56 +214,113 @@
     <ClCompile Include="..\..\..\..\code\systems\environment\sdl\sdl_window.cpp">
       <Filter>systems\environment\sdl</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\code\systems\logic\logic.cpp">
-      <Filter>systems\logic</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\code\systems\logic\logic_base.cpp">
-      <Filter>systems\logic</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\code\renderer\graphics_api\ogl\ogl_shader_uniform.cpp">
       <Filter>renderer\graphics_api\ogl</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\code\application\application_client.cpp">
+    <ClCompile Include="..\..\..\..\code\core\entity_id.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\core\physics\ray.cpp">
+      <Filter>core\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\core\interface\component.cpp">
+      <Filter>core\interface</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\core\interface\entity.cpp">
+      <Filter>core\interface</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\core\event\event.cpp">
+      <Filter>core\event</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\core\event\event_controller.cpp">
+      <Filter>core\event</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\core\event\event_manager.cpp">
+      <Filter>core\event</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\core\input\controller.cpp">
+      <Filter>core\input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\core\input\input.cpp">
+      <Filter>core\input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\application\engine\application_client.cpp">
+      <Filter>application\engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\application\engine\application_common.cpp">
+      <Filter>application\engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\application\engine\application_graphics.cpp">
+      <Filter>application\engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\application\engine\application_host.cpp">
+      <Filter>application\engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\data\camera_pool.cpp">
+      <Filter>data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\data\entity_pool.cpp">
+      <Filter>data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\data\logic_pool.cpp">
+      <Filter>data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\data\model_pool.cpp">
+      <Filter>data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\data\rigidbody_pool.cpp">
+      <Filter>data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\data\texture_pool.cpp">
+      <Filter>data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\data\world_data.cpp">
+      <Filter>data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\data\core_data\core_data.cpp">
+      <Filter>data\core_data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\systems\entity\generic_id.cpp">
+      <Filter>systems\entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\application\game_logic\actor.cpp">
+      <Filter>application\game_logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\application\game_logic\local_player_controller.cpp">
+      <Filter>application\game_logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\application\game_logic\npc_actor_controller.cpp">
+      <Filter>application\game_logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\application\entity_factory.cpp">
       <Filter>application</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\code\application\application_common.cpp">
+    <ClCompile Include="..\..\..\..\code\application\network_events.cpp">
       <Filter>application</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\code\application\application_graphics.cpp">
+    <ClCompile Include="..\..\..\..\code\application\resources.cpp">
       <Filter>application</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\code\application\application_host.cpp">
-      <Filter>application</Filter>
+    <ClCompile Include="..\..\..\..\3rdparty\external\sdl_wrapper\sdl_input.cpp">
+      <Filter>external</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\systems\physics\debug_renderer.cpp">
+      <Filter>systems\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\systems\physics\motion_state.cpp">
+      <Filter>systems\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\systems\physics\rigidbody.cpp">
+      <Filter>systems\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\systems\physics\rigidbody_collider.cpp">
+      <Filter>systems\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\systems\physics\world.cpp">
+      <Filter>systems\physics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\code\application\entity_factory.hpp">
-      <Filter>application</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\code\application\network_events.hpp">
-      <Filter>application</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\code\application\resources.hpp">
-      <Filter>application</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\code\data\data.hpp">
-      <Filter>data</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\code\data\data_fwd.hpp">
-      <Filter>data</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\code\data\entity_pool.hpp">
-      <Filter>data</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\code\data\model_pool.hpp">
-      <Filter>data</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\code\data\texture_pool.hpp">
-      <Filter>data</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\code\data\actor\actor.hpp">
-      <Filter>data\actor</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\code\renderer\debug_line.hpp">
       <Filter>renderer</Filter>
     </ClInclude>
@@ -339,18 +369,6 @@
     <ClInclude Include="..\..\..\..\code\renderer\simple_renderer\simple_renderer_node.hpp">
       <Filter>renderer\simple_renderer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\code\systems\entity\entity_data.hpp">
-      <Filter>systems\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\code\systems\entity\entity_fwd.hpp">
-      <Filter>systems\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\code\systems\entity\entity_id.hpp">
-      <Filter>systems\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\code\systems\entity\generic_id.hpp">
-      <Filter>systems\entity</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\code\systems\model_manager\model_manager.hpp">
       <Filter>systems\model_manager</Filter>
     </ClInclude>
@@ -368,27 +386,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\code\systems\network\network_fwd.hpp">
       <Filter>systems\network</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\code\systems\physics\debug_renderer.hpp">
-      <Filter>systems\physics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\code\systems\physics\motion_state.hpp">
-      <Filter>systems\physics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\code\systems\physics\physics.hpp">
-      <Filter>systems\physics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\code\systems\physics\physics_fwd.hpp">
-      <Filter>systems\physics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\code\systems\physics\rigidbody.hpp">
-      <Filter>systems\physics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\code\systems\physics\rigidbody_properties.hpp">
-      <Filter>systems\physics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\code\systems\physics\world.hpp">
-      <Filter>systems\physics</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\code\systems\texture_manager\texture_manager.hpp">
       <Filter>systems\texture_manager</Filter>
@@ -510,18 +507,6 @@
     <ClInclude Include="..\..\..\..\3rdparty\external\sdl_wrapper\window.hpp">
       <Filter>external</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\code\application\game_logic\actor_local_player.hpp">
-      <Filter>application\game_logic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\code\application\game_logic\actor_network_player.hpp">
-      <Filter>application\game_logic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\code\data\pending_rigidbody_pool.hpp">
-      <Filter>data</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\code\data\logic_pool.hpp">
-      <Filter>data</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\code\systems\environment\environment.hpp">
       <Filter>systems\environment</Filter>
     </ClInclude>
@@ -540,29 +525,182 @@
     <ClInclude Include="..\..\..\..\code\systems\environment\sdl\sdl_types.hpp">
       <Filter>systems\environment\sdl</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\code\systems\logic\logic.hpp">
-      <Filter>systems\logic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\code\systems\logic\logic_base.hpp">
-      <Filter>systems\logic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\code\systems\logic\logic_fwd.hpp">
-      <Filter>systems\logic</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\code\renderer\graphics_api\ogl\ogl_shader_uniform.hpp">
       <Filter>renderer\graphics_api\ogl</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\code\application\application_client.hpp">
+    <ClInclude Include="..\..\..\..\code\core\core.hpp">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\core\core_fwd.hpp">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\core\entity_id.hpp">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\core\ids_core_events.hpp">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\core\physics\ray.hpp">
+      <Filter>core\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\core\interface\component.hpp">
+      <Filter>core\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\core\interface\entity.hpp">
+      <Filter>core\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\core\interface\interface.hpp">
+      <Filter>core\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\core\interface\interface_fwd.hpp">
+      <Filter>core\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\core\interface\detail\component_detail.hpp">
+      <Filter>core\interface\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\core\interface\detail\entity_detail.hpp">
+      <Filter>core\interface\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\core\event\event.hpp">
+      <Filter>core\event</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\core\event\event_controller.hpp">
+      <Filter>core\event</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\core\event\event_fwd.hpp">
+      <Filter>core\event</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\core\event\event_manager.hpp">
+      <Filter>core\event</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\core\input\axis.hpp">
+      <Filter>core\input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\core\input\buttons.hpp">
+      <Filter>core\input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\core\input\controller.hpp">
+      <Filter>core\input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\core\input\input.hpp">
+      <Filter>core\input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\core\input\detail\controller_members.hpp">
+      <Filter>core\input\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\core\input\detail\input_access.hpp">
+      <Filter>core\input\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\application\common\ids_component_types.hpp">
+      <Filter>application\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\application\common\ids_game_events.hpp">
+      <Filter>application\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\application\common\ids_object_tags.hpp">
+      <Filter>application\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\application\common\ids_object_types.hpp">
+      <Filter>application\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\application\engine\application_client.hpp">
+      <Filter>application\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\application\engine\application_common.hpp">
+      <Filter>application\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\application\engine\application_graphics.hpp">
+      <Filter>application\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\application\engine\application_host.hpp">
+      <Filter>application\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\data\camera_pool.hpp">
+      <Filter>data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\data\data.hpp">
+      <Filter>data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\data\data_fwd.hpp">
+      <Filter>data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\data\entity_pool.hpp">
+      <Filter>data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\data\logic_pool.hpp">
+      <Filter>data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\data\model_pool.hpp">
+      <Filter>data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\data\rigidbody_pool.hpp">
+      <Filter>data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\data\texture_pool.hpp">
+      <Filter>data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\data\world_data.hpp">
+      <Filter>data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\data\core_data\core_data.hpp">
+      <Filter>data\core_data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\data\core_data\core_data_fwd.hpp">
+      <Filter>data\core_data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\systems\camera\camera.hpp">
+      <Filter>systems\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\systems\camera\camera_fwd.hpp">
+      <Filter>systems\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\systems\camera\camera_properties.hpp">
+      <Filter>systems\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\systems\entity\generic_id.hpp">
+      <Filter>systems\entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\application\game_logic\actor.hpp">
+      <Filter>application\game_logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\application\game_logic\local_player_controller.hpp">
+      <Filter>application\game_logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\application\game_logic\npc_actor_controller.hpp">
+      <Filter>application\game_logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\application\entity_factory.hpp">
       <Filter>application</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\code\application\application_common.hpp">
+    <ClInclude Include="..\..\..\..\code\application\network_events.hpp">
       <Filter>application</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\code\application\application_graphics.hpp">
+    <ClInclude Include="..\..\..\..\code\application\resources.hpp">
       <Filter>application</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\code\application\application_host.hpp">
-      <Filter>application</Filter>
+    <ClInclude Include="..\..\..\..\code\systems\physics\debug_renderer.hpp">
+      <Filter>systems\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\systems\physics\motion_state.hpp">
+      <Filter>systems\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\systems\physics\physics.hpp">
+      <Filter>systems\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\systems\physics\physics_fwd.hpp">
+      <Filter>systems\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\systems\physics\rigidbody.hpp">
+      <Filter>systems\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\systems\physics\rigidbody_collider.hpp">
+      <Filter>systems\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\systems\physics\rigidbody_properties.hpp">
+      <Filter>systems\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\systems\physics\world.hpp">
+      <Filter>systems\physics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
