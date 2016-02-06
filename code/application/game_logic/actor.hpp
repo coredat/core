@@ -10,12 +10,11 @@
 #include <memory>
 
 
-class Actor_base : public Core::Component
+class Actor : public Core::Component
 {
 public:
 
-  explicit              Actor_base();
-  virtual               ~Actor_base();
+  explicit              Actor();
   
   uint32_t              get_rtti() const override { return Component_type::actor; }
   

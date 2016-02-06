@@ -49,7 +49,6 @@ bool
 world_find_entity(World *world_data, Core::Entity *out_entity, const Core::Entity_id id);
 
 
-
 } // ns
 
 

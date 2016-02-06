@@ -1,4 +1,4 @@
-#include "actor_base.hpp"
+#include "Actor.hpp"
 #include <math/transform/transform.hpp>
 #include <core/interface/entity.hpp>
 #include <renderer/renderer.hpp>
@@ -55,18 +55,13 @@ namespace
 }
 
 
-Actor_base::Actor_base()
-{
-}
-
-
-Actor_base::~Actor_base()
+Actor::Actor()
 {
 }
 
 
 void
-Actor_base::on_start()
+Actor::on_start()
 {
   m_ghost_obj.reset(new btPairCachingGhostObject());
   m_ghost_obj->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
@@ -85,7 +80,7 @@ Actor_base::on_start()
 
 
 void
-Actor_base::on_update(const float dt)
+Actor::on_update(const float dt)
 {
   math::transform curr_trans = get_entity().get_transform();
   
@@ -293,14 +288,14 @@ Actor_base::on_update(const float dt)
 
 
 void
-Actor_base::on_event(const uint32_t id, const void *data, const size_t size_of_data)
+Actor::on_event(const uint32_t id, const void *data, const size_t size_of_data)
 {
   std::cout << "evt yo!" << std::endl;
 }
 
 
 void
-Actor_base::move_forward(const float fwd)
+Actor::move_forward(const float fwd)
 {
   const float accum_fwd = math::vec3_get_z(m_pending_move) + fwd;
   m_pending_move        = math::vec3_init(math::vec3_get_x(m_pending_move), math::vec3_get_y(m_pending_move), accum_fwd);
@@ -308,7 +303,7 @@ Actor_base::move_forward(const float fwd)
 
 
 void
-Actor_base::move_left(const float left)
+Actor::move_left(const float left)
 {
   const float accum_left = math::vec3_get_x(m_pending_move) + left;
   m_pending_move         = math::vec3_init(accum_left, math::vec3_get_y(m_pending_move), math::vec3_get_z(m_pending_move));
@@ -316,7 +311,7 @@ Actor_base::move_left(const float left)
 
 
 void
-Actor_base::look_up(const float pitch)
+Actor::look_up(const float pitch)
 {
   const float accum_up      = math::vec3_get_x(m_acuumulated_rotations) + pitch;
   const float clamped_accum = math::clamp(accum_up, +math::quart_tau(), -math::quart_tau());
@@ -325,7 +320,7 @@ Actor_base::look_up(const float pitch)
 
 
 void
-Actor_base::turn_left(const float turn)
+Actor::turn_left(const float turn)
 {
   const float accum_right = math::vec3_get_y(m_acuumulated_rotations) + turn;
   m_acuumulated_rotations = math::vec3_init(math::vec3_get_x(m_acuumulated_rotations), accum_right, math::vec3_get_z(m_acuumulated_rotations));
@@ -333,7 +328,7 @@ Actor_base::turn_left(const float turn)
 
 
 void
-Actor_base::take_damage()
+Actor::take_damage()
 {
   size_t index;
   Core::Entity_id_util::find_index_linearly(&index,

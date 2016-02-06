@@ -1,7 +1,5 @@
 #include <application/resources.hpp>
 #include <application/entity_factory.hpp>
-#include <application/game_logic/actor_local_player.hpp>
-#include <application/game_logic/actor_network_player.hpp>
 
 #include <systems/environment/environment.hpp>
 #include <systems/transform/transform.hpp>

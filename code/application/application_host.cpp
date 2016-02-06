@@ -1,7 +1,5 @@
 #include "application_host.hpp"
 #include "entity_factory.hpp"
-#include "game_logic/actor_local_player.hpp" // KILL!
-#include "game_logic/actor_network_player.hpp" // KILL!
 #include <data/data.hpp>
 #include <systems/network/network.hpp>
 #include <core/entity_id.hpp>
@@ -68,20 +66,6 @@ host_think(
 
   std::size_t index;
   Core::Entity_id_util::find_index_linearly(&index, kine_actor_local, world->entity_pool->entity_id, world->entity_pool->size);
-
-  // Kill me!!!!
-  Actor_local_player *actor = reinterpret_cast<Actor_local_player*>(world->logic_pool->objects_in_use[0]);
-
-//  actor->move_forward(inputs->controllers[0].axis_2[1]);
-//  actor->move_left(inputs->controllers[0].axis_2[0]);
-//  
-//  actor->look_up(static_cast<float>(inputs->controllers[0].axis_1[1]) * delta_time);
-//  actor->turn_left(static_cast<float>(inputs->controllers[0].axis_1[0]) * delta_time);
-
-  if (inputs->controllers[0].buttons[Environment::Button::action_button] == (uint8_t)Environment::Button_action::on_down)
-  {
-    actor->action();
-  }
 
   // ** Game Logic Update ** //
   Data::logic_pool_on_start_hook(world->logic_pool);
