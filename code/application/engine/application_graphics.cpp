@@ -21,14 +21,21 @@ graphics_think(Data::World *world,
   renderer::clear();
 
   // Get active camera and generate a projection matrix.
-  auto cam = Data::camera_pool_get_priority(world->camera_pool, 1);
+  const auto cam = Data::camera_pool_get_properties_for_priority(world->camera_pool, 1);
   const math::mat4 proj = math::mat4_projection(cam.viewport_width, cam.viewport_height, cam.near_plane, cam.far_plane, cam.fov);
   
   // Get entity's transform so we can generate a view.
   math::mat4 view = math::mat4_zero();
   {
+    const auto id = Data::camera_pool_get_entity_id_for_priority(world->camera_pool, 1);
+
+    if (id == Core::Entity_id_util::invalid_id())
+    {
+      return; // we have no camera.
+    }
+
     Core::Entity ent;
-    Data::world_find_entity(world, &ent, world->camera_pool->entity_id[0]);
+    Data::world_find_entity(world, &ent, id);
     
     const math::transform camera_transform = ent.get_transform();
     

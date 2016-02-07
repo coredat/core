@@ -58,8 +58,14 @@ camera_pool_set_priority(Camera_pool *pool,
   Get the entity with priority.
 */
 Camera::Camera_properties
-camera_pool_get_priority(Camera_pool *pool,
-                         const uint32_t priority);
+camera_pool_get_properties_for_priority(Camera_pool *pool,
+                                        const uint32_t priority);
+
+
+Core::Entity_id
+camera_pool_get_entity_id_for_priority(Camera_pool *pool,
+                                       const uint32_t priority);
+
 
 } // ns
 

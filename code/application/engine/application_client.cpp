@@ -15,7 +15,7 @@ void
 client_initialize(
   Network::Connection *connection)
 {
-  const char *server_ip = "192.168.0.10";
+  const char *server_ip = "192.168.0.6";
   const uint32_t port = 1234;
   const uint32_t timeout = 5000;
 
@@ -36,6 +36,7 @@ client_think(
   const float delta_time)
 {
   Network::poll_events(connection,
+
     0,
     [&](const Network::Event_id id, const void *data, const std::size_t size_of_data)
     {

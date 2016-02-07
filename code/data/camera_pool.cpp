@@ -49,7 +49,7 @@ camera_pool_set_priority(Camera_pool *pool,
 
 
 Camera::Camera_properties
-camera_pool_get_priority(Camera_pool *pool,
+camera_pool_get_properties_for_priority(Camera_pool *pool,
                          const uint32_t priority)
 {
   assert(pool);
@@ -67,6 +67,23 @@ camera_pool_get_priority(Camera_pool *pool,
 }
 
 
+Core::Entity_id
+camera_pool_get_entity_id_for_priority(Camera_pool *pool,
+                                       const uint32_t priority)
+{
+  assert(pool);
+
+  for (size_t i = 0; i < pool->number_of_cameras; ++i)
+  {
+    if (pool->priority[i] == priority)
+    {
+      return pool->entity_id[i];
+    }
+  }
+
+  // Failed
+  return Core::Entity_id_util::invalid_id();
+}
 
 
 } // ns
