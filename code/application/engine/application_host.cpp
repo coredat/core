@@ -5,6 +5,7 @@
 #include <core/entity_id.hpp>
 #include <systems/physics/physics.hpp>
 #include <systems/environment/environment.hpp>
+#include <application/game_logic/actor.hpp>
 #include <core/interface/entity.hpp>
 #include <iostream>
 
@@ -59,7 +60,23 @@ host_think(
     0,
     [&](const Network::Event_id id, const void *data, const std::size_t size_of_data)
   {
-//    const Actor::Input_cmds *cmds = reinterpret_cast<const Actor::Input_cmds*>(data);
+    float controller_data[4];
+    memcpy(&controller_data[0], data, size_of_data);
+
+    Core::Entity network_actor;
+    Data::world_find_entity(world, &network_actor, kine_actor_network);
+    
+    Actor *actor = network_actor.get_component<Actor>(Component_type::actor);
+    assert(actor);
+    
+    actor->move_forward(controller_data[0]);
+    actor->move_left(controller_data[1]);
+    actor->turn_left(controller_data[2]);
+    actor->look_up(controller_data[3]);
+    
+    // Apply to network actor.
+  
+//    const Actor::Input_cmds *cmds = reinterpret_cast<const Actor  ::Input_cmds*>(data);
 //    Actor::input(*cmds, delta_time, kine_actor_network, world->entity_pool, world->entity_pool->size, world->physics_world);
   },
     &std::cout);
