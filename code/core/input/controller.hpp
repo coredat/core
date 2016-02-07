@@ -14,10 +14,12 @@ class Controller
 {
 public:
 
-  Controller();
+  explicit          Controller();
 
-  Axis get_axis(const uint8_t axis) const;
-  bool is_button_down(const Button::ENUM button) const;
+  Axis              get_axis(const uint8_t axis) const;
+  bool              is_button_down(const Button::ENUM button) const;
+  void              serialize(uint8_t out_data[16]);
+
 
 private:
 

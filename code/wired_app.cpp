@@ -48,6 +48,7 @@ main(int argc, char *argv[])
 
   Environment::Window window;
   Environment::Input input_devices;
+  memset(&input_devices, 0, sizeof(input_devices));
   Environment::window_create(&window, 800, 480, false, title.c_str());
 
   sdl::input input;
@@ -118,6 +119,8 @@ main(int argc, char *argv[])
   Core_data::Input_data core_input;
   
   core_data.input_data = &core_input;
+
+  Core_data::core_data_init(&core_data);
   
   Core_data::set_core_data(&core_data);
   

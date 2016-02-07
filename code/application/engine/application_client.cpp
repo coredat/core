@@ -5,6 +5,7 @@
 #include <systems/physics/physics.hpp>
 #include <systems/environment/environment.hpp>
 #include <iostream>
+#include <core/input/input.hpp>
 
 
 namespace Application {
@@ -14,7 +15,7 @@ void
 client_initialize(
   Network::Connection *connection)
 {
-  const char *server_ip = "192.168.0.8";
+  const char *server_ip = "192.168.0.10";
   const uint32_t port = 1234;
   const uint32_t timeout = 5000;
 
@@ -40,15 +41,17 @@ client_think(
     },
     &std::cout);
 
-//  Actor::Input_cmds input_cmds;
-   
-//  input_cmds.fwd = inputs->controllers[0].axis_2[1];
-//  input_cmds.right = inputs->controllers[0].axis_2[0];
+  auto controller = Core::Input::get_controller(Core::Input::Player::one);
+  
+  uint8_t data[16];
+  controller.serialize(data);
+  
+  float ft_data[4];
+  memcpy(&ft_data[0], &data[0], sizeof(data));
 
-//  input_cmds.rot = inputs->controllers[0].axis_1[0];
-//  input_cmds.pitch = inputs->controllers[0].axis_1[1];
+  std::cout << ft_data[0] << ", " << ft_data[1] << ", " << ft_data[2] << ", " << ft_data[3] << std::endl;
 
-//  Network::send_packet(connection, sizeof(input_cmds), &input_cmds, false);
+  Network::send_packet(connection, sizeof(data), &data[0], false);
 }
 
 

@@ -1,5 +1,6 @@
 #include "core_data.hpp"
 #include <assert.h>
+#include <cstring>
 
 
 namespace
@@ -9,6 +10,14 @@ namespace
 
 
 namespace Core_data {
+
+
+void
+core_data_init(Core_data::Core *core_data)
+{
+  memset(&core_data->input_data->axis[0], 0, sizeof(core_data->input_data->axis));
+  memset(&core_data->input_data->buttons[0], 0, sizeof(core_data->input_data->buttons));
+}
 
 
 Core*

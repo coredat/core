@@ -23,6 +23,9 @@ struct Core
 }; // struct
 
 
+void
+core_data_init(Core *data);
+
 Core*
 get_core_data();
 
