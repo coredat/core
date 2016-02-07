@@ -21,6 +21,10 @@ client_initialize(
 
   Network::client_create(connection, &std::cout);
   Network::client_connect_to_server(connection, server_ip, port, timeout, &std::cout);
+  
+  // * Set camera * //
+
+//  world->camera_pool->entity_id[0] = kine_actor_local;
 }
 
 
