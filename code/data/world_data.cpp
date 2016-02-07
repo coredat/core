@@ -73,4 +73,38 @@ world_find_entity(World *world_data, Core::Entity *out_entity, const Core::Entit
 }
 
 
+void
+world_find_entities_with_tag(World *world_data,
+                             const uint32_t tag,
+                             size_t *out_entities_for_tag,
+                             Core::Entity_id out_ids[],
+                             const size_t size_of_out)
+{
+  assert(world_data);
+  
+  auto entity_pool = world_data->entity_pool;
+  
+  size_t number_found(0);
+  
+  for(size_t i = 0; i < entity_pool->size; ++i)
+  {
+    auto prop = entity_pool->entity_properties[i];
+    
+    if(prop.tags & tag)
+    {
+      if(size_of_out > number_found)
+      {
+        out_ids[number_found++] = entity_pool->entity_id[i];
+      }
+      else
+      {
+        break;
+      }
+    }
+  }
+  
+  (*out_entities_for_tag) = number_found;
+}
+
+
 } // ns

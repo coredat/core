@@ -25,19 +25,25 @@ host_initialize(
   Data::World *world,
   Network::Connection *connection)
 {
-  Entity_factory::create_ground(world);
-
   {
+    Entity_factory::create_ground(world);
     kine_actor_local   = Entity_factory::create_local_kinematic_actor(world).get_id();
-    
-    // * Set camera * //
-    world->camera_pool->entity_id[0] = kine_actor_local;
-    
     kine_actor_network = Entity_factory::create_network_kinematic_actor(world).get_id();
-//    kine_actor_local = Entity_factory::create_npc_actor(world).get_id();
+    Entity_factory::create_connection_node(world);
   }
   
-  Entity_factory::create_connection_node(world);
+  // * Add camera's * //
+  {
+    Camera::Camera_properties cam_props;
+    cam_props.fov = math::quart_tau() * 0.6f;
+    cam_props.near_plane = 0.1f;
+    cam_props.far_plane = 1000.f;
+    cam_props.viewport_width = 800;
+    cam_props.viewport_height = 480;
+    
+    Data::camera_pool_add_camera(world->camera_pool, kine_actor_local, cam_props);
+    Data::camera_pool_add_camera(world->camera_pool, kine_actor_network, cam_props);
+  }
   
   volatile const uint32_t number_of_random_cubes = 0;
   for(uint32_t i = 0; i < number_of_random_cubes; ++i)

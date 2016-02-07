@@ -49,6 +49,13 @@ bool
 world_find_entity(World *world_data, Core::Entity *out_entity, const Core::Entity_id id);
 
 
+void
+world_find_entities_with_tag(World *world_data,
+                             const uint32_t tag,
+                             size_t *out_entities_for_tag,
+                             Core::Entity_id out_ids[],
+                             const size_t size_of_out);
+
 } // ns
 
 

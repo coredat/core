@@ -1,5 +1,6 @@
 #include <application/resources.hpp>
 #include <application/entity_factory.hpp>
+#include <application/common/ids_object_tags.hpp>
 
 #include <systems/environment/environment.hpp>
 #include <systems/transform/transform.hpp>
@@ -89,17 +90,7 @@ main(int argc, char *argv[])
   Data::entity_graph_change_pool_init(&graph_changes);
   
   Data::Camera_pool camera_pool;
-  // init
-  {
-    Camera::Camera_propertiess cam_props;
-    cam_props.fov = math::quart_tau() * 0.6f;
-    cam_props.near_plane = 0.1f;
-    cam_props.far_plane = 1000.f;
-    cam_props.viewport_width = 800;
-    cam_props.viewport_height = 480;
-    
-    camera_pool.camera[0] = cam_props;
-  }
+  Data::camera_pool_init(&camera_pool);
   
   Data::World world_data;
   {
@@ -113,7 +104,6 @@ main(int argc, char *argv[])
     world_data.physics_world          = &phy_world;
   }
   
-  
   // Core Data
   Core_data::Core core_data;
   Core_data::Input_data core_input;
@@ -121,9 +111,7 @@ main(int argc, char *argv[])
   core_data.input_data = &core_input;
 
   Core_data::core_data_init(&core_data);
-  
   Core_data::set_core_data(&core_data);
-  
   
   Resource::load_default_resources(&texture_pool, texture_pool.size, &model_pool, model_pool.size);
   
@@ -166,7 +154,6 @@ main(int argc, char *argv[])
     
     // ** Update World ** //
     
-    // Temp while paramaters change
     if(!is_client)
     {
       Application::host_think(
@@ -174,6 +161,12 @@ main(int argc, char *argv[])
         &connection,
         &input_devices,
         delta_time);
+      
+      size_t number_found_with_tag(0);
+      Core::Entity_id ids[5];
+      
+      Data::world_find_entities_with_tag(&world_data, Tag::player, &number_found_with_tag, &ids[0], 5);
+      Data::camera_pool_set_priority(world_data.camera_pool, ids[0], 1);
     }
     else
     {
@@ -182,6 +175,12 @@ main(int argc, char *argv[])
         &connection,
         &input_devices,
         delta_time);
+      
+      size_t number_found_with_tag(0);
+      Core::Entity_id ids[5];
+      
+      Data::world_find_entities_with_tag(&world_data, Tag::network_player, &number_found_with_tag, &ids[0], 5);
+      Data::camera_pool_set_priority(world_data.camera_pool, ids[0], 1);
     }
     
     // ** Graphics ** //

@@ -20,9 +20,8 @@ graphics_think(Data::World *world,
 {
   renderer::clear();
 
-
   // Get active camera and generate a projection matrix.
-  auto cam = world->camera_pool->camera[0];
+  auto cam = Data::camera_pool_get_priority(world->camera_pool, 1);
   const math::mat4 proj = math::mat4_projection(cam.viewport_width, cam.viewport_height, cam.near_plane, cam.far_plane, cam.fov);
   
   // Get entity's transform so we can generate a view.

@@ -14,7 +14,7 @@ enum class Type
 }; // enum
 
 
-struct Camera_propertiess
+struct Camera_properties
 {
   Type      type             = Type::perspective;
   uint32_t  viewport_width   = 0;

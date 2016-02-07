@@ -1,6 +1,7 @@
 #include "entity_factory.hpp"
 #include "resources.hpp"
 #include "common/ids_object_types.hpp"
+#include "common/ids_object_tags.hpp"
 #include <systems/physics/physics.hpp>
 #include <core/entity_id.hpp>
 #include <systems/entity/generic_id.hpp>
@@ -129,6 +130,8 @@ create_network_kinematic_actor(Data::World *world)
   entity.set_model_id(Resource::Model::unit_cube);
   
   entity.add_component<Actor>();
+  
+  entity.add_tag(Tag::network_player);
   
   return entity;
 }
