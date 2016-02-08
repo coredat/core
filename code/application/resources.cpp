@@ -21,8 +21,9 @@ load_default_resources(Data::Texture_pool *texture_pool,
   // Load models
   {
     const ::Model::Load_model model[Resource::Model::size] {
-      ::Model::Load_model{Resource::Model::unit_cube,   std::string(asset_path + "models/unit_cube.obj")},
-      ::Model::Load_model{Resource::Model::unit_plane,  std::string(asset_path + "models/unit_plane.obj")},
+      ::Model::Load_model{Resource::Model::unit_cube,     std::string(asset_path + "models/unit_cube.obj")},
+      ::Model::Load_model{Resource::Model::unit_plane,    std::string(asset_path + "models/unit_plane.obj")},
+      ::Model::Load_model{Resource::Model::test_level_01, std::string(asset_path + "models/test_level.obj")},
     };
     
     Generic_id::ids_init_sequentially(model_pool->id, model_pool->size);
