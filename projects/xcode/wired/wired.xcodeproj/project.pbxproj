@@ -651,11 +651,11 @@
 			isa = PBXGroup;
 			children = (
 				7EAD4CD91C628A51007F6A9C /* ids_core_events.hpp */,
-				7EAD4CCE1C628524007F6A9C /* event */,
 				7EFB9B0F1C5E625A00A838C7 /* core_fwd.hpp */,
 				7EFB9B101C5E625A00A838C7 /* core.hpp */,
 				7EFB9B001C5E620C00A838C7 /* entity_id.cpp */,
 				7EFB9B011C5E620C00A838C7 /* entity_id.hpp */,
+				7EAD4CCE1C628524007F6A9C /* event */,
 				7EAD4CF21C6684BD007F6A9C /* physics */,
 				7EAD4CE51C638F8E007F6A9C /* input */,
 				7EFB9B021C5E620C00A838C7 /* interface */,

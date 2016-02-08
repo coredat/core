@@ -104,6 +104,8 @@ main(int argc, char *argv[])
     world_data.physics_world          = &phy_world;
   }
   
+  Data::set_world_data(&world_data);
+  
   // Core Data
   Core_data::Core core_data;
   Core_data::Input_data core_input;

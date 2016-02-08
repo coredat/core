@@ -35,10 +35,10 @@ host_initialize(
   // * Add camera's * //
   {
     Camera::Camera_properties cam_props;
-    cam_props.fov = math::quart_tau() * 0.6f;
-    cam_props.near_plane = 0.1f;
-    cam_props.far_plane = 1000.f;
-    cam_props.viewport_width = 800;
+    cam_props.fov             = math::quart_tau() * 0.6f;
+    cam_props.near_plane      = 0.1f;
+    cam_props.far_plane       = 1000.f;
+    cam_props.viewport_width  = 800;
     cam_props.viewport_height = 480;
     
     Data::camera_pool_add_camera(world->camera_pool, kine_actor_local, cam_props);
@@ -86,14 +86,14 @@ host_think(
 //    Actor::input(*cmds, delta_time, kine_actor_network, world->entity_pool, world->entity_pool->size, world->physics_world);
   },
     &std::cout);
-
+  
   std::size_t index;
   Core::Entity_id_util::find_index_linearly(&index, kine_actor_local, world->entity_pool->entity_id, world->entity_pool->size);
-
+  
   // ** Game Logic Update ** //
   Data::logic_pool_on_start_hook(world->logic_pool);
   Data::logic_pool_on_update_hook(world->logic_pool, delta_time);
-
+  
   // Push in new phy entities.  
   Data::rigidbody_pool_update_scene_graph_changes(world->rigidbody_pool, world, world->entity_graph_changes);
   

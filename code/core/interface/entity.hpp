@@ -30,7 +30,7 @@ public:
   bool                          is_valid() const;
   
   uint32_t                      get_tags() const;
-  bool                          has_tag(const uint32_t tag_id);
+  bool                          has_tag(const uint32_t tag_id) const;
   void                          set_tags(const uint32_t set_tags);
   void                          add_tag(const uint32_t add_tag);
   void                          remove_tag(const uint32_t tag);

@@ -16,7 +16,6 @@ void
 graphics_think(Data::World *world,
                Simple_renderer::Node nodes[],
                const std::size_t size_of_node_pool)
-
 {
   renderer::clear();
 
@@ -31,7 +30,7 @@ graphics_think(Data::World *world,
 
     if (id == Core::Entity_id_util::invalid_id())
     {
-      return; // we have no camera.
+      return; // we have no camera's to render with.
     }
 
     Core::Entity ent;
@@ -56,7 +55,6 @@ graphics_think(Data::World *world,
 //    math::mat4 view = math::mat4_lookat(math::vec3_init(5, 5, 0),
 //      math::vec3_zero(),
 //      math::vec3_init(0, 1, 0));
-
   }
 
   const math::mat4 view_proj = math::mat4_multiply(view, proj); // *hurt* camaera or such.

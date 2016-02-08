@@ -10,10 +10,23 @@ namespace
   // Instance id is incremented each time
   // a new entity is added to the world.
   std::atomic<uint32_t> instance(0);
+  
+  Data::World *world = nullptr;
 }
 
 
 namespace Data {
+
+
+void
+set_world_data(World *set_world) { world = set_world; }
+
+
+Physics::World*
+get_physics_world() { return world->physics_world; }
+
+World*
+get_world() { return world; }
 
 
 bool

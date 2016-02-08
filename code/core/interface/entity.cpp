@@ -43,7 +43,7 @@ Entity::get_tags() const
 
 
 bool
-Entity::has_tag(const uint32_t tag_id)
+Entity::has_tag(const uint32_t tag_id) const
 {
   if(!is_valid()) { return 0; }
   

@@ -27,7 +27,6 @@ public:
   enum class Search
   {
     first,
-    all,
   }; // enum
 
 
@@ -42,14 +41,14 @@ public:
   
 private:
   
-  struct Ray_results
+  struct Ray_result
   {
     Core::Entity_id id;
     math::vec3 hit;
     math::vec3 normal;
   };
   
-  std::vector<Ray_results> m_results;
+  std::vector<Ray_result> m_results;
 
 }; // class
 

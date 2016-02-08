@@ -25,6 +25,17 @@ struct World
 }; // struct
 
 
+void
+set_world_data(World *world);
+
+
+Physics::World*
+get_physics_world();
+
+
+World*
+get_world();
+
 
 /*!
  Create a new entity. This abstraction will insert the correct
