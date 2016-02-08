@@ -12,6 +12,8 @@ enum ENUM : uint32_t {
   null_event   = Core::Event_id::end_of_core_events,
 
   got_shot,
+  
+  actor_died, // Signal from the actor to its controller.
 
   player_spawned,
   player_died,

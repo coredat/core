@@ -7,7 +7,7 @@
 #include <systems/entity/generic_id.hpp>
 #include <data/data.hpp>
 #include <core/interface/entity.hpp>
-#include <application/game_logic/actor.hpp>
+#include <application/game_logic/actor_model.hpp>
 #include <application/game_logic/local_player_controller.hpp>
 #include <application/game_logic/npc_actor_controller.hpp>
 
@@ -101,7 +101,7 @@ create_local_kinematic_actor(Data::World *world)
   entity.set_material_id(Resource::Texture::dev_orange);
   entity.set_model_id(Resource::Model::unit_cube);
   
-  entity.add_component<Actor>();
+  entity.add_component<Actor_model>();
   entity.add_component<Local_player_controller>();
   
   return entity;
@@ -129,7 +129,7 @@ create_network_kinematic_actor(Data::World *world)
   entity.set_material_id(Resource::Texture::dev_red);
   entity.set_model_id(Resource::Model::unit_cube);
   
-  entity.add_component<Actor>();
+  entity.add_component<Actor_model>();
   
   entity.add_tag(Tag::network_player);
   
@@ -158,7 +158,7 @@ create_npc_actor(Data::World *world)
   entity.set_material_id(Resource::Texture::dev_orange);
   entity.set_model_id(Resource::Model::unit_cube);
   
-  entity.add_component<Actor>();
+  entity.add_component<Actor_model>();
   entity.add_component<Npc_actor_controller>();
   
   return entity;

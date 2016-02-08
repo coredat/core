@@ -1,9 +1,10 @@
-#include "Actor.hpp"
+#include "actor_model.hpp"
 #include <math/transform/transform.hpp>
 #include <core/interface/entity.hpp>
 #include <renderer/renderer.hpp>
 #include <systems/transform/transform.hpp>
 #include "../common/ids_object_tags.hpp"
+#include "../common/ids_game_events.hpp"
 #include <iostream>
 
 
@@ -55,13 +56,13 @@ namespace
 }
 
 
-Actor::Actor()
+Actor_model::Actor_model()
 {
 }
 
 
 void
-Actor::on_start()
+Actor_model::on_start()
 {
   m_ghost_obj.reset(new btPairCachingGhostObject());
   m_ghost_obj->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
@@ -80,17 +81,17 @@ Actor::on_start()
 
 
 void
-Actor::on_update(const float dt)
+Actor_model::on_update(const float dt)
 {
   math::transform curr_trans = get_entity().get_transform();
   
   // Apply gravity
   {
-    const auto actor_length = math::vec3_get_y(m_size);
+    const auto Actor_model_length = math::vec3_get_y(m_size);
     
     // Cast ray downwards from feet
-    const btVector3 btFrom(math::vec3_get_x(curr_trans.position), math::vec3_get_y(curr_trans.position) - actor_length + 0.2, math::vec3_get_z(curr_trans.position));
-    const btVector3 btTo(math::vec3_get_x(curr_trans.position), math::vec3_get_y(curr_trans.position) - actor_length, math::vec3_get_z(curr_trans.position));
+    const btVector3 btFrom(math::vec3_get_x(curr_trans.position), math::vec3_get_y(curr_trans.position) - Actor_model_length + 0.2, math::vec3_get_z(curr_trans.position));
+    const btVector3 btTo(math::vec3_get_x(curr_trans.position), math::vec3_get_y(curr_trans.position) - Actor_model_length, math::vec3_get_z(curr_trans.position));
     btCollisionWorld::ClosestRayResultCallback feet_test(btFrom, btTo);
     
     m_ghost_obj->setWorldTransform(gl_to_bullet(curr_trans)); // move outta the way.
@@ -104,7 +105,7 @@ Actor::on_update(const float dt)
     //if(false)
     {
       const auto hit_point          = math::vec3_init(feet_test.m_hitPointWorld.x(), feet_test.m_hitPointWorld.y(), feet_test.m_hitPointWorld.z());
-      const auto corrected_position = math::vec3_init(math::vec3_get_x(hit_point), math::vec3_get_y(hit_point) + actor_length, math::vec3_get_z(hit_point));
+      const auto corrected_position = math::vec3_init(math::vec3_get_x(hit_point), math::vec3_get_y(hit_point) + Actor_model_length, math::vec3_get_z(hit_point));
       
       curr_trans.position = corrected_position;
     }
@@ -161,12 +162,12 @@ Actor::on_update(const float dt)
     m_pending_move = math::vec3_zero();
   }
   
-  // Turn actor
+  // Turn Actor_model
   {
     const float rot_rad   = static_cast<float>(math::vec3_get_y(m_acuumulated_rotations));
-    math::quat turn_actor = math::quat_init_with_axis_angle(0, 1, 0, rot_rad);
+    math::quat turn_Actor_model = math::quat_init_with_axis_angle(0, 1, 0, rot_rad);
     
-    curr_trans.rotation = turn_actor;
+    curr_trans.rotation = turn_Actor_model;
   }
   
   // Apply head movements
@@ -288,14 +289,21 @@ Actor::on_update(const float dt)
 
 
 void
-Actor::on_event(const uint32_t id, const void *data, const size_t size_of_data)
+Actor_model::on_event(const uint32_t id, const void *data, const size_t size_of_data)
 {
-  std::cout << "evt yo!" << std::endl;
+  switch(id)
+  {
+    case(Game_event_id::got_shot):
+    {
+      take_damage();
+      break;
+    }
+  };
 }
 
 
 void
-Actor::move_forward(const float fwd)
+Actor_model::move_forward(const float fwd)
 {
   const float accum_fwd = math::vec3_get_z(m_pending_move) + fwd;
   m_pending_move        = math::vec3_init(math::vec3_get_x(m_pending_move), math::vec3_get_y(m_pending_move), accum_fwd);
@@ -303,7 +311,7 @@ Actor::move_forward(const float fwd)
 
 
 void
-Actor::move_left(const float left)
+Actor_model::move_left(const float left)
 {
   const float accum_left = math::vec3_get_x(m_pending_move) + left;
   m_pending_move         = math::vec3_init(accum_left, math::vec3_get_y(m_pending_move), math::vec3_get_z(m_pending_move));
@@ -311,7 +319,7 @@ Actor::move_left(const float left)
 
 
 void
-Actor::look_up(const float pitch)
+Actor_model::look_up(const float pitch)
 {
   const float accum_up      = math::vec3_get_x(m_acuumulated_rotations) + pitch;
   const float clamped_accum = math::clamp(accum_up, +math::quart_tau(), -math::quart_tau());
@@ -320,7 +328,7 @@ Actor::look_up(const float pitch)
 
 
 void
-Actor::turn_left(const float turn)
+Actor_model::turn_left(const float turn)
 {
   const float accum_right = math::vec3_get_y(m_acuumulated_rotations) + turn;
   m_acuumulated_rotations = math::vec3_init(math::vec3_get_x(m_acuumulated_rotations), accum_right, math::vec3_get_z(m_acuumulated_rotations));
@@ -328,7 +336,7 @@ Actor::turn_left(const float turn)
 
 
 void
-Actor::take_damage()
+Actor_model::take_damage()
 {
   size_t index;
   Core::Entity_id_util::find_index_linearly(&index,
@@ -337,4 +345,6 @@ Actor::take_damage()
                                             m_world_data->entity_pool->size);
 
   m_world_data->entity_pool->texture[index] = Resource::Texture::dev_green;
+  
+  get_entity().send_event(Game_event_id::actor_died, nullptr, 0);
 }

@@ -3,7 +3,7 @@
 #include "../common/ids_object_tags.hpp"
 #include "../entity_factory.hpp"
 #include "local_player_controller.hpp"
-#include "actor.hpp"
+#include "actor_model.hpp"
 #include <core/interface/entity.hpp>
 #include <core/input/input.hpp>
 #include <core/physics/ray.hpp>
@@ -33,20 +33,23 @@ Local_player_controller::on_update(const float dt)
   
   // Actor Movement
   {
-    Actor *actor = get_entity().get_component<Actor>(Component_type::actor);
+    Actor_model *actor = get_entity().get_component<Actor_model>(Component_type::actor);
     assert(actor);
     
-    // Position
-    actor->move_forward(controller.get_axis(0).x);
-    actor->move_left(controller.get_axis(0).y);
-    
-    // Head
-    const float scale(0.5f);
-    actor->turn_left(controller.get_axis(1).x * scale * dt);
-    actor->look_up(controller.get_axis(1).y * scale * dt);
+    if(actor)
+    {
+      // Position
+      actor->move_forward(controller.get_axis(0).x);
+      actor->move_left(controller.get_axis(0).y);
+      
+      // Head
+      const float scale(0.5f);
+      actor->turn_left(controller.get_axis(1).x * scale * dt);
+      actor->look_up(controller.get_axis(1).y * scale * dt);
+    }
   }
   
-  // Player Actions
+  // Player Actions (This should be moved into a gun model.)
   if(controller.is_button_down(Core::Input::Button::button_0))
   {
     const math::transform curr_trans = get_entity().get_transform();
@@ -56,7 +59,7 @@ Local_player_controller::on_update(const float dt)
     const math::vec3 scaled_fwd_vec = math::vec3_scale(fwd_vec, 3);
     
     const math::vec3 from = curr_trans.position;
-    const math::vec3 to = math::vec3_add(from, scaled_fwd_vec);
+    const math::vec3 to   = math::vec3_add(from, scaled_fwd_vec);
     
     Core::Physics::Ray shoot_ray(from, to, Core::Physics::Ray::Search::first);
     
@@ -80,9 +83,10 @@ Local_player_controller::on_event(const uint32_t id,
 {
   switch(id)
   {
-    case(Game_event_id::got_shot):
-      // Get model apply damage.
-      Actor *base = get_entity().get_component<Actor>(Component_type::actor);
-      base->take_damage();
+    case(Game_event_id::actor_died):
+    {
+      
+      break;
+    }
   }
 }

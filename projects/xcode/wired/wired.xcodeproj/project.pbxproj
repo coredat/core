@@ -62,7 +62,7 @@
 		7EFB9B0C1C5E620C00A838C7 /* entity_id.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EFB9B001C5E620C00A838C7 /* entity_id.cpp */; };
 		7EFB9B0D1C5E620C00A838C7 /* component.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EFB9B051C5E620C00A838C7 /* component.cpp */; };
 		7EFB9B0E1C5E620C00A838C7 /* entity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EFB9B0A1C5E620C00A838C7 /* entity.cpp */; };
-		7EFB9B131C5E78CB00A838C7 /* actor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EFB9B111C5E78CB00A838C7 /* actor.cpp */; };
+		7EFB9B131C5E78CB00A838C7 /* actor_model.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EFB9B111C5E78CB00A838C7 /* actor_model.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -222,8 +222,8 @@
 		7EFB9B0B1C5E620C00A838C7 /* entity.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = entity.hpp; sourceTree = "<group>"; };
 		7EFB9B0F1C5E625A00A838C7 /* core_fwd.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = core_fwd.hpp; sourceTree = "<group>"; };
 		7EFB9B101C5E625A00A838C7 /* core.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = core.hpp; sourceTree = "<group>"; };
-		7EFB9B111C5E78CB00A838C7 /* actor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = actor.cpp; sourceTree = "<group>"; };
-		7EFB9B121C5E78CB00A838C7 /* actor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = actor.hpp; sourceTree = "<group>"; };
+		7EFB9B111C5E78CB00A838C7 /* actor_model.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = actor_model.cpp; sourceTree = "<group>"; };
+		7EFB9B121C5E78CB00A838C7 /* actor_model.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = actor_model.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -468,8 +468,8 @@
 				7EAD4CDC1C63340D007F6A9C /* npc_actor_controller.hpp */,
 				7EAD4CC81C623C97007F6A9C /* local_player_controller.cpp */,
 				7EAD4CC91C623C97007F6A9C /* local_player_controller.hpp */,
-				7EFB9B111C5E78CB00A838C7 /* actor.cpp */,
-				7EFB9B121C5E78CB00A838C7 /* actor.hpp */,
+				7EFB9B111C5E78CB00A838C7 /* actor_model.cpp */,
+				7EFB9B121C5E78CB00A838C7 /* actor_model.hpp */,
 			);
 			path = game_logic;
 			sourceTree = "<group>";
@@ -786,7 +786,7 @@
 				7ED7BC1B1C3E56D000CE80EA /* generic_id.cpp in Sources */,
 				7EC9B9861C3EF1BA00FBF1D7 /* entity_pool.cpp in Sources */,
 				7EAD4CD61C628524007F6A9C /* event.cpp in Sources */,
-				7EFB9B131C5E78CB00A838C7 /* actor.cpp in Sources */,
+				7EFB9B131C5E78CB00A838C7 /* actor_model.cpp in Sources */,
 				7ED7BBC91C3CF8B100CE80EA /* entity_factory.cpp in Sources */,
 				7ED7BBF11C3CF9C700CE80EA /* logging.cpp in Sources */,
 				7EAD4CE41C638F6D007F6A9C /* core_data.cpp in Sources */,

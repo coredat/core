@@ -5,7 +5,7 @@
 #include <core/entity_id.hpp>
 #include <systems/physics/physics.hpp>
 #include <systems/environment/environment.hpp>
-#include <application/game_logic/actor.hpp>
+#include <application/game_logic/actor_model.hpp>
 #include <core/interface/entity.hpp>
 #include <iostream>
 
@@ -72,7 +72,7 @@ host_think(
     Core::Entity network_actor;
     Data::world_find_entity(world, &network_actor, kine_actor_network);
     
-    Actor *actor = network_actor.get_component<Actor>(Component_type::actor);
+    Actor_model *actor = network_actor.get_component<Actor_model>(Component_type::actor);
     assert(actor);
     
     actor->move_forward(controller_data[0]);

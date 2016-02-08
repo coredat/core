@@ -29,7 +29,16 @@ Ray::Ray(const math::vec3 from, const math::vec3 to, const Search search)
         
         m_results.emplace_back(Ray_result{id, hit_pos, normal});
       }
+      
+      break;
     }
+    
+    /*
+    case(Search::All):
+    {
+      break;
+    }
+    */
   }
 }
 
