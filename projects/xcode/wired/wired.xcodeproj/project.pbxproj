@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7E03C4341C68D22E0079DA81 /* network_player_controller.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E03C4321C68D22E0079DA81 /* network_player_controller.cpp */; };
 		7EA1A1F91C3984D0009867BD /* libenet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EA1A1F81C3984D0009867BD /* libenet.a */; };
 		7EA2C61E1C1F5D4600389748 /* wired_app.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EA2C61D1C1F5D4600389748 /* wired_app.cpp */; };
 		7EA2C6201C1F5E2A00389748 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EA2C61F1C1F5E2A00389748 /* OpenGL.framework */; };
@@ -66,6 +67,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7E03C4321C68D22E0079DA81 /* network_player_controller.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = network_player_controller.cpp; sourceTree = "<group>"; };
+		7E03C4331C68D22E0079DA81 /* network_player_controller.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = network_player_controller.hpp; sourceTree = "<group>"; };
 		7E687DAA1C5EAC2900E13BB6 /* ids_component_types.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ids_component_types.hpp; sourceTree = "<group>"; };
 		7E687DAB1C5EAC2900E13BB6 /* ids_object_types.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ids_object_types.hpp; sourceTree = "<group>"; };
 		7EA1A1F81C3984D0009867BD /* libenet.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libenet.a; path = ../../../3rdparty/enet/lib/osx/libenet.a; sourceTree = "<group>"; };
@@ -466,6 +469,8 @@
 			children = (
 				7EAD4CDB1C63340D007F6A9C /* npc_actor_controller.cpp */,
 				7EAD4CDC1C63340D007F6A9C /* npc_actor_controller.hpp */,
+				7E03C4321C68D22E0079DA81 /* network_player_controller.cpp */,
+				7E03C4331C68D22E0079DA81 /* network_player_controller.hpp */,
 				7EAD4CC81C623C97007F6A9C /* local_player_controller.cpp */,
 				7EAD4CC91C623C97007F6A9C /* local_player_controller.hpp */,
 				7EFB9B111C5E78CB00A838C7 /* actor_model.cpp */,
@@ -797,6 +802,7 @@
 				7EC9B99E1C418A3000FBF1D7 /* ogl_texture.cpp in Sources */,
 				7ED7BBD91C3CF8B100CE80EA /* network.cpp in Sources */,
 				7EAD4D011C668F72007F6A9C /* application_graphics.cpp in Sources */,
+				7E03C4341C68D22E0079DA81 /* network_player_controller.cpp in Sources */,
 				7EAD4CEE1C638F8E007F6A9C /* controller.cpp in Sources */,
 				7EAD4CEF1C638F8E007F6A9C /* input.cpp in Sources */,
 				7EC9B99F1C418A3000FBF1D7 /* ogl_texture_filtering.cpp in Sources */,

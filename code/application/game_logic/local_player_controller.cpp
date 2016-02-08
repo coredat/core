@@ -39,13 +39,14 @@ Local_player_controller::on_update(const float dt)
     if(actor)
     {
       // Position
-      actor->move_forward(controller.get_axis(0).x);
-      actor->move_left(controller.get_axis(0).y);
+      const float move_scale = 70 * dt;
+      actor->move_forward(controller.get_axis(0).x * move_scale);
+      actor->move_left(controller.get_axis(0).y * move_scale);
       
       // Head
-      const float scale(0.5f);
-      actor->turn_left(controller.get_axis(1).x * scale * dt);
-      actor->look_up(controller.get_axis(1).y * scale * dt);
+      const float rot_scale = 0.5f * dt;
+      actor->turn_left(controller.get_axis(1).x * rot_scale);
+      actor->look_up(controller.get_axis(1).y * rot_scale);
     }
   }
   
@@ -83,6 +84,19 @@ Local_player_controller::on_event(const uint32_t id,
 {
   switch(id)
   {
+    case(Game_event_id::got_shot):
+    {
+      Actor_model *actor = get_entity().get_component<Actor_model>(Component_type::actor);
+      assert(actor);
+      
+      if(actor)
+      {
+        actor->take_damage();
+      }
+      
+      break;
+    }
+  
     case(Game_event_id::actor_died):
     {
       

@@ -291,14 +291,6 @@ Actor_model::on_update(const float dt)
 void
 Actor_model::on_event(const uint32_t id, const void *data, const size_t size_of_data)
 {
-  switch(id)
-  {
-    case(Game_event_id::got_shot):
-    {
-      take_damage();
-      break;
-    }
-  };
 }
 
 

@@ -10,6 +10,7 @@
 #include <application/game_logic/actor_model.hpp>
 #include <application/game_logic/local_player_controller.hpp>
 #include <application/game_logic/npc_actor_controller.hpp>
+#include <application/game_logic/network_player_controller.hpp>
 
 
 namespace Entity_factory {
@@ -130,6 +131,7 @@ create_network_kinematic_actor(Data::World *world)
   entity.set_model_id(Resource::Model::unit_cube);
   
   entity.add_component<Actor_model>();
+  entity.add_component<Network_player_controller>();
   
   entity.add_tag(Tag::network_player);
   

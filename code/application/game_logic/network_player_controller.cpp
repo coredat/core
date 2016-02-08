@@ -1,26 +1,30 @@
-#include <core/interface/entity.hpp>
-#include "../common/ids_component_types.hpp"
-#include "npc_actor_controller.hpp"
-#include "actor_model.hpp"
+#include "network_player_controller.hpp"
 #include "../common/ids_game_events.hpp"
-#include <iostream>
+#include "actor_model.hpp"
+#include <core/interface/entity.hpp>
 
 
-Npc_actor_controller::Npc_actor_controller()
+Network_player_controller::Network_player_controller()
 {
   
 }
 
 
 void
-Npc_actor_controller::on_update(const float dt)
+Network_player_controller::on_start()
+{
+}
+
+
+void
+Network_player_controller::on_update(const float dt)
 {
   
 }
 
 
 void
-Npc_actor_controller::on_event(const uint32_t id,
+Network_player_controller::on_event(const uint32_t id,
                                   const void *data,
                                   const size_t size_of_data)
 {

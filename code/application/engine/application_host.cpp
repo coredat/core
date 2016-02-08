@@ -29,6 +29,7 @@ host_initialize(
     Entity_factory::create_ground(world);
     kine_actor_local   = Entity_factory::create_local_kinematic_actor(world).get_id();
     kine_actor_network = Entity_factory::create_network_kinematic_actor(world).get_id();
+    Entity_factory::create_npc_actor(world);
     Entity_factory::create_connection_node(world);
   }
   
