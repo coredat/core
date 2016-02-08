@@ -3,6 +3,7 @@
 
 
 namespace Core {
+namespace Physics {
 
 
 Ray::Ray(const math::vec3 from, const math::vec3 to, const Search search)
@@ -43,4 +44,5 @@ Ray::get_entity(const size_t i) const
 }
 
 
+} // ns
 } // ns

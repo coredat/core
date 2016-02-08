@@ -50,13 +50,15 @@ Local_player_controller::on_update(const float dt)
   if(controller.is_button_down(Core::Input::Button::button_0))
   {
     const math::transform curr_trans = get_entity().get_transform();
-    const math::vec3 curr_pos = curr_trans.position;
     
     math::vec3 fwd_vec;
     Transform::get_fwd_vec(&curr_trans, &fwd_vec);
     const math::vec3 scaled_fwd_vec = math::vec3_scale(fwd_vec, 3);
     
-    Core::Ray shoot_ray(curr_pos, scaled_fwd_vec, Core::Ray::Search::first);
+    const math::vec3 from = curr_trans.position;
+    const math::vec3 to = math::vec3_add(from, scaled_fwd_vec);
+    
+    Core::Physics::Ray shoot_ray(from, to, Core::Physics::Ray::Search::first);
     
     if(shoot_ray.has_hit())
     {
@@ -64,7 +66,7 @@ Local_player_controller::on_update(const float dt)
 
       if(hit_ent.is_valid() && hit_ent.has_tag(Tag::actor))
       {
-          hit_ent.send_event(Game_event_id::got_shot, nullptr, 0);
+        hit_ent.send_event(Game_event_id::got_shot, nullptr, 0);
       }
     } // if face_ray hit
   } // If player input action
