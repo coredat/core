@@ -29,6 +29,8 @@ host_initialize(
     Entity_factory::create_ground(world);
     kine_actor_local   = Entity_factory::create_local_kinematic_actor(world).get_id();
     kine_actor_network = Entity_factory::create_network_kinematic_actor(world).get_id();
+    Entity_factory::create_npc_actor(world).get_id();
+    Entity_factory::create_npc_actor(world).get_id();
     Entity_factory::create_npc_actor(world);
     Entity_factory::create_connection_node(world);
   }
@@ -95,7 +97,8 @@ host_think(
   Data::logic_pool_on_start_hook(world->logic_pool);
   Data::logic_pool_on_update_hook(world->logic_pool, delta_time);
   
-  // Push in new phy entities.  
+  // Push in new phy entities.
+  Data::world_update_scene_graph_changes(world, world->entity_graph_changes);
   Data::rigidbody_pool_update_scene_graph_changes(world->rigidbody_pool, world, world->entity_graph_changes);
   
   // Reset the entity pool for new changes.

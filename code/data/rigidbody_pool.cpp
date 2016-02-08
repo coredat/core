@@ -121,17 +121,6 @@ rigidbody_pool_update_scene_graph_changes(Rigidbody_pool *pool,
   // TODO: Keep an eye on this I can't imagine this is partcularly fast way of doing things.
   // But we do feesibly work with small amounts of data.
   
-  // Remove all the rbs that exist **TODO** Change this to remove all graph removals.
-//  for(size_t i = 0; i < graph_changes->size; ++i)
-//  {
-//    Physics::Rigidbody* rb = nullptr;
-//    if(rigidbody_pool_find(world_data->rigidbody_pool, graph_changes->entity_event[i].entity_id, &rb) && rb)
-//    {
-//      Physics::world_remove_rigidbody(world_data->physics_world, rb);
-//      rigidbody_pool_remove(world_data->rigidbody_pool, graph_changes->entity_event[i].entity_id);
-//    }
-//  }
-  
   // Get a list of Entities that have not been removed.
   // And have no parents
   Core::Entity ent[128];
@@ -141,11 +130,11 @@ rigidbody_pool_update_scene_graph_changes(Rigidbody_pool *pool,
   {
     const auto graph_change = graph_changes->entity_event[i];
     
+    Core::Entity entity;
+    Data::world_find_entity(world_data, &entity, graph_change.entity_id);
+    
     if(graph_change.change_type != Data::Entity_graph_change::removed)
     {
-      Core::Entity entity;
-      Data::world_find_entity(world_data, &entity, graph_change.entity_id);
-      
       // Is valid? Then get the top most entity.
       if(entity.is_valid())
       {
@@ -155,6 +144,17 @@ rigidbody_pool_update_scene_graph_changes(Rigidbody_pool *pool,
 //        }
         
         ent[ent_count++] = entity;
+      }
+    }
+    else
+    {
+      Physics::Rigidbody *rb = nullptr;
+      rigidbody_pool_find(world_data->rigidbody_pool, entity.get_id(), &rb);
+      
+      if(rb)
+      {
+        Physics::world_remove_rigidbody(world_data->physics_world, rb);
+        rigidbody_pool_remove(world_data->rigidbody_pool, entity.get_id());
       }
     }
   }

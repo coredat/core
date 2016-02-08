@@ -66,6 +66,15 @@ world_find_entities_with_tag(World *world_data,
                              size_t *out_entities_for_tag,
                              Core::Entity_id out_ids[],
                              const size_t size_of_out);
+  
+  
+/*!
+ 
+*/
+void
+world_update_scene_graph_changes(Data::World *world_data,
+                                 const Entity_graph_changes_pool *graph_changes);
+
 
 } // ns
 

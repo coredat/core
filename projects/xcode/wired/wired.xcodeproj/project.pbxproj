@@ -69,6 +69,8 @@
 /* Begin PBXFileReference section */
 		7E03C4321C68D22E0079DA81 /* network_player_controller.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = network_player_controller.cpp; sourceTree = "<group>"; };
 		7E03C4331C68D22E0079DA81 /* network_player_controller.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = network_player_controller.hpp; sourceTree = "<group>"; };
+		7E03C4361C69268B0079DA81 /* audio.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = audio.hpp; sourceTree = "<group>"; };
+		7E03C4371C69268B0079DA81 /* audio_fwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = audio_fwd.hpp; sourceTree = "<group>"; };
 		7E687DAA1C5EAC2900E13BB6 /* ids_component_types.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ids_component_types.hpp; sourceTree = "<group>"; };
 		7E687DAB1C5EAC2900E13BB6 /* ids_object_types.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ids_object_types.hpp; sourceTree = "<group>"; };
 		7EA1A1F81C3984D0009867BD /* libenet.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libenet.a; path = ../../../3rdparty/enet/lib/osx/libenet.a; sourceTree = "<group>"; };
@@ -242,6 +244,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7E03C4351C69268B0079DA81 /* audio */ = {
+			isa = PBXGroup;
+			children = (
+				7E03C4361C69268B0079DA81 /* audio.hpp */,
+				7E03C4371C69268B0079DA81 /* audio_fwd.hpp */,
+			);
+			path = audio;
+			sourceTree = "<group>";
+		};
 		7E687DA91C5EAC2900E13BB6 /* common */ = {
 			isa = PBXGroup;
 			children = (
@@ -539,6 +550,7 @@
 		7ED7BBBC1C3CF8B100CE80EA /* systems */ = {
 			isa = PBXGroup;
 			children = (
+				7E03C4351C69268B0079DA81 /* audio */,
 				7EAD4CC11C6123F1007F6A9C /* camera */,
 				7EC9B9BB1C48370700FBF1D7 /* environment */,
 				7ED7BC051C3E56D000CE80EA /* entity */,

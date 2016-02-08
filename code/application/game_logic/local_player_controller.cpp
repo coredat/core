@@ -57,7 +57,7 @@ Local_player_controller::on_update(const float dt)
     
     math::vec3 fwd_vec;
     Transform::get_fwd_vec(&curr_trans, &fwd_vec);
-    const math::vec3 scaled_fwd_vec = math::vec3_scale(fwd_vec, 3);
+    const math::vec3 scaled_fwd_vec = math::vec3_scale(fwd_vec, 1000.f);
     
     const math::vec3 from = curr_trans.position;
     const math::vec3 to   = math::vec3_add(from, scaled_fwd_vec);

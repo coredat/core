@@ -120,4 +120,38 @@ world_find_entities_with_tag(World *world_data,
 }
 
 
+void
+world_update_scene_graph_changes(Data::World *world_data,
+                                 const Entity_graph_changes_pool *graph_changes)
+{
+  for(size_t i = 0; i < graph_changes->size; ++i)
+  {
+    const auto change = graph_changes->entity_event[i];
+    
+    switch(change.change_type)
+    {
+      case(Data::Entity_graph_change::removed):
+      {
+        auto entity_pool = world_data->entity_pool;
+      
+        size_t remove_id;
+        if(Core::Entity_id_util::find_index_linearly(&remove_id,
+                                                     Core::Entity_id_util::invalid_id(),
+                                                     entity_pool->entity_id,
+                                                     entity_pool->size))
+        {
+          entity_pool->entity_id[remove_id] = Core::Entity_id_util::invalid_id();
+          entity_pool->parent_id[remove_id] = Core::Entity_id_util::invalid_id();
+          entity_pool->transform[remove_id] = math::transform_init(math::vec3_zero(), math::vec3_zero(), math::quat_init());
+          entity_pool->display[remove_id] = false;
+        }
+        
+          
+        break;
+      }
+    }
+  }
+}
+
+
 } // ns

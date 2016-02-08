@@ -336,7 +336,12 @@ Actor_model::take_damage()
                                             m_world_data->entity_pool->entity_id,
                                             m_world_data->entity_pool->size);
 
-  m_world_data->entity_pool->texture[index] = Resource::Texture::dev_green;
+  m_world_data->entity_pool->texture[index] = static_cast<Resource::Texture::ENUM>(rand() % (uint32_t)Resource::Texture::size);
   
-  get_entity().send_event(Game_event_id::actor_died, nullptr, 0);
+  m_health -= 1.f;
+  
+  if(m_health < 0.f)
+  {
+    get_entity().send_event(Game_event_id::actor_died, nullptr, 0);
+  }
 }

@@ -26,6 +26,8 @@ public:
 
   explicit                      Entity();
   
+  void                          destroy();
+  
   Core::Entity_id               get_id() const;
   bool                          is_valid() const;
   

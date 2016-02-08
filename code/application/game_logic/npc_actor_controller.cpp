@@ -38,5 +38,11 @@ Npc_actor_controller::on_event(const uint32_t id,
       
       break;
     }
+    
+    case(Game_event_id::actor_died):
+    {
+      get_entity().destroy();
+      break;
+    }
   }
 }

@@ -10,6 +10,17 @@
 #include <memory>
 
 
+/*
+  TODO
+  --
+  Consider this
+  We will have many actors! 10 - 40?
+  We shall need ai on a nav mesh!
+  
+  We should data this, when it settles down.
+*/
+
+
 class Actor_model : public Core::Component
 {
 public:
@@ -36,10 +47,12 @@ public:
   
 private:
 
-  math::vec3            m_pending_move = math::vec3_zero();
+  math::vec3            m_pending_move          = math::vec3_zero();
   math::vec3            m_acuumulated_rotations = math::vec3_zero();
-  math::vec3            m_size = math::vec3_init(0.5, 2, 0.5);
-  const float           m_gravity = -0.5f;
+  math::vec3            m_size                  = math::vec3_init(0.5, 2, 0.5);
+  const float           m_gravity               = -0.5f;
+  float                 m_max_health            = 10.f;
+  float                 m_health                = 10.f;
   
   // Urgh these need to go into the rb system unfort.
   std::unique_ptr<btPairCachingGhostObject> m_ghost_obj;

@@ -10,6 +10,15 @@ Entity::Entity()
 }
 
 
+void
+Entity::destroy()
+{
+  if(!is_valid()) { return; }
+  
+  Data::entity_graph_change_push(m_world_data->entity_graph_changes, m_this_id, Data::Entity_graph_change::removed);
+}
+
+
 Core::Entity_id
 Entity::get_id() const
 {
