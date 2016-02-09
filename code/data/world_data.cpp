@@ -127,29 +127,14 @@ world_update_scene_graph_changes(Data::World *world_data,
     switch(change.change_type)
     {
       case(Data::Entity_graph_change::removed):
-      
       {
-        auto pool = world_data->entity_pool;
-      
-        size_t remove_id;
-        if(Core::Entity_id_util::find_index_linearly(&remove_id,
-                                                     change.entity_id,
-                                                     pool->entity_id,
-                                                     pool->size))
-        {
-          memset(&pool->entity_id[remove_id],          0, sizeof(pool->entity_id[remove_id]));
-          memset(&pool->parent_id[remove_id],          0, sizeof(pool->parent_id[remove_id]));
-          memset(&pool->entity_properties[remove_id],  0, sizeof(pool->entity_properties[remove_id]));
-//          memset(&pool->model[remove_id],              0, sizeof(pool->model[remove_id]));
-//          memset(&pool->display[remove_id],            0, sizeof(pool->display[remove_id]));
-//          memset(&pool->texture[remove_id],            0, sizeof(pool->texture[remove_id]));
-          memset(&pool->transform[remove_id],          0, sizeof(pool->transform[remove_id]));
-//          memset(&pool->rigidbody_property[remove_id], 0, sizeof(pool->rigidbody_property[remove_id]));
-        }
-        
+        entity_pool_remove_entity(world_data->entity_pool, change.entity_id);
           
         break;
       }
+      
+      default:
+        break;
     }
   }
 }

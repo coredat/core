@@ -58,7 +58,26 @@ entity_pool_push_new_entity(Entity_pool *pool, const Core::Entity_id id)
 bool
 entity_pool_remove_entity(Entity_pool *pool, const Core::Entity_id id)
 {
-  return true;
+  size_t remove_id;
+  if(Core::Entity_id_util::find_index_linearly(&remove_id,
+                                               id,
+                                               pool->entity_id,
+                                               pool->size))
+  {    
+    memset(&pool->entity_id[remove_id],          0, sizeof(pool->entity_id[remove_id]));
+    memset(&pool->parent_id[remove_id],          0, sizeof(pool->parent_id[remove_id]));
+    memset(&pool->entity_properties[remove_id],  0, sizeof(pool->entity_properties[remove_id]));
+    memset(&pool->model[remove_id],              0, sizeof(pool->model[remove_id]));
+    memset(&pool->display[remove_id],            0, sizeof(pool->display[remove_id]));
+    memset(&pool->texture[remove_id],            0, sizeof(pool->texture[remove_id]));
+    memset(&pool->transform[remove_id],          0, sizeof(pool->transform[remove_id]));
+    memset(&pool->rigidbody_property[remove_id], 0, sizeof(pool->rigidbody_property[remove_id]));
+    
+    return true;
+  }
+
+  assert(false); // uhuo
+  return false;
 }
 
 
