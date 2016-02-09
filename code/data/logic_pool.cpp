@@ -1,6 +1,7 @@
 #include "logic_pool.hpp"
 #include <cstring>
 #include <assert.h>
+#include <algorithm>
 
 
 namespace Data {
@@ -70,6 +71,52 @@ logic_pool_get_slot_count(Logic_pool *pool, const Core::Entity_id id)
   }
   
   return count;
+}
+
+
+void
+logic_pool_free_slots(Logic_pool *pool, const Core::Entity_id id)
+{
+  // Search the entity list and find objects to removes
+  const size_t slots_to_remove = logic_pool_get_slot_count(pool, id);
+  
+  for(size_t i = 0; i < slots_to_remove; ++i)
+  {
+    size_t index;
+    if(Core::Entity_id_util::find_index_linearly(&index, id, pool->entity_id, pool->size))
+    {
+      // Remove this logic.
+      pool->entity_id[index] = Core::Entity_id_util::invalid_id();
+      auto obj_to_remove = pool->object_locations[index];
+      pool->object_locations[index] = nullptr;
+      
+      // Remove from objects in use.
+      size_t o = 0;
+      while(o < pool->objects_in_use_size)
+      {
+        if(pool->objects_in_use[o] == obj_to_remove)
+        {
+          void* start       = &pool->objects_in_use[o];
+          const void* end   = &pool->objects_in_use[o+1];
+          const size_t size = (pool->size-o-1) * sizeof(*pool->objects_in_use);
+        
+          --(pool->objects_in_use_size);
+        
+          memmove(start, end, size);
+          continue;
+        }
+        
+        ++o;
+      }
+      
+      // Check pending on start just incase.
+      
+    }
+    else
+    {
+      assert(false); // Why did the count give us something different?
+    }
+  }
 }
 
 

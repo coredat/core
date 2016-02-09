@@ -60,6 +60,13 @@ size_t
 logic_pool_get_slot_count(Logic_pool *pool, const Core::Entity_id id);
 
 
+/*!
+ Removes all the slots associated with an entity.
+*/
+void
+logic_pool_free_slots(Logic_pool *pool, const Core::Entity_id id);
+
+
 // ** EVENT HOOKS ** //
 /* These methods call logic event hooks. */
 
