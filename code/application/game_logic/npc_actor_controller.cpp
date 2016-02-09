@@ -12,6 +12,12 @@ Npc_actor_controller::Npc_actor_controller()
 }
 
 
+Npc_actor_controller::~Npc_actor_controller()
+{
+
+}
+
+
 void
 Npc_actor_controller::on_update(const float dt)
 {

@@ -131,19 +131,24 @@ world_update_scene_graph_changes(Data::World *world_data,
     switch(change.change_type)
     {
       case(Data::Entity_graph_change::removed):
+      
       {
-        auto entity_pool = world_data->entity_pool;
+        auto pool = world_data->entity_pool;
       
         size_t remove_id;
         if(Core::Entity_id_util::find_index_linearly(&remove_id,
-                                                     Core::Entity_id_util::invalid_id(),
-                                                     entity_pool->entity_id,
-                                                     entity_pool->size))
+                                                     change.entity_id,
+                                                     pool->entity_id,
+                                                     pool->size))
         {
-          entity_pool->entity_id[remove_id] = Core::Entity_id_util::invalid_id();
-          entity_pool->parent_id[remove_id] = Core::Entity_id_util::invalid_id();
-          entity_pool->transform[remove_id] = math::transform_init(math::vec3_zero(), math::vec3_zero(), math::quat_init());
-          entity_pool->display[remove_id] = false;
+          memset(&pool->entity_id[remove_id],          0, sizeof(pool->entity_id[remove_id]));
+          memset(&pool->parent_id[remove_id],          0, sizeof(pool->parent_id[remove_id]));
+          memset(&pool->entity_properties[remove_id],  0, sizeof(pool->entity_properties[remove_id]));
+//          memset(&pool->model[remove_id],              0, sizeof(pool->model[remove_id]));
+//          memset(&pool->display[remove_id],            0, sizeof(pool->display[remove_id]));
+//          memset(&pool->texture[remove_id],            0, sizeof(pool->texture[remove_id]));
+          memset(&pool->transform[remove_id],          0, sizeof(pool->transform[remove_id]));
+//          memset(&pool->rigidbody_property[remove_id], 0, sizeof(pool->rigidbody_property[remove_id]));
         }
         
           

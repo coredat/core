@@ -21,6 +21,8 @@ namespace Core {
   I'd prefer to impliement an explicit decleration.
   
   set_callbacks(start | update | end);
+  
+  get_rtti() should prolly be a static. Make the interface a little cleaner.
 */
 class Component
 {

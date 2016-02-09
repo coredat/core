@@ -61,6 +61,12 @@ Actor_model::Actor_model()
 }
 
 
+Actor_model::~Actor_model()
+{
+
+}
+
+
 void
 Actor_model::on_start()
 {
