@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7E033E501C69C56600D3379D /* graph_change_pool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E033E4E1C69C56600D3379D /* graph_change_pool.cpp */; };
+		7E033E581C6A845000D3379D /* memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E033E541C6A845000D3379D /* memory.cpp */; };
 		7E03C4341C68D22E0079DA81 /* network_player_controller.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E03C4321C68D22E0079DA81 /* network_player_controller.cpp */; };
 		7EA1A1F91C3984D0009867BD /* libenet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EA1A1F81C3984D0009867BD /* libenet.a */; };
 		7EA2C61E1C1F5D4600389748 /* wired_app.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EA2C61D1C1F5D4600389748 /* wired_app.cpp */; };
@@ -70,6 +71,10 @@
 /* Begin PBXFileReference section */
 		7E033E4E1C69C56600D3379D /* graph_change_pool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = graph_change_pool.cpp; sourceTree = "<group>"; };
 		7E033E4F1C69C56600D3379D /* graph_change_pool.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = graph_change_pool.hpp; sourceTree = "<group>"; };
+		7E033E531C6A845000D3379D /* chunk.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = chunk.hpp; sourceTree = "<group>"; };
+		7E033E541C6A845000D3379D /* memory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = memory.cpp; sourceTree = "<group>"; };
+		7E033E551C6A845000D3379D /* memory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = memory.hpp; sourceTree = "<group>"; };
+		7E033E561C6A845000D3379D /* memory_fwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = memory_fwd.hpp; sourceTree = "<group>"; };
 		7E03C4321C68D22E0079DA81 /* network_player_controller.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = network_player_controller.cpp; sourceTree = "<group>"; };
 		7E03C4331C68D22E0079DA81 /* network_player_controller.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = network_player_controller.hpp; sourceTree = "<group>"; };
 		7E03C4361C69268B0079DA81 /* audio.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = audio.hpp; sourceTree = "<group>"; };
@@ -247,6 +252,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7E033E511C6A845000D3379D /* memory */ = {
+			isa = PBXGroup;
+			children = (
+				7E033E531C6A845000D3379D /* chunk.hpp */,
+				7E033E541C6A845000D3379D /* memory.cpp */,
+				7E033E551C6A845000D3379D /* memory.hpp */,
+				7E033E561C6A845000D3379D /* memory_fwd.hpp */,
+			);
+			path = memory;
+			sourceTree = "<group>";
+		};
 		7E03C4351C69268B0079DA81 /* audio */ = {
 			isa = PBXGroup;
 			children = (
@@ -677,6 +693,7 @@
 				7EFB9B101C5E625A00A838C7 /* core.hpp */,
 				7EFB9B001C5E620C00A838C7 /* entity_id.cpp */,
 				7EFB9B011C5E620C00A838C7 /* entity_id.hpp */,
+				7E033E511C6A845000D3379D /* memory */,
 				7EAD4CCE1C628524007F6A9C /* event */,
 				7EAD4CF21C6684BD007F6A9C /* physics */,
 				7EAD4CE51C638F8E007F6A9C /* input */,
@@ -790,6 +807,7 @@
 				7EAD4CCA1C623C97007F6A9C /* local_player_controller.cpp in Sources */,
 				7EC9B9AF1C44DA7700FBF1D7 /* logic_pool.cpp in Sources */,
 				7EC9B9E61C4D5D6100FBF1D7 /* world_data.cpp in Sources */,
+				7E033E581C6A845000D3379D /* memory.cpp in Sources */,
 				7EC9B9881C3EF1BA00FBF1D7 /* texture_pool.cpp in Sources */,
 				7EC9B9CA1C4844BE00FBF1D7 /* sdl_environment.cpp in Sources */,
 				7ED7BBEF1C3CF9C700CE80EA /* directory_mac.mm in Sources */,
