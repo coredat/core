@@ -1,4 +1,6 @@
 #include "entity_pool.hpp"
+#include <assert.h>
+#include <stddef.h>
 
 
 namespace Data {
@@ -19,25 +21,45 @@ entity_pool_init(Entity_pool *pool)
 
 
 void
-entity_graph_change_pool_init(Entity_graph_changes_pool *pool)
+entity_pool_de_init(Entity_pool *pool)
 {
-  memset(pool->entity_event, 0, sizeof(pool->entity_event));
-  pool->size = 0;
+  assert(pool);
+  
+  for(size_t i = 0; i < pool->size; ++i)
+  {
+    if(pool->entity_id[i] != Core::Entity_id_util::invalid_id())
+    {
+      // TODO: Re add this when more scene graph things in.
+      //assert(false);
+    }
+  }
 }
 
 
-
-void
-entity_graph_change_push(Entity_graph_changes_pool *pool, const Core::Entity_id entity_id, Entity_graph_change change_type)
+bool
+entity_pool_push_new_entity(Entity_pool *pool, const Core::Entity_id id)
 {
-  assert(pool && pool->size < pool->capacity);
-  
-  pool->entity_event[pool->size].entity_id = entity_id;
-  pool->entity_event[pool->size].change_type = change_type;
-  
-  ++(pool->size);
+  size_t search_index;
+  if(Core::Entity_id_util::find_index_linearly(&search_index,
+                                               Core::Entity_id_util::invalid_id(),
+                                               pool->entity_id,
+                                               pool->size))
+  {
+    pool->entity_id[search_index] = id;
+    
+    return true;
+  }
+
+  assert(false); // uhuo
+  return false;
 }
 
+
+bool
+entity_pool_remove_entity(Entity_pool *pool, const Core::Entity_id id)
+{
+  return true;
+}
 
 
 } // ns

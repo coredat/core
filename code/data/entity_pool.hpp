@@ -50,53 +50,42 @@ struct Entity_pool
 };
 
 
-/*!
-  Entities that have 'changed' in the tree in the last frame.
-*/
-
-enum class Entity_graph_change
-{
-  inserted,
-  moved,
-  updated,
-  removed,
-};
-
-
-struct Entity_change
-{
-  Entity_graph_change change_type;
-  Core::Entity_id entity_id;
-};
-
-
-struct Entity_graph_changes_pool
-{
-  Entity_change       entity_event[ENTITY_POOL_SIZE];
-  size_t              size;
-  const size_t        capacity = ENTITY_POOL_SIZE;
-};
-
 
 /*!
   Initializes the pool to all zeros.
+  \param pool The pool you wish to init.
 */
 void
 entity_pool_init(Entity_pool *pool);
 
 
 /*!
-  Graph changes events
+  De intiialize the pool.
+  \param The entity pool.
 */
 void
-entity_graph_change_pool_init(Entity_graph_changes_pool *pool);
+entity_pool_de_init(Entity_pool *pool);
+
 
 
 /*!
-  Push pending graph changes in
+ Push a new entity into the pool.
+ \param pool entity_pool.
+ \param id The entity id that you wish to insert.
+ \return true if it successfully inserted an object.
 */
-void
-entity_graph_change_push(Entity_graph_changes_pool *pool, const Core::Entity_id entity_id, Entity_graph_change change_type);
+bool
+entity_pool_push_new_entity(Entity_pool *pool, const Core::Entity_id id);
+
+
+/*!
+  Remove an entity fromt the pool.
+  \param pool the entity_pool.
+  \param id The entity_id you wish to remove.
+  \return true if the id was found and removed.
+*/
+bool
+entity_pool_remove_entity(Entity_pool *pool, const Core::Entity_id id);
 
 
 } // ns

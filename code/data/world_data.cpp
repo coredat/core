@@ -30,31 +30,25 @@ get_world() { return world; }
 
 
 bool
-world_create_new_entity(World *world_data, Core::Entity *out_entity, const uint32_t type_id)
+world_create_new_entity(World *world_data,
+                        Core::Entity *out_entity,
+                        const uint32_t type_id)
 {
   // Param check.
   assert(world_data && out_entity && type_id);
-
-  // Find empty index.
+  
+  auto entity_pool = world_data->entity_pool;
+  Core::Entity_id new_id{type_id, ++instance};
+  
+  if(Data::entity_pool_push_new_entity(entity_pool, new_id))
   {
-    auto entity_pool = world_data->entity_pool;
-
-    size_t empty_index;
-    if(Core::Entity_id_util::find_index_linearly(&empty_index,
-                                                 Core::Entity_id_util::invalid_id(),
-                                                 entity_pool->entity_id,
-                                                 entity_pool->size))
-    {
-      Core::Detail::set_entity_members(out_entity, world_data, Core::Entity_id{type_id, ++instance});
-      
-      entity_pool->entity_id[empty_index] = out_entity->get_id();
-
-      entity_graph_change_push(world_data->entity_graph_changes,
-                               out_entity->get_id(),
-                               Entity_graph_change::inserted);
-
-      return true;
-    }
+    Core::Detail::set_entity_members(out_entity, world_data, new_id);
+    
+    entity_graph_change_push(world_data->entity_graph_changes,
+                             out_entity->get_id(),
+                             Entity_graph_change::inserted);
+    
+    return true;
   }
   
   // Didn't find an index. Entity data is full.
@@ -63,7 +57,9 @@ world_create_new_entity(World *world_data, Core::Entity *out_entity, const uint3
 
 
 bool
-world_find_entity(World *world_data, Core::Entity *out_entity, const Core::Entity_id id)
+world_find_entity(World *world_data,
+                  Core::Entity *out_entity,
+                  const Core::Entity_id id)
 {
   assert(world_data);
   assert(id != Core::Entity_id_util::invalid_id());
