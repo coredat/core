@@ -7,6 +7,7 @@
 #include <btBulletCollisionCommon.h>
 #include <BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolver.h>
 #include <BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
+#include <BulletCollision/CollisionDispatch/btGhostObject.h>
 #include <memory>
 
 
@@ -26,6 +27,7 @@ struct World
   btSequentialImpulseConstraintSolver    solver;
   btDiscreteDynamicsWorld                dynamics_world = {&dispatcher, &broadphase, &solver, &collision_config};
   std::unique_ptr<btIDebugDraw>          debug_draw;
+  btGhostPairCallback                    ghost_callback_pair_cb;
 };
 
 

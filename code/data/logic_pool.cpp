@@ -1,8 +1,7 @@
 #include "logic_pool.hpp"
 #include <cstring>
 #include <assert.h>
-#include <algorithm>
-
+#include <core/interface/component.hpp>
 
 namespace Data {
 
@@ -88,6 +87,7 @@ logic_pool_free_slots(Logic_pool *pool, const Core::Entity_id id)
       // Remove this logic.
       pool->entity_id[index] = Core::Entity_id_util::invalid_id();
       auto obj_to_remove = pool->object_locations[index];
+      reinterpret_cast<Core::Component*>(obj_to_remove)->~Component();
       pool->object_locations[index] = nullptr;
       
       // Remove from objects in use.

@@ -1,9 +1,8 @@
-#include <core/interface/entity.hpp>
 #include "../common/ids_component_types.hpp"
+#include "../common/ids_game_events.hpp"
 #include "npc_actor_controller.hpp"
 #include "actor_model.hpp"
-#include "../common/ids_game_events.hpp"
-#include <iostream>
+#include <core/interface/entity.hpp>
 
 
 Npc_actor_controller::Npc_actor_controller()

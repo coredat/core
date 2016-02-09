@@ -19,6 +19,8 @@ world_init(World *world)
   
   world->debug_draw.reset(new Debug_renderer());
   world->dynamics_world.setDebugDrawer(world->debug_draw.get());
+  
+  world->dynamics_world.getPairCache()->setInternalGhostPairCallback(&world->ghost_callback_pair_cb);
 }
 
 

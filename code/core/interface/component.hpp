@@ -29,7 +29,7 @@ class Component
 public:
 
   explicit            Component()  {}
-  virtual             ~Component() {} //!< Dtor is not guarteed to be called.
+  virtual             ~Component() {}
   
   virtual uint32_t    get_rtti() const = 0;
   

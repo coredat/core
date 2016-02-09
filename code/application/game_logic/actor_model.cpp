@@ -63,7 +63,7 @@ Actor_model::Actor_model()
 
 Actor_model::~Actor_model()
 {
-
+  m_world_data->physics_world->dynamics_world.removeCollisionObject(m_ghost_obj.get());
 }
 
 
@@ -74,13 +74,10 @@ Actor_model::on_start()
   m_ghost_obj->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
   m_ghost_obj->setUserPointer(Core::Entity_id_util::convert_entity_to_ptr(get_entity().get_id()));
   
-  m_pair_cb.reset(new btGhostPairCallback());
-  
   m_collisionshape.reset(new btCapsuleShape(0.35,0.75));
   m_ghost_obj->setCollisionShape(m_collisionshape.get());
   
   m_world_data->physics_world->dynamics_world.addCollisionObject(m_ghost_obj.get(), btBroadphaseProxy::AllFilter, btBroadphaseProxy::AllFilter);
-  m_world_data->physics_world->dynamics_world.getPairCache()->setInternalGhostPairCallback(m_pair_cb.get());
   
   get_entity().add_tag(Tag::actor);
 }
