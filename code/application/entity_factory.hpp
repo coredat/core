@@ -34,7 +34,7 @@ create_placement_cube(Data::World *world);
 
 
 Core::Entity
-create_connection_node(Data::World *world);
+create_static_cube(Data::World *world);
 
 } // ns
 

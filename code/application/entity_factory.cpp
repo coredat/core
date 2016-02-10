@@ -22,7 +22,7 @@ create_ground(Data::World *data)
   Core::Entity entity;
   assert(Data::world_create_new_entity(data, &entity, Object_type::dev_static_ground));
 
-  const float scale = 10.f;
+  const float scale = 100.f;
   
   entity.set_transform(math::transform_init(math::vec3_zero(), math::vec3_init(scale,scale,scale), math::quat_init()));
 
@@ -200,7 +200,7 @@ create_npc_actor(Data::World *world)
                                             math::vec3_init(c_scale_x, c_scale_y, c_scale_z),
                                             math::quat_init()));
   
-  child_entity.set_material_id(Resource::Texture::dev_green);
+  child_entity.set_material_id(Resource::Texture::dev_red);
   child_entity.set_model_id(Resource::Model::unit_cube);
   
   child_entity.set_parent(entity.get_id());
@@ -231,12 +231,12 @@ create_placement_cube(Data::World *world)
 
 
 Core::Entity
-create_connection_node(Data::World *world)
+create_static_cube(Data::World *world)
 {
   Core::Entity entity;
   assert(Data::world_create_new_entity(world, &entity, Object_type::dev_dynamic_cube));
 
-  const float scale = 1.f;
+  const float scale = 3.f + static_cast<float>(rand() % 10) / 2.f;
   const float scale_x = 1.f * scale;
   const float scale_y = math::g_ratio() * scale;
   const float scale_z = 1.f * scale;

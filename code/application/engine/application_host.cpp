@@ -28,13 +28,80 @@ host_initialize(
   {
     kine_actor_local   = Entity_factory::create_local_kinematic_actor(world).get_id();
 //    kine_actor_network = Entity_factory::create_network_kinematic_actor(world).get_id();
-    Entity_factory::create_ground(world);
-    Entity_factory::create_npc_actor(world);
-    Entity_factory::create_npc_actor(world);
-    Entity_factory::create_npc_actor(world);
-    Entity_factory::create_npc_actor(world);
-    Entity_factory::create_npc_actor(world);
-    Entity_factory::create_connection_node(world);
+    
+    // Create level geometry.
+    {
+      math::transform place_transform;
+      Core::Entity entity;
+    
+      Entity_factory::create_ground(world);
+      
+      
+      
+      entity = Entity_factory::create_static_cube(world);
+      place_transform.position = math::vec3_init(5,0,0);
+      place_transform.scale = entity.get_transform().scale;
+      entity.set_transform(place_transform);
+
+      entity = Entity_factory::create_static_cube(world);
+      place_transform.position = math::vec3_init(-5,0,-4);
+      place_transform.scale = entity.get_transform().scale;
+      entity.set_transform(place_transform);
+
+      entity = Entity_factory::create_static_cube(world);
+      place_transform.position = math::vec3_init(5,0,-8);
+      place_transform.scale = entity.get_transform().scale;
+      entity.set_transform(place_transform);
+
+      entity = Entity_factory::create_static_cube(world);
+      place_transform.position = math::vec3_init(-5,0,-10);
+      place_transform.scale = entity.get_transform().scale;
+      entity.set_transform(place_transform);
+      
+      entity = Entity_factory::create_static_cube(world);
+      place_transform.position = math::vec3_init(5,0,-14);
+      place_transform.scale = entity.get_transform().scale;
+      entity.set_transform(place_transform);
+
+      entity = Entity_factory::create_static_cube(world);
+      place_transform.position = math::vec3_init(-5,0,-18);
+      place_transform.scale = entity.get_transform().scale;
+      entity.set_transform(place_transform);
+
+      entity = Entity_factory::create_static_cube(world);
+      place_transform.position = math::vec3_init(5,0,-22);
+      place_transform.scale = entity.get_transform().scale;
+      entity.set_transform(place_transform);
+
+      entity = Entity_factory::create_static_cube(world);
+      place_transform.position = math::vec3_init(-5,0,-26);
+      place_transform.scale = entity.get_transform().scale;
+      entity.set_transform(place_transform);
+
+      entity = Entity_factory::create_static_cube(world);
+      place_transform.position = math::vec3_init(5,0,-30);
+      place_transform.scale = entity.get_transform().scale;
+      entity.set_transform(place_transform);
+
+      entity = Entity_factory::create_static_cube(world);
+      place_transform.position = math::vec3_init(-5,0,-34);
+      place_transform.scale = entity.get_transform().scale;
+      entity.set_transform(place_transform);
+
+      entity = Entity_factory::create_static_cube(world);
+      place_transform.position = math::vec3_init(5,0,-38);
+      place_transform.scale = entity.get_transform().scale;
+      entity.set_transform(place_transform);
+    }
+    
+    // Create npc's
+    {
+      Entity_factory::create_npc_actor(world);
+      Entity_factory::create_npc_actor(world);
+      Entity_factory::create_npc_actor(world);
+      Entity_factory::create_npc_actor(world);
+      Entity_factory::create_npc_actor(world);
+    }
   }
   
   // * Add camera's * //
