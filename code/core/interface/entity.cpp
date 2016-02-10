@@ -15,6 +15,13 @@ Entity::destroy()
 {
   if(!is_valid()) { return; }
   
+  // Destroy all children.
+  for(size_t c = 0; c < get_number_of_children(); ++c)
+  {
+    get_child(c).destroy();
+  }
+  
+  // Destroy this.
   Data::entity_graph_change_push(m_world_data->entity_graph_changes, m_this_id, Data::Entity_graph_change::removed);
 }
 

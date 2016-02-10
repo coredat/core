@@ -1,6 +1,7 @@
 #include "entity_pool.hpp"
 #include <assert.h>
 #include <stddef.h>
+#include <vector>
 
 
 namespace Data {
@@ -63,7 +64,7 @@ entity_pool_remove_entity(Entity_pool *pool, const Core::Entity_id id)
                                                id,
                                                pool->entity_id,
                                                pool->size))
-  {    
+  {
     memset(&pool->entity_id[remove_id],          0, sizeof(pool->entity_id[remove_id]));
     memset(&pool->parent_id[remove_id],          0, sizeof(pool->parent_id[remove_id]));
     memset(&pool->entity_properties[remove_id],  0, sizeof(pool->entity_properties[remove_id]));
