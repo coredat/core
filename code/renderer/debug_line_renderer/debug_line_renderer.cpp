@@ -134,56 +134,56 @@ initialize()
 void
 add_lines(const Line_node nodes[], const std::size_t number_of_lines)
 {
-  // Shit - can do two memcpy's instead
-  for(int32_t i = 0; i < number_of_lines; ++i)
-  {
-    const std::size_t start_index = (data_ptr * (16)) % data.size();
-    
-    data.at(start_index + 0) = nodes[i].position_from[0];
-    data.at(start_index + 1) = nodes[i].position_from[1];
-    data.at(start_index + 2) = nodes[i].position_from[2];
-    data.at(start_index + 3) = 1;
-    
-    data.at(start_index + 4) = nodes[i].position_to[0];
-    data.at(start_index + 5) = nodes[i].position_to[1];
-    data.at(start_index + 6) = nodes[i].position_to[2];
-    data.at(start_index + 7) = 1;
-    
-    data.at(start_index + 8)  = nodes[i].color[0];
-    data.at(start_index + 9)  = nodes[i].color[1];
-    data.at(start_index + 10) = nodes[i].color[2];
-    data.at(start_index + 11) = 1;
-    
-    data_ptr++;
-  }
+//  // Shit - can do two memcpy's instead
+//  for(int32_t i = 0; i < number_of_lines; ++i)
+//  {
+//    const std::size_t start_index = (data_ptr * (16)) % data.size();
+//    
+//    data.at(start_index + 0) = nodes[i].position_from[0];
+//    data.at(start_index + 1) = nodes[i].position_from[1];
+//    data.at(start_index + 2) = nodes[i].position_from[2];
+//    data.at(start_index + 3) = 1;
+//    
+//    data.at(start_index + 4) = nodes[i].position_to[0];
+//    data.at(start_index + 5) = nodes[i].position_to[1];
+//    data.at(start_index + 6) = nodes[i].position_to[2];
+//    data.at(start_index + 7) = 1;
+//    
+//    data.at(start_index + 8)  = nodes[i].color[0];
+//    data.at(start_index + 9)  = nodes[i].color[1];
+//    data.at(start_index + 10) = nodes[i].color[2];
+//    data.at(start_index + 11) = 1;
+//    
+//    data_ptr++;
+//  }
 }
 
 
 void
 render(const float wvp_mat[16])
 {
-  // Update texture
-  Ogl::texture_update_texture_2d(&data_texture, 0, 0, data_texture.width, data_texture.height, (void*)data.data(), &std::cout);
-  Ogl::error_check("Updating texture", &std::cout);
-  
-  // Render
-  Ogl::reset_state();
-  
-  glUseProgram(debug_line_shader.program_id);
-  Ogl::error_check("Use program", &std::cout);
-  
-  glUniformMatrix4fv(uni_wvp, 1, GL_FALSE, wvp_mat);
-  Ogl::error_check("set wvp.", &std::cout);
-  
-  glActiveTexture(GL_TEXTURE0 + uni_data);
-  glBindTexture(GL_TEXTURE_2D, data_texture.texture_id);
-
-  Ogl::filtering_apply(filtering);
-  
-  glDrawArrays(GL_POINTS, 0, static_cast<GLsizei>(data_ptr));
-  data_ptr = 0;
-
-  Ogl::error_check("Debug line renderer.", &std::cout);
+//  // Update texture
+//  Ogl::texture_update_texture_2d(&data_texture, 0, 0, data_texture.width, data_texture.height, (void*)data.data(), &std::cout);
+//  Ogl::error_check("Updating texture", &std::cout);
+//  
+//  // Render
+//  Ogl::reset_state();
+//  
+//  glUseProgram(debug_line_shader.program_id);
+//  Ogl::error_check("Use program", &std::cout);
+//  
+//  glUniformMatrix4fv(uni_wvp, 1, GL_FALSE, wvp_mat);
+//  Ogl::error_check("set wvp.", &std::cout);
+//  
+//  glActiveTexture(GL_TEXTURE0 + uni_data);
+//  glBindTexture(GL_TEXTURE_2D, data_texture.texture_id);
+//
+//  Ogl::filtering_apply(filtering);
+//  
+//  glDrawArrays(GL_POINTS, 0, static_cast<GLsizei>(data_ptr));
+//  data_ptr = 0;
+//
+//  Ogl::error_check("Debug line renderer.", &std::cout);
 }
 
 

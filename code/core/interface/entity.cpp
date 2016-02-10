@@ -231,12 +231,31 @@ void
 Entity::set_transform(const math::transform &transform)
 {
   if(!is_valid()) { return; }
-
+  
   auto ent_pool = m_world_data->entity_pool;
 
   size_t index;
   assert(get_index(&index, m_this_id, ent_pool->entity_id, ent_pool->size));
+  const math::transform old_transform = ent_pool->transform[index];
   ent_pool->transform[index] = transform;
+  
+  // Apply transforms to children
+  for(size_t c = 0; c < get_number_of_children(); ++c)
+  {
+    Entity child = get_child(c);
+  
+    const math::transform child_transform = child.get_transform();
+    
+    // Calc offset transform.
+    // Get the difference with old transform, add it to the new transform.
+    auto offset_pos = math::vec3_subtract(old_transform.position, child_transform.position);
+   // auto new_pos = math::vec3_add(transform.position, offset_pos);
+    
+    math::transform offset_transform = child_transform;
+    offset_transform.position = math::vec3_add(transform.position, offset_pos);
+    
+    child.set_transform(offset_transform);
+  }
   
   Data::entity_graph_change_push(m_world_data->entity_graph_changes, m_this_id, Data::Entity_graph_change::updated);
 }

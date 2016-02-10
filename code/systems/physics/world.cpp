@@ -29,8 +29,8 @@ world_step(World *world, const float dt)
 {
   assert(world);
 
-  world->dynamics_world.stepSimulation(dt, 100  , 1.f / 240.0f);
-  //world->dynamics_world.stepSimulation(dt, 1);
+  world->dynamics_world.stepSimulation(dt, 10  , 1.f / 60.f);
+//  world->dynamics_world.stepSimulation(dt, 1);
   
   world->dynamics_world.debugDrawWorld();
 }

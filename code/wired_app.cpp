@@ -138,7 +138,8 @@ main(int argc, char *argv[])
   
   renderer::clear_color(0.4f, 0.2f, 0.2f);
 
-  //glViewport(0,0,1280, 720);
+//  glViewport(0,0,1280, 720);
+//  SDL_GL_SetSwapInterval(0);
 
   // Foop
   bool run_game = true;
@@ -146,7 +147,7 @@ main(int argc, char *argv[])
   while(run_game)
   {
     const float delta_time = static_cast<float>(frame_timer.split()) / 1000.f;
-  
+
     // ** Common ** //
     
     Application::common_think(

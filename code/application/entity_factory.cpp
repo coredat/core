@@ -35,7 +35,7 @@ create_ground(Data::World *data)
   rb_collider.collider_info.static_plane.normal[0] = 0;
   rb_collider.collider_info.static_plane.normal[1] = 1;
   rb_collider.collider_info.static_plane.normal[2] = 0;
-  rb_collider.collider_info.static_plane.offset = 0;
+  rb_collider.collider_info.static_plane.offset    = 0;
   entity.set_rigidbody_collider(rb_collider);
 
   entity.set_material_id(Resource::Texture::dev_squares);
@@ -105,6 +105,27 @@ create_local_kinematic_actor(Data::World *world)
   entity.add_component<Actor_model>();
   entity.add_component<Local_player_controller>();
   
+  // Child
+  Core::Entity child_entity;
+  assert(Data::world_create_new_entity(world, &child_entity, Object_type::dev_actor));
+  
+  const float c_scale_x = 0.4f;
+  const float c_scale_y = 1.5f;
+  const float c_scale_z = 0.4f;
+
+  const float c_pos_x = pos_x + 0.f;
+  const float c_pos_y = pos_y - 1.1f;
+  const float c_pos_z = pos_z + 0.f;
+
+  child_entity.set_transform(math::transform_init(math::vec3_init(c_pos_x, c_pos_y, c_pos_z),
+                                            math::vec3_init(c_scale_x, c_scale_y, c_scale_z),
+                                            math::quat_init()));
+  
+  child_entity.set_material_id(Resource::Texture::dev_green);
+  child_entity.set_model_id(Resource::Model::unit_cube);
+  
+  child_entity.set_parent(entity.get_id());
+  
   return entity;
 }
 
@@ -162,6 +183,27 @@ create_npc_actor(Data::World *world)
   
   entity.add_component<Actor_model>();
   entity.add_component<Npc_actor_controller>();
+  
+  // Child
+  Core::Entity child_entity;
+  assert(Data::world_create_new_entity(world, &child_entity, Object_type::dev_actor));
+  
+  const float c_scale_x = 0.4f;
+  const float c_scale_y = 1.5f;
+  const float c_scale_z = 0.4f;
+
+  const float c_pos_x = pos_x + 0.f;
+  const float c_pos_y = pos_y - 1.1f;
+  const float c_pos_z = pos_z + 0.f;
+
+  child_entity.set_transform(math::transform_init(math::vec3_init(c_pos_x, c_pos_y, c_pos_z),
+                                            math::vec3_init(c_scale_x, c_scale_y, c_scale_z),
+                                            math::quat_init()));
+  
+  child_entity.set_material_id(Resource::Texture::dev_green);
+  child_entity.set_model_id(Resource::Model::unit_cube);
+  
+  child_entity.set_parent(entity.get_id());
   
   return entity;
 }
