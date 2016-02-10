@@ -96,11 +96,14 @@ host_initialize(
     
     // Create npc's
     {
-      Entity_factory::create_npc_actor(world);
-      Entity_factory::create_npc_actor(world);
-      Entity_factory::create_npc_actor(world);
-      Entity_factory::create_npc_actor(world);
-      Entity_factory::create_npc_actor(world);
+      Core::Entity entity;
+      math::transform place_transform;
+    
+      entity = Entity_factory::create_npc_actor(world);
+      entity = Entity_factory::create_npc_actor(world);
+      entity = Entity_factory::create_npc_actor(world);
+      entity = Entity_factory::create_npc_actor(world);
+      entity = Entity_factory::create_npc_actor(world);
     }
   }
   

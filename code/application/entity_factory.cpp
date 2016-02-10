@@ -172,7 +172,7 @@ create_npc_actor(Data::World *world)
 
   const float pos_x = -5 + (rand() % 10);
   const float pos_y = 2.5f;
-  const float pos_z = -5 + (rand() % 10);
+  const float pos_z = -30 + (rand() % 10);
 
   entity.set_transform(math::transform_init(math::vec3_init(pos_x, pos_y, pos_z),
                                             math::vec3_init(scale_x, scale_y, scale_z),
