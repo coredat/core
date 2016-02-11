@@ -25,18 +25,6 @@ struct World
 }; // struct
 
 
-void
-set_world_data(World *world);
-
-
-Physics::World*
-get_physics_world(World *world);
-
-
-World*
-get_world();
-
-
 /*!
  Create a new entity. This abstraction will insert the correct
  data elements into to the world.
@@ -46,7 +34,9 @@ get_world();
  \return returns true if we created the entity.
 */
 bool
-world_create_new_entity(World *world_data, Core::Entity *out_entity, const uint32_t type_id);
+world_create_new_entity(World *world_data,
+                        Core::Entity *out_entity,
+                        const uint32_t type_id);
 
 
 /*!
@@ -57,7 +47,9 @@ world_create_new_entity(World *world_data, Core::Entity *out_entity, const uint3
   \return true or false depending on if we found it or not.
 */
 bool
-world_find_entity(World *world_data, Core::Entity *out_entity, const Core::Entity_id id);
+world_find_entity(World *world_data,
+                  Core::Entity *out_entity,
+                  const Core::Entity_id id);
 
 
 /*!

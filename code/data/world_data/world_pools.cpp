@@ -2,7 +2,6 @@
 #include "entity_pool.hpp"
 #include "graph_change_pool.hpp"
 #include <core/interface/entity.hpp>
-#include <systems/physics/physics.hpp>
 #include <atomic>
 
 
@@ -11,23 +10,10 @@ namespace
   // Instance id is incremented each time
   // a new entity is added to the world.
   std::atomic<uint32_t> instance(0);
-  
-  World_data::World *curr_world = nullptr;
 }
 
 
 namespace World_data {
-
-
-void
-set_world_data(World *set_world) { curr_world = set_world; }
-
-
-Physics::World*
-get_physics_world(World *world_data) { return world_data->physics_world; }
-
-World*
-get_world() { return curr_world; }
 
 
 bool

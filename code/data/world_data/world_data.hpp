@@ -9,6 +9,7 @@
 #include "model_pool.hpp"
 #include "rigidbody_pool.hpp"
 #include "texture_pool.hpp"
+#include "world.hpp"
 #include "world_pools.hpp"
 #include "world_data_fwd.hpp"
 
