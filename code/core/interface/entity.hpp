@@ -8,7 +8,7 @@
 #include <systems/physics/rigidbody_properties.hpp>
 #include <systems/physics/rigidbody_collider.hpp>
 #include <math/math.hpp>
-#include <data/data.hpp>
+#include <data/world_data/world_data.hpp> // TODO: Urgh template! can we reduce this
 #include <stddef.h>
 #include <stdint.h>
 
@@ -64,7 +64,7 @@ public:
   T*
   add_component()
   {
-    const auto free_slot = Data::logic_pool_get_slot(m_world_data->logic_pool, get_id());
+    const auto free_slot = World_data::logic_pool_get_slot(m_world_data->logic_pool, get_id());
     auto comp = new(free_slot) T();
 
     auto base = reinterpret_cast<Core::Component*>(free_slot);

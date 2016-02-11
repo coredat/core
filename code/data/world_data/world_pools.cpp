@@ -1,5 +1,6 @@
-#include "world_data.hpp"
+#include "world_pools.hpp"
 #include "entity_pool.hpp"
+#include "graph_change_pool.hpp"
 #include <core/interface/entity.hpp>
 #include <systems/physics/physics.hpp>
 #include <atomic>
@@ -11,22 +12,22 @@ namespace
   // a new entity is added to the world.
   std::atomic<uint32_t> instance(0);
   
-  Data::World *world = nullptr;
+  World_data::World *curr_world = nullptr;
 }
 
 
-namespace Data {
+namespace World_data {
 
 
 void
-set_world_data(World *set_world) { world = set_world; }
+set_world_data(World *set_world) { curr_world = set_world; }
 
 
 Physics::World*
-get_physics_world() { return world->physics_world; }
+get_physics_world(World *world_data) { return world_data->physics_world; }
 
 World*
-get_world() { return world; }
+get_world() { return curr_world; }
 
 
 bool
@@ -40,7 +41,7 @@ world_create_new_entity(World *world_data,
   auto entity_pool = world_data->entity_pool;
   Core::Entity_id new_id{type_id, ++instance};
   
-  if(Data::entity_pool_push_new_entity(entity_pool, new_id))
+  if(World_data::entity_pool_push_new_entity(entity_pool, new_id))
   {
     Core::Detail::set_entity_members(out_entity, world_data, new_id);
     
@@ -117,7 +118,7 @@ world_find_entities_with_tag(World *world_data,
 
 
 void
-world_update_scene_graph_changes(Data::World *world_data,
+world_update_scene_graph_changes(World_data::World *world_data,
                                  const Entity_graph_changes_pool *graph_changes)
 {
   for(size_t i = 0; i < graph_changes->size; ++i)
@@ -126,7 +127,7 @@ world_update_scene_graph_changes(Data::World *world_data,
     
     switch(change.change_type)
     {
-      case(Data::Entity_graph_change::removed):
+      case(World_data::Entity_graph_change::removed):
       {
         entity_pool_remove_entity(world_data->entity_pool, change.entity_id);
         logic_pool_free_slots(world_data->logic_pool, change.entity_id);

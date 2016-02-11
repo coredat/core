@@ -22,7 +22,7 @@ Entity::destroy()
   }
   
   // Destroy this.
-  Data::entity_graph_change_push(m_world_data->entity_graph_changes, m_this_id, Data::Entity_graph_change::removed);
+  World_data::entity_graph_change_push(m_world_data->entity_graph_changes, m_this_id, World_data::Entity_graph_change::removed);
 }
 
 
@@ -137,8 +137,8 @@ Entity::set_parent(const Core::Entity_id parent_id)
   ent_pool->parent_id[index] = parent_id;
   
   // TODO: Need to check parent is valid?
-  Data::entity_graph_change_push(m_world_data->entity_graph_changes, parent_id, Data::Entity_graph_change::updated);
-  Data::entity_graph_change_push(m_world_data->entity_graph_changes, m_this_id, Data::Entity_graph_change::moved);
+  World_data::entity_graph_change_push(m_world_data->entity_graph_changes, parent_id, World_data::Entity_graph_change::updated);
+  World_data::entity_graph_change_push(m_world_data->entity_graph_changes, m_this_id, World_data::Entity_graph_change::moved);
 }
 
 
@@ -264,7 +264,7 @@ Entity::set_transform(const math::transform &transform)
     child.set_transform(offset_transform);
   }
   
-  Data::entity_graph_change_push(m_world_data->entity_graph_changes, m_this_id, Data::Entity_graph_change::updated);
+  World_data::entity_graph_change_push(m_world_data->entity_graph_changes, m_this_id, World_data::Entity_graph_change::updated);
 }
 
 
@@ -348,7 +348,7 @@ Entity::set_rigidbody_properties(const Physics::Rigidbody_properties props)
   *rb_prop = props;
   rb_prop->id = m_this_id;
   
-  Data::entity_graph_change_push(m_world_data->entity_graph_changes, m_this_id, Data::Entity_graph_change::moved);
+  World_data::entity_graph_change_push(m_world_data->entity_graph_changes, m_this_id, World_data::Entity_graph_change::moved);
 }
 
 
@@ -377,7 +377,7 @@ Entity::set_rigidbody_collider(const Physics::Rigidbody_collider collider)
   
   *rb_coll = collider;
   
-  Data::entity_graph_change_push(m_world_data->entity_graph_changes, m_this_id, Data::Entity_graph_change::moved);
+  World_data::entity_graph_change_push(m_world_data->entity_graph_changes, m_this_id, World_data::Entity_graph_change::moved);
 }
 
 
@@ -397,7 +397,7 @@ Entity::get_rigidbody_collider() const
 size_t
 Entity::get_number_of_components() const
 {
-  const size_t count = Data::logic_pool_get_slot_count(m_world_data->logic_pool, m_this_id);
+  const size_t count = World_data::logic_pool_get_slot_count(m_world_data->logic_pool, m_this_id);
 
   return count;
 }

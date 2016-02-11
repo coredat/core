@@ -3,7 +3,7 @@
 #include <assert.h>
 #include <core/interface/component.hpp>
 
-namespace Data {
+namespace World_data {
 
 
 void

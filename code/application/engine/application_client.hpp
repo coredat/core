@@ -2,7 +2,7 @@
 #define APPLICATION_CLIENT_INCLUDED_CB73EE7C_41F5_4B66_9B30_6188643D035A
 
 
-#include <data/data_fwd.hpp>
+#include <data/world_data/world_data_fwd.hpp>
 #include <systems/physics/physics_fwd.hpp>
 #include <systems/network/network_fwd.hpp>
 #include <systems/environment/environment_fwd.hpp>
@@ -23,7 +23,7 @@ client_initialize(Network::Connection *connection);
 */
 void
 client_think(
-  Data::World *world,
+  World_data::World *world,
   Network::Connection *connection,
   const Environment::Input *inputs,
   const float delta_time);

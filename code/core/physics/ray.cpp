@@ -1,5 +1,4 @@
 #include "ray.hpp"
-#include <data/data.hpp>
 
 
 namespace Core {
@@ -8,7 +7,8 @@ namespace Physics {
 
 Ray::Ray(const math::vec3 from, const math::vec3 to, const Search search)
 {
-  auto phy_world = Data::get_physics_world();
+  auto world_data = World_data::get_world();
+  auto phy_world  = World_data::get_physics_world(world_data);
   
   const btVector3 bt_from(math::vec3_get_x(from), math::vec3_get_y(from), math::vec3_get_z(from));
   const btVector3 bt_to(math::vec3_get_x(to), math::vec3_get_y(to), math::vec3_get_z(to));
@@ -47,7 +47,7 @@ Entity
 Ray::get_entity(const size_t i) const
 {
   Entity return_ent;
-  Data::world_find_entity(Data::get_world(), &return_ent, m_results.at(i).id);
+  World_data::world_find_entity(World_data::get_world(), &return_ent, m_results.at(i).id);
   
   return return_ent;
 }

@@ -1,5 +1,5 @@
 #include "application_client.hpp"
-#include <data/data.hpp>
+#include <data/world_data/world_data.hpp>
 #include <systems/network/network.hpp>
 #include <core/entity_id.hpp>
 #include <systems/physics/physics.hpp>
@@ -30,7 +30,7 @@ client_initialize(
 
 void
 client_think(
-  Data::World *world,
+  World_data::World *world,
   Network::Connection *connection,
   const Environment::Input *inputs,
   const float delta_time)

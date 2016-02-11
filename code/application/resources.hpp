@@ -2,7 +2,7 @@
 #define RESOURCES_INCLUDED_8C811BD6_4022_4F06_9C0E_FC8DFEEE4BF4
 
 
-#include <data/data_fwd.hpp>
+#include <data/world_data/world_data_fwd.hpp>
 #include <stddef.h>
 
 
@@ -58,9 +58,9 @@ enum ENUM {
   \param size_of_model_pool size of the model pool.
 */
 void
-load_default_resources(Data::Texture_pool *texture_pool,
+load_default_resources(World_data::Texture_pool *texture_pool,
                        const size_t size_of_texture_pool,
-                       Data::Model_pool *model_pool,
+                       World_data::Model_pool *model_pool,
                        const size_t size_of_model_pool);
 
 

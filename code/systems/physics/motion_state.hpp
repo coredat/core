@@ -4,7 +4,7 @@
 
 #include <btBulletDynamicsCommon.h>
 #include <core/entity_id.hpp>
-#include <data/data_fwd.hpp>
+#include <data/world_data/world_data_fwd.hpp>
 
 
 namespace Physics {
@@ -18,7 +18,7 @@ class Motion_state : public btMotionState
 {
 public:
 
-  explicit      Motion_state(const Core::Entity_id e, Data::Entity_pool *data);
+  explicit      Motion_state(const Core::Entity_id e, World_data::Entity_pool *data);
                 ~Motion_state();
   
   void          getWorldTransform(btTransform &world_trans) const override;
@@ -27,7 +27,7 @@ public:
 private:
 
   const Core::Entity_id     m_entity;
-  Data::Entity_pool           *m_data;
+  World_data::Entity_pool           *m_data;
 
 }; // class
 

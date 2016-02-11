@@ -12,13 +12,16 @@
 #define RIGIDBODY_POOL_SIZE 512
 
 
-namespace Data {
+namespace World_data {
 
 
 /*!
   Holds the rigidbodies active in the scene.
   We only need to hold on to these for cleanup,
   as bullet will deal with everything else.
+  
+  TODO:
+  - We can skip on the unique_ptrs here for the rbs.
 */
 struct Rigidbody_pool
 {
@@ -91,7 +94,7 @@ rigidbody_pool_push(Rigidbody_pool *pool,
 */
 void
 rigidbody_pool_update_scene_graph_changes(Rigidbody_pool *pool,
-                                          Data::World *world_data,
+                                          World_data::World *world_data,
                                           const Entity_graph_changes_pool *graph_changes);
 
 

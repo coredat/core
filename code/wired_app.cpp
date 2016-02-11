@@ -9,7 +9,7 @@
 #include <systems/physics/physics.hpp>
 #include <systems/entity/generic_id.hpp>
 
-#include <data/data.hpp>
+#include <data/world_data/world_data.hpp>
 #include <data/core_data/core_data.hpp>
 
 #include <renderer/renderer.hpp>
@@ -71,28 +71,28 @@ main(int argc, char *argv[])
   Physics::World phy_world;
   Physics::world_init(&phy_world);
   
-  Data::Model_pool model_pool;
-  Data::model_pool_init(&model_pool);
+  World_data::Model_pool model_pool;
+  World_data::model_pool_init(&model_pool);
   
-  Data::Rigidbody_pool rigidbody_pool;
-  Data::rigidbody_pool_init(&rigidbody_pool);
+  World_data::Rigidbody_pool rigidbody_pool;
+  World_data::rigidbody_pool_init(&rigidbody_pool);
   
-  Data::Logic_pool logic_pool;
-  Data::logic_pool_init(&logic_pool);
+  World_data::Logic_pool logic_pool;
+  World_data::logic_pool_init(&logic_pool);
   
-  Data::Texture_pool texture_pool;
-  Data::texture_pool_init(&texture_pool);
+  World_data::Texture_pool texture_pool;
+  World_data::texture_pool_init(&texture_pool);
   
-  Data::Entity_pool world_entities;
-  Data::entity_pool_init(&world_entities);
+  World_data::Entity_pool world_entities;
+  World_data::entity_pool_init(&world_entities);
   
-  Data::Entity_graph_changes_pool graph_changes;
-  Data::entity_graph_change_pool_init(&graph_changes);
+  World_data::Entity_graph_changes_pool graph_changes;
+  World_data::entity_graph_change_pool_init(&graph_changes);
   
-  Data::Camera_pool camera_pool;
-  Data::camera_pool_init(&camera_pool);
+  World_data::Camera_pool camera_pool;
+  World_data::camera_pool_init(&camera_pool);
   
-  Data::World world_data;
+  World_data::World world_data;
   {
     world_data.entity_pool            = &world_entities;
     world_data.entity_graph_changes   = &graph_changes;
@@ -104,7 +104,7 @@ main(int argc, char *argv[])
     world_data.physics_world          = &phy_world;
   }
   
-  Data::set_world_data(&world_data);
+  World_data::set_world_data(&world_data);
   
   // Core Data
   Core_data::Core core_data;
@@ -131,7 +131,6 @@ main(int argc, char *argv[])
   
   // Transform data
   std::vector<Simple_renderer::Node> renderer_nodes;
-  renderer_nodes.resize(world_entities.size);
   
   util::timer frame_timer;
   frame_timer.start();
@@ -168,8 +167,8 @@ main(int argc, char *argv[])
       size_t number_found_with_tag(0);
       Core::Entity_id ids[5];
       
-      Data::world_find_entities_with_tag(&world_data, Tag::player, &number_found_with_tag, &ids[0], 5);
-      Data::camera_pool_set_priority(world_data.camera_pool, ids[0], 1);
+      World_data::world_find_entities_with_tag(&world_data, Tag::player, &number_found_with_tag, &ids[0], 5);
+      World_data::camera_pool_set_priority(world_data.camera_pool, ids[0], 1);
     }
     else
     {
@@ -182,12 +181,13 @@ main(int argc, char *argv[])
       size_t number_found_with_tag(0);
       Core::Entity_id ids[5];
       
-      Data::world_find_entities_with_tag(&world_data, Tag::network_player, &number_found_with_tag, &ids[0], 5);
-      Data::camera_pool_set_priority(world_data.camera_pool, ids[0], 1);
+      World_data::world_find_entities_with_tag(&world_data, Tag::network_player, &number_found_with_tag, &ids[0], 5);
+      World_data::camera_pool_set_priority(world_data.camera_pool, ids[0], 1);
     }
     
     // ** Graphics ** //
 
+    renderer_nodes.resize(world_entities.size);
     Application::graphics_think(
         &world_data,
         renderer_nodes.data(),

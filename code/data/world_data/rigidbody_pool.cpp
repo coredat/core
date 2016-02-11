@@ -6,7 +6,7 @@
 #include <functional>
 
 
-namespace Data {
+namespace World_data {
 
 
 void
@@ -79,7 +79,7 @@ rigidbody_pool_push(Rigidbody_pool *pool,
 namespace
 {
   void
-  add_child_colliders(Data::World *world_data, Core::Entity e, btCompoundShape *parent_compound)
+  add_child_colliders(World_data::World *world_data, Core::Entity e, btCompoundShape *parent_compound)
   {  
     for(size_t c = 0; c < e.get_number_of_children(); ++c)
     {
@@ -115,7 +115,7 @@ namespace
 
 void
 rigidbody_pool_update_scene_graph_changes(Rigidbody_pool *pool,
-                                          Data::World *world_data,
+                                          World_data::World *world_data,
                                           const Entity_graph_changes_pool *graph_changes)
 {
   // TODO: Keep an eye on this I can't imagine this is partcularly fast way of doing things.
@@ -131,9 +131,9 @@ rigidbody_pool_update_scene_graph_changes(Rigidbody_pool *pool,
     const auto graph_change = graph_changes->entity_event[i];
     
     Core::Entity entity;
-    Data::world_find_entity(world_data, &entity, graph_change.entity_id);
+    World_data::world_find_entity(world_data, &entity, graph_change.entity_id);
     
-    if(graph_change.change_type != Data::Entity_graph_change::removed)
+    if(graph_change.change_type != World_data::Entity_graph_change::removed)
     {
       // Is valid? Then get the top most entity.
       if(entity.is_valid())

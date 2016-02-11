@@ -13,20 +13,20 @@ namespace Application {
 
 
 void
-graphics_think(Data::World *world,
+graphics_think(World_data::World *world,
                Simple_renderer::Node nodes[],
                const std::size_t size_of_node_pool)
 {
   renderer::clear();
 
   // Get active camera and generate a projection matrix.
-  const auto cam = Data::camera_pool_get_properties_for_priority(world->camera_pool, 1);
+  const auto cam = World_data::camera_pool_get_properties_for_priority(world->camera_pool, 1);
   const math::mat4 proj = math::mat4_projection(cam.viewport_width, cam.viewport_height, cam.near_plane, cam.far_plane, cam.fov);
   
   // Get entity's transform so we can generate a view.
   math::mat4 view = math::mat4_zero();
   {
-    const auto id = Data::camera_pool_get_entity_id_for_priority(world->camera_pool, 1);
+    const auto id = World_data::camera_pool_get_entity_id_for_priority(world->camera_pool, 1);
 
     if (id == Core::Entity_id_util::invalid_id())
     {
@@ -34,7 +34,7 @@ graphics_think(Data::World *world,
     }
 
     Core::Entity ent;
-    Data::world_find_entity(world, &ent, id);
+    World_data::world_find_entity(world, &ent, id);
     
     const math::transform camera_transform = ent.get_transform();
     
@@ -74,7 +74,7 @@ graphics_think(Data::World *world,
   for (std::size_t i = 0; i < world->entity_pool->size; ++i)
   {
     nodes[i].vbo = world->model_pool->vbo[world->entity_pool->model[i]];
-    nodes[i].diffuse_id = Data::texture_pool_find(world->texture_pool, world->entity_pool->texture[i])->texture_id;
+    nodes[i].diffuse_id = World_data::texture_pool_find(world->texture_pool, world->entity_pool->texture[i])->texture_id;
   }
 
   Simple_renderer::render_nodes_fullbright(nodes, size_of_node_pool);

@@ -17,10 +17,10 @@ namespace Entity_factory {
 
 
 Core::Entity
-create_ground(Data::World *data)
+create_ground(World_data::World *data)
 {
   Core::Entity entity;
-  assert(Data::world_create_new_entity(data, &entity, Object_type::dev_static_ground));
+  assert(World_data::world_create_new_entity(data, &entity, Object_type::dev_static_ground));
 
   const float scale = 100.f;
   
@@ -46,10 +46,10 @@ create_ground(Data::World *data)
 
 
 Core::Entity
-create_random_cube(Data::World *world)
+create_random_cube(World_data::World *world)
 {
   Core::Entity entity;
-  assert(Data::world_create_new_entity(world, &entity, Object_type::dev_dynamic_cube));
+  assert(World_data::world_create_new_entity(world, &entity, Object_type::dev_dynamic_cube));
   
   const float scale_x = static_cast<float>(rand() % 200 + 10) / 200;
   const float scale_y = static_cast<float>(rand() % 200 + 10) / 200;
@@ -82,10 +82,10 @@ create_random_cube(Data::World *world)
 
 
 Core::Entity
-create_local_kinematic_actor(Data::World *world)
+create_local_kinematic_actor(World_data::World *world)
 {
   Core::Entity entity;
-  assert(Data::world_create_new_entity(world, &entity, Object_type::dev_actor));
+  assert(World_data::world_create_new_entity(world, &entity, Object_type::dev_actor));
   
   const float scale_x = 0.5f;
   const float scale_y = 0.5f;
@@ -107,7 +107,7 @@ create_local_kinematic_actor(Data::World *world)
   
   // Child
   Core::Entity child_entity;
-  assert(Data::world_create_new_entity(world, &child_entity, Object_type::dev_actor));
+  assert(World_data::world_create_new_entity(world, &child_entity, Object_type::dev_actor));
   
   const float c_scale_x = 0.4f;
   const float c_scale_y = 1.5f;
@@ -131,10 +131,10 @@ create_local_kinematic_actor(Data::World *world)
 
 
 Core::Entity
-create_network_kinematic_actor(Data::World *world)
+create_network_kinematic_actor(World_data::World *world)
 {
   Core::Entity entity;
-  assert(Data::world_create_new_entity(world, &entity, Object_type::dev_actor));
+  assert(World_data::world_create_new_entity(world, &entity, Object_type::dev_actor));
   
   const float scale_x = 0.5f;
   const float scale_y = 0.5f;
@@ -161,10 +161,10 @@ create_network_kinematic_actor(Data::World *world)
 
 
 Core::Entity
-create_npc_actor(Data::World *world)
+create_npc_actor(World_data::World *world)
 {
   Core::Entity entity;
-  assert(Data::world_create_new_entity(world, &entity, Object_type::dev_actor));
+  assert(World_data::world_create_new_entity(world, &entity, Object_type::dev_actor));
   
   const float scale_x = 0.5f;
   const float scale_y = 0.5f;
@@ -186,7 +186,7 @@ create_npc_actor(Data::World *world)
   
   // Child
   Core::Entity child_entity;
-  assert(Data::world_create_new_entity(world, &child_entity, Object_type::dev_actor));
+  assert(World_data::world_create_new_entity(world, &child_entity, Object_type::dev_actor));
   
   const float c_scale_x = 0.4f;
   const float c_scale_y = 1.5f;
@@ -210,10 +210,10 @@ create_npc_actor(Data::World *world)
 
 
 Core::Entity
-create_placement_cube(Data::World *world)
+create_placement_cube(World_data::World *world)
 {
   Core::Entity entity;
-  assert(Data::world_create_new_entity(world, &entity, Object_type::dev_view_cube));
+  assert(World_data::world_create_new_entity(world, &entity, Object_type::dev_view_cube));
 
   entity.set_transform(math::transform_init(math::vec3_zero(),
                                             math::vec3_init(0.1f, 0.1f, 0.1f),
@@ -231,10 +231,10 @@ create_placement_cube(Data::World *world)
 
 
 Core::Entity
-create_static_cube(Data::World *world)
+create_static_cube(World_data::World *world)
 {
   Core::Entity entity;
-  assert(Data::world_create_new_entity(world, &entity, Object_type::dev_dynamic_cube));
+  assert(World_data::world_create_new_entity(world, &entity, Object_type::dev_dynamic_cube));
 
   const float scale = 3.f + static_cast<float>(rand() % 10) / 2.f;
   const float scale_x = 1.f * scale;

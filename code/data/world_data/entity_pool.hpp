@@ -15,11 +15,12 @@
 #define ENTITY_POOL_SIZE 128
 
 
-namespace Data {
+namespace World_data {
 
 
 /*!
   Generic entity properties.
+  Currently on contains tags, but other things like name could live here.
 */
 struct Entity_properties
 {
@@ -28,7 +29,7 @@ struct Entity_properties
 
 
 /*!
-  Generic entity storeage. aka the scene graph.
+  Generic entity storeage. This is the scene graph.
 */
 struct Entity_pool
 {
@@ -38,17 +39,15 @@ struct Entity_pool
   
   math::transform                 transform[ENTITY_POOL_SIZE];
   
-  bool                            display[ENTITY_POOL_SIZE];
-  
   Resource::Model::ENUM           model[ENTITY_POOL_SIZE];
   Resource::Texture::ENUM         texture[ENTITY_POOL_SIZE];
   
   Physics::Rigidbody_properties   rigidbody_property[ENTITY_POOL_SIZE];
   Physics::Rigidbody_collider     rigidbody_collider[ENTITY_POOL_SIZE];
   
-  const size_t                    size = ENTITY_POOL_SIZE;
+  const size_t                    capacity = ENTITY_POOL_SIZE;
+  size_t                          size = 0;
 };
-
 
 
 /*!

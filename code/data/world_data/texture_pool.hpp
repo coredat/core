@@ -9,7 +9,7 @@
 #define SIZE_OF_TEXTURE_POOL 64
 
 
-namespace Data {
+namespace World_data {
 
 
 struct Texture_pool

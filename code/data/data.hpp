@@ -1,15 +1,10 @@
-#ifndef DATA_INCLUDED_ABCACCD8_C057_4FD1_AE86_1287B9872D88
-#define DATA_INCLUDED_ABCACCD8_C057_4FD1_AE86_1287B9872D88
+#ifndef DATA_INCLUDED_D76ADFDF_2A62_43DA_ABAE_EBCBD2907FA0
+#define DATA_INCLUDED_D76ADFDF_2A62_43DA_ABAE_EBCBD2907FA0
 
 
-#include "entity_pool.hpp"
-#include "graph_change_pool.hpp"
-#include "model_pool.hpp"
-#include "texture_pool.hpp"
-#include "logic_pool.hpp"
-#include "world_data.hpp"
-#include "rigidbody_pool.hpp"
-#include "camera_pool.hpp"
+// Include all the data.
+#include "core_data/core_data.hpp"
+#include "world_data/world_data.hpp"
 
 
 #endif // inc guard

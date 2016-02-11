@@ -4,7 +4,7 @@
 
 #include "interface_fwd.hpp"
 #include "detail/component_detail.hpp"
-#include <data/data_fwd.hpp>
+#include <data/world_data/world_data_fwd.hpp>
 #include <core/entity_id.hpp>
 
 

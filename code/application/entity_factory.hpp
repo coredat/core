@@ -3,38 +3,38 @@
 
 
 #include <core/interface/interface_fwd.hpp>
-#include <data/data_fwd.hpp>
+#include <data/world_data/world_data_fwd.hpp>
 
 
 namespace Entity_factory {
 
 
 Core::Entity
-create_ground(Data::World *world);
+create_ground(World_data::World *world);
 
 
 Core::Entity
-create_random_cube(Data::World *world);
+create_random_cube(World_data::World *world);
 
 
 Core::Entity
-create_local_kinematic_actor(Data::World *world);
+create_local_kinematic_actor(World_data::World *world);
 
 
 Core::Entity
-create_network_kinematic_actor(Data::World *world);
+create_network_kinematic_actor(World_data::World *world);
 
 
 Core::Entity
-create_npc_actor(Data::World *world);
+create_npc_actor(World_data::World *world);
 
 
 Core::Entity
-create_placement_cube(Data::World *world);
+create_placement_cube(World_data::World *world);
 
 
 Core::Entity
-create_static_cube(Data::World *world);
+create_static_cube(World_data::World *world);
 
 } // ns
 

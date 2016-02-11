@@ -1,6 +1,6 @@
 #include <math/transform/transform.hpp>
 #include <btBulletDynamicsCommon.h>
-#include <data/entity_pool.hpp>
+#include <data/world_data/entity_pool.hpp>
 #include <core/entity_id.hpp>
 #include "motion_state.hpp"
 
@@ -62,7 +62,7 @@ gl_to_bullet(const math::transform &transform)
 namespace Physics {
 
 
-Motion_state::Motion_state(const Core::Entity_id e, Data::Entity_pool *d)
+Motion_state::Motion_state(const Core::Entity_id e, World_data::Entity_pool *d)
 : btMotionState()
 , m_entity(e)
 , m_data(d)

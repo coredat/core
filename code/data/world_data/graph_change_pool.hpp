@@ -6,15 +6,16 @@
 
 
 #include <core/entity_id.hpp>
+#include <stdint.h>
 
 
-namespace Data {
+namespace World_data {
 
 
 /*!
   Entities that have 'changed' in the tree in the last frame.
 */
-enum class Entity_graph_change
+enum class Entity_graph_change : uint32_t
 {
   inserted,
   moved,

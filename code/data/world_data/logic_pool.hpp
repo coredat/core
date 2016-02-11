@@ -11,7 +11,7 @@
 #define LOGIC_POOL_SIZE_MAX_SCRIPT_SIZE 128
 
 
-namespace Data {
+namespace World_data {
 
 
 /*

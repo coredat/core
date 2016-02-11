@@ -2,7 +2,7 @@
 #include <systems/model_manager/model_manager.hpp>
 #include <systems/texture_manager/texture_manager.hpp>
 #include <systems/entity/generic_id.hpp>
-#include <data/data.hpp>
+#include <data/world_data/world_data.hpp>
 #include <utils/directory.hpp>
 #include <string>
 
@@ -11,9 +11,9 @@ namespace Resource {
 
 
 void
-load_default_resources(Data::Texture_pool *texture_pool,
+load_default_resources(World_data::Texture_pool *texture_pool,
                        const size_t size_of_texture_pool,
-                       Data::Model_pool *model_pool,
+                       World_data::Model_pool *model_pool,
                        const size_t size_of_model_pool)
 {
   const std::string asset_path = util::get_resource_path() + "assets/";

@@ -3,13 +3,13 @@
 
 
 #include "component.hpp"
-#include <data/data_fwd.hpp>
+#include <data/world_data/world_data_fwd.hpp>
 #include <core/entity_id.hpp>
 
 
 #define COMPONENT_MEMBERS                                             \
   Core::Entity_id m_entity_id = Core::Entity_id_util::invalid_id();   \
-  Data::World *m_world_data;                                          \
+  World_data::World *m_world_data;                                          \
 
 
 #endif // inc gaurd
