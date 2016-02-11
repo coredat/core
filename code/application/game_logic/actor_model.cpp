@@ -3,6 +3,8 @@
 #include <core/interface/entity.hpp>
 #include <renderer/renderer.hpp>
 #include <systems/transform/transform.hpp>
+#include <systems/physics/physics.hpp>
+#include <data/world_data/entity_pool.hpp>
 #include "../common/ids_object_tags.hpp"
 #include "../common/ids_game_events.hpp"
 #include <iostream>

@@ -7,8 +7,9 @@
 #include "detail/entity_detail.hpp"
 #include <systems/physics/rigidbody_properties.hpp>
 #include <systems/physics/rigidbody_collider.hpp>
+#include <data/world_data/world_pools.hpp>
+#include <data/world_data/logic_pool.hpp>
 #include <math/math.hpp>
-#include <data/world_data/world_data.hpp> // TODO: Urgh template! can we reduce this
 #include <stddef.h>
 #include <stdint.h>
 
