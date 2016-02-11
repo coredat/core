@@ -5,8 +5,8 @@
 namespace Core_data {
 
 
-class Core;
-class Input_data;
+struct Core;
+struct Input_data;
 
 
 } // ns

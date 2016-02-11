@@ -21,7 +21,6 @@ struct Model_pool
 }; // struct
 
 
-
 void
 model_pool_init(Model_pool *pool);
 

@@ -29,9 +29,9 @@ get_controller(const Player::ENUM player)
   Controller controller;
   Private_access *access = reinterpret_cast<Private_access*>(&controller);
   
-  access->m_axis[0] = input_data->axis[0];
-  access->m_axis[1] = input_data->axis[1];
-  memcpy(&access->m_buttons[0], &input_data->buttons[0], sizeof(access->m_buttons));
+  access->m_axis[0] = input_data->controllers[0].axis[0];
+  access->m_axis[1] = input_data->controllers[0].axis[1];
+  memcpy(&access->m_buttons[0], &input_data->controllers[0].buttons[0], sizeof(access->m_buttons));
 
   return controller;
 }

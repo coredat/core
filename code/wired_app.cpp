@@ -108,9 +108,9 @@ main(int argc, char *argv[])
   
   // Core Data
   Core_data::Core core_data;
-  Core_data::Input_data core_input;
+  Core_data::Input_pool core_input;
   
-  core_data.input_data = &core_input;
+  core_data.input_pool = &core_input;
 
   Core_data::core_data_init(&core_data);
   Core_data::set_core_data(&core_data);
