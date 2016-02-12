@@ -46,8 +46,8 @@ Local_player_controller::on_update(const float dt)
     {
       // Position
       const float move_scale = 70 * dt;
-      actor->move_forward(controller.get_axis(0).x * move_scale);
-      actor->move_left(controller.get_axis(0).y * move_scale);
+      actor->move_forward(controller.get_axis(0).y * move_scale);
+      actor->move_left(controller.get_axis(0).x * move_scale);
       
       // Head
       const float rot_scale = 0.5f * dt;

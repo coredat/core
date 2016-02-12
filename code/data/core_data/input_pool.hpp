@@ -7,10 +7,13 @@
 #include <stddef.h>
 
 
+#define NUMBER_OF_CONTROLLERS 4
+
+
 namespace Core_data {
 
 
-struct Controller
+struct Game_controller
 {
   ::Core::Input::Axis axis[2];
   ::Core::Input::Button_state buttons[16];
@@ -20,7 +23,9 @@ struct Controller
 
 struct Input_pool
 {
-  Controller controllers[4];
+  Game_controller controllers[NUMBER_OF_CONTROLLERS];
+  
+  const size_t size = NUMBER_OF_CONTROLLERS;
 }; // struct
 
 
@@ -31,7 +36,10 @@ input_data_init(Input_pool *data);
 void
 input_data_update_controller(Input_pool *pool,
                              const size_t controller,
-                             const Controller *controller_data);
+                             const Game_controller *controller_data);
+  
+Game_controller*
+input_data_get_controller(Input_pool *pool, const size_t controller);
 
 
 } // ns

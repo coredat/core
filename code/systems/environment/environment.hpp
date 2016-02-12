@@ -5,6 +5,7 @@
 #include "window.hpp"
 #include "input.hpp"
 #include "sdl/sdl_types.hpp"
+#include <data/core_data/input_pool.hpp>
 
 
 namespace Environment {
@@ -30,7 +31,7 @@ de_initialize();
 
 
 void
-think(const Window *window, Input *input, const std::function<void(Environment::Event_id id)> &callback);
+think(const Window *window, Input *input, const std::function<void(Environment::Event_id id)> &callback, Core_data::Input_pool *input_pool);
 
 
 } // ns

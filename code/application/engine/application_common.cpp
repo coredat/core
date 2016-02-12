@@ -30,14 +30,15 @@ common_think(
     default:
       assert(true); // shut up the warning.
     };
-  });
+  },
+  core_data->input_pool);
   
   auto env_controller = input_devices->controllers[0];
   
-  core_data->input_pool->controllers[0].axis[0].x = env_controller.axis_2[1];
-  core_data->input_pool->controllers[0].axis[0].y = env_controller.axis_2[0];
-  core_data->input_pool->controllers[0].axis[1].x = env_controller.axis_1[0];
-  core_data->input_pool->controllers[0].axis[1].y = env_controller.axis_1[1];
+//  core_data->input_pool->controllers[0].axis[0].x = env_controller.axis_2[1];
+//  core_data->input_pool->controllers[0].axis[0].y = env_controller.axis_2[0];
+//  core_data->input_pool->controllers[0].axis[1].x = env_controller.axis_1[0];
+//  core_data->input_pool->controllers[0].axis[1].y = env_controller.axis_1[1];
   
   if(env_controller.buttons[0] == (uint8_t)Environment::Button_action::on_down)
   {
