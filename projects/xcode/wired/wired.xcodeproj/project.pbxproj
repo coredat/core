@@ -103,6 +103,7 @@
 		7E033E811C6E699D00D3379D /* net_entity_pool.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = net_entity_pool.hpp; sourceTree = "<group>"; };
 		7E033E831C6F296700D3379D /* physics_world.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = physics_world.cpp; sourceTree = "<group>"; };
 		7E033E841C6F296700D3379D /* physics_world.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = physics_world.hpp; sourceTree = "<group>"; };
+		7E033E861C6FC64700D3379D /* optimizations.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = optimizations.hpp; sourceTree = "<group>"; };
 		7E03C4321C68D22E0079DA81 /* network_player_controller.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = network_player_controller.cpp; sourceTree = "<group>"; };
 		7E03C4331C68D22E0079DA81 /* network_player_controller.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = network_player_controller.hpp; sourceTree = "<group>"; };
 		7E03C4361C69268B0079DA81 /* audio.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = audio.hpp; sourceTree = "<group>"; };
@@ -652,6 +653,7 @@
 			isa = PBXGroup;
 			children = (
 				7ED7BBDF1C3CF9C700CE80EA /* alignment.hpp */,
+				7E033E861C6FC64700D3379D /* optimizations.hpp */,
 				7ED7BBE01C3CF9C700CE80EA /* color.hpp */,
 				7ED7BBE11C3CF9C700CE80EA /* directory.hpp */,
 				7ED7BBE21C3CF9C700CE80EA /* directory_mac.mm */,
