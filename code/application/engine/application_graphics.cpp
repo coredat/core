@@ -74,7 +74,7 @@ graphics_think(World_data::World *world,
                                       sizeof(Simple_renderer::Node));
 
   // Texture/vbo info
-  for (std::size_t i = 0; i < world->entity_pool->size; ++i)
+  for (size_t i = 0; i < size_of_node_pool; ++i)
   {
     nodes[i].vbo = world->model_pool->vbo[world->entity_pool->model[i]];
     nodes[i].diffuse_id = World_data::texture_pool_find(world->texture_pool, world->entity_pool->texture[i])->texture_id;

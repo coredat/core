@@ -8,6 +8,13 @@
 #include <core/input/input.hpp>
 #include <data/network_data/net_entity_pool.hpp>
 #include <application/resources.hpp>
+#include <utils/alignment.hpp>
+
+
+namespace
+{
+  
+}
 
 
 namespace Application {
@@ -38,22 +45,20 @@ client_think(
   const float delta_time)
 {
 
-  static Net_data::Net_entity_pool incoming_ents;
+  ALIGN_16(static Net_data::Net_entity_pool incoming_ents);
 
   Network::poll_events(connection,
 
     0,
-    [&](const Network::Event_id id, const void *data, const std::size_t size_of_data)
+    [&](const Network::Event_id id, const void *data, const size_t size_of_data)
     {
-        // We just copy entitiy positions into our entity pool.
-        // So much todo here!
-        memcpy(&incoming_ents, data, size_of_data);
+      memcpy(static_cast<void*>(&incoming_ents), data, size_of_data);
     },
     &std::cout);
 
   // Update the entity pool
   {
-    for (size_t i = 0; i < 128; ++i)
+    for (size_t i = 0; i < incoming_ents.capacity; ++i)
     {
       size_t s = sizeof(Net_data::Net_entity);
       Core::Entity_id id = Core::Entity_id_util::convert_uint_to_entity(incoming_ents.entities[i].entity_id);
@@ -61,8 +66,9 @@ client_think(
       world->entity_pool->transform[i]  = incoming_ents.entities[i].transform;
       world->entity_pool->model[i]      = (Resource::Model::ENUM)incoming_ents.entities[i].vbo_id;
       world->entity_pool->texture[i]    = (Resource::Texture::ENUM)incoming_ents.entities[i].mat_id;
-      world->entity_pool->size          = 128;
     }
+
+    world->entity_pool->size = incoming_ents.capacity;
   }
 
   auto controller = Core::Input::get_controller(Core::Input::Player::one);
@@ -72,8 +78,6 @@ client_think(
   
   float ft_data[4];
   memcpy(&ft_data[0], &data[0], sizeof(data));
-
- // std::cout << ft_data[0] << ", " << ft_data[1] << ", " << ft_data[2] << ", " << ft_data[3] << std::endl;
 
   Network::send_packet(connection, sizeof(data), &data[0], false);
 }
