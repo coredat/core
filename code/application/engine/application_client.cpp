@@ -6,6 +6,8 @@
 #include <systems/environment/environment.hpp>
 #include <iostream>
 #include <core/input/input.hpp>
+#include <data/network_data/net_entity_pool.hpp>
+#include <application/resources.hpp>
 
 
 namespace Application {
@@ -35,6 +37,9 @@ client_think(
   const Environment::Input *inputs,
   const float delta_time)
 {
+
+  static Net_data::Net_entity_pool incoming_ents;
+
   Network::poll_events(connection,
 
     0,
@@ -42,9 +47,23 @@ client_think(
     {
         // We just copy entitiy positions into our entity pool.
         // So much todo here!
-        memcpy(world->entity_pool->transform, data, size_of_data);
+        memcpy(&incoming_ents, data, size_of_data);
     },
     &std::cout);
+
+  // Update the entity pool
+  {
+    for (size_t i = 0; i < 128; ++i)
+    {
+      size_t s = sizeof(Net_data::Net_entity);
+      Core::Entity_id id = Core::Entity_id_util::convert_uint_to_entity(incoming_ents.entities[i].entity_id);
+      world->entity_pool->entity_id[i]  = id;
+      world->entity_pool->transform[i]  = incoming_ents.entities[i].transform;
+      world->entity_pool->model[i]      = (Resource::Model::ENUM)incoming_ents.entities[i].vbo_id;
+      world->entity_pool->texture[i]    = (Resource::Texture::ENUM)incoming_ents.entities[i].mat_id;
+      world->entity_pool->size          = 128;
+    }
+  }
 
   auto controller = Core::Input::get_controller(Core::Input::Player::one);
   

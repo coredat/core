@@ -7,7 +7,7 @@
 #include <math/transform/transform.hpp>
 
 
-#define NET_ENTITY_POOL_SIZE 512
+#define NET_ENTITY_POOL_SIZE 128
 
 
 namespace Net_data {
@@ -26,7 +26,7 @@ struct Net_entity_pool
 {
   Net_entity        entities[NET_ENTITY_POOL_SIZE];
   size_t            tick = 0;
-  const size_t      capacity = NET_ENTITY_POOL_SIZE;
+  size_t            capacity = NET_ENTITY_POOL_SIZE;
 };
 
 
