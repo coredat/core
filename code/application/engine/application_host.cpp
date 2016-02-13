@@ -179,7 +179,8 @@ host_think(
 
   // Build network entity list
   {
-    static Net_data::Net_entity_pool net_pool;
+    ALIGN_16(static Net_data::Net_entity_pool net_pool);
+    
     static uint32_t tick = 0;
     
     net_pool.tick = ++tick;
@@ -193,7 +194,7 @@ host_think(
       net_pool.entities[i].mat_id     = world->entity_pool->texture[i];
     }
     
-    Network::send_packet(connection, sizeof(net_pool), &net_pool, false);
+    Network::send_packet(connection, sizeof(net_pool), &net_pool, true);
   }
 
 }
