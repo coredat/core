@@ -1,6 +1,5 @@
 #include "world.hpp"
 #include "world_pools.hpp"
-#include <atomic>
 
 
 namespace

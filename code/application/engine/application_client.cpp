@@ -54,7 +54,7 @@ client_think(
   float ft_data[4];
   memcpy(&ft_data[0], &data[0], sizeof(data));
 
-  std::cout << ft_data[0] << ", " << ft_data[1] << ", " << ft_data[2] << ", " << ft_data[3] << std::endl;
+ // std::cout << ft_data[0] << ", " << ft_data[1] << ", " << ft_data[2] << ", " << ft_data[3] << std::endl;
 
   Network::send_packet(connection, sizeof(data), &data[0], false);
 }

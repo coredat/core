@@ -28,31 +28,34 @@ graphics_think(World_data::World *world,
   {
     const auto id = World_data::camera_pool_get_entity_id_for_priority(world->camera_pool, 1);
 
-    if (id == Core::Entity_id_util::invalid_id())
+    // If we cant find the camera we'll just make a dummy orbit one for the time.
+    // This is good for debugging.
+    if (id != Core::Entity_id_util::invalid_id())
     {
-      return; // we have no camera's to render with.
-    }
+      Core::Entity ent;
+      World_data::world_find_entity(world, &ent, id);
 
-    Core::Entity ent;
-    World_data::world_find_entity(world, &ent, id);
-    
-    const math::transform camera_transform = ent.get_transform();
-    
-    math::vec3 cam_fwd;
-    Transform::get_fwd_vec(&camera_transform, &cam_fwd);
-    
-    math::vec3 cam_up;
-    Transform::get_up_vec(&camera_transform, &cam_up);
-    
-    view = math::mat4_lookat(camera_transform.position, math::vec3_add(camera_transform.position, cam_fwd), cam_up);
-    
-//    static float time = 4;
-//    time += 0.01f;
-//
-//    const float x = math::sin(time) * 9;
-//    const float z = math::cos(time) * 9;
-//    
-//    view = math::mat4_lookat(math::vec3_init(x, 5, z), math::vec3_zero(), math::vec3_init(0, 1, 0));
+      const math::transform camera_transform = ent.get_transform();
+
+      math::vec3 cam_fwd;
+      Transform::get_fwd_vec(&camera_transform, &cam_fwd);
+
+      math::vec3 cam_up;
+      Transform::get_up_vec(&camera_transform, &cam_up);
+
+      view = math::mat4_lookat(camera_transform.position, math::vec3_add(camera_transform.position, cam_fwd), cam_up);
+    }
+    else
+    {
+      static float time = 4;
+      time += 0.005f;
+
+      const float x = math::sin(time) * 9;
+      const float z = math::cos(time) * 9;
+
+      view = math::mat4_lookat(math::vec3_init(x, 5, z), math::vec3_zero(), math::vec3_init(0, 1, 0));
+
+    }
   }
 
   const math::mat4 view_proj = math::mat4_multiply(view, proj); // *hurt* camaera or such.

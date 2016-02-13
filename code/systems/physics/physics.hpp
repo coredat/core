@@ -5,7 +5,7 @@
 /*
   Lazy include file.
 */
-#include "world.hpp"
+#include "physics_world.hpp"
 #include "rigidbody_properties.hpp"
 #include "rigidbody_collider.hpp"
 #include "rigidbody.hpp"

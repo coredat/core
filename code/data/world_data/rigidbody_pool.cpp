@@ -2,7 +2,7 @@
 #include "world_data.hpp"
 #include "entity_pool.hpp"
 #include <core/interface/entity.hpp>
-#include <systems/physics/world.hpp>
+#include <systems/physics/physics_world.hpp>
 #include <functional>
 
 

@@ -94,6 +94,12 @@
     <Filter Include="systems\camera">
       <UniqueIdentifier>{c0ff8c4c-82e8-45a4-974d-fc6e5426106a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="data\network_data">
+      <UniqueIdentifier>{7df2032b-73c3-4126-91ed-b27725c8eb1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\world_data">
+      <UniqueIdentifier>{b5ce546a-a989-46b3-8ed8-f0365d74ad79}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\code\wired_app.cpp" />
@@ -256,35 +262,11 @@
     <ClCompile Include="..\..\..\..\code\application\engine\application_host.cpp">
       <Filter>application\engine</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\code\data\camera_pool.cpp">
-      <Filter>data</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\code\data\entity_pool.cpp">
-      <Filter>data</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\code\data\logic_pool.cpp">
-      <Filter>data</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\code\data\model_pool.cpp">
-      <Filter>data</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\code\data\rigidbody_pool.cpp">
-      <Filter>data</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\code\data\texture_pool.cpp">
-      <Filter>data</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\code\data\world_data.cpp">
-      <Filter>data</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\code\data\core_data\core_data.cpp">
       <Filter>data\core_data</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\code\systems\entity\generic_id.cpp">
       <Filter>systems\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\code\application\game_logic\actor.cpp">
-      <Filter>application\game_logic</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\code\application\game_logic\local_player_controller.cpp">
       <Filter>application\game_logic</Filter>
@@ -316,7 +298,46 @@
     <ClCompile Include="..\..\..\..\code\systems\physics\rigidbody_collider.cpp">
       <Filter>systems\physics</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\code\systems\physics\world.cpp">
+    <ClCompile Include="..\..\..\..\code\data\world_data\camera_pool.cpp">
+      <Filter>data\world_data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\data\world_data\entity_pool.cpp">
+      <Filter>data\world_data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\data\world_data\graph_change_pool.cpp">
+      <Filter>data\world_data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\data\world_data\logic_pool.cpp">
+      <Filter>data\world_data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\data\world_data\model_pool.cpp">
+      <Filter>data\world_data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\data\world_data\rigidbody_pool.cpp">
+      <Filter>data\world_data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\data\world_data\texture_pool.cpp">
+      <Filter>data\world_data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\data\world_data\world.cpp">
+      <Filter>data\world_data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\data\world_data\world_pools.cpp">
+      <Filter>data\world_data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\data\network_data\net_entity_pool.cpp">
+      <Filter>data\network_data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\application\game_logic\actor_model.cpp">
+      <Filter>application\game_logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\application\game_logic\network_player_controller.cpp">
+      <Filter>application\game_logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\data\core_data\input_pool.cpp">
+      <Filter>data\core_data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\systems\physics\physics_world.cpp">
       <Filter>systems\physics</Filter>
     </ClCompile>
   </ItemGroup>
@@ -615,33 +636,6 @@
     <ClInclude Include="..\..\..\..\code\application\engine\application_host.hpp">
       <Filter>application\engine</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\code\data\camera_pool.hpp">
-      <Filter>data</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\code\data\data.hpp">
-      <Filter>data</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\code\data\data_fwd.hpp">
-      <Filter>data</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\code\data\entity_pool.hpp">
-      <Filter>data</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\code\data\logic_pool.hpp">
-      <Filter>data</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\code\data\model_pool.hpp">
-      <Filter>data</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\code\data\rigidbody_pool.hpp">
-      <Filter>data</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\code\data\texture_pool.hpp">
-      <Filter>data</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\code\data\world_data.hpp">
-      <Filter>data</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\code\data\core_data\core_data.hpp">
       <Filter>data\core_data</Filter>
     </ClInclude>
@@ -659,9 +653,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\code\systems\entity\generic_id.hpp">
       <Filter>systems\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\code\application\game_logic\actor.hpp">
-      <Filter>application\game_logic</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\code\application\game_logic\local_player_controller.hpp">
       <Filter>application\game_logic</Filter>
@@ -699,7 +690,55 @@
     <ClInclude Include="..\..\..\..\code\systems\physics\rigidbody_properties.hpp">
       <Filter>systems\physics</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\code\systems\physics\world.hpp">
+    <ClInclude Include="..\..\..\..\code\data\data.hpp">
+      <Filter>data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\data\world_data\camera_pool.hpp">
+      <Filter>data\world_data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\data\world_data\entity_pool.hpp">
+      <Filter>data\world_data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\data\world_data\graph_change_pool.hpp">
+      <Filter>data\world_data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\data\world_data\logic_pool.hpp">
+      <Filter>data\world_data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\data\world_data\model_pool.hpp">
+      <Filter>data\world_data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\data\world_data\rigidbody_pool.hpp">
+      <Filter>data\world_data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\data\world_data\texture_pool.hpp">
+      <Filter>data\world_data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\data\world_data\world.hpp">
+      <Filter>data\world_data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\data\world_data\world_data.hpp">
+      <Filter>data\world_data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\data\world_data\world_data_fwd.hpp">
+      <Filter>data\world_data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\data\world_data\world_pools.hpp">
+      <Filter>data\world_data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\data\network_data\net_entity_pool.hpp">
+      <Filter>data\network_data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\application\game_logic\actor_model.hpp">
+      <Filter>application\game_logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\application\game_logic\network_player_controller.hpp">
+      <Filter>application\game_logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\data\core_data\input_pool.hpp">
+      <Filter>data\core_data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\systems\physics\physics_world.hpp">
       <Filter>systems\physics</Filter>
     </ClInclude>
   </ItemGroup>
