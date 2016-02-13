@@ -340,6 +340,12 @@
     <ClCompile Include="..\..\..\..\code\systems\physics\physics_world.cpp">
       <Filter>systems\physics</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\code\data\network_data\interpolation_pool.cpp">
+      <Filter>data\network_data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\data\network_data\network_data.cpp">
+      <Filter>data\network_data</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\code\renderer\debug_line.hpp">
@@ -740,6 +746,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\code\systems\physics\physics_world.hpp">
       <Filter>systems\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\data\network_data\interpolation_pool.hpp">
+      <Filter>data\network_data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\data\network_data\network_data.hpp">
+      <Filter>data\network_data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\data\network_data\network_data_fwd.hpp">
+      <Filter>data\network_data</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

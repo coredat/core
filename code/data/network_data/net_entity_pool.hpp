@@ -13,15 +13,21 @@
 namespace Net_data {
 
 
+/*!
+  Entity pack we are going to send/recive accorss network.
+*/
 PACK(struct Net_entity
 {
-  uint32_t    entity_id;
-  uint32_t    vbo_id;
-  uint32_t    mat_id;
+  uint32_t        entity_id;
+  uint32_t        vbo_id;
+  uint32_t        mat_id;
   math::transform transform;
 });
 
 
+/*!
+  Entity collection that gets sent to clients.
+*/
 PACK(struct Net_entity_pool
 {
   Net_entity        entities[NET_ENTITY_POOL_SIZE];

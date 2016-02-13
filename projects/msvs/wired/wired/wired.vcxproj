@@ -67,6 +67,8 @@
     <ClCompile Include="..\..\..\..\code\core\physics\ray.cpp" />
     <ClCompile Include="..\..\..\..\code\data\core_data\core_data.cpp" />
     <ClCompile Include="..\..\..\..\code\data\core_data\input_pool.cpp" />
+    <ClCompile Include="..\..\..\..\code\data\network_data\interpolation_pool.cpp" />
+    <ClCompile Include="..\..\..\..\code\data\network_data\network_data.cpp" />
     <ClCompile Include="..\..\..\..\code\data\network_data\net_entity_pool.cpp" />
     <ClCompile Include="..\..\..\..\code\data\world_data\camera_pool.cpp" />
     <ClCompile Include="..\..\..\..\code\data\world_data\entity_pool.cpp" />
@@ -179,6 +181,9 @@
     <ClInclude Include="..\..\..\..\code\data\core_data\core_data_fwd.hpp" />
     <ClInclude Include="..\..\..\..\code\data\core_data\input_pool.hpp" />
     <ClInclude Include="..\..\..\..\code\data\data.hpp" />
+    <ClInclude Include="..\..\..\..\code\data\network_data\interpolation_pool.hpp" />
+    <ClInclude Include="..\..\..\..\code\data\network_data\network_data.hpp" />
+    <ClInclude Include="..\..\..\..\code\data\network_data\network_data_fwd.hpp" />
     <ClInclude Include="..\..\..\..\code\data\network_data\net_entity_pool.hpp" />
     <ClInclude Include="..\..\..\..\code\data\world_data\camera_pool.hpp" />
     <ClInclude Include="..\..\..\..\code\data\world_data\entity_pool.hpp" />

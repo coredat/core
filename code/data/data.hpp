@@ -5,6 +5,7 @@
 // Include all the data.
 #include "core_data/core_data.hpp"
 #include "world_data/world_data.hpp"
+#include "network_data/network_data.hpp"
 
 
 #endif // inc guard
