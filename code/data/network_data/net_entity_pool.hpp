@@ -7,14 +7,13 @@
 #include <utils/alignment.hpp>
 
 
-#define NET_ENTITY_POOL_SIZE 64
+#define NET_ENTITY_POOL_SIZE 128
 
 
 namespace Net_data {
 
 
-PACK(
-struct Net_entity
+PACK(struct Net_entity
 {
   uint32_t    entity_id;
   uint32_t    vbo_id;
@@ -23,8 +22,7 @@ struct Net_entity
 });
 
 
-PACK(
-struct Net_entity_pool
+PACK(struct Net_entity_pool
 {
   Net_entity        entities[NET_ENTITY_POOL_SIZE];
   uint32_t          tick = 0;
