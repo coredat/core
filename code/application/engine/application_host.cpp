@@ -7,6 +7,7 @@
 #include <systems/environment/environment.hpp>
 #include <application/game_logic/actor_model.hpp>
 #include <core/interface/entity.hpp>
+#include <data/network_data/net_entity_pool.hpp>
 #include <iostream>
 
 
@@ -27,7 +28,7 @@ host_initialize(
 {
   {
     kine_actor_local   = Entity_factory::create_local_kinematic_actor(world).get_id();
-//    kine_actor_network = Entity_factory::create_network_kinematic_actor(world).get_id();
+    kine_actor_network = Entity_factory::create_network_kinematic_actor(world).get_id();
     
     // Create level geometry.
     {
@@ -176,7 +177,24 @@ host_think(
   // Reset the entity pool for new changes.
   World_data::entity_graph_change_pool_init(world->entity_graph_changes);
 
-  Network::send_packet(connection, sizeof(world->entity_pool->transform), world->entity_pool->transform, false);
+  // Build network entity list
+  {
+    static Net_data::Net_entity_pool net_pool;
+    static uint32_t tick = 0;
+    
+    net_pool.tick = ++tick;
+  
+    // TODO This stinks need to change it.
+    for(size_t i = 0; i < world->entity_pool->size; ++i)
+    {
+      net_pool.entities[i].entity_id  = Core::Entity_id_util::convert_entity_to_uint(world->entity_pool->entity_id[i]);
+      net_pool.entities[i].transform  = world->entity_pool->transform[i];
+      net_pool.entities[i].vbo_id     = world->entity_pool->model[i];
+      net_pool.entities[i].mat_id     = world->entity_pool->texture[i];
+    }
+    
+    Network::send_packet(connection, sizeof(net_pool), &net_pool, false);
+  }
 
 }
 

@@ -9,7 +9,7 @@ void
 net_entity_pool_init(Net_entity_pool *pool)
 {
   memset(pool->entities, 0, sizeof(pool->entities));
-  pool->sequence = 0;
+  pool->tick = 0;
 }
 
 

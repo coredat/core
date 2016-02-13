@@ -19,6 +19,7 @@
 		7E033E7B1C6C915800D3379D /* world.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E033E791C6C915800D3379D /* world.cpp */; };
 		7E033E7E1C6D340800D3379D /* input_pool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E033E7C1C6D340800D3379D /* input_pool.cpp */; };
 		7E033E821C6E699D00D3379D /* net_entity_pool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E033E801C6E699D00D3379D /* net_entity_pool.cpp */; };
+		7E033E851C6F296700D3379D /* physics_world.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E033E831C6F296700D3379D /* physics_world.cpp */; };
 		7E03C4341C68D22E0079DA81 /* network_player_controller.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E03C4321C68D22E0079DA81 /* network_player_controller.cpp */; };
 		7EA1A1F91C3984D0009867BD /* libenet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EA1A1F81C3984D0009867BD /* libenet.a */; };
 		7EA2C61E1C1F5D4600389748 /* wired_app.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EA2C61D1C1F5D4600389748 /* wired_app.cpp */; };
@@ -64,7 +65,6 @@
 		7ED7BC1C1C3E56D000CE80EA /* debug_renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7BC0E1C3E56D000CE80EA /* debug_renderer.cpp */; };
 		7ED7BC1D1C3E56D000CE80EA /* motion_state.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7BC101C3E56D000CE80EA /* motion_state.cpp */; };
 		7ED7BC1E1C3E56D000CE80EA /* rigidbody.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7BC141C3E56D000CE80EA /* rigidbody.cpp */; };
-		7ED7BC1F1C3E56D000CE80EA /* world.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7BC171C3E56D000CE80EA /* world.cpp */; };
 		7EFB9B0C1C5E620C00A838C7 /* entity_id.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EFB9B001C5E620C00A838C7 /* entity_id.cpp */; };
 		7EFB9B0D1C5E620C00A838C7 /* component.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EFB9B051C5E620C00A838C7 /* component.cpp */; };
 		7EFB9B0E1C5E620C00A838C7 /* entity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EFB9B0A1C5E620C00A838C7 /* entity.cpp */; };
@@ -101,6 +101,8 @@
 		7E033E7D1C6D340800D3379D /* input_pool.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = input_pool.hpp; sourceTree = "<group>"; };
 		7E033E801C6E699D00D3379D /* net_entity_pool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = net_entity_pool.cpp; sourceTree = "<group>"; };
 		7E033E811C6E699D00D3379D /* net_entity_pool.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = net_entity_pool.hpp; sourceTree = "<group>"; };
+		7E033E831C6F296700D3379D /* physics_world.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = physics_world.cpp; sourceTree = "<group>"; };
+		7E033E841C6F296700D3379D /* physics_world.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = physics_world.hpp; sourceTree = "<group>"; };
 		7E03C4321C68D22E0079DA81 /* network_player_controller.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = network_player_controller.cpp; sourceTree = "<group>"; };
 		7E03C4331C68D22E0079DA81 /* network_player_controller.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = network_player_controller.hpp; sourceTree = "<group>"; };
 		7E03C4361C69268B0079DA81 /* audio.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = audio.hpp; sourceTree = "<group>"; };
@@ -231,8 +233,6 @@
 		7ED7BC141C3E56D000CE80EA /* rigidbody.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = rigidbody.cpp; sourceTree = "<group>"; };
 		7ED7BC151C3E56D000CE80EA /* rigidbody.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = rigidbody.hpp; sourceTree = "<group>"; };
 		7ED7BC161C3E56D000CE80EA /* rigidbody_properties.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = rigidbody_properties.hpp; sourceTree = "<group>"; };
-		7ED7BC171C3E56D000CE80EA /* world.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = world.cpp; sourceTree = "<group>"; };
-		7ED7BC181C3E56D000CE80EA /* world.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = world.hpp; sourceTree = "<group>"; };
 		7EFB9B001C5E620C00A838C7 /* entity_id.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = entity_id.cpp; sourceTree = "<group>"; };
 		7EFB9B011C5E620C00A838C7 /* entity_id.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = entity_id.hpp; sourceTree = "<group>"; };
 		7EFB9B031C5E620C00A838C7 /* interface.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = interface.hpp; sourceTree = "<group>"; };
@@ -712,8 +712,8 @@
 				7ED7BC161C3E56D000CE80EA /* rigidbody_properties.hpp */,
 				7ED7BC141C3E56D000CE80EA /* rigidbody.cpp */,
 				7ED7BC151C3E56D000CE80EA /* rigidbody.hpp */,
-				7ED7BC171C3E56D000CE80EA /* world.cpp */,
-				7ED7BC181C3E56D000CE80EA /* world.hpp */,
+				7E033E831C6F296700D3379D /* physics_world.cpp */,
+				7E033E841C6F296700D3379D /* physics_world.hpp */,
 			);
 			path = physics;
 			sourceTree = "<group>";
@@ -847,7 +847,6 @@
 				7EAD4CFF1C668F72007F6A9C /* application_client.cpp in Sources */,
 				7EC9B99D1C418A3000FBF1D7 /* ogl_shader.cpp in Sources */,
 				7EC9B9A31C43838200FBF1D7 /* ogl_shader_uniform.cpp in Sources */,
-				7ED7BC1F1C3E56D000CE80EA /* world.cpp in Sources */,
 				7E033E6E1C6C878400D3379D /* graph_change_pool.cpp in Sources */,
 				7EFB9B0D1C5E620C00A838C7 /* component.cpp in Sources */,
 				7ED7BC041C3E566000CE80EA /* model_manager.cpp in Sources */,
@@ -879,6 +878,7 @@
 				7EC9B99F1C418A3000FBF1D7 /* ogl_texture_filtering.cpp in Sources */,
 				7EFB9B0C1C5E620C00A838C7 /* entity_id.cpp in Sources */,
 				7ED7BC1C1C3E56D000CE80EA /* debug_renderer.cpp in Sources */,
+				7E033E851C6F296700D3379D /* physics_world.cpp in Sources */,
 				7EAD4CDD1C63340D007F6A9C /* npc_actor_controller.cpp in Sources */,
 				7ED7BBDD1C3CF8FE00CE80EA /* resources.cpp in Sources */,
 				7ED7BBDA1C3CF8B100CE80EA /* transform.cpp in Sources */,

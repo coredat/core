@@ -4,6 +4,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include <math/transform/transform.hpp>
 
 
 #define NET_ENTITY_POOL_SIZE 512
@@ -14,17 +15,17 @@ namespace Net_data {
 
 struct Net_entity
 {
-  uint32_t  entity_id;
-  float     position[3];
-  float     scale[3];
-  float     rotation[4];
+  uint32_t    entity_id;
+  uint32_t    vbo_id;
+  uint32_t    mat_id;
+  math::transform transform;
 };
 
 
 struct Net_entity_pool
 {
   Net_entity        entities[NET_ENTITY_POOL_SIZE];
-  size_t            sequence = 0;
+  size_t            tick = 0;
   const size_t      capacity = NET_ENTITY_POOL_SIZE;
 };
 
