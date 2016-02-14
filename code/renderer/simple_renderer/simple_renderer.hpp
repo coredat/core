@@ -39,7 +39,7 @@ render_nodes_fullbright(const Node nodes[], const std::size_t number_of_nodes);
   \param number_of_nodes How many nodes contained in the array.
 */
 void
-render_nodes_directional_light(const Node nodes[], const std::size_t number_of_nodes, const float* eye_pos_vec3);
+render_nodes_directional_light(const Node nodes[], const std::size_t number_of_nodes);
 
 
 } // ns

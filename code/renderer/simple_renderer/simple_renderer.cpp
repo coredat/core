@@ -85,15 +85,19 @@ render_nodes_fullbright(const Node nodes[],
 
 
 void
-render_nodes_directional_light(const Node nodes[], const std::size_t number_of_nodes, const float* eye_pos_vec3)
+render_nodes_directional_light(const Node nodes[], const std::size_t number_of_nodes)
 {
   renderer::reset();
-  
+
+  // TODO:
+  // Lot of state changes that can be saved here. Setting the shader every node?
   for(std::size_t n = 0; n < number_of_nodes; ++n)
   {
     // Render node.
     const Node *curr_node = &nodes[n];
     assert(curr_node);
+    
+    dir_light.bind();
     
     dir_light.set_raw_data("wvp", curr_node->wvp, sizeof(float) * 16);
     dir_light.set_raw_data("world", curr_node->world_mat, sizeof(float) * 16);
@@ -109,10 +113,10 @@ render_nodes_directional_light(const Node nodes[], const std::size_t number_of_n
     const float dir[3] {0.f,-0.707f,-0.707f};
     dir_light.set_raw_data("dir_light.direction", &dir[0], sizeof(float) * 3);
 
-    const float amb = 0.55f;
+    const float amb = 0.75f;
     dir_light.set_raw_data("dir_light.ambient", &amb, sizeof(float) * 1);
     
-    const float diff = 1.0f;
+    const float diff = 0.8f;
     dir_light.set_raw_data("dir_light.diffuse", &diff, sizeof(float) * 1);
     
     curr_node->vbo.bind(vertex_fmt, dir_light);                  // *hurt* need to know if this is a duplicate bind?

@@ -25,7 +25,6 @@ graphics_think(World_data::World *world,
   
   // Get entity's transform so we can generate a view.
   math::mat4 view = math::mat4_zero();
-  math::vec3 eye_pos = math::vec3_zero();
   {
     const auto id = World_data::camera_pool_get_entity_id_for_priority(world->camera_pool, 1);
 
@@ -44,7 +43,6 @@ graphics_think(World_data::World *world,
       math::vec3 cam_up;
       Transform::get_up_vec(&camera_transform, &cam_up);
       
-      eye_pos = camera_transform.position;
       view = math::mat4_lookat(camera_transform.position, math::vec3_add(camera_transform.position, cam_fwd), cam_up);
     }
     else
@@ -55,8 +53,11 @@ graphics_think(World_data::World *world,
       const float x = math::sin(time) * 9;
       const float z = math::cos(time) * 9;
 
-      eye_pos = math::vec3_init(x, 5, z);
-      view = math::mat4_lookat(eye_pos, math::vec3_zero(), math::vec3_init(0, 1, 0));
+      const math::vec3 eye_pos = math::vec3_init(x, 5, z);
+      const math::vec3 look_at = math::vec3_zero();
+      const math::vec3 up      = math::vec3_init(0.f, 1.f, 0.f);
+      
+      view = math::mat4_lookat(eye_pos, look_at, up);
     }
   }
 
@@ -82,11 +83,8 @@ graphics_think(World_data::World *world,
     nodes[i].diffuse_id = World_data::texture_pool_find(world->texture_pool, world->entity_pool->texture[i])->texture_id;
   }
   
-  float eye[3];
-  math::vec3_to_array(eye_pos, eye);
-
   //Simple_renderer::render_nodes_fullbright(nodes, size_of_node_pool);
-  Simple_renderer::render_nodes_directional_light(nodes, size_of_node_pool, eye);
+  Simple_renderer::render_nodes_directional_light(nodes, size_of_node_pool);
 
   math::mat4 wvp = math::mat4_multiply(math::mat4_id(), view, proj);
   Debug_line_renderer::render(math::mat4_get_data(wvp));
