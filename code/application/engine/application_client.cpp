@@ -59,7 +59,6 @@ client_think(
 
   // Update the entity pool
   {
-    // get last entity tick for the time being.
     if(inter_pool->rotate_point > 0)
     {
       auto incoming_ents = inter_pool->snapshot[inter_pool->rotate_point % inter_pool->max_snapshots];
@@ -69,9 +68,32 @@ client_think(
         size_t s = sizeof(Net_data::Net_entity);
         Core::Entity_id id = Core::Entity_id_util::convert_uint_to_entity(incoming_ents.entities[i].entity_id);
         world->entity_pool->entity_id[i]  = id;
-        world->entity_pool->transform[i]  = incoming_ents.entities[i].transform;
         world->entity_pool->model[i]      = (Resource::Model::ENUM)incoming_ents.entities[i].vbo_id;
         world->entity_pool->texture[i]    = (Resource::Texture::ENUM)incoming_ents.entities[i].mat_id;
+
+        // Interpolate the position
+        {
+          // Block copy the transform.
+          world->entity_pool->transform[i] = incoming_ents.entities[i].transform;
+
+          auto herm_inter = [](const float mu,
+                               const float point_start,
+                               const float point_end,
+                               const float direction_start,
+                               const float direction_end)
+          {
+            const float mu_sq = mu * mu;
+            const float mu_cu = mu_sq * mu;
+
+            const float h1 = +2 * mu_cu - 3 * mu_sq + 1;
+            const float h2 = -2 * mu_cu + 3 * mu_sq;
+            const float h3 = mu_cu - 2 * mu_sq + mu;
+            const float h4 = mu_cu - mu_sq;
+
+
+          };
+          
+        }
       }
 
       // Need to sort this.
