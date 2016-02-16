@@ -4,6 +4,7 @@
 
 #include <core/interface/interface_fwd.hpp>
 #include <data/world_data/world_data_fwd.hpp>
+#include <math/transform/transform.hpp>
 
 
 namespace Entity_factory {
@@ -34,7 +35,7 @@ create_placement_cube(World_data::World *world);
 
 
 Core::Entity
-create_static_cube(World_data::World *world);
+create_static_cube(World_data::World *world, const math::transform &transform);
 
 } // ns
 

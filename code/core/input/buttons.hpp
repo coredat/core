@@ -10,13 +10,14 @@ namespace Button {
 enum ENUM {
 
   button_0 = 0,
-  button_1 = 1 << 0,
-  button_2 = 1 << 1,
-  button_3 = 1 << 2,
-  button_4 = 1 << 3,
-  button_5 = 1 << 4,
-  button_6 = 1 << 5,
-  button_7 = 1 << 6,
+  button_1,
+  button_2,
+  button_3,
+  button_4,
+  button_5,
+  button_6,
+  button_7,
+  
 
 }; // enum
 } // ns

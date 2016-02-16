@@ -14,7 +14,6 @@ namespace Application {
 */
 void common_think(
   Environment::Window *window,
-  Environment::Input *input_devices,
   Core_data::Core *core_data);
 
 

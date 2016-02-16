@@ -53,11 +53,11 @@ initialize()
 
 void
 render_nodes_fullbright(const Node nodes[],
-                        const std::size_t number_of_nodes)
+                        const size_t number_of_nodes)
 {
   renderer::reset();
   
-  for(std::size_t n = 0; n < number_of_nodes; ++n)
+  for(size_t n = 0; n < number_of_nodes; ++n)
   {
     // Render node.
     const Node *curr_node = &nodes[n];
@@ -85,13 +85,13 @@ render_nodes_fullbright(const Node nodes[],
 
 
 void
-render_nodes_directional_light(const Node nodes[], const std::size_t number_of_nodes)
+render_nodes_directional_light(const Node nodes[], const size_t number_of_nodes)
 {
   renderer::reset();
 
   // TODO:
   // Lot of state changes that can be saved here. Setting the shader every node?
-  for(std::size_t n = 0; n < number_of_nodes; ++n)
+  for(size_t n = 0; n < number_of_nodes; ++n)
   {
     // Render node.
     const Node *curr_node = &nodes[n];
@@ -110,7 +110,7 @@ render_nodes_directional_light(const Node nodes[], const std::size_t number_of_n
     const float color[3] {0.8f,0.7f,0.7f};
     dir_light.set_raw_data("dir_light.color", &color[0], sizeof(float) * 3);
     
-    const float dir[3] {0.f,-0.707f,-0.707f};
+    const float dir[3] {-0.707f,-0.707f,-0.707f};
     dir_light.set_raw_data("dir_light.direction", &dir[0], sizeof(float) * 3);
 
     const float amb = 0.75f;

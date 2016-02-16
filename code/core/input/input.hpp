@@ -14,6 +14,9 @@ namespace Player {
 enum ENUM {
 
   one,
+  two,
+  three,
+  four,
 
 }; // enum
 } // ns

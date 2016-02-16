@@ -10,6 +10,7 @@
 
 namespace Environment {
 
+
 enum class Event_id
 {
   window_open,
@@ -31,7 +32,7 @@ de_initialize();
 
 
 void
-think(const Window *window, Input *input, const std::function<void(Environment::Event_id id)> &callback, Core_data::Input_pool *input_pool);
+think(const Window *window, Core_data::Input_pool *input_pool);
 
 
 } // ns

@@ -8,29 +8,8 @@ namespace Environment {
 
 void
 think(const Window *window,
-      Input *input,
-      const std::function<void(Environment::Event_id id)> &callback,
       Core_data::Input_pool *input_pool)
 {
-  Environment::Event_id id[128]; // This will need to hold data I think.
-  std::size_t current_id(0);
-
-  // Controller states
-  {
-    input->controllers[0].axis_1[0] = 0;
-    input->controllers[0].axis_1[1] = 0;
-    
-    if(input->controllers[0].buttons[Environment::Button::action_button] == (uint8_t)Environment::Button_action::on_down)
-    {
-      input->controllers[0].buttons[Environment::Button::action_button] = (uint8_t)Environment::Button_action::held;
-    }
-    
-    if(input->controllers[0].buttons[Environment::Button::action_button] == (uint8_t)Environment::Button_action::on_up)
-    {
-      input->controllers[0].buttons[Environment::Button::action_button] = (uint8_t)Environment::Button_action::resting;
-    }
-  }
-
   // Process events
   {
     SDL_Event evt;
@@ -44,7 +23,6 @@ think(const Window *window,
       {
         //** Application and Window **//
         case(SDL_QUIT):
-          id[current_id++] = Environment::Event_id::window_close;
           break;
           
           
@@ -104,28 +82,28 @@ think(const Window *window,
           
         case(SDL_MOUSEBUTTONDOWN):
         {
-          if(input->controllers[0].buttons[Environment::Button::action_button] == (uint8_t)Environment::Button_action::on_down)
-          {
-            input->controllers[0].buttons[Environment::Button::action_button] = (uint8_t)Environment::Button_action::held;
-          }
-          else
-          {
-            input->controllers[0].buttons[Environment::Button::action_button] = (uint8_t)Environment::Button_action::on_down;
-          }
-          break;
+//          if(input->controllers[0].buttons[Environment::Button::action_button] == (uint8_t)Environment::Button_action::on_down)
+//          {
+//            input->controllers[0].buttons[Environment::Button::action_button] = (uint8_t)Environment::Button_action::held;
+//          }
+//          else
+//          {
+//            input->controllers[0].buttons[Environment::Button::action_button] = (uint8_t)Environment::Button_action::on_down;
+//          }
+//          break;
         }
         
         case(SDL_MOUSEBUTTONUP):
         {
-          if(input->controllers[0].buttons[Environment::Button::action_button] == (uint8_t)Environment::Button_action::on_up)
-          {
-            input->controllers[0].buttons[Environment::Button::action_button] = (uint8_t)Environment::Button_action::resting;
-          }
-          else
-          {
-            input->controllers[0].buttons[Environment::Button::action_button] = (uint8_t)Environment::Button_action::on_up;
-          }
-          break;
+//          if(input->controllers[0].buttons[Environment::Button::action_button] == (uint8_t)Environment::Button_action::on_up)
+//          {
+//            input->controllers[0].buttons[Environment::Button::action_button] = (uint8_t)Environment::Button_action::resting;
+//          }
+//          else
+//          {
+//            input->controllers[0].buttons[Environment::Button::action_button] = (uint8_t)Environment::Button_action::on_up;
+//          }
+//          break;
         }
       }
       
@@ -135,19 +113,12 @@ think(const Window *window,
   
   // Normalize input
   {
-    if(input->controllers[0].axis_2[0] != 0 && input->controllers[0].axis_2[1] != 0)
-    {
-    // TODO: Normalise this.
-//      input->controllers[0].axis_2[0] *= 0.7071f;
-//      input->controllers[0].axis_2[1] *= 0.7071f;
-    }
-  }
-  
-  
-  // Send out callbacks
-  for(std::size_t i = 0; i < current_id; ++i)
-  {
-    callback(id[i]);
+//    if(input->controllers[0].axis_2[0] != 0 && input->controllers[0].axis_2[1] != 0)
+//    {
+//    // TODO: Normalise this.
+////      input->controllers[0].axis_2[0] *= 0.7071f;
+////      input->controllers[0].axis_2[1] *= 0.7071f;
+//    }
   }
 }
 

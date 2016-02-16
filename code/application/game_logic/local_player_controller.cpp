@@ -45,7 +45,13 @@ Local_player_controller::on_update(const float dt)
     if(actor)
     {
       // Position
-      const float move_scale = 70 * dt;
+      float move_scale = 70;
+      if(controller.is_button_down(Core::Input::Button::button_1))
+      {
+        move_scale *= 2;
+      }
+      
+      move_scale *= dt;
       actor->move_forward(controller.get_axis(0).y * move_scale);
       actor->move_left(controller.get_axis(0).x * move_scale);
       

@@ -28,7 +28,6 @@ void
 host_think(
   World_data::World *world,
   Network::Connection *connection,
-  const Environment::Input *inputs,
   const float delta_time);
 
 

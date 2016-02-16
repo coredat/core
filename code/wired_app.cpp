@@ -47,8 +47,6 @@ main(int argc, char *argv[])
   const std::string title = is_client ? "Wired Client" : "Wired Server";
 
   Environment::Window window;
-  Environment::Input input_devices;
-  memset(&input_devices, 0, sizeof(input_devices));
   Environment::window_create(&window, 800, 480, false, title.c_str());
 
   sdl::input input;
@@ -161,7 +159,6 @@ main(int argc, char *argv[])
     
     Application::common_think(
       &window,
-      &input_devices,
       &core_data);
     
     // ** Update World ** //
@@ -171,7 +168,6 @@ main(int argc, char *argv[])
       Application::host_think(
         &world_data,
         &connection,
-        &input_devices,
         delta_time);
       
       size_t number_found_with_tag(0);
@@ -185,7 +181,6 @@ main(int argc, char *argv[])
       Application::client_think(
         &world_data,
         &connection,
-        &input_devices,
         delta_time);
       
       size_t number_found_with_tag(0);

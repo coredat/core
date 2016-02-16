@@ -7,48 +7,7 @@
 
 namespace Environment {
 
-namespace Button {
-enum ENUM
-{
-  action_button,
-  
-  size
-};
-} // ns
 
-
-enum class Button_action
-{
-  resting,
-  on_up,
-  on_down,
-  held,
-};
-
-
-struct Controller
-{
-  uint8_t buttons[Button::size];
-
-  float axis_1[2];
-  float axis_2[2];
-}; // struct
-
-
-
-struct Input
-{
-  Controller controllers[4];
-};
-
-
-
-void
-input_create(Input *input);
-
-
-void
-input_destroy(Input *input);
 
 
 } // ns

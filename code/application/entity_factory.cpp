@@ -22,7 +22,7 @@ create_ground(World_data::World *data)
   Core::Entity entity;
   assert(World_data::world_create_new_entity(data, &entity, Object_type::dev_static_ground));
 
-  const float scale = 100.f;
+  const float scale = 160;
   
   entity.set_transform(math::transform_init(math::vec3_zero(), math::vec3_init(scale,scale,scale), math::quat_init()));
 
@@ -170,9 +170,9 @@ create_npc_actor(World_data::World *world)
   const float scale_y = 0.5f;
   const float scale_z = 0.5f;
 
-  const float pos_x = -5 + (rand() % 10);
+  const float pos_x = 5 - (rand() % 10);
   const float pos_y = 2.5f;
-  const float pos_z = -30 + (rand() % 10);
+  const float pos_z = 5 - (rand() % 10);
 
   entity.set_transform(math::transform_init(math::vec3_init(pos_x, pos_y, pos_z),
                                             math::vec3_init(scale_x, scale_y, scale_z),
@@ -231,27 +231,20 @@ create_placement_cube(World_data::World *world)
 
 
 Core::Entity
-create_static_cube(World_data::World *world)
+create_static_cube(World_data::World *world, const math::transform &transform)
 {
   Core::Entity entity;
   assert(World_data::world_create_new_entity(world, &entity, Object_type::dev_dynamic_cube));
 
-  const float scale = 3.f + static_cast<float>(rand() % 10) / 2.f;
-  const float scale_x = 1.f * scale;
-  const float scale_y = math::g_ratio() * scale;
-  const float scale_z = 1.f * scale;
-
-  entity.set_transform(math::transform_init(math::vec3_zero(),
-                                            math::vec3_init(scale_x, scale_y, scale_z),
-                                            math::quat_init()));
+  entity.set_transform(transform);
   
   entity.set_rigidbody_properties(Physics::Rigidbody_properties{});
 
   Physics::Rigidbody_collider rb_collider;
   rb_collider.collider_type = Physics::Collider_type::cube;
-  rb_collider.collider_info.cube.extents[0] = scale_x * 0.5f;
-  rb_collider.collider_info.cube.extents[1] = scale_y * 0.5f;
-  rb_collider.collider_info.cube.extents[2] = scale_z * 0.5f;
+  rb_collider.collider_info.cube.extents[0] = math::vec3_get_x(transform.scale) * 0.5f;
+  rb_collider.collider_info.cube.extents[1] = math::vec3_get_y(transform.scale) * 0.5f;
+  rb_collider.collider_info.cube.extents[2] = math::vec3_get_z(transform.scale) * 0.5f;
   entity.set_rigidbody_collider(rb_collider);
 
   entity.set_material_id(static_cast<Resource::Texture::ENUM>(rand() % Resource::Texture::size));

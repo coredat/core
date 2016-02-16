@@ -37,10 +37,5 @@ get_controller(const Player::ENUM player)
 }
 
 
-namespace Detail {
-
-  
-
-} // ns
 } // ns
 } // ns

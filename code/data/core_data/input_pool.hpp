@@ -17,8 +17,7 @@ struct Game_controller
 {
   ::Core::Input::Axis axis[2];
   ::Core::Input::Button_state buttons[16];
-};
-
+}; // struct
 
 
 struct Input_pool
@@ -29,15 +28,31 @@ struct Input_pool
 }; // struct
 
 
+/*!
+  Initialises the data pool
+  \param pool is the data pool you wish to initialise.
+*/
 void
-input_data_init(Input_pool *data);
+input_data_init(Input_pool *pool);
 
 
+/*!
+  Update a controller's data.
+  \param pool, the data pool.
+  \param controller the controller number.
+  \param controller_data is the new data.
+*/
 void
 input_data_update_controller(Input_pool *pool,
                              const size_t controller,
                              const Game_controller *controller_data);
-  
+
+
+/*!
+  Get the current state of a controller.
+  \param pool is the input data.
+  \param controller index.
+*/
 Game_controller*
 input_data_get_controller(Input_pool *pool, const size_t controller);
 

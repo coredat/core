@@ -12,7 +12,7 @@
 
 namespace
 {
-  const int32_t fullscreen_mode = SDL_WINDOW_FULLSCREEN_DESKTOP; // rather than SDL_WINDOW_FULLSCREEN
+  constexpr Uint32 fullscreen_mode = SDL_WINDOW_FULLSCREEN_DESKTOP; // rather than SDL_WINDOW_FULLSCREEN
 }
 
 

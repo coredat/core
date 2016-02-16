@@ -37,62 +37,82 @@ host_initialize(
     
       Entity_factory::create_ground(world);
       
-      const float offset = 6.f;
+      const float scale = 5;
+      const float place_scale = 4;
       
-      entity = Entity_factory::create_static_cube(world);
-      place_transform.position = math::vec3_init(+offset,0,0);
-      place_transform.scale = entity.get_transform().scale;
-      entity.set_transform(place_transform);
+      // Inner
+      place_transform.position = math::vec3_init(5 * place_scale,0,-5);
+      place_transform.scale = math::vec3_init(scale, scale * 2, scale);
+      Entity_factory::create_static_cube(world, place_transform);
 
-      entity = Entity_factory::create_static_cube(world);
-      place_transform.position = math::vec3_init(-offset,0,-4);
-      place_transform.scale = entity.get_transform().scale;
-      entity.set_transform(place_transform);
+      place_transform.position = math::vec3_init(5 * place_scale,0,+5);
+      place_transform.scale = math::vec3_init(scale, scale * 2, scale);
+      Entity_factory::create_static_cube(world, place_transform);
 
-      entity = Entity_factory::create_static_cube(world);
-      place_transform.position = math::vec3_init(+offset,0,-8);
-      place_transform.scale = entity.get_transform().scale;
-      entity.set_transform(place_transform);
+      place_transform.position = math::vec3_init(5 * place_scale,0,+10);
+      place_transform.scale = math::vec3_init(scale, scale, scale * 2);
+      Entity_factory::create_static_cube(world, place_transform);
 
-      entity = Entity_factory::create_static_cube(world);
-      place_transform.position = math::vec3_init(-offset,0,-10);
-      place_transform.scale = entity.get_transform().scale;
-      entity.set_transform(place_transform);
+      place_transform.position = math::vec3_init(5 * place_scale,0,-10);
+      place_transform.scale = math::vec3_init(scale, scale, scale * 2);
+      Entity_factory::create_static_cube(world, place_transform);
       
-      entity = Entity_factory::create_static_cube(world);
-      place_transform.position = math::vec3_init(+offset,0,-14);
-      place_transform.scale = entity.get_transform().scale;
-      entity.set_transform(place_transform);
+      place_transform.position = math::vec3_init(-5 * place_scale,0,+10);
+      place_transform.scale = math::vec3_init(scale, scale, scale * 2);
+      Entity_factory::create_static_cube(world, place_transform);
 
-      entity = Entity_factory::create_static_cube(world);
-      place_transform.position = math::vec3_init(-offset,0,-18);
-      place_transform.scale = entity.get_transform().scale;
-      entity.set_transform(place_transform);
+      place_transform.position = math::vec3_init(-5 * place_scale,0,-10);
+      place_transform.scale = math::vec3_init(scale, scale, scale * 4);
+      Entity_factory::create_static_cube(world, place_transform);
+      
+      place_transform.position = math::vec3_init(-5,0,5 * place_scale);
+      place_transform.scale = math::vec3_init(scale * 2, scale, scale);
+      Entity_factory::create_static_cube(world, place_transform);
 
-      entity = Entity_factory::create_static_cube(world);
-      place_transform.position = math::vec3_init(+offset,0,-22);
-      place_transform.scale = entity.get_transform().scale;
-      entity.set_transform(place_transform);
+      place_transform.position = math::vec3_init(-5,5,6 * place_scale);
+      place_transform.scale = math::vec3_init(scale, scale, scale * 4);
+      Entity_factory::create_static_cube(world, place_transform);
 
-      entity = Entity_factory::create_static_cube(world);
-      place_transform.position = math::vec3_init(-offset,0,-26);
-      place_transform.scale = entity.get_transform().scale;
-      entity.set_transform(place_transform);
+      place_transform.position = math::vec3_init(10,5,6 * place_scale);
+      place_transform.scale = math::vec3_init(scale, scale, scale * 4);
+      Entity_factory::create_static_cube(world, place_transform);
 
-      entity = Entity_factory::create_static_cube(world);
-      place_transform.position = math::vec3_init(+offset,0,-30);
-      place_transform.scale = entity.get_transform().scale;
-      entity.set_transform(place_transform);
+      place_transform.position = math::vec3_init(+10,0,5 * place_scale);
+      place_transform.scale = math::vec3_init(scale * 4, scale, scale);
+      Entity_factory::create_static_cube(world, place_transform);
+      
+      place_transform.position = math::vec3_init(-8,0,-5 * place_scale);
+      place_transform.scale = math::vec3_init(scale * 2, scale, scale);
+      Entity_factory::create_static_cube(world, place_transform);
 
-      entity = Entity_factory::create_static_cube(world);
-      place_transform.position = math::vec3_init(-offset,0,-34);
-      place_transform.scale = entity.get_transform().scale;
-      entity.set_transform(place_transform);
+      place_transform.position = math::vec3_init(8,0,-5 * place_scale);
+      place_transform.scale = math::vec3_init(scale * 2, scale, scale);
+      Entity_factory::create_static_cube(world, place_transform);
 
-      entity = Entity_factory::create_static_cube(world);
-      place_transform.position = math::vec3_init(+offset,0,-38);
-      place_transform.scale = entity.get_transform().scale;
-      entity.set_transform(place_transform);
+      place_transform.position = math::vec3_init(0,5,-5 * place_scale);
+      place_transform.scale = math::vec3_init(scale * 2, scale, scale);
+      Entity_factory::create_static_cube(world, place_transform);
+
+      place_transform.position = math::vec3_init(15,5,-5 * place_scale);
+      place_transform.scale = math::vec3_init(scale, scale * 2, scale);
+      Entity_factory::create_static_cube(world, place_transform);
+      
+      // Outter
+      place_transform.position = math::vec3_init(8 * place_scale,0,0);
+      place_transform.scale = math::vec3_init(scale, scale, scale * 4);
+      Entity_factory::create_static_cube(world, place_transform);
+      
+      place_transform.position = math::vec3_init(-8 * place_scale,0,0);
+      place_transform.scale = math::vec3_init(scale, scale, scale * 4);
+      Entity_factory::create_static_cube(world, place_transform);
+      
+      place_transform.position = math::vec3_init(0,0,8 * place_scale);
+      place_transform.scale = math::vec3_init(scale * 4, scale, scale);
+      Entity_factory::create_static_cube(world, place_transform);
+      
+      place_transform.position = math::vec3_init(0,0,-8 * place_scale);
+      place_transform.scale = math::vec3_init(scale * 4, scale, scale);
+      Entity_factory::create_static_cube(world, place_transform);
     }
     
     // Create npc's
@@ -105,6 +125,8 @@ host_initialize(
       entity = Entity_factory::create_npc_actor(world);
       entity = Entity_factory::create_npc_actor(world);
       entity = Entity_factory::create_npc_actor(world);
+      entity = Entity_factory::create_npc_actor(world);
+      entity = Entity_factory::create_npc_actor(world);      
     }
   }
   
@@ -133,7 +155,6 @@ void
 host_think(
   World_data::World *world,
   Network::Connection *connection,
-  const Environment::Input *inputs,
   const float delta_time)
 {
   Physics::world_step(world->physics_world, delta_time);

@@ -34,7 +34,6 @@ void
 client_think(
   World_data::World *world,
   Network::Connection *connection,
-  const Environment::Input *inputs,
   const float delta_time)
 {
   //ALIGN_16(static Net_data::Net_entity_pool incoming_ents);
