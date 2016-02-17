@@ -25,7 +25,7 @@ create_ground(World_data::World *data)
 
   const float scale = 160;
   
-  entity.set_transform(math::transform_init(math::vec3_zero(), math::vec3_init(scale,scale,scale), math::quat_init()));
+  entity.set_transform(Core::Transform(math::vec3_zero(), math::vec3_init(scale,scale,scale), math::quat_init()));
 
   Physics::Rigidbody_properties rb_props;
   rb_props.mass = 0.f;
@@ -60,7 +60,7 @@ create_random_cube(World_data::World *world)
   const float pos_y = static_cast<float>(rand() % 200 + 10) / 200;
   const float pos_z = static_cast<float>(rand() % 200 + 10) / 200;
 
-  entity.set_transform(math::transform_init(math::vec3_init(pos_x, pos_y, pos_z),
+  entity.set_transform(Core::Transform(math::vec3_init(pos_x, pos_y, pos_z),
                        math::vec3_init(scale_x, scale_y, scale_z),
                        math::quat_init()));
   
@@ -96,7 +96,7 @@ create_local_kinematic_actor(World_data::World *world)
   const float pos_y = 2.5f;
   const float pos_z = 0.f;
 
-  entity.set_transform(math::transform_init(math::vec3_init(pos_x, pos_y, pos_z),
+  entity.set_transform(Core::Transform(math::vec3_init(pos_x, pos_y, pos_z),
                                             math::vec3_init(scale_x, scale_y, scale_z),
                                             math::quat_init()));
   
@@ -118,7 +118,7 @@ create_local_kinematic_actor(World_data::World *world)
   const float c_pos_y = pos_y - 1.1f;
   const float c_pos_z = pos_z + 0.f;
 
-  child_entity.set_transform(math::transform_init(math::vec3_init(c_pos_x, c_pos_y, c_pos_z),
+  child_entity.set_transform(Core::Transform(math::vec3_init(c_pos_x, c_pos_y, c_pos_z),
                                             math::vec3_init(c_scale_x, c_scale_y, c_scale_z),
                                             math::quat_init()));
   
@@ -145,7 +145,7 @@ create_network_kinematic_actor(World_data::World *world)
   const float pos_y = 2.5f;
   const float pos_z = 0.f;
 
-  entity.set_transform(math::transform_init(math::vec3_init(pos_x, pos_y, pos_z),
+  entity.set_transform(Core::Transform(math::vec3_init(pos_x, pos_y, pos_z),
                                             math::vec3_init(scale_x, scale_y, scale_z),
                                             math::quat_init()));
   
@@ -175,7 +175,7 @@ create_npc_actor(World_data::World *world)
   const float pos_y = 2.5f;
   const float pos_z = 5 - (rand() % 10);
 
-  entity.set_transform(math::transform_init(math::vec3_init(pos_x, pos_y, pos_z),
+  entity.set_transform(Core::Transform(math::vec3_init(pos_x, pos_y, pos_z),
                                             math::vec3_init(scale_x, scale_y, scale_z),
                                             math::quat_init()));
   
@@ -197,7 +197,7 @@ create_npc_actor(World_data::World *world)
   const float c_pos_y = pos_y - 1.1f;
   const float c_pos_z = pos_z + 0.f;
 
-  child_entity.set_transform(math::transform_init(math::vec3_init(c_pos_x, c_pos_y, c_pos_z),
+  child_entity.set_transform(Core::Transform(math::vec3_init(c_pos_x, c_pos_y, c_pos_z),
                                             math::vec3_init(c_scale_x, c_scale_y, c_scale_z),
                                             math::quat_init()));
   
@@ -216,7 +216,7 @@ create_placement_cube(World_data::World *world)
   Core::Entity entity;
   assert(World_data::world_create_new_entity(world, &entity, Object_type::dev_view_cube));
 
-  entity.set_transform(math::transform_init(math::vec3_zero(),
+  entity.set_transform(Core::Transform(math::vec3_zero(),
                                             math::vec3_init(0.1f, 0.1f, 0.1f),
                                             math::quat_init()));
 
@@ -247,7 +247,7 @@ create_gun(World_data::World *world)
   const float pos_y = 0.f;
   const float pos_z = 0.f;
 
-  entity.set_transform(math::transform_init(math::vec3_init(pos_x, pos_y, pos_z),
+  entity.set_transform(Core::Transform(math::vec3_init(pos_x, pos_y, pos_z),
                                             math::vec3_init(scale_x, scale_y, scale_z),
                                             math::quat_init()));
   
@@ -267,7 +267,7 @@ create_static_cube(World_data::World *world, const math::transform &transform)
   Core::Entity entity;
   assert(World_data::world_create_new_entity(world, &entity, Object_type::dev_dynamic_cube));
 
-  entity.set_transform(transform);
+  entity.set_transform(Core::Transform(transform.position, transform.scale, transform.rotation));
   
   entity.set_rigidbody_properties(Physics::Rigidbody_properties{});
 

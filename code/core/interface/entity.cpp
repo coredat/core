@@ -235,7 +235,7 @@ Entity::send_event(const uint32_t id,
 
 
 void
-Entity::set_transform(const math::transform &new_transform)
+Entity::set_transform(const Transform &set_transform)
 {
   if(!is_valid()) { return; }
   
@@ -244,6 +244,8 @@ Entity::set_transform(const math::transform &new_transform)
   size_t index;
   assert(get_index(&index, m_this_id, ent_pool->entity_id, ent_pool->size));
   const math::transform old_transform = ent_pool->transform[index];
+  
+  math::transform new_transform = math::transform_init(set_transform.get_position(), set_transform.get_scale(), set_transform.get_rotation());
   ent_pool->transform[index] = new_transform;
   
   // Apply transforms to children
@@ -251,19 +253,19 @@ Entity::set_transform(const math::transform &new_transform)
   {
     Entity child = get_child(c);
     
-    const math::transform child_transform = child.get_transform();
+    const Transform child_transform = child.get_transform();
     
     // Offset rotation
     const math::quat rot_conj  = math::quat_conjugate(old_transform.rotation);
     const math::quat rot_prim  = math::quat_multiply(new_transform.rotation, rot_conj);
-    const math::quat final_rot = math::quat_multiply(rot_prim, child_transform.rotation);
+    const math::quat final_rot = math::quat_multiply(rot_prim, child_transform.get_rotation());
     
     // Offset position TODO: This needs to take into account rotatations, currently the calling code needs to deal with this.
     const math::vec3 new_offset = math::vec3_subtract(new_transform.position, old_transform.position);
-    const math::vec3 final_pos  = math::vec3_add(child_transform.position, new_offset);
+    const math::vec3 final_pos  = math::vec3_add(child_transform.get_position(), new_offset);
     
     // Apply offset transform.
-    const math::transform offset_transform = math::transform_init(final_pos, child_transform.scale, final_rot);
+    const Transform offset_transform(final_pos, child_transform.get_scale(), final_rot);
     child.set_transform(offset_transform);
   }
   
@@ -271,16 +273,18 @@ Entity::set_transform(const math::transform &new_transform)
 }
 
 
-math::transform
+Transform
 Entity::get_transform() const
 {
-  if(!is_valid()) { return math::transform(); }
+  if(!is_valid()) { return Transform(); }
   
   auto ent_pool = m_world_data->entity_pool;
 
   size_t index;
   assert(get_index(&index, m_this_id, ent_pool->entity_id, ent_pool->size));
-  return ent_pool->transform[index];
+  math::transform* local_transform = &ent_pool->transform[index];
+  
+  return Core::Transform(local_transform->position, local_transform->scale, local_transform->rotation);
 }
 
 

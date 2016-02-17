@@ -8,6 +8,9 @@
 namespace Core {
 
 
+/*!
+  Transform represents an Entities place in the world.
+*/
 class Transform final
 {
 public:

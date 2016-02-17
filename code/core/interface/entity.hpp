@@ -9,7 +9,7 @@
 #include <systems/physics/rigidbody_collider.hpp>
 #include <data/world_data/world_pools.hpp>
 #include <data/world_data/logic_pool.hpp>
-#include <math/math.hpp>
+#include <core/transform/transform.hpp>
 #include <stddef.h>
 #include <stdint.h>
 
@@ -46,8 +46,8 @@ public:
 
   void                          send_event(const uint32_t id, const void *data, const size_t size_of_data);
 
-  void                          set_transform(const math::transform &transform);
-  math::transform               get_transform() const;
+  void                          set_transform(const Transform &transform);
+  Transform                     get_transform() const;
 
   void                          set_material_id(const size_t id);
   size_t                        get_material_id() const;

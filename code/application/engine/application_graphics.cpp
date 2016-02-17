@@ -36,15 +36,9 @@ graphics_think(World_data::World *world,
       Core::Entity ent;
       World_data::world_find_entity(world, &ent, id);
 
-      const math::transform camera_transform = ent.get_transform();
-
-      math::vec3 cam_fwd;
-      Transform::get_fwd_vec(&camera_transform, &cam_fwd);
-
-      math::vec3 cam_up;
-      Transform::get_up_vec(&camera_transform, &cam_up);
+      const Core::Transform cam_transform = ent.get_transform();
       
-      view = math::mat4_lookat(camera_transform.position, math::vec3_add(camera_transform.position, cam_fwd), cam_up);
+      view = math::mat4_lookat(cam_transform.get_position(), math::vec3_add(cam_transform.get_position(), cam_transform.get_forward()), cam_transform.get_up());
     }
     else
     {

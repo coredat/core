@@ -88,18 +88,20 @@ Actor_model::on_start()
 void
 Actor_model::on_update(const float dt)
 {
-  math::transform curr_trans = get_entity().get_transform();
+  Core::Transform curr_trans = get_entity().get_transform();
   
   // Apply gravity
   {
     const auto Actor_model_length = math::vec3_get_y(m_size);
     
     // Cast ray downwards from feet
-    const btVector3 btFrom(math::vec3_get_x(curr_trans.position), math::vec3_get_y(curr_trans.position) - Actor_model_length + 0.2, math::vec3_get_z(curr_trans.position));
-    const btVector3 btTo(math::vec3_get_x(curr_trans.position), math::vec3_get_y(curr_trans.position) - Actor_model_length, math::vec3_get_z(curr_trans.position));
+    const btVector3 btFrom(math::vec3_get_x(curr_trans.get_position()), math::vec3_get_y(curr_trans.get_position()) - Actor_model_length + 0.2, math::vec3_get_z(curr_trans.get_position()));
+    const btVector3 btTo(math::vec3_get_x(curr_trans.get_position()), math::vec3_get_y(curr_trans.get_position()) - Actor_model_length, math::vec3_get_z(curr_trans.get_position()));
     btCollisionWorld::ClosestRayResultCallback feet_test(btFrom, btTo);
     
-    m_ghost_obj->setWorldTransform(gl_to_bullet(curr_trans)); // move outta the way.
+    // TODO: This gl_to_bullet thing!!!
+    math::transform trans = math::transform_init(curr_trans.get_position(), curr_trans.get_scale(), curr_trans.get_rotation());
+    m_ghost_obj->setWorldTransform(gl_to_bullet(trans)); // move outta the way.
     
     m_world_data->physics_world->dynamics_world.rayTest(btFrom, btTo, feet_test);
 
@@ -112,14 +114,14 @@ Actor_model::on_update(const float dt)
       const auto hit_point          = math::vec3_init(feet_test.m_hitPointWorld.x(), feet_test.m_hitPointWorld.y(), feet_test.m_hitPointWorld.z());
       const auto corrected_position = math::vec3_init(math::vec3_get_x(hit_point), math::vec3_get_y(hit_point) + Actor_model_length, math::vec3_get_z(hit_point));
       
-      curr_trans.position = corrected_position;
+      curr_trans.set_position(corrected_position);
     }
     // Else apply gravity.
     else
     {
       const auto gravity = math::vec3_init(0, m_gravity * dt, 0);
       
-      curr_trans.position = math::vec3_add(curr_trans.position, gravity);
+      curr_trans.set_position(math::vec3_add(curr_trans.get_position(), gravity));
     }
   }
   
@@ -134,8 +136,7 @@ Actor_model::on_update(const float dt)
   
     if(move_fwd != 0)
     {
-      math::vec3 left;
-      Transform::get_left_vec(&curr_trans, &left);
+      math::vec3 left = curr_trans.get_left();
       
       // TODO:
       // Can the player's 'left' ever point directly up?
@@ -145,13 +146,12 @@ Actor_model::on_update(const float dt)
       const math::vec3 fwd_norm = math::vec3_normalize(fwd);
       const math::vec3 scaled_fwd = math::vec3_scale(fwd_norm, move_fwd * dt * 4);
       
-      curr_trans.position = math::vec3_add(curr_trans.position, scaled_fwd);
+      curr_trans.set_position( math::vec3_add(curr_trans.get_position(), scaled_fwd));
     }
     
     if(move_left != 0)
     {
-      math::vec3 fwd;
-      Transform::get_fwd_vec(&curr_trans, &fwd);
+      math::vec3 fwd = curr_trans.get_forward();
       
       // TODO
       // If player looks up we get a 0 cross product.
@@ -161,7 +161,7 @@ Actor_model::on_update(const float dt)
       const math::vec3 left_norm = math::vec3_normalize(left);
       const math::vec3 scaled_left = math::vec3_scale(left_norm, move_left * dt * 4);
       
-      curr_trans.position = math::vec3_add(curr_trans.position, scaled_left);
+      curr_trans.set_position(math::vec3_add(curr_trans.get_position(), scaled_left));
     }
     
     m_pending_move = math::vec3_zero();
@@ -170,19 +170,19 @@ Actor_model::on_update(const float dt)
   // Turn Actor_model
   {
     const float rot_rad   = static_cast<float>(math::vec3_get_y(m_acuumulated_rotations));
-    math::quat turn_Actor_model = math::quat_init_with_axis_angle(0, 1, 0, rot_rad);
+    const math::quat turn_Actor_model = math::quat_init_with_axis_angle(0, 1, 0, rot_rad);
     
-    curr_trans.rotation = turn_Actor_model;
+    curr_trans.set_rotation(turn_Actor_model);
   }
   
   // Apply head movements
   {
     const float rot_rad            = static_cast<float>(math::vec3_get_x(m_acuumulated_rotations));
     const math::vec3 axis          = math::vec3_init(1,0,0);
-    const math::vec3 adjusted_axis = math::quat_rotate_point(curr_trans.rotation, axis);
+    const math::vec3 adjusted_axis = math::quat_rotate_point(curr_trans.get_rotation(), axis);
     const math::quat pitch_head    = math::quat_init_with_axis_angle(adjusted_axis, rot_rad);
     
-    curr_trans.rotation = math::quat_multiply(curr_trans.rotation, pitch_head);
+    curr_trans.set_rotation(math::quat_multiply(curr_trans.get_rotation(), pitch_head));
   }
   
   get_entity().set_transform(curr_trans);
@@ -192,9 +192,9 @@ Actor_model::on_update(const float dt)
   if(m_ghost_obj)
   {
     //curr_trans.rotation = math::quat_init();
-    math::transform collider_trans = curr_trans;
+    math::transform collider_trans = math::transform_init(curr_trans.get_position(), curr_trans.get_scale(), curr_trans.get_rotation());
     collider_trans.rotation = math::quat_init();
-    collider_trans.position = math::vec3_add(curr_trans.position, math::vec3_init(0, ghost_offset, 0));
+    collider_trans.position = math::vec3_add(curr_trans.get_position(), math::vec3_init(0, ghost_offset, 0));
     m_ghost_obj->setWorldTransform(gl_to_bullet(collider_trans));
   
     //** testing ghost stuff **//
@@ -267,11 +267,11 @@ Actor_model::on_update(const float dt)
       
       // Ghost object needs to be updated.
       math::vec3 final_offset = math::vec3_init(offset.x(), offset.y(), offset.z());
-      collider_trans.position = math::vec3_add(curr_trans.position, final_offset);
+      collider_trans.position = math::vec3_add(curr_trans.get_position(), final_offset);
       
-      curr_trans.position = collider_trans.position;
+      curr_trans.set_position(collider_trans.position);
       
-      collider_trans.position = math::vec3_add(curr_trans.position, math::vec3_init(0, ghost_offset, 0));
+      collider_trans.position = math::vec3_add(curr_trans.get_position(), math::vec3_init(0, ghost_offset, 0));
       
       m_ghost_obj->setWorldTransform(gl_to_bullet(collider_trans));
       get_entity().set_transform(curr_trans);

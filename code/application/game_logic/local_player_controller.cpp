@@ -65,13 +65,11 @@ Local_player_controller::on_update(const float dt)
   // Player Actions (This should be moved into a gun model.)
   if(controller.is_button_down(Core::Input::Button::button_0))
   {
-    const math::transform curr_trans = get_entity().get_transform();
+    const Core::Transform curr_trans = get_entity().get_transform();
     
-    math::vec3 fwd_vec;
-    Transform::get_fwd_vec(&curr_trans, &fwd_vec);
-    const math::vec3 scaled_fwd_vec = math::vec3_scale(fwd_vec, 1000.f);
+    const math::vec3 scaled_fwd_vec = math::vec3_scale(curr_trans.get_forward(), 1000.f);
     
-    const math::vec3 from = curr_trans.position;
+    const math::vec3 from = curr_trans.get_position();
     const math::vec3 to   = math::vec3_add(from, scaled_fwd_vec);
     
     Core::Physics::Ray shoot_ray(from, to, Core::Physics::Ray::Search::first);
