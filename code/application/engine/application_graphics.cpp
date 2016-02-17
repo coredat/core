@@ -30,8 +30,8 @@ graphics_think(World_data::World *world,
 
     // If we cant find the camera we'll just make a dummy orbit one for the time.
     // This is good for debugging.
-    if (id != Core::Entity_id_util::invalid_id())
-    //if(false)
+    //if (id != Core::Entity_id_util::invalid_id())
+    if(false) // debug cam route
     {
       Core::Entity ent;
       World_data::world_find_entity(world, &ent, id);

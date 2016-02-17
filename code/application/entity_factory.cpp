@@ -235,13 +235,14 @@ Core::Entity
 create_gun(World_data::World *world)
 {
   Core::Entity gun_entity;
+  assert(World_data::world_create_new_entity(world, &gun_entity, Object_type::dev_gun));
   
   Core::Entity entity;
-  assert(World_data::world_create_new_entity(world, &entity, Object_type::dev_actor));
+  assert(World_data::world_create_new_entity(world, &entity, Object_type::dev_gun));
   
-  const float scale_x = 0.1f;
-  const float scale_y = 0.1f;
-  const float scale_z = 0.3f;
+  const float scale_x = 0.5f;
+  const float scale_y = 0.5f;
+  const float scale_z = 0.5f;
 
   const float pos_x = 0.f;
   const float pos_y = 0.f;

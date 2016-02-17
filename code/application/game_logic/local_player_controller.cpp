@@ -87,7 +87,14 @@ Local_player_controller::on_update(const float dt)
   
   // Move gun model
   {
+    Core::Transform parent_trans = get_entity().get_transform();
+    Core::Transform new_gun_trans = gun.get_transform();
     
+    new_gun_trans.set_rotation(parent_trans.get_rotation());
+    new_gun_trans.set_position(math::vec3_add(parent_trans.get_position(), math::vec3_scale(parent_trans.get_forward(), 1)));
+    new_gun_trans.set_scale(gun.get_transform().get_scale());
+
+    gun.set_transform(new_gun_trans);
   }
 }
 
