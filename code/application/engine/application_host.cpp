@@ -120,13 +120,13 @@ host_initialize(
       Core::Entity entity;
       math::transform place_transform;
     
-//      entity = Entity_factory::create_npc_actor(world);
-//      entity = Entity_factory::create_npc_actor(world);
-//      entity = Entity_factory::create_npc_actor(world);
-//      entity = Entity_factory::create_npc_actor(world);
-//      entity = Entity_factory::create_npc_actor(world);
-//      entity = Entity_factory::create_npc_actor(world);
-//      entity = Entity_factory::create_npc_actor(world);      
+      entity = Entity_factory::create_npc_actor(world);
+      entity = Entity_factory::create_npc_actor(world);
+      entity = Entity_factory::create_npc_actor(world);
+      entity = Entity_factory::create_npc_actor(world);
+      entity = Entity_factory::create_npc_actor(world);
+      entity = Entity_factory::create_npc_actor(world);
+      entity = Entity_factory::create_npc_actor(world);      
     }
   }
   
