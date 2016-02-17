@@ -276,7 +276,9 @@ Entity::set_transform(const Transform &set_transform)
 Transform
 Entity::get_transform() const
 {
-  if(!is_valid()) { return Transform(); }
+  if(!is_valid()) {
+    return Transform();
+  }
   
   auto ent_pool = m_world_data->entity_pool;
 

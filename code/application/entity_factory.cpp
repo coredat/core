@@ -237,25 +237,22 @@ create_gun(World_data::World *world)
   Core::Entity gun_entity;
   assert(World_data::world_create_new_entity(world, &gun_entity, Object_type::dev_gun));
   
-  Core::Entity entity;
-  assert(World_data::world_create_new_entity(world, &entity, Object_type::dev_gun));
-  
-  const float scale_x = 0.5f;
-  const float scale_y = 0.5f;
-  const float scale_z = 0.5f;
+  const float scale_x = 0.1f;
+  const float scale_y = 0.1f;
+  const float scale_z = 0.2f;
 
   const float pos_x = 0.f;
   const float pos_y = 0.f;
   const float pos_z = 0.f;
 
-  entity.set_transform(Core::Transform(math::vec3_init(pos_x, pos_y, pos_z),
+  gun_entity.set_transform(Core::Transform(math::vec3_init(pos_x, pos_y, pos_z),
                                             math::vec3_init(scale_x, scale_y, scale_z),
                                             math::quat_init()));
   
-  entity.set_material_id(Resource::Texture::dev_orange);
-  entity.set_model_id(Resource::Model::unit_cube);
+  gun_entity.set_material_id(Resource::Texture::dev_orange);
+  gun_entity.set_model_id(Resource::Model::unit_cube);
   
-  entity.add_component<Gun_model>();
+  gun_entity.add_component<Gun_model>();
   // TODO: Gun Controller.
   
   return gun_entity;

@@ -91,7 +91,16 @@ Local_player_controller::on_update(const float dt)
     Core::Transform new_gun_trans = gun.get_transform();
     
     new_gun_trans.set_rotation(parent_trans.get_rotation());
-    new_gun_trans.set_position(math::vec3_add(parent_trans.get_position(), math::vec3_scale(parent_trans.get_forward(), 1)));
+    
+    const math::vec3 fwd = math::vec3_add(parent_trans.get_position(), math::vec3_scale(parent_trans.get_forward(), 0.6f));
+    const math::vec3 down = math::vec3_scale(parent_trans.get_up(), -0.2f);
+    const math::vec3 left = math::vec3_scale(parent_trans.get_left(), 0.2f);
+    
+    const math::vec3 fwd_down = math::vec3_add(fwd, down);
+    const math::vec3 fwd_down_left = math::vec3_add(fwd_down, left);
+    
+    new_gun_trans.set_position(fwd_down_left);
+    
     new_gun_trans.set_scale(gun.get_transform().get_scale());
 
     gun.set_transform(new_gun_trans);
