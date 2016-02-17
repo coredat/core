@@ -60,20 +60,25 @@ entity_pool_remove_entity(Entity_pool *pool, const Core::Entity_id id)
 {
   // We move down all the elements in the data down one.
   // This way we can keep fragmentation and cache misses out
-  // when processing the data.
+  // when processing the data, but take a hit here.1
   size_t remove_id;
   if(Core::Entity_id_util::find_index_linearly(&remove_id,
                                                id,
                                                pool->entity_id,
                                                pool->size))
   {
-    memmove(&pool->entity_id[remove_id],          &pool->entity_id[remove_id + 1],          (pool->size - remove_id - 1) * sizeof(*pool->entity_id));
-    memmove(&pool->parent_id[remove_id],          &pool->parent_id[remove_id + 1],          (pool->size - remove_id - 1) * sizeof(*pool->parent_id));
-    memmove(&pool->entity_properties[remove_id],  &pool->entity_properties[remove_id + 1],  (pool->size - remove_id - 1) * sizeof(*pool->entity_properties));
-    memmove(&pool->model[remove_id],              &pool->model[remove_id + 1],              (pool->size - remove_id - 1) * sizeof(*pool->model));
-    memmove(&pool->texture[remove_id],            &pool->texture[remove_id + 1],            (pool->size - remove_id - 1) * sizeof(*pool->texture));
-    memmove(&pool->transform[remove_id],          &pool->transform[remove_id + 1],          (pool->size - remove_id - 1) * sizeof(*pool->transform));
-    memmove(&pool->rigidbody_property[remove_id], &pool->rigidbody_property[remove_id + 1], (pool->size - remove_id - 1) * sizeof(*pool->rigidbody_property));
+    const size_t start_move = remove_id + 1;
+    const size_t end_move = pool->size - remove_id - 1;
+  
+    memmove(&pool->entity_id[remove_id],          &pool->entity_id[start_move],          end_move * sizeof(*pool->entity_id));
+    memmove(&pool->parent_id[remove_id],          &pool->parent_id[start_move],          end_move * sizeof(*pool->parent_id));
+    memmove(&pool->entity_properties[remove_id],  &pool->entity_properties[start_move],  end_move * sizeof(*pool->entity_properties));
+    memmove(&pool->model[remove_id],              &pool->model[start_move],              end_move * sizeof(*pool->model));
+    memmove(&pool->texture[remove_id],            &pool->texture[start_move],            end_move * sizeof(*pool->texture));
+    memmove(&pool->transform[remove_id],          &pool->transform[start_move],          end_move * sizeof(*pool->transform));
+    memmove(&pool->rigidbody_property[remove_id], &pool->rigidbody_property[start_move], end_move * sizeof(*pool->rigidbody_property));
+    
+    --(pool->size);
     
     return true;
   }

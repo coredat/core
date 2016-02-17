@@ -211,6 +211,7 @@ render(const float wvp_mat[16])
   }
   
   data_ptr = 0;
+  memset(data.data(), 0, sizeof(float) * data.size());
 
   Ogl::error_check("Debug line renderer.", &std::cout);
 }
