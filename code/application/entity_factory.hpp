@@ -35,7 +35,12 @@ create_placement_cube(World_data::World *world);
 
 
 Core::Entity
+create_gun(World_data::World *world);
+
+
+Core::Entity
 create_static_cube(World_data::World *world, const math::transform &transform);
+
 
 } // ns
 

@@ -11,6 +11,7 @@ enum ENUM : uint32_t {
   invalid,    // zero 
 
   actor,
+  gun,
   
   local_player_controller,
   network_player_controller,

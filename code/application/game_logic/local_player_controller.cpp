@@ -28,7 +28,7 @@ void
 Local_player_controller::on_start()
 {
   get_entity().add_tag(Tag::player);
-  cube_id = Entity_factory::create_placement_cube(m_world_data).get_id();
+  gun = Entity_factory::create_gun(m_world_data);
 }
 
 
@@ -46,9 +46,9 @@ Local_player_controller::on_update(const float dt)
     {
       // Position
       float move_scale = 70;
-      if(controller.is_button_down(Core::Input::Button::button_1))
+      if(controller.is_button_down(Core::Input::Button::button_2))
       {
-        move_scale *= 2;
+        move_scale *= 3;
       }
       
       move_scale *= dt;
@@ -86,6 +86,11 @@ Local_player_controller::on_update(const float dt)
       }
     } // if face_ray hit
   } // If player input action
+  
+  // Move gun model
+  {
+    
+  }
 }
 
 

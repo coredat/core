@@ -31,6 +31,7 @@ graphics_think(World_data::World *world,
     // If we cant find the camera we'll just make a dummy orbit one for the time.
     // This is good for debugging.
     if (id != Core::Entity_id_util::invalid_id())
+    //if(false)
     {
       Core::Entity ent;
       World_data::world_find_entity(world, &ent, id);
@@ -48,7 +49,7 @@ graphics_think(World_data::World *world,
     else
     {
       static float time = 4;
-      time += 0.005f;
+      //time += 0.005f;
 
       const float x = math::sin(time) * 9;
       const float z = math::cos(time) * 9;

@@ -25,8 +25,8 @@ enum ENUM {
 
 enum class Button_state {
 
-  button_up,
-  button_down,
+  up,
+  down,
 
 }; // enum
 

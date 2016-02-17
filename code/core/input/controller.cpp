@@ -25,7 +25,7 @@ Controller::get_axis(const uint8_t axis) const
 bool
 Controller::is_button_down(const Button::ENUM button) const
 {
-  return m_buttons[(size_t)button] == Button_state::button_down;
+  return m_buttons[(size_t)button] == Button_state::down;
 }
 
 

@@ -5,8 +5,8 @@
 #include <stdint.h>
 
 
-/*
-  Type ids.
+/*!
+  Type ids are the type id's used in Core::Entity
 */
 namespace Object_type {
 enum ENUM : uint32_t {
@@ -19,6 +19,7 @@ enum ENUM : uint32_t {
   dev_static_ground,
   
   dev_actor,
+  dev_gun,
   dev_npc_actor,
 
 }; // enum

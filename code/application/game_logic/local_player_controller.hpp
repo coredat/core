@@ -4,6 +4,7 @@
 
 #include "../common/ids_component_types.hpp"
 #include <core/interface/component.hpp>
+#include <core/interface/entity.hpp>
 
 
 class Local_player_controller final : public Core::Component
@@ -23,8 +24,7 @@ public:
 private:
 
   bool m_place_node = false;
-  Core::Entity_id cube_id;
-
+  Core::Entity gun;
 
 }; // class
 

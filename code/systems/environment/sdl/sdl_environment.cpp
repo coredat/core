@@ -48,6 +48,14 @@ think(const Window *window,
           {
             player_one->axis[0].x = +1;
           }
+          else if(key == SDLK_LSHIFT || key == SDLK_RSHIFT)
+          {
+            player_one->buttons[Core::Input::Button::button_2] = Core::Input::Button_state::down;
+          }
+          else if(key == SDLK_SPACE)
+          {
+            player_one->buttons[Core::Input::Button::button_3] = Core::Input::Button_state::down;
+          }
           
           break;
         }
@@ -71,6 +79,14 @@ think(const Window *window,
           {
             player_one->axis[0].x = 0;
           }
+          else if(key == SDLK_LSHIFT || key == SDLK_RSHIFT)
+          {
+            player_one->buttons[Core::Input::Button::button_2] = Core::Input::Button_state::up;
+          }
+          else if(key == SDLK_SPACE)
+          {
+            player_one->buttons[Core::Input::Button::button_3] = Core::Input::Button_state::up;
+          }
           
           break;
         }
@@ -82,43 +98,19 @@ think(const Window *window,
           
         case(SDL_MOUSEBUTTONDOWN):
         {
-//          if(input->controllers[0].buttons[Environment::Button::action_button] == (uint8_t)Environment::Button_action::on_down)
-//          {
-//            input->controllers[0].buttons[Environment::Button::action_button] = (uint8_t)Environment::Button_action::held;
-//          }
-//          else
-//          {
-//            input->controllers[0].buttons[Environment::Button::action_button] = (uint8_t)Environment::Button_action::on_down;
-//          }
-//          break;
+          player_one->buttons[Core::Input::Button::button_0] = Core::Input::Button_state::down;
+          break;
         }
         
         case(SDL_MOUSEBUTTONUP):
         {
-//          if(input->controllers[0].buttons[Environment::Button::action_button] == (uint8_t)Environment::Button_action::on_up)
-//          {
-//            input->controllers[0].buttons[Environment::Button::action_button] = (uint8_t)Environment::Button_action::resting;
-//          }
-//          else
-//          {
-//            input->controllers[0].buttons[Environment::Button::action_button] = (uint8_t)Environment::Button_action::on_up;
-//          }
-//          break;
+          player_one->buttons[Core::Input::Button::button_0] = Core::Input::Button_state::up;
+          break;
         }
       }
       
     } // While event
     
-  }
-  
-  // Normalize input
-  {
-//    if(input->controllers[0].axis_2[0] != 0 && input->controllers[0].axis_2[1] != 0)
-//    {
-//    // TODO: Normalise this.
-////      input->controllers[0].axis_2[0] *= 0.7071f;
-////      input->controllers[0].axis_2[1] *= 0.7071f;
-//    }
   }
 }
 

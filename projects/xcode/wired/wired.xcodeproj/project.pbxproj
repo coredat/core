@@ -67,6 +67,8 @@
 		7ED7BC1C1C3E56D000CE80EA /* debug_renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7BC0E1C3E56D000CE80EA /* debug_renderer.cpp */; };
 		7ED7BC1D1C3E56D000CE80EA /* motion_state.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7BC101C3E56D000CE80EA /* motion_state.cpp */; };
 		7ED7BC1E1C3E56D000CE80EA /* rigidbody.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7BC141C3E56D000CE80EA /* rigidbody.cpp */; };
+		7EE444561C731D2500D7881B /* gun_model.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EE444541C731D2500D7881B /* gun_model.cpp */; };
+		7EE4445A1C7457B300D7881B /* transform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EE444581C7457B300D7881B /* transform.cpp */; };
 		7EFB9B0C1C5E620C00A838C7 /* entity_id.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EFB9B001C5E620C00A838C7 /* entity_id.cpp */; };
 		7EFB9B0D1C5E620C00A838C7 /* component.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EFB9B051C5E620C00A838C7 /* component.cpp */; };
 		7EFB9B0E1C5E620C00A838C7 /* entity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EFB9B0A1C5E620C00A838C7 /* entity.cpp */; };
@@ -241,6 +243,10 @@
 		7ED7BC141C3E56D000CE80EA /* rigidbody.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = rigidbody.cpp; sourceTree = "<group>"; };
 		7ED7BC151C3E56D000CE80EA /* rigidbody.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = rigidbody.hpp; sourceTree = "<group>"; };
 		7ED7BC161C3E56D000CE80EA /* rigidbody_properties.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = rigidbody_properties.hpp; sourceTree = "<group>"; };
+		7EE444541C731D2500D7881B /* gun_model.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gun_model.cpp; sourceTree = "<group>"; };
+		7EE444551C731D2500D7881B /* gun_model.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = gun_model.hpp; sourceTree = "<group>"; };
+		7EE444581C7457B300D7881B /* transform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = transform.cpp; sourceTree = "<group>"; };
+		7EE444591C7457B300D7881B /* transform.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = transform.hpp; sourceTree = "<group>"; };
 		7EFB9B001C5E620C00A838C7 /* entity_id.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = entity_id.cpp; sourceTree = "<group>"; };
 		7EFB9B011C5E620C00A838C7 /* entity_id.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = entity_id.hpp; sourceTree = "<group>"; };
 		7EFB9B031C5E620C00A838C7 /* interface.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = interface.hpp; sourceTree = "<group>"; };
@@ -558,6 +564,8 @@
 		7ED7BB861C3CF8B100CE80EA /* game_logic */ = {
 			isa = PBXGroup;
 			children = (
+				7EE444541C731D2500D7881B /* gun_model.cpp */,
+				7EE444551C731D2500D7881B /* gun_model.hpp */,
 				7EAD4CDB1C63340D007F6A9C /* npc_actor_controller.cpp */,
 				7EAD4CDC1C63340D007F6A9C /* npc_actor_controller.hpp */,
 				7E03C4321C68D22E0079DA81 /* network_player_controller.cpp */,
@@ -732,9 +740,19 @@
 			path = physics;
 			sourceTree = "<group>";
 		};
+		7EE444571C7457B300D7881B /* transform */ = {
+			isa = PBXGroup;
+			children = (
+				7EE444581C7457B300D7881B /* transform.cpp */,
+				7EE444591C7457B300D7881B /* transform.hpp */,
+			);
+			path = transform;
+			sourceTree = "<group>";
+		};
 		7EFB9AFF1C5E620C00A838C7 /* core */ = {
 			isa = PBXGroup;
 			children = (
+				7EE444571C7457B300D7881B /* transform */,
 				7EAD4CD91C628A51007F6A9C /* ids_core_events.hpp */,
 				7EFB9B0F1C5E625A00A838C7 /* core_fwd.hpp */,
 				7EFB9B101C5E625A00A838C7 /* core.hpp */,
@@ -869,6 +887,7 @@
 				7E033E6F1C6C878400D3379D /* logic_pool.cpp in Sources */,
 				7EAD4D021C668F72007F6A9C /* application_host.cpp in Sources */,
 				7EFB9B0E1C5E620C00A838C7 /* entity.cpp in Sources */,
+				7EE4445A1C7457B300D7881B /* transform.cpp in Sources */,
 				7ED7BC1B1C3E56D000CE80EA /* generic_id.cpp in Sources */,
 				7EAD4CD61C628524007F6A9C /* event.cpp in Sources */,
 				7EFB9B131C5E78CB00A838C7 /* actor_model.cpp in Sources */,
@@ -886,6 +905,7 @@
 				7E033E701C6C878400D3379D /* model_pool.cpp in Sources */,
 				7EC9B99E1C418A3000FBF1D7 /* ogl_texture.cpp in Sources */,
 				7ED7BBD91C3CF8B100CE80EA /* network.cpp in Sources */,
+				7EE444561C731D2500D7881B /* gun_model.cpp in Sources */,
 				7EAD4D011C668F72007F6A9C /* application_graphics.cpp in Sources */,
 				7E03C4341C68D22E0079DA81 /* network_player_controller.cpp in Sources */,
 				7EAD4CEE1C638F8E007F6A9C /* controller.cpp in Sources */,

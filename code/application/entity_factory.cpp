@@ -8,6 +8,7 @@
 #include <data/data.hpp>
 #include <core/interface/entity.hpp>
 #include <application/game_logic/actor_model.hpp>
+#include <application/game_logic/gun_model.hpp>
 #include <application/game_logic/local_player_controller.hpp>
 #include <application/game_logic/npc_actor_controller.hpp>
 #include <application/game_logic/network_player_controller.hpp>
@@ -227,6 +228,36 @@ create_placement_cube(World_data::World *world)
   entity.set_model_id(Resource::Model::unit_cube);
   
   return entity;
+}
+
+
+Core::Entity
+create_gun(World_data::World *world)
+{
+  Core::Entity gun_entity;
+  
+  Core::Entity entity;
+  assert(World_data::world_create_new_entity(world, &entity, Object_type::dev_actor));
+  
+  const float scale_x = 0.1f;
+  const float scale_y = 0.1f;
+  const float scale_z = 0.3f;
+
+  const float pos_x = 0.f;
+  const float pos_y = 0.f;
+  const float pos_z = 0.f;
+
+  entity.set_transform(math::transform_init(math::vec3_init(pos_x, pos_y, pos_z),
+                                            math::vec3_init(scale_x, scale_y, scale_z),
+                                            math::quat_init()));
+  
+  entity.set_material_id(Resource::Texture::dev_orange);
+  entity.set_model_id(Resource::Model::unit_cube);
+  
+  entity.add_component<Gun_model>();
+  // TODO: Gun Controller.
+  
+  return gun_entity;
 }
 
 
