@@ -15,9 +15,9 @@ world_init(World *world)
   
   world->dynamics_world.setGravity(btVector3(0, -10, 0));
   
-  //world->debug_draw.setDebugMode(btIDebugDraw::DBG_DrawWireframe);
-  
   world->debug_draw.reset(new Debug_renderer());
+  
+  world->debug_draw->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
   world->dynamics_world.setDebugDrawer(world->debug_draw.get());
   
   world->dynamics_world.getPairCache()->setInternalGhostPairCallback(&world->ghost_callback_pair_cb);
