@@ -16,24 +16,26 @@ namespace Ogl {
 // TODO: This could move up a level?
 enum class Attr_type
 {
-  float1,
-  float2,
-  float3,
-  float4,
+  FLOAT1,
+  FLOAT2,
+  FLOAT3,
+  FLOAT4,
+  INT,
+  UINT,
 };
 
 
 // TODO: Could this move up a level?
 struct Attribute_desc
 {
-  const char  name[32];
+  char        name[32];
   Attr_type   type;
 };
 
 
 struct Attribute
 {
-  const char    name[32];
+  char          name[32];
   GLenum        type    = GL_NONE;
   uint32_t      size    = 0;
   size_t        pointer = 0;
@@ -55,8 +57,22 @@ struct Vertex_format
   \param number_of_attributes How many attributes in the array.
 */
 void
-vertex_attributes_load(Vertex_format *out_format, Attribute_desc attr_desc[], const size_t number_of_attributes);
+vertex_format_load(Vertex_format *out_format,
+                   const Attribute_desc attr_desc[],
+                   const size_t number_of_attributes);
 
+
+/*!
+  Checks to see if the vertex format is valid.
+  This only checks that stride > 0.
+  \return true if the format is valid.
+*/
+inline bool
+vertex_format_is_valid(Vertex_format *vert_fmt)
+{
+  assert(vert_fmt);
+  return vert_fmt->stride > 0;
+}
 
   
 } // ns

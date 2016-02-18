@@ -68,15 +68,34 @@ shader_create(Shader *out_shader,
     return shader_id;
   };
   
-  const auto vert_shader_id  = create_shader(GL_VERTEX_SHADER,   vert_shader_code, log);
-  const auto geo_shader_id   = create_shader(GL_GEOMETRY_SHADER, geo_shader_code,  log);
-  const auto frag_shader_id  = create_shader(GL_FRAGMENT_SHADER, frag_shader_code, log);
-  const auto program_id      = glCreateProgram();
+  const auto vert_shader_id = create_shader(GL_VERTEX_SHADER,   vert_shader_code, log);
+  Ogl::error_check("creating vert shader", log);
+  
+  GLuint geo_shader_id;
+  if(strlen(geo_shader_code))
+  {
+    geo_shader_id = create_shader(GL_GEOMETRY_SHADER, geo_shader_code,  log);
+    Ogl::error_check("creating geo shader", log);
+  }
+  
+  const auto frag_shader_id = create_shader(GL_FRAGMENT_SHADER, frag_shader_code, log);
+  Ogl::error_check("creating frag shader", log);
+  
+  const auto program_id = glCreateProgram();
+  Ogl::error_check("creating program", log);
   
   glAttachShader(program_id, vert_shader_id);
-  glAttachShader(program_id, geo_shader_id);
+  Ogl::error_check("attach shader to program", log);
+  
+  if(strlen(geo_shader_code))
+  {
+    glAttachShader(program_id, geo_shader_id);
+    Ogl::error_check("attach shader to program", log);
+  }
+  
   glAttachShader(program_id, frag_shader_id);
   glLinkProgram(program_id);
+  Ogl::error_check("linking program", log);
  
   // Log
   std::vector<GLchar> output_log;

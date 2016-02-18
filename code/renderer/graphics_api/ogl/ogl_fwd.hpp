@@ -8,6 +8,8 @@ namespace Ogl {
 struct Texture;
 struct Shader;
 struct Shader_uniforms;
+struct Vertex_buffer;
+struct Vertex_format;
 
 
 } // ns
