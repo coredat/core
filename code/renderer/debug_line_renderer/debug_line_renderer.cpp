@@ -10,7 +10,7 @@
 #include <assert.h>
 #include <iostream>
 #include <vector>
-#include <cstddef>
+#include <stddef.h>
 
 
 namespace
@@ -28,7 +28,7 @@ namespace
   constexpr size_t size_of_data_buffer = (1 << 20) * number_of_components; // Some big size * number of components (start, end, color)
   float data[size_of_data_buffer];
   
-  size_t data_ptr = 0;
+  size_t data_ptr = 0; // Keeps a track of the data that we push in.
 }
 
 
@@ -89,7 +89,6 @@ initialize()
       
       EndPrimitive();
     }
-
   )";
   
   const char* fragment_shader = R"(
