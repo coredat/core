@@ -45,6 +45,13 @@ shader_destroy(Shader *shader_to_destroy,
                std::ostream *log = nullptr);
 
 
+/*!
+  Bind a shader, passing null will unbind current shader.
+  \param shader_to_bind is the shader to bind o_O.
+*/
+void
+shader_bind(Shader *shader_to_bind);
+
 } // ns
 
 

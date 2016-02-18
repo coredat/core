@@ -18,7 +18,7 @@ namespace Ogl {
   Resets the gl states to the applications default.
 */
 inline void
-reset_state()
+default_state()
 {
   glEnable(GL_CULL_FACE);
   glCullFace(GL_BACK);

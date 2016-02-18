@@ -3,7 +3,7 @@
 
 
 #include <stdint.h>
-#include <simple_renderer/lazy_include.hpp>
+#include <renderer/graphics_api/ogl/ogl_vertex_buffer.hpp>
 
 
 namespace Simple_renderer {
@@ -14,7 +14,7 @@ struct Node
   float                     wvp[16];
   float                     world_mat[16];
   GLuint                    diffuse_id;
-  renderer::vertex_buffer   vbo;
+  Ogl::Vertex_buffer        vbo;
   uint32_t                  number_of_verts;
 };
 

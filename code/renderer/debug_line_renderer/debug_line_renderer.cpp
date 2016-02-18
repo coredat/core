@@ -20,11 +20,13 @@ namespace
   GLint uni_wvp(0);
   GLint uni_data(0);
   
-  constexpr size_t line_uniform_max = 32 * 3; // 64 lines, 3 components per line (start, end, color)
-  GLint uni_line[32 * 3];
+  constexpr size_t number_of_lines = 32;
+  constexpr size_t number_of_components = 3;
+  constexpr size_t line_uniform_max = number_of_lines * number_of_components; // 64 lines, 3 components per line (start, end, color)
+  GLint uni_line[line_uniform_max];
   
-  constexpr size_t size_of_data_buffer = (1 << 20) * 3; // Some big size * number of components (start, end, color)
-  float data[(1 << 20) * 3];
+  constexpr size_t size_of_data_buffer = (1 << 20) * number_of_components; // Some big size * number of components (start, end, color)
+  float data[size_of_data_buffer];
   
   size_t data_ptr = 0;
 }
@@ -153,15 +155,15 @@ add_lines(const Line_node nodes[], const std::size_t number_of_lines)
 void
 render(const float wvp_mat[16])
 {
-  const size_t number_to_batch = (data_ptr / 32) + 1;
+  const size_t number_to_batch = (data_ptr / number_of_lines) + 1;
   
   // Render
-  Ogl::reset_state();
+  Ogl::default_state();
   
-  static size_t data_get = 0;
-  data_get = 0;
+  size_t data_get = 0; // counter to how many we have already draw from the buffer.
   
-  glUseProgram(debug_line_shader.program_id);
+  //glUseProgram(debug_line_shader.program_id);
+  Ogl::shader_bind(&debug_line_shader);
   Ogl::error_check("Use program", &std::cout);
   
   glUniformMatrix4fv(uni_wvp, 1, GL_FALSE, wvp_mat);
@@ -169,16 +171,17 @@ render(const float wvp_mat[16])
   
   for(size_t b = 0; b < number_to_batch; ++b)
   {
-    for(size_t l = 0; l < std::min<size_t>(32, data_ptr); ++l)
+    for(size_t l = 0; l < std::min<size_t>(number_of_lines, data_ptr); ++l)
     {
-      const size_t uni = l * 3;
+      const size_t uni = l * number_of_components;
       
+      // TODO: If I stored the info in a 3x3 matrix would uploading be quicker?
       glUniform3f(uni_line[uni + 0], data[data_get+ 0], data[data_get+ 1], data[data_get+2]);
       glUniform3f(uni_line[uni + 1], data[data_get+ 3], data[data_get+ 4], data[data_get+5]);
       glUniform3f(uni_line[uni + 2], data[data_get+ 6], data[data_get+ 7], data[data_get+8]);
       
-      data_get += 9;
-      data_ptr -= (9);
+      data_get += number_of_components * 3; // * 3 because we are doing 3 at a time.
+      data_ptr -= (number_of_components * 3);
     }
     
     Ogl::error_check("Uploading debug line uniforms", &std::cout);
@@ -186,8 +189,7 @@ render(const float wvp_mat[16])
     glDrawArrays(GL_POINTS, 0, static_cast<GLsizei>(line_uniform_max));
   }
   
-  assert(data_ptr == 0);
-  //memset(data, 0, sizeof(float) * size_of_data_buffer);
+  assert(data_ptr == 0); // We need to have drawn all the lines, if not somethings out of sync.
 
   Ogl::error_check("Debug line renderer.", &std::cout);
 }

@@ -2,6 +2,7 @@
 #include <assert.h>
 #include <vector>
 #include <string>
+#include <iostream>
 
 
 namespace Ogl {
@@ -163,6 +164,21 @@ shader_destroy(Shader *shader, std::ostream *log)
   if(shader->vert_shader_id)  { glDeleteShader(shader->vert_shader_id); }
   if(shader->geo_shader_id)   { glDeleteShader(shader->geo_shader_id);  }
   if(shader->frag_shader_id)  { glDeleteShader(shader->frag_shader_id); }
+}
+
+
+void
+shader_bind(Shader *shader_to_bind)
+{
+  if(!shader_to_bind)
+  {
+    glUseProgram(0);
+  }
+  else
+  {
+    glUseProgram(shader_to_bind->program_id);
+    Ogl::error_check("Binding shader", &std::cout);
+  }
 }
 
 
