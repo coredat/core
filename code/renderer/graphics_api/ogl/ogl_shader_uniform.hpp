@@ -28,7 +28,6 @@ struct Sampler
 };
 
 
-
 struct Shader_uniforms
 {
   std::vector<Uniform> uniforms;

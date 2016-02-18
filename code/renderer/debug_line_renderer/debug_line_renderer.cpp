@@ -6,6 +6,7 @@
 #include "../graphics_api/ogl/ogl_pixel_format.hpp"
 #include "../graphics_api/pixel_format.hpp"
 #include "../graphics_api/ogl/ogl_texture_filtering.hpp"
+#include <algorithm>
 #include <assert.h>
 #include <iostream>
 #include <vector>
@@ -15,15 +16,14 @@
 namespace
 {
   Ogl::Shader debug_line_shader;
-  Ogl::Texture data_texture;
   
-  GLint uni_wvp;
-  GLint uni_data;
+  GLint uni_wvp(0);
+  GLint uni_data(0);
   
-  const size_t line_uniform_max = 32 * 3; // 64 lines, 3 components per line (start, end, color)
+  constexpr size_t line_uniform_max = 32 * 3; // 64 lines, 3 components per line (start, end, color)
   GLint uni_line[32 * 3];
   
-  const size_t size_of_data_buffer = (1 << 20) * 3; // Some big size * number of components (start, end, color)
+  constexpr size_t size_of_data_buffer = (1 << 20) * 3; // Some big size * number of components (start, end, color)
   float data[(1 << 20) * 3];
   
   size_t data_ptr = 0;
@@ -161,16 +161,15 @@ render(const float wvp_mat[16])
   static size_t data_get = 0;
   data_get = 0;
   
+  glUseProgram(debug_line_shader.program_id);
+  Ogl::error_check("Use program", &std::cout);
+  
+  glUniformMatrix4fv(uni_wvp, 1, GL_FALSE, wvp_mat);
+  Ogl::error_check("set wvp.", &std::cout);
+  
   for(size_t b = 0; b < number_to_batch; ++b)
   {
-    glUseProgram(debug_line_shader.program_id);
-    Ogl::error_check("Use program", &std::cout);
-    
-    glUniformMatrix4fv(uni_wvp, 1, GL_FALSE, wvp_mat);
-    Ogl::error_check("set wvp.", &std::cout);
-    
-    
-    for(size_t l = 0; l < 32; ++l)
+    for(size_t l = 0; l < std::min<size_t>(32, data_ptr); ++l)
     {
       const size_t uni = l * 3;
       
@@ -179,15 +178,16 @@ render(const float wvp_mat[16])
       glUniform3f(uni_line[uni + 2], data[data_get+ 6], data[data_get+ 7], data[data_get+8]);
       
       data_get += 9;
-      
-      Ogl::error_check("Uploading debug line uniforms", &std::cout);
+      data_ptr -= (9);
     }
+    
+    Ogl::error_check("Uploading debug line uniforms", &std::cout);
     
     glDrawArrays(GL_POINTS, 0, static_cast<GLsizei>(line_uniform_max));
   }
   
-  data_ptr = 0;
-  memset(data, 0, sizeof(float) * size_of_data_buffer);
+  assert(data_ptr == 0);
+  //memset(data, 0, sizeof(float) * size_of_data_buffer);
 
   Ogl::error_check("Debug line renderer.", &std::cout);
 }

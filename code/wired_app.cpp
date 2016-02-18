@@ -132,7 +132,7 @@ main(int argc, char *argv[])
   else
   {
     Application::host_initialize(&world_data, &connection);
-    Network::server_create(&connection, &std::cout);
+    //Network::server_create(&connection, &std::cout);
   }
 
   Physics::world_step(&phy_world, 0.f);

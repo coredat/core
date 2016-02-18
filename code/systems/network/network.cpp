@@ -239,7 +239,8 @@ poll_events(Connection *connection,
 
   ENetEvent event;
 
-  while (enet_host_service(connection->host, & event, static_cast<enet_uint32>(wait_ms)) > 0)
+  //while (enet_host_service(connection->host, & event, static_cast<enet_uint32>(wait_ms)) > 0)
+  while(false)
   {
       switch (event.type)
       {
