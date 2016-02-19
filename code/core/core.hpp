@@ -3,6 +3,10 @@
 
 
 #include "entity_id.hpp"
+#include "input/input.hpp"
+#include "physics/ray.hpp"
+#include "interface/component.hpp"
+#include "interface/entity.hpp"
 
 
 #endif // inc guard

@@ -7,6 +7,10 @@ namespace Core {
 
 struct Entity_id;
 
+class Transform;
+class Ray;
+class Controller;
+
 
 } // ns
 

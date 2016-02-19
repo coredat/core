@@ -10,6 +10,7 @@
 #include <systems/transform/transform.hpp>
 #include <renderer/renderer.hpp>
 #include <iostream>
+#include <systems/audio/audio.hpp>
 
 
 Local_player_controller::Local_player_controller()
@@ -65,6 +66,8 @@ Local_player_controller::on_update(const float dt)
   // Player Actions (This should be moved into a gun model.)
   if(controller.is_button_down(Core::Input::Button::button_0))
   {
+    Audio::play();
+  
     const Core::Transform curr_trans = get_entity().get_transform();
     
     const math::vec3 scaled_fwd_vec = math::vec3_scale(curr_trans.get_forward(), 1000.f);

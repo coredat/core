@@ -11,8 +11,6 @@
 */
 namespace Resource {
 namespace Model {
-
-
 enum ENUM {
 
   unit_cube,
@@ -21,12 +19,10 @@ enum ENUM {
   size
 
 }; // enum
-
 } // ns
 
 
 namespace Texture {
-
 enum ENUM {
   
   // Speical dev textures.

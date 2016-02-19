@@ -26,6 +26,7 @@
 #include <application/engine/application_common.hpp>
 #include <application/engine/application_graphics.hpp>
 
+#include <systems/audio/audio.hpp>
 
 namespace
 {
@@ -50,13 +51,14 @@ main(int argc, char *argv[])
   Environment::window_create(&window, 800, 480, false, title.c_str());
 
   sdl::input input;
-
   input.set_mouse_hold(true);
   
   renderer::set_log_callback([](const int32_t id, const std::string &msg)
   {
     std::cout << id << " - " << msg << std::endl;
   });
+  
+  Audio::initialize();
   
   Network::initialize(&std::cout);
   Network::Connection connection;
@@ -132,7 +134,7 @@ main(int argc, char *argv[])
   else
   {
     Application::host_initialize(&world_data, &connection);
-    //Network::server_create(&connection, &std::cout);
+    Network::server_create(&connection, &std::cout);
   }
 
   Physics::world_step(&phy_world, 0.f);

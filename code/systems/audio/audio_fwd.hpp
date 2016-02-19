@@ -4,9 +4,9 @@
 
 namespace Audio {
 
-
-
-
+struct Node_sample_3d;
+struct Node_sample_2d;
+struct Node_song;
 
 } // ns
 
