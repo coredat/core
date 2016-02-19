@@ -2,7 +2,7 @@
 #define RESOURCES_INCLUDED_8C811BD6_4022_4F06_9C0E_FC8DFEEE4BF4
 
 
-#include <data/world_data/world_data_fwd.hpp>
+#include <data/world_data/world.hpp>
 #include <stddef.h>
 
 
@@ -16,6 +16,7 @@ enum ENUM {
   unit_cube,
   unit_plane,
   
+  // Number of models.
   size
 
 }; // enum
@@ -36,11 +37,22 @@ enum ENUM {
   dev_colored_squares,
   dev_squares,
   
-  
   // Number of textures.
   size
 
 }; // enum
+
+
+namespace Audio {
+enum ENUM {
+
+  gun_shot,
+  
+  // Number of audio samples.
+  size
+
+}; // enum
+} // ns
 
 } // ns
 
@@ -53,10 +65,7 @@ enum ENUM {
   \param size_of_model_pool size of the model pool.
 */
 void
-load_default_resources(World_data::Texture_pool *texture_pool,
-                       const size_t size_of_texture_pool,
-                       World_data::Model_pool *model_pool,
-                       const size_t size_of_model_pool);
+load_default_resources(World_data::World *world);
 
 
 } // ns

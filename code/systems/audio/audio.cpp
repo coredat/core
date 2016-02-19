@@ -8,11 +8,13 @@ namespace
 {
   std::vector<bool> channels;
   
+  
   void
   channel_finished(int channel)
   {
     channels[channel] = true;
   }
+  
   
   inline int
   get_free_channel()
@@ -101,7 +103,9 @@ load_samples(const char* files_to_load[],
 
 
 void
-play_nodes(const float ear[3], const Node_sample_3d nodes[], size_t number_of_nodes)
+play_nodes(const float ear[3],
+           const Node_sample_3d nodes[],
+           const size_t number_of_nodes)
 {
   for(size_t i = 0; i < number_of_nodes; ++i)
   { 
@@ -114,7 +118,8 @@ play_nodes(const float ear[3], const Node_sample_3d nodes[], size_t number_of_no
 
 
 void
-play_nodes(const Node_sample_2d nodes[], size_t number_of_nodes)
+play_nodes(const Node_sample_2d nodes[],
+          const size_t number_of_nodes)
 {
   for(size_t i = 0; i < number_of_nodes; ++i)
   { 
@@ -124,8 +129,6 @@ play_nodes(const Node_sample_2d nodes[], size_t number_of_nodes)
     }
   }
 }
-
-
 
 
 } // ns

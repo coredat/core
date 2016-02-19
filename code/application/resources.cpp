@@ -11,15 +11,14 @@ namespace Resource {
 
 
 void
-load_default_resources(World_data::Texture_pool *texture_pool,
-                       const size_t size_of_texture_pool,
-                       World_data::Model_pool *model_pool,
-                       const size_t size_of_model_pool)
+load_default_resources(World_data::World *world)
 {
   const std::string asset_path = util::get_resource_path() + "assets/";
 
   // Load models
   {
+    auto model_pool = world->model_pool;
+    
     const ::Model::Load_model model[Resource::Model::size] {
       ::Model::Load_model{Resource::Model::unit_cube,     std::string(asset_path + "models/unit_cube.obj")},
       ::Model::Load_model{Resource::Model::unit_plane,    std::string(asset_path + "models/unit_plane.obj")},
@@ -31,6 +30,8 @@ load_default_resources(World_data::Texture_pool *texture_pool,
   
   // Load textures
   {
+    auto texture_pool = world->texture_pool;
+    
     const ::Texture::Load_texture tex[Resource::Texture::size] {
       ::Texture::Load_texture{Resource::Texture::dev_green,             std::string(asset_path + "textures/dev_grid_green_512.png").c_str()},
       ::Texture::Load_texture{Resource::Texture::dev_red,               std::string(asset_path + "textures/dev_grid_red_512.png").c_str()},
@@ -42,6 +43,19 @@ load_default_resources(World_data::Texture_pool *texture_pool,
     
     Generic_id::ids_init_sequentially(texture_pool->id, texture_pool->size);
     ::Texture::texture_load(tex, Resource::Texture::size, texture_pool->texture, texture_pool->size);
+  }
+  
+  // Load audio
+  {
+    auto audio_pool = world->audio_pool;
+    
+    const size_t num_of_files = 1;
+    
+    const char *audio_files[num_of_files] {
+      "/Users/PhilCK/Developer/wired/assets/audio/test_2.wav",
+    };
+    
+    Audio::load_samples(audio_files, num_of_files, audio_pool->samples, audio_pool->size);
   }
 }
 

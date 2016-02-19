@@ -111,17 +111,8 @@ main(int argc, char *argv[])
   
   // Load some audio data
   {
-    const size_t num_of_files = 1;
-    const char *audio_files[num_of_files] {
-      "/Users/PhilCK/Developer/wired/assets/audio/test_2.wav",
-    };
-    
-    Audio::load_samples(audio_files, num_of_files, audio_pool.samples, audio_pool.size);
-    
     Audio::Node_sample_2d node;
     node.chunk_to_play = audio_pool.samples[0].chunk;
-    
-    Audio::play_nodes(&node, 1);
   }
   
   // Core Data
@@ -143,7 +134,7 @@ main(int argc, char *argv[])
 
   Net_data::set_net_data(&net_data);
   
-  Resource::load_default_resources(&texture_pool, texture_pool.size, &model_pool, model_pool.size);
+  Resource::load_default_resources(&world_data);
   
   if (is_client)
   {
