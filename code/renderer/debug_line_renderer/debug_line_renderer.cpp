@@ -6,6 +6,8 @@
 #include "../graphics_api/ogl/ogl_pixel_format.hpp"
 #include "../graphics_api/pixel_format.hpp"
 #include "../graphics_api/ogl/ogl_texture_filtering.hpp"
+#include "../graphics_api/utils/shader_utils.hpp"
+#include <utils/directory.hpp>
 #include <algorithm>
 #include <assert.h>
 #include <iostream>
@@ -37,78 +39,17 @@ void
 initialize()
 {
   Ogl::error_clear();
-
-  const char* vertex_shader = R"(
-    #version 150 core
-
-    out int gs_in_vert_id;
   
-    void main()
-    {
-      gs_in_vert_id = gl_VertexID;
-    }
-  )";
+  const std::string debug_lines = util::get_resource_path() + "assets/" + "shaders/debug_line.ogl";
+  auto debug_code = Graphics_api::Util::shader_code_from_tagged_file(debug_lines.c_str());
   
-  const char* geometry_shader = R"(
-    #version 330
-
-    layout (points) in;
-    layout (line_strip, max_vertices = 2) out;
-  
-    in int              gs_in_vert_id[];
-  
-    uniform mat4        uni_wvp_mat;
-
-    #define NUM_LINES 32
-    #define COMPONENTS_PER_LINE 3
-
-    uniform vec3        uni_line[NUM_LINES * COMPONENTS_PER_LINE]; // In groups of three, start, end, color.
-  
-    out vec3            ps_in_color;
-
-    void main()
-    {
-      int id = gs_in_vert_id[0] * COMPONENTS_PER_LINE;
-      
-      int start = id + 0;
-      int end   = id + 1;
-      int color = id + 2;
-      
-      ps_in_color = uni_line[color];
-      
-      // Generate the primitive //
-
-      gl_Position = uni_wvp_mat * vec4(uni_line[start], 1);
-      EmitVertex();
-      
-      gl_Position = uni_wvp_mat * vec4(uni_line[end], 1);
-      EmitVertex();
-      
-      EndPrimitive();
-    }
-  )";
-  
-  const char* fragment_shader = R"(
-    #version 150
-
-    in vec3 ps_in_color;
-  
-    out vec4 ps_out_color;
-
-    void main()
-    {
-      ps_out_color = vec4(ps_in_color, 1.0);
-    }
-  )";
-  
-  Ogl::shader_create(&debug_line_shader, vertex_shader, geometry_shader, fragment_shader, &std::cout);
+  Ogl::shader_create(&debug_line_shader, debug_code.vs_code.c_str(), debug_code.gs_code.c_str(), debug_code.ps_code.c_str(), &std::cout);
   Ogl::error_check("Building debug line shader.", &std::cout);
   
   Ogl::Shader_uniforms uniforms;
   Ogl::shader_uniforms_retrive(&uniforms, &debug_line_shader);
   Ogl::shader_uniforms_get_uniform_index(&uni_wvp, &uniforms, "uni_wvp_mat");
   Ogl::error_check("Getting uniforms from debug shader", &std::cout);
-  
   
   for(size_t i = 0; i < line_uniform_max; ++i)
   {
