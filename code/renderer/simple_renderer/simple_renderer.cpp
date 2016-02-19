@@ -6,7 +6,7 @@
 #include "../graphics_api/ogl/ogl_common.hpp"
 #include "../graphics_api/ogl/ogl_texture.hpp"
 #include "../graphics_api/ogl/ogl_vertex_format.hpp"
-#include <simple_renderer/lazy_include.hpp> // Used to parse the shader code. Boo!
+#include "../graphics_api/utils/shader_utils.hpp"
 #include <utils/directory.hpp>
 #include <string>
 #include <assert.h>
@@ -44,9 +44,12 @@ initialize()
 
   // Load shaders
   {
-    const std::string asset_path = util::get_resource_path() + "assets/";
-    const auto full_code = renderer::shader_utils::get_shader_code_from_tagged_file(asset_path + "shaders/basic_fullbright.ogl");
-    const auto dir_code  = renderer::shader_utils::get_shader_code_from_tagged_file(asset_path + "shaders/basic_dir_light.ogl");
+    const std::string asset_path  = util::get_resource_path() + "assets/";
+    const std::string fullbright  = asset_path + "shaders/basic_fullbright.ogl";
+    const std::string directional = asset_path + "shaders/basic_dir_light.ogl";
+   
+    const auto full_code = Graphics_api::Util::shader_code_from_tagged_file(fullbright.c_str());
+    const auto dir_code  = Graphics_api::Util::shader_code_from_tagged_file(directional.c_str());
 
     Ogl::shader_create(&shader_fullbright, full_code.vs_code.c_str(), full_code.gs_code.c_str(), full_code.ps_code.c_str(), &std::cout);
     Ogl::shader_create(&shader_dir_light, dir_code.vs_code.c_str(), dir_code.gs_code.c_str(), dir_code.ps_code.c_str(), &std::cout);

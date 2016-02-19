@@ -45,6 +45,7 @@ texture_create_2d(Texture *out_texture,
   out_texture->format = format;
   out_texture->width = width;
   out_texture->height = height;
+  out_texture->dimention = GL_TEXTURE_2D;
   
   // Open GL
   glGenTextures(1, &out_texture->texture_id);

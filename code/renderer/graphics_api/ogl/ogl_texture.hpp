@@ -12,15 +12,16 @@ namespace Ogl {
 
 /*!
   Texture Object.
+  TODO: Pack this down. ideally under 128bits or less.
 */
 struct Texture
 {
   GLuint          texture_id  = 0;
+  GLenum          format      = GL_RGBA;
+  GLenum          dimention   = GL_TEXTURE_2D;
   uint32_t        width       = 0;
   uint32_t        height      = 0;
-  //uint32_t        depth       = 0;
-  GLenum          format      = GL_RGBA;
-  //GLenum          dimention   = GL_TEXTURE_2D;
+  uint32_t        depth       = 0;
 }; // struct
 
 
