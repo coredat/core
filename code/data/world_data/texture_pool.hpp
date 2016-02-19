@@ -32,7 +32,7 @@ texture_pool_init(Texture_pool *pool);
 /*!
   Find the texture for the given id.
 */
-const Ogl::Texture*
+Ogl::Texture
 texture_pool_find(const Texture_pool *pool, const size_t id);
 
 

@@ -13,7 +13,7 @@ texture_pool_init(Texture_pool *pool)
 }
 
 
-const Ogl::Texture*
+Ogl::Texture
 texture_pool_find(const Texture_pool *pool, const size_t id)
 {
   assert(pool);
@@ -22,11 +22,11 @@ texture_pool_find(const Texture_pool *pool, const size_t id)
   {
     if(pool->id[i] == id)
     {
-      return &pool->texture[i];
+      return pool->texture[i];
     }
   }
   
-  return nullptr;
+  return Ogl::Texture();
 }
 
 

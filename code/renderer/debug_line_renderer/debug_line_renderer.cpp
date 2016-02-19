@@ -16,9 +16,7 @@
 namespace
 {
   Ogl::Shader debug_line_shader;
-  
-  GLint uni_wvp(0);
-  GLint uni_data(0);
+  Ogl::Uniform uni_wvp;
   
   constexpr size_t number_of_lines = 32;
   constexpr size_t number_of_components = 3;
@@ -60,7 +58,6 @@ initialize()
     in int              gs_in_vert_id[];
   
     uniform mat4        uni_wvp_mat;
-    uniform sampler2D 	uni_data_lookup;
 
     #define NUM_LINES 32
     #define COMPONENTS_PER_LINE 3
@@ -109,10 +106,9 @@ initialize()
   
   Ogl::Shader_uniforms uniforms;
   Ogl::shader_uniforms_retrive(&uniforms, &debug_line_shader);
+  Ogl::shader_uniforms_get_uniform_index(&uni_wvp, &uniforms, "uni_wvp_mat");
   Ogl::error_check("Getting uniforms from debug shader", &std::cout);
   
-  Ogl::shader_uniforms_get_uniform_index(&uni_wvp, &uniforms, "uni_wvp_mat");
-  Ogl::shader_uniforms_get_uniform_index(&uni_data, &uniforms, "uni_data_lookup");
   
   for(size_t i = 0; i < line_uniform_max; ++i)
   {
@@ -165,7 +161,7 @@ render(const float wvp_mat[16])
   Ogl::shader_bind(&debug_line_shader);
   Ogl::error_check("Use program", &std::cout);
   
-  glUniformMatrix4fv(uni_wvp, 1, GL_FALSE, wvp_mat);
+  Ogl::shader_uniforms_apply(uni_wvp, (void*)wvp_mat);
   Ogl::error_check("set wvp.", &std::cout);
   
   for(size_t b = 0; b < number_to_batch; ++b)

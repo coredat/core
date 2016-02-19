@@ -52,7 +52,7 @@ error_check(const char* msg, std::ostream *stream)
 inline void
 error_clear()
 {
-  glGetError();
+  while(glGetError()) {}
 }
 
 

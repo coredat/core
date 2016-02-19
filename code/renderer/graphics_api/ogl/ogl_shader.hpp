@@ -13,10 +13,10 @@ namespace Ogl {
 */
 struct Shader
 {
-  GLuint program_id;
-  GLuint vert_shader_id;
-  GLuint geo_shader_id;
-  GLuint frag_shader_id;
+  GLuint program_id        = 0;
+  GLuint vert_shader_id    = 0;
+  GLuint geo_shader_id     = 0;
+  GLuint frag_shader_id    = 0;
 };
 
 

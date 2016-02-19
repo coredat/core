@@ -14,24 +14,19 @@ namespace Ogl {
 
 struct Uniform
 {
-  std::string name;
   GLint       index;
   GLenum      type;
   GLint       number_of_elements;
 };
 
 
-struct Sampler
-{
-  std::string name;
-  GLint       index;
-};
-
-
 struct Shader_uniforms
 {
-  std::vector<Uniform> uniforms;
-  std::vector<Sampler> samplers;
+  std::vector<std::string>  uniform_names;
+  std::vector<Uniform>      uniforms;
+  
+  std::vector<std::string>  sampler_names;
+  std::vector<Uniform>      samplers;
 };
 
 
@@ -46,24 +41,20 @@ shader_uniforms_retrive(Shader_uniforms *out_uniforms, const Shader *shader);
 
 /*!
   Searches for the index for the requested uniform.
-  \param index result.
+  \param out_uniform, the uniforms reesult.
   \param unis pointer to shader_uniforms.
   \param name name of the uniform.
   \return true or false depending of if it was found.
 */
 bool
-shader_uniforms_get_uniform_index(GLint *index, const Shader_uniforms *unis, const std::string &name);
+shader_uniforms_get_uniform_index(Uniform *out_uniform, const Shader_uniforms *unis, const std::string &name);
 
 
 /*!
-  Searches for the index for the requested sampler.
-  \param index result.
-  \param unis pointer to shader_uniforms.
-  \param name name of the sampler.
-  \return true or false depending of if it was found.
+ 
 */
-bool
-shader_uniforms_get_sampler_index(GLint *index, const Shader_uniforms *unis, const std::string &name);
+void
+shader_uniforms_apply(const Uniform uniform_to_apply, void *data);
 
 
 } // ns

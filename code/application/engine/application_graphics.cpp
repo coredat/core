@@ -74,8 +74,8 @@ graphics_think(World_data::World *world,
   // Texture/vbo info
   for (size_t i = 0; i < size_of_node_pool; ++i)
   {
-    nodes[i].vbo        = world->model_pool->vbo[world->entity_pool->model[i]];
-    nodes[i].diffuse_id = World_data::texture_pool_find(world->texture_pool, world->entity_pool->texture[i])->texture_id;
+    nodes[i].vbo     = world->model_pool->vbo[world->entity_pool->model[i]];
+    nodes[i].diffuse = World_data::texture_pool_find(world->texture_pool, world->entity_pool->texture[i]);
   }
   
   //Simple_renderer::render_nodes_fullbright(nodes, size_of_node_pool);

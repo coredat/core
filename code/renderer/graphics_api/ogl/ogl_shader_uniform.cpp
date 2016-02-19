@@ -22,11 +22,15 @@ shader_uniforms_retrive(Shader_uniforms *out_uniforms, const Shader *shader)
   glGetProgramiv(shader->program_id, GL_ACTIVE_UNIFORMS, &uniform_count);
   glGetProgramiv(shader->program_id, GL_ACTIVE_UNIFORM_MAX_LENGTH, &uniform_length);
 
-  std::vector<Sampler>samplers;
+  std::vector<std::string>  sampler_names;
+  std::vector<Uniform>      samplers;
   samplers.reserve(uniform_count);
+  sampler_names.reserve(uniform_count);
   
-  std::vector<Uniform>constants;
+  std::vector<std::string>  constant_names;
+  std::vector<Uniform>      constants;
   constants.reserve(uniform_count);
+  constant_names.reserve(uniform_count);
 
   for(GLint i = 0; i < uniform_count; ++i)
   {
@@ -47,7 +51,8 @@ shader_uniforms_retrive(Shader_uniforms *out_uniforms, const Shader *shader)
 
       glUniform1i(location, static_cast<GLint>(samplers.size()));
 
-      samplers.emplace_back(Sampler{uniform_name, static_cast<GLint>(samplers.size())});
+      sampler_names.emplace_back(uniform_name);
+      samplers.emplace_back(Uniform{static_cast<GLint>(samplers.size()), gl_type, 0});
     }
     // Then uniform
     else
@@ -58,31 +63,45 @@ shader_uniforms_retrive(Shader_uniforms *out_uniforms, const Shader *shader)
       {
         const GLint index = glGetUniformLocation(shader->program_id, uniform_name.c_str());
 
-        constants.emplace_back(Uniform{uniform_name, index, gl_type, static_cast<int32_t>(size)});
+        constant_names.emplace_back(uniform_name);
+        constants.emplace_back(Uniform{index, gl_type, static_cast<int32_t>(size)});
       }
     }
   }
   
   glUseProgram(0);
 
+  sampler_names.shrink_to_fit();
+  constant_names.shrink_to_fit();
   samplers.shrink_to_fit();
   constants.shrink_to_fit();
   
+  out_uniforms->sampler_names = std::move(sampler_names);
   out_uniforms->samplers = std::move(samplers);
+  out_uniforms->uniform_names = std::move(constant_names);
   out_uniforms->uniforms = std::move(constants);
 }
 
 
 bool
-shader_uniforms_get_uniform_index(GLint *out_index, const Shader_uniforms *unis, const std::string &name)
+shader_uniforms_get_uniform_index(Uniform *out_index, const Shader_uniforms *unis, const std::string &name)
 {
   assert(out_index && unis);
   
-  for(std::size_t i = 0; i < unis->uniforms.size(); ++i)
+  for(std::size_t i = 0; i < unis->uniform_names.size(); ++i)
   {
-    if(unis->uniforms[i].name == name)
+    if(unis->uniform_names[i] == name)
     {
-      (*out_index) = unis->uniforms[i].index;
+      (*out_index) = unis->uniforms[i];
+      return true;
+    }
+  }
+  
+  for(std::size_t i = 0; i < unis->sampler_names.size(); ++i)
+  {
+    if(unis->sampler_names[i] == name)
+    {
+      (*out_index) = unis->samplers[i];
       return true;
     }
   }
@@ -91,21 +110,48 @@ shader_uniforms_get_uniform_index(GLint *out_index, const Shader_uniforms *unis,
 }
 
 
-bool
-shader_uniforms_get_sampler_index(GLint *out_index, const Shader_uniforms *unis, const std::string &name)
+void
+shader_uniforms_apply(const Uniform uniform_to_apply, void *data)
 {
-  assert(out_index && unis);
-  
-  for(std::size_t i = 0; i < unis->uniforms.size(); ++i)
+  switch(uniform_to_apply.type)
   {
-    if(unis->samplers[i].name == name)
-    {
-      (*out_index) = unis->samplers[i].index;
-      return true;
-    }
-  }
+    case(GL_FLOAT):       glUniform1fv(uniform_to_apply.index, uniform_to_apply.number_of_elements, (GLfloat*)data);  break;
+    case(GL_FLOAT_VEC2):  glUniform2fv(uniform_to_apply.index, uniform_to_apply.number_of_elements, (GLfloat*)data);  break;
+    case(GL_FLOAT_VEC3):  glUniform3fv(uniform_to_apply.index, uniform_to_apply.number_of_elements, (GLfloat*)data);  break;
+    case(GL_FLOAT_VEC4):  glUniform4fv(uniform_to_apply.index, uniform_to_apply.number_of_elements, (GLfloat*)data);  break;
+    case(GL_INT):         glUniform1iv(uniform_to_apply.index, uniform_to_apply.number_of_elements, (GLint*)data);    break;
+    case(GL_INT_VEC2):    glUniform2iv(uniform_to_apply.index, uniform_to_apply.number_of_elements, (GLint*)data);    break;
+    case(GL_INT_VEC3):    glUniform3iv(uniform_to_apply.index, uniform_to_apply.number_of_elements, (GLint*)data);    break;
+    case(GL_INT_VEC4):    glUniform4iv(uniform_to_apply.index, uniform_to_apply.number_of_elements, (GLint*)data);    break;
+    case(GL_BOOL):        glUniform1iv(uniform_to_apply.index, uniform_to_apply.number_of_elements, (GLint*)data);    break;
+    case(GL_BOOL_VEC2):   glUniform2iv(uniform_to_apply.index, uniform_to_apply.number_of_elements, (GLint*)data);    break;
+    case(GL_BOOL_VEC3):   glUniform3iv(uniform_to_apply.index, uniform_to_apply.number_of_elements, (GLint*)data);    break;
+    case(GL_BOOL_VEC4):   glUniform4iv(uniform_to_apply.index, uniform_to_apply.number_of_elements, (GLint*)data);    break;
+    case(GL_FLOAT_MAT2):  glUniformMatrix2fv(uniform_to_apply.index, uniform_to_apply.number_of_elements, GL_FALSE, (GLfloat*)data); break;
+    case(GL_FLOAT_MAT3):  glUniformMatrix3fv(uniform_to_apply.index, uniform_to_apply.number_of_elements, GL_FALSE, (GLfloat*)data); break;
+    case(GL_FLOAT_MAT4):  glUniformMatrix4fv(uniform_to_apply.index, uniform_to_apply.number_of_elements, GL_FALSE, (GLfloat*)data); break;
+    case(GL_SAMPLER_1D):
+    case(GL_SAMPLER_1D_ARRAY):
+    case(GL_SAMPLER_1D_ARRAY_SHADOW):
+    case(GL_SAMPLER_1D_SHADOW):
+    case(GL_SAMPLER_2D):
+    case(GL_SAMPLER_2D_ARRAY):
+    case(GL_SAMPLER_2D_ARRAY_SHADOW):
+    case(GL_SAMPLER_2D_MULTISAMPLE):
+    case(GL_SAMPLER_2D_MULTISAMPLE_ARRAY):
+    case(GL_SAMPLER_2D_RECT):
+    case(GL_SAMPLER_2D_RECT_SHADOW):
+    case(GL_SAMPLER_2D_SHADOW):
+    case(GL_SAMPLER_3D):
+    // There are other samplers but do we need them?
+      glActiveTexture(GL_TEXTURE0);
+      glBindTexture(GL_TEXTURE_2D, *static_cast<GLuint*>(data));
+      break;
+    
 
-  return false;
+    default:
+      assert(false); // Why did you get here?
+  };  
 }
 
 

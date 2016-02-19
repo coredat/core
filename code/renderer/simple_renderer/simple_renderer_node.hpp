@@ -4,6 +4,7 @@
 
 #include <stdint.h>
 #include <renderer/graphics_api/ogl/ogl_vertex_buffer.hpp>
+#include <renderer/graphics_api/ogl/ogl_texture.hpp>
 
 
 namespace Simple_renderer {
@@ -13,7 +14,7 @@ struct Node
 {
   float                     wvp[16];
   float                     world_mat[16];
-  GLuint                    diffuse_id;
+  Ogl::Texture              diffuse;
   Ogl::Vertex_buffer        vbo;
   uint32_t                  number_of_verts;
 };
