@@ -14,6 +14,7 @@ namespace World_data {
 
 struct World
 {
+  Audio_pool                  *audio_pool = nullptr;
   Entity_pool                 *entity_pool = nullptr;
   Entity_graph_changes_pool   *entity_graph_changes = nullptr;
   Logic_pool                  *logic_pool = nullptr;

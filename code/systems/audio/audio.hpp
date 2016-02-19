@@ -9,57 +9,75 @@
 namespace Audio {
 
 
+struct Sample
+{
+  Mix_Chunk   *chunk = nullptr;
+};
+
+
 struct Node_sample_3d
 {
-  Mix_Chunk   *chunk_to_play;
-  float       position[3];
+  Mix_Chunk   *chunk_to_play = nullptr;
+  float       position[3] = {0,0,0};
 };
 
 
 struct Node_sample_2d
 {
-  Mix_Chunk   *chunk_to_play;
-  float       volume;
-};
-
-
-struct Node_song
-{
-  Mix_Chunk   *chunk_to_play;
-  float       volume;
+  Mix_Chunk   *chunk_to_play = nullptr;
+  float       volume = 0;
 };
 
 
 
-void initialize();
-void de_initialize();
-
-void play_nodes(const float ear[3], const Node_sample_3d[], size_t number_of_nodes);
-void play_nodes(const Node_sample_2d[], size_t number_of_nodes);
-void play_nodes(const Node_song[], size_t number_of_nodes);
-
+/*!
+  Initialize the audio system.
+*/
+void
+initialize();
 
 
-inline void
-play()
-{
-  static Mix_Chunk *sample;
-  sample = Mix_LoadWAV("/Users/PhilCK/Developer/wired/assets/audio/temp_shot.wav");
-  
-  if(!sample)
-  {
-      printf("Mix_LoadWAV: %s\n", Mix_GetError());
-      // handle error
-  }
+/*!
+  De-init the audio system.
+*/
+void
+de_initialize();
 
-  // play sample on first free unreserved channel
-  // play it exactly once through
-  // Mix_Chunk *sample; //previously loaded
-  if(Mix_PlayChannel(-1, sample, 0)==-1)
-  {
-    printf("Mix_PlayChannel: %s\n",Mix_GetError());
-  }
-}
+
+/*!
+  Loads a collection of samples into a given buffer.
+  \param files_to_load An array of filenames to load.
+  \param number_of_files How large the array is.
+  \param out_samples[] Where to put the loaded files.
+  \param number_of_out_samples How big the output buffer is.
+*/
+void
+load_samples(const char* files_to_load[],
+             const size_t number_of_files,
+             Sample out_samples[],
+             const size_t number_of_out_samples);
+
+
+/*!
+  Play 3d sounds
+  \param ear[3] The position of the virtual ear.
+  \param nodes[] The chunks to play and where.
+  \param number_of_nodes How many nodes to play.
+*/
+void
+play_nodes(const float ear[3],
+           const Node_sample_3d nodes[],
+           const size_t number_of_nodes);
+
+
+/*!
+  Play 2d sounds.
+  \param nodes[] Array of 2d sound nodes.
+  \param number_of_nodes How many nodes to play.
+*/
+void
+play_nodes(const Node_sample_2d nodes[],
+           const size_t number_of_nodes);
 
 
 } // ns

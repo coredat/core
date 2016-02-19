@@ -7,6 +7,7 @@
 #include <core/interface/entity.hpp>
 #include <core/input/input.hpp>
 #include <core/physics/ray.hpp>
+#include <data/world_data/audio_pool.hpp>
 #include <systems/transform/transform.hpp>
 #include <renderer/renderer.hpp>
 #include <iostream>
@@ -66,7 +67,11 @@ Local_player_controller::on_update(const float dt)
   // Player Actions (This should be moved into a gun model.)
   if(controller.is_button_down(Core::Input::Button::button_0))
   {
-    Audio::play();
+    Audio::Node_sample_2d node;
+    node.chunk_to_play = m_world_data->audio_pool->samples[0].chunk;
+    
+    Audio::play_nodes(&node, 1);
+
   
     const Core::Transform curr_trans = get_entity().get_transform();
     

@@ -91,8 +91,12 @@ main(int argc, char *argv[])
   World_data::Camera_pool camera_pool;
   World_data::camera_pool_init(&camera_pool);
   
+  World_data::Audio_pool audio_pool;
+  World_data::audio_pool_init(&audio_pool);
+  
   World_data::World world_data;
   {
+    world_data.audio_pool             = &audio_pool;
     world_data.entity_pool            = &world_entities;
     world_data.entity_graph_changes   = &graph_changes;
     world_data.logic_pool             = &logic_pool;
@@ -105,6 +109,21 @@ main(int argc, char *argv[])
   
   World_data::set_world_data(&world_data);
   
+  // Load some audio data
+  {
+    const size_t num_of_files = 1;
+    const char *audio_files[num_of_files] {
+      "/Users/PhilCK/Developer/wired/assets/audio/test_2.wav",
+    };
+    
+    Audio::load_samples(audio_files, num_of_files, audio_pool.samples, audio_pool.size);
+    
+    Audio::Node_sample_2d node;
+    node.chunk_to_play = audio_pool.samples[0].chunk;
+    
+    Audio::play_nodes(&node, 1);
+  }
+  
   // Core Data
   Core_data::Core core_data;
   Core_data::Input_pool core_input;
@@ -113,7 +132,6 @@ main(int argc, char *argv[])
 
   Core_data::core_data_init(&core_data);
   Core_data::set_core_data(&core_data);
-
 
   // Network Data
   Net_data::Net_entity_pool net_entity_pool;
@@ -134,7 +152,7 @@ main(int argc, char *argv[])
   else
   {
     Application::host_initialize(&world_data, &connection);
-    Network::server_create(&connection, &std::cout);
+    //Network::server_create(&connection, &std::cout);
   }
 
   Physics::world_step(&phy_world, 0.f);

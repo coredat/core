@@ -73,6 +73,8 @@
 		7EEEF6C01C76523600103E80 /* ogl_vertex_buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EEEF6BE1C76523600103E80 /* ogl_vertex_buffer.cpp */; };
 		7EEEF6C41C77046E00103E80 /* shader_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EEEF6C21C77046E00103E80 /* shader_utils.cpp */; };
 		7EEEF6CB1C7751F000103E80 /* audio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EEEF6CA1C7751F000103E80 /* audio.cpp */; };
+		7EEEF6D01C77A21000103E80 /* audio_pool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EEEF6CC1C77A20F00103E80 /* audio_pool.cpp */; };
+		7EEEF6D11C77A21000103E80 /* audio_raw_pool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EEEF6CE1C77A21000103E80 /* audio_raw_pool.cpp */; };
 		7EFB9B0C1C5E620C00A838C7 /* entity_id.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EFB9B001C5E620C00A838C7 /* entity_id.cpp */; };
 		7EFB9B0D1C5E620C00A838C7 /* component.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EFB9B051C5E620C00A838C7 /* component.cpp */; };
 		7EFB9B0E1C5E620C00A838C7 /* entity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EFB9B0A1C5E620C00A838C7 /* entity.cpp */; };
@@ -270,6 +272,10 @@
 		7EEEF6C21C77046E00103E80 /* shader_utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = shader_utils.cpp; sourceTree = "<group>"; };
 		7EEEF6C31C77046E00103E80 /* shader_utils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = shader_utils.hpp; sourceTree = "<group>"; };
 		7EEEF6CA1C7751F000103E80 /* audio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = audio.cpp; sourceTree = "<group>"; };
+		7EEEF6CC1C77A20F00103E80 /* audio_pool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = audio_pool.cpp; sourceTree = "<group>"; };
+		7EEEF6CD1C77A20F00103E80 /* audio_pool.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = audio_pool.hpp; sourceTree = "<group>"; };
+		7EEEF6CE1C77A21000103E80 /* audio_raw_pool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = audio_raw_pool.cpp; sourceTree = "<group>"; };
+		7EEEF6CF1C77A21000103E80 /* audio_raw_pool.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = audio_raw_pool.hpp; sourceTree = "<group>"; };
 		7EFB9B001C5E620C00A838C7 /* entity_id.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = entity_id.cpp; sourceTree = "<group>"; };
 		7EFB9B011C5E620C00A838C7 /* entity_id.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = entity_id.hpp; sourceTree = "<group>"; };
 		7EFB9B031C5E620C00A838C7 /* interface.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = interface.hpp; sourceTree = "<group>"; };
@@ -313,6 +319,10 @@
 		7E033E591C6C878400D3379D /* world_data */ = {
 			isa = PBXGroup;
 			children = (
+				7EEEF6CC1C77A20F00103E80 /* audio_pool.cpp */,
+				7EEEF6CD1C77A20F00103E80 /* audio_pool.hpp */,
+				7EEEF6CE1C77A21000103E80 /* audio_raw_pool.cpp */,
+				7EEEF6CF1C77A21000103E80 /* audio_raw_pool.hpp */,
 				7E033E5A1C6C878400D3379D /* camera_pool.cpp */,
 				7E033E5B1C6C878400D3379D /* camera_pool.hpp */,
 				7E033E5E1C6C878400D3379D /* entity_pool.cpp */,
@@ -900,6 +910,7 @@
 				7ED7BBD31C3CF8B100CE80EA /* debug_line_renderer.cpp in Sources */,
 				7ED7BC1D1C3E56D000CE80EA /* motion_state.cpp in Sources */,
 				7ED7BBF21C3CF9C700CE80EA /* obj_model_loader.cpp in Sources */,
+				7EEEF6D11C77A21000103E80 /* audio_raw_pool.cpp in Sources */,
 				7ED7BBD81C3CF8B100CE80EA /* net_transform.cpp in Sources */,
 				7EAD4CD71C628524007F6A9C /* event_controller.cpp in Sources */,
 				7EAD4D001C668F72007F6A9C /* application_common.cpp in Sources */,
@@ -951,6 +962,7 @@
 				7EE444561C731D2500D7881B /* gun_model.cpp in Sources */,
 				7EAD4D011C668F72007F6A9C /* application_graphics.cpp in Sources */,
 				7E03C4341C68D22E0079DA81 /* network_player_controller.cpp in Sources */,
+				7EEEF6D01C77A21000103E80 /* audio_pool.cpp in Sources */,
 				7EAD4CEE1C638F8E007F6A9C /* controller.cpp in Sources */,
 				7E033E721C6C878400D3379D /* texture_pool.cpp in Sources */,
 				7EAD4CEF1C638F8E007F6A9C /* input.cpp in Sources */,

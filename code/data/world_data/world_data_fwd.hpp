@@ -8,6 +8,7 @@
 namespace World_data {
 
 
+struct Audio_pool;
 struct Camera_pool;
 struct Entity_pool;
 enum class Entity_graph_change : uint32_t;
