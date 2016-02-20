@@ -32,7 +32,7 @@ PACK(struct Net_entity_pool
 {
   Net_entity        entities[NET_ENTITY_POOL_SIZE];
   uint32_t          tick = 0;
-  uint16_t          capacity = NET_ENTITY_POOL_SIZE;
+  const uint16_t    capacity = NET_ENTITY_POOL_SIZE;
   uint16_t          size = 0;
 });
 
