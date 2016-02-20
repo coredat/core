@@ -215,6 +215,8 @@ host_think(
       net_pool.entities[i].mat_id     = world->entity_pool->texture[i];
     }
     
+    net_pool.size = world->entity_pool->size;
+    
     Network::send_packet(connection, sizeof(net_pool), &net_pool, true);
   }
 
