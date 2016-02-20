@@ -8,6 +8,7 @@
 #include <application/game_logic/actor_model.hpp>
 #include <core/interface/entity.hpp>
 #include <data/network_data/net_entity_pool.hpp>
+#include <data/core_data/input_pool.hpp>
 #include <iostream>
 
 
@@ -166,21 +167,13 @@ host_think(
     float controller_data[4];
     memcpy(&controller_data[0], data, size_of_data);
 
-    Core::Entity network_actor;
-    World_data::world_find_entity(world, &network_actor, kine_actor_network);
+    Core_data::Game_controller controller;
+    controller.axis[0].x = controller_data[0];
+    controller.axis[0].y = controller_data[1];
+    controller.axis[1].x = controller_data[2];
+    controller.axis[1].y = controller_data[3];
     
-    Actor_model *actor = network_actor.get_component<Actor_model>(Component_type::actor);
-    assert(actor);
-    
-    actor->move_forward(controller_data[0]);
-    actor->move_left(controller_data[1]);
-    actor->turn_left(controller_data[2]);
-    actor->look_up(controller_data[3]);
-    
-    // Apply to network actor.
-  
-//    const Actor::Input_cmds *cmds = reinterpret_cast<const Actor  ::Input_cmds*>(data);
-//    Actor::input(*cmds, delta_time, kine_actor_network, world->entity_pool, world->entity_pool->size, world->physics_world);
+    Core_data::input_data_update_controller(Core_data::get_core_data()->input_pool, 1, &controller);
   },
     &std::cout);
   

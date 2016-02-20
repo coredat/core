@@ -13,7 +13,7 @@ namespace Input {
 namespace Player {
 enum ENUM {
 
-  one,
+  one = 0,
   two,
   three,
   four,
