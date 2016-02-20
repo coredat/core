@@ -29,7 +29,6 @@ struct Node_sample_2d
 };
 
 
-
 /*!
   Initialize the audio system.
 */

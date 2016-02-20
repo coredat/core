@@ -47,12 +47,14 @@ load_default_resources(World_data::World *world)
   
   // Load audio
   {
+    // TODO Need to hook up ids some how.
+  
     auto audio_pool = world->audio_pool;
     
     const size_t num_of_files = 1;
     
     const char *audio_files[num_of_files] {
-      "/Users/PhilCK/Developer/wired/assets/audio/test_2.wav",
+      "/Users/PhilCK/Developer/wired/assets/audio/temp_shot.wav",
     };
     
     Audio::load_samples(audio_files, num_of_files, audio_pool->samples, audio_pool->size);
