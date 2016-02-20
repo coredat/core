@@ -56,6 +56,7 @@ initialize()
   }
 
   // Dir light shader uniforms
+  if(Ogl::shader_is_valid(shader_dir_light))
   {
     Ogl::Shader_uniforms dir_light_uniforms;
     Ogl::shader_uniforms_retrive(&dir_light_uniforms, &shader_dir_light);
@@ -67,9 +68,25 @@ initialize()
     Ogl::shader_uniforms_get_uniform_index(&uni_dir_light_amb,    &dir_light_uniforms, "dir_light.ambient");
     Ogl::shader_uniforms_get_uniform_index(&uni_dir_light_diff,   &dir_light_uniforms, "dir_light.diffuse");
     Ogl::shader_uniforms_get_uniform_index(&uni_dir_diffuse_map,  &dir_light_uniforms, "diffuse_map");
+
+    // Setup constants on direction light
+    {
+      const float color[3]{ 0.8f,0.7f,0.7f };
+      const float dir[3]{ -0.707f,-0.707f,-0.707f };
+      const float amb = 0.75f;
+      const float diff = 0.8f;
+
+      Ogl::shader_bind(&shader_dir_light);
+      Ogl::shader_uniforms_apply(uni_dir_light_color, (void*)color);
+      Ogl::shader_uniforms_apply(uni_dir_light_dir, (void*)dir);
+      Ogl::shader_uniforms_apply(uni_dir_light_amb, (void*)&amb);
+      Ogl::shader_uniforms_apply(uni_dir_light_diff, (void*)&diff);
+      Ogl::shader_bind(nullptr);
+    }
   }
 
   // Fullbright shader uniforms
+  if (Ogl::shader_is_valid(shader_fullbright))
   {
     Ogl::Shader_uniforms fullbright_uniforms;
     Ogl::shader_uniforms_retrive(&fullbright_uniforms, &shader_fullbright);
@@ -96,21 +113,6 @@ initialize()
     filtering.wrap_mode_s = Graphics_api::Wrap_mode::clamp;
     filtering.wrap_mode_t = Graphics_api::Wrap_mode::clamp;
     filtering.filtering   = Graphics_api::Filtering_mode::anisotropic;
-  }
-  
-  // Setup constants on direction light
-  {
-    const float color[3] {0.8f,0.7f,0.7f};
-    const float dir[3] {-0.707f,-0.707f,-0.707f};
-    const float amb = 0.75f;
-    const float diff = 0.8f;
-  
-    Ogl::shader_bind(&shader_dir_light);
-    Ogl::shader_uniforms_apply(uni_dir_light_color, (void*)color);
-    Ogl::shader_uniforms_apply(uni_dir_light_dir,   (void*)dir);
-    Ogl::shader_uniforms_apply(uni_dir_light_amb,   (void*)&amb);
-    Ogl::shader_uniforms_apply(uni_dir_light_diff,  (void*)&diff);
-    Ogl::shader_bind(nullptr);
   }
   
   Ogl::error_check("Setting up simple renderers", &std::cout);

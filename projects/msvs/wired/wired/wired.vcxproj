@@ -51,11 +51,13 @@
     <ClCompile Include="..\..\..\..\code\application\engine\application_host.cpp" />
     <ClCompile Include="..\..\..\..\code\application\entity_factory.cpp" />
     <ClCompile Include="..\..\..\..\code\application\game_logic\actor_model.cpp" />
+    <ClCompile Include="..\..\..\..\code\application\game_logic\gun_model.cpp" />
     <ClCompile Include="..\..\..\..\code\application\game_logic\local_player_controller.cpp" />
     <ClCompile Include="..\..\..\..\code\application\game_logic\network_player_controller.cpp" />
     <ClCompile Include="..\..\..\..\code\application\game_logic\npc_actor_controller.cpp" />
     <ClCompile Include="..\..\..\..\code\application\network_events.cpp" />
     <ClCompile Include="..\..\..\..\code\application\resources.cpp" />
+    <ClCompile Include="..\..\..\..\code\core\audio\audio.cpp" />
     <ClCompile Include="..\..\..\..\code\core\entity_id.cpp" />
     <ClCompile Include="..\..\..\..\code\core\event\event.cpp" />
     <ClCompile Include="..\..\..\..\code\core\event\event_controller.cpp" />
@@ -64,12 +66,16 @@
     <ClCompile Include="..\..\..\..\code\core\input\input.cpp" />
     <ClCompile Include="..\..\..\..\code\core\interface\component.cpp" />
     <ClCompile Include="..\..\..\..\code\core\interface\entity.cpp" />
+    <ClCompile Include="..\..\..\..\code\core\memory\memory.cpp" />
     <ClCompile Include="..\..\..\..\code\core\physics\ray.cpp" />
+    <ClCompile Include="..\..\..\..\code\core\transform\transform.cpp" />
     <ClCompile Include="..\..\..\..\code\data\core_data\core_data.cpp" />
     <ClCompile Include="..\..\..\..\code\data\core_data\input_pool.cpp" />
     <ClCompile Include="..\..\..\..\code\data\network_data\interpolation_pool.cpp" />
     <ClCompile Include="..\..\..\..\code\data\network_data\network_data.cpp" />
     <ClCompile Include="..\..\..\..\code\data\network_data\net_entity_pool.cpp" />
+    <ClCompile Include="..\..\..\..\code\data\world_data\audio_pool.cpp" />
+    <ClCompile Include="..\..\..\..\code\data\world_data\audio_raw_pool.cpp" />
     <ClCompile Include="..\..\..\..\code\data\world_data\camera_pool.cpp" />
     <ClCompile Include="..\..\..\..\code\data\world_data\entity_pool.cpp" />
     <ClCompile Include="..\..\..\..\code\data\world_data\graph_change_pool.cpp" />
@@ -85,7 +91,12 @@
     <ClCompile Include="..\..\..\..\code\renderer\graphics_api\ogl\ogl_shader_uniform.cpp" />
     <ClCompile Include="..\..\..\..\code\renderer\graphics_api\ogl\ogl_texture.cpp" />
     <ClCompile Include="..\..\..\..\code\renderer\graphics_api\ogl\ogl_texture_filtering.cpp" />
+    <ClCompile Include="..\..\..\..\code\renderer\graphics_api\ogl\ogl_vertex_buffer.cpp" />
+    <ClCompile Include="..\..\..\..\code\renderer\graphics_api\ogl\ogl_vertex_format.cpp" />
+    <ClCompile Include="..\..\..\..\code\renderer\graphics_api\texture.cpp" />
+    <ClCompile Include="..\..\..\..\code\renderer\graphics_api\utils\shader_utils.cpp" />
     <ClCompile Include="..\..\..\..\code\renderer\simple_renderer\simple_renderer.cpp" />
+    <ClCompile Include="..\..\..\..\code\systems\audio\audio.cpp" />
     <ClCompile Include="..\..\..\..\code\systems\entity\generic_id.cpp" />
     <ClCompile Include="..\..\..\..\code\systems\environment\sdl\sdl_environment.cpp" />
     <ClCompile Include="..\..\..\..\code\systems\environment\sdl\sdl_input.cpp" />
@@ -99,7 +110,7 @@
     <ClCompile Include="..\..\..\..\code\systems\physics\rigidbody_collider.cpp" />
     <ClCompile Include="..\..\..\..\code\systems\physics\physics_world.cpp" />
     <ClCompile Include="..\..\..\..\code\systems\texture_manager\texture_manager.cpp" />
-    <ClCompile Include="..\..\..\..\code\systems\transform\transform.cpp" />
+    <ClCompile Include="..\..\..\..\code\systems\transform\transformations.cpp" />
     <ClCompile Include="..\..\..\..\code\wired_app.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -151,11 +162,13 @@
     <ClInclude Include="..\..\..\..\code\application\engine\application_host.hpp" />
     <ClInclude Include="..\..\..\..\code\application\entity_factory.hpp" />
     <ClInclude Include="..\..\..\..\code\application\game_logic\actor_model.hpp" />
+    <ClInclude Include="..\..\..\..\code\application\game_logic\gun_model.hpp" />
     <ClInclude Include="..\..\..\..\code\application\game_logic\local_player_controller.hpp" />
     <ClInclude Include="..\..\..\..\code\application\game_logic\network_player_controller.hpp" />
     <ClInclude Include="..\..\..\..\code\application\game_logic\npc_actor_controller.hpp" />
     <ClInclude Include="..\..\..\..\code\application\network_events.hpp" />
     <ClInclude Include="..\..\..\..\code\application\resources.hpp" />
+    <ClInclude Include="..\..\..\..\code\core\audio\audio.hpp" />
     <ClInclude Include="..\..\..\..\code\core\core.hpp" />
     <ClInclude Include="..\..\..\..\code\core\core_fwd.hpp" />
     <ClInclude Include="..\..\..\..\code\core\entity_id.hpp" />
@@ -176,7 +189,11 @@
     <ClInclude Include="..\..\..\..\code\core\interface\entity.hpp" />
     <ClInclude Include="..\..\..\..\code\core\interface\interface.hpp" />
     <ClInclude Include="..\..\..\..\code\core\interface\interface_fwd.hpp" />
+    <ClInclude Include="..\..\..\..\code\core\memory\chunk.hpp" />
+    <ClInclude Include="..\..\..\..\code\core\memory\memory.hpp" />
+    <ClInclude Include="..\..\..\..\code\core\memory\memory_fwd.hpp" />
     <ClInclude Include="..\..\..\..\code\core\physics\ray.hpp" />
+    <ClInclude Include="..\..\..\..\code\core\transform\transform.hpp" />
     <ClInclude Include="..\..\..\..\code\data\core_data\core_data.hpp" />
     <ClInclude Include="..\..\..\..\code\data\core_data\core_data_fwd.hpp" />
     <ClInclude Include="..\..\..\..\code\data\core_data\input_pool.hpp" />
@@ -185,6 +202,8 @@
     <ClInclude Include="..\..\..\..\code\data\network_data\network_data.hpp" />
     <ClInclude Include="..\..\..\..\code\data\network_data\network_data_fwd.hpp" />
     <ClInclude Include="..\..\..\..\code\data\network_data\net_entity_pool.hpp" />
+    <ClInclude Include="..\..\..\..\code\data\world_data\audio_pool.hpp" />
+    <ClInclude Include="..\..\..\..\code\data\world_data\audio_raw_pool.hpp" />
     <ClInclude Include="..\..\..\..\code\data\world_data\camera_pool.hpp" />
     <ClInclude Include="..\..\..\..\code\data\world_data\entity_pool.hpp" />
     <ClInclude Include="..\..\..\..\code\data\world_data\graph_change_pool.hpp" />
@@ -207,12 +226,18 @@
     <ClInclude Include="..\..\..\..\code\renderer\graphics_api\ogl\ogl_shader_uniform.hpp" />
     <ClInclude Include="..\..\..\..\code\renderer\graphics_api\ogl\ogl_texture.hpp" />
     <ClInclude Include="..\..\..\..\code\renderer\graphics_api\ogl\ogl_texture_filtering.hpp" />
+    <ClInclude Include="..\..\..\..\code\renderer\graphics_api\ogl\ogl_vertex_buffer.hpp" />
+    <ClInclude Include="..\..\..\..\code\renderer\graphics_api\ogl\ogl_vertex_format.hpp" />
     <ClInclude Include="..\..\..\..\code\renderer\graphics_api\pixel_format.hpp" />
     <ClInclude Include="..\..\..\..\code\renderer\graphics_api\shader.hpp" />
+    <ClInclude Include="..\..\..\..\code\renderer\graphics_api\texture.hpp" />
     <ClInclude Include="..\..\..\..\code\renderer\graphics_api\texture_filtering.hpp" />
+    <ClInclude Include="..\..\..\..\code\renderer\graphics_api\utils\shader_utils.hpp" />
     <ClInclude Include="..\..\..\..\code\renderer\renderer.hpp" />
     <ClInclude Include="..\..\..\..\code\renderer\simple_renderer\simple_renderer.hpp" />
     <ClInclude Include="..\..\..\..\code\renderer\simple_renderer\simple_renderer_node.hpp" />
+    <ClInclude Include="..\..\..\..\code\systems\audio\audio.hpp" />
+    <ClInclude Include="..\..\..\..\code\systems\audio\audio_fwd.hpp" />
     <ClInclude Include="..\..\..\..\code\systems\camera\camera.hpp" />
     <ClInclude Include="..\..\..\..\code\systems\camera\camera_fwd.hpp" />
     <ClInclude Include="..\..\..\..\code\systems\camera\camera_properties.hpp" />
@@ -238,7 +263,7 @@
     <ClInclude Include="..\..\..\..\code\systems\physics\rigidbody_properties.hpp" />
     <ClInclude Include="..\..\..\..\code\systems\physics\physics_world.hpp" />
     <ClInclude Include="..\..\..\..\code\systems\texture_manager\texture_manager.hpp" />
-    <ClInclude Include="..\..\..\..\code\systems\transform\transform.hpp" />
+    <ClInclude Include="..\..\..\..\code\systems\transform\transformations.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C952A000-99AF-4A44-9DD7-28CF94CA846A}</ProjectGuid>

@@ -18,8 +18,8 @@ client_initialize(
   Network::Connection *connection)
 {
   const char *server_ip   = "192.168.0.6";
-  const uint32_t port     = 1234;
-  const uint32_t timeout  = 5000;
+  const uint32_t port     = 6666;
+  const uint32_t timeout  = 10000;
 
   Network::client_create(connection, &std::cout);
   Network::client_connect_to_server(connection, server_ip, port, timeout, &std::cout);
@@ -36,7 +36,6 @@ client_think(
   Network::Connection *connection,
   const float delta_time)
 {
-  //ALIGN_16(static Net_data::Net_entity_pool incoming_ents);
   auto inter_pool = Net_data::get_net_data()->interpolation_pool;
 
   Network::poll_events(connection,

@@ -72,7 +72,7 @@ shader_create(Shader *out_shader,
   const auto vert_shader_id = create_shader(GL_VERTEX_SHADER,   vert_shader_code, log);
   Ogl::error_check("creating vert shader", log);
   
-  GLuint geo_shader_id;
+  GLuint geo_shader_id(0);
   if(strlen(geo_shader_code))
   {
     geo_shader_id = create_shader(GL_GEOMETRY_SHADER, geo_shader_code,  log);

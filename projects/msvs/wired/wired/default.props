@@ -7,7 +7,7 @@
     <ThirdPartyDir>$(RootDir)3rdparty/</ThirdPartyDir>
   </PropertyGroup>
   <PropertyGroup>
-    <IncludePath>$(CodeDir);$(ThirdPartyDir)external;$(ThirdPartyDir)bullet/include;$(ThirdPartyDir)sdl2/include;$(ThirdPartyDir)glew/include;$(ThirdPartyDir)enet/include;$(IncludePath)</IncludePath>
+    <IncludePath>$(CodeDir);$(ThirdPartyDir)external;$(ThirdPartyDir)bullet/include;$(ThirdPartyDir)sdl2/include;$(ThirdPartyDir)glew/include;$(ThirdPartyDir)enet/include;$(ThirdPartyDir)sdl_mixer/include;$(IncludePath)</IncludePath>
     <LibraryPath>$(ThirdPartyDir)bullet/lib/windows/x64;$(ThirdPartyDir)bullet/lib/windows/x86/$(Configuration);$(ThirdPartyDir)enet/lib/windows/x64;$(ThirdPartyDir)enet/lib/windows/x86/$(Configuration);$(ThirdPartyDir)glew/lib/x64;$(ThirdPartyDir)glew/lib/x86;$(ThirdPartyDir)sdl2/lib/windows/x64;$(ThirdPartyDir)sdl2/lib/windows/x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup>

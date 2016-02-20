@@ -100,6 +100,21 @@
     <Filter Include="data\world_data">
       <UniqueIdentifier>{b5ce546a-a989-46b3-8ed8-f0365d74ad79}</UniqueIdentifier>
     </Filter>
+    <Filter Include="core\audio">
+      <UniqueIdentifier>{beaa3e4e-1f6c-482f-9d7b-33fb6290b6ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\transform">
+      <UniqueIdentifier>{5c67cfcf-cee0-420f-98e3-877eba7b51f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\memory">
+      <UniqueIdentifier>{d996cff3-002c-4dd5-a31d-d31d7b20f438}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="renderer\graphics_api\utils">
+      <UniqueIdentifier>{e9ec7aa5-743d-4b2f-abab-9c76169dbf7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="systems\audio">
+      <UniqueIdentifier>{21586add-9606-45cd-bdb0-2f177539bdbc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\code\wired_app.cpp" />
@@ -132,9 +147,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\code\systems\texture_manager\texture_manager.cpp">
       <Filter>systems\texture_manager</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\code\systems\transform\transform.cpp">
-      <Filter>systems\transform</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\3rdparty\external\utils\logging.cpp">
       <Filter>utils</Filter>
@@ -346,6 +358,42 @@
     <ClCompile Include="..\..\..\..\code\data\network_data\network_data.cpp">
       <Filter>data\network_data</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\code\application\game_logic\gun_model.cpp">
+      <Filter>application\game_logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\core\audio\audio.cpp">
+      <Filter>core\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\core\transform\transform.cpp">
+      <Filter>core\transform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\core\memory\memory.cpp">
+      <Filter>core\memory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\data\world_data\audio_pool.cpp">
+      <Filter>data\world_data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\data\world_data\audio_raw_pool.cpp">
+      <Filter>data\world_data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\renderer\graphics_api\texture.cpp">
+      <Filter>renderer\graphics_api</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\renderer\graphics_api\utils\shader_utils.cpp">
+      <Filter>renderer\graphics_api\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\renderer\graphics_api\ogl\ogl_vertex_buffer.cpp">
+      <Filter>renderer\graphics_api\ogl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\renderer\graphics_api\ogl\ogl_vertex_format.cpp">
+      <Filter>renderer\graphics_api\ogl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\systems\audio\audio.cpp">
+      <Filter>systems\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\systems\transform\transformations.cpp">
+      <Filter>systems\transform</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\code\renderer\debug_line.hpp">
@@ -416,9 +464,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\code\systems\texture_manager\texture_manager.hpp">
       <Filter>systems\texture_manager</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\code\systems\transform\transform.hpp">
-      <Filter>systems\transform</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\3rdparty\external\utils\alignment.hpp">
       <Filter>utils</Filter>
@@ -755,6 +800,51 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\code\data\network_data\network_data_fwd.hpp">
       <Filter>data\network_data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\application\game_logic\gun_model.hpp">
+      <Filter>application\game_logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\core\audio\audio.hpp">
+      <Filter>core\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\core\transform\transform.hpp">
+      <Filter>core\transform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\core\memory\chunk.hpp">
+      <Filter>core\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\core\memory\memory.hpp">
+      <Filter>core\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\core\memory\memory_fwd.hpp">
+      <Filter>core\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\data\world_data\audio_pool.hpp">
+      <Filter>data\world_data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\data\world_data\audio_raw_pool.hpp">
+      <Filter>data\world_data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\renderer\graphics_api\texture.hpp">
+      <Filter>renderer\graphics_api</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\renderer\graphics_api\utils\shader_utils.hpp">
+      <Filter>renderer\graphics_api\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\renderer\graphics_api\ogl\ogl_vertex_buffer.hpp">
+      <Filter>renderer\graphics_api\ogl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\renderer\graphics_api\ogl\ogl_vertex_format.hpp">
+      <Filter>renderer\graphics_api\ogl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\systems\audio\audio.hpp">
+      <Filter>systems\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\systems\audio\audio_fwd.hpp">
+      <Filter>systems\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\systems\transform\transformations.hpp">
+      <Filter>systems\transform</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

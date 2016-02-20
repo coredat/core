@@ -52,6 +52,19 @@ shader_destroy(Shader *shader_to_destroy,
 void
 shader_bind(Shader *shader_to_bind);
 
+
+/*!
+  Checks if a shader is valid or not.
+  This simply checks if program_id has a value.
+  \param shader_to_check This is the shader to test.
+*/
+inline bool
+shader_is_valid(Shader shader_to_check)
+{
+  return shader_to_check.program_id != 0;
+}
+
+
 } // ns
 
 

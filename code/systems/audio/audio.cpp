@@ -39,6 +39,7 @@ namespace Audio {
 void
 initialize()
 {
+#ifndef WIN32
   const int32_t flags = 0;
   const int32_t initted = Mix_Init(flags);
 
@@ -65,18 +66,21 @@ initialize()
   }
   
   Mix_ChannelFinished(&channel_finished);
+#endif
 }
 
 
 void
 de_initialize()
 {
+#ifndef WIN32
   // Because multiple init's are allowed with SDL_Mixer we need
   // to repeated De-init until its done.
   while(Mix_Init(0))
   {
     Mix_Quit();
   }
+#endif
 }
 
 
@@ -86,6 +90,7 @@ load_samples(const char* files_to_load[],
              Sample out_samples[],
              const size_t number_of_out_samples)
 {
+#ifndef WIN32
   const size_t number_to_load = std::min(number_of_files, number_of_out_samples);
 
   for(size_t i = 0; i < number_to_load; ++i)
@@ -99,6 +104,7 @@ load_samples(const char* files_to_load[],
     
     out_samples[i].chunk = load_chunk;
   }
+#endif
 }
 
 
@@ -107,6 +113,7 @@ play_nodes(const float ear[3],
            const Node_sample_3d nodes[],
            const size_t number_of_nodes)
 {
+#ifndef WIN32
   for(size_t i = 0; i < number_of_nodes; ++i)
   { 
     if(Mix_PlayChannel(get_free_channel(), nodes[i].chunk_to_play, 0)==-1)
@@ -114,6 +121,7 @@ play_nodes(const float ear[3],
       printf("Mix_PlayChannel: %s\n",Mix_GetError());
     }
   }
+#endif
 }
 
 
@@ -121,6 +129,7 @@ void
 play_nodes(const Node_sample_2d nodes[],
           const size_t number_of_nodes)
 {
+#ifndef WIN32
   for(size_t i = 0; i < number_of_nodes; ++i)
   { 
     if(Mix_PlayChannel(get_free_channel(), nodes[i].chunk_to_play, 0)==-1)
@@ -128,6 +137,7 @@ play_nodes(const Node_sample_2d nodes[],
       printf("Mix_PlayChannel: %s\n",Mix_GetError());
     }
   }
+#endif
 }
 
 

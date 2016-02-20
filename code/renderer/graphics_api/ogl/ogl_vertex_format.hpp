@@ -5,6 +5,7 @@
 #include "ogl_common.hpp"
 #include <stdint.h>
 #include <stddef.h>
+#include <assert.h>
 
 
 #define MAX_NUMBER_OF_ATTRS 8

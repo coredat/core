@@ -1,4 +1,5 @@
 #include "audio_pool.hpp"
+#include <cstring>
 
 
 namespace World_data {

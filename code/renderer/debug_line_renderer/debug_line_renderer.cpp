@@ -44,17 +44,20 @@ initialize()
   auto debug_code = Graphics_api::Util::shader_code_from_tagged_file(debug_lines.c_str());
   
   Ogl::shader_create(&debug_line_shader, debug_code.vs_code.c_str(), debug_code.gs_code.c_str(), debug_code.ps_code.c_str(), &std::cout);
-  Ogl::error_check("Building debug line shader.", &std::cout);
-  
-  Ogl::Shader_uniforms uniforms;
-  Ogl::shader_uniforms_retrive(&uniforms, &debug_line_shader);
-  Ogl::shader_uniforms_get_uniform_index(&uni_wvp, &uniforms, "uni_wvp_mat");
-  Ogl::error_check("Getting uniforms from debug shader", &std::cout);
-  
-  for(size_t i = 0; i < line_uniform_max; ++i)
+  assert(Ogl::shader_is_valid(debug_line_shader));
+
+  if(Ogl::shader_is_valid(debug_line_shader))
   {
-    const std::string uni_name = "uni_line[" + std::to_string(i) + "]";
-    uni_line[i] = glGetUniformLocation(debug_line_shader.program_id, uni_name.c_str());
+    Ogl::Shader_uniforms uniforms;
+    Ogl::shader_uniforms_retrive(&uniforms, &debug_line_shader);
+    Ogl::shader_uniforms_get_uniform_index(&uni_wvp, &uniforms, "uni_wvp_mat");
+    Ogl::error_check("Getting uniforms from debug shader", &std::cout);
+  
+    for(size_t i = 0; i < line_uniform_max; ++i)
+    {
+      const std::string uni_name = "uni_line[" + std::to_string(i) + "]";
+      uni_line[i] = glGetUniformLocation(debug_line_shader.program_id, uni_name.c_str());
+    }
   }
   
   Ogl::error_check("Debug Renderer Setup.", &std::cout);
