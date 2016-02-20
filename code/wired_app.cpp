@@ -3,7 +3,7 @@
 #include <application/common/ids_object_tags.hpp>
 
 #include <systems/environment/environment.hpp>
-#include <systems/transform/transform.hpp>
+#include <systems/transform/transformations.hpp>
 #include <systems/network/network.hpp>
 #include <systems/network/network_connection.hpp>
 #include <systems/physics/physics.hpp>
@@ -31,7 +31,7 @@
 namespace
 {
 
-#ifndef WIN32
+#ifdef WIN32
   const bool is_client = true;
 #else
   const bool is_client = false;
