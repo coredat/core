@@ -31,7 +31,7 @@
 namespace
 {
 
-#ifdef WIN32
+#ifndef WIN32
   const bool is_client = true;
 #else
   const bool is_client = false;
@@ -143,7 +143,7 @@ main(int argc, char *argv[])
   else
   {
     Application::host_initialize(&world_data, &connection);
-    //Network::server_create(&connection, &std::cout);
+    Network::server_create(&connection, &std::cout);
   }
 
   Physics::world_step(&phy_world, 0.f);

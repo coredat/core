@@ -71,7 +71,7 @@ server_create(Connection *connection, std::ostream *log)
   }
 
   connection->address.host  = ENET_HOST_ANY;
-  connection->address.port  = 1234;
+  connection->address.port  = 6666;
   connection->host          = enet_host_create(&connection->address, 4, 2, 0, 0);
   
   if(!connection->host)
@@ -85,13 +85,18 @@ server_create(Connection *connection, std::ostream *log)
     
     return false;
   }
+  else
+  {
+    (*log) << "Created server on port " << connection->address.port << "\n";
+  }
   
   return true;
 }
 
 
 bool
-client_create(Connection *connection, std::ostream *log)
+client_create(Connection *connection,
+              std::ostream *log)
 {
   // Param check
   if(!connection)
@@ -123,7 +128,11 @@ client_create(Connection *connection, std::ostream *log)
 
 
 bool
-client_connect_to_server(Connection *connection, const char *ip, const uint32_t port, const uint32_t timeout, std::ostream *log)
+client_connect_to_server(Connection *connection,
+                         const char *ip,
+                         const uint32_t port,
+                         const uint32_t timeout,
+                         std::ostream *log)
 {
   // Param check
   if(!connection || !ip)
@@ -189,7 +198,10 @@ client_connect_to_server(Connection *connection, const char *ip, const uint32_t 
 
 
 bool
-send_packet(Connection *connection, const std::size_t size_of_packet, const void *data, const bool reliable, std::ostream *log)
+send_packet(Connection *connection,
+            const std::size_t size_of_packet,
+            const void *data,
+            const bool reliable, std::ostream *log)
 {
   // Param check.
   if(!connection || !connection->peer)
@@ -239,8 +251,7 @@ poll_events(Connection *connection,
 
   ENetEvent event;
 
-  //while (enet_host_service(connection->host, & event, static_cast<enet_uint32>(wait_ms)) > 0)
-  while(false)
+  while (enet_host_service(connection->host, & event, static_cast<enet_uint32>(wait_ms)) > 0)
   {
       switch (event.type)
       {
