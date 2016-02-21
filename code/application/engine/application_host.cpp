@@ -193,6 +193,7 @@ host_think(
 
   // Build network entity list
   {
+    ALIGN_16(static Net_data::Net_camera_pool net_camera);
     ALIGN_16(static Net_data::Net_entity_pool net_pool);
     
     static uint32_t tick = 0;
@@ -211,6 +212,19 @@ host_think(
     net_pool.size = world->entity_pool->size;
     
     Network::send_packet(connection, sizeof(net_pool), &net_pool, true);
+    
+    // TODO Stinky
+    for(size_t i = 0; i < world->camera_pool->number_of_cameras; ++i)
+    {
+      memcpy(net_camera.entity_id, world->camera_pool->entity_id, sizeof(world->camera_pool->entity_id));
+      memcpy(net_camera.camera, world->camera_pool->camera, sizeof(world->camera_pool->camera));
+      memcpy(net_camera.peer_priority_00, world->camera_pool->peer_priority_00, sizeof(world->camera_pool->peer_priority_00));
+      memcpy(net_camera.peer_priority_01, world->camera_pool->peer_priority_01, sizeof(world->camera_pool->peer_priority_01));
+      memcpy(net_camera.peer_priority_02, world->camera_pool->peer_priority_02, sizeof(world->camera_pool->peer_priority_02));
+      memcpy(net_camera.peer_priority_03, world->camera_pool->peer_priority_03, sizeof(world->camera_pool->peer_priority_03));
+    }
+    
+    Network::send_packet(connection, sizeof(net_camera), &net_camera, true);
   }
 
 }

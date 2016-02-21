@@ -42,15 +42,39 @@ client_think(
     0,
     [&](const Network::Event_id id, const void *data, const size_t size_of_data)
     {
-      const Net_data::Net_entity_pool *peek_pool = reinterpret_cast<const Net_data::Net_entity_pool *>(data);
-
-      // If tick is newer than the ones we have then lets keep it.
+      const uint32_t packet_type = *reinterpret_cast<const uint32_t*>(data);
       
-      if(inter_pool->last_tick < peek_pool->tick)
+      switch(packet_type)
       {
-        inter_pool->last_tick = peek_pool->tick;
+        case(0):
+        {
+          const Net_data::Net_entity_pool *peek_pool = reinterpret_cast<const Net_data::Net_entity_pool *>(data);
+
+          // If tick is newer than the ones we have then lets keep it.
+          
+          if(inter_pool->last_tick < peek_pool->tick)
+          {
+            inter_pool->last_tick = peek_pool->tick;
+            
+            memcpy(&inter_pool->snapshot[++(inter_pool->rotate_point) % inter_pool->max_snapshots], data, size_of_data);
+          }
+          
+          break;
+        }
         
-        memcpy(&inter_pool->snapshot[++(inter_pool->rotate_point) % inter_pool->max_snapshots], data, size_of_data);
+        case(1):
+        {
+          const Net_data::Net_camera_pool *cam_pool = reinterpret_cast<const Net_data::Net_camera_pool*>(data);
+          
+          memcpy(world->camera_pool->entity_id, cam_pool->entity_id, sizeof(cam_pool->entity_id));
+          memcpy(world->camera_pool->camera, cam_pool->camera, sizeof(cam_pool->camera));
+          memcpy(world->camera_pool->peer_priority_00, cam_pool->peer_priority_00, sizeof(cam_pool->peer_priority_00));
+          memcpy(world->camera_pool->peer_priority_01, cam_pool->peer_priority_01, sizeof(cam_pool->peer_priority_01));
+          memcpy(world->camera_pool->peer_priority_02, cam_pool->peer_priority_02, sizeof(cam_pool->peer_priority_02));
+          memcpy(world->camera_pool->peer_priority_03, cam_pool->peer_priority_03, sizeof(cam_pool->peer_priority_03));
+          
+          break;
+        }
       }
     },
     &std::cout);
