@@ -92,6 +92,7 @@ client_think(
         world->entity_pool->entity_id[i]  = id;
         world->entity_pool->model[i]      = (Resource::Model::ENUM)incoming_ents.entities[i].vbo_id;
         world->entity_pool->texture[i]    = (Resource::Texture::ENUM)incoming_ents.entities[i].mat_id;
+        world->entity_pool->size          = incoming_ents.size;
 
         // Interpolate the position
         {
@@ -112,14 +113,10 @@ client_think(
             const float h3 = mu_cu - 2 * mu_sq + mu;
             const float h4 = mu_cu - mu_sq;
 
-
           };
           
         }
       }
-
-      // Need to sort this.
-      world->entity_pool->size = incoming_ents.capacity;
     }
   }
 

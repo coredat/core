@@ -84,6 +84,7 @@ camera_pool_get_properties_for_priority(Camera_pool *pool,
 
 Core::Entity_id
 camera_pool_get_entity_id_for_priority(Camera_pool *pool,
+                                       const size_t peer,
                                        const uint32_t priority);
 
 
