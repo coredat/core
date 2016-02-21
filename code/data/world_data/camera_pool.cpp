@@ -1,4 +1,4 @@
-git #include "camera_pool.hpp"
+#include "camera_pool.hpp"
 #include <cstring>
 #include <assert.h>
 
