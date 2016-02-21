@@ -140,8 +140,8 @@ host_initialize(
     cam_props.viewport_width  = 800;
     cam_props.viewport_height = 480;
     
-    World_data::camera_pool_add_camera(world->camera_pool, kine_actor_local, cam_props);
-    World_data::camera_pool_add_camera(world->camera_pool, kine_actor_network, cam_props);
+    //World_data::camera_pool_add_camera(world->camera_pool, kine_actor_local, cam_props);
+    //World_data::camera_pool_add_camera(world->camera_pool, kine_actor_network, cam_props);
   }
   
   volatile const uint32_t number_of_random_cubes = 0;

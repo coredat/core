@@ -1,4 +1,4 @@
-#include "camera_pool.hpp"
+git #include "camera_pool.hpp"
 #include <cstring>
 #include <assert.h>
 
@@ -29,6 +29,7 @@ camera_pool_add_camera(Camera_pool *pool,
     {
       pool->entity_id[i] = id;
       pool->camera[i] = props;
+      return;
     }
   }
 }

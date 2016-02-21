@@ -20,6 +20,7 @@ Network_player_controller::~Network_player_controller()
 void
 Network_player_controller::on_start()
 {
+  m_camera.set_attached_entity(get_entity());
   m_camera.set_peer_priority(1, 1);
 }
 
