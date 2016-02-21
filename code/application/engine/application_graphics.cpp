@@ -31,7 +31,7 @@ graphics_think(World_data::World *world,
   // Get entity's transform so we can generate a view.
   math::mat4 view = math::mat4_zero();
   {
-    const auto id = World_data::camera_pool_get_entity_id_for_priority(world->camera_pool, 1);
+    const auto id = World_data::camera_pool_get_entity_id_for_priority(world->camera_pool, peer, 1);
 
     // If we cant find the camera we'll just make a dummy orbit one for the time.
     // This is good for debugging.

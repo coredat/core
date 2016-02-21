@@ -115,6 +115,9 @@
     <Filter Include="systems\audio">
       <UniqueIdentifier>{21586add-9606-45cd-bdb0-2f177539bdbc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="core\camera">
+      <UniqueIdentifier>{f94b4a17-d420-4467-8167-f7a1af960727}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\code\wired_app.cpp" />
@@ -388,11 +391,14 @@
     <ClCompile Include="..\..\..\..\code\renderer\graphics_api\ogl\ogl_vertex_format.cpp">
       <Filter>renderer\graphics_api\ogl</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\code\systems\audio\audio.cpp">
-      <Filter>systems\audio</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\code\systems\transform\transformations.cpp">
       <Filter>systems\transform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\core\camera\camera.cpp">
+      <Filter>core\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\code\systems\audio\audio_system.cpp">
+      <Filter>systems\audio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -693,9 +699,6 @@
     <ClInclude Include="..\..\..\..\code\data\core_data\core_data_fwd.hpp">
       <Filter>data\core_data</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\code\systems\camera\camera.hpp">
-      <Filter>systems\camera</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\code\systems\camera\camera_fwd.hpp">
       <Filter>systems\camera</Filter>
     </ClInclude>
@@ -845,6 +848,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\code\systems\transform\transformations.hpp">
       <Filter>systems\transform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\code\core\camera\camera.hpp">
+      <Filter>core\camera</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

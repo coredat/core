@@ -119,13 +119,26 @@ camera_pool_get_properties_for_priority(Camera_pool *pool,
 
 Core::Entity_id
 camera_pool_get_entity_id_for_priority(Camera_pool *pool,
+                                       const size_t peer,
                                        const uint32_t priority)
 {
   assert(pool);
 
   for (size_t i = 0; i < pool->number_of_cameras; ++i)
   {
-    if (pool->peer_priority_00[i] == priority)
+    if (peer == 0 && pool->peer_priority_00[i] == priority)
+    {
+      return pool->entity_id[i];
+    }
+    if (peer == 1 && pool->peer_priority_01[i] == priority)
+    {
+      return pool->entity_id[i];
+    }
+    if (peer == 2 && pool->peer_priority_02[i] == priority)
+    {
+      return pool->entity_id[i];
+    }
+    if (peer == 3 && pool->peer_priority_03[i] == priority)
     {
       return pool->entity_id[i];
     }

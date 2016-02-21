@@ -58,6 +58,7 @@
     <ClCompile Include="..\..\..\..\code\application\network_events.cpp" />
     <ClCompile Include="..\..\..\..\code\application\resources.cpp" />
     <ClCompile Include="..\..\..\..\code\core\audio\audio.cpp" />
+    <ClCompile Include="..\..\..\..\code\core\camera\camera.cpp" />
     <ClCompile Include="..\..\..\..\code\core\entity_id.cpp" />
     <ClCompile Include="..\..\..\..\code\core\event\event.cpp" />
     <ClCompile Include="..\..\..\..\code\core\event\event_controller.cpp" />
@@ -96,7 +97,7 @@
     <ClCompile Include="..\..\..\..\code\renderer\graphics_api\texture.cpp" />
     <ClCompile Include="..\..\..\..\code\renderer\graphics_api\utils\shader_utils.cpp" />
     <ClCompile Include="..\..\..\..\code\renderer\simple_renderer\simple_renderer.cpp" />
-    <ClCompile Include="..\..\..\..\code\systems\audio\audio.cpp" />
+    <ClCompile Include="..\..\..\..\code\systems\audio\audio_system.cpp" />
     <ClCompile Include="..\..\..\..\code\systems\entity\generic_id.cpp" />
     <ClCompile Include="..\..\..\..\code\systems\environment\sdl\sdl_environment.cpp" />
     <ClCompile Include="..\..\..\..\code\systems\environment\sdl\sdl_input.cpp" />
@@ -169,6 +170,7 @@
     <ClInclude Include="..\..\..\..\code\application\network_events.hpp" />
     <ClInclude Include="..\..\..\..\code\application\resources.hpp" />
     <ClInclude Include="..\..\..\..\code\core\audio\audio.hpp" />
+    <ClInclude Include="..\..\..\..\code\core\camera\camera.hpp" />
     <ClInclude Include="..\..\..\..\code\core\core.hpp" />
     <ClInclude Include="..\..\..\..\code\core\core_fwd.hpp" />
     <ClInclude Include="..\..\..\..\code\core\entity_id.hpp" />
@@ -238,7 +240,6 @@
     <ClInclude Include="..\..\..\..\code\renderer\simple_renderer\simple_renderer_node.hpp" />
     <ClInclude Include="..\..\..\..\code\systems\audio\audio.hpp" />
     <ClInclude Include="..\..\..\..\code\systems\audio\audio_fwd.hpp" />
-    <ClInclude Include="..\..\..\..\code\systems\camera\camera.hpp" />
     <ClInclude Include="..\..\..\..\code\systems\camera\camera_fwd.hpp" />
     <ClInclude Include="..\..\..\..\code\systems\camera\camera_properties.hpp" />
     <ClInclude Include="..\..\..\..\code\systems\entity\generic_id.hpp" />
