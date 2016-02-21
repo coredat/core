@@ -15,13 +15,18 @@ namespace Application {
 void
 graphics_think(World_data::World *world,
                Simple_renderer::Node nodes[],
-               const std::size_t size_of_node_pool)
+               const std::size_t size_of_node_pool,
+               const std::size_t peer)
 {
   renderer::clear();
 
   // Get active camera and generate a projection matrix.
   const auto cam = World_data::camera_pool_get_properties_for_priority(world->camera_pool, 1);
-  const math::mat4 proj = math::mat4_projection(cam.viewport_width, cam.viewport_height, cam.near_plane, cam.far_plane, cam.fov);
+  const math::mat4 proj = math::mat4_projection(cam.viewport_width,
+                                                cam.viewport_height,
+                                                cam.near_plane,
+                                                cam.far_plane,
+                                                cam.fov);
   
   // Get entity's transform so we can generate a view.
   math::mat4 view = math::mat4_zero();
