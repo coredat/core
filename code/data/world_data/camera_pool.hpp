@@ -3,7 +3,7 @@
 
 
 #include <core/entity_id.hpp>
-#include <systems/camera/camera.hpp>
+#include <systems/camera/camera_properties.hpp>
 #include <stddef.h>
 
 

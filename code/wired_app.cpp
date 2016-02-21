@@ -205,7 +205,8 @@ main(int argc, char *argv[])
     Application::graphics_think(
         &world_data,
         renderer_nodes.data(),
-        renderer_nodes.size()
+        renderer_nodes.size(),
+        (is_client ? 1 : 0)
       );
   }
   

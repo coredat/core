@@ -1,8 +1,0 @@
-#ifndef CAMERA_INCLUDED_54C8163C_F8F6_4E86_86A6_CA91E3E02BCB
-#define CAMERA_INCLUDED_54C8163C_F8F6_4E86_86A6_CA91E3E02BCB
-
-
-#include "camera_properties.hpp"
-
-
-#endif // inc guard

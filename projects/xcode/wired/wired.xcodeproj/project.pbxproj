@@ -153,7 +153,6 @@
 		7EA2C61F1C1F5E2A00389748 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		7EA2C6541C1F637D00389748 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = ../../../assets; sourceTree = "<group>"; };
 		7EAD4CC01C609C6E007F6A9C /* ids_object_tags.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ids_object_tags.hpp; sourceTree = "<group>"; };
-		7EAD4CC21C6123F1007F6A9C /* camera.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = camera.hpp; sourceTree = "<group>"; };
 		7EAD4CC31C6123F1007F6A9C /* camera_fwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = camera_fwd.hpp; sourceTree = "<group>"; };
 		7EAD4CC41C6123F1007F6A9C /* camera_properties.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = camera_properties.hpp; sourceTree = "<group>"; };
 		7EAD4CC81C623C97007F6A9C /* local_player_controller.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = local_player_controller.cpp; sourceTree = "<group>"; };
@@ -463,7 +462,6 @@
 		7EAD4CC11C6123F1007F6A9C /* camera */ = {
 			isa = PBXGroup;
 			children = (
-				7EAD4CC21C6123F1007F6A9C /* camera.hpp */,
 				7EAD4CC31C6123F1007F6A9C /* camera_fwd.hpp */,
 				7EAD4CC41C6123F1007F6A9C /* camera_properties.hpp */,
 			);
