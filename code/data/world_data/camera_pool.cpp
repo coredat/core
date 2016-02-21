@@ -11,7 +11,10 @@ camera_pool_init(Camera_pool *pool)
 {
   memset(&pool->entity_id[0], 0, sizeof(pool->entity_id));
   memset(&pool->camera[0], 0, sizeof(pool->camera));
-  memset(&pool->priority[0], 0, sizeof(pool->priority));
+  memset(&pool->peer_priority_00, 0, sizeof(pool->peer_priority_00));
+  memset(&pool->peer_priority_01, 0, sizeof(pool->peer_priority_01));
+  memset(&pool->peer_priority_02, 0, sizeof(pool->peer_priority_02));
+  memset(&pool->peer_priority_03, 0, sizeof(pool->peer_priority_03));
 }
 
 
@@ -32,31 +35,78 @@ camera_pool_add_camera(Camera_pool *pool,
 
 
 void
-camera_pool_set_priority(Camera_pool *pool,
-                         const Core::Entity_id id,
-                         const uint32_t priority)
+camera_pool_remove_camera(Camera_pool *pool,
+                          const Core::Entity_id id)
 {
-  size_t index;
-
+  // Find index of camera pool
+  size_t index(0);
   if(Core::Entity_id_util::find_index_linearly(&index,
                                                id,
                                                pool->entity_id,
                                                pool->number_of_cameras))
   {
-    pool->priority[index] = priority;
+    pool->entity_id[index] = Core::Entity_id_util::invalid_id();
   }
+}
+
+
+void
+camera_pool_set_priority(Camera_pool *pool,
+                         const Core::Entity_id id,
+                         const uint32_t peer,
+                         const uint32_t priority)
+
+{
+  size_t index(0);
+  if(Core::Entity_id_util::find_index_linearly(&index,
+                                               id,
+                                               pool->entity_id,
+                                               pool->number_of_cameras))
+  {
+    switch(peer)
+    {
+      case(0): pool->peer_priority_00[index] = priority; break;
+      case(1): pool->peer_priority_01[index] = priority; break;
+      case(2): pool->peer_priority_02[index] = priority; break;
+      case(3): pool->peer_priority_03[index] = priority; break;
+    };
+  }
+}
+
+
+uint32_t
+camera_pool_get_priority(Camera_pool *pool,
+                         const Core::Entity_id id,
+                         const uint32_t peer)
+{
+  size_t index(0);
+  if(Core::Entity_id_util::find_index_linearly(&index,
+                                               id,
+                                               pool->entity_id,
+                                               pool->number_of_cameras))
+  {
+    switch(peer)
+    {
+      case(0): return pool->peer_priority_00[index]; break;
+      case(1): return pool->peer_priority_01[index]; break;
+      case(2): return pool->peer_priority_02[index]; break;
+      case(3): return pool->peer_priority_03[index]; break;
+    };
+  }
+  
+  return 0;
 }
 
 
 Camera::Camera_properties
 camera_pool_get_properties_for_priority(Camera_pool *pool,
-                         const uint32_t priority)
+                                        const uint32_t priority)
 {
   assert(pool);
   
   for(size_t i = 0; i < pool->number_of_cameras; ++i)
   {
-    if(pool->priority[i] == priority)
+    if(pool->peer_priority_00[i] == priority)
     {
       return pool->camera[i];
     }
@@ -75,7 +125,7 @@ camera_pool_get_entity_id_for_priority(Camera_pool *pool,
 
   for (size_t i = 0; i < pool->number_of_cameras; ++i)
   {
-    if (pool->priority[i] == priority)
+    if (pool->peer_priority_00[i] == priority)
     {
       return pool->entity_id[i];
     }
