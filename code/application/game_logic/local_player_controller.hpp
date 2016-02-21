@@ -5,6 +5,8 @@
 #include "../common/ids_component_types.hpp"
 #include <core/interface/component.hpp>
 #include <core/interface/entity.hpp>
+#include <core/camera/camera.hpp>
+
 
 
 class Local_player_controller final : public Core::Component
@@ -24,7 +26,8 @@ public:
 private:
 
   bool m_place_node = false;
-  Core::Entity gun;
+  Core::Entity          m_gun;
+  Core::Camera          m_camera;
 
 }; // class
 

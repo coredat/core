@@ -185,7 +185,6 @@ main(int argc, char *argv[])
       Core::Entity_id ids[5];
       
       World_data::world_find_entities_with_tag(&world_data, Tag::player, &number_found_with_tag, &ids[0], 5);
-      World_data::camera_pool_set_priority(world_data.camera_pool, ids[0], 1);
     }
     else
     {
@@ -198,7 +197,6 @@ main(int argc, char *argv[])
       Core::Entity_id ids[5];
       
       World_data::world_find_entities_with_tag(&world_data, Tag::network_player, &number_found_with_tag, &ids[0], 5);
-      World_data::camera_pool_set_priority(world_data.camera_pool, ids[0], 1);
     }
     
     // ** Graphics ** //

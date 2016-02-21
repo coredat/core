@@ -18,7 +18,7 @@ input_data_update_controller(Input_pool *pool,
                              const size_t controller,
                              const Game_controller *controller_data)
 {
-  memcpy(&pool[controller], controller_data, sizeof(Game_controller));
+  memcpy(&pool->controllers[controller], controller_data, sizeof(Game_controller));
 }
 
 

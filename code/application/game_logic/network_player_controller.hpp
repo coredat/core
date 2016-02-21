@@ -4,6 +4,7 @@
 
 #include "../common/ids_component_types.hpp"
 #include <core/interface/component.hpp>
+#include <core/camera/camera.hpp>
 
 
 class Network_player_controller final : public Core::Component
@@ -19,6 +20,9 @@ public:
   void                  on_update(const float dt) override;
   void                  on_event(const uint32_t id, const void *data, const size_t size_of_data) override;
 
+private:
+
+  Core::Camera          m_camera;
 
 }; // class
 

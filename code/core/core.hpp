@@ -7,6 +7,8 @@
 #include "physics/ray.hpp"
 #include "interface/component.hpp"
 #include "interface/entity.hpp"
+#include "network/peers.hpp"
+#include "camera/camera.hpp"
 
 
 #endif // inc guard

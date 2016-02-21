@@ -30,7 +30,10 @@ void
 Local_player_controller::on_start()
 {
   get_entity().add_tag(Tag::player);
-  gun = Entity_factory::create_gun(m_world_data);
+  m_gun = Entity_factory::create_gun(m_world_data);
+  
+  m_camera.set_attached_entity(get_entity());
+  m_camera.set_priority(1);
 }
 
 
@@ -96,7 +99,7 @@ Local_player_controller::on_update(const float dt)
   // Move gun model
   {
     Core::Transform parent_trans = get_entity().get_transform();
-    Core::Transform new_gun_trans = gun.get_transform();
+    Core::Transform new_gun_trans = m_gun.get_transform();
     
     new_gun_trans.set_rotation(parent_trans.get_rotation());
     
@@ -109,9 +112,9 @@ Local_player_controller::on_update(const float dt)
     
     new_gun_trans.set_position(fwd_down_left);
     
-    new_gun_trans.set_scale(gun.get_transform().get_scale());
+    new_gun_trans.set_scale(m_gun.get_transform().get_scale());
 
-    gun.set_transform(new_gun_trans);
+    m_gun.set_transform(new_gun_trans);
   }
 }
 

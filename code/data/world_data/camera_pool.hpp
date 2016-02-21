@@ -23,7 +23,10 @@ struct Camera_pool
 {
   Core::Entity_id             entity_id[MAX_CAMERAS];
   Camera::Camera_properties   camera[MAX_CAMERAS];
-  uint32_t                    priority[MAX_CAMERAS];
+  uint32_t                    peer_priority_00[MAX_CAMERAS];
+  uint32_t                    peer_priority_01[MAX_CAMERAS];
+  uint32_t                    peer_priority_02[MAX_CAMERAS];
+  uint32_t                    peer_priority_03[MAX_CAMERAS];
   
   const size_t                number_of_cameras = MAX_CAMERAS;
 };
@@ -45,6 +48,13 @@ camera_pool_add_camera(Camera_pool *pool,
                        const Camera::Camera_properties props);
 
 /*!
+  Removes a camera from the pool.
+*/
+void
+camera_pool_remove_camera(Camera_pool *pool,
+                          const Core::Entity_id id);
+
+/*!
   Set priority of the camera
   TODO: This is just a stub function.
   We need to set the render order of things currently we just set 1
@@ -52,7 +62,17 @@ camera_pool_add_camera(Camera_pool *pool,
 void
 camera_pool_set_priority(Camera_pool *pool,
                          const Core::Entity_id id,
+                         const uint32_t peer,
                          const uint32_t priority);
+
+/*!
+  Returns the priority of the camera.
+  If the camera cannot be found it will return 0.
+*/
+uint32_t
+camera_pool_get_priority(Camera_pool *pool,
+                         const Core::Entity_id id,
+                         const uint32_t peer);
 
 /*!
   Get the entity with priority.
