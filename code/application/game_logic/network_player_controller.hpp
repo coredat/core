@@ -10,9 +10,6 @@
 class Network_player_controller final : public Core::Component
 {
 public:
-
-  explicit              Network_player_controller();
-                        ~Network_player_controller();
   
   uint32_t              get_rtti() const override { return Component_type::network_player_controller; }
   

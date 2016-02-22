@@ -58,17 +58,6 @@ namespace
 }
 
 
-Actor_model::Actor_model()
-{
-}
-
-
-Actor_model::~Actor_model()
-{
-  m_world_data->physics_world->dynamics_world.removeCollisionObject(m_ghost_obj.get());
-}
-
-
 void
 Actor_model::on_start()
 {
@@ -82,6 +71,13 @@ Actor_model::on_start()
   m_world_data->physics_world->dynamics_world.addCollisionObject(m_ghost_obj.get(), btBroadphaseProxy::AllFilter, btBroadphaseProxy::AllFilter);
   
   get_entity().add_tag(Tag::actor);
+}
+
+
+void
+Actor_model::on_end()
+{
+ m_world_data->physics_world->dynamics_world.removeCollisionObject(m_ghost_obj.get());
 }
 
 

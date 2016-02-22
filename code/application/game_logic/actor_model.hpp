@@ -23,18 +23,19 @@
 
 class Actor_model : public Core::Component
 {
-public:
+private:
 
-  explicit              Actor_model();
-                        ~Actor_model();
+  // TODO Actor controller?
+  friend class Npc_actor_controller;
+  friend class Network_player_controller;
+  friend class Local_player_controller;
   
   uint32_t              get_rtti() const override { return Component_type::actor; }
   
-  virtual void          on_start() override;
-  virtual void          on_update(const float dt) override;
-  virtual void          on_event(const uint32_t id, const void *data, const size_t size_of_data) override;
-  
-  /* Interface */
+  void                  on_start() override;
+  void                  on_end() override;
+  void                  on_update(const float dt) override;
+  void                  on_event(const uint32_t id, const void *data, const size_t size_of_data) override;
   
   void                  move_forward(const float fwd);
   void                  move_left(const float left);

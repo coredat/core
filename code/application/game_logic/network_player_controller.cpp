@@ -5,18 +5,6 @@
 #include <core/input/input.hpp>
 
 
-Network_player_controller::Network_player_controller()
-{
-  
-}
-
-
-Network_player_controller::~Network_player_controller()
-{
-
-}
-
-
 void
 Network_player_controller::on_start()
 {

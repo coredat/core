@@ -15,15 +15,15 @@
 */
 class Gun_model : public Core::Component
 {
-public:
-  
+private:
+
+  friend class Gun_controller;
+
   uint32_t              get_rtti() const override { return Component_type::gun; }
-  
   void                  on_update(const float dt) override;
   
   bool                  fire_gun();     //! Returns true if the gun state changed.
   bool                  reload();       //! Returns true if the gun state changed.
-  
   bool                  is_reloading() const { return m_gun_state == State::reloading; }
   bool                  is_firing() const    { return m_gun_state == State::firing;    }
   
