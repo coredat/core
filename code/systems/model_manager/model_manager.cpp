@@ -2,6 +2,7 @@
 #include <utils/obj_model_loader.hpp>
 #include <assert.h>
 #include <algorithm>
+#include <math/math.hpp>
 
 
 namespace Model {
