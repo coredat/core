@@ -74,7 +74,7 @@ initialize()
       const float color[3]{ 0.8f,0.7f,0.7f };
       const float dir[3]{ -0.707f,-0.707f,-0.707f };
       const float amb = 0.75f;
-      const float diff = 0.8f;
+      const float diff = 0.43f;
 
       Ogl::shader_bind(&shader_dir_light);
       Ogl::shader_uniforms_apply(uni_dir_light_color, (void*)color);
