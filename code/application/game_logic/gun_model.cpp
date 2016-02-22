@@ -1,24 +1,104 @@
 #include "gun_model.hpp"
-
-
-Gun_model::Gun_model()
-{
-}
+#include <math/math.hpp>
 
 
 void
 Gun_model::on_update(const float dt)
 {
+  switch(m_gun_state)
+  {
+    // The gun was fired.
+    // We need to remove a bullet from the clip.
+    // Then next state.
+    case(State::fired):
+    {
+      --m_loaded_bullets;
+      
+      m_gun_state = State::firing;
+      break;
+    }
+  
+    // The gun is fireing for as long as the timer is
+    // running. Check the timer than next state.
+    case(State::firing):
+    {
+      const util::milliseconds split = m_timer.split();
+      
+      if(split > m_fire_time)
+      {
+        if(m_bullets)
+        {
+          m_gun_state = State::ready;
+        }
+        else
+        {
+          m_gun_state = State::empty;
+        }
+        
+        m_timer.stop();
+      }
+      
+      break;
+    }
+  
+    // The gun is reloading.
+    // After the timer is done we need to rmeove
+    // the bullets from the bullet pool.
+    // Then we make the gun 'ready'
+    case(State::reloading):
+    {
+      const util::milliseconds split = m_timer.split();
+      
+      if(split > m_reload_time)
+      {
+        // Bullets from pool.
+        const uint32_t bullets = math::min(m_max_clip_size, m_bullets);
+        
+        m_bullets -= bullets;
+        m_loaded_bullets = bullets;
+        
+        m_gun_state = State::ready;
+        m_timer.stop();
+      }
+      
+      break;
+    }
+    
+    // Nothing needs doing here.
+    case(State::ready):
+    case(State::empty):
+    default:
+      break;
+  }; // state swtich
 }
 
 
-void
+bool
 Gun_model::fire_gun()
 {
+  if(m_gun_state == State::ready)
+  {
+    m_gun_state = State::fired;
+    m_timer.start();
+    
+    return true;
+  }
+  
+  return false;
 }
 
 
-void
+bool
 Gun_model::reload()
 {
+  if((m_gun_state == State::ready && m_loaded_bullets < m_max_clip_size)
+  || (m_gun_state == State::empty && m_bullets))
+  {
+    m_gun_state = State::reloading;
+    m_timer.start();
+    
+    return true;
+  }
+  
+  return false;
 }

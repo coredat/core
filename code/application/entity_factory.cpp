@@ -9,6 +9,7 @@
 #include <core/interface/entity.hpp>
 #include <application/game_logic/actor_model.hpp>
 #include <application/game_logic/gun_model.hpp>
+#include <application/game_logic/gun_controller.hpp>
 #include <application/game_logic/local_player_controller.hpp>
 #include <application/game_logic/npc_actor_controller.hpp>
 #include <application/game_logic/network_player_controller.hpp>
@@ -252,6 +253,7 @@ create_gun(World_data::World *world)
   gun_entity.set_material_id(Resource::Texture::dev_orange);
   gun_entity.set_model_id(Resource::Model::unit_cube);
   
+  gun_entity.add_component<Gun_controller>();
   gun_entity.add_component<Gun_model>();
   // TODO: Gun Controller.
   

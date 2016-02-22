@@ -26,6 +26,16 @@ namespace Core {
 */
 class Component
 {
+  // TODO: Privacy.
+  // Need to do better I think.
+  // This is because we manage the component memory manually.
+  // Duplicating an object isn't something that should ever happen.
+  // This is a good argument (weridly) to move this to scripting.
+  Component(const Component&)             = delete;
+  Component(Component&&)                  = delete;
+  Component& operator=(const Component&)  = delete;
+  Component& operator=(const Component&&) = delete;
+
 public:
 
   explicit            Component()  {}

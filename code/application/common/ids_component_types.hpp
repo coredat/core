@@ -12,6 +12,7 @@ enum ENUM : uint32_t {
 
   actor,
   gun,
+  gun_controller,
   
   local_player_controller,
   network_player_controller,

@@ -14,18 +14,6 @@
 #include <systems/audio/audio.hpp>
 
 
-Local_player_controller::Local_player_controller()
-{
-  
-}
-
-
-Local_player_controller::~Local_player_controller()
-{
-
-}
-
-
 void
 Local_player_controller::on_start()
 {

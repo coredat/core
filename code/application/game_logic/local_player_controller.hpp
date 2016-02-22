@@ -13,9 +13,6 @@ class Local_player_controller final : public Core::Component
 {
 public:
 
-  explicit              Local_player_controller();
-                        ~Local_player_controller();
-
   uint32_t              get_rtti() const override { return Component_type::local_player_controller; }
   
   void                  on_start() override;
