@@ -52,8 +52,8 @@ MATH_GENR_INLINE float              degrees_to_radians(const float degrees); // 
 
 MATH_GENR_INLINE float              sqrt(const float x);
 MATH_GENR_INLINE float              abs(const float x);
-MATH_GENR_INLINE float              max(const float a, const float b); // TODO:
-MATH_GENR_INLINE float              min(const float a, const float b); // TODO:
+MATH_GENR_INLINE float              max(const float a, const float b);
+MATH_GENR_INLINE float              min(const float a, const float b);
 MATH_GENR_INLINE float              clamp(const float x, const float between_a, const float between_b);
 MATH_GENR_INLINE bool               is_between(const float to_check, const float a, const float b); // TODO:
 MATH_GENR_INLINE bool               is_near(const float actual, const float target, const float error_margin); // TODO:
@@ -155,6 +155,19 @@ float
 a_sin(const float radians)
 {
   return std::asin(radians);
+}
+
+
+float
+radians_to_degrees(const float radians)
+{
+  return radians * (180.f / pi());
+}
+
+float
+degrees_to_radians(const float degrees)
+{
+  return degrees * (pi() / 180.f);
 }
 
 
