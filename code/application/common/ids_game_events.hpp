@@ -13,6 +13,8 @@ enum ENUM : uint32_t {
 
   got_shot,
   
+  gun_fire,
+  
   actor_died, // Signal from the actor to its controller.
 
   player_spawned,

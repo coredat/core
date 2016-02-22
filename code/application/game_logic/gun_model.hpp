@@ -39,9 +39,9 @@ private:
   };
 
   State                 m_gun_state       = State::ready;
-  float                 m_reload_time     = 10;
-  float                 m_fire_time       = 1;
-  uint32_t              m_bullets         = 20;
+  float                 m_reload_time     = 1050;
+  float                 m_fire_time       = 85;
+  uint32_t              m_bullets         = 200;
   uint32_t              m_loaded_bullets  = 10;
   uint32_t              m_max_clip_size   = 10;
   util::timer           m_timer;

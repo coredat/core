@@ -58,30 +58,7 @@ Local_player_controller::on_update(const float dt)
   // Player Actions (This should be moved into a gun model.)
   if(controller.is_button_down(Core::Input::Button::button_0))
   {
-    Audio::Node_sample_2d node;
-    node.chunk_to_play = m_world_data->audio_pool->samples[0].chunk;
-    
-    Audio::play_nodes(&node, 1);
-
-  
-    const Core::Transform curr_trans = get_entity().get_transform();
-    
-    const math::vec3 scaled_fwd_vec = math::vec3_scale(curr_trans.get_forward(), 1000.f);
-    
-    const math::vec3 from = curr_trans.get_position();
-    const math::vec3 to   = math::vec3_add(from, scaled_fwd_vec);
-    
-    Core::Physics::Ray shoot_ray(from, to, Core::Physics::Ray::Search::first);
-    
-    if(shoot_ray.has_hit())
-    {
-      Core::Entity hit_ent = shoot_ray.get_entity(0);
-
-      if(hit_ent.is_valid() && hit_ent.has_tag(Tag::actor))
-      {
-        hit_ent.send_event(Game_event_id::got_shot, nullptr, 0);
-      }
-    } // if face_ray hit
+    m_gun.send_event(Game_event_id::gun_fire, nullptr, 0);
   } // If player input action
   
   // Move gun model
