@@ -47,6 +47,10 @@ camera_pool_remove_camera(Camera_pool *pool,
                                                pool->number_of_cameras))
   {
     pool->entity_id[index] = Core::Entity_id_util::invalid_id();
+    pool->peer_priority_00[index] = 0;
+    pool->peer_priority_01[index] = 0;
+    pool->peer_priority_02[index] = 0;
+    pool->peer_priority_03[index] = 0;
   }
 }
 
@@ -101,6 +105,7 @@ camera_pool_get_priority(Camera_pool *pool,
 
 Camera::Camera_properties
 camera_pool_get_properties_for_priority(Camera_pool *pool,
+                                        const size_t peer,
                                         const uint32_t priority)
 {
   assert(pool);
@@ -125,6 +130,7 @@ camera_pool_get_entity_id_for_priority(Camera_pool *pool,
 {
   assert(pool);
 
+  // TODO: OMG!
   for (size_t i = 0; i < pool->number_of_cameras; ++i)
   {
     if (peer == 0 && pool->peer_priority_00[i] == priority)
