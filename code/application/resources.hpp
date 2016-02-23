@@ -15,6 +15,8 @@ enum ENUM {
 
   unit_cube,
   unit_plane,
+
+  test_aabb,
   
   // Number of models.
   size

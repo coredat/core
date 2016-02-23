@@ -2,6 +2,7 @@
 #define GENERIC_ID_INCLUDED_41DA909C_56FC_408D_8034_7A963FC2520D
 
 
+#include <stdint.h>
 #include <stddef.h>
 
 
@@ -14,7 +15,7 @@ namespace Generic_id {
   \param number_of_ids how many ids in the array.
 */
 void
-ids_init_sequentially(size_t ids[], const size_t number_of_ids);
+ids_init_sequentially(uint32_t ids[], const size_t number_of_ids);
 
 
 } // ns

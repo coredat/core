@@ -47,11 +47,10 @@ model_load(const Load_model models_to_load[],
                             false);
     
     output_vbo[i] = vbo;
-    
+
     // Calculate aabb of the model.
-    math::aabb aabb = math::aabb_from_xyz_array(model.meshes[0].positions.data(), model.meshes[0].positions.size());
-    
-    output_aabb[i] = aabb;
+    output_aabb[i] = math::aabb_from_xyz_array(model.meshes[0].positions.data(),
+                                               model.meshes[0].positions.size());
   }
 }
 

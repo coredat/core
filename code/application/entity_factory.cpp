@@ -123,8 +123,8 @@ create_local_kinematic_actor(World_data::World *world)
   const float c_pos_z = pos_z + 0.f;
 
   child_entity.set_transform(Core::Transform(math::vec3_init(c_pos_x, c_pos_y, c_pos_z),
-                                            math::vec3_init(c_scale_x, c_scale_y, c_scale_z),
-                                            math::quat_init()));
+                                             math::vec3_init(c_scale_x, c_scale_y, c_scale_z),
+                                             math::quat_init()));
   
   child_entity.set_material_id(Resource::Texture::dev_green);
   child_entity.set_model_id(Resource::Model::unit_cube);
@@ -283,6 +283,32 @@ create_static_cube(World_data::World *world, const math::transform &transform)
 
   entity.set_material_id(static_cast<Resource::Texture::ENUM>(rand() % Resource::Texture::size));
   entity.set_model_id(Resource::Model::unit_cube);
+  
+  return entity;
+}
+
+
+Core::Entity
+test_aabb(World_data::World *world)
+{
+  Core::Entity entity;
+  assert(World_data::world_create_new_entity(world, &entity, Object_type::dev_generic));
+  
+  Core::Model model(Resource::Model::test_aabb);
+  const math::aabb test_aabb = model.get_model_aabb();
+  
+  entity.set_transform(Core::Transform(math::vec3_zero(), math::vec3_one(), math::quat_init()));
+  entity.set_rigidbody_properties(Physics::Rigidbody_properties{});
+  
+  Physics::Rigidbody_collider rb_collider;
+  rb_collider.collider_type = Physics::Collider_type::cube;
+  rb_collider.collider_info.cube.extents[0] = math::vec3_get_x(test_aabb.extents) * 0.5f;
+  rb_collider.collider_info.cube.extents[1] = math::vec3_get_y(test_aabb.extents) * 0.5f;
+  rb_collider.collider_info.cube.extents[2] = math::vec3_get_z(test_aabb.extents) * 0.5f;
+  entity.set_rigidbody_collider(rb_collider);
+
+  entity.set_material_id(static_cast<Resource::Texture::ENUM>(rand() % Resource::Texture::size));
+  entity.set_model_id(Resource::Model::test_aabb);
   
   return entity;
 }

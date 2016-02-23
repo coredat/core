@@ -5,7 +5,7 @@
 #include <simple_renderer/vertex_buffer.hpp>
 #include <renderer/graphics_api/ogl/ogl_vertex_buffer.hpp>
 #include <math/geometry/geometry.hpp>
-#include <stddef.h>
+#include <stdint.h>
 
 
 #define SIZE_OF_MODEL_POOL 32
@@ -16,7 +16,7 @@ namespace World_data {
 
 struct Model_pool
 {
-  std::size_t               id[SIZE_OF_MODEL_POOL];
+  uint32_t                  id[SIZE_OF_MODEL_POOL];
 //  renderer::vertex_buffer   vbo[SIZE_OF_MODEL_POOL];
   Ogl::Vertex_buffer        vbo[SIZE_OF_MODEL_POOL];
   math::aabb                aabb[SIZE_OF_MODEL_POOL];

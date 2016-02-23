@@ -16,11 +16,7 @@ public:
 
   explicit            Model(const uint32_t model_resource_id);
   
-  //math::aabb          get_model_aabb() const; // todo concat aabbs of the meshes together.
-  
-  uint32_t            get_number_of_meshes() const;
-  Mesh                get_mesh(const uint32_t i) const;
-  bool                set_mesh(const uint32_t i, const Mesh &mesh);
+  math::aabb          get_model_aabb() const;
   
 private:
 

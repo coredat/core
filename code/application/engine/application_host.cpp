@@ -41,6 +41,8 @@ host_initialize(
       const float scale = 5;
       const float place_scale = 4;
       
+      //Entity_factory::test_aabb(world);
+      
       // Inner
       place_transform.position = math::vec3_init(5 * place_scale,0,-5);
       place_transform.scale = math::vec3_init(scale, scale * 2, scale);

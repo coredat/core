@@ -13,6 +13,8 @@ enum ENUM : uint32_t {
 
   null_type = 0,
   
+  dev_generic,
+  
   dev_dynamic_cube,
   dev_view_cube,
   

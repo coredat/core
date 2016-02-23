@@ -1,6 +1,8 @@
 #include "model.hpp"
 #include <data/world_data/world.hpp>
+#include <data/world_data/world_pools.hpp>
 #include <data/world_data/model_pool.hpp>
+#include <stddef.h>
 
 
 namespace Core {
@@ -12,32 +14,23 @@ Model::Model(const uint32_t model_resource_id)
 }
 
 
-uint32_t
-Model::get_number_of_meshes() const
+math::aabb
+Model::get_model_aabb() const
 {
-  return 0;
-}
-
-
-Mesh
-Model::get_mesh(const uint32_t i) const
-{
-  World_data::World *world = World_data::get_world();
+  math::aabb return_aabb;
   
-  if(world)
+  World_data::World *world = World_data::get_world();
+  size_t id_index;
+  
+  if(world && math::index_linear_search(m_model_id,
+                                        world->model_pool->id,
+                                        world->model_pool->size,
+                                        &id_index))
   {
-    //world_data->model_pool;
+    return_aabb = world->model_pool->aabb[id_index];
   }
-
-  return Mesh();
+  
+  return return_aabb;
 }
-
-
-bool
-Model::set_mesh(const uint32_t i, const Mesh &mesh)
-{
-  return false;
-}
-
 
 } // ns

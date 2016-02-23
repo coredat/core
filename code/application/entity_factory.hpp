@@ -42,6 +42,10 @@ Core::Entity
 create_static_cube(World_data::World *world, const math::transform &transform);
 
 
+Core::Entity
+test_aabb(World_data::World *world);
+
+
 } // ns
 
 

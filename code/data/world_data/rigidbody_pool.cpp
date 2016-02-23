@@ -221,42 +221,42 @@ rigidbody_pool_update_scene_graph_changes(Rigidbody_pool *pool,
     rigidbody_pool_find(world_data->rigidbody_pool, entity.get_id(), &rb);
     assert(rb);
 
-    auto get_child_colliders = [&](Core::Entity e, btCompoundShape *parent_compound)
-    {
-        auto lambda = [&](Core::Entity e, btCompoundShape *parent_compound, const auto& ff) -> void
-        {  
-          for(size_t c = 0; c < e.get_number_of_children(); ++c)
-          {
-            Core::Entity child = e.get_child(c);
-          
-            return ff(child, parent_compound, ff);
-          }
-          
-          auto parent = e.get_parent();
-          
-          if(parent.is_valid())
-          {
-            auto parent_trans = parent.get_transform().get_position();
-            auto child_trans = e.get_transform().get_position();
-            auto pos = math::vec3_subtract(child_trans, parent_trans);
-          
-            btTransform transform;
-            transform.setIdentity();
-            transform.setOrigin(btVector3(math::vec3_get_x(pos), math::vec3_get_y(pos), math::vec3_get_z(pos)));
-    
-            //assert(false);
-            // Need to get new transform.
-            // Of the nested entity.
-            
-            Physics::Rigidbody *rb = nullptr;
-            rigidbody_pool_find(world_data->rigidbody_pool, e.get_id(), &rb);
-          
-            parent_compound->addChildShape(transform, rb->shape.get());
-          }
-        };
-          
-        return lambda(e, parent_compound, lambda);
-    };
+//    auto get_child_colliders = [&](Core::Entity e, btCompoundShape *parent_compound)
+//    {
+//        auto lambda = [&](Core::Entity e, btCompoundShape *parent_compound, const auto& ff) -> void
+//        {  
+//          for(size_t c = 0; c < e.get_number_of_children(); ++c)
+//          {
+//            Core::Entity child = e.get_child(c);
+//          
+//            return ff(child, parent_compound, ff);
+//          }
+//          
+//          auto parent = e.get_parent();
+//          
+//          if(parent.is_valid())
+//          {
+//            auto parent_trans = parent.get_transform().get_position();
+//            auto child_trans = e.get_transform().get_position();
+//            auto pos = math::vec3_subtract(child_trans, parent_trans);
+//          
+//            btTransform transform;
+//            transform.setIdentity();
+//            transform.setOrigin(btVector3(math::vec3_get_x(pos), math::vec3_get_y(pos), math::vec3_get_z(pos)));
+//    
+//            //assert(false);
+//            // Need to get new transform.
+//            // Of the nested entity.
+//            
+//            Physics::Rigidbody *rb = nullptr;
+//            rigidbody_pool_find(world_data->rigidbody_pool, e.get_id(), &rb);
+//          
+//            parent_compound->addChildShape(transform, rb->shape.get());
+//          }
+//        };
+//          
+//        return lambda(e, parent_compound, lambda);
+//    };
     
     if(entity.get_parent().get_id() == Core::Entity_id_util::invalid_id())
     {
