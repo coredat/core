@@ -2,10 +2,10 @@
 #define MESH_DATA_INCLUDED_A8754D41_F518_4378_A1D4_7B46EEE7387D
 
 
-#include <cstddef>
-#include <stdint.h>
-#include <simple_renderer/vertex_buffer.hpp>
 #include <renderer/graphics_api/ogl/ogl_vertex_buffer.hpp>
+#include <math/geometry/geometry.hpp>
+#include <stddef.h>
+#include <stdint.h>
 
 
 namespace Model {
@@ -13,7 +13,7 @@ namespace Model {
 
 struct Load_model
 {
-  const std::size_t id;         //!< Index into the output.
+  const size_t id;         //!< Index into the output.
   const std::string file_name;  //!< File to load
 }; // struct
 
@@ -27,17 +27,18 @@ struct Load_model
 */
 void
 model_load(const Load_model models_to_load[],
-           const std::size_t number_of_models_to_load,
+           const size_t number_of_models_to_load,
            Ogl::Vertex_buffer output_vbo[],
+           math::aabb output_aabb[],
            const std::size_t size_of_output_pool);
 
   
 void
 find_model_data(Ogl::Vertex_buffer output_vbo[],
-                const std::size_t size_of_output,
+                const size_t size_of_output,
                 const uint32_t input_ids[],
                 const Ogl::Vertex_buffer input_vbo[],
-                const std::size_t size_of_input);
+                const size_t size_of_input);
 
 
 

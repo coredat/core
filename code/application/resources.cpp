@@ -25,7 +25,7 @@ load_default_resources(World_data::World *world)
     };
     
     Generic_id::ids_init_sequentially(model_pool->id, model_pool->size);
-    ::Model::model_load(model, Resource::Model::size, model_pool->vbo, model_pool->size);
+    ::Model::model_load(model, Resource::Model::size, model_pool->vbo, model_pool->aabb, model_pool->size);
   }
   
   // Load textures

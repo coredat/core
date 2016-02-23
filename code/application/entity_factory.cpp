@@ -7,6 +7,7 @@
 #include <systems/entity/generic_id.hpp>
 #include <data/data.hpp>
 #include <core/interface/entity.hpp>
+#include <core/model/model.hpp>
 #include <application/game_logic/actor_model.hpp>
 #include <application/game_logic/gun_model.hpp>
 #include <application/game_logic/gun_controller.hpp>
@@ -75,9 +76,11 @@ create_random_cube(World_data::World *world)
   rb_collider.collider_info.cube.extents[1] = scale_y * 0.5f;
   rb_collider.collider_info.cube.extents[2] = scale_z * 0.5f;
   entity.set_rigidbody_collider(rb_collider);
-
+  
   entity.set_material_id(static_cast<Resource::Texture::ENUM>(rand() % Resource::Texture::size));
   entity.set_model_id(Resource::Model::unit_cube);
+  
+  Core::Model cube(Resource::Model::unit_cube);
   
   return entity;
 }

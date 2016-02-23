@@ -12,6 +12,7 @@ void
 model_load(const Load_model models_to_load[],
            const std::size_t number_of_models_to_load,
            Ogl::Vertex_buffer output_vbo[],
+           math::aabb output_aabb[],
            const std::size_t size_of_output_pool)
 {
   const std::size_t number_to_load = std::min(number_of_models_to_load, size_of_output_pool);
@@ -39,9 +40,18 @@ model_load(const Load_model models_to_load[],
     const util::gl_mesh mesh(util::convert_to_open_gl_mesh(model.meshes.front()));
     
     Ogl::Vertex_buffer vbo;
-    Ogl::vertex_buffer_load(&vbo, mesh.mesh_data.data(), sizeof(float) * mesh.mesh_data.size(), mesh.mesh_data.size(), false);
+    Ogl::vertex_buffer_load(&vbo,
+                            mesh.mesh_data.data(),
+                            sizeof(float) * mesh.mesh_data.size(),
+                            mesh.mesh_data.size(),
+                            false);
     
     output_vbo[i] = vbo;
+    
+    // Calculate aabb of the model.
+    math::aabb aabb = math::aabb_from_xyz_array(model.meshes[0].positions.data(), model.meshes[0].positions.size());
+    
+    output_aabb[i] = aabb;
   }
 }
 
