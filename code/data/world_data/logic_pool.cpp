@@ -17,7 +17,7 @@ logic_pool_init(Logic_pool *pool)
   pool->objects_in_use_size = 0;
   
   // Create free list
-  for(std::size_t i = 0; i < pool->size; ++i)
+  for(uint32_t i = 0; i < pool->size; ++i)
   {
     pool->object_locations[i] = &pool->storage[i * pool->storage_size];
   }
@@ -28,7 +28,7 @@ void*
 logic_pool_get_slot(Logic_pool *pool,
                     const Core::Entity_id id)
 {
-  size_t index;
+  uint32_t index;
   if(Core::Entity_id_util::find_index_linearly(&index,
                                                Core::Entity_id_util::invalid_id(),
                                                pool->entity_id,
@@ -42,7 +42,7 @@ logic_pool_get_slot(Logic_pool *pool,
     {
       pool->objects_in_use[pool->objects_in_use_size++] = result;
       
-      const size_t new_on_start = pool->objects_on_start_pending_hooks_size;
+      const uint32_t new_on_start = pool->objects_on_start_pending_hooks_size;
       pool->objects_on_start_pending_hooks[new_on_start] = result;
       
       pool->objects_on_start_pending_hooks_size++;
@@ -56,12 +56,12 @@ logic_pool_get_slot(Logic_pool *pool,
 }
 
 
-size_t
+uint32_t
 logic_pool_get_slot_count(Logic_pool *pool, const Core::Entity_id id)
 {
-  size_t count(0);
+  uint32_t count(0);
   
-  for(size_t i = 0; i < pool->size; ++i)
+  for(uint32_t i = 0; i < pool->size; ++i)
   {
     if(pool->entity_id[i] == id)
     {
@@ -77,11 +77,11 @@ void
 logic_pool_free_slots(Logic_pool *pool, const Core::Entity_id id)
 {
   // Search the entity list and find objects to removes
-  const size_t slots_to_remove = logic_pool_get_slot_count(pool, id);
+  const uint32_t slots_to_remove = logic_pool_get_slot_count(pool, id);
   
-  for(size_t i = 0; i < slots_to_remove; ++i)
+  for(uint32_t i = 0; i < slots_to_remove; ++i)
   {
-    size_t index;
+    uint32_t index;
     if(Core::Entity_id_util::find_index_linearly(&index, id, pool->entity_id, pool->size))
     {
       // Remove this logic.
@@ -95,14 +95,14 @@ logic_pool_free_slots(Logic_pool *pool, const Core::Entity_id id)
       pool->object_locations[index] = nullptr;
       
       // Remove from objects in use.
-      size_t o = 0;
+      uint32_t o = 0;
       while(o < pool->objects_in_use_size)
       {
         if(pool->objects_in_use[o] == obj_to_remove)
         {
           void* start       = &pool->objects_in_use[o];
           const void* end   = &pool->objects_in_use[o+1];
-          const size_t size = (pool->size-o-1) * sizeof(*pool->objects_in_use);
+          const uint32_t size = (pool->size-o-1) * sizeof(*pool->objects_in_use);
         
           --(pool->objects_in_use_size);
         
@@ -127,11 +127,11 @@ logic_pool_free_slots(Logic_pool *pool, const Core::Entity_id id)
 void
 logic_pool_on_start_hook(Logic_pool *pool)
 {
-  const size_t pending = pool->objects_on_start_pending_hooks_size;
+  const uint32_t pending = pool->objects_on_start_pending_hooks_size;
 
   if(pending)
   {
-    for(size_t i = 0; i < pending; ++i)
+    for(uint32_t i = 0; i < pending; ++i)
     {
       auto obj = pool->objects_on_start_pending_hooks[i];
       reinterpret_cast<Core::Component*>(obj)->on_start();
@@ -145,11 +145,11 @@ logic_pool_on_start_hook(Logic_pool *pool)
 void
 logic_pool_on_update_hook(Logic_pool *pool, const float delta_time)
 {
-  const size_t pending = pool->objects_in_use_size;
+  const uint32_t pending = pool->objects_in_use_size;
 
   if(pending)
   {
-    for(size_t i = 0; i < pending; ++i)
+    for(uint32_t i = 0; i < pending; ++i)
     {
       auto obj = pool->objects_in_use[i];
       reinterpret_cast<Core::Component*>(obj)->on_update(delta_time);

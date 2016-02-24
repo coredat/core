@@ -68,9 +68,9 @@ world_remove_rigidbody(World *world, Rigidbody *rb);
 void
 world_add_rigidbodies(World *world,
                       const Rigidbody_properties rb_properties[],
-                      const std::size_t number_of_rb_props,
+                      const std::uint32_t number_of_rb_props,
                       Rigidbody destination[],
-                      const std::size_t number_of_rbs);
+                      const std::uint32_t number_of_rbs);
 
 
 void

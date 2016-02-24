@@ -18,7 +18,7 @@ struct Texture_pool
   uint32_t            id[SIZE_OF_TEXTURE_POOL];
   Ogl::Texture        texture[SIZE_OF_TEXTURE_POOL];
   
-  const size_t        size = SIZE_OF_TEXTURE_POOL;
+  const uint32_t        size = SIZE_OF_TEXTURE_POOL;
 }; // struct
 
 
@@ -34,7 +34,7 @@ texture_pool_init(Texture_pool *pool);
   Find the texture for the given id.
 */
 Ogl::Texture
-texture_pool_find(const Texture_pool *pool, const size_t id);
+texture_pool_find(const Texture_pool *pool, const uint32_t id);
 
 
 } // ns

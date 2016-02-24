@@ -17,7 +17,7 @@ struct Audio_pool
   uint32_t        id[AUDIO_SAMPLE_POOL_SIZE];
   Audio::Sample   samples[AUDIO_SAMPLE_POOL_SIZE];
   
-  const size_t    size = AUDIO_SAMPLE_POOL_SIZE;
+  const uint32_t    size = AUDIO_SAMPLE_POOL_SIZE;
 };
 
 

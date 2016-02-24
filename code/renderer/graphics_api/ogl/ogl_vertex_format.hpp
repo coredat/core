@@ -39,7 +39,7 @@ struct Attribute
   char          name[32];
   GLenum        type    = GL_NONE;
   uint32_t      size    = 0;
-  size_t        pointer = 0;
+  uint32_t        pointer = 0;
 };
 
 
@@ -60,7 +60,7 @@ struct Vertex_format
 void
 vertex_format_load(Vertex_format *out_format,
                    const Attribute_desc attr_desc[],
-                   const size_t number_of_attributes);
+                   const uint32_t number_of_attributes);
 
 
 /*!

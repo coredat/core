@@ -195,7 +195,7 @@ Actor_model::on_update(const float dt)
   
     //** testing ghost stuff **//
     
-    for(size_t i = 0; i < m_ghost_obj->getNumOverlappingObjects(); i++)
+    for(uint32_t i = 0; i < m_ghost_obj->getNumOverlappingObjects(); i++)
     {
       
     }
@@ -290,7 +290,7 @@ Actor_model::on_update(const float dt)
 
 
 void
-Actor_model::on_event(const uint32_t id, const void *data, const size_t size_of_data)
+Actor_model::on_event(const uint32_t id, const void *data, const uint32_t size_of_data)
 {
 }
 
@@ -331,7 +331,7 @@ Actor_model::turn_left(const float turn)
 void
 Actor_model::take_damage()
 {
-  size_t index;
+  uint32_t index;
   Core::Entity_id_util::find_index_linearly(&index,
                                             get_entity().get_id(),
                                             m_world_data->entity_pool->entity_id,

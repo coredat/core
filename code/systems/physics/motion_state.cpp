@@ -79,7 +79,7 @@ Motion_state::~Motion_state()
 void
 Motion_state::getWorldTransform(btTransform &world_trans) const
 {
-  size_t index;
+  uint32_t index;
   if(Core::Entity_id_util::find_index_linearly(&index, m_entity, m_data->entity_id, m_data->size))
   {
     world_trans = gl_to_bullet(m_data->transform[index]);
@@ -90,7 +90,7 @@ Motion_state::getWorldTransform(btTransform &world_trans) const
 void
 Motion_state::setWorldTransform(const btTransform &world_trans)
 {
-  std::size_t index;
+  std::uint32_t index;
   if(Core::Entity_id_util::find_index_linearly(&index, m_entity, m_data->entity_id, m_data->size))
   {
     const math::transform curr_trans = m_data->transform[index];

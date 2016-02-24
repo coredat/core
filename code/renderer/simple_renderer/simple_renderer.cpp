@@ -97,7 +97,7 @@ initialize()
   
   // Vertex attr
   {
-    constexpr size_t number_of_attrs = 3;
+    constexpr uint32_t number_of_attrs = 3;
     Ogl::Attribute_desc vert_desc[number_of_attrs]
     {
       Ogl::Attribute_desc{"in_vs_position",       Ogl::Attr_type::FLOAT3},
@@ -121,12 +121,12 @@ initialize()
 
 void
 render_nodes_fullbright(const Node nodes[],
-                        const size_t number_of_nodes)
+                        const uint32_t number_of_nodes)
 {
   Ogl::default_state();
   Ogl::shader_bind(&shader_fullbright);
   
-  for(size_t n = 0; n < number_of_nodes; ++n)
+  for(uint32_t n = 0; n < number_of_nodes; ++n)
   {
     // Render node.
     const Node *curr_node = &nodes[n];
@@ -148,12 +148,12 @@ render_nodes_fullbright(const Node nodes[],
 
 void
 render_nodes_directional_light(const Node nodes[],
-                               const size_t number_of_nodes)
+                               const uint32_t number_of_nodes)
 {
   Ogl::default_state();
   Ogl::shader_bind(&shader_dir_light);
   
-  for(size_t n = 0; n < number_of_nodes; ++n)
+  for(uint32_t n = 0; n < number_of_nodes; ++n)
   {
     // Render node.
     const Node *curr_node = &nodes[n];

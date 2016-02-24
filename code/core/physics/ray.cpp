@@ -46,7 +46,7 @@ Ray::Ray(const math::vec3 from, const math::vec3 to, const Search search)
 
 
 Entity
-Ray::get_entity(const size_t i) const
+Ray::get_entity(const uint32_t i) const
 {
   Entity return_ent;
   World_data::world_find_entity(World_data::get_world(), &return_ent, m_results.at(i).id);

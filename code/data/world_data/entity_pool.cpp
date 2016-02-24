@@ -27,7 +27,7 @@ entity_pool_de_init(Entity_pool *pool)
 {
   assert(pool);
   
-  for(size_t i = 0; i < pool->size; ++i)
+  for(uint32_t i = 0; i < pool->size; ++i)
   {
     if(pool->entity_id[i] != Core::Entity_id_util::invalid_id())
     {
@@ -61,14 +61,14 @@ entity_pool_remove_entity(Entity_pool *pool, const Core::Entity_id id)
   // We move down all the elements in the data down one.
   // This way we can keep fragmentation and cache misses out
   // when processing the data, but take a hit here.1
-  size_t remove_id;
+  uint32_t remove_id;
   if(Core::Entity_id_util::find_index_linearly(&remove_id,
                                                id,
                                                pool->entity_id,
                                                pool->size))
   {
-    const size_t start_move = remove_id + 1;
-    const size_t end_move = pool->size - remove_id - 1;
+    const uint32_t start_move = remove_id + 1;
+    const uint32_t end_move = pool->size - remove_id - 1;
   
     memmove(&pool->entity_id[remove_id],          &pool->entity_id[start_move],          end_move * sizeof(*pool->entity_id));
     memmove(&pool->parent_id[remove_id],          &pool->parent_id[start_move],          end_move * sizeof(*pool->parent_id));

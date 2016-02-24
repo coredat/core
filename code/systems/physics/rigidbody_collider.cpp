@@ -9,13 +9,13 @@ namespace Physics {
 
 void
 colliders_generate(const Rigidbody_collider colliders[],
-                   const size_t number_of_colliders,
+                   const uint32_t number_of_colliders,
                    Rigidbody out_rb_info[],
-                   const size_t number_of_outs)
+                   const uint32_t number_of_outs)
 {
-  const size_t number_to_process = std::min(number_of_colliders, number_of_outs);
+  const uint32_t number_to_process = std::min(number_of_colliders, number_of_outs);
   
-  for(size_t i = 0; i < number_to_process; ++i)
+  for(uint32_t i = 0; i < number_to_process; ++i)
   {
     const auto coll = colliders[i];
     auto out_rb = &out_rb_info[i];

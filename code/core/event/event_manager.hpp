@@ -29,19 +29,19 @@ de_initialize();
 
 
 void*
-get_memory_chunk(const size_t size_of_data);
+get_memory_chunk(const uint32_t size_of_data);
 
 
 void
-send_message(const uint32_t event_id, const uint8_t *data, const size_t size_of_data);
+send_message(const uint32_t event_id, const uint8_t *data, const uint32_t size_of_data);
 
 
-size_t
-listen_for_message(const uint32_t event_id, const &std::functional<void(uint32_t, uint8_t*, size_t)> &callback);
+uint32_t
+listen_for_message(const uint32_t event_id, const &std::functional<void(uint32_t, uint8_t*, uint32_t)> &callback);
 
 
 void
-stop_listening_for_message(const uint32_t event_id, const size_t listener_id);
+stop_listening_for_message(const uint32_t event_id, const uint32_t listener_id);
 
 
 } // ns

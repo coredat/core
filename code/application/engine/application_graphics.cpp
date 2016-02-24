@@ -15,8 +15,8 @@ namespace Application {
 void
 graphics_think(World_data::World *world,
                Simple_renderer::Node nodes[],
-               const std::size_t size_of_node_pool,
-               const std::size_t peer)
+               const std::uint32_t size_of_node_pool,
+               const std::uint32_t peer)
 {
   renderer::clear();
 
@@ -77,7 +77,7 @@ graphics_think(World_data::World *world,
                                       sizeof(Simple_renderer::Node));
 
   // Texture/vbo info
-  for (size_t i = 0; i < size_of_node_pool; ++i)
+  for (uint32_t i = 0; i < size_of_node_pool; ++i)
   {
     nodes[i].vbo     = world->model_pool->vbo[world->entity_pool->model[i]];
     nodes[i].diffuse = World_data::texture_pool_find(world->texture_pool, world->entity_pool->texture[i]);

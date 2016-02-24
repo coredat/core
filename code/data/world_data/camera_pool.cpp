@@ -23,7 +23,7 @@ camera_pool_add_camera(Camera_pool *pool,
                        const Core::Entity_id id,
                        const Camera::Camera_properties props)
 {
-  for(size_t i = 0; i < pool->number_of_cameras; ++i)
+  for(uint32_t i = 0; i < pool->number_of_cameras; ++i)
   {
     if(pool->entity_id[i] == Core::Entity_id_util::invalid_id())
     {
@@ -40,7 +40,7 @@ camera_pool_remove_camera(Camera_pool *pool,
                           const Core::Entity_id id)
 {
   // Find index of camera pool
-  size_t index(0);
+  uint32_t index(0);
   if(Core::Entity_id_util::find_index_linearly(&index,
                                                id,
                                                pool->entity_id,
@@ -62,7 +62,7 @@ camera_pool_set_priority(Camera_pool *pool,
                          const uint32_t priority)
 
 {
-  size_t index(0);
+  uint32_t index(0);
   if(Core::Entity_id_util::find_index_linearly(&index,
                                                id,
                                                pool->entity_id,
@@ -84,7 +84,7 @@ camera_pool_get_priority(Camera_pool *pool,
                          const Core::Entity_id id,
                          const uint32_t peer)
 {
-  size_t index(0);
+  uint32_t index(0);
   if(Core::Entity_id_util::find_index_linearly(&index,
                                                id,
                                                pool->entity_id,
@@ -105,12 +105,12 @@ camera_pool_get_priority(Camera_pool *pool,
 
 Camera::Camera_properties
 camera_pool_get_properties_for_priority(Camera_pool *pool,
-                                        const size_t peer,
+                                        const uint32_t peer,
                                         const uint32_t priority)
 {
   assert(pool);
   
-  for(size_t i = 0; i < pool->number_of_cameras; ++i)
+  for(uint32_t i = 0; i < pool->number_of_cameras; ++i)
   {
     if(pool->peer_priority_00[i] == priority)
     {
@@ -125,13 +125,13 @@ camera_pool_get_properties_for_priority(Camera_pool *pool,
 
 Core::Entity_id
 camera_pool_get_entity_id_for_priority(Camera_pool *pool,
-                                       const size_t peer,
+                                       const uint32_t peer,
                                        const uint32_t priority)
 {
   assert(pool);
 
   // TODO: OMG!
-  for (size_t i = 0; i < pool->number_of_cameras; ++i)
+  for (uint32_t i = 0; i < pool->number_of_cameras; ++i)
   {
     if (peer == 0 && pool->peer_priority_00[i] == priority)
     {

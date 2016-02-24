@@ -10,14 +10,14 @@ namespace Model {
 
 void
 model_load(const Load_model models_to_load[],
-           const std::size_t number_of_models_to_load,
+           const std::uint32_t number_of_models_to_load,
            Ogl::Vertex_buffer output_vbo[],
            math::aabb output_aabb[],
-           const std::size_t size_of_output_pool)
+           const std::uint32_t size_of_output_pool)
 {
-  const std::size_t number_to_load = std::min(number_of_models_to_load, size_of_output_pool);
+  const std::uint32_t number_to_load = std::min(number_of_models_to_load, size_of_output_pool);
   
-  for(std::size_t i = 0; i < number_to_load; ++i)
+  for(std::uint32_t i = 0; i < number_to_load; ++i)
   {
     const auto &model_to_load = models_to_load[i];
     
@@ -57,12 +57,12 @@ model_load(const Load_model models_to_load[],
 
 void
 find_model_data(Ogl::Vertex_buffer output_vbo[],
-                const std::size_t size_of_output,
+                const std::uint32_t size_of_output,
                 const uint32_t input_ids[],
                 const Ogl::Vertex_buffer input_vbo[],
-                const std::size_t size_of_input)
+                const std::uint32_t size_of_input)
 {
-  for(std::size_t i = 0; i < size_of_output; ++i)
+  for(std::uint32_t i = 0; i < size_of_output; ++i)
   {
     output_vbo[i] = input_vbo[input_ids[i]];
   }

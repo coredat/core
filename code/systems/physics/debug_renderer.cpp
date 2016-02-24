@@ -80,7 +80,7 @@ Debug_renderer::drawContactPoint(const btVector3 &point_on_b,
     node->color[2] = color_b;
   };
   
-  const std::size_t number_of_nodes = 12;
+  const std::uint32_t number_of_nodes = 12;
   Debug_line_renderer::Line_node nodes[number_of_nodes];
 
   // x facing lines

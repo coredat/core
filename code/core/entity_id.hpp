@@ -40,9 +40,9 @@ convert_entity_to_ptr(const Entity_id to_ptr)
 {
   const uint32_t usr = convert_entity_to_uint(to_ptr);
   const uintptr_t warn = static_cast<uintptr_t>(usr);
-  size_t* ptr = nullptr;
+  uint32_t* ptr = nullptr;
   
-  ptr = (size_t*)warn;
+  ptr = (uint32_t*)warn;
   
   return ptr;
 }
@@ -51,7 +51,7 @@ convert_entity_to_ptr(const Entity_id to_ptr)
 inline Entity_id
 convert_ptr_to_entity(const void *to_ent)
 {
-  const size_t ptr = (size_t)to_ent;
+  const uint32_t ptr = (size_t)to_ent;
   const Core::Entity_id id = convert_uint_to_entity(static_cast<uint32_t>(ptr));
   
   return id;
@@ -78,7 +78,7 @@ invalid_id()
  \param size_of_entities the number of entities to invalidate.
 */
 void
-init_to_invalid_ids(Entity_id ids[], const size_t size_of_entities);
+init_to_invalid_ids(Entity_id ids[], const uint32_t size_of_entities);
 
 
 /*!
@@ -90,7 +90,7 @@ init_to_invalid_ids(Entity_id ids[], const size_t size_of_entities);
   \return return true if an index has been found.
 */
 bool
-find_index_linearly(size_t *out_index, const Entity_id id_to_find, const Entity_id ids[], const size_t number_of_entities);
+find_index_linearly(uint32_t *out_index, const Entity_id id_to_find, const Entity_id ids[], const uint32_t number_of_entities);
 
 
 } // ns

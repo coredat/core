@@ -5,7 +5,7 @@
 
 namespace
 {
-  size_t
+  uint32_t
   number_of_elements(const Ogl::Attr_type type)
   {
     switch(type)
@@ -46,7 +46,7 @@ namespace Ogl {
 
 
 void
-vertex_format_load(Vertex_format *out_format, const Attribute_desc attr_desc[], const size_t number_of_attrs)
+vertex_format_load(Vertex_format *out_format, const Attribute_desc attr_desc[], const uint32_t number_of_attrs)
 {
   if(!out_format)
   {
@@ -60,7 +60,7 @@ vertex_format_load(Vertex_format *out_format, const Attribute_desc attr_desc[], 
   memset(out_format->attributes, 0, sizeof(out_format->attributes));
 
   // Build the new format.
-  for(size_t i = 0; i < number_of_attrs; ++i)
+  for(uint32_t i = 0; i < number_of_attrs; ++i)
   {
     const Attribute_desc *attr = &attr_desc[i];
     Attribute *out_attr = &out_format->attributes[i];

@@ -15,7 +15,7 @@ input_data_init(Input_pool *data)
 
 void
 input_data_update_controller(Input_pool *pool,
-                             const size_t controller,
+                             const uint32_t controller,
                              const Game_controller *controller_data)
 {
   memcpy(&pool->controllers[controller], controller_data, sizeof(Game_controller));
@@ -23,7 +23,7 @@ input_data_update_controller(Input_pool *pool,
 
 
 Game_controller*
-input_data_get_controller(Input_pool *pool, const size_t controller)
+input_data_get_controller(Input_pool *pool, const uint32_t controller)
 {
   assert(controller < pool->size);
 

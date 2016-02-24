@@ -34,8 +34,8 @@ struct Entity_change
 struct Entity_graph_changes_pool
 {
   Entity_change       entity_event[GRAPH_CHANGE_POOL];
-  size_t              size;
-  const size_t        capacity = GRAPH_CHANGE_POOL;
+  uint32_t              size;
+  const uint32_t        capacity = GRAPH_CHANGE_POOL;
 };
 
 

@@ -12,13 +12,13 @@ namespace Texture {
 
 void
 texture_load(const Load_texture textures_to_load[],
-             const std::size_t number_of_textures_to_load,
+             const std::uint32_t number_of_textures_to_load,
              Ogl::Texture output[],
-             const std::size_t size_of_output_pool)
+             const std::uint32_t size_of_output_pool)
 {
-  const std::size_t number_to_load = std::min(number_of_textures_to_load, size_of_output_pool);
+  const std::uint32_t number_to_load = std::min(number_of_textures_to_load, size_of_output_pool);
 
-  for(std::size_t i = 0; i < number_to_load; ++i)
+  for(std::uint32_t i = 0; i < number_to_load; ++i)
   {
     const auto &tex = textures_to_load[i];
     

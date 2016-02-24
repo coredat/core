@@ -14,11 +14,11 @@ texture_pool_init(Texture_pool *pool)
 
 
 Ogl::Texture
-texture_pool_find(const Texture_pool *pool, const size_t id)
+texture_pool_find(const Texture_pool *pool, const uint32_t id)
 {
   assert(pool);
 
-  for(std::size_t i = 0; i < pool->size; ++i)
+  for(std::uint32_t i = 0; i < pool->size; ++i)
   {
     if(pool->id[i] == id)
     {

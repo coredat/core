@@ -29,8 +29,8 @@ struct Vertex_buffer
 void
 vertex_buffer_load(Vertex_buffer *out_vbo,
                    const void *vbo_buffer,
-                   const size_t size_of_vbo,
-                   const size_t number_of_elements,
+                   const uint32_t size_of_vbo,
+                   const uint32_t number_of_elements,
                    const bool is_dynamic);
 
 

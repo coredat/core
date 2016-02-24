@@ -53,17 +53,17 @@ world_remove_rigidbody(World *world, Rigidbody *rb)
 void
 world_add_rigidbodies(World *world,
                       const Rigidbody_properties props[],
-                      const std::size_t number_of_rbs_props,
+                      const std::uint32_t number_of_rbs_props,
                       Rigidbody destination[],
-                      const std::size_t number_of_rbs)
+                      const std::uint32_t number_of_rbs)
 {
   // Param check
   assert(world && props && destination);
   assert(number_of_rbs >= number_of_rbs_props); // Will work but likely you didn't mean todo this.
   
-  const std::size_t number_of_rbs_to_process = std::min(number_of_rbs_props, number_of_rbs);
+  const std::uint32_t number_of_rbs_to_process = std::min(number_of_rbs_props, number_of_rbs);
   
-  for(std::size_t i = 0; i < number_of_rbs_to_process; ++i)
+  for(std::uint32_t i = 0; i < number_of_rbs_to_process; ++i)
   {
     const Rigidbody_properties *prop = &props[i];
     Rigidbody *out_rb = &destination[i];

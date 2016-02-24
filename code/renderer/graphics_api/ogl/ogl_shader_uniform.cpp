@@ -88,7 +88,7 @@ shader_uniforms_get_uniform_index(Uniform *out_index, const Shader_uniforms *uni
 {
   assert(out_index && unis);
   
-  for(std::size_t i = 0; i < unis->uniform_names.size(); ++i)
+  for(std::uint32_t i = 0; i < unis->uniform_names.size(); ++i)
   {
     if(unis->uniform_names[i] == name)
     {
@@ -97,7 +97,7 @@ shader_uniforms_get_uniform_index(Uniform *out_index, const Shader_uniforms *uni
     }
   }
   
-  for(std::size_t i = 0; i < unis->sampler_names.size(); ++i)
+  for(std::uint32_t i = 0; i < unis->sampler_names.size(); ++i)
   {
     if(unis->sampler_names[i] == name)
     {

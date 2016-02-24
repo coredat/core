@@ -35,11 +35,11 @@ inline math::vec3 world_forward() { return math::vec3_init(0, 0, -1); }
 */
 void
 transforms_to_wvp_mats(const math::transform input_transforms[],
-                       const std::size_t number_of_input_transforms,
+                       const std::uint32_t number_of_input_transforms,
                        const math::mat4 view_proj_mat,
                        void *output_mats,
-                       const std::size_t number_of_output_mats,
-                       const std::size_t stride = sizeof(float) * 16);
+                       const std::uint32_t number_of_output_mats,
+                       const std::uint32_t stride = sizeof(float) * 16);
 
 
 /*!
@@ -52,10 +52,10 @@ transforms_to_wvp_mats(const math::transform input_transforms[],
 */
 void
 transforms_to_world_mats(const math::transform input_transforms[],
-                         const std::size_t number_of_input_transforms,
+                         const std::uint32_t number_of_input_transforms,
                          void *output_mats,
-                         const std::size_t number_of_output_mats,
-                         const std::size_t stride = sizeof(float) * 16);
+                         const std::uint32_t number_of_output_mats,
+                         const std::uint32_t stride = sizeof(float) * 16);
 
 /*!
   Computes the forward direction.

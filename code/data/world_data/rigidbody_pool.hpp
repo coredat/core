@@ -28,7 +28,7 @@ struct Rigidbody_pool
   Core::Entity_id                   entity_id[RIGIDBODY_POOL_SIZE];
   Physics::Rigidbody                rigidbody[RIGIDBODY_POOL_SIZE];
   
-  const size_t                      size{RIGIDBODY_POOL_SIZE};
+  const uint32_t                      size{RIGIDBODY_POOL_SIZE};
 }; // ns
 
 

@@ -31,7 +31,7 @@ struct Camera_pool
   uint32_t                    peer_priority_02[MAX_CAMERAS];
   uint32_t                    peer_priority_03[MAX_CAMERAS];
   
-  const size_t                number_of_cameras = MAX_CAMERAS;
+  const uint32_t                number_of_cameras = MAX_CAMERAS;
 };
 
 
@@ -99,7 +99,7 @@ camera_pool_get_priority(Camera_pool *pool,
 */
 Camera::Camera_properties
 camera_pool_get_properties_for_priority(Camera_pool *pool,
-                                        const size_t peer,
+                                        const uint32_t peer,
                                         const uint32_t priority);
 
 
@@ -112,7 +112,7 @@ camera_pool_get_properties_for_priority(Camera_pool *pool,
 */
 Core::Entity_id
 camera_pool_get_entity_id_for_priority(Camera_pool *pool,
-                                       const size_t peer,
+                                       const uint32_t peer,
                                        const uint32_t priority);
 
 

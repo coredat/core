@@ -11,8 +11,8 @@ namespace Ogl {
 void
 vertex_buffer_load(Vertex_buffer *out_vbo,
                    const void *vbo_buffer,
-                   const size_t size_of_vbo,
-                   const size_t number_of_elements,
+                   const uint32_t size_of_vbo,
+                   const uint32_t number_of_elements,
                    const bool is_dynamic)
 {
   assert(out_vbo);
@@ -44,7 +44,7 @@ vertex_buffer_bind(const Vertex_buffer vbo,
   
   // Vertex Format
   {
-    for(std::size_t i = 0; i < vert_fmt->number_of_attributes; ++i)
+    for(std::uint32_t i = 0; i < vert_fmt->number_of_attributes; ++i)
     {
       const GLint NOT_USED = -1;
       const Attribute *attrib = &vert_fmt->attributes[i];

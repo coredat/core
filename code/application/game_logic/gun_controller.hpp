@@ -17,7 +17,7 @@ public:
   uint32_t              get_rtti() const override { return Component_type::gun_controller; }
   
   void                  on_update(const float dt) override;
-  void                  on_event(const uint32_t id, const void *data, const size_t size_of_data) override;
+  void                  on_event(const uint32_t id, const void *data, const uint32_t size_of_data) override;
   
   void                  fire_gun();
   void                  reload();

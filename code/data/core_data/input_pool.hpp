@@ -4,7 +4,7 @@
 
 #include <core/input/axis.hpp>
 #include <core/input/buttons.hpp>
-#include <stddef.h>
+#include <stdint.h>
 
 
 #define NUMBER_OF_CONTROLLERS 4
@@ -24,7 +24,7 @@ struct Input_pool
 {
   Game_controller controllers[NUMBER_OF_CONTROLLERS];
   
-  const size_t size = NUMBER_OF_CONTROLLERS;
+  const uint32_t size = NUMBER_OF_CONTROLLERS;
 }; // struct
 
 
@@ -44,7 +44,7 @@ input_data_init(Input_pool *pool);
 */
 void
 input_data_update_controller(Input_pool *pool,
-                             const size_t controller,
+                             const uint32_t controller,
                              const Game_controller *controller_data);
 
 
@@ -54,7 +54,7 @@ input_data_update_controller(Input_pool *pool,
   \param controller index.
 */
 Game_controller*
-input_data_get_controller(Input_pool *pool, const size_t controller);
+input_data_get_controller(Input_pool *pool, const uint32_t controller);
 
 
 } // ns

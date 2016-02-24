@@ -20,15 +20,15 @@ namespace
   Ogl::Shader debug_line_shader;
   Ogl::Uniform uni_wvp;
   
-  constexpr size_t number_of_lines = 32;
-  constexpr size_t number_of_components = 3;
-  constexpr size_t line_uniform_max = number_of_lines * number_of_components; // 64 lines, 3 components per line (start, end, color)
+  constexpr uint32_t number_of_lines = 32;
+  constexpr uint32_t number_of_components = 3;
+  constexpr uint32_t line_uniform_max = number_of_lines * number_of_components; // 64 lines, 3 components per line (start, end, color)
   GLint uni_line[line_uniform_max];
   
-  constexpr size_t size_of_data_buffer = (1 << 20) * number_of_components; // Some big size * number of components (start, end, color)
+  constexpr uint32_t size_of_data_buffer = (1 << 20) * number_of_components; // Some big size * number of components (start, end, color)
   float data[size_of_data_buffer];
   
-  size_t data_ptr = 0; // Keeps a track of the data that we push in.
+  uint32_t data_ptr = 0; // Keeps a track of the data that we push in.
 }
 
 
@@ -53,7 +53,7 @@ initialize()
     Ogl::shader_uniforms_get_uniform_index(&uni_wvp, &uniforms, "uni_wvp_mat");
     Ogl::error_check("Getting uniforms from debug shader", &std::cout);
   
-    for(size_t i = 0; i < line_uniform_max; ++i)
+    for(uint32_t i = 0; i < line_uniform_max; ++i)
     {
       const std::string uni_name = "uni_line[" + std::to_string(i) + "]";
       uni_line[i] = glGetUniformLocation(debug_line_shader.program_id, uni_name.c_str());
@@ -65,7 +65,7 @@ initialize()
 
 
 void
-add_lines(const Line_node nodes[], const std::size_t number_of_lines)
+add_lines(const Line_node nodes[], const std::uint32_t number_of_lines)
 {
   // Shit - can do two memcpy's instead
   for(int32_t i = 0; i < number_of_lines; ++i)
@@ -94,12 +94,12 @@ add_lines(const Line_node nodes[], const std::size_t number_of_lines)
 void
 render(const float wvp_mat[16])
 {
-  const size_t number_to_batch = (data_ptr / number_of_lines) + 1;
+  const uint32_t number_to_batch = (data_ptr / number_of_lines) + 1;
   
   // Render
   Ogl::default_state();
   
-  size_t data_get = 0; // counter to how many we have already draw from the buffer.
+  uint32_t data_get = 0; // counter to how many we have already draw from the buffer.
   
   //glUseProgram(debug_line_shader.program_id);
   Ogl::shader_bind(&debug_line_shader);
@@ -108,11 +108,11 @@ render(const float wvp_mat[16])
   Ogl::shader_uniforms_apply(uni_wvp, (void*)wvp_mat);
   Ogl::error_check("set wvp.", &std::cout);
   
-  for(size_t b = 0; b < number_to_batch; ++b)
+  for(uint32_t b = 0; b < number_to_batch; ++b)
   {
-    for(size_t l = 0; l < std::min<size_t>(number_of_lines, data_ptr); ++l)
+    for(uint32_t l = 0; l < std::min<uint32_t>(number_of_lines, data_ptr); ++l)
     {
-      const size_t uni = l * number_of_components;
+      const uint32_t uni = l * number_of_components;
       
       // TODO: If I stored the info in a 3x3 matrix would uploading be quicker?
       glUniform3f(uni_line[uni + 0], data[data_get+ 0], data[data_get+ 1], data[data_get+2]);

@@ -3,7 +3,7 @@
 
 
 #include "physics_fwd.hpp"
-#include <stddef.h>
+#include <stdint.h>
 
 
 namespace Physics {
@@ -73,9 +73,9 @@ struct Rigidbody_collider
 */
 void
 colliders_generate(const Rigidbody_collider colliders[],
-                   const size_t number_of_colliders,
+                   const uint32_t number_of_colliders,
                    Rigidbody out_rb_info[],
-                   const size_t number_of_outs);
+                   const uint32_t number_of_outs);
 
 
 } // ns

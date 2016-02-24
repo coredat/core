@@ -15,8 +15,8 @@ namespace Application {
 void
 graphics_think(World_data::World *world,
                Simple_renderer::Node nodes[],
-               const std::size_t size_of_node_pool,
-               const std::size_t peer);
+               const std::uint32_t size_of_node_pool,
+               const std::uint32_t peer);
 
 
 } // ns

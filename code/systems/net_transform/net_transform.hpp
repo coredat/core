@@ -12,9 +12,9 @@ namespace Net_transform {
 
 void
 generate_baseline_transforms(Net_transform::Baseline out_baseline[],
-                             const std::size_t number_of_baselines,
+                             const std::uint32_t number_of_baselines,
                              const math::transform transforms[],
-                             const std::size_t number_of_transforms);
+                             const std::uint32_t number_of_transforms);
 
 
 } // ns

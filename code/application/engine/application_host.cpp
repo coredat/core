@@ -164,7 +164,7 @@ host_think(
 
   Network::poll_events(connection,
     0,
-    [&](const Network::Event_id id, const void *data, const std::size_t size_of_data)
+    [&](const Network::Event_id id, const void *data, const std::uint32_t size_of_data)
   {
     float controller_data[4];
     memcpy(&controller_data[0], data, size_of_data);
@@ -179,7 +179,7 @@ host_think(
   },
     &std::cout);
   
-  std::size_t index;
+  std::uint32_t index;
   Core::Entity_id_util::find_index_linearly(&index, kine_actor_local, world->entity_pool->entity_id, world->entity_pool->size);
   
   // ** Game Logic Update ** //
@@ -203,7 +203,7 @@ host_think(
     net_pool.tick = ++tick;
   
     // TODO This stinks need to change it.
-    for(size_t i = 0; i < world->entity_pool->size; ++i)
+    for(uint32_t i = 0; i < world->entity_pool->size; ++i)
     {
       net_pool.entities[i].entity_id  = Core::Entity_id_util::convert_entity_to_uint(world->entity_pool->entity_id[i]);
       net_pool.entities[i].transform  = world->entity_pool->transform[i];
@@ -216,7 +216,7 @@ host_think(
     Network::send_packet(connection, sizeof(net_pool), &net_pool, true);
     
     // TODO Stinky
-    for(size_t i = 0; i < world->camera_pool->number_of_cameras; ++i)
+    for(uint32_t i = 0; i < world->camera_pool->number_of_cameras; ++i)
     {
       memcpy(net_camera.entity_id, world->camera_pool->entity_id, sizeof(world->camera_pool->entity_id));
       memcpy(net_camera.camera, world->camera_pool->camera, sizeof(world->camera_pool->camera));

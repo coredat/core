@@ -27,15 +27,15 @@ struct Logic_pool
   void*                     object_locations[LOGIC_POOL_NUMBER_OF_SCRIPTS];
   
   void*                     objects_in_use[LOGIC_POOL_NUMBER_OF_SCRIPTS]; // This is a stack type thing.
-  size_t                    objects_in_use_size = 0;
+  uint32_t                    objects_in_use_size = 0;
   
   void*                     objects_on_start_pending_hooks[LOGIC_POOL_NUMBER_OF_SCRIPTS];
-  size_t                    objects_on_start_pending_hooks_size = 0;
+  uint32_t                    objects_on_start_pending_hooks_size = 0;
 
   uint8_t                   storage[LOGIC_POOL_NUMBER_OF_SCRIPTS * LOGIC_POOL_SIZE_MAX_SCRIPT_SIZE];
   
-  const size_t              storage_size  = LOGIC_POOL_SIZE_MAX_SCRIPT_SIZE;
-  const size_t              size          = LOGIC_POOL_NUMBER_OF_SCRIPTS;
+  const uint32_t              storage_size  = LOGIC_POOL_SIZE_MAX_SCRIPT_SIZE;
+  const uint32_t              size          = LOGIC_POOL_NUMBER_OF_SCRIPTS;
 };
 
 
@@ -56,7 +56,7 @@ logic_pool_get_slot(Logic_pool *pool, const Core::Entity_id id);
 /*!
   Return how many components are attached to an entity.
 */
-size_t
+uint32_t
 logic_pool_get_slot_count(Logic_pool *pool, const Core::Entity_id id);
 
 

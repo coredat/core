@@ -52,7 +52,7 @@ load_default_resources(World_data::World *world)
   
     auto audio_pool = world->audio_pool;
     
-    const size_t num_of_files = 1;
+    const uint32_t num_of_files = 1;
     
     const char *audio_files[num_of_files] {
       "/Users/PhilCK/Developer/wired/assets/audio/temp_shot.wav",

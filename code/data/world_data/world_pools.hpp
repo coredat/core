@@ -64,9 +64,9 @@ world_find_entity(World *world_data,
 void
 world_find_entities_with_tag(World *world_data,
                              const uint32_t tag,
-                             size_t *out_entities_for_tag,
+                             uint32_t *out_entities_for_tag,
                              Core::Entity_id out_ids[],
-                             const size_t size_of_out);
+                             const uint32_t size_of_out);
   
   
 /*!

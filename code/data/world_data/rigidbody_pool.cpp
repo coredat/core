@@ -22,7 +22,7 @@ rigidbody_pool_find(Rigidbody_pool *pool,
                     const Core::Entity_id id,
                     Physics::Rigidbody **out_rb)
 {
-  size_t index;
+  uint32_t index;
   if(Core::Entity_id_util::find_index_linearly(&index, id, pool->entity_id, pool->size))
   {
     *out_rb = &(pool->rigidbody[index]);
@@ -37,7 +37,7 @@ bool
 rigidbody_pool_remove(Rigidbody_pool *pool,
                       const Core::Entity_id id)
 {
-  size_t index;
+  uint32_t index;
   if(Core::Entity_id_util::find_index_linearly(&index, id, pool->entity_id, pool->size))
   {
     pool->entity_id[index] = Core::Entity_id_util::invalid_id();
@@ -52,7 +52,7 @@ bool
 rigidbody_pool_exists(Rigidbody_pool *pool,
                       const Core::Entity_id id)
 {
-  size_t index;
+  uint32_t index;
   return Core::Entity_id_util::find_index_linearly(&index, id, pool->entity_id, pool->size);
 }
 
@@ -63,7 +63,7 @@ rigidbody_pool_push(Rigidbody_pool *pool,
                     Physics::Rigidbody **new_rb)
 {
   // This is there I am at.
-  size_t index;
+  uint32_t index;
   if(Core::Entity_id_util::find_index_linearly(&index, Core::Entity_id_util::invalid_id(), pool->entity_id, pool->size))
   {
     pool->entity_id[index] = id;
@@ -81,7 +81,7 @@ namespace
   void
   add_child_colliders(World_data::World *world_data, Core::Entity e, btCompoundShape *parent_compound)
   {  
-    for(size_t c = 0; c < e.get_number_of_children(); ++c)
+    for(uint32_t c = 0; c < e.get_number_of_children(); ++c)
     {
       Core::Entity child = e.get_child(c);
     
@@ -124,9 +124,9 @@ rigidbody_pool_update_scene_graph_changes(Rigidbody_pool *pool,
   // Get a list of Entities that have not been removed.
   // And have no parents
   Core::Entity ent[128];
-  size_t ent_count(0);
+  uint32_t ent_count(0);
   
-  for(size_t i = 0; i < graph_changes->size; ++i)
+  for(uint32_t i = 0; i < graph_changes->size; ++i)
   {
     const auto graph_change = graph_changes->entity_event[i];
     
@@ -161,7 +161,7 @@ rigidbody_pool_update_scene_graph_changes(Rigidbody_pool *pool,
   
   // Remove all entities attached to these parents. TODO just going to remove parents atm.
   // TODO: Didn't we just do removals huh?
-  for(size_t i = 0; i < ent_count; ++i)
+  for(uint32_t i = 0; i < ent_count; ++i)
   {
     Core::Entity parent = ent[i];
     
@@ -178,7 +178,7 @@ rigidbody_pool_update_scene_graph_changes(Rigidbody_pool *pool,
   }
   
   // Build colliders.
-  for(size_t i = 0; i < ent_count; ++i)
+  for(uint32_t i = 0; i < ent_count; ++i)
   {
     Core::Entity entity = ent[i];
     
@@ -206,7 +206,7 @@ rigidbody_pool_update_scene_graph_changes(Rigidbody_pool *pool,
   }
   
   // Stick them into the world.
-  for(size_t i = 0; i < ent_count; ++i)
+  for(uint32_t i = 0; i < ent_count; ++i)
   {
     Core::Entity entity = ent[i];
     
@@ -225,7 +225,7 @@ rigidbody_pool_update_scene_graph_changes(Rigidbody_pool *pool,
 //    {
 //        auto lambda = [&](Core::Entity e, btCompoundShape *parent_compound, const auto& ff) -> void
 //        {  
-//          for(size_t c = 0; c < e.get_number_of_children(); ++c)
+//          for(uint32_t c = 0; c < e.get_number_of_children(); ++c)
 //          {
 //            Core::Entity child = e.get_child(c);
 //          

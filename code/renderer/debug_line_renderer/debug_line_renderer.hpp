@@ -3,7 +3,7 @@
 
 
 #include "debug_line_renderer_node.hpp"
-#include <cstddef>
+#include <stdint.h>
 
 
 /*!
@@ -29,7 +29,7 @@ initialize();
   \param number_of_lines How many nodes contained in the array.
 */
 void
-add_lines(const Line_node nodes[], const std::size_t number_of_lines);
+add_lines(const Line_node nodes[], const uint32_t number_of_lines);
 
 
 /*!

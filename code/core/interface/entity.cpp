@@ -16,7 +16,7 @@ Entity::destroy()
   if(!is_valid()) { return; }
   
   // Destroy all children.
-  for(size_t c = 0; c < get_number_of_children(); ++c)
+  for(uint32_t c = 0; c < get_number_of_children(); ++c)
   {
     get_child(c).destroy();
   }
@@ -45,7 +45,7 @@ Entity::get_tags() const
 {
   if(!is_valid()) { return 0; }
   
-  size_t index;
+  uint32_t index;
   if(Entity_id_util::find_index_linearly(&index,
                                          m_this_id,
                                          m_world_data->entity_pool->entity_id,
@@ -74,7 +74,7 @@ Entity::set_tags(const uint32_t set_tags)
 {
   if(!is_valid()) { return; }
   
-  size_t index;
+  uint32_t index;
   if(Entity_id_util::find_index_linearly(&index,
                                          m_this_id,
                                          m_world_data->entity_pool->entity_id,
@@ -108,7 +108,7 @@ Entity::remove_tag(const uint32_t tag)
 namespace
 {
   inline bool
-  get_index(size_t *index, const Core::Entity_id id, const Core::Entity_id ents[], const size_t size)
+  get_index(uint32_t *index, const Core::Entity_id id, const Core::Entity_id ents[], const uint32_t size)
   {
     if(!ents)
     {
@@ -132,7 +132,7 @@ Entity::set_parent(const Core::Entity_id parent_id)
 
   auto ent_pool = m_world_data->entity_pool;
 
-  size_t index;
+  uint32_t index;
   assert(get_index(&index, m_this_id, ent_pool->entity_id, ent_pool->size));
   ent_pool->parent_id[index] = parent_id;
   
@@ -147,7 +147,7 @@ Entity::get_parent() const
 {
   if(!is_valid()) { return Entity(); }
   
-  size_t index;
+  uint32_t index;
   if(Entity_id_util::find_index_linearly(&index, m_this_id, m_world_data->entity_pool->entity_id, m_world_data->entity_pool->size))
   {
     Entity parent;
@@ -160,16 +160,16 @@ Entity::get_parent() const
 }
 
 
-size_t
+uint32_t
 Entity::get_number_of_children() const
 {
   if(!is_valid()) { return 0; }
 
   auto ent_pool = m_world_data->entity_pool;
 
-  size_t children_count(0);
+  uint32_t children_count(0);
   
-  for(size_t i = 0; i < ent_pool->size; ++i)
+  for(uint32_t i = 0; i < ent_pool->size; ++i)
   {
     const Core::Entity_id id = ent_pool->parent_id[i];
   
@@ -184,15 +184,15 @@ Entity::get_number_of_children() const
 
 
 Entity
-Entity::get_child(const size_t index) const
+Entity::get_child(const uint32_t index) const
 {
   if(!is_valid()) { return Entity(); }
 
   auto ent_pool = m_world_data->entity_pool;
 
-  size_t children_count(0);
+  uint32_t children_count(0);
   
-  for(size_t i = 0; i < ent_pool->size; ++i)
+  for(uint32_t i = 0; i < ent_pool->size; ++i)
   {
     const Core::Entity_id id = ent_pool->parent_id[i];
 
@@ -219,12 +219,12 @@ Entity::get_child(const size_t index) const
 void
 Entity::send_event(const uint32_t id,
                    const void *data,
-                   const size_t size_of_data)
+                   const uint32_t size_of_data)
 {
   // Find all components and send an event to.
   auto pool = m_world_data->logic_pool;
   
-  for(size_t i = 0; i < pool->size; ++i)
+  for(uint32_t i = 0; i < pool->size; ++i)
   {
     if(pool->entity_id[i] == m_this_id)
     {
@@ -241,7 +241,7 @@ Entity::set_transform(const Transform &set_transform)
   
   auto ent_pool = m_world_data->entity_pool;
 
-  size_t index;
+  uint32_t index;
   assert(get_index(&index, m_this_id, ent_pool->entity_id, ent_pool->size));
   const math::transform old_transform = ent_pool->transform[index];
   
@@ -249,7 +249,7 @@ Entity::set_transform(const Transform &set_transform)
   ent_pool->transform[index] = new_transform;
   
   // Apply transforms to children
-  for(size_t c = 0; c < get_number_of_children(); ++c)
+  for(uint32_t c = 0; c < get_number_of_children(); ++c)
   {
     Entity child = get_child(c);
     
@@ -282,7 +282,7 @@ Entity::get_transform() const
   
   auto ent_pool = m_world_data->entity_pool;
 
-  size_t index;
+  uint32_t index;
   assert(get_index(&index, m_this_id, ent_pool->entity_id, ent_pool->size));
   math::transform* local_transform = &ent_pool->transform[index];
   
@@ -291,54 +291,54 @@ Entity::get_transform() const
 
 
 void
-Entity::set_material_id(const size_t id)
+Entity::set_material_id(const uint32_t id)
 {
   if(!is_valid()) { return; }
   
   auto ent_pool = m_world_data->entity_pool;
 
-  size_t index;
+  uint32_t index;
   assert(get_index(&index, m_this_id, ent_pool->entity_id, ent_pool->size));
   ent_pool->texture[index] = (Resource::Texture::ENUM)id;
 }
 
 
-size_t
+uint32_t
 Entity::get_material_id() const
 {
   if(!is_valid()) { return 0; }
 
   auto ent_pool = m_world_data->entity_pool;
 
-  size_t index;
+  uint32_t index;
   assert(get_index(&index, m_this_id, ent_pool->entity_id, ent_pool->size));
-  return (size_t)ent_pool->texture[index];
+  return (uint32_t)ent_pool->texture[index];
 }
 
 
 void
-Entity::set_model_id(const size_t id)
+Entity::set_model_id(const uint32_t id)
 {
   if(!is_valid()) { return; }
   
   auto ent_pool = m_world_data->entity_pool;
 
-  size_t index;
+  uint32_t index;
   assert(get_index(&index, m_this_id, ent_pool->entity_id, ent_pool->size));
   ent_pool->model[index] = (Resource::Model::ENUM)id;
 }
 
 
-size_t
+uint32_t
 Entity::get_model_id() const
 {
   if(!is_valid()) { return 0; }
   
   auto ent_pool = m_world_data->entity_pool;
 
-  size_t index;
+  uint32_t index;
   assert(get_index(&index, m_this_id, ent_pool->entity_id, ent_pool->size));
-  return (size_t)ent_pool->model[index];
+  return (uint32_t)ent_pool->model[index];
 }
 
 
@@ -349,7 +349,7 @@ Entity::set_rigidbody_properties(const Physics::Rigidbody_properties props)
   
   auto ent_pool = m_world_data->entity_pool;
 
-  size_t index;
+  uint32_t index;
   assert(get_index(&index, m_this_id, ent_pool->entity_id, ent_pool->size));
   
   auto rb_prop = &ent_pool->rigidbody_property[index];
@@ -366,7 +366,7 @@ Entity::get_rigidbody_properties() const
 {
   if(!is_valid()) { return Physics::Rigidbody_properties(); }
 
-  size_t index;
+  uint32_t index;
   assert(get_index(&index, m_this_id, m_world_data->entity_pool->entity_id, m_world_data->entity_pool->size));
   return m_world_data->entity_pool->rigidbody_property[index];
 }
@@ -379,7 +379,7 @@ Entity::set_rigidbody_collider(const Physics::Rigidbody_collider collider)
 
   auto ent_pool = m_world_data->entity_pool;
 
-  size_t index;
+  uint32_t index;
   assert(get_index(&index, m_this_id, ent_pool->entity_id, ent_pool->size));
   
   auto rb_coll = &ent_pool->rigidbody_collider[index];
@@ -397,16 +397,16 @@ Entity::get_rigidbody_collider() const
 
   auto ent_pool = m_world_data->entity_pool;
 
-  size_t index;
+  uint32_t index;
   assert(get_index(&index, m_this_id, ent_pool->entity_id, ent_pool->size));
   return m_world_data->entity_pool->rigidbody_collider[index];
 }
 
 
-size_t
+uint32_t
 Entity::get_number_of_components() const
 {
-  const size_t count = World_data::logic_pool_get_slot_count(m_world_data->logic_pool, m_this_id);
+  const uint32_t count = World_data::logic_pool_get_slot_count(m_world_data->logic_pool, m_this_id);
 
   return count;
 }

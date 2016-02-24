@@ -24,7 +24,7 @@ entity_graph_change_push(Entity_graph_changes_pool *pool,
   // Need to check to see if the entity has already
   // been pushed.
   {
-    for(size_t i = 0; i < pool->size; ++i)
+    for(uint32_t i = 0; i < pool->size; ++i)
     {
       if(pool->entity_event[i].entity_id == entity_id &&
          pool->entity_event[i].change_type == change_type)

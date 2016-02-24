@@ -41,19 +41,19 @@ public:
   void                          set_parent(const Core::Entity_id id);
   Entity                        get_parent() const;
   
-  size_t                        get_number_of_children() const;
-  Entity                        get_child(const size_t index) const;
+  uint32_t                        get_number_of_children() const;
+  Entity                        get_child(const uint32_t index) const;
 
-  void                          send_event(const uint32_t id, const void *data, const size_t size_of_data);
+  void                          send_event(const uint32_t id, const void *data, const uint32_t size_of_data);
 
   void                          set_transform(const Transform &transform);
   Transform                     get_transform() const;
 
-  void                          set_material_id(const size_t id);
-  size_t                        get_material_id() const;
+  void                          set_material_id(const uint32_t id);
+  uint32_t                        get_material_id() const;
   
-  void                          set_model_id(const size_t id);
-  size_t                        get_model_id() const;
+  void                          set_model_id(const uint32_t id);
+  uint32_t                        get_model_id() const;
   
   void                          set_rigidbody_properties(const Physics::Rigidbody_properties props);
   Physics::Rigidbody_properties get_rigidbody_properties() const;
@@ -78,9 +78,9 @@ public:
   template<typename T>
   T* get_component(const uint32_t rtti_id)
   {
-    const size_t count = m_world_data->logic_pool->size;
+    const uint32_t count = m_world_data->logic_pool->size;
     
-    for(size_t i = 0; i < count; ++i)
+    for(uint32_t i = 0; i < count; ++i)
     {
       if(m_world_data->logic_pool->entity_id[i] == get_id())
       {
@@ -97,7 +97,7 @@ public:
     return nullptr;
   }
   
-  size_t get_number_of_components() const;
+  uint32_t get_number_of_components() const;
   
 private:
 

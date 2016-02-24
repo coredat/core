@@ -48,7 +48,7 @@ public:
   virtual void        on_update(const float dt)   {} //!< Called when the object is being updated.
   virtual void        on_end()                    {} //!< Called when the object is dead
   
-  virtual void        on_event(const uint32_t event_id, const void *data, const size_t size_of_data) {}
+  virtual void        on_event(const uint32_t event_id, const void *data, const uint32_t size_of_data) {}
 
   Core::Entity        get_entity() const; //! < Returns an object of the entity.
   

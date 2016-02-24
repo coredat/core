@@ -19,7 +19,7 @@ namespace
   inline int
   get_free_channel()
   {
-    for(size_t i = 0; i < channels.size(); ++i)
+    for(uint32_t i = 0; i < channels.size(); ++i)
     {
       if(channels[i])
       {
@@ -60,7 +60,7 @@ initialize()
   channels.resize(num_chans);
   
   // Make all channels true
-  for(size_t i = 0; i < channels.size(); ++i)
+  for(uint32_t i = 0; i < channels.size(); ++i)
   {
     channels[i] = true;
   }
@@ -86,14 +86,14 @@ de_initialize()
 
 void
 load_samples(const char* files_to_load[],
-             const size_t number_of_files,
+             const uint32_t number_of_files,
              Sample out_samples[],
-             const size_t number_of_out_samples)
+             const uint32_t number_of_out_samples)
 {
 #ifndef WIN32
-  const size_t number_to_load = std::min(number_of_files, number_of_out_samples);
+  const uint32_t number_to_load = std::min(number_of_files, number_of_out_samples);
 
-  for(size_t i = 0; i < number_to_load; ++i)
+  for(uint32_t i = 0; i < number_to_load; ++i)
   {
     Mix_Chunk *load_chunk = Mix_LoadWAV(files_to_load[i]);
     
@@ -111,10 +111,10 @@ load_samples(const char* files_to_load[],
 void
 play_nodes(const float ear[3],
            const Node_sample_3d nodes[],
-           const size_t number_of_nodes)
+           const uint32_t number_of_nodes)
 {
 #ifndef WIN32
-  for(size_t i = 0; i < number_of_nodes; ++i)
+  for(uint32_t i = 0; i < number_of_nodes; ++i)
   { 
     if(Mix_PlayChannel(get_free_channel(), nodes[i].chunk_to_play, 0)==-1)
     {
@@ -127,10 +127,10 @@ play_nodes(const float ear[3],
 
 void
 play_nodes(const Node_sample_2d nodes[],
-          const size_t number_of_nodes)
+          const uint32_t number_of_nodes)
 {
 #ifndef WIN32
-  for(size_t i = 0; i < number_of_nodes; ++i)
+  for(uint32_t i = 0; i < number_of_nodes; ++i)
   { 
     if(Mix_PlayChannel(get_free_channel(), nodes[i].chunk_to_play, 0)==-1)
     {

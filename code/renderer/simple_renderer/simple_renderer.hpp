@@ -30,7 +30,7 @@ initialize();
   \param number_of_nodes How many nodes contained in the array.
 */
 void
-render_nodes_fullbright(const Node nodes[], const size_t number_of_nodes);
+render_nodes_fullbright(const Node nodes[], const uint32_t number_of_nodes);
 
 
 /*!
@@ -39,7 +39,7 @@ render_nodes_fullbright(const Node nodes[], const size_t number_of_nodes);
   \param number_of_nodes How many nodes contained in the array.
 */
 void
-render_nodes_directional_light(const Node nodes[], const size_t number_of_nodes);
+render_nodes_directional_light(const Node nodes[], const uint32_t number_of_nodes);
 
 
 } // ns

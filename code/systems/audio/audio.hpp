@@ -52,9 +52,9 @@ de_initialize();
 */
 void
 load_samples(const char* files_to_load[],
-             const size_t number_of_files,
+             const uint32_t number_of_files,
              Sample out_samples[],
-             const size_t number_of_out_samples);
+             const uint32_t number_of_out_samples);
 
 
 /*!
@@ -66,7 +66,7 @@ load_samples(const char* files_to_load[],
 void
 play_nodes(const float ear[3],
            const Node_sample_3d nodes[],
-           const size_t number_of_nodes);
+           const uint32_t number_of_nodes);
 
 
 /*!
@@ -76,7 +76,7 @@ play_nodes(const float ear[3],
 */
 void
 play_nodes(const Node_sample_2d nodes[],
-           const size_t number_of_nodes);
+           const uint32_t number_of_nodes);
 
 
 } // ns

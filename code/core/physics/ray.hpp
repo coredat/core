@@ -34,11 +34,11 @@ public:
   explicit              Ray(const math::vec3 from, const math::vec3 to, const Search search);
   
   bool                  has_hit() const                             { return m_results.size();          }
-  size_t                number_of_hits() const                      { return (size_t)m_results.size();  }
+  uint32_t                number_of_hits() const                      { return (uint32_t)m_results.size();  }
 
-  Entity                get_entity(const size_t i) const;
-  math::vec3            get_position_of_hit(const size_t i) const   { return m_results.at(i).hit;       }
-  math::vec3            get_normal_of_hit(const size_t i) const     { return m_results.at(i).normal;    }
+  Entity                get_entity(const uint32_t i) const;
+  math::vec3            get_position_of_hit(const uint32_t i) const   { return m_results.at(i).hit;       }
+  math::vec3            get_normal_of_hit(const uint32_t i) const     { return m_results.at(i).normal;    }
   
 private:
   

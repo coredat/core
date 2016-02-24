@@ -21,7 +21,7 @@ struct Model_pool
   Ogl::Vertex_buffer        vbo[SIZE_OF_MODEL_POOL];
   math::aabb                aabb[SIZE_OF_MODEL_POOL];
   
-  const size_t              size = SIZE_OF_MODEL_POOL;
+  const uint32_t              size = SIZE_OF_MODEL_POOL;
 }; // struct
 
 

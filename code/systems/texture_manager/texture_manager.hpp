@@ -13,7 +13,7 @@ namespace Texture {
 
 struct Load_texture
 {
-  std::size_t id;           //!< Index to be used for the output.
+  std::uint32_t id;           //!< Index to be used for the output.
   std::string file_path;    //!< Path to load.
 };
 
@@ -27,9 +27,9 @@ struct Load_texture
 */
 void
 texture_load(const Load_texture textures_to_load[],
-             const std::size_t number_of_textures_to_load,
+             const std::uint32_t number_of_textures_to_load,
              Ogl::Texture output[],
-             const std::size_t size_of_output_pool);
+             const std::uint32_t size_of_output_pool);
   
 } // ns
 

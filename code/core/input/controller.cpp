@@ -25,14 +25,14 @@ Controller::get_axis(const uint8_t axis) const
 bool
 Controller::is_button_down(const Button::ENUM button) const
 {
-  return m_buttons[(size_t)button] == Button_state::down;
+  return m_buttons[(uint32_t)button] == Button_state::down;
 }
 
 
 void
 Controller::serialize(uint8_t out_data[16])
 {
-  size_t offset = 0;
+  uint32_t offset = 0;
   
   // Copy axis.
 

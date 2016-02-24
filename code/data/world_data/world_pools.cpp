@@ -54,7 +54,7 @@ world_find_entity(World *world_data,
   auto entity_pool = world_data->entity_pool;
 
   // Search the list for the entity.
-  size_t index;
+  uint32_t index;
   if(Core::Entity_id_util::find_index_linearly(&index,
                                                id,
                                                entity_pool->entity_id,
@@ -72,17 +72,17 @@ world_find_entity(World *world_data,
 void
 world_find_entities_with_tag(World *world_data,
                              const uint32_t tag,
-                             size_t *out_entities_for_tag,
+                             uint32_t *out_entities_for_tag,
                              Core::Entity_id out_ids[],
-                             const size_t size_of_out)
+                             const uint32_t size_of_out)
 {
   assert(world_data);
   
   auto entity_pool = world_data->entity_pool;
   
-  size_t number_found(0);
+  uint32_t number_found(0);
   
-  for(size_t i = 0; i < entity_pool->size; ++i)
+  for(uint32_t i = 0; i < entity_pool->size; ++i)
   {
     auto prop = entity_pool->entity_properties[i];
     
@@ -107,7 +107,7 @@ void
 world_update_scene_graph_changes(World_data::World *world_data,
                                  const Entity_graph_changes_pool *graph_changes)
 {
-  for(size_t i = 0; i < graph_changes->size; ++i)
+  for(uint32_t i = 0; i < graph_changes->size; ++i)
   {
     const auto change = graph_changes->entity_event[i];
     

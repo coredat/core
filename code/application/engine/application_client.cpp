@@ -40,7 +40,7 @@ client_think(
 
   Network::poll_events(connection,
     0,
-    [&](const Network::Event_id id, const void *data, const size_t size_of_data)
+    [&](const Network::Event_id id, const void *data, const uint32_t size_of_data)
     {
       const uint32_t packet_type = *reinterpret_cast<const uint32_t*>(data);
       
@@ -85,9 +85,9 @@ client_think(
     {
       auto incoming_ents = inter_pool->snapshot[inter_pool->rotate_point % inter_pool->max_snapshots];
 
-      for (size_t i = 0; i < incoming_ents.capacity; ++i)
+      for (uint32_t i = 0; i < incoming_ents.capacity; ++i)
       {
-        size_t s = sizeof(Net_data::Net_entity);
+        uint32_t s = sizeof(Net_data::Net_entity);
         Core::Entity_id id = Core::Entity_id_util::convert_uint_to_entity(incoming_ents.entities[i].entity_id);
         world->entity_pool->entity_id[i]  = id;
         world->entity_pool->model[i]      = (Resource::Model::ENUM)incoming_ents.entities[i].vbo_id;

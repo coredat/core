@@ -181,7 +181,7 @@ main(int argc, char *argv[])
         &connection,
         delta_time);
       
-      size_t number_found_with_tag(0);
+      uint32_t number_found_with_tag(0);
       Core::Entity_id ids[5];
       
       World_data::world_find_entities_with_tag(&world_data, Tag::player, &number_found_with_tag, &ids[0], 5);
@@ -193,7 +193,7 @@ main(int argc, char *argv[])
         &connection,
         delta_time);
       
-      size_t number_found_with_tag(0);
+      uint32_t number_found_with_tag(0);
       Core::Entity_id ids[5];
       
       World_data::world_find_entities_with_tag(&world_data, Tag::network_player, &number_found_with_tag, &ids[0], 5);
