@@ -12,7 +12,7 @@
 #include <application/game_logic/gun_model.hpp>
 #include <application/game_logic/gun_controller.hpp>
 #include <application/game_logic/local_player_controller.hpp>
-#include <application/game_logic/npc_actor_controller.hpp>
+#include <application/game_logic/npc_controller.hpp>
 #include <application/game_logic/network_player_controller.hpp>
 
 
@@ -187,7 +187,7 @@ create_npc_actor(World_data::World *world)
   entity.set_model_id(Resource::Model::unit_cube);
   
   entity.add_component<Actor_model>();
-  entity.add_component<Npc_actor_controller>();
+  entity.add_component<Npc_controller>();
   
   // Child
   Core::Entity child_entity;

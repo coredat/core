@@ -1,6 +1,5 @@
 #include "gun_model.hpp"
 #include <math/math.hpp>
-#include <iostream>
 
 
 void
@@ -22,7 +21,6 @@ Gun_model::on_update(const float dt)
       --m_loaded_bullets;
       
       m_gun_state = State::firing;
-      std::cout << "fired" << std::endl;
       break;
     }
   
@@ -32,18 +30,14 @@ Gun_model::on_update(const float dt)
     {
       const util::milliseconds split = m_timer.currentResult();
       
-      std::cout << split << std::endl;
-      
       if(split > m_fire_time)
       {
         if(m_bullets)
         {
-          std::cout << "ready" << std::endl;
           m_gun_state = State::ready;
         }
         else
         {
-          std::cout << "empty" << std::endl;
           m_gun_state = State::empty;
         }
         
@@ -65,8 +59,6 @@ Gun_model::on_update(const float dt)
       {
         // Bullets from pool.
         const uint32_t bullets = math::min(m_max_clip_size, m_bullets);
-        
-        std::cout << "reloaded" << std::endl;
         
         m_bullets -= bullets;
         m_loaded_bullets = bullets;

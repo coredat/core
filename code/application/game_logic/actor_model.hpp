@@ -26,7 +26,7 @@ class Actor_model : public Core::Component
 private:
 
   // TODO Actor controller?
-  friend class Npc_actor_controller;
+  friend class Npc_controller;
   friend class Network_player_controller;
   friend class Local_player_controller;
   

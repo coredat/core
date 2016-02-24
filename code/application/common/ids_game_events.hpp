@@ -20,6 +20,8 @@ enum ENUM : uint32_t {
   player_spawned,
   player_died,
   player_walk,
+  
+  guards_sounded_alarm,
 
 }; // enum
 } // ns
