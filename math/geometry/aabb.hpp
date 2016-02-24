@@ -14,29 +14,33 @@ namespace math {
 
 // ** Interface ** //
 
-inline void     aabb_from_xyz_array(aabb &out_aabb, const float vertex[], const size_t number_of_floats);
+inline aabb       aabb_from_xyz_array(const float vertex[], const size_t number_of_floats);
 
 
 // ** Impl ** //
 
 
-void
-aabb_from_xyz_array(aabb &out_aabb,
-                        const float vertex[],
-                        const size_t number_of_floats)
+aabb
+aabb_from_xyz_array(const float vertex[],
+                    const size_t number_of_floats)
 {
+  aabb out_aabb;
+
+  // Check is valid.
   assert((number_of_floats % 3) == 0);
   if((number_of_floats % 3) != 0)
   {
-    return;
+    return out_aabb;
   }
 
-  float max_x(0.f);
-  float max_y(0.f);
-  float max_z(0.f);
-  float min_x(0.f);
-  float min_y(0.f);
-  float min_z(0.f);
+  // Calculate min, max
+  float max_x(vertex[0]);
+  float max_y(vertex[1]);
+  float max_z(vertex[2]);
+
+  float min_x(vertex[0]);
+  float min_y(vertex[1]);
+  float min_z(vertex[2]);
 
   for(size_t i = 0; i < number_of_floats / 3; ++i)
   {
@@ -52,9 +56,20 @@ aabb_from_xyz_array(aabb &out_aabb,
     min_z = min(vertex[index + 2], min_z);
   }
 
-  out_aabb.max     = vec3_init(max_x, max_y, max_z);
-  out_aabb.min     = vec3_init(min_x, min_y, min_z);
+  out_aabb.max = vec3_init(max_x, max_y, max_z);
+  out_aabb.min = vec3_init(min_x, min_y, min_z);
+
+  // Calculate extents
   out_aabb.extents = vec3_subtract(out_aabb.max, out_aabb.min);
+
+  // Calculate origin.
+  const float origin_x = vec3_get_x(out_aabb.max) - (vec3_get_x(out_aabb.extents) * 0.5f);
+  const float origin_y = vec3_get_y(out_aabb.max) - (vec3_get_y(out_aabb.extents) * 0.5f);
+  const float origin_z = vec3_get_z(out_aabb.max) - (vec3_get_z(out_aabb.extents) * 0.5f);
+
+  out_aabb.origin = vec3_init(origin_x, origin_y, origin_z);
+  
+  return out_aabb;
 }
 
 
