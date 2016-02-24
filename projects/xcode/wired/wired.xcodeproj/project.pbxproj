@@ -31,6 +31,7 @@
 		7E574D9A1C7C56C500E502C9 /* mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E574D961C7C56C500E502C9 /* mesh.cpp */; };
 		7E574D9B1C7C56C500E502C9 /* model.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E574D981C7C56C500E502C9 /* model.cpp */; };
 		7E574DA01C7CFC0A00E502C9 /* physics_engine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E574D9E1C7CFC0A00E502C9 /* physics_engine.cpp */; };
+		7E574DA41C7D9F6B00E502C9 /* navigation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E574DA21C7D9F6B00E502C9 /* navigation.cpp */; };
 		7EA1A1F91C3984D0009867BD /* libenet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EA1A1F81C3984D0009867BD /* libenet.a */; };
 		7EA2C61E1C1F5D4600389748 /* wired_app.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EA2C61D1C1F5D4600389748 /* wired_app.cpp */; };
 		7EA2C6201C1F5E2A00389748 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EA2C61F1C1F5E2A00389748 /* OpenGL.framework */; };
@@ -158,6 +159,8 @@
 		7E574D9C1C7C571A00E502C9 /* model_fwd.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = model_fwd.hpp; sourceTree = "<group>"; };
 		7E574D9E1C7CFC0A00E502C9 /* physics_engine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = physics_engine.cpp; sourceTree = "<group>"; };
 		7E574D9F1C7CFC0A00E502C9 /* physics_engine.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = physics_engine.hpp; sourceTree = "<group>"; };
+		7E574DA21C7D9F6B00E502C9 /* navigation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = navigation.cpp; sourceTree = "<group>"; };
+		7E574DA31C7D9F6B00E502C9 /* navigation.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = navigation.hpp; sourceTree = "<group>"; };
 		7E687DAA1C5EAC2900E13BB6 /* ids_component_types.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ids_component_types.hpp; sourceTree = "<group>"; };
 		7E687DAB1C5EAC2900E13BB6 /* ids_object_types.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ids_object_types.hpp; sourceTree = "<group>"; };
 		7EA1A1F81C3984D0009867BD /* libenet.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libenet.a; path = ../../../3rdparty/enet/lib/osx/libenet.a; sourceTree = "<group>"; };
@@ -429,6 +432,15 @@
 				7E574D9F1C7CFC0A00E502C9 /* physics_engine.hpp */,
 			);
 			path = physics_engine;
+			sourceTree = "<group>";
+		};
+		7E574DA11C7D9F6B00E502C9 /* navigation */ = {
+			isa = PBXGroup;
+			children = (
+				7E574DA21C7D9F6B00E502C9 /* navigation.cpp */,
+				7E574DA31C7D9F6B00E502C9 /* navigation.hpp */,
+			);
+			path = navigation;
 			sourceTree = "<group>";
 		};
 		7E687DA91C5EAC2900E13BB6 /* common */ = {
@@ -725,6 +737,7 @@
 		7ED7BBBC1C3CF8B100CE80EA /* systems */ = {
 			isa = PBXGroup;
 			children = (
+				7E574DA11C7D9F6B00E502C9 /* navigation */,
 				7E574D9D1C7CFC0A00E502C9 /* physics_engine */,
 				7E03C4351C69268B0079DA81 /* audio */,
 				7EAD4CC11C6123F1007F6A9C /* camera */,
@@ -994,6 +1007,7 @@
 				7E033E8D1C70622F00D3379D /* interpolation_pool.cpp in Sources */,
 				7EC9B9CC1C4844BE00FBF1D7 /* sdl_window.cpp in Sources */,
 				7ED7BC001C3E561700CE80EA /* texture_manager.cpp in Sources */,
+				7E574DA41C7D9F6B00E502C9 /* navigation.cpp in Sources */,
 				7EAD4CCA1C623C97007F6A9C /* local_player_controller.cpp in Sources */,
 				7E033E581C6A845000D3379D /* memory.cpp in Sources */,
 				7EC9B9CA1C4844BE00FBF1D7 /* sdl_environment.cpp in Sources */,
