@@ -18,8 +18,8 @@ de_initialize();
 
 
 void
-render_gui_nodes(Node nodes[],
-                 uint32_t number_of_nodes);
+render_gui_nodes(const Node nodes[],
+                 const uint32_t number_of_nodes);
 
 
 } // ns

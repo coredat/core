@@ -2,14 +2,18 @@
 #define GUI_NODE_INCLUDED_9CFF639A_4B47_470C_B5DB_5980263ADD8E
 
 
+#include <renderer/graphics_api/ogl/ogl_texture.hpp>
+
+
 namespace Gui_renderer {
 
 
 struct Node
 {
-  float top_left[2];
-  float bot_right[2];
-  float bg_color[4];
+  float           wvp_mat[16];
+  float           quad_env[4];
+  float           bg_color[4];
+  Ogl::Texture    diffuse;
 };
 
 
