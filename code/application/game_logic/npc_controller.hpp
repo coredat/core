@@ -3,6 +3,7 @@
 
 
 #include "../common/ids_component_types.hpp"
+#include "../common/ids_object_types.hpp"
 #include <core/interface/component.hpp>
 
 

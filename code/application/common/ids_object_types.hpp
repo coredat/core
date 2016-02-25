@@ -23,6 +23,8 @@ enum ENUM : uint32_t {
   dev_actor,
   dev_gun,
   dev_npc_actor,
+  
+  game_state,
 
 }; // enum
 } // ns

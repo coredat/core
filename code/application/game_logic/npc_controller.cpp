@@ -7,6 +7,7 @@
 #include <core/physics/ray.hpp>
 #include <core/transform/transform.hpp>
 #include <renderer/renderer.hpp>
+#include "../resources.hpp"
 
 
 void
@@ -30,7 +31,20 @@ Npc_controller::on_update(const float dt)
       {
         if(search_ray.get_entity(0).has_tag(Tag::player))
         {
+          get_entity().set_material_id(Resource::Texture::dev_squares);
+        
+          // Let game state know.
+          Core::Entity_id id[1];
+          uint32_t entities_found(0);
+          World_data::world_find_entities_with_tag(m_world_data, Tag::game_state, &entities_found, id, 1);
           
+          if(entities_found)
+          {
+            Core::Entity game_state;
+            World_data::world_find_entity(m_world_data, &game_state, id[0]);
+            
+            game_state.send_event(Game_event_id::guards_sounded_alarm, nullptr, 0);
+          }
         }
       }
     }

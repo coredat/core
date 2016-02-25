@@ -14,9 +14,23 @@
 #include <application/game_logic/local_player_controller.hpp>
 #include <application/game_logic/npc_controller.hpp>
 #include <application/game_logic/network_player_controller.hpp>
+#include <application/game_logic/game_state.hpp>
 
 
 namespace Entity_factory {
+
+
+Core::Entity
+create_game_state(World_data::World *data)
+{
+  Core::Entity entity;
+  assert(World_data::world_create_new_entity(data, &entity, Object_type::game_state));
+  
+  entity.add_tag(Tag::game_state);
+  entity.add_component<Game_state>();
+  
+  return entity;
+}
 
 
 Core::Entity

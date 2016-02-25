@@ -36,6 +36,7 @@ host_initialize(
       math::transform place_transform;
       Core::Entity entity;
     
+      Entity_factory::create_game_state(world);
       Entity_factory::create_ground(world);
       
       const float scale = 5;

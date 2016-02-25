@@ -28,10 +28,6 @@ void
 de_initialize();
 
 
-void*
-get_memory_chunk(const uint32_t size_of_data);
-
-
 void
 send_message(const uint32_t event_id, const uint8_t *data, const uint32_t size_of_data);
 

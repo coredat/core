@@ -11,6 +11,10 @@ namespace Entity_factory {
 
 
 Core::Entity
+create_game_state(World_data::World *world);
+
+
+Core::Entity
 create_ground(World_data::World *world);
 
 
