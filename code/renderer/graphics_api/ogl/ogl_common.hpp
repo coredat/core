@@ -24,6 +24,7 @@ default_state()
   glCullFace(GL_BACK);
   glEnable(GL_DEPTH_TEST);
   glDisable(GL_STENCIL_TEST);
+  glFrontFace(GL_CCW);
 }
 
 

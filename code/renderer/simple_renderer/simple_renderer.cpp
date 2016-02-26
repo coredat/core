@@ -61,13 +61,13 @@ initialize()
     Ogl::Shader_uniforms dir_light_uniforms;
     Ogl::shader_uniforms_retrive(&dir_light_uniforms, &shader_dir_light);
     
-    Ogl::shader_uniforms_get_uniform_index(&uni_dir_wvp,          &dir_light_uniforms, "wvp");
-    Ogl::shader_uniforms_get_uniform_index(&uni_dir_world,        &dir_light_uniforms, "world");
-    Ogl::shader_uniforms_get_uniform_index(&uni_dir_light_dir,    &dir_light_uniforms, "dir_light.direction");
-    Ogl::shader_uniforms_get_uniform_index(&uni_dir_light_color,  &dir_light_uniforms, "dir_light.color");
-    Ogl::shader_uniforms_get_uniform_index(&uni_dir_light_amb,    &dir_light_uniforms, "dir_light.ambient");
-    Ogl::shader_uniforms_get_uniform_index(&uni_dir_light_diff,   &dir_light_uniforms, "dir_light.diffuse");
-    Ogl::shader_uniforms_get_uniform_index(&uni_dir_diffuse_map,  &dir_light_uniforms, "diffuse_map");
+    Ogl::shader_uniforms_get_uniform_index(&uni_dir_wvp,          &dir_light_uniforms, "uni_wvp_mat");
+    Ogl::shader_uniforms_get_uniform_index(&uni_dir_world,        &dir_light_uniforms, "uni_world_mat");
+    Ogl::shader_uniforms_get_uniform_index(&uni_dir_diffuse_map,  &dir_light_uniforms, "uni_diffuse_map");    
+    Ogl::shader_uniforms_get_uniform_index(&uni_dir_light_dir,    &dir_light_uniforms, "uni_dir_light.direction");
+    Ogl::shader_uniforms_get_uniform_index(&uni_dir_light_color,  &dir_light_uniforms, "uni_dir_light.color");
+    Ogl::shader_uniforms_get_uniform_index(&uni_dir_light_amb,    &dir_light_uniforms, "uni_dir_light.ambient");
+    Ogl::shader_uniforms_get_uniform_index(&uni_dir_light_diff,   &dir_light_uniforms, "uni_dir_light.diffuse");
 
     // Setup constants on direction light
     {
@@ -91,8 +91,8 @@ initialize()
     Ogl::Shader_uniforms fullbright_uniforms;
     Ogl::shader_uniforms_retrive(&fullbright_uniforms, &shader_fullbright);
     
-    Ogl::shader_uniforms_get_uniform_index(&uni_full_wvp,         &fullbright_uniforms, "wvp");
-    Ogl::shader_uniforms_get_uniform_index(&uni_full_diffuse_map, &fullbright_uniforms, "diffuse_map");
+    Ogl::shader_uniforms_get_uniform_index(&uni_full_wvp,         &fullbright_uniforms, "uni_wvp_mat");
+    Ogl::shader_uniforms_get_uniform_index(&uni_full_diffuse_map, &fullbright_uniforms, "uni_diffuse_map");
   }
   
   // Vertex attr

@@ -1,4 +1,5 @@
 #include "shader_utils.hpp"
+#include <utils/string_helpers.hpp>
 #include <fstream>
 #include <streambuf>
 #include <string>
@@ -12,7 +13,11 @@ Shader_code
 shader_code_from_tagged_file(const char *filename)
 {
   const std::string code(std::istreambuf_iterator<char>(std::ifstream(filename).rdbuf()), std::istreambuf_iterator<char>());
-  return shader_code_from_tagged_string(code.c_str());
+  
+  const std::string get_filepath = util::get_dir_from_filename(filename);
+  const std::string pre_processed = util::hash_include_string(code, {get_filepath});
+  
+  return shader_code_from_tagged_string(pre_processed.c_str());
 }
 
 
