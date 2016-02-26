@@ -123,7 +123,9 @@ void
 render_nodes_fullbright(const Node nodes[],
                         const uint32_t number_of_nodes)
 {
+  Ogl::error_clear();
   Ogl::default_state();
+  
   Ogl::shader_bind(&shader_fullbright);
   
   for(uint32_t n = 0; n < number_of_nodes; ++n)
@@ -132,10 +134,10 @@ render_nodes_fullbright(const Node nodes[],
     const Node *curr_node = &nodes[n];
     assert(curr_node);
     
-    Ogl::shader_uniforms_apply(uni_full_diffuse_map, (void*)&curr_node->diffuse.texture_id);
     Ogl::filtering_apply(filtering);
-    Ogl::vertex_buffer_bind(curr_node->vbo, &vertex_format, &shader_fullbright);
+    Ogl::shader_uniforms_apply(uni_full_diffuse_map, (void*)&curr_node->diffuse.texture_id);
     Ogl::shader_uniforms_apply(uni_full_wvp, (void*)&curr_node->wvp);
+    Ogl::vertex_buffer_bind(curr_node->vbo, &vertex_format, &shader_fullbright);
 
     const GLsizei count = curr_node->vbo.number_of_entries / vertex_format.number_of_attributes;
 

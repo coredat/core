@@ -72,7 +72,7 @@ add_lines(const Line_node nodes[], const std::uint32_t number_of_lines)
   {
     if(data_ptr >= size_of_data_buffer)
     {
-      assert(false); // trying to render more lines than we have capacity for.
+     // assert(false); // trying to render more lines than we have capacity for.
       return;
     }
     

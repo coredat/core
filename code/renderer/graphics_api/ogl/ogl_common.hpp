@@ -20,7 +20,8 @@ namespace Ogl {
 inline void
 default_state()
 {
-  glEnable(GL_CULL_FACE);
+//  glEnable(GL_CULL_FACE);
+  glDisable(GL_CULL_FACE);
   glCullFace(GL_BACK);
   glEnable(GL_DEPTH_TEST);
   glDisable(GL_STENCIL_TEST);

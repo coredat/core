@@ -17,7 +17,7 @@
 namespace
 {
   Ogl::Shader                       shader_gui;
-  Ogl::Vertex_format                vertex_format;
+  Ogl::Vertex_format                gui_vertex_format;
   Ogl::Vertex_buffer                quad_vbo;
   Ogl::Uniform                      uni_wvp_mat;
   Ogl::Uniform                      uni_quad_size;
@@ -38,9 +38,9 @@ initialize()
   // Load shader
   {
     const std::string asset_path  = util::get_resource_path() + "assets/";
-    const std::string fullbright  = asset_path + "shaders/basic_fullbright.ogl";
+    const std::string gui_shader  = asset_path + "shaders/gui.ogl";
     
-    const auto gui_code = Graphics_api::Util::shader_code_from_tagged_file(fullbright.c_str());
+    const auto gui_code = Graphics_api::Util::shader_code_from_tagged_file(gui_shader.c_str());
     
     Ogl::shader_create(&shader_gui, gui_code.vs_code.c_str(), gui_code.gs_code.c_str(), gui_code.ps_code.c_str(), &std::cout);
     
@@ -61,31 +61,35 @@ initialize()
   
   // Vertex attr
   {
-    constexpr uint32_t number_of_attrs = 1;
-    Ogl::Attribute_desc vert_desc[number_of_attrs]
+    constexpr uint32_t number_of_attrs = 2;
+    constexpr Ogl::Attribute_desc vert_desc[number_of_attrs]
     {
-      Ogl::Attribute_desc{"in_vs_position",       Ogl::Attr_type::FLOAT3},
-      //Ogl::Attribute_desc{"in_vs_texture_coord",  Ogl::Attr_type::FLOAT2},
+      Ogl::Attribute_desc{"in_vs_position",       Ogl::Attr_type::FLOAT2},
+      Ogl::Attribute_desc{"in_vs_texture_coord",  Ogl::Attr_type::FLOAT2},
     };
     
-    Ogl::vertex_format_load(&vertex_format, vert_desc, number_of_attrs);
-    assert(Ogl::vertex_format_is_valid(&vertex_format));
+    Ogl::vertex_format_load(&gui_vertex_format, vert_desc, number_of_attrs);
+    assert(Ogl::vertex_format_is_valid(&gui_vertex_format));
   }
   
   // Build VBO.
   {
-    float quad_data[]
+    constexpr uint32_t number_of_entries = 12;
+    const float quad_data[number_of_entries]
     {
-      +0.0f, +0.5f, 0.f, //0.f, 0.f,
-      +0.5f, -0.5f, 0.f, //1.f,// 0.f,
-      -0.5f, -0.5f, 0.f, //0.f,// 1.f,
-//      
+      +0.0f, +0.5f, 0.f, 0.f,
+      +0.5f, -0.5f, 1.f, 0.f,
+      -0.5f, -0.5f, 0.f, 1.f,
+//      +0.0f, -0.5f, 0.f, //0.f, 0.f,
+//      +0.5f, +0.5f, 0.f, //1.f,// 0.f,
+//      -0.5f, +0.5f, 0.f, //0.f,// 1.f,
+//
 //      +1.f, +1.f, 1.f, 0.f,
 //      +1.f, -1.f, 1.f, 1.f,
 //      -1.f, -1.f, 0.f, 1.f,
     };
     
-    Ogl::vertex_buffer_load(&quad_vbo, quad_data, sizeof(quad_data), 9 /*???*/, false);
+    Ogl::vertex_buffer_load(&quad_vbo, quad_data, sizeof(quad_data), number_of_entries, false);
     assert(Ogl::vertex_buffer_is_valid(quad_vbo));
   }
   
@@ -120,7 +124,9 @@ render_gui_nodes(const Node nodes[],
     const Node *curr_node = &nodes[n];
     assert(curr_node);
     
-    Ogl::vertex_buffer_bind(quad_vbo, &vertex_format, &shader_gui);
+    Ogl::filtering_apply(texture_filtering);
+    
+    Ogl::vertex_buffer_bind(quad_vbo, &gui_vertex_format, &shader_gui);
     
     //const GLsizei count = quad_vbo.number_of_entries / vertex_format.number_of_attributes;
     glDrawArrays(GL_TRIANGLES, 0, 3);

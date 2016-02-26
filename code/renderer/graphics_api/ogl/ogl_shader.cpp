@@ -113,8 +113,11 @@ shader_create(Shader *out_shader,
     log_str.reserve(output_log.size());
     log_str.append(output_log.data());
     
-    (*log) << "Ogl::shader_create - issues linking shader.\n";
-    (*log) << log_str << "\n";
+    if(!log_str.empty())
+    {
+      (*log) << "Ogl::shader_create - issues linking shader.\n";
+      (*log) << log_str << "\n";
+    }
   }
   
   // Did it link
