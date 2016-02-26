@@ -14,6 +14,7 @@
 #include <renderer/renderer.hpp>
 #include <renderer/simple_renderer/simple_renderer.hpp>
 #include <renderer/debug_line_renderer/debug_line_renderer.hpp>
+#include <renderer/gui_renderer/gui_renderer.hpp>
 
 #include <sdl_wrapper/sdl_lazy_include.hpp>
 #include <math/math.hpp>
@@ -63,9 +64,10 @@ main(int argc, char *argv[])
   Network::initialize(&std::cout);
   Network::Connection connection;
   
-  renderer::initialize();
+  renderer::initialize(); // TODO: Needs to go for all it does.
   Simple_renderer::initialize();
   Debug_line_renderer::initialize();
+  Gui_renderer::initialize();
   
   Physics::World phy_world;
   Physics::world_init(&phy_world);
@@ -208,6 +210,14 @@ main(int argc, char *argv[])
         renderer_nodes.size(),
         (is_client ? 1 : 0)
       );
+
+    // GUI Test
+    {
+      renderer::clear(true, true);
+      Gui_renderer::Node test_node;
+      Gui_renderer::render_gui_nodes(&test_node, 1);
+    }
+    
   }
   
   Network::destroy_connection(&connection);

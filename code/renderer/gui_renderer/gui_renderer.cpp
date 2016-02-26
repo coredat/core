@@ -33,6 +33,8 @@ namespace Gui_renderer {
 void
 initialize()
 {
+  Ogl::error_clear();
+
   // Load shader
   {
     const std::string asset_path  = util::get_resource_path() + "assets/";
@@ -59,11 +61,11 @@ initialize()
   
   // Vertex attr
   {
-    constexpr uint32_t number_of_attrs = 2;
+    constexpr uint32_t number_of_attrs = 1;
     Ogl::Attribute_desc vert_desc[number_of_attrs]
     {
       Ogl::Attribute_desc{"in_vs_position",       Ogl::Attr_type::FLOAT3},
-      Ogl::Attribute_desc{"in_vs_texture_coord",  Ogl::Attr_type::FLOAT2},
+      //Ogl::Attribute_desc{"in_vs_texture_coord",  Ogl::Attr_type::FLOAT2},
     };
     
     Ogl::vertex_format_load(&vertex_format, vert_desc, number_of_attrs);
@@ -74,16 +76,16 @@ initialize()
   {
     float quad_data[]
     {
-      -1.f, +1.f, 0.f, 0.f,
-      +1.f, +1.f, 1.f, 0.f,
-      -1.f, -1.f, 0.f, 1.f,
-      
-      +1.f, +1.f, 1.f, 0.f,
-      +1.f, -1.f, 1.f, 1.f,
-      -1.f, -1.f, 0.f, 1.f,
+      +0.0f, +0.5f, 0.f, //0.f, 0.f,
+      +0.5f, -0.5f, 0.f, //1.f,// 0.f,
+      -0.5f, -0.5f, 0.f, //0.f,// 1.f,
+//      
+//      +1.f, +1.f, 1.f, 0.f,
+//      +1.f, -1.f, 1.f, 1.f,
+//      -1.f, -1.f, 0.f, 1.f,
     };
     
-    Ogl::vertex_buffer_load(&quad_vbo, quad_data, sizeof(quad_data), 24 /*???*/, false);
+    Ogl::vertex_buffer_load(&quad_vbo, quad_data, sizeof(quad_data), 9 /*???*/, false);
     assert(Ogl::vertex_buffer_is_valid(quad_vbo));
   }
   
@@ -108,7 +110,9 @@ void
 render_gui_nodes(const Node nodes[],
                  const uint32_t number_of_nodes)
 {
+  Ogl::error_clear();
   Ogl::default_state();
+  
   Ogl::shader_bind(&shader_gui);
   
   for(uint32_t n = 0; n < number_of_nodes; ++n)
@@ -116,10 +120,10 @@ render_gui_nodes(const Node nodes[],
     const Node *curr_node = &nodes[n];
     assert(curr_node);
     
+    Ogl::vertex_buffer_bind(quad_vbo, &vertex_format, &shader_gui);
     
-    
-    const GLsizei count = quad_vbo.number_of_entries / vertex_format.number_of_attributes;
-    glDrawArrays(GL_TRIANGLES, 0, count);
+    //const GLsizei count = quad_vbo.number_of_entries / vertex_format.number_of_attributes;
+    glDrawArrays(GL_TRIANGLES, 0, 3);
   }
   
   Ogl::error_check("Drawing the gui", &std::cout);

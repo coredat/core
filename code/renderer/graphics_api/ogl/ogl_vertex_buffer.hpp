@@ -21,16 +21,16 @@ struct Vertex_buffer
 /*!
   Creates a Vertex Buffer.
   \param out_vbo Where to write the details.
-  \param vbo_buffer the buffer of data.
-  \param size_of_vbo the sizeof the buffer.
-  \param number_of_elements how many elements are contained in the buffer.
+  \param vbo_buffer The buffer of data.
+  \param byte_size_of_vbo the sizeof the buffer in bytes.
+  \param number_of_individual_elements How many elements are contained in the buffer.
   \param is_dynamic Is the mesh going to be updated on the cpu.
 */
 void
 vertex_buffer_load(Vertex_buffer *out_vbo,
                    const void *vbo_buffer,
-                   const uint32_t size_of_vbo,
-                   const uint32_t number_of_elements,
+                   const uint32_t byte_size_of_vbo,
+                   const uint32_t number_of_individual_elements,
                    const bool is_dynamic);
 
 
