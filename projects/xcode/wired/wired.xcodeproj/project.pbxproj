@@ -87,6 +87,7 @@
 		7EFB3E551C7F0732004DECAC /* color.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EFB3E531C7F0732004DECAC /* color.cpp */; };
 		7EFB3E5A1C7F3B55004DECAC /* gui_renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EFB3E581C7F3B55004DECAC /* gui_renderer.cpp */; };
 		7EFB3E5E1C7F3F4B004DECAC /* gui_view.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EFB3E5C1C7F3F4B004DECAC /* gui_view.cpp */; };
+		7EFB3E611C80F096004DECAC /* ogl_index_buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EFB3E5F1C80F096004DECAC /* ogl_index_buffer.cpp */; };
 		7EFB9B0C1C5E620C00A838C7 /* entity_id.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EFB9B001C5E620C00A838C7 /* entity_id.cpp */; };
 		7EFB9B0D1C5E620C00A838C7 /* component.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EFB9B051C5E620C00A838C7 /* component.cpp */; };
 		7EFB9B0E1C5E620C00A838C7 /* entity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EFB9B0A1C5E620C00A838C7 /* entity.cpp */; };
@@ -313,6 +314,8 @@
 		7EFB3E591C7F3B55004DECAC /* gui_renderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = gui_renderer.hpp; sourceTree = "<group>"; };
 		7EFB3E5C1C7F3F4B004DECAC /* gui_view.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gui_view.cpp; sourceTree = "<group>"; };
 		7EFB3E5D1C7F3F4B004DECAC /* gui_view.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = gui_view.hpp; sourceTree = "<group>"; };
+		7EFB3E5F1C80F096004DECAC /* ogl_index_buffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ogl_index_buffer.cpp; sourceTree = "<group>"; };
+		7EFB3E601C80F096004DECAC /* ogl_index_buffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ogl_index_buffer.hpp; sourceTree = "<group>"; };
 		7EFB9B001C5E620C00A838C7 /* entity_id.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = entity_id.cpp; sourceTree = "<group>"; };
 		7EFB9B011C5E620C00A838C7 /* entity_id.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = entity_id.hpp; sourceTree = "<group>"; };
 		7EFB9B031C5E620C00A838C7 /* interface.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = interface.hpp; sourceTree = "<group>"; };
@@ -624,6 +627,8 @@
 		7EC9B98F1C418A3000FBF1D7 /* ogl */ = {
 			isa = PBXGroup;
 			children = (
+				7EFB3E5F1C80F096004DECAC /* ogl_index_buffer.cpp */,
+				7EFB3E601C80F096004DECAC /* ogl_index_buffer.hpp */,
 				7EEEF6BE1C76523600103E80 /* ogl_vertex_buffer.cpp */,
 				7EEEF6BF1C76523600103E80 /* ogl_vertex_buffer.hpp */,
 				7EEEF6BB1C7603FC00103E80 /* ogl_vertex_format.cpp */,
@@ -1044,6 +1049,7 @@
 				7ED7BBD31C3CF8B100CE80EA /* debug_line_renderer.cpp in Sources */,
 				7ED7BC1D1C3E56D000CE80EA /* motion_state.cpp in Sources */,
 				7ED7BBF21C3CF9C700CE80EA /* obj_model_loader.cpp in Sources */,
+				7EFB3E611C80F096004DECAC /* ogl_index_buffer.cpp in Sources */,
 				7EEEF6D11C77A21000103E80 /* audio_raw_pool.cpp in Sources */,
 				7E574D941C7B0FB700E502C9 /* gun_controller.cpp in Sources */,
 				7ED7BBD81C3CF8B100CE80EA /* net_transform.cpp in Sources */,

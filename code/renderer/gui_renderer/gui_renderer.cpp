@@ -7,6 +7,7 @@
 #include "../graphics_api/ogl/ogl_texture.hpp"
 #include "../graphics_api/ogl/ogl_vertex_format.hpp"
 #include "../graphics_api/ogl/ogl_vertex_buffer.hpp"
+#include "../graphics_api/ogl/ogl_index_buffer.hpp"
 #include "../graphics_api/utils/shader_utils.hpp"
 #include <utils/directory.hpp>
 #include <string>
@@ -19,6 +20,7 @@ namespace
   Ogl::Shader                       shader_gui;
   Ogl::Vertex_format                gui_vertex_format;
   Ogl::Vertex_buffer                quad_vbo;
+  Ogl::Index_buffer                 quad_ibo;
   Ogl::Uniform                      uni_wvp_mat;
   Ogl::Uniform                      uni_quad_size;
   Ogl::Uniform                      uni_quad_color;
@@ -72,25 +74,29 @@ initialize()
     assert(Ogl::vertex_format_is_valid(&gui_vertex_format));
   }
   
-  // Build VBO.
+  // Build VBO and IBO
   {
-    constexpr uint32_t number_of_entries = 12;
+    constexpr uint32_t number_of_entries = 16;
     const float quad_data[number_of_entries]
     {
-      +0.0f, +0.5f, 0.f, 0.f,
-      +0.5f, -0.5f, 1.f, 0.f,
-      -0.5f, -0.5f, 0.f, 1.f,
-//      +0.0f, -0.5f, 0.f, //0.f, 0.f,
-//      +0.5f, +0.5f, 0.f, //1.f,// 0.f,
-//      -0.5f, +0.5f, 0.f, //0.f,// 1.f,
-//
-//      +1.f, +1.f, 1.f, 0.f,
-//      +1.f, -1.f, 1.f, 1.f,
-//      -1.f, -1.f, 0.f, 1.f,
+      -1.f, -1.f, 0.f, 0.f,
+      +1.f, -1.f, 1.f, 0.f,
+      +1.f, +1.f, 1.f, 1.f,
+      -1.f, +1.f, 0.f, 1.f,
     };
     
     Ogl::vertex_buffer_load(&quad_vbo, quad_data, sizeof(quad_data), number_of_entries, false);
     assert(Ogl::vertex_buffer_is_valid(quad_vbo));
+    
+    constexpr uint32_t number_of_indices = 6;
+    const uint32_t index[number_of_indices]
+    {
+      0,1,2,
+      2,3,0,
+    };
+    
+    Ogl::index_buffer_load(&quad_ibo, index, number_of_indices);
+    assert(Ogl::index_buffer_is_valid(quad_ibo));
   }
   
   // Default texture filtering
@@ -117,6 +123,9 @@ render_gui_nodes(const Node nodes[],
   Ogl::error_clear();
   Ogl::default_state();
   
+  glEnable(GL_BLEND);
+  glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  
   Ogl::shader_bind(&shader_gui);
   
   for(uint32_t n = 0; n < number_of_nodes; ++n)
@@ -125,11 +134,8 @@ render_gui_nodes(const Node nodes[],
     assert(curr_node);
     
     Ogl::filtering_apply(texture_filtering);
-    
     Ogl::vertex_buffer_bind(quad_vbo, &gui_vertex_format, &shader_gui);
-    
-    //const GLsizei count = quad_vbo.number_of_entries / vertex_format.number_of_attributes;
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    Ogl::index_buffer_draw(GL_TRIANGLES, quad_ibo);
   }
   
   Ogl::error_check("Drawing the gui", &std::cout);

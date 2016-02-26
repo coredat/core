@@ -10,6 +10,7 @@
 #include <OpenGL/gl3ext.h>
 #endif
 
+#include <iostream> // for error stream this needs to change.
 
 namespace Ogl {
 
@@ -20,8 +21,8 @@ namespace Ogl {
 inline void
 default_state()
 {
-//  glEnable(GL_CULL_FACE);
-  glDisable(GL_CULL_FACE);
+  glDisable(GL_BLEND);
+  glEnable(GL_CULL_FACE);
   glCullFace(GL_BACK);
   glEnable(GL_DEPTH_TEST);
   glDisable(GL_STENCIL_TEST);

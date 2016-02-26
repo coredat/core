@@ -203,17 +203,17 @@ main(int argc, char *argv[])
     
     // ** Graphics ** //
 
-//    renderer_nodes.resize(world_entities.size);
-//    Application::graphics_think(
-//        &world_data,
-//        renderer_nodes.data(),
-//        renderer_nodes.size(),
-//        (is_client ? 1 : 0)
-//      );
+    renderer_nodes.resize(world_entities.size);
+    Application::graphics_think(
+        &world_data,
+        renderer_nodes.data(),
+        renderer_nodes.size(),
+        (is_client ? 1 : 0)
+      );
 
     // GUI Test
     {
-      renderer::clear(true, true);
+      renderer::clear(false, true);
       Gui_renderer::Node test_node;
       Gui_renderer::render_gui_nodes(&test_node, 1);
     }
