@@ -19,7 +19,9 @@ de_initialize();
 
 void
 render_gui_nodes(const Node nodes[],
-                 const uint32_t number_of_nodes);
+                 const uint32_t number_of_nodes,
+                 const uint32_t view_port_width,
+                 const uint32_t view_port_height);
 
 
 } // ns

@@ -34,15 +34,21 @@ struct Attribute_desc
 };
 
 
+/*!
+  Structure for GL attribute.
+*/
 struct Attribute
 {
   char          name[32];
   GLenum        type    = GL_NONE;
   uint32_t      size    = 0;
-  uint32_t        pointer = 0;
+  uint32_t      pointer = 0;
 };
 
 
+/*!
+  Structure for GL vertex attribute.
+*/
 struct Vertex_format
 {
   Attribute   attributes[MAX_NUMBER_OF_ATTRS];

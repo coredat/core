@@ -215,7 +215,7 @@ main(int argc, char *argv[])
     {
       renderer::clear(false, true);
       Gui_renderer::Node test_node;
-      Gui_renderer::render_gui_nodes(&test_node, 1);
+      Gui_renderer::render_gui_nodes(&test_node, 1, 600, 480);
     }
     
   }

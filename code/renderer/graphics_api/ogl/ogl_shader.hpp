@@ -9,7 +9,7 @@ namespace Ogl {
 
 
 /*!
-  A shader program.
+  A GL shader program.
 */
 struct Shader
 {

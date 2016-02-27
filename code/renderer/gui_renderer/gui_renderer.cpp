@@ -9,6 +9,7 @@
 #include "../graphics_api/ogl/ogl_vertex_buffer.hpp"
 #include "../graphics_api/ogl/ogl_index_buffer.hpp"
 #include "../graphics_api/utils/shader_utils.hpp"
+#include "../graphics_api/ogl/ogl_blend.hpp"
 #include <utils/directory.hpp>
 #include <string>
 #include <assert.h>
@@ -23,6 +24,7 @@ namespace
   Ogl::Index_buffer                 quad_ibo;
   Ogl::Uniform                      uni_wvp_mat;
   Ogl::Uniform                      uni_quad_size;
+  Ogl::Uniform                      uni_scale;
   Ogl::Uniform                      uni_quad_color;
   Ogl::Uniform                      uni_diffuse_map;
   Graphics_api::Texture_filtering   texture_filtering;
@@ -59,6 +61,7 @@ initialize()
     Ogl::shader_uniforms_get_uniform_index(&uni_quad_size,   &gui_uniforms, "uni_quad_size");
     Ogl::shader_uniforms_get_uniform_index(&uni_quad_color,  &gui_uniforms, "uni_quad_color");
     Ogl::shader_uniforms_get_uniform_index(&uni_diffuse_map, &gui_uniforms, "uni_diffuse_map");
+    Ogl::shader_uniforms_get_uniform_index(&uni_scale,       &gui_uniforms, "uni_scale");
   }
   
   // Vertex attr
@@ -118,13 +121,14 @@ de_initialize()
 
 void
 render_gui_nodes(const Node nodes[],
-                 const uint32_t number_of_nodes)
+                 const uint32_t number_of_nodes,
+                 const uint32_t view_port_width,
+                 const uint32_t view_port_height)
 {
   Ogl::error_clear();
   Ogl::default_state();
   
-  glEnable(GL_BLEND);
-  glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  Ogl::blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   
   Ogl::shader_bind(&shader_gui);
   
@@ -132,6 +136,9 @@ render_gui_nodes(const Node nodes[],
   {
     const Node *curr_node = &nodes[n];
     assert(curr_node);
+    
+    float scale[2] = {0.15f, 0.15f};
+    Ogl::shader_uniforms_apply(uni_scale, scale);
     
     Ogl::filtering_apply(texture_filtering);
     Ogl::vertex_buffer_bind(quad_vbo, &gui_vertex_format, &shader_gui);

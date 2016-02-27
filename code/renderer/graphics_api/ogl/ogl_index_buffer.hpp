@@ -9,6 +9,9 @@
 namespace Ogl {
 
 
+/*!
+  Structure for GL index buffer.
+*/
 struct Index_buffer
 {
   GLuint          index_buffer_id = 0;

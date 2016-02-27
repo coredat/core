@@ -12,6 +12,9 @@
 namespace Ogl {
 
 
+/*!
+  Structure for a GL Uniform.
+*/
 struct Uniform
 {
   GLint       index;
@@ -20,6 +23,9 @@ struct Uniform
 };
 
 
+/*!
+  Structure for uniforms that apply to a shader.
+*/
 struct Shader_uniforms
 {
   std::vector<std::string>  uniform_names;
@@ -51,7 +57,9 @@ shader_uniforms_get_uniform_index(Uniform *out_uniform, const Shader_uniforms *u
 
 
 /*!
- 
+ Applys a uniform to the currently bound shader.
+ \param uniform_to_apply The uniform to apply to the current shader.
+ \param data The data to be uploaded to the uniform.
 */
 void
 shader_uniforms_apply(const Uniform uniform_to_apply, void *data);

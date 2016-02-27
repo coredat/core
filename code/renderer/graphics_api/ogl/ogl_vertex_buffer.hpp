@@ -10,12 +10,14 @@
 namespace Ogl {
 
 
+/*!
+  Structure for GL vertex buffer.
+*/
 struct Vertex_buffer
 {
   GLuint    vertex_buffer_id  = 0;
   uint32_t  number_of_entries = 0;
 };
-
 
 
 /*!

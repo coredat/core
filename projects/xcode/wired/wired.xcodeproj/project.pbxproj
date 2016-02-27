@@ -316,6 +316,7 @@
 		7EFB3E5D1C7F3F4B004DECAC /* gui_view.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = gui_view.hpp; sourceTree = "<group>"; };
 		7EFB3E5F1C80F096004DECAC /* ogl_index_buffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ogl_index_buffer.cpp; sourceTree = "<group>"; };
 		7EFB3E601C80F096004DECAC /* ogl_index_buffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ogl_index_buffer.hpp; sourceTree = "<group>"; };
+		7EFB3E621C81A072004DECAC /* ogl_blend.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ogl_blend.hpp; sourceTree = "<group>"; };
 		7EFB9B001C5E620C00A838C7 /* entity_id.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = entity_id.cpp; sourceTree = "<group>"; };
 		7EFB9B011C5E620C00A838C7 /* entity_id.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = entity_id.hpp; sourceTree = "<group>"; };
 		7EFB9B031C5E620C00A838C7 /* interface.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = interface.hpp; sourceTree = "<group>"; };
@@ -627,14 +628,11 @@
 		7EC9B98F1C418A3000FBF1D7 /* ogl */ = {
 			isa = PBXGroup;
 			children = (
-				7EFB3E5F1C80F096004DECAC /* ogl_index_buffer.cpp */,
-				7EFB3E601C80F096004DECAC /* ogl_index_buffer.hpp */,
-				7EEEF6BE1C76523600103E80 /* ogl_vertex_buffer.cpp */,
-				7EEEF6BF1C76523600103E80 /* ogl_vertex_buffer.hpp */,
-				7EEEF6BB1C7603FC00103E80 /* ogl_vertex_format.cpp */,
-				7EEEF6BC1C7603FC00103E80 /* ogl_vertex_format.hpp */,
+				7EFB3E621C81A072004DECAC /* ogl_blend.hpp */,
 				7EC9B9911C418A3000FBF1D7 /* ogl_common.hpp */,
 				7EC9B9921C418A3000FBF1D7 /* ogl_fwd.hpp */,
+				7EFB3E5F1C80F096004DECAC /* ogl_index_buffer.cpp */,
+				7EFB3E601C80F096004DECAC /* ogl_index_buffer.hpp */,
 				7EC9B9931C418A3000FBF1D7 /* ogl_pixel_format.hpp */,
 				7EC9B9A11C43838200FBF1D7 /* ogl_shader_uniform.cpp */,
 				7EC9B9A21C43838200FBF1D7 /* ogl_shader_uniform.hpp */,
@@ -644,6 +642,10 @@
 				7EC9B9991C418A3000FBF1D7 /* ogl_texture_filtering.hpp */,
 				7EC9B9961C418A3000FBF1D7 /* ogl_texture.cpp */,
 				7EC9B9971C418A3000FBF1D7 /* ogl_texture.hpp */,
+				7EEEF6BE1C76523600103E80 /* ogl_vertex_buffer.cpp */,
+				7EEEF6BF1C76523600103E80 /* ogl_vertex_buffer.hpp */,
+				7EEEF6BB1C7603FC00103E80 /* ogl_vertex_format.cpp */,
+				7EEEF6BC1C7603FC00103E80 /* ogl_vertex_format.hpp */,
 				7EC9B9901C418A3000FBF1D7 /* ogl.hpp */,
 			);
 			path = ogl;
