@@ -28,6 +28,7 @@
 #include <application/engine/application_graphics.hpp>
 
 #include <systems/audio/audio.hpp>
+#include <core/gui/gui_view.hpp>
 
 namespace
 {
@@ -96,6 +97,9 @@ main(int argc, char *argv[])
   World_data::Audio_pool audio_pool;
   World_data::audio_pool_init(&audio_pool);
   
+  World_data::Gui_view_pool gui_view_pool;
+  World_data::gui_view_pool_init(&gui_view_pool);
+  
   World_data::World world_data;
   {
     world_data.audio_pool             = &audio_pool;
@@ -107,6 +111,7 @@ main(int argc, char *argv[])
     world_data.camera_pool            = &camera_pool;
     world_data.model_pool             = &model_pool;
     world_data.physics_world          = &phy_world;
+    world_data.gui_pool               = &gui_view_pool;
   }
   
   World_data::set_world_data(&world_data);
@@ -213,11 +218,25 @@ main(int argc, char *argv[])
 
     // GUI Test
     {
-      renderer::clear(false, true);
-      Gui_renderer::Node test_node;
-      Gui_renderer::render_gui_nodes(&test_node, 1, 600, 480);
-    }
+      // Generate views
+      Core::Gui_view view;
+      view.set_color(Core::Color::green());
+      view.set_envelope(Core::Rect(0, 0, 1, 1));
+      
+      // Create ndoes
+      std::vector<Gui_renderer::Node> nodes;
+      
+      for(uint32_t i = 0; i < world_data.gui_pool->size; ++i)
+      {
+        if(world_data.gui_pool->id[i] > 0)
+        {
+          nodes.push_back(world_data.gui_pool->gui[i]);
+        }
+      }
     
+      renderer::clear(false, true);
+      Gui_renderer::render_gui_nodes(&nodes[0], nodes.size(), 600, 480);
+    }
   }
   
   Network::destroy_connection(&connection);

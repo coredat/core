@@ -10,9 +10,8 @@ namespace Gui_renderer {
 
 struct Node
 {
-  float           wvp_mat[16];
   float           quad_env[4];
-  float           bg_color[4];
+  float           color[4];
   Ogl::Texture    diffuse;
 };
 

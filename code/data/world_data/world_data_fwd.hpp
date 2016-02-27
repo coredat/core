@@ -19,6 +19,7 @@ struct Model_pool;
 struct Rigidbody_pool;
 struct Texture_pool;
 struct World;
+struct Gui_view_pool;
 
 
 } // ns

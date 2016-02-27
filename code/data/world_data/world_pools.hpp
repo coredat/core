@@ -23,6 +23,7 @@ struct World
   Model_pool                  *model_pool           = nullptr;
   Camera_pool                 *camera_pool          = nullptr;
   Physics::World              *physics_world        = nullptr;
+  Gui_view_pool               *gui_pool             = nullptr;
 }; // struct
 
 

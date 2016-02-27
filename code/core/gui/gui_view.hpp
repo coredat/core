@@ -3,25 +3,31 @@
 
 
 #include <stdint.h>
+#include <core/rect.hpp>
 #include <core/color/color.hpp>
 
 
 namespace Core {
 
 
-class Rect
+/*!
+  Represents an area on the GUI.
+  This can be styled accordingly.
+*/
+class Gui_view final
 {
-  float top, bot, left, right;
-};
 
+  Gui_view(Gui_view &&)                 = delete;
+  Gui_view(const Gui_view &)            = delete;
+  Gui_view& operator=(Gui_view&&)       = delete;
+  Gui_view& operator=(const Gui_view&)  = delete;
 
-class Gui_view
-{
 public:
 
   explicit          Gui_view();
+                    ~Gui_view();
 
-  void              set_envelope(const Rect rect);
+  void              set_envelope(const Rect rect);        // Sets the area
   void              set_color(const Color color);
   
 private:

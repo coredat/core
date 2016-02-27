@@ -59,7 +59,7 @@ initialize()
     
     Ogl::shader_uniforms_get_uniform_index(&uni_wvp_mat,     &gui_uniforms, "uni_wvp_mat");
     Ogl::shader_uniforms_get_uniform_index(&uni_quad_size,   &gui_uniforms, "uni_quad_size");
-    Ogl::shader_uniforms_get_uniform_index(&uni_quad_color,  &gui_uniforms, "uni_quad_color");
+    Ogl::shader_uniforms_get_uniform_index(&uni_quad_color,  &gui_uniforms, "uni_color");
     Ogl::shader_uniforms_get_uniform_index(&uni_diffuse_map, &gui_uniforms, "uni_diffuse_map");
     Ogl::shader_uniforms_get_uniform_index(&uni_scale,       &gui_uniforms, "uni_scale");
   }
@@ -137,8 +137,9 @@ render_gui_nodes(const Node nodes[],
     const Node *curr_node = &nodes[n];
     assert(curr_node);
     
-    float scale[2] = {0.15f, 0.15f};
-    Ogl::shader_uniforms_apply(uni_scale, scale);
+    float scale[2] = {0.01f, 0.01f};
+    Ogl::shader_uniforms_apply(uni_scale, (void*)scale);
+    Ogl::shader_uniforms_apply(uni_quad_color, (void*)curr_node->color);
     
     Ogl::filtering_apply(texture_filtering);
     Ogl::vertex_buffer_bind(quad_vbo, &gui_vertex_format, &shader_gui);

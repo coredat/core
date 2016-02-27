@@ -88,6 +88,7 @@
 		7EFB3E5A1C7F3B55004DECAC /* gui_renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EFB3E581C7F3B55004DECAC /* gui_renderer.cpp */; };
 		7EFB3E5E1C7F3F4B004DECAC /* gui_view.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EFB3E5C1C7F3F4B004DECAC /* gui_view.cpp */; };
 		7EFB3E611C80F096004DECAC /* ogl_index_buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EFB3E5F1C80F096004DECAC /* ogl_index_buffer.cpp */; };
+		7EFB3E651C81AAA3004DECAC /* rect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EFB3E631C81AAA3004DECAC /* rect.cpp */; };
 		7EFB9B0C1C5E620C00A838C7 /* entity_id.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EFB9B001C5E620C00A838C7 /* entity_id.cpp */; };
 		7EFB9B0D1C5E620C00A838C7 /* component.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EFB9B051C5E620C00A838C7 /* component.cpp */; };
 		7EFB9B0E1C5E620C00A838C7 /* entity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EFB9B0A1C5E620C00A838C7 /* entity.cpp */; };
@@ -317,6 +318,8 @@
 		7EFB3E5F1C80F096004DECAC /* ogl_index_buffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ogl_index_buffer.cpp; sourceTree = "<group>"; };
 		7EFB3E601C80F096004DECAC /* ogl_index_buffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ogl_index_buffer.hpp; sourceTree = "<group>"; };
 		7EFB3E621C81A072004DECAC /* ogl_blend.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ogl_blend.hpp; sourceTree = "<group>"; };
+		7EFB3E631C81AAA3004DECAC /* rect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = rect.cpp; sourceTree = "<group>"; };
+		7EFB3E641C81AAA3004DECAC /* rect.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = rect.hpp; sourceTree = "<group>"; };
 		7EFB9B001C5E620C00A838C7 /* entity_id.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = entity_id.cpp; sourceTree = "<group>"; };
 		7EFB9B011C5E620C00A838C7 /* entity_id.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = entity_id.hpp; sourceTree = "<group>"; };
 		7EFB9B031C5E620C00A838C7 /* interface.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = interface.hpp; sourceTree = "<group>"; };
@@ -935,23 +938,25 @@
 		7EFB9AFF1C5E620C00A838C7 /* core */ = {
 			isa = PBXGroup;
 			children = (
-				7EFB3E5B1C7F3F4B004DECAC /* gui */,
-				7EFB3E521C7F0732004DECAC /* color */,
-				7E574D951C7C56C500E502C9 /* model */,
-				7E0D475D1C79133A00FD7752 /* camera */,
-				7E0D47601C79133A00FD7752 /* network */,
 				7EEEF6D21C77C4CD00103E80 /* audio */,
-				7EE444571C7457B300D7881B /* transform */,
-				7EAD4CD91C628A51007F6A9C /* ids_core_events.hpp */,
+				7E0D475D1C79133A00FD7752 /* camera */,
+				7EFB3E521C7F0732004DECAC /* color */,
 				7EFB9B0F1C5E625A00A838C7 /* core_fwd.hpp */,
 				7EFB9B101C5E625A00A838C7 /* core.hpp */,
 				7EFB9B001C5E620C00A838C7 /* entity_id.cpp */,
 				7EFB9B011C5E620C00A838C7 /* entity_id.hpp */,
-				7E033E511C6A845000D3379D /* memory */,
 				7EAD4CCE1C628524007F6A9C /* event */,
-				7EAD4CF21C6684BD007F6A9C /* physics */,
+				7EFB3E5B1C7F3F4B004DECAC /* gui */,
+				7EAD4CD91C628A51007F6A9C /* ids_core_events.hpp */,
 				7EAD4CE51C638F8E007F6A9C /* input */,
 				7EFB9B021C5E620C00A838C7 /* interface */,
+				7E033E511C6A845000D3379D /* memory */,
+				7E574D951C7C56C500E502C9 /* model */,
+				7E0D47601C79133A00FD7752 /* network */,
+				7EAD4CF21C6684BD007F6A9C /* physics */,
+				7EFB3E631C81AAA3004DECAC /* rect.cpp */,
+				7EFB3E641C81AAA3004DECAC /* rect.hpp */,
+				7EE444571C7457B300D7881B /* transform */,
 			);
 			path = core;
 			sourceTree = "<group>";
@@ -1059,6 +1064,7 @@
 				7EAD4D001C668F72007F6A9C /* application_common.cpp in Sources */,
 				7EA2C61E1C1F5D4600389748 /* wired_app.cpp in Sources */,
 				7E033E8D1C70622F00D3379D /* interpolation_pool.cpp in Sources */,
+				7EFB3E651C81AAA3004DECAC /* rect.cpp in Sources */,
 				7EC9B9CC1C4844BE00FBF1D7 /* sdl_window.cpp in Sources */,
 				7ED7BC001C3E561700CE80EA /* texture_manager.cpp in Sources */,
 				7E574DA41C7D9F6B00E502C9 /* navigation.cpp in Sources */,
