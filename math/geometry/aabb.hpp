@@ -14,7 +14,9 @@ namespace math {
 
 // ** Interface ** //
 
-inline aabb       aabb_from_xyz_array(const float vertex[], const size_t number_of_floats);
+inline aabb         aabb_from_xyz_array(const float vertex[], const size_t number_of_floats);
+inline bool         aabb_intersection_test(const aabb &a, const aabb &b);
+inline bool         aabb_intersection_ray_test(const ray &ray, const aabb &box);
 
 
 // ** Impl ** //
@@ -60,17 +62,50 @@ aabb_from_xyz_array(const float vertex[],
   out_aabb.min = vec3_init(min_x, min_y, min_z);
 
   // Calculate extents
-  out_aabb.extents = vec3_subtract(out_aabb.max, out_aabb.min);
+  out_aabb.extents = vec3_scale(vec3_subtract(out_aabb.max, out_aabb.min), 0.5f);
 
   // Calculate origin.
-  const float origin_x = vec3_get_x(out_aabb.max) - (vec3_get_x(out_aabb.extents) * 0.5f);
-  const float origin_y = vec3_get_y(out_aabb.max) - (vec3_get_y(out_aabb.extents) * 0.5f);
-  const float origin_z = vec3_get_z(out_aabb.max) - (vec3_get_z(out_aabb.extents) * 0.5f);
+  const float origin_x = vec3_get_x(out_aabb.max) - (vec3_get_x(out_aabb.half_extents));
+  const float origin_y = vec3_get_y(out_aabb.max) - (vec3_get_y(out_aabb.half_extents));
+  const float origin_z = vec3_get_z(out_aabb.max) - (vec3_get_z(out_aabb.half_extents));
 
   out_aabb.origin = vec3_init(origin_x, origin_y, origin_z);
-  
+
   return out_aabb;
 }
+
+
+namespace detail
+{
+  // Simple Single Axis Therom test.
+  // We assume we are dealing with just AABB boxes.
+  inline bool
+  sat_test(const float origin_a,
+           const float origin_b,
+           const float combined_length)
+  {
+    return math::abs(origin_b - origin_a) < combined_length;
+  }
+} // ns
+
+
+bool
+aabb_intersection_test(const aabb &a,
+                       const aabb &b)
+{
+  return (sat_test(math::vec3_get_x(a.origin), math::vec3_get_x(b.origin), (math::vec3_get_x(a.half_extent) + math::vec3_get_x(b.half_extent))) &&
+          sat_test(math::vec3_get_y(a.origin), math::vec3_get_y(b.origin), (math::vec3_get_y(a.half_extent) + math::vec3_get_y(b.half_extent))) &&
+          sat_test(math::vec3_get_z(a.origin), math::vec3_get_z(b.origin), (math::vec3_get_z(a.half_extent) + math::vec3_get_z(b.half_extent)));
+}
+
+
+
+bool
+aabb_intersection_ray_test(const ray &ray, conset aabb &box)
+{
+  return false;
+}
+
 
 
 } // ns

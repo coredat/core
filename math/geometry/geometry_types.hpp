@@ -10,10 +10,17 @@ namespace math {
 
 struct aabb
 {
-  math::vec3 max        = math::vec3_zero();
-  math::vec3 min        = math::vec3_zero();
-  math::vec3 extents    = math::vec3_zero();
-  math::vec3 origin     = math::vec3_zero();
+  math::vec3 max          = math::vec3_zero();
+  math::vec3 min          = math::vec3_zero();
+  math::vec3 half_extents = math::vec3_zero();
+  math::vec3 origin       = math::vec3_zero();
+};
+
+
+struct ray
+{
+  math::vec3 start      = math::vec3_zero();
+  math::vec3 end        = math::vec3_zero();
 };
 
 
