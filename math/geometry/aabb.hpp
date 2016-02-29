@@ -15,6 +15,7 @@ namespace math {
 // ** Interface ** //
 
 inline aabb         aabb_from_xyz_array(const float vertex[], const size_t number_of_floats);
+inline math::vec3   aabb_get_extents(const aabb &a);
 inline bool         aabb_intersection_test(const aabb &a, const aabb &b);
 inline bool         aabb_intersection_ray_test(const ray &ray, const aabb &box);
 
@@ -62,7 +63,7 @@ aabb_from_xyz_array(const float vertex[],
   out_aabb.min = vec3_init(min_x, min_y, min_z);
 
   // Calculate extents
-  out_aabb.extents = vec3_scale(vec3_subtract(out_aabb.max, out_aabb.min), 0.5f);
+  out_aabb.half_extents = vec3_scale(vec3_subtract(out_aabb.max, out_aabb.min), 0.5f);
 
   // Calculate origin.
   const float origin_x = vec3_get_x(out_aabb.max) - (vec3_get_x(out_aabb.half_extents));
@@ -72,6 +73,13 @@ aabb_from_xyz_array(const float vertex[],
   out_aabb.origin = vec3_init(origin_x, origin_y, origin_z);
 
   return out_aabb;
+}
+
+
+math::vec3
+aabb_get_extents(const aabb &a)
+{
+  return math::vec3_scale(a.half_extents, 2.f);
 }
 
 
@@ -93,15 +101,15 @@ bool
 aabb_intersection_test(const aabb &a,
                        const aabb &b)
 {
-  return (sat_test(math::vec3_get_x(a.origin), math::vec3_get_x(b.origin), (math::vec3_get_x(a.half_extent) + math::vec3_get_x(b.half_extent))) &&
-          sat_test(math::vec3_get_y(a.origin), math::vec3_get_y(b.origin), (math::vec3_get_y(a.half_extent) + math::vec3_get_y(b.half_extent))) &&
-          sat_test(math::vec3_get_z(a.origin), math::vec3_get_z(b.origin), (math::vec3_get_z(a.half_extent) + math::vec3_get_z(b.half_extent)));
+  return (detail::sat_test(math::vec3_get_x(a.origin), math::vec3_get_x(b.origin), (math::vec3_get_x(a.half_extents) + math::vec3_get_x(b.half_extents))) &&
+          detail::sat_test(math::vec3_get_y(a.origin), math::vec3_get_y(b.origin), (math::vec3_get_y(a.half_extents) + math::vec3_get_y(b.half_extents))) &&
+          detail::sat_test(math::vec3_get_z(a.origin), math::vec3_get_z(b.origin), (math::vec3_get_z(a.half_extents) + math::vec3_get_z(b.half_extents))));
 }
 
 
 
 bool
-aabb_intersection_ray_test(const ray &ray, conset aabb &box)
+aabb_intersection_ray_test(const ray &ray, const aabb &box)
 {
   return false;
 }
