@@ -45,8 +45,8 @@ struct Entity_pool
   Physics::Rigidbody_properties   rigidbody_property[ENTITY_POOL_SIZE];
   Physics::Rigidbody_collider     rigidbody_collider[ENTITY_POOL_SIZE];
   
-  const uint32_t                    capacity = ENTITY_POOL_SIZE;
-  uint32_t                          size = 0;
+  const uint32_t                  capacity = ENTITY_POOL_SIZE;
+  uint32_t                        size = 0;
 };
 
 
