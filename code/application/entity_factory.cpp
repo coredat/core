@@ -264,8 +264,8 @@ create_gun(World_data::World *world)
   const float pos_z = 0.f;
 
   gun_entity.set_transform(Core::Transform(math::vec3_init(pos_x, pos_y, pos_z),
-                                            math::vec3_init(scale_x, scale_y, scale_z),
-                                            math::quat_init()));
+                                           math::vec3_init(scale_x, scale_y, scale_z),
+                                           math::quat_init()));
   
   gun_entity.set_material_id(Resource::Texture::dev_orange);
   gun_entity.set_model_id(Resource::Model::unit_cube);
@@ -316,9 +316,9 @@ test_aabb(World_data::World *world)
   
   Physics::Rigidbody_collider rb_collider;
   rb_collider.collider_type = Physics::Collider_type::cube;
-  rb_collider.collider_info.cube.extents[0] = math::vec3_get_x(test_aabb.extents) * 0.5f;
-  rb_collider.collider_info.cube.extents[1] = math::vec3_get_y(test_aabb.extents) * 0.5f;
-  rb_collider.collider_info.cube.extents[2] = math::vec3_get_z(test_aabb.extents) * 0.5f;
+  rb_collider.collider_info.cube.extents[0] = math::vec3_get_x(test_aabb.half_extents);
+  rb_collider.collider_info.cube.extents[1] = math::vec3_get_y(test_aabb.half_extents);
+  rb_collider.collider_info.cube.extents[2] = math::vec3_get_z(test_aabb.half_extents);
   entity.set_rigidbody_collider(rb_collider);
 
   entity.set_material_id(static_cast<Resource::Texture::ENUM>(rand() % Resource::Texture::size));
