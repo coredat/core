@@ -17,7 +17,6 @@ entity_pool_init(Entity_pool *pool)
   memset(pool->model,              0, sizeof(pool->model));
   memset(pool->texture,            0, sizeof(pool->texture));
   memset(pool->transform,          0, sizeof(pool->transform));
-  memset(pool->rigidbody_property, 0, sizeof(pool->rigidbody_property));
   #endif
 }
 
@@ -76,7 +75,6 @@ entity_pool_remove_entity(Entity_pool *pool, const Core::Entity_id id)
     memmove(&pool->model[remove_id],              &pool->model[start_move],              end_move * sizeof(*pool->model));
     memmove(&pool->texture[remove_id],            &pool->texture[start_move],            end_move * sizeof(*pool->texture));
     memmove(&pool->transform[remove_id],          &pool->transform[start_move],          end_move * sizeof(*pool->transform));
-    memmove(&pool->rigidbody_property[remove_id], &pool->rigidbody_property[start_move], end_move * sizeof(*pool->rigidbody_property));
     
     --(pool->size);
     

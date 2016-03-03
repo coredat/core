@@ -24,10 +24,4 @@ get_world() {
 }
 
 
-Physics::World*
-get_physics_world(World *world_data) {
-  return world_data->physics_world;
-}
-
-
 } // ns

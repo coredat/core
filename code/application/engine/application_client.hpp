@@ -3,7 +3,6 @@
 
 
 #include <data/world_data/world_data_fwd.hpp>
-#include <systems/physics/physics_fwd.hpp>
 #include <systems/network/network_fwd.hpp>
 #include <systems/environment/environment_fwd.hpp>
 

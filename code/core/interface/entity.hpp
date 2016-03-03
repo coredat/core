@@ -5,8 +5,6 @@
 #include "component.hpp"
 #include "../entity_id.hpp"
 #include "detail/entity_detail.hpp"
-#include <systems/physics/rigidbody_properties.hpp>
-#include <systems/physics/rigidbody_collider.hpp>
 #include <data/world_data/world_pools.hpp>
 #include <data/world_data/logic_pool.hpp>
 #include <core/transform/transform.hpp>
@@ -55,11 +53,6 @@ public:
   void                          set_model_id(const uint32_t id);
   uint32_t                      get_model_id() const;
   
-  void                          set_rigidbody_properties(const Physics::Rigidbody_properties props);
-  Physics::Rigidbody_properties get_rigidbody_properties() const;
-  
-  void                          set_rigidbody_collider(const Physics::Rigidbody_collider collider);
-  Physics::Rigidbody_collider   get_rigidbody_collider() const;
   
   template<typename T>
   T*

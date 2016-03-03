@@ -6,9 +6,7 @@
 #include <core/entity_id.hpp>
 #include <math/math.hpp>
 #include <simple_renderer/lazy_include.hpp>
-#include <systems/physics/physics_fwd.hpp>
 #include <core/entity_id.hpp>
-#include <systems/physics/physics.hpp>
 #include <stddef.h>
 
 
@@ -41,9 +39,6 @@ struct Entity_pool
   
   Resource::Model::ENUM           model[ENTITY_POOL_SIZE];
   Resource::Texture::ENUM         texture[ENTITY_POOL_SIZE];
-  
-  Physics::Rigidbody_properties   rigidbody_property[ENTITY_POOL_SIZE];
-  Physics::Rigidbody_collider     rigidbody_collider[ENTITY_POOL_SIZE];
   
   const uint32_t                  capacity = ENTITY_POOL_SIZE;
   uint32_t                        size = 0;

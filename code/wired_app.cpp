@@ -6,7 +6,6 @@
 #include <systems/transform/transformations.hpp>
 #include <systems/network/network.hpp>
 #include <systems/network/network_connection.hpp>
-#include <systems/physics/physics.hpp>
 #include <systems/entity/generic_id.hpp>
 
 #include <data/data.hpp>
@@ -70,14 +69,8 @@ main(int argc, char *argv[])
   Debug_line_renderer::initialize();
   Gui_renderer::initialize();
   
-  Physics::World phy_world;
-  Physics::world_init(&phy_world);
-  
   World_data::Model_pool model_pool;
   World_data::model_pool_init(&model_pool);
-  
-  World_data::Rigidbody_pool rigidbody_pool;
-  World_data::rigidbody_pool_init(&rigidbody_pool);
   
   World_data::Logic_pool logic_pool;
   World_data::logic_pool_init(&logic_pool);
@@ -106,11 +99,9 @@ main(int argc, char *argv[])
     world_data.entity_pool            = &world_entities;
     world_data.entity_graph_changes   = &graph_changes;
     world_data.logic_pool             = &logic_pool;
-    world_data.rigidbody_pool         = &rigidbody_pool;
     world_data.texture_pool           = &texture_pool;
     world_data.camera_pool            = &camera_pool;
     world_data.model_pool             = &model_pool;
-    world_data.physics_world          = &phy_world;
     world_data.gui_pool               = &gui_view_pool;
   }
   
@@ -152,8 +143,6 @@ main(int argc, char *argv[])
     Application::host_initialize(&world_data, &connection);
     Network::server_create(&connection, &std::cout);
   }
-
-  Physics::world_step(&phy_world, 0.f);
   
   // Transform data
   std::vector<Simple_renderer::Node> renderer_nodes;

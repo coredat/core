@@ -3,9 +3,7 @@
 #include <data/data.hpp>
 #include <systems/network/network.hpp>
 #include <core/entity_id.hpp>
-#include <systems/physics/physics.hpp>
 #include <systems/environment/environment.hpp>
-#include <application/game_logic/actor_model.hpp>
 #include <core/interface/entity.hpp>
 #include <data/network_data/net_entity_pool.hpp>
 #include <data/core_data/input_pool.hpp>
@@ -27,112 +25,6 @@ host_initialize(
   World_data::World *world,
   Network::Connection *connection)
 {
-  {
-    kine_actor_local   = Entity_factory::create_local_kinematic_actor(world).get_id();
-    kine_actor_network = Entity_factory::create_network_kinematic_actor(world).get_id();
-    
-    // Create level geometry.
-    {
-      math::transform place_transform;
-      Core::Entity entity;
-    
-      Entity_factory::create_game_state(world);
-      Entity_factory::create_ground(world);
-      
-      const float scale = 5;
-      const float place_scale = 4;
-      
-      //Entity_factory::test_aabb(world);
-      
-      // Inner
-      place_transform.position = math::vec3_init(5 * place_scale,0,-5);
-      place_transform.scale = math::vec3_init(scale, scale * 2, scale);
-      Entity_factory::create_static_cube(world, place_transform);
-
-      place_transform.position = math::vec3_init(5 * place_scale,0,+5);
-      place_transform.scale = math::vec3_init(scale, scale * 2, scale);
-      Entity_factory::create_static_cube(world, place_transform);
-
-      place_transform.position = math::vec3_init(5 * place_scale,0,+10);
-      place_transform.scale = math::vec3_init(scale, scale, scale * 2);
-      Entity_factory::create_static_cube(world, place_transform);
-
-      place_transform.position = math::vec3_init(5 * place_scale,0,-10);
-      place_transform.scale = math::vec3_init(scale, scale, scale * 2);
-      Entity_factory::create_static_cube(world, place_transform);
-      
-      place_transform.position = math::vec3_init(-5 * place_scale,0,+10);
-      place_transform.scale = math::vec3_init(scale, scale, scale * 2);
-      Entity_factory::create_static_cube(world, place_transform);
-
-      place_transform.position = math::vec3_init(-5 * place_scale,0,-10);
-      place_transform.scale = math::vec3_init(scale, scale, scale * 4);
-      Entity_factory::create_static_cube(world, place_transform);
-      
-      place_transform.position = math::vec3_init(-5,0,5 * place_scale);
-      place_transform.scale = math::vec3_init(scale * 2, scale, scale);
-      Entity_factory::create_static_cube(world, place_transform);
-
-      place_transform.position = math::vec3_init(-5,5,6 * place_scale);
-      place_transform.scale = math::vec3_init(scale, scale, scale * 4);
-      Entity_factory::create_static_cube(world, place_transform);
-
-      place_transform.position = math::vec3_init(10,5,6 * place_scale);
-      place_transform.scale = math::vec3_init(scale, scale, scale * 4);
-      Entity_factory::create_static_cube(world, place_transform);
-
-      place_transform.position = math::vec3_init(+10,0,5 * place_scale);
-      place_transform.scale = math::vec3_init(scale * 4, scale, scale);
-      Entity_factory::create_static_cube(world, place_transform);
-      
-      place_transform.position = math::vec3_init(-8,0,-5 * place_scale);
-      place_transform.scale = math::vec3_init(scale * 2, scale, scale);
-      Entity_factory::create_static_cube(world, place_transform);
-
-      place_transform.position = math::vec3_init(8,0,-5 * place_scale);
-      place_transform.scale = math::vec3_init(scale * 2, scale, scale);
-      Entity_factory::create_static_cube(world, place_transform);
-
-      place_transform.position = math::vec3_init(0,5,-5 * place_scale);
-      place_transform.scale = math::vec3_init(scale * 2, scale, scale);
-      Entity_factory::create_static_cube(world, place_transform);
-
-      place_transform.position = math::vec3_init(15,5,-5 * place_scale);
-      place_transform.scale = math::vec3_init(scale, scale * 2, scale);
-      Entity_factory::create_static_cube(world, place_transform);
-      
-      // Outter
-      place_transform.position = math::vec3_init(8 * place_scale,0,0);
-      place_transform.scale = math::vec3_init(scale, scale, scale * 4);
-      Entity_factory::create_static_cube(world, place_transform);
-      
-      place_transform.position = math::vec3_init(-8 * place_scale,0,0);
-      place_transform.scale = math::vec3_init(scale, scale, scale * 4);
-      Entity_factory::create_static_cube(world, place_transform);
-      
-      place_transform.position = math::vec3_init(0,0,8 * place_scale);
-      place_transform.scale = math::vec3_init(scale * 4, scale, scale);
-      Entity_factory::create_static_cube(world, place_transform);
-      
-      place_transform.position = math::vec3_init(0,0,-8 * place_scale);
-      place_transform.scale = math::vec3_init(scale * 4, scale, scale);
-      Entity_factory::create_static_cube(world, place_transform);
-    }
-    
-    // Create npc's
-    {
-      Core::Entity entity;
-      math::transform place_transform;
-    
-      entity = Entity_factory::create_npc_actor(world);
-      entity = Entity_factory::create_npc_actor(world);
-      entity = Entity_factory::create_npc_actor(world);
-      entity = Entity_factory::create_npc_actor(world);
-      entity = Entity_factory::create_npc_actor(world);
-      entity = Entity_factory::create_npc_actor(world);
-      entity = Entity_factory::create_npc_actor(world);      
-    }
-  }
   
   // * Add camera's * //
   {
@@ -150,7 +42,16 @@ host_initialize(
   volatile const uint32_t number_of_random_cubes = 0;
   for(uint32_t i = 0; i < number_of_random_cubes; ++i)
   {
-    Entity_factory::create_random_cube(world);
+    //Entity_factory::create_random_cube(world);
+  }
+  
+  // Create an entity
+  {
+    Core::Entity test_cube;
+    World_data::world_create_new_entity(world, &test_cube, 1);
+    
+    test_cube.set_material_id(1);
+    test_cube.set_model_id(1);
   }
 }
 
@@ -161,8 +62,6 @@ host_think(
   Network::Connection *connection,
   const float delta_time)
 {
-  Physics::world_step(world->physics_world, delta_time);
-
   Network::poll_events(connection,
     0,
     [&](const Network::Event_id id, const void *data, const std::uint32_t size_of_data)
@@ -189,7 +88,6 @@ host_think(
   
   // Push in new phy entities.
   World_data::world_update_scene_graph_changes(world, world->entity_graph_changes);
-  World_data::rigidbody_pool_update_scene_graph_changes(world->rigidbody_pool, world, world->entity_graph_changes);
   
   // Reset the entity pool for new changes.
   World_data::entity_graph_change_pool_init(world->entity_graph_changes);

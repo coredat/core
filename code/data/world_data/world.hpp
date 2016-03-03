@@ -3,7 +3,6 @@
 
 
 #include "world_data_fwd.hpp"
-#include <systems/physics/physics_fwd.hpp>
 
 
 /*!
@@ -29,15 +28,6 @@ set_world_data(World *world);
 */
 World*
 get_world();
-
-
-/*!
-  Get the physics world.
-  \param the world whose physics you want to access.
-  \return the current physics world.
-*/
-Physics::World*
-get_physics_world(World *world);
 
 
 } // ns

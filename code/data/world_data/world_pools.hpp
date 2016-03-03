@@ -3,7 +3,6 @@
 
 
 #include "world_data_fwd.hpp"
-#include <systems/physics/physics_fwd.hpp>
 #include <core/entity_id.hpp>
 #include <core/interface/interface_fwd.hpp>
 #include <stdint.h>
@@ -22,7 +21,6 @@ struct World
   Texture_pool                *texture_pool         = nullptr;
   Model_pool                  *model_pool           = nullptr;
   Camera_pool                 *camera_pool          = nullptr;
-  Physics::World              *physics_world        = nullptr;
   Gui_view_pool               *gui_pool             = nullptr;
 }; // struct
 

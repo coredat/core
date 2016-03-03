@@ -2,7 +2,6 @@
 #include <data/data.hpp>
 #include <systems/network/network.hpp>
 #include <core/entity_id.hpp>
-#include <systems/physics/physics.hpp>
 #include <systems/environment/environment.hpp>
 #include <iostream>
 #include <core/input/input.hpp>

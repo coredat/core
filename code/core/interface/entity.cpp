@@ -342,67 +342,6 @@ Entity::get_model_id() const
 }
 
 
-void
-Entity::set_rigidbody_properties(const Physics::Rigidbody_properties props)
-{
-  if(!is_valid()) { return; }
-  
-  auto ent_pool = m_world_data->entity_pool;
-
-  uint32_t index;
-  assert(get_index(&index, m_this_id, ent_pool->entity_id, ent_pool->size));
-  
-  auto rb_prop = &ent_pool->rigidbody_property[index];
-
-  *rb_prop = props;
-  rb_prop->id = m_this_id;
-  
-  World_data::entity_graph_change_push(m_world_data->entity_graph_changes, m_this_id, World_data::Entity_graph_change::moved);
-}
-
-
-Physics::Rigidbody_properties
-Entity::get_rigidbody_properties() const
-{
-  if(!is_valid()) { return Physics::Rigidbody_properties(); }
-
-  uint32_t index;
-  assert(get_index(&index, m_this_id, m_world_data->entity_pool->entity_id, m_world_data->entity_pool->size));
-  return m_world_data->entity_pool->rigidbody_property[index];
-}
-
-
-void
-Entity::set_rigidbody_collider(const Physics::Rigidbody_collider collider)
-{
-  if(!is_valid()) { return; }
-
-  auto ent_pool = m_world_data->entity_pool;
-
-  uint32_t index;
-  assert(get_index(&index, m_this_id, ent_pool->entity_id, ent_pool->size));
-  
-  auto rb_coll = &ent_pool->rigidbody_collider[index];
-  
-  *rb_coll = collider;
-  
-  World_data::entity_graph_change_push(m_world_data->entity_graph_changes, m_this_id, World_data::Entity_graph_change::moved);
-}
-
-
-Physics::Rigidbody_collider
-Entity::get_rigidbody_collider() const
-{
-  if(!is_valid()) { return Physics::Rigidbody_collider(); }
-
-  auto ent_pool = m_world_data->entity_pool;
-
-  uint32_t index;
-  assert(get_index(&index, m_this_id, ent_pool->entity_id, ent_pool->size));
-  return m_world_data->entity_pool->rigidbody_collider[index];
-}
-
-
 uint32_t
 Entity::get_number_of_components() const
 {
