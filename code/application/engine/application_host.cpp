@@ -50,8 +50,9 @@ host_initialize(
     Core::Entity test_cube;
     World_data::world_create_new_entity(world, &test_cube, 1);
     
+    test_cube.set_transform(Core::Transform(math::vec3_zero(), math::vec3_one(), math::quat_init()));
     test_cube.set_material_id(1);
-    test_cube.set_model_id(1);
+    test_cube.set_model_id(0);
   }
 }
 

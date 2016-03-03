@@ -223,8 +223,8 @@ main(int argc, char *argv[])
         }
       }
     
-      renderer::clear(false, true);
-      Gui_renderer::render_gui_nodes(&nodes[0], nodes.size(), 600, 480);
+      //renderer::clear(false, true);
+      //Gui_renderer::render_gui_nodes(&nodes[0], nodes.size(), 600, 480);
     }
   }
   

@@ -84,8 +84,8 @@ graphics_think(World_data::World *world,
     nodes[i].diffuse = World_data::texture_pool_find(world->texture_pool, world->entity_pool->texture[i]);
   }
   
-  //Simple_renderer::render_nodes_fullbright(nodes, size_of_node_pool);
-  Simple_renderer::render_nodes_directional_light(nodes, size_of_node_pool);
+  Simple_renderer::render_nodes_fullbright(nodes, size_of_node_pool);
+  //Simple_renderer::render_nodes_directional_light(nodes, size_of_node_pool);
 
   math::mat4 wvp = math::mat4_multiply(math::mat4_id(), view, proj);
   Debug_line_renderer::render(math::mat4_get_data(wvp));

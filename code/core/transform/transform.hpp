@@ -15,10 +15,18 @@ class Transform final
 {
 public:
 
+  constexpr explicit
+  Transform(const math::vec3 pos,
+            const math::vec3 scale,
+            const math::quat rot)
+  : m_position(pos)
+  , m_scale(scale)
+  , m_rotation(rot)
+  {
+  }
+
+
   explicit            Transform();
-  explicit            Transform(const math::vec3 pos,
-                                const math::vec3 scale,
-                                const math::quat rot);
   
   math::vec3          get_position() const                { return m_position; }
   void                set_position(const math::vec3 pos)  { m_position = pos;  }
