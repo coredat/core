@@ -19,35 +19,7 @@ create_ground(World_data::World *world);
 
 
 Core::Entity
-create_random_cube(World_data::World *world);
-
-
-Core::Entity
-create_local_kinematic_actor(World_data::World *world);
-
-
-Core::Entity
-create_network_kinematic_actor(World_data::World *world);
-
-
-Core::Entity
-create_npc_actor(World_data::World *world);
-
-
-Core::Entity
-create_placement_cube(World_data::World *world);
-
-
-Core::Entity
-create_gun(World_data::World *world);
-
-
-Core::Entity
-create_static_cube(World_data::World *world, const math::transform &transform);
-
-
-Core::Entity
-test_aabb(World_data::World *world);
+create_actor(World_data::World *world);
 
 
 } // ns

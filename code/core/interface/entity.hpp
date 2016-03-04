@@ -8,6 +8,7 @@
 #include <data/world_data/world_pools.hpp>
 #include <data/world_data/logic_pool.hpp>
 #include <core/transform/transform.hpp>
+#include <core/physics/collider.hpp>
 #include <stddef.h>
 #include <stdint.h>
 
@@ -52,6 +53,9 @@ public:
   
   void                          set_model_id(const uint32_t id);
   uint32_t                      get_model_id() const;
+  
+  void                          set_collider(const Collider &collider);
+  Collider                      get_collider() const;
   
   
   template<typename T>

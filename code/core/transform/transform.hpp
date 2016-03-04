@@ -28,6 +28,7 @@ public:
 
   explicit            Transform();
   
+  
   math::vec3          get_position() const                { return m_position; }
   void                set_position(const math::vec3 pos)  { m_position = pos;  }
   

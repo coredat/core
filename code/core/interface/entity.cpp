@@ -351,4 +351,17 @@ Entity::get_number_of_components() const
 }
 
 
+void
+Entity::set_collider(const Core::Collider &collider)
+{
+}
+
+
+Collider
+Entity::get_collider() const
+{
+  return Collider();
+}
+
+
 } // ns

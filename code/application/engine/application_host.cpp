@@ -34,25 +34,20 @@ host_initialize(
     cam_props.far_plane       = 1000.f;
     cam_props.viewport_width  = 800;
     cam_props.viewport_height = 480;
-    
-    //World_data::camera_pool_add_camera(world->camera_pool, kine_actor_local, cam_props);
-    //World_data::camera_pool_add_camera(world->camera_pool, kine_actor_network, cam_props);
-  }
-  
-  volatile const uint32_t number_of_random_cubes = 0;
-  for(uint32_t i = 0; i < number_of_random_cubes; ++i)
-  {
-    //Entity_factory::create_random_cube(world);
   }
   
   // Create an entity
   {
-    Core::Entity test_cube;
-    World_data::world_create_new_entity(world, &test_cube, 1);
-    
-    test_cube.set_transform(Core::Transform(math::vec3_zero(), math::vec3_one(), math::quat_init()));
-    test_cube.set_material_id(1);
-    test_cube.set_model_id(0);
+   
+    Entity_factory::create_ground(world);
+    Entity_factory::create_actor(world);
+  
+//    Core::Entity test_cube;
+//    World_data::world_create_new_entity(world, &test_cube, 1);
+//    
+//    test_cube.set_transform(Core::Transform(math::vec3_zero(), math::vec3_one(), math::quat_init()));
+//    test_cube.set_material_id(1);
+//    test_cube.set_model_id(0);
   }
 }
 
