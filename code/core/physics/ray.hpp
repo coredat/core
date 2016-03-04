@@ -18,7 +18,6 @@
 
 
 namespace Core {
-namespace Physics {
 
 
 class Ray final
@@ -54,7 +53,6 @@ private:
 }; // class
 
 
-} // ns
 } // ns
 
 

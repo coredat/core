@@ -3,13 +3,12 @@
 
 
 #include "component.hpp"
-#include "../entity_id.hpp"
+#include <core/entity_id.hpp>
+#include <core/transform/transform.hpp>
+#include <core/physics/collider.hpp>
 #include "detail/entity_detail.hpp"
 #include <data/world_data/world_pools.hpp>
 #include <data/world_data/logic_pool.hpp>
-#include <core/transform/transform.hpp>
-#include <core/physics/collider.hpp>
-#include <stddef.h>
 #include <stdint.h>
 
 

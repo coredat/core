@@ -1,6 +1,7 @@
+#include "entity_factory.hpp"
+#include <application/game_logic/actor_controller.hpp>
 #include <core/interface/entity.hpp>
 #include <core/physics/box_collider.hpp>
-#include "entity_factory.hpp"
 
 
 namespace Entity_factory {
@@ -32,12 +33,22 @@ create_actor(World_data::World *world)
   Core::Entity entity;
   World_data::world_create_new_entity(world, &entity, 1);
   
-  const Core::Transform transform(math::vec3_zero(), math::vec3_init(1, 3, 1), math::quat_init());
+  
+  // Logic
+  entity.add_component<Actor_controller>();
+  
+  
+  // Transform
+  const Core::Transform transform(math::vec3_init(0, 3, 0), math::vec3_init(1, 3, 1), math::quat_init());
   entity.set_transform(transform);
   
+  
+  // Physics
   const Core::Box_collider collider(transform.get_scale());
   //entity.set_collider(collider);
   
+  
+  // Other stuff.
   entity.set_model_id(0);
   entity.set_material_id(2);
   

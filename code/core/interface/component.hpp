@@ -5,6 +5,7 @@
 #include "interface_fwd.hpp"
 #include "detail/component_detail.hpp"
 #include <data/world_data/world_data_fwd.hpp>
+#include <core/interface/entity.hpp>
 #include <core/entity_id.hpp>
 
 
@@ -51,6 +52,8 @@ public:
   virtual void        on_event(const uint32_t event_id, const void *data, const uint32_t size_of_data) {}
 
   Core::Entity        get_entity() const; //! < Returns an object of the entity.
+  
+  virtual void        on_collision(const Core::Entity entity) {}
   
 //protected: // TODO: Private this is because I haven't exposed enough functionality through interface, and entity  needs a setter here.
 
