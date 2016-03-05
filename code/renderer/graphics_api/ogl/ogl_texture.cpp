@@ -10,10 +10,11 @@ texture_create_2d(Texture *out_texture,
                   const uint32_t width,
                   const uint32_t height,
                   const GLenum format,
-                  const void *data, std::ostream *log)
+                  const void *data,
+                  std::ostream *log)
 {
   // Param check
-  if(!out_texture || !width || !height || !data)
+  if(!out_texture || !width || !height)
   {
     assert(false); // Param fail
     
@@ -42,10 +43,13 @@ texture_create_2d(Texture *out_texture,
   }
   
   // Set some arguments
-  out_texture->format = format;
-  out_texture->width = width;
-  out_texture->height = height;
+  out_texture->format    = format;
+  out_texture->width     = width;
+  out_texture->height    = height;
   out_texture->dimention = GL_TEXTURE_2D;
+  
+  const auto pixel_format      = pixel_format_get_format(format);
+  const auto pixel_format_type = pixel_format_get_type(format);
   
   // Open GL
   glGenTextures(1, &out_texture->texture_id);
@@ -56,15 +60,11 @@ texture_create_2d(Texture *out_texture,
                width,
                height,
                0,
-               pixel_format_get_format(format),
-               pixel_format_get_type(format),
+               pixel_format,
+               pixel_format_type,
                data);
-
-  glGenerateMipmap(GL_TEXTURE_2D);
   
   glGenerateMipmap(GL_TEXTURE_2D);
-  
-  // Calling code checks for error.
 }
 
 

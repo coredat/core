@@ -143,10 +143,14 @@ shader_uniforms_apply(const Uniform uniform_to_apply, void *data)
     case(GL_SAMPLER_2D_RECT_SHADOW):
     case(GL_SAMPLER_2D_SHADOW):
     case(GL_SAMPLER_3D):
-    // There are other samplers but do we need them?
-      glActiveTexture(GL_TEXTURE0);
-      glBindTexture(GL_TEXTURE_2D, *static_cast<GLuint*>(data));
+    {
+      // There are other samplers but do we need them?
+      GLint tex_id = *static_cast<GLint*>(data);
+      
+      glActiveTexture(GL_TEXTURE0 + uniform_to_apply.index);
+      glBindTexture(GL_TEXTURE_2D, tex_id);
       break;
+    }
     
 
     default:

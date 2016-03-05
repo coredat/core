@@ -126,7 +126,10 @@ shader_create(Shader *out_shader,
   
   if(!is_linked) // Failed
   {
-    (*log) << "Ogl::shader_create - failed to link shader program.\n";
+    if(log)
+    {
+      (*log) << "Ogl::shader_create - failed to link shader program.\n";
+    }
     
     Shader clean_up;
     clean_up.program_id     = program_id;

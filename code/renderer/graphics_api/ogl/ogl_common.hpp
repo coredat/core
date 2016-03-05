@@ -31,6 +31,52 @@ default_state()
 
 
 /*!
+  Sugar function to for clear color
+*/
+inline void
+clear_color(const float r = 0,
+            const float g = 0,
+            const float b = 0,
+            const float a = 0)
+{
+  glClearColor(r, g, b, a);
+}
+
+
+/*!
+  Sugar function to clear attached buffer
+  \param color If true clears the attached color buffer.
+  \param depth If true clears the attached depth buffer.
+*/
+inline void
+clear(const bool color, const bool depth)
+{
+  GLint clear = 0;
+  
+  if(color) { clear |= GL_COLOR_BUFFER_BIT; }
+  if(depth) { clear |= GL_DEPTH_BUFFER_BIT; }
+
+  glClear(clear);
+}
+
+
+/*!
+  Initialize vao
+*/
+inline void
+vao_init()
+{
+  static GLuint vao(0);
+  
+  if(!vao)
+  {
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+  }
+}
+
+
+/*!
   Checks glGetError, if an error is found it will push it out
   in the stream that was provided.
 */
