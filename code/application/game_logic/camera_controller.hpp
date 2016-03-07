@@ -1,23 +1,25 @@
-#ifndef ACTOR_CONTROLLER_INCLUDED_8C5C8BE7_A2D8_4BE1_B46E_8FC50CB81479
-#define ACTOR_CONTROLLER_INCLUDED_8C5C8BE7_A2D8_4BE1_B46E_8FC50CB81479
+#ifndef CAMERA_CONTROLLER_INCLUDED_
+#define CAMERA_CONTROLLER_INCLUDED_
 
 
 #include <core/interface/component.hpp>
 #include <core/input/controller.hpp>
+#include <core/camera/camera.hpp>
 
 
-class Actor_controller : public Core::Component
+class Camera_controller : public Core::Component
 {
 private:
 
   uint32_t            get_rtti() const override { return 1; };
 
   void                on_start() override;
+  void                on_end() override;
   void                on_update(const float dt) override;
 
 private:
 
-  float               m_position = 0.f;
+  Core::Camera        m_camera;
 
 }; // class
 

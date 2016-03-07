@@ -8,7 +8,6 @@ namespace Core {
 class Ray;
 class Collider;
 class Box_collider;
-class Rigidbody;
 
 
 } // ns

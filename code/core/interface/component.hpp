@@ -41,7 +41,7 @@ public:
   explicit            Component()  {}
   virtual             ~Component() {}
   
-  virtual uint32_t    get_rtti() const = 0;
+  virtual uint32_t    get_rtti() const            { return 0; };
   
   // Event hooks
   virtual void        on_start()                  {} //!< Called when the object is ready.
@@ -50,9 +50,9 @@ public:
   
   virtual void        on_event(const uint32_t event_id, const void *data, const uint32_t size_of_data) {}
 
+  virtual void        on_collision(const Entity *entity) {}
+
   Core::Entity        get_entity() const; //! < Returns an object of the entity.
-  
-//  virtual void        on_collision(const Core::Entity entity) {}
   
 //protected: // TODO: Private this is because I haven't exposed enough functionality through interface, and entity  needs a setter here.
 

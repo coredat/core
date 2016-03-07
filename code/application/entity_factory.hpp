@@ -15,7 +15,11 @@ create_game_state(World_data::World *world);
 
 
 Core::Entity
-create_ground(World_data::World *world);
+create_game_play_camera(World_data::World *world);
+
+
+Core::Entity
+create_bullet(World_data::World *world);
 
 
 Core::Entity

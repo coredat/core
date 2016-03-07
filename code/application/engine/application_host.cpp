@@ -25,7 +25,6 @@ host_initialize(
   World_data::World *world,
   Network::Connection *connection)
 {
-  
   // * Add camera's * //
   {
     Camera::Camera_properties cam_props;
@@ -39,8 +38,9 @@ host_initialize(
   // Create an entity
   {
    
-    Entity_factory::create_ground(world);
+//    Entity_factory::create_ground(world);
     Entity_factory::create_actor(world);
+    Entity_factory::create_game_play_camera(world);
   
 //    Core::Entity test_cube;
 //    World_data::world_create_new_entity(world, &test_cube, 1);

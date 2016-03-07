@@ -71,6 +71,7 @@ public:
     return comp;
   }
   
+  
   template<typename T>
   T* get_component(const uint32_t rtti_id)
   {
