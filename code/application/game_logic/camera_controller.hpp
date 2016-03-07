@@ -12,6 +12,7 @@ class Camera_controller : public Core::Component
 private:
 
   uint32_t            get_rtti() const override { return 1; };
+  COMPONENT_RTTI(2)
 
   void                on_start() override;
   void                on_end() override;

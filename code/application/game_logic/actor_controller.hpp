@@ -11,16 +11,34 @@ class Actor_controller : public Core::Component
 private:
 
   uint32_t            get_rtti() const override { return 1; };
+  COMPONENT_RTTI(1)
 
   void                on_start() override;
   void                on_update(const float dt) override;
 
 private:
 
+  enum class Movement_state
+  {
+    grounded,
+    
+    jumped,
+    jumping,
+    landed,
+    
+    duck,
+    ducking,
+    emerged,
+  };
+  
+  Movement_state      m_move_state      = Movement_state::grounded;
+  float               m_jump_momentum   = 0.f;
+
   float               m_move_speed      = 5.f;
   float               m_position        = 0.f;
   float               m_cooldown        = 0.f;
   float               m_cooldown_timer  = 0.1f;
+  float               m_ground          = 0.f;
 
 }; // class
 

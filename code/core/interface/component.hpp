@@ -8,6 +8,9 @@
 #include <core/entity_id.hpp>
 
 
+#define COMPONENT_RTTI(id) static uint32_t get_rtti_id() { return id; }
+
+
 namespace Core {
 
 

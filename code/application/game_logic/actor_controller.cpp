@@ -29,6 +29,13 @@ Actor_controller::on_update(const float dt)
   get_entity().set_transform(curr_trans);
   
   
+  // Jumping
+  if(controller.is_button_down(Core::Input::Button::button_2) && m_move_state == Movement_state::grounded)
+  {
+    m_move_state = Movement_state::jumped;
+  }
+  
+  // Shooting
   if(m_cooldown > m_cooldown_timer)
   {
     if(controller.is_button_down(Core::Input::Button::button_0))
@@ -51,6 +58,48 @@ Actor_controller::on_update(const float dt)
   {
     m_cooldown += dt;
   }
+  
+  const float mass = 0.2f;
+  const float g = 4.1f;
+  static float time = 0;
+  time += dt;
+  
+  switch(m_move_state)
+  {
+    case(Movement_state::jumped):
+    {
+      m_jump_momentum = mass * (20.4f);
+      m_move_state = Movement_state::jumping;
+      time = 0;
+      
+      break;
+    }
+    
+    case(Movement_state::jumping):
+    {
+      float offset = m_jump_momentum * time - g*time*time;
+     
+      Core::Transform trans = get_entity().get_transform();
+      const math::vec3 curr_pos = trans.get_position();
+      
+      const float new_z = math::max(math::vec3_get_z(curr_pos) + offset, m_ground);
+      
+      if(new_z <= m_ground)
+      {
+        m_move_state = Movement_state::grounded;
+      }
+      
+      const math::vec3 new_pos = math::vec3_init(
+        math::vec3_get_x(curr_pos),
+        math::vec3_get_y(curr_pos),
+        new_z
+      );
+      trans.set_position(new_pos);
+      
+      get_entity().set_transform(trans);
+      
+    }
+  };
   
 //  // Movement
 //  math::vec3 new_pos = curr_trans.get_position();

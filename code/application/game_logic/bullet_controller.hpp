@@ -10,6 +10,8 @@ class Bullet_controller : public Core::Component
 {
 public:
 
+  COMPONENT_RTTI(3)
+
   void          set_position(const math::vec3 position);
   void          set_direction(const uint32_t i);
 
