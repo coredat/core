@@ -19,7 +19,7 @@ void
 Actor_controller::on_update(const float dt)
 {
   const Core::Input::Controller controller = Core::Input::get_controller(Core::Input::Player::one);
-  m_position += controller.get_axis(0).x * dt;
+  m_position += controller.get_axis(0).x * m_move_speed * dt;
   
   const math::vec3 position = Level::get_point_on_cirlce(m_position);
  
@@ -29,18 +29,27 @@ Actor_controller::on_update(const float dt)
   get_entity().set_transform(curr_trans);
   
   
-  if(controller.is_button_down(Core::Input::Button::button_0))
+  if(m_cooldown > m_cooldown_timer)
   {
-    Core::Entity bullet = Entity_factory::create_bullet(m_world_data);
-
-    Bullet_controller *bullet_controller = bullet.get_component<Bullet_controller>(0);
-    assert(bullet_controller);
-    
-    if(bullet_controller)
+    if(controller.is_button_down(Core::Input::Button::button_0))
     {
-      bullet_controller->set_position(get_entity().get_transform().get_position());
-      bullet_controller->set_direction(-1);
+      Core::Entity bullet = Entity_factory::create_bullet(m_world_data);
+
+      Bullet_controller *bullet_controller = bullet.get_component<Bullet_controller>(0);
+      assert(bullet_controller);
+      
+      if(bullet_controller)
+      {
+        bullet_controller->set_position(get_entity().get_transform().get_position());
+        bullet_controller->set_direction(-1);
+      }
+      
+      m_cooldown = 0.f;
     }
+  }
+  else
+  {
+    m_cooldown += dt;
   }
   
 //  // Movement

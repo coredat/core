@@ -17,7 +17,10 @@ private:
 
 private:
 
-  float               m_position = 0.f;
+  float               m_move_speed      = 5.f;
+  float               m_position        = 0.f;
+  float               m_cooldown        = 0.f;
+  float               m_cooldown_timer  = 0.1f;
 
 }; // class
 

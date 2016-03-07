@@ -92,8 +92,6 @@ logic_pool_free_slots(Logic_pool *pool, const Core::Entity_id id)
       component->on_end();
       component->~Component();
       
-      pool->object_locations[index] = nullptr;
-      
       // Remove from objects in use.
       uint32_t o = 0;
       while(o < pool->objects_in_use_size)

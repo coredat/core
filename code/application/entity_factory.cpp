@@ -18,7 +18,7 @@ create_bullet(World_data::World *world)
   // Logic
   entity.add_component<Bullet_controller>();
   
-  const Core::Transform transform(math::vec3_zero(), math::vec3_init(1, 1, 1), math::quat_init());
+  const Core::Transform transform(math::vec3_zero(), math::vec3_init(0.25, 0.25, 0.25), math::quat_init());
   entity.set_transform(transform);
   
   const Core::Box_collider collider(transform.get_scale());
@@ -55,7 +55,9 @@ create_actor(World_data::World *world)
   
   
   // Transform
-  const Core::Transform transform(math::vec3_init(0, 3, 0), math::vec3_init(1, 1, 2), math::quat_init());
+  const Core::Transform transform(math::vec3_init(0, 3, 0),
+                                  math::vec3_init(0.5f, 0.5f, 1.f),
+                                  math::quat_init());
   entity.set_transform(transform);
   
   
