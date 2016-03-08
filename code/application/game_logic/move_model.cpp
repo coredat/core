@@ -11,36 +11,37 @@ Move_model::on_update(const float dt)
   // Strafe
   if(m_pending_strafe != 0.f)
   {
-    m_strafe += (m_pending_strafe * dt);
+    m_strafe += ((m_pending_strafe * m_move_speed) * dt);
     m_pending_strafe = 0.f;
     
-    const math::vec3 position = Level::get_point_on_cirlce(m_strafe);
-   
-    Core::Transform curr_trans = get_entity().get_transform();
-    curr_trans.set_position(position);
+    const math::vec2 level_position = Level::get_point_on_cirlce(m_strafe);
     
-    get_entity().set_transform(curr_trans);
+    Core::Transform trans = get_entity().get_transform();
+    const math::vec3 position = trans.get_position();
+    
+    trans.set_position(math::vec3_init(
+                        math::vec2_get_x(level_position),
+                        math::vec2_get_y(level_position),
+                        math::vec3_get_z(position)
+                       ));
+    
+    get_entity().set_transform(trans);
   }
   
-  const float mass   = 0.2f;
-  const float g      = 4.1f;
-  static float time  = 0;
-  time              += dt;
-
   switch(m_move_state)
   {
     case(Movement_state::jumped):
     {
-      m_jump_momentum = mass * (20.4f);
       m_move_state = Movement_state::jumping;
-      time = 0;
+      m_jump_time  = 0;
       
       break;
     }
     
     case(Movement_state::jumping):
     {
-      float offset = m_jump_momentum * time - g*time*time;
+      m_jump_time += dt;
+      float offset = (m_jump_speed * m_jump_time) + (m_gravity * m_jump_time * m_jump_time);
      
       Core::Transform trans = get_entity().get_transform();
       const math::vec3 curr_pos = trans.get_position();
@@ -61,8 +62,11 @@ Move_model::on_update(const float dt)
       
       get_entity().set_transform(trans);
       
+      break;
     }
     
+    default:
+      break;
   };
 }
 

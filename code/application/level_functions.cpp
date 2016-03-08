@@ -4,7 +4,7 @@
 namespace Level {
 
 
-math::vec3
+math::vec2
 get_point_on_cirlce(const float a)
 {
   const float radius = 2.f;
@@ -13,9 +13,8 @@ get_point_on_cirlce(const float a)
   
   const float x = origin_x + radius * math::cos(a);
   const float y = origin_y + radius * math::sin(a);
-  constexpr float z = 0.f;
   
-  return math::vec3_init(x, y, z);
+  return math::vec2_init(x, y);
 }
 
 
