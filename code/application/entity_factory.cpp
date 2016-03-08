@@ -6,6 +6,8 @@
 #include <application/game_logic/move_model.hpp>
 #include <core/interface/entity.hpp>
 #include <core/physics/box_collider.hpp>
+#include <application/game_logic/game_controller.hpp>
+#include <application/game_logic/enemy_controller.hpp>
 
 
 namespace Entity_factory {
@@ -51,7 +53,6 @@ create_actor(World_data::World *world)
   Core::Entity entity;
   World_data::world_create_new_entity(world, &entity, 1);
   
-  
   // Logic
   entity.add_component<Actor_controller>();
   entity.add_component<Gun_model>();
@@ -74,6 +75,50 @@ create_actor(World_data::World *world)
   entity.set_model_id(0);
   entity.set_material_id(2);
   
+  return entity;
+}
+
+
+Core::Entity
+create_game_state(World_data::World *world)
+{
+  Core::Entity entity;
+  World_data::world_create_new_entity(world, &entity, 1);
+
+  // Logic
+  entity.add_component<Game_controller>();
+
+  return entity;
+}
+
+
+Core::Entity
+create_enemy(World_data::World *world)
+{
+  Core::Entity entity;
+  World_data::world_create_new_entity(world, &entity, 1);
+  
+  // Logic
+  entity.add_component<Enemy_controller>();
+  entity.add_component<Gun_model>();
+  entity.add_component<Move_model>();
+  
+  
+  // Transform
+  const Core::Transform transform(math::vec3_init(0, 3, 0),
+                                  math::vec3_init(0.5f, 0.5f, 1.f),
+                                  math::quat_init());
+  entity.set_transform(transform);
+  
+  
+  // Physics
+  const Core::Box_collider collider(transform.get_scale());
+  //entity.set_collider(collider);
+  
+  // Other stuff.
+  entity.set_model_id(0);
+  entity.set_material_id(0);
+
   return entity;
 }
 

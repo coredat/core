@@ -1,18 +1,19 @@
-#ifndef CAMERA_CONTROLLER_INCLUDED_
-#define CAMERA_CONTROLLER_INCLUDED_
+#ifndef CAMERA_CONTROLLER_INCLUDED_05B921CC_58EF_4F7C_8E86_12B94D96328C
+#define CAMERA_CONTROLLER_INCLUDED_05B921CC_58EF_4F7C_8E86_12B94D96328C
 
 
 #include <core/interface/component.hpp>
 #include <core/input/controller.hpp>
 #include <core/camera/camera.hpp>
+#include "../common/ids_component_types.hpp"
 
 
 class Camera_controller : public Core::Component
 {
 private:
 
-  uint32_t            get_rtti() const override { return 1; };
-  COMPONENT_RTTI(2)
+  uint32_t            get_rtti() const override { return Component_type::camera_controller; };
+  COMPONENT_RTTI(Component_type::camera_controller)
 
   void                on_start() override;
   void                on_end() override;

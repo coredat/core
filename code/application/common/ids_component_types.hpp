@@ -10,9 +10,12 @@ enum ENUM : uint32_t {
 
   invalid, // zero 
 
+  game_controller,
+
   actor_controller,
   camera_controller,
   bullet_controller,
+  enemy_controller,
   
   gun_model,
   move_model,

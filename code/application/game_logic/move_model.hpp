@@ -41,7 +41,6 @@ private:
   float               m_jump_time       = 0.f;
   float               m_gravity         = -2.f;
   float               m_ground          = 0.f;
-  
   float               m_strafe          = 0.f;
   float               m_pending_strafe  = 0.1f;
   float               m_move_speed      = 5.f;
