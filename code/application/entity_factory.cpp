@@ -2,6 +2,8 @@
 #include <application/game_logic/actor_controller.hpp>
 #include <application/game_logic/camera_controller.hpp>
 #include <application/game_logic/bullet_controller.hpp>
+#include <application/game_logic/gun_model.hpp>
+#include <application/game_logic/move_model.hpp>
 #include <core/interface/entity.hpp>
 #include <core/physics/box_collider.hpp>
 
@@ -52,6 +54,8 @@ create_actor(World_data::World *world)
   
   // Logic
   entity.add_component<Actor_controller>();
+  entity.add_component<Gun_model>();
+  entity.add_component<Move_model>();
   
   
   // Transform

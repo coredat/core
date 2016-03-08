@@ -13,10 +13,10 @@ namespace Tag {
 enum ENUM : uint32_t {
 
   actor           = 1 << 0,
-  player          = 1 << 1,
-  network_player  = 1 << 2,
-  npc             = 1 << 3,
-  game_state      = 1 << 4,
+  npc             = 1 << 1,
+  game_state      = 1 << 2,
+  player          = 1 << 3,
+  network_player  = 1 << 4,
 
 }; // enum
 } // ns

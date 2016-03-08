@@ -8,15 +8,14 @@
 namespace Component_type {
 enum ENUM : uint32_t {
 
-  invalid,    // zero 
+  invalid, // zero 
 
-  actor,
-  gun,
-  gun_controller,
+  actor_controller,
+  camera_controller,
+  bullet_controller,
   
-  local_player_controller,
-  network_player_controller,
-  npc_actor_controller,
+  gun_model,
+  move_model,
 
 }; // enum
 } // ns

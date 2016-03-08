@@ -3,6 +3,7 @@
 
 
 #include <core/interface/component.hpp>
+#include "../common/ids_component_types.hpp"
 #include <math/vec/vec3.hpp>
 
 
@@ -10,7 +11,8 @@ class Bullet_controller : public Core::Component
 {
 public:
 
-  COMPONENT_RTTI(3)
+  uint32_t get_rtti() const override { return Component_type::bullet_controller; }
+  COMPONENT_RTTI(Component_type::bullet_controller)
 
   void          set_position(const math::vec3 position);
   void          set_direction(const uint32_t i);
