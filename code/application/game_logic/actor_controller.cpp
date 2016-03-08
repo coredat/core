@@ -1,3 +1,4 @@
+#include "../common/ids_object_tags.hpp"
 #include "actor_controller.hpp"
 #include "bullet_controller.hpp"
 #include <core/interface/entity.hpp>
@@ -12,6 +13,7 @@
 void
 Actor_controller::on_start()
 {
+  get_entity().add_tag(Tag::player);
 }
 
 

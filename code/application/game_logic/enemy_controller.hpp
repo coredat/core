@@ -13,13 +13,13 @@ private:
   uint32_t            get_rtti() const override { return Component_type::enemy_controller; };
   COMPONENT_RTTI(Component_type::enemy_controller)
 
-
   void                on_start() override;
   void                on_end() override;
   void                on_update(const float dt) override;
 
 private:
-
+  
+  
 
 }; // class
 

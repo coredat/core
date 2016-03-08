@@ -16,4 +16,5 @@ Enemy_controller::on_end()
 void
 Enemy_controller::on_update(const float dt)
 {
+
 }
