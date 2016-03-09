@@ -2,7 +2,7 @@
 #include "../common/ids_object_tags.hpp"
 #include <core/interface/entity.hpp>
 #include <core/input/input.hpp>
-#include <iostream>
+#include <algorithm>
 
 
 void
@@ -11,18 +11,11 @@ Camera_controller::on_start()
   m_camera.set_attached_entity(get_entity());
   m_camera.set_peer_priority(0, 1);
   
-  // Set transform to above the player zone.
-  
   Core::Transform curr_transform = get_entity().get_transform();
-  
-  math::quat rot = math::quat_init_with_axis_angle(0, 1, 0, math::quart_tau());
-  
-  curr_transform.set_position(math::vec3_init(0,0,5));
-//  curr_transform.set_rotation(rot);
+  curr_transform.set_position(math::vec3_init(0,0,0));
   
   get_entity().set_transform(curr_transform);
 }
-
 
 
 void
@@ -49,10 +42,12 @@ Camera_controller::on_update(const float dt)
   Core::Transform this_trans = get_entity().get_transform();
   
   // Go through the players and accumulate the target point.
-  if(number_of_found_players)
+  const uint32_t num_of_players = std::min<uint32_t>(number_of_found_players, found_player_id.size());
+  
+  for(uint32_t i = 0; i < num_of_players; ++i)
   {
     Core::Entity entity;
-    World_data::world_find_entity(m_world_data, &entity, found_player_id[0]);
+    World_data::world_find_entity(m_world_data, &entity, found_player_id[i]);
 
     const math::vec3 player_pos = entity.get_transform().get_position();
     
@@ -66,13 +61,11 @@ Camera_controller::on_update(const float dt)
   
   const math::vec3 this_pos = this_trans.get_position();
 
-  const math::vec3 move_direction = math::vec3_subtract(m_target_position, this_pos);
-  const math::vec3 scaled_dir = math::vec3_scale(move_direction, dt * 2);
-  const math::vec3 new_pos = math::vec3_add(this_pos, scaled_dir);
+  const math::vec3 move_dir   = math::vec3_subtract(m_target_position, this_pos);
+  const math::vec3 scaled_dir = math::vec3_scale(move_dir, dt * 2);
+  const math::vec3 new_pos    = math::vec3_add(this_pos, scaled_dir);
 
   this_trans.set_position(new_pos);
   
   get_entity().set_transform(this_trans);
-
 }
-
