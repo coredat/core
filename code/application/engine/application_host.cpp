@@ -81,13 +81,19 @@ host_think(
   Core::Entity_id_util::find_index_linearly(&index, kine_actor_local, world->entity_pool->entity_id, world->entity_pool->size);
   
   // ** Run physics ** //
+  constexpr uint32_t size_of_pairs = 128;
+  Physics_engine::Collision_pair collision_pairs[size_of_pairs];
+  
+  uint32_t number_of_collisions(0);
+  
   Physics_engine::get_collisions(
     world->entity_pool->entity_id,
     world->entity_pool->transform,
     world->entity_pool->aabb,
     world->entity_pool->size,
-    nullptr,
-    0
+    collision_pairs,
+    size_of_pairs,
+    &number_of_collisions
   );
   
   // ** Game Logic Update ** //
