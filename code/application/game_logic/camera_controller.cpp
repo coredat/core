@@ -44,24 +44,35 @@ Camera_controller::on_update(const float dt)
                                            &found_player_id[0],
                                            found_player_id.size());
   
+  // We set the camera origin as the first point.
+  math::vec3 accum_target = math::vec3_init(0,0,10.f);
+  Core::Transform this_trans = get_entity().get_transform();
+  
+  // Go through the players and accumulate the target point.
   if(number_of_found_players)
   {
     Core::Entity entity;
     World_data::world_find_entity(m_world_data, &entity, found_player_id[0]);
+
+    const math::vec3 player_pos = entity.get_transform().get_position();
     
-    const Core::Transform entity_trans = entity.get_transform();
-    Core::Transform this_trans = get_entity().get_transform();
+    const math::vec3 direction = math::vec3_subtract(player_pos, accum_target);
+    const math::vec3 scaled_dir = math::vec3_scale(direction, 0.5f);
     
-    this_trans.set_position(
-      math::vec3_init(
-        math::vec3_get_x(this_trans.get_position()),
-        math::vec3_get_y(this_trans.get_position()),
-        math::vec3_get_z(this_trans.get_position())
-        //math::vec3_get_z(entity_trans.get_position()) + 7.f
-      )
-    );
-    
-    get_entity().set_transform(this_trans);
+    accum_target = math::vec3_add(accum_target, scaled_dir);
   }
+  
+  m_target_position = accum_target;
+  
+  const math::vec3 this_pos = this_trans.get_position();
+
+  const math::vec3 move_direction = math::vec3_subtract(m_target_position, this_pos);
+  const math::vec3 scaled_dir = math::vec3_scale(move_direction, dt * 2);
+  const math::vec3 new_pos = math::vec3_add(this_pos, scaled_dir);
+
+  this_trans.set_position(new_pos);
+  
+  get_entity().set_transform(this_trans);
+
 }
 

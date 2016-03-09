@@ -22,6 +22,7 @@ private:
 private:
 
   Core::Camera        m_camera;
+  math::vec3          m_target_position;  
 
 }; // class
 
