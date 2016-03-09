@@ -1,4 +1,5 @@
 #include "physics_engine.hpp"
+#include <iostream>
 
 
 namespace Physics_engine {
@@ -19,7 +20,7 @@ get_collisions(
     math::aabb aabb_a = aabbs[i];
     aabb_a.origin = transforms[i].position;
   
-    for(uint32_t j = (i + 1); j < (number_of_entities_to_test - 1); ++j)
+    for(uint32_t j = 0; j < number_of_entities_to_test; ++j)
     {
       if(i != j)
       {    
@@ -28,7 +29,7 @@ get_collisions(
         
         if(math::aabb_intersection_test(aabb_a, aabb_b))
         {
-        
+          std::cout << "hit: " << ids[i].instance_id << std::endl;
         }
       }
     }

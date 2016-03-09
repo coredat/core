@@ -33,7 +33,7 @@ Bullet_controller::on_update(const float dt)
   const Core::Transform curr_trans = get_entity().get_transform();
   
   const math::vec3 curr_pos = curr_trans.get_position();
-  const math::vec3 move_vec = math::vec3_init(0, 0, m_direction);
+  const math::vec3 move_vec = math::vec3_init(0, 0, m_direction * (dt * 40));
   const math::vec3 new_pos  = math::vec3_add(curr_pos, move_vec);
   
   const Core::Transform new_trans(new_pos,
