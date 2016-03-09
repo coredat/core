@@ -103,7 +103,6 @@ create_enemy(World_data::World *world)
   entity.add_component<Gun_model>();
   entity.add_component<Move_model>();
   
-  
   // Transform
   const Core::Transform transform(math::vec3_init(0, 3, 0),
                                   math::vec3_init(0.5f, 0.5f, 1.f),

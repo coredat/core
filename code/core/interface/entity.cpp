@@ -326,6 +326,8 @@ Entity::set_model_id(const uint32_t id)
   uint32_t index;
   assert(get_index(&index, m_this_id, ent_pool->entity_id, ent_pool->size));
   ent_pool->model[index] = (Resource::Model::ENUM)id;
+  
+  ent_pool->aabb[index] = m_world_data->model_pool->aabb[id];
 }
 
 

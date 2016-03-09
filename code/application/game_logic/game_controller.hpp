@@ -10,10 +10,8 @@ class Game_controller : public Core::Component
 {
 private:
 
-
   uint32_t            get_rtti() const override { return Component_type::game_controller; };
   COMPONENT_RTTI(Component_type::game_controller)
-  
   
   void                on_start() override;
   void                on_update(const float dt) override;

@@ -31,7 +31,7 @@ model_load(const Load_model models_to_load[],
            Ogl::Vertex_buffer output_vbo[],
            math::aabb output_aabb[],
            const std::uint32_t size_of_output_pool);
-
+  
   
 void
 find_model_data(Ogl::Vertex_buffer output_vbo[],
@@ -39,7 +39,6 @@ find_model_data(Ogl::Vertex_buffer output_vbo[],
                 const uint32_t input_ids[],
                 const Ogl::Vertex_buffer input_vbo[],
                 const uint32_t size_of_input);
-
 
 
 } // ns

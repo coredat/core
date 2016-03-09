@@ -7,6 +7,7 @@
 #include <core/interface/entity.hpp>
 #include <data/network_data/net_entity_pool.hpp>
 #include <data/core_data/input_pool.hpp>
+#include <systems/physics_engine/physics_engine.hpp>
 #include <iostream>
 
 
@@ -79,6 +80,16 @@ host_think(
   std::uint32_t index;
   Core::Entity_id_util::find_index_linearly(&index, kine_actor_local, world->entity_pool->entity_id, world->entity_pool->size);
   
+  // ** Run physics ** //
+  Physics_engine::get_collisions(
+    world->entity_pool->entity_id,
+    world->entity_pool->transform,
+    world->entity_pool->aabb,
+    world->entity_pool->size,
+    nullptr,
+    0
+  );
+  
   // ** Game Logic Update ** //
   World_data::logic_pool_on_start_hook(world->logic_pool);
   World_data::logic_pool_on_update_hook(world->logic_pool, delta_time);
@@ -88,6 +99,7 @@ host_think(
   
   // Reset the entity pool for new changes.
   World_data::entity_graph_change_pool_init(world->entity_graph_changes);
+  
 
   // Build network entity list
   {

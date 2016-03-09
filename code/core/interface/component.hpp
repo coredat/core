@@ -57,6 +57,8 @@ public:
 
   Core::Entity        get_entity() const; //! < Returns an object of the entity.
   
+  virtual void        on_collision(const Core::Entity &entity) {};
+  
 //protected: // TODO: Private this is because I haven't exposed enough functionality through interface, and entity  needs a setter here.
 
   COMPONENT_MEMBERS
