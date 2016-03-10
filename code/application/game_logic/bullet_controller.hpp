@@ -20,6 +20,7 @@ public:
 private:
 
   void          on_update(const float dt) override;
+  void          on_collision(const Core::Entity &collided_with) override;
   
 private:
 

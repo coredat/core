@@ -96,12 +96,19 @@ host_think(
     &number_of_collisions
   );
   
+  // Alert the collision callbacks
+  for(uint32_t i = 0; i < number_of_collisions; ++i)
+  {
+    World_data::logic_pool_on_collision_hook(world->logic_pool, collision_pairs[i].obj_a, collision_pairs[i].obj_b);
+  }
+  
   // ** Game Logic Update ** //
   World_data::logic_pool_on_start_hook(world->logic_pool);
   World_data::logic_pool_on_update_hook(world->logic_pool, delta_time);
   
   // Push in new phy entities.
   World_data::world_update_scene_graph_changes(world, world->entity_graph_changes);
+
   
   // Reset the entity pool for new changes.
   World_data::entity_graph_change_pool_init(world->entity_graph_changes);

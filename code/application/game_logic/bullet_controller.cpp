@@ -1,6 +1,7 @@
 #include "bullet_controller.hpp"
 #include <core/transform/transform.hpp>
 #include <core/interface/entity.hpp>
+#include <iostream>
 
 
 
@@ -50,4 +51,11 @@ Bullet_controller::on_update(const float dt)
       get_entity().destroy();
     }
   }
+}
+
+
+void
+Bullet_controller::on_collision(const Core::Entity &collided_with)
+{
+  std::cout << "boom" << std::endl;
 }

@@ -2,6 +2,9 @@
 #include <cstring>
 #include <assert.h>
 #include <core/interface/component.hpp>
+#include <core/interface/entity.hpp>
+#include <data/world_data/world_data.hpp>
+
 
 namespace World_data {
 
@@ -153,6 +156,35 @@ logic_pool_on_update_hook(Logic_pool *pool, const float delta_time)
       reinterpret_cast<Core::Component*>(obj)->on_update(delta_time);
     }
   }
+}
+
+
+void
+logic_pool_on_collision_hook(Logic_pool *pool, const Core::Entity_id id_a, const Core::Entity_id id_b)
+{
+  // Find the entity.
+  uint32_t index(0);
+  uint32_t search_from(0);
+  
+  // Could be mutliple components attached to the same entity.
+  while(Core::Entity_id_util::find_index_linearly(&index,
+                                                  id_a,
+                                                  &(pool->entity_id[search_from]),
+                                                  pool->objects_in_use_size - search_from))
+  {
+    index += search_from;
+  
+    auto obj = reinterpret_cast<Core::Component*>(pool->objects_in_use[index]);
+    
+    // Create the entity.
+    Core::Entity collision;
+    World_data::world_find_entity(obj->m_world_data, &collision, id_b);
+    
+    obj->on_collision(collision);
+  
+    search_from = index + 1;
+  }
+  
 }
 
 

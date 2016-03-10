@@ -27,15 +27,15 @@ struct Logic_pool
   void*                     object_locations[LOGIC_POOL_NUMBER_OF_SCRIPTS];
   
   void*                     objects_in_use[LOGIC_POOL_NUMBER_OF_SCRIPTS]; // This is a stack type thing.
-  uint32_t                    objects_in_use_size = 0;
+  uint32_t                  objects_in_use_size = 0;
   
   void*                     objects_on_start_pending_hooks[LOGIC_POOL_NUMBER_OF_SCRIPTS];
-  uint32_t                    objects_on_start_pending_hooks_size = 0;
+  uint32_t                  objects_on_start_pending_hooks_size = 0;
 
   uint8_t                   storage[LOGIC_POOL_NUMBER_OF_SCRIPTS * LOGIC_POOL_SIZE_MAX_SCRIPT_SIZE];
   
-  const uint32_t              storage_size  = LOGIC_POOL_SIZE_MAX_SCRIPT_SIZE;
-  const uint32_t              size          = LOGIC_POOL_NUMBER_OF_SCRIPTS;
+  const uint32_t            storage_size = LOGIC_POOL_SIZE_MAX_SCRIPT_SIZE;
+  const uint32_t            size         = LOGIC_POOL_NUMBER_OF_SCRIPTS;
 };
 
 
@@ -84,6 +84,13 @@ logic_pool_on_start_hook(Logic_pool *pool);
 */
 void
 logic_pool_on_update_hook(Logic_pool *pool, const float delta_time);
+
+
+/*!
+  Call the on_collision hooks.
+*/
+void
+logic_pool_on_collision_hook(Logic_pool *pool, const Core::Entity_id id_a, const Core::Entity_id id_b);
 
 
 } // ns
