@@ -57,5 +57,4 @@ Bullet_controller::on_update(const float dt)
 void
 Bullet_controller::on_collision(const Core::Entity &collided_with)
 {
-  std::cout << "boom" << std::endl;
 }

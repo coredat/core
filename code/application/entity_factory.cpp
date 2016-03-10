@@ -1,4 +1,5 @@
 #include "entity_factory.hpp"
+#include <application/common/ids_object_tags.hpp>
 #include <application/game_logic/actor_controller.hpp>
 #include <application/game_logic/camera_controller.hpp>
 #include <application/game_logic/bullet_controller.hpp>
@@ -18,6 +19,8 @@ create_bullet(World_data::World *world)
 {
   Core::Entity entity;
   World_data::world_create_new_entity(world, &entity, 1);
+  
+  entity.add_tag(Tag::projectile);
   
   // Logic
   entity.add_component<Bullet_controller>();
