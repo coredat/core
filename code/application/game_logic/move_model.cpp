@@ -6,6 +6,13 @@
 
 
 void
+Move_model::on_start()
+{
+  m_strafe = static_cast<float>(rand() & 100);
+}
+
+
+void
 Move_model::on_update(const float dt)
 {
   // Strafe

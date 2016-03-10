@@ -25,7 +25,9 @@ create_bullet(World_data::World *world)
   // Logic
   entity.add_component<Bullet_controller>();
   
-  const Core::Transform transform(math::vec3_zero(), math::vec3_init(0.25, 0.25, 0.25), math::quat_init());
+  const Core::Transform transform(math::vec3_zero(),
+                                  math::vec3_init(0.25, 0.25, 0.25),
+                                  math::quat_init());
   entity.set_transform(transform);
   
   const Core::Box_collider collider(transform.get_scale());
@@ -72,7 +74,6 @@ create_actor(World_data::World *world)
   // Physics
   const Core::Box_collider collider(transform.get_scale());
   //entity.set_collider(collider);
-  
   
   // Other stuff.
   entity.set_model_id(0);
