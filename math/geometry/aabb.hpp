@@ -16,6 +16,8 @@ namespace math {
 
 inline aabb         aabb_from_xyz_array(const float vertex[], const size_t number_of_floats);
 inline math::vec3   aabb_get_extents(const aabb &a);
+inline void         aabb_scale(aabb &aabb_to_scale, const vec3 scale);
+inline void         aabb_scale(aabb &aabb_to_scale, const float scale);
 inline bool         aabb_intersection_test(const aabb &a, const aabb &b);
 inline bool         aabb_intersection_ray_test(const ray &ray, const aabb &box);
 
@@ -80,6 +82,23 @@ math::vec3
 aabb_get_extents(const aabb &a)
 {
   return math::vec3_scale(a.half_extents, 2.f);
+}
+
+
+void
+aabb_scale(aabb &aabb_to_scale, const vec3 scale)
+{
+  aabb_to_scale.max = math::vec3_multiply(aabb_to_scale.max, scale);
+  aabb_to_scale.min = math::vec3_multiply(aabb_to_scale.min, scale);
+  aabb_to_scale.half_extents = math::vec3_multiply(aabb_to_scale.half_extents, scale);
+  aabb_to_scale.origin = math::vec3_multiply(aabb_to_scale.origin, scale);
+}
+
+
+void
+aabb_scale(aabb &aabb_to_scale, const float scale)
+{
+  return aabb_scale(aabb_to_scale, vec3_init(scale));
 }
 
 
