@@ -11,8 +11,8 @@ namespace Memory {
 
 struct Chunk
 {
-  void    *start_of_chunk;
-  size_t   bytes_in_chunk;
+  void    *start_of_chunk = nullptr;
+  size_t   bytes_in_chunk = 0;
 };
 
 
