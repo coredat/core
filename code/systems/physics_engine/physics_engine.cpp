@@ -36,6 +36,11 @@ get_collisions(
         {
           out_ids[(*number_of_collisions)] = Collision_pair{ids[i], ids[j]};
           (*number_of_collisions) += 1;
+          
+          if(*number_of_collisions > size_of_out_buffer)
+          {
+            return;
+          }
         }
       }
     }

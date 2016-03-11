@@ -23,16 +23,16 @@ namespace World_data {
 */
 struct Logic_pool
 {
-  Core::Entity_id           entity_id[LOGIC_POOL_NUMBER_OF_SCRIPTS];
-  void*                     object_locations[LOGIC_POOL_NUMBER_OF_SCRIPTS];
+  Core::Entity_id           *entity_id;
+  void*                     *object_locations;
   
-  void*                     objects_in_use[LOGIC_POOL_NUMBER_OF_SCRIPTS]; // This is a stack type thing.
+  void*                     *objects_in_use; // This is a stack type thing.
   uint32_t                  objects_in_use_size = 0;
   
-  void*                     objects_on_start_pending_hooks[LOGIC_POOL_NUMBER_OF_SCRIPTS];
+  void*                     *objects_on_start_pending_hooks;
   uint32_t                  objects_on_start_pending_hooks_size = 0;
 
-  uint8_t                   storage[LOGIC_POOL_NUMBER_OF_SCRIPTS * LOGIC_POOL_SIZE_MAX_SCRIPT_SIZE];
+  uint8_t                   *storage; // LOGIC_POOL_NUMBER_OF_SCRIPTS * LOGIC_POOL_SIZE_MAX_SCRIPT_SIZE
   
   const uint32_t            storage_size = LOGIC_POOL_SIZE_MAX_SCRIPT_SIZE;
   const uint32_t            size         = LOGIC_POOL_NUMBER_OF_SCRIPTS;

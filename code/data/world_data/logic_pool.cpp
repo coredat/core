@@ -4,6 +4,7 @@
 #include <core/interface/component.hpp>
 #include <core/interface/entity.hpp>
 #include <data/world_data/world_data.hpp>
+#include <core/memory/memory.hpp>
 
 
 namespace World_data {
@@ -12,10 +13,39 @@ namespace World_data {
 void
 logic_pool_init(Logic_pool *pool)
 {
-  memset(pool->storage, 0, sizeof(pool->storage));
-  memset(pool->entity_id, 0, sizeof(pool->entity_id));
-  memset(pool->objects_in_use, 0, sizeof(pool->objects_in_use));
-  memset(pool->storage, 0, sizeof(pool->storage));
+  {
+    const Core::Memory::Chunk chunk = Core::Memory::request_chunk(LOGIC_POOL_NUMBER_OF_SCRIPTS * sizeof(Core::Entity_id));
+    pool->entity_id = static_cast<Core::Entity_id*>(chunk.start_of_chunk);
+    memset(pool->entity_id, 0, chunk.bytes_in_chunk);
+  }
+
+  {
+    const Core::Memory::Chunk chunk = Core::Memory::request_chunk(LOGIC_POOL_NUMBER_OF_SCRIPTS * sizeof(void*));
+    pool->object_locations = static_cast<void**>(chunk.start_of_chunk);
+    memset(pool->object_locations, 0, chunk.bytes_in_chunk);
+  }
+  
+  {
+    const Core::Memory::Chunk chunk = Core::Memory::request_chunk(LOGIC_POOL_NUMBER_OF_SCRIPTS * sizeof(void*));
+    pool->objects_in_use = static_cast<void**>(chunk.start_of_chunk);
+    memset(pool->objects_in_use, 0, chunk.bytes_in_chunk);
+  }
+
+  {
+    const Core::Memory::Chunk chunk = Core::Memory::request_chunk(LOGIC_POOL_NUMBER_OF_SCRIPTS * sizeof(void*));
+    pool->objects_on_start_pending_hooks = static_cast<void**>(chunk.start_of_chunk);
+    memset(pool->objects_on_start_pending_hooks, 0, chunk.bytes_in_chunk);
+  }
+  
+  {
+    const Core::Memory::Chunk chunk = Core::Memory::request_chunk(LOGIC_POOL_NUMBER_OF_SCRIPTS * LOGIC_POOL_SIZE_MAX_SCRIPT_SIZE * sizeof(uint8_t));
+    pool->storage = static_cast<uint8_t*>(chunk.start_of_chunk);
+    memset(pool->storage, 0, chunk.bytes_in_chunk);  }
+
+//  memset(pool->storage, 0, sizeof(pool->storage));
+//  memset(pool->entity_id, 0, sizeof(pool->entity_id));
+//  memset(pool->objects_in_use, 0, sizeof(pool->objects_in_use));
+//  memset(pool->storage, 0, sizeof(pool->storage));
   
   pool->objects_in_use_size = 0;
   
