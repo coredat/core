@@ -6,6 +6,9 @@
 #include <stddef.h>
 
 
+// ** Move this out of Core, should not be part of public interface! ** //
+
+
 namespace Core {
 namespace Memory {
 

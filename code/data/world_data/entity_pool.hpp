@@ -31,15 +31,15 @@ struct Entity_properties
 */
 struct Entity_pool
 {
-  Core::Entity_id                 entity_id[ENTITY_POOL_SIZE];
-  Core::Entity_id                 parent_id[ENTITY_POOL_SIZE];
-  Entity_properties               entity_properties[ENTITY_POOL_SIZE];
+  Core::Entity_id                 *entity_id;
+  Core::Entity_id                 *parent_id;
+  Entity_properties               *entity_properties;
   
-  math::transform                 transform[ENTITY_POOL_SIZE];
-  math::aabb                      aabb[ENTITY_POOL_SIZE];
+  math::transform                 *transform;
+  math::aabb                      *aabb;
   
-  Resource::Model::ENUM           model[ENTITY_POOL_SIZE];
-  Resource::Texture::ENUM         texture[ENTITY_POOL_SIZE];
+  Resource::Model::ENUM           *model;
+  Resource::Texture::ENUM         *texture;
   
   const uint32_t                  capacity = ENTITY_POOL_SIZE;
   uint32_t                        size = 0;

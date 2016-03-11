@@ -9,7 +9,7 @@
 void
 Move_model::on_start()
 {
-  m_strafe = static_cast<float>(rand() & 100);
+  m_pending_strafe = static_cast<float>(rand() & 100);
 }
 
 

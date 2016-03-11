@@ -48,29 +48,35 @@ Chunk
 request_chunk(const size_t request_size)
 {
   Chunk chunk;
+  Chunk_header *this_header = reinterpret_cast<Chunk_header*>(&memory_buffer[0]);
 
   while(true)
   {
-    Chunk_header *this_header = reinterpret_cast<Chunk_header*>(&memory_buffer[0]);
-  
     if(this_header->available == true)
     {
       // Is size big enough.
       if(this_header->size_of_chunk >= request_size + sizeof(Chunk_header))
       {
         // Hooray we have found memory. We need to split this up now.
-        uint8_t *start_of_avail_chunk = reinterpret_cast<uint8_t*>(this_header);
+        uint8_t *start_of_avail_chunk = reinterpret_cast<uint8_t*>(this_header + sizeof(Chunk_header));
         uint8_t *next_chunk = &start_of_avail_chunk[request_size + sizeof(Chunk_header)];
         
         Chunk_header *next_chunk_header = reinterpret_cast<Chunk_header*>(next_chunk);
+        next_chunk_header->size_of_chunk = this_header->size_of_chunk - request_size - sizeof(Chunk_header);
+        next_chunk_header->available = true;
+        
         Chunk_header *old_next_header = this_header->next;
         
         this_header->next = next_chunk_header;
+        next_chunk_header->prev = this_header;
+
         this_header->available = false;
+        this_header->size_of_chunk = request_size + sizeof(Chunk_header);
         
         if(old_next_header)
         {
           old_next_header->prev = next_chunk_header;
+          next_chunk_header->prev = old_next_header;
         }
         
         chunk.bytes_in_chunk = request_size;

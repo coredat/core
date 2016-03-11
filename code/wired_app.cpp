@@ -29,6 +29,8 @@
 #include <systems/audio/audio.hpp>
 #include <core/gui/gui_view.hpp>
 
+#include <core/memory/memory.hpp>
+
 namespace
 {
 
@@ -46,6 +48,9 @@ namespace
 int
 main(int argc, char *argv[])
 {
+  const size_t chunk_128_mb = 134217728;
+  Core::Memory::initialize(chunk_128_mb);
+  
   const std::string title = is_client ? "Wired Client" : "Wired Server";
 
   Environment::Window window;
