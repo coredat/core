@@ -83,6 +83,13 @@ logic_pool_on_start_hook(Logic_pool *pool);
   Calls the on_update hooks of any pending logic scripts.
 */
 void
+logic_pool_on_early_update_hook(Logic_pool *pool, const float delta_time);
+
+
+/*!
+  Calls the on_update hooks of any pending logic scripts.
+*/
+void
 logic_pool_on_update_hook(Logic_pool *pool, const float delta_time);
 
 

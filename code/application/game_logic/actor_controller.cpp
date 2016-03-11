@@ -18,7 +18,7 @@ Actor_controller::on_start()
 
 
 void
-Actor_controller::on_update(const float dt)
+Actor_controller::on_early_update(const float dt)
 {
   const Core::Input::Controller controller = Core::Input::get_controller(Core::Input::Player::one);
   

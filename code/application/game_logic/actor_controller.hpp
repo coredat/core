@@ -14,7 +14,7 @@ private:
   COMPONENT_RTTI(1)
 
   void                on_start() override;
-  void                on_update(const float dt) override;
+  void                on_early_update(const float dt) override;
 
 private:
 

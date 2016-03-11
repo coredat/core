@@ -29,7 +29,7 @@ Bullet_controller::set_direction(const uint32_t i)
 
 
 void
-Bullet_controller::on_update(const float dt)
+Bullet_controller::on_early_update(const float dt)
 {
   const Core::Transform curr_trans = get_entity().get_transform();
   

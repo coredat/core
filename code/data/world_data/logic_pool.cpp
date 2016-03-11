@@ -144,6 +144,22 @@ logic_pool_on_start_hook(Logic_pool *pool)
 
 
 void
+logic_pool_on_early_update_hook(Logic_pool *pool, const float delta_time)
+{
+  const uint32_t pending = pool->objects_in_use_size;
+
+  if(pending)
+  {
+    for(uint32_t i = 0; i < pending; ++i)
+    {
+      auto obj = pool->objects_in_use[i];
+      reinterpret_cast<Core::Component*>(obj)->on_early_update(delta_time);
+    }
+  }
+}
+
+
+void
 logic_pool_on_update_hook(Logic_pool *pool, const float delta_time)
 {
   const uint32_t pending = pool->objects_in_use_size;

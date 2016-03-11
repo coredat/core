@@ -104,6 +104,7 @@ host_think(
   
   // ** Game Logic Update ** //
   World_data::logic_pool_on_start_hook(world->logic_pool);
+  World_data::logic_pool_on_early_update_hook(world->logic_pool, delta_time);
   World_data::logic_pool_on_update_hook(world->logic_pool, delta_time);
   
   // Push in new phy entities.

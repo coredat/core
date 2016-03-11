@@ -47,9 +47,10 @@ public:
   virtual uint32_t    get_rtti() const            { return 0; };
   
   // Event hooks
-  virtual void        on_start()                  {} //!< Called when the object is ready.
-  virtual void        on_update(const float dt)   {} //!< Called when the object is being updated.
-  virtual void        on_end()                    {} //!< Called when the object is dead
+  virtual void        on_start()                      {} //!< Called when the object is ready.
+  virtual void        on_early_update(const float dt) {} //! Called before on_update.
+  virtual void        on_update(const float dt)       {} //!< Called when the object is being updated.
+  virtual void        on_end()                        {} //!< Called when the object is dead
   
   virtual void        on_event(const uint32_t event_id, const void *data, const uint32_t size_of_data) {}
 

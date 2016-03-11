@@ -26,7 +26,7 @@ Camera_controller::on_end()
 
 
 void
-Camera_controller::on_update(const float dt)
+Camera_controller::on_early_update(const float dt)
 {
   // Need to search for active players.
   uint32_t number_of_found_players(0);

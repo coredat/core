@@ -18,7 +18,7 @@ Game_controller::on_start()
 
 
 void
-Game_controller::on_update(const float dt)
+Game_controller::on_early_update(const float dt)
 {
   static float timer = 0;
   

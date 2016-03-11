@@ -3,6 +3,7 @@
 #include <core/transform/transform.hpp>
 #include <assert.h>
 #include "../level_functions.hpp"
+#include <iostream>
 
 
 void
