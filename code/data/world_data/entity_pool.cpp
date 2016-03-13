@@ -3,6 +3,7 @@
 #include <stddef.h>
 #include <vector>
 #include <core/memory/memory.hpp>
+#include <iostream>
 
 
 namespace World_data {
@@ -107,6 +108,8 @@ entity_pool_push_new_entity(Entity_pool *pool, const Core::Entity_id id)
 bool
 entity_pool_remove_entity(Entity_pool *pool, const Core::Entity_id id)
 {
+  std::cout << "Delete entity" << std::endl;
+
   // We move down all the elements in the data down one.
   // This way we can keep fragmentation and cache misses out
   // when processing the data, but take a hit here.1

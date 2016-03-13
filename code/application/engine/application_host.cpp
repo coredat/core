@@ -92,14 +92,19 @@ host_think(
     world->entity_pool->aabb,
     world->entity_pool->size,
     collision_pairs,
+    
     size_of_pairs,
     &number_of_collisions
   );
   
+  //std::cout << "No Entities: " << world->entity_pool->size << std::endl;
+  
   // Alert the collision callbacks
   for(uint32_t i = 0; i < number_of_collisions; ++i)
   {
-    World_data::logic_pool_on_collision_hook(world->logic_pool, collision_pairs[i].obj_a, collision_pairs[i].obj_b);
+    World_data::logic_pool_on_collision_hook(world->logic_pool,
+                                             collision_pairs[i].obj_a,
+                                             collision_pairs[i].obj_b);
   }
   
   // ** Game Logic Update ** //

@@ -19,7 +19,7 @@ graphics_think(World_data::World *world,
                const std::uint32_t size_of_node_pool,
                const std::uint32_t peer)
 {
-  renderer::clear(); // TODO Remove this!!!!!
+  renderer::clear(); // TODO Remove this!!!!
 
   // Get active camera and generate a projection matrix.
   const auto cam = World_data::camera_pool_get_properties_for_priority(world->camera_pool, peer, 1);

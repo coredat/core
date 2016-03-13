@@ -18,7 +18,7 @@ Core::Entity
 create_bullet(World_data::World *world)
 {
   Core::Entity entity;
-  World_data::world_create_new_entity(world, &entity, 1);
+  World_data::world_create_new_entity(world, &entity, 3);
   
   entity.add_tag(Tag::projectile);
   
@@ -56,7 +56,7 @@ Core::Entity
 create_actor(World_data::World *world)
 {
   Core::Entity entity;
-  World_data::world_create_new_entity(world, &entity, 1);
+  World_data::world_create_new_entity(world, &entity, 4);
   
   // Logic
   entity.add_component<Actor_controller>();
@@ -100,7 +100,7 @@ Core::Entity
 create_enemy(World_data::World *world)
 {
   Core::Entity entity;
-  World_data::world_create_new_entity(world, &entity, 1);
+  World_data::world_create_new_entity(world, &entity, 2);
   
   // Logic
   entity.add_component<Enemy_controller>();

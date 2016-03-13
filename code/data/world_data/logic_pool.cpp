@@ -40,13 +40,9 @@ logic_pool_init(Logic_pool *pool)
   {
     const Core::Memory::Chunk chunk = Core::Memory::request_chunk(LOGIC_POOL_NUMBER_OF_SCRIPTS * LOGIC_POOL_SIZE_MAX_SCRIPT_SIZE * sizeof(uint8_t));
     pool->storage = static_cast<uint8_t*>(chunk.start_of_chunk);
-    memset(pool->storage, 0, chunk.bytes_in_chunk);  }
+    memset(pool->storage, 0, chunk.bytes_in_chunk);
+  }
 
-//  memset(pool->storage, 0, sizeof(pool->storage));
-//  memset(pool->entity_id, 0, sizeof(pool->entity_id));
-//  memset(pool->objects_in_use, 0, sizeof(pool->objects_in_use));
-//  memset(pool->storage, 0, sizeof(pool->storage));
-  
   pool->objects_in_use_size = 0;
   
   // Create free list
@@ -159,17 +155,17 @@ void
 logic_pool_on_start_hook(Logic_pool *pool)
 {
   const uint32_t pending = pool->objects_on_start_pending_hooks_size;
-
-  if(pending)
-  {
-    for(uint32_t i = 0; i < pending; ++i)
-    {
-      auto obj = pool->objects_on_start_pending_hooks[i];
-      reinterpret_cast<Core::Component*>(obj)->on_start();
-    }
-  }
   
-  pool->objects_on_start_pending_hooks_size = 0;
+  void **pending_objs[128];
+  memcpy(pending_objs, &pool->objects_on_start_pending_hooks_size, sizeof(void*) * pending);
+  
+  pool->objects_on_start_pending_hooks_size = 0;  
+
+  for(uint32_t i = 0; i < pending; ++i)
+  {
+    auto obj = pool->objects_on_start_pending_hooks[i];
+    reinterpret_cast<Core::Component*>(obj)->on_start();
+  }
 }
 
 
