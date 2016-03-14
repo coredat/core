@@ -45,6 +45,7 @@ namespace
 #undef main
 #endif
 
+#ifndef UNIT_TEST
 int
 main(int argc, char *argv[])
 {
@@ -237,3 +238,4 @@ main(int argc, char *argv[])
   
   return 0;
 }
+#endif

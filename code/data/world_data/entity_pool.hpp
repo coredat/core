@@ -84,6 +84,16 @@ bool
 entity_pool_remove_entity(Entity_pool *pool, const Core::Entity_id id);
 
 
+/*!
+  Get the name of an entity.
+  \param pool The data pool.
+  \param id The id of the entity you wish.
+  \return returns the name of the entity or nullptr if it couldn't find one.
+*/
+const char *
+entity_pool_get_entity_name(const Entity_pool *pool, const Core::Entity_id id);
+
+
 } // ns
 
 

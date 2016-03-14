@@ -39,7 +39,7 @@ entity_pool_init(Entity_pool *pool)
   {
     const Core::Memory::Chunk ent_name_chunk = Core::Memory::request_chunk(ENTITY_POOL_SIZE * (sizeof(char) * max_entity_name_size));
     pool->name = static_cast<char**>(ent_name_chunk.start_of_chunk);
-    memset(pool->entity_properties, 0, ent_name_chunk.bytes_in_chunk);
+    memset(pool->name, 0, ent_name_chunk.bytes_in_chunk);
   }
   
   {
@@ -141,6 +141,26 @@ entity_pool_remove_entity(Entity_pool *pool, const Core::Entity_id id)
 
   assert(false); // uhuo
   return false;
+}
+
+
+const char *
+entity_pool_get_entity_name(const Entity_pool *pool, const Core::Entity_id id)
+{
+  assert(pool);
+  assert(id != Core::Entity_id_util::invalid_id());
+  
+  uint32_t remove_id(0);
+  if(Core::Entity_id_util::find_index_linearly(&remove_id,
+                                               id,
+                                               pool->entity_id,
+                                               pool->size))
+  {
+    return pool->name[remove_id * max_entity_name_size];
+  }
+  
+  assert(false); // A valid entity id should have got something.
+  return nullptr; // Didn't find anything.
 }
 
 
