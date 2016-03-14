@@ -34,6 +34,7 @@ struct Entity_pool
   Core::Entity_id                 *entity_id;
   Core::Entity_id                 *parent_id;
   Entity_properties               *entity_properties;
+  char                            **name;
   
   math::transform                 *transform;
   math::aabb                      *aabb;

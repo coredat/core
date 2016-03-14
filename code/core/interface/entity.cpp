@@ -105,6 +105,43 @@ Entity::remove_tag(const uint32_t tag)
 }
 
 
+void
+Entity::set_name(const char* set_name)
+{
+  if(!is_valid()) { return; }
+  
+  uint32_t index;
+  if(Entity_id_util::find_index_linearly(&index,
+                                         m_this_id,
+                                         m_world_data->entity_pool->entity_id,
+                                         m_world_data->entity_pool->size))
+  {
+    // set string.
+    //m_world_data->entity_pool->entity_properties[index].tags = set_tags;
+  }
+}
+  
+  
+const char*
+Entity::get_name() const
+{
+  if(!is_valid()) { return nullptr; }
+  
+  uint32_t index;
+  if(Entity_id_util::find_index_linearly(&index,
+                                         m_this_id,
+                                         m_world_data->entity_pool->entity_id,
+                                         m_world_data->entity_pool->size))
+  {
+//    m_world_data->entity_pool->entity_properties[index].tags = set_tags;
+
+    return nullptr; // change for string.
+  }
+  
+  return nullptr;
+}
+
+
 namespace
 {
   inline bool

@@ -6,6 +6,12 @@
 #include <iostream>
 
 
+namespace
+{
+  constexpr uint32_t max_entity_name_size = 32;
+}
+
+
 namespace World_data {
 
 
@@ -31,6 +37,12 @@ entity_pool_init(Entity_pool *pool)
   }
   
   {
+    const Core::Memory::Chunk ent_name_chunk = Core::Memory::request_chunk(ENTITY_POOL_SIZE * (sizeof(char) * max_entity_name_size));
+    pool->name = static_cast<char**>(ent_name_chunk.start_of_chunk);
+    memset(pool->entity_properties, 0, ent_name_chunk.bytes_in_chunk);
+  }
+  
+  {
     const Core::Memory::Chunk model_chunk = Core::Memory::request_chunk(ENTITY_POOL_SIZE * sizeof(Resource::Model::ENUM));
     pool->model = static_cast<Resource::Model::ENUM*>(model_chunk.start_of_chunk);
     memset(pool->model, 0, model_chunk.bytes_in_chunk);
@@ -53,16 +65,6 @@ entity_pool_init(Entity_pool *pool)
     pool->aabb = static_cast<math::aabb*>(aabb_chunk.start_of_chunk);
     memset(pool->aabb, 0, aabb_chunk.bytes_in_chunk);
   }
-  
-//  #ifndef NDEBUG
-//  memset(pool->entity_id,          0, sizeof(pool->entity_id));
-//  memset(pool->parent_id,          0, sizeof(pool->parent_id));
-//  memset(pool->entity_properties,  0, sizeof(pool->entity_properties));
-//  memset(pool->model,              0, sizeof(pool->model));
-//  memset(pool->texture,            0, sizeof(pool->texture));
-//  memset(pool->transform,          0, sizeof(pool->transform));
-//  memset(pool->aabb,               0, sizeof(pool->aabb));
-//  #endif
 }
 
 
@@ -90,6 +92,7 @@ entity_pool_push_new_entity(Entity_pool *pool, const Core::Entity_id id)
     pool->entity_id[pool->size] = id;
     pool->parent_id[pool->size] = Core::Entity_id_util::invalid_id();
     pool->entity_properties[pool->size] = Entity_properties{0};
+    pool->name[pool->size * max_entity_name_size] = (char*)"";
     pool->model[pool->size] = (Resource::Model::ENUM)0;
     pool->texture[pool->size] = (Resource::Texture::ENUM)0;
     pool->aabb[pool->size] = math::aabb();
@@ -125,6 +128,7 @@ entity_pool_remove_entity(Entity_pool *pool, const Core::Entity_id id)
     memmove(&pool->entity_id[remove_id],          &pool->entity_id[start_move],          end_move * sizeof(*pool->entity_id));
     memmove(&pool->parent_id[remove_id],          &pool->parent_id[start_move],          end_move * sizeof(*pool->parent_id));
     memmove(&pool->entity_properties[remove_id],  &pool->entity_properties[start_move],  end_move * sizeof(*pool->entity_properties));
+    memmove(&pool->name[remove_id + max_entity_name_size],  &pool->entity_properties[start_move + max_entity_name_size],  end_move * sizeof(*pool->name));
     memmove(&pool->model[remove_id],              &pool->model[start_move],              end_move * sizeof(*pool->model));
     memmove(&pool->texture[remove_id],            &pool->texture[start_move],            end_move * sizeof(*pool->texture));
     memmove(&pool->transform[remove_id],          &pool->transform[start_move],          end_move * sizeof(*pool->transform));

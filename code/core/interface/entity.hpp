@@ -36,6 +36,9 @@ public:
   void                          add_tag(const uint32_t add_tag);
   void                          remove_tag(const uint32_t tag);
   
+  void                          set_name(const char* set_name);
+  const char*                   get_name() const;
+  
   void                          set_parent(const Core::Entity_id id);
   Entity                        get_parent() const;
   
