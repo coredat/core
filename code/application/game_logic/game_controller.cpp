@@ -21,6 +21,48 @@ Game_controller::on_start()
   trans.set_position(math::vec3_init(0, 0, -10));
   e.set_transform(trans);
   e.set_material_id(2);
+  
+  e = Entity_factory::create_enemy(m_world_data);
+  
+  trans = e.get_transform();
+  trans.set_position(math::vec3_init(0, 0, -10));
+  e.set_transform(trans);
+  e.set_material_id(2);
+  
+  e = Entity_factory::create_enemy(m_world_data);
+  
+  trans = e.get_transform();
+  trans.set_position(math::vec3_init(0, 0, -10));
+  e.set_transform(trans);
+  e.set_material_id(2);
+  
+  e = Entity_factory::create_enemy(m_world_data);
+  
+  trans = e.get_transform();
+  trans.set_position(math::vec3_init(0, 0, -10));
+  e.set_transform(trans);
+  e.set_material_id(2);
+  
+  e = Entity_factory::create_enemy(m_world_data);
+  
+  trans = e.get_transform();
+  trans.set_position(math::vec3_init(0, 0, -10));
+  e.set_transform(trans);
+  e.set_material_id(2);
+  
+  e = Entity_factory::create_enemy(m_world_data);
+  
+  trans = e.get_transform();
+  trans.set_position(math::vec3_init(0, 0, -10));
+  e.set_transform(trans);
+  e.set_material_id(2);
+  
+  e = Entity_factory::create_enemy(m_world_data);
+  
+  trans = e.get_transform();
+  trans.set_position(math::vec3_init(0, 0, -10));
+  e.set_transform(trans);
+  e.set_material_id(2);
 }
 
 

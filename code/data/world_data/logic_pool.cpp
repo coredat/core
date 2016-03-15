@@ -11,36 +11,45 @@ namespace World_data {
 
 
 void
-logic_pool_init(Logic_pool *pool)
+logic_pool_init(Logic_pool *pool,
+                const bool allocate_memory)
 {
+
+  if(allocate_memory)
   {
-    const Core::Memory::Chunk chunk = Core::Memory::request_chunk(LOGIC_POOL_NUMBER_OF_SCRIPTS * sizeof(Core::Entity_id));
-    pool->entity_id = static_cast<Core::Entity_id*>(chunk.start_of_chunk);
-    memset(pool->entity_id, 0, chunk.bytes_in_chunk);
+    {
+      const Core::Memory::Chunk chunk = Core::Memory::request_chunk(LOGIC_POOL_NUMBER_OF_SCRIPTS * sizeof(Core::Entity_id));
+      pool->entity_id = static_cast<Core::Entity_id*>(chunk.start_of_chunk);
+    }
+
+    {
+      const Core::Memory::Chunk chunk = Core::Memory::request_chunk(LOGIC_POOL_NUMBER_OF_SCRIPTS * sizeof(void*));
+      pool->object_locations = static_cast<void**>(chunk.start_of_chunk);
+    }
+    
+    {
+      const Core::Memory::Chunk chunk = Core::Memory::request_chunk(LOGIC_POOL_NUMBER_OF_SCRIPTS * sizeof(void*));
+      pool->objects_in_use = static_cast<void**>(chunk.start_of_chunk);
+    }
+
+    {
+      const Core::Memory::Chunk chunk = Core::Memory::request_chunk(LOGIC_POOL_NUMBER_OF_SCRIPTS * sizeof(void*));
+      pool->objects_on_start_pending_hooks = static_cast<void**>(chunk.start_of_chunk);
+    }
+    
+    {
+      const Core::Memory::Chunk chunk = Core::Memory::request_chunk(LOGIC_POOL_NUMBER_OF_SCRIPTS * LOGIC_POOL_SIZE_MAX_SCRIPT_SIZE * sizeof(uint8_t));
+      pool->storage = static_cast<uint8_t*>(chunk.start_of_chunk);
+    }
   }
 
+  // Clear the memory
   {
-    const Core::Memory::Chunk chunk = Core::Memory::request_chunk(LOGIC_POOL_NUMBER_OF_SCRIPTS * sizeof(void*));
-    pool->object_locations = static_cast<void**>(chunk.start_of_chunk);
-    memset(pool->object_locations, 0, chunk.bytes_in_chunk);
-  }
-  
-  {
-    const Core::Memory::Chunk chunk = Core::Memory::request_chunk(LOGIC_POOL_NUMBER_OF_SCRIPTS * sizeof(void*));
-    pool->objects_in_use = static_cast<void**>(chunk.start_of_chunk);
-    memset(pool->objects_in_use, 0, chunk.bytes_in_chunk);
-  }
-
-  {
-    const Core::Memory::Chunk chunk = Core::Memory::request_chunk(LOGIC_POOL_NUMBER_OF_SCRIPTS * sizeof(void*));
-    pool->objects_on_start_pending_hooks = static_cast<void**>(chunk.start_of_chunk);
-    memset(pool->objects_on_start_pending_hooks, 0, chunk.bytes_in_chunk);
-  }
-  
-  {
-    const Core::Memory::Chunk chunk = Core::Memory::request_chunk(LOGIC_POOL_NUMBER_OF_SCRIPTS * LOGIC_POOL_SIZE_MAX_SCRIPT_SIZE * sizeof(uint8_t));
-    pool->storage = static_cast<uint8_t*>(chunk.start_of_chunk);
-    memset(pool->storage, 0, chunk.bytes_in_chunk);
+//    memset(pool->entity_id, 0, chunk.bytes_in_chunk);
+//    memset(pool->object_locations, 0, chunk.bytes_in_chunk);
+//    memset(pool->objects_in_use, 0, chunk.bytes_in_chunk);
+//    memset(pool->objects_on_start_pending_hooks, 0, chunk.bytes_in_chunk);
+//    memset(pool->storage, 0, chunk.bytes_in_chunk);
   }
 
   pool->objects_in_use_size = 0;
@@ -141,6 +150,23 @@ logic_pool_free_slots(Logic_pool *pool, const Core::Entity_id id)
       }
       
       // Check pending on start just incase.
+      o = 0;
+      while(o < pool->objects_on_start_pending_hooks_size)
+      {
+        if(pool->objects_on_start_pending_hooks[o] == obj_to_remove)
+        {
+          void* start       = &pool->objects_on_start_pending_hooks[o];
+          const void* end   = &pool->objects_on_start_pending_hooks[o+1];
+          const uint32_t size = (pool->objects_on_start_pending_hooks_size-o-1) * sizeof(*pool->objects_on_start_pending_hooks);
+        
+          --(pool->objects_on_start_pending_hooks_size);
+        
+          memmove(start, end, size);
+          continue;
+        }
+        
+        ++o;
+      }
       
     }
     else

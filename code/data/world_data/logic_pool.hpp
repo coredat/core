@@ -41,9 +41,12 @@ struct Logic_pool
 
 /*!
   Initialises the pool.
+  \param pool The pool to initialize.
+  \param allocate_memory Set false if you manually allocate the memory for the pool.
 */
 void
-logic_pool_init(Logic_pool *pool);
+logic_pool_init(Logic_pool *pool,
+                const bool allocate_memory = true);
 
 
 /*!

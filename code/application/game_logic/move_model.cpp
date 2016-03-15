@@ -13,7 +13,7 @@ Move_model::on_start()
   i++;
   
   srand(i);
-  m_pending_strafe = static_cast<float>(rand() & 100);
+  m_pending_strafe = static_cast<float>(rand() & 500);
 }
 
 

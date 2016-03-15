@@ -2,7 +2,7 @@
 #include <core/memory/memory.hpp>
 
 
-TEST_CASE("Memory pool allocate and deallocates correctly.")
+TEST_CASE("MemoryPool")
 {
   constexpr size_t bytes_in_pool        = 1 << 17;
   constexpr size_t size_of_chunk_header = sizeof(Core::Memory::Detail::Chunk_header);

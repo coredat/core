@@ -18,6 +18,8 @@ private:
 
 private:
 
+  float               m_timer = 0.f;
+
 };
 
 
