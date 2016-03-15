@@ -21,7 +21,28 @@ namespace World_data {
   
   This is prob the most dangerous thing right now.
 */
+namespace Logic_hook {
+
+  enum ENUM
+  {
+    on_start          = 1 << 0,
+    on_early_update   = 1 << 1,
+    on_update         = 1 << 2,
+    on_end            = 1 << 3,
+  };
+
+} // ns
+
+
 struct Logic_pool
+{
+  Core::Entity_id               *entity_id;
+  uint32_t                      *regd_hook;
+  uint8_t                       *object_store;
+  uint32_t                      size = 0;
+};
+
+struct Logic_pool_old
 {
   Core::Entity_id           *entity_id;
   void                      **object_locations;
@@ -57,6 +78,12 @@ logic_pool_get_slot(Logic_pool *pool, const Core::Entity_id id);
 
 
 /*!
+  Find a component.
+*/
+void*
+logic_pool_get_component(Logic_pool *pool, const Core::Entity_id id);
+
+/*!
   Return how many components are attached to an entity.
 */
 uint32_t
@@ -67,7 +94,10 @@ logic_pool_get_slot_count(Logic_pool *pool, const Core::Entity_id id);
   Removes all the slots associated with an entity.
 */
 void
-logic_pool_free_slots(Logic_pool *pool, const Core::Entity_id id);
+logic_pool_free_slots(Logic_pool *pool,
+                      const Core::Entity_id ids[],
+                      const uint32_t number_of_entities);
+
 
 
 // ** EVENT HOOKS ** //
@@ -102,6 +132,11 @@ logic_pool_on_update_hook(Logic_pool *pool, const float delta_time);
 void
 logic_pool_on_collision_hook(Logic_pool *pool, const Core::Entity_id id_a, const Core::Entity_id id_b);
 
+/*!
+  Call the on end hook for objects that are to be removed.
+*/
+void
+logic_pool_on_end_hook(Logic_pool *pool);
 
 } // ns
 

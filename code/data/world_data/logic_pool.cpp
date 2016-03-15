@@ -21,43 +21,29 @@ logic_pool_init(Logic_pool *pool,
       const Core::Memory::Chunk chunk = Core::Memory::request_chunk(LOGIC_POOL_NUMBER_OF_SCRIPTS * sizeof(Core::Entity_id));
       pool->entity_id = static_cast<Core::Entity_id*>(chunk.start_of_chunk);
     }
-
-    {
-      const Core::Memory::Chunk chunk = Core::Memory::request_chunk(LOGIC_POOL_NUMBER_OF_SCRIPTS * sizeof(void*));
-      pool->object_locations = static_cast<void**>(chunk.start_of_chunk);
-    }
     
     {
-      const Core::Memory::Chunk chunk = Core::Memory::request_chunk(LOGIC_POOL_NUMBER_OF_SCRIPTS * sizeof(void*));
-      pool->objects_in_use = static_cast<void**>(chunk.start_of_chunk);
-    }
-
-    {
-      const Core::Memory::Chunk chunk = Core::Memory::request_chunk(LOGIC_POOL_NUMBER_OF_SCRIPTS * sizeof(void*));
-      pool->objects_on_start_pending_hooks = static_cast<void**>(chunk.start_of_chunk);
+      const Core::Memory::Chunk chunk = Core::Memory::request_chunk(LOGIC_POOL_NUMBER_OF_SCRIPTS * sizeof(uint32_t*));
+      pool->regd_hook = static_cast<uint32_t*>(chunk.start_of_chunk);
     }
     
     {
       const Core::Memory::Chunk chunk = Core::Memory::request_chunk(LOGIC_POOL_NUMBER_OF_SCRIPTS * LOGIC_POOL_SIZE_MAX_SCRIPT_SIZE * sizeof(uint8_t));
-      pool->storage = static_cast<uint8_t*>(chunk.start_of_chunk);
+      pool->object_store = static_cast<uint8_t*>(chunk.start_of_chunk);
     }
   }
 
-  // Clear the memory
-  {
-//    memset(pool->entity_id, 0, chunk.bytes_in_chunk);
-//    memset(pool->object_locations, 0, chunk.bytes_in_chunk);
-//    memset(pool->objects_in_use, 0, chunk.bytes_in_chunk);
-//    memset(pool->objects_on_start_pending_hooks, 0, chunk.bytes_in_chunk);
-//    memset(pool->storage, 0, chunk.bytes_in_chunk);
-  }
+  pool->size = 0;
+}
 
-  pool->objects_in_use_size = 0;
-  
-  // Create free list
-  for(uint32_t i = 0; i < pool->size; ++i)
+
+namespace
+{
+  inline void*
+  get_object_ptr(uint8_t *store,
+                 const uint32_t index)
   {
-    pool->object_locations[i] = &pool->storage[i * pool->storage_size];
+    return reinterpret_cast<void*>(&store[index * LOGIC_POOL_SIZE_MAX_SCRIPT_SIZE]);
   }
 }
 
@@ -66,31 +52,23 @@ void*
 logic_pool_get_slot(Logic_pool *pool,
                     const Core::Entity_id id)
 {
-  uint32_t index;
-  if(Core::Entity_id_util::find_index_linearly(&index,
-                                               Core::Entity_id_util::invalid_id(),
-                                               pool->entity_id,
-                                               pool->size))
+  if(pool->size >= LOGIC_POOL_NUMBER_OF_SCRIPTS)
   {
-    pool->entity_id[index] = id;
-    
-    void *result = pool->object_locations[index];
-    
-    // Push object onto list
-    {
-      pool->objects_in_use[pool->objects_in_use_size++] = result;
-      
-      const uint32_t new_on_start = pool->objects_on_start_pending_hooks_size;
-      pool->objects_on_start_pending_hooks[new_on_start] = result;
-      
-      pool->objects_on_start_pending_hooks_size++;
-    }
-    
-    return result;
+    return nullptr;
   }
+
+  const uint32_t index = pool->size++;
   
+  // Add all hooks
+  const uint32_t hooks = Logic_hook::on_start |
+                         Logic_hook::on_early_update |
+                         Logic_hook::on_update |
+                         Logic_hook::on_end;
   
-  return nullptr;
+  pool->regd_hook[index] = hooks;
+  
+  void *return_location = get_object_ptr(pool->object_store, index);
+  return return_location;
 }
 
 
@@ -112,66 +90,36 @@ logic_pool_get_slot_count(Logic_pool *pool, const Core::Entity_id id)
 
 
 void
-logic_pool_free_slots(Logic_pool *pool, const Core::Entity_id id)
+logic_pool_free_slots(Logic_pool *pool,
+                      const Core::Entity_id ids[],
+                      const uint32_t number_of_entities)
 {
-  // Search the entity list and find objects to removes
-  const uint32_t slots_to_remove = logic_pool_get_slot_count(pool, id);
-  
-  for(uint32_t i = 0; i < slots_to_remove; ++i)
+  // Remove all the entities from the pool
+  // We will call on_end if it is subscribed.
+  for(uint32_t i = 0; i < number_of_entities; ++i)
   {
-    uint32_t index;
-    if(Core::Entity_id_util::find_index_linearly(&index, id, pool->entity_id, pool->size))
+    uint32_t index(0);
+    if(Core::Entity_id_util::find_index_linearly(&index,
+                                                 Core::Entity_id_util::invalid_id(),
+                                                 pool->entity_id,
+                                                 pool->size))
     {
-      // Remove this logic.
-      pool->entity_id[index] = Core::Entity_id_util::invalid_id();
-      auto obj_to_remove = pool->object_locations[index];
+      const uint32_t start_move = index + 1;
+      const uint32_t end_move = pool->size - index - 1;
+    
+      memmove(&pool->entity_id[index],      &pool->entity_id[start_move],    end_move * sizeof(*pool->entity_id));
+      memmove(&pool->regd_hook[index],      &pool->regd_hook[start_move],    end_move * sizeof(*pool->regd_hook));
       
-      Core::Component *component = reinterpret_cast<Core::Component*>(obj_to_remove);
-      component->on_end();
-      component->~Component();
+      // Special case since this is just a storeage.
+      const uint32_t dest_index = index * LOGIC_POOL_SIZE_MAX_SCRIPT_SIZE;
+      const uint32_t src_index = (index + 1) * LOGIC_POOL_SIZE_MAX_SCRIPT_SIZE;
+      const size_t count = src_index * sizeof(uint8_t) * LOGIC_POOL_SIZE_MAX_SCRIPT_SIZE;
       
-      // Remove from objects in use.
-      uint32_t o = 0;
-      while(o < pool->objects_in_use_size)
-      {
-        if(pool->objects_in_use[o] == obj_to_remove)
-        {
-          void* start       = &pool->objects_in_use[o];
-          const void* end   = &pool->objects_in_use[o+1];
-          const uint32_t size = (pool->size-o-1) * sizeof(*pool->objects_in_use);
-        
-          --(pool->objects_in_use_size);
-        
-          memmove(start, end, size);
-          continue;
-        }
-        
-        ++o;
-      }
+      memmove(&pool->object_store[dest_index],
+              &pool->object_store[src_index],
+              count);
       
-      // Check pending on start just incase.
-      o = 0;
-      while(o < pool->objects_on_start_pending_hooks_size)
-      {
-        if(pool->objects_on_start_pending_hooks[o] == obj_to_remove)
-        {
-          void* start       = &pool->objects_on_start_pending_hooks[o];
-          const void* end   = &pool->objects_on_start_pending_hooks[o+1];
-          const uint32_t size = (pool->objects_on_start_pending_hooks_size-o-1) * sizeof(*pool->objects_on_start_pending_hooks);
-        
-          --(pool->objects_on_start_pending_hooks_size);
-        
-          memmove(start, end, size);
-          continue;
-        }
-        
-        ++o;
-      }
-      
-    }
-    else
-    {
-      assert(false); // Why did the count give us something different?
+      --pool->size;
     }
   }
 }
@@ -180,78 +128,85 @@ logic_pool_free_slots(Logic_pool *pool, const Core::Entity_id id)
 void
 logic_pool_on_start_hook(Logic_pool *pool)
 {
-  const uint32_t pending = pool->objects_on_start_pending_hooks_size;
-  
-  void **pending_objs[128];
-  memcpy(pending_objs, &pool->objects_on_start_pending_hooks_size, sizeof(void*) * pending);
-  
-  pool->objects_on_start_pending_hooks_size = 0;  
-
-  for(uint32_t i = 0; i < pending; ++i)
-  {
-    auto obj = pool->objects_on_start_pending_hooks[i];
-    reinterpret_cast<Core::Component*>(obj)->on_start();
-  }
+//  const uint32_t pending = pool->objects_on_start_pending_hooks_size;
+//  
+//  void **pending_objs[128];
+//  memcpy(pending_objs, &pool->objects_on_start_pending_hooks_size, sizeof(void*) * pending);
+//  
+//  pool->objects_on_start_pending_hooks_size = 0;  
+//
+//  for(uint32_t i = 0; i < pending; ++i)
+//  {
+//    auto obj = pool->objects_on_start_pending_hooks[i];
+//    reinterpret_cast<Core::Component*>(obj)->on_start();
+//  }
 }
 
 
 void
 logic_pool_on_early_update_hook(Logic_pool *pool, const float delta_time)
 {
-  const uint32_t pending = pool->objects_in_use_size;
-
-  if(pending)
-  {
-    for(uint32_t i = 0; i < pending; ++i)
-    {
-      auto obj = pool->objects_in_use[i];
-      reinterpret_cast<Core::Component*>(obj)->on_early_update(delta_time);
-    }
-  }
+//  const uint32_t pending = pool->objects_in_use_size;
+//
+//  if(pending)
+//  {
+//    for(uint32_t i = 0; i < pending; ++i)
+//    {
+//      auto obj = pool->objects_in_use[i];
+//      reinterpret_cast<Core::Component*>(obj)->on_early_update(delta_time);
+//    }
+//  }
 }
 
 
 void
 logic_pool_on_update_hook(Logic_pool *pool, const float delta_time)
 {
-  const uint32_t pending = pool->objects_in_use_size;
-
-  if(pending)
-  {
-    for(uint32_t i = 0; i < pending; ++i)
-    {
-      auto obj = pool->objects_in_use[i];
-      reinterpret_cast<Core::Component*>(obj)->on_update(delta_time);
-    }
-  }
+//  const uint32_t pending = pool->objects_in_use_size;
+//
+//  if(pending)
+//  {
+//    for(uint32_t i = 0; i < pending; ++i)
+//    {
+//      auto obj = pool->objects_in_use[i];
+//      reinterpret_cast<Core::Component*>(obj)->on_update(delta_time);
+//    }
+//  }
 }
 
 
 void
 logic_pool_on_collision_hook(Logic_pool *pool, const Core::Entity_id id_a, const Core::Entity_id id_b)
 {
-  // Find the entity.
-  uint32_t index(0);
-  uint32_t search_from(0);
-  
-  // Could be mutliple components attached to the same entity.
-  while(Core::Entity_id_util::find_index_linearly(&index,
-                                                  id_a,
-                                                  &(pool->entity_id[search_from]),
-                                                  pool->objects_in_use_size - search_from))
-  {
-    index += search_from;
-  
-    auto obj = reinterpret_cast<Core::Component*>(pool->object_locations[index]);
-    
-    // Create the entity.
-    Core::Entity collision;
-    World_data::world_find_entity(obj->m_world_data, &collision, id_b);
-    
-    obj->on_collision(collision);
-  
-    search_from = index + 1;
-  }
+//  // Find the entity.
+//  uint32_t index(0);
+//  uint32_t search_from(0);
+//  
+//  // Could be mutliple components attached to the same entity.
+//  while(Core::Entity_id_util::find_index_linearly(&index,
+//                                                  id_a,
+//                                                  &(pool->entity_id[search_from]),
+//                                                  pool->objects_in_use_size - search_from))
+//  {
+//    index += search_from;
+//  
+//    auto obj = reinterpret_cast<Core::Component*>(pool->object_locations[index]);
+//    
+//    // Create the entity.
+//    Core::Entity collision;
+//    World_data::world_find_entity(obj->m_world_data, &collision, id_b);
+//    
+//    obj->on_collision(collision);
+//  
+//    search_from = index + 1;
+//  }
+//  
+}
+
+
+void
+logic_pool_on_end_hook(Logic_pool *pool)
+{
   
 }
 

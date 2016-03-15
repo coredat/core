@@ -116,7 +116,7 @@ world_update_scene_graph_changes(World_data::World *world_data,
       case(World_data::Entity_graph_change::removed):
       {
         entity_pool_remove_entity(world_data->entity_pool, change.entity_id);
-        logic_pool_free_slots(world_data->logic_pool, change.entity_id);
+        logic_pool_free_slots(world_data->logic_pool, &change.entity_id, 1);
           
         break;
       }
