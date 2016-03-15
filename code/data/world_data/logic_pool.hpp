@@ -40,6 +40,7 @@ struct Logic_pool
   uint32_t                      *regd_hook;
   uint8_t                       *object_store;
   uint32_t                      size = 0;
+  const uint32_t                capacity = LOGIC_POOL_NUMBER_OF_SCRIPTS;
 };
 
 struct Logic_pool_old
