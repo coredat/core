@@ -9,6 +9,7 @@
 #include <core/physics/box_collider.hpp>
 #include <application/game_logic/game_controller.hpp>
 #include <application/game_logic/enemy_controller.hpp>
+#include <iostream>
 
 
 namespace Entity_factory {
@@ -20,6 +21,7 @@ create_bullet(World_data::World *world)
   Core::Entity entity;
   World_data::world_create_new_entity(world, &entity, 3);
   
+  entity.set_name("Bullet");
   entity.add_tag(Tag::projectile);
   
   // Logic
@@ -46,6 +48,8 @@ create_game_play_camera(World_data::World *world)
   Core::Entity entity;
   World_data::world_create_new_entity(world, &entity, 1);
   
+  entity.set_name("Camera");
+  
   entity.add_component<Camera_controller>();
   
   return entity;
@@ -57,6 +61,8 @@ create_actor(World_data::World *world)
 {
   Core::Entity entity;
   World_data::world_create_new_entity(world, &entity, 4);
+  
+  entity.set_name("Player");
   
   // Logic
   entity.add_component<Actor_controller>();
@@ -88,6 +94,8 @@ create_game_state(World_data::World *world)
 {
   Core::Entity entity;
   World_data::world_create_new_entity(world, &entity, 1);
+  
+  entity.set_name("Game State");
 
   // Logic
   entity.add_component<Game_controller>();
@@ -101,6 +109,8 @@ create_enemy(World_data::World *world)
 {
   Core::Entity entity;
   World_data::world_create_new_entity(world, &entity, 2);
+  
+  entity.set_name("Enemy");
   
   // Logic
   entity.add_component<Enemy_controller>();

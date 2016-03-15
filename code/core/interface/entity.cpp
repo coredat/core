@@ -110,15 +110,8 @@ Entity::set_name(const char* set_name)
 {
   if(!is_valid()) { return; }
   
-  uint32_t index;
-  if(Entity_id_util::find_index_linearly(&index,
-                                         m_this_id,
-                                         m_world_data->entity_pool->entity_id,
-                                         m_world_data->entity_pool->size))
-  {
-    // set string.
-    //m_world_data->entity_pool->entity_properties[index].tags = set_tags;
-  }
+  // set string.
+  World_data::entity_pool_set_entity_name(m_world_data->entity_pool, m_this_id, set_name);
 }
   
   
@@ -127,18 +120,8 @@ Entity::get_name() const
 {
   if(!is_valid()) { return nullptr; }
   
-  uint32_t index;
-  if(Entity_id_util::find_index_linearly(&index,
-                                         m_this_id,
-                                         m_world_data->entity_pool->entity_id,
-                                         m_world_data->entity_pool->size))
-  {
-//    m_world_data->entity_pool->entity_properties[index].tags = set_tags;
-
-    return nullptr; // change for string.
-  }
-  
-  return nullptr;
+  // set string.
+  return World_data::entity_pool_get_entity_name(m_world_data->entity_pool, m_this_id);
 }
 
 

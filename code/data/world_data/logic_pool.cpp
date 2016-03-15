@@ -216,7 +216,7 @@ logic_pool_on_collision_hook(Logic_pool *pool, const Core::Entity_id id_a, const
   {
     index += search_from;
   
-    auto obj = reinterpret_cast<Core::Component*>(pool->objects_in_use[index]);
+    auto obj = reinterpret_cast<Core::Component*>(pool->object_locations[index]);
     
     // Create the entity.
     Core::Entity collision;

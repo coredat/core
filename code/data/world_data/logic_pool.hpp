@@ -31,7 +31,7 @@ struct Logic_pool
   
   void                      **objects_on_start_pending_hooks;
   uint32_t                  objects_on_start_pending_hooks_size = 0;
-
+  
   uint8_t                   *storage;
   
   const uint32_t            storage_size = LOGIC_POOL_SIZE_MAX_SCRIPT_SIZE;

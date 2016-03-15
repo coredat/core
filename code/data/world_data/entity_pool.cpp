@@ -38,7 +38,7 @@ entity_pool_init(Entity_pool *pool)
   
   {
     const Core::Memory::Chunk ent_name_chunk = Core::Memory::request_chunk(ENTITY_POOL_SIZE * (sizeof(char) * max_entity_name_size));
-    pool->name = static_cast<char**>(ent_name_chunk.start_of_chunk);
+    pool->name = static_cast<char*>(ent_name_chunk.start_of_chunk);
     memset(pool->name, 0, ent_name_chunk.bytes_in_chunk);
   }
   
@@ -92,7 +92,7 @@ entity_pool_push_new_entity(Entity_pool *pool, const Core::Entity_id id)
     pool->entity_id[pool->size] = id;
     pool->parent_id[pool->size] = Core::Entity_id_util::invalid_id();
     pool->entity_properties[pool->size] = Entity_properties{0};
-    pool->name[pool->size * max_entity_name_size] = (char*)"";
+    pool->name[pool->size * max_entity_name_size] = '\0';
     pool->model[pool->size] = (Resource::Model::ENUM)0;
     pool->texture[pool->size] = (Resource::Texture::ENUM)0;
     pool->aabb[pool->size] = math::aabb();
@@ -156,11 +156,36 @@ entity_pool_get_entity_name(const Entity_pool *pool, const Core::Entity_id id)
                                                pool->entity_id,
                                                pool->size))
   {
-    return pool->name[remove_id * max_entity_name_size];
+    return &pool->name[remove_id * max_entity_name_size];
   }
   
   assert(false); // A valid entity id should have got something.
   return nullptr; // Didn't find anything.
+}
+
+
+void
+entity_pool_set_entity_name(const Entity_pool *pool,
+                            const Core::Entity_id id,
+                            const char *set_name)
+{
+  assert(pool);
+  assert(id != Core::Entity_id_util::invalid_id());
+  
+  uint32_t set_id(0);
+  if(Core::Entity_id_util::find_index_linearly(&set_id,
+                                               id,
+                                               pool->entity_id,
+                                               pool->size))
+  {
+    const uint32_t index = set_id * max_entity_name_size;
+  
+    strncpy(&pool->name[index],
+            set_name,
+            max_entity_name_size - 1);
+    
+    pool->name[index + max_entity_name_size] = '\0'; // Make sure last char is nullptr
+  }
 }
 
 

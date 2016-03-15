@@ -34,7 +34,7 @@ struct Entity_pool
   Core::Entity_id                 *entity_id;
   Core::Entity_id                 *parent_id;
   Entity_properties               *entity_properties;
-  char                            **name;
+  char                            *name;
   
   math::transform                 *transform;
   math::aabb                      *aabb;
@@ -92,6 +92,10 @@ entity_pool_remove_entity(Entity_pool *pool, const Core::Entity_id id);
 */
 const char *
 entity_pool_get_entity_name(const Entity_pool *pool, const Core::Entity_id id);
+
+
+void
+entity_pool_set_entity_name(const Entity_pool *pool, const Core::Entity_id id, const char *set_name);
 
 
 } // ns
