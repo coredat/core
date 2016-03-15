@@ -80,18 +80,10 @@ TEST_CASE("LogicPool")
   const Core::Entity_id id_03{3,3};
   My_test_component *comp_03 = new(World_data::logic_pool_get_slot(&pool, id_03)) My_test_component();
   REQUIRE(pool.size == 3);
-  /*
-    We need to add and remove components to the world.
-  */
-  SECTION("remove components")
-  {
-    World_data::logic_pool_free_slots(&pool, &id_01, 1);
-    World_data::logic_pool_free_slots(&pool, &id_02, 1);
-    World_data::logic_pool_free_slots(&pool, &id_03, 1);
-    
-    REQUIRE(pool.size == 0);
-  }
   
+  /*
+    Check start up hook
+  */
   SECTION("On start should happen only once");
   {
     World_data::logic_pool_on_start_hook(&pool);
@@ -121,17 +113,19 @@ TEST_CASE("LogicPool")
     REQUIRE(comp_02->has_updated == 1);
   }
   
-  SECTION("End hook is called")
+  /*
+    We need to add and remove components to the world.
+  */
+  SECTION("remove components")
   {
     World_data::logic_pool_free_slots(&pool, &id_01, 1);
     World_data::logic_pool_free_slots(&pool, &id_02, 1);
     World_data::logic_pool_free_slots(&pool, &id_03, 1);
-
-    // free slots deletes the object!
-//    REQUIRE(comp_01->has_ended == 1);
-//    REQUIRE(comp_02->has_ended == 1);
-//    REQUIRE(comp_02->has_ended == 1);
-  }
+    
+    // How do ew check on_end was called?
+    
+    REQUIRE(pool.size == 0);
+  }  
   
   SECTION("Correct hooks are called - Complex")
   {

@@ -29,6 +29,8 @@ namespace Logic_hook {
     on_early_update   = 1 << 1,
     on_update         = 1 << 2,
     on_end            = 1 << 3,
+    
+    to_destroy        = 1 << 4, // This is a special flag that we use to identity what objects need to be removed.
   };
 
 } // ns
@@ -41,23 +43,6 @@ struct Logic_pool
   uint8_t                       *object_store;
   uint32_t                      size = 0;
   const uint32_t                capacity = LOGIC_POOL_NUMBER_OF_SCRIPTS;
-};
-
-struct Logic_pool_old
-{
-  Core::Entity_id           *entity_id;
-  void                      **object_locations;
-  
-  void                      **objects_in_use; // This is a stack type thing.
-  uint32_t                  objects_in_use_size = 0;
-  
-  void                      **objects_on_start_pending_hooks;
-  uint32_t                  objects_on_start_pending_hooks_size = 0;
-  
-  uint8_t                   *storage;
-  
-  const uint32_t            storage_size = LOGIC_POOL_SIZE_MAX_SCRIPT_SIZE;
-  const uint32_t            size         = LOGIC_POOL_NUMBER_OF_SCRIPTS;
 };
 
 

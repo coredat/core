@@ -14,7 +14,6 @@ void
 logic_pool_init(Logic_pool *pool,
                 const bool allocate_memory)
 {
-
   if(allocate_memory)
   {
     {
@@ -59,6 +58,8 @@ logic_pool_get_slot(Logic_pool *pool,
 
   const uint32_t index = pool->size++;
   
+  pool->entity_id[index] = id;
+  
   // Add all hooks
   const uint32_t hooks = Logic_hook::on_start |
                          Logic_hook::on_early_update |
@@ -98,9 +99,11 @@ logic_pool_free_slots(Logic_pool *pool,
   // We will call on_end if it is subscribed.
   for(uint32_t i = 0; i < number_of_entities; ++i)
   {
+    const Core::Entity_id id = ids[i];
+  
     uint32_t index(0);
     if(Core::Entity_id_util::find_index_linearly(&index,
-                                                 Core::Entity_id_util::invalid_id(),
+                                                 id,
                                                  pool->entity_id,
                                                  pool->size))
     {
@@ -125,53 +128,108 @@ logic_pool_free_slots(Logic_pool *pool,
 }
 
 
+namespace
+{
+  inline void
+  build_objs_list(uint32_t flags[],
+                  const uint32_t size_of_flags,
+                  uint8_t objects[],
+                  const uint32_t size_of_objects,
+                  const uint32_t flag_to_find,
+                  uint32_t *out_size,
+                  Core::Component *out_comp[],
+                  const uint32_t size_of_out_comp,
+                  const bool clear_flag = false)
+  {
+    *out_size = 0;
+  
+    for(uint32_t i = 0; i < size_of_flags; ++i)
+    {
+      if(flags[i] & flag_to_find)
+      {
+        assert(size_of_objects > i); // We assume its the same size as flags[]
+        assert(size_of_out_comp > *out_size); // We assume its the same size as flags[]
+      
+        out_comp[*out_size] = reinterpret_cast<Core::Component*>(get_object_ptr(objects, i));
+        ++(*out_size);
+        
+        if(clear_flag)
+        {
+          flags[i] &= ~(flag_to_find);
+        }
+      }
+    }
+  }
+}
+
+
 void
 logic_pool_on_start_hook(Logic_pool *pool)
 {
-//  const uint32_t pending = pool->objects_on_start_pending_hooks_size;
-//  
-//  void **pending_objs[128];
-//  memcpy(pending_objs, &pool->objects_on_start_pending_hooks_size, sizeof(void*) * pending);
-//  
-//  pool->objects_on_start_pending_hooks_size = 0;  
-//
-//  for(uint32_t i = 0; i < pending; ++i)
-//  {
-//    auto obj = pool->objects_on_start_pending_hooks[i];
-//    reinterpret_cast<Core::Component*>(obj)->on_start();
-//  }
+  uint32_t objs_found(0);
+  Core::Component *comps[LOGIC_POOL_NUMBER_OF_SCRIPTS];
+
+  build_objs_list(pool->regd_hook,
+                  pool->size,
+                  pool->object_store,
+                  pool->size,
+                  Logic_hook::on_start,
+                  &objs_found,
+                  comps,
+                  LOGIC_POOL_NUMBER_OF_SCRIPTS,
+                  true);
+  
+  // Call all the objects to start
+  for(uint32_t i = 0; i < objs_found; ++i)
+  {
+    comps[i]->on_start();
+  }
 }
 
 
 void
 logic_pool_on_early_update_hook(Logic_pool *pool, const float delta_time)
 {
-//  const uint32_t pending = pool->objects_in_use_size;
-//
-//  if(pending)
-//  {
-//    for(uint32_t i = 0; i < pending; ++i)
-//    {
-//      auto obj = pool->objects_in_use[i];
-//      reinterpret_cast<Core::Component*>(obj)->on_early_update(delta_time);
-//    }
-//  }
+  uint32_t objs_found(0);
+  Core::Component *comps[LOGIC_POOL_NUMBER_OF_SCRIPTS];
+
+  build_objs_list(pool->regd_hook,
+                  pool->size,
+                  pool->object_store,
+                  pool->size,
+                  Logic_hook::on_early_update,
+                  &objs_found,
+                  comps,
+                  LOGIC_POOL_NUMBER_OF_SCRIPTS);
+  
+  // Call all the objects to start
+  for(uint32_t i = 0; i < objs_found; ++i)
+  {
+    comps[i]->on_early_update(delta_time);
+  }
 }
 
 
 void
 logic_pool_on_update_hook(Logic_pool *pool, const float delta_time)
 {
-//  const uint32_t pending = pool->objects_in_use_size;
-//
-//  if(pending)
-//  {
-//    for(uint32_t i = 0; i < pending; ++i)
-//    {
-//      auto obj = pool->objects_in_use[i];
-//      reinterpret_cast<Core::Component*>(obj)->on_update(delta_time);
-//    }
-//  }
+  uint32_t objs_found(0);
+  Core::Component *comps[LOGIC_POOL_NUMBER_OF_SCRIPTS];
+
+  build_objs_list(pool->regd_hook,
+                  pool->size,
+                  pool->object_store,
+                  pool->size,
+                  Logic_hook::on_update,
+                  &objs_found,
+                  comps,
+                  LOGIC_POOL_NUMBER_OF_SCRIPTS);
+  
+  // Call all the objects to start
+  for(uint32_t i = 0; i < objs_found; ++i)
+  {
+    comps[i]->on_update(delta_time);
+  }
 }
 
 
