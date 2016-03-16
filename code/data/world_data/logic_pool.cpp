@@ -112,7 +112,7 @@ logic_pool_clean_up(Logic_pool *pool)
       const uint32_t src_byte  = src * LOGIC_POOL_SIZE_MAX_SCRIPT_SIZE;
       const uint32_t size_byte = size * LOGIC_POOL_SIZE_MAX_SCRIPT_SIZE;
       
-      memmove(&pool->object_store[dest_byte], &pool->entity_id[src_byte], size_byte);
+      memmove(&pool->object_store[dest_byte], &pool->object_store[src_byte], size_byte);
       
       --(pool->size);
     }
@@ -272,20 +272,16 @@ logic_pool_on_end_hook(Logic_pool *pool,
   
     uint32_t index(0);
     if(Core::Entity_id_util::find_index_linearly(&index,
-                                                    id,
-                                                    pool->entity_id,
-                                                    pool->size))
+                                                 id,
+                                                 pool->entity_id,
+                                                 pool->size))
     {
-      for(uint32_t j = 0; j < pool->size; ++j)
+      if(pool->regd_hook[index] & Logic_hook::on_end)
       {
-        if(pool->regd_hook[j] & Logic_hook::on_end)
-        {
-          comps[objs_found] = reinterpret_cast<Core::Component*>(get_object_ptr(pool->object_store, j));
-          ++objs_found;
-          
-          pool->regd_hook[j] = 0;                      // Hooks should no longer be called.
-          pool->regd_hook[j] = Logic_hook::to_destroy; // Flags this as space to be destroyed.
-        }
+        comps[objs_found++] = reinterpret_cast<Core::Component*>(get_object_ptr(pool->object_store, index));
+        
+        pool->regd_hook[index] = 0;                      // Hooks should no longer be called.
+        pool->regd_hook[index] = Logic_hook::to_destroy; // Flags this as space to be destroyed.
       }
     }
   }
