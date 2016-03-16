@@ -113,22 +113,46 @@ TEST_CASE("LogicPool")
     REQUIRE(comp_02->has_updated == 1);
   }
   
+  SECTION("on end hook")
+  {
+    Core::Entity_id remove_hook[]
+    {
+      id_01, id_02, id_03,
+    };
+  
+    World_data::logic_pool_on_end_hook(&pool, remove_hook, 3);
+    REQUIRE(comp_01->has_ended == 1);
+    REQUIRE(comp_02->has_ended == 1);
+    REQUIRE(comp_02->has_ended == 1);
+    
+    World_data::logic_pool_on_end_hook(&pool, remove_hook, 3);
+    REQUIRE(comp_01->has_ended == 1);
+    REQUIRE(comp_02->has_ended == 1);
+    REQUIRE(comp_02->has_ended == 1);
+    
+    REQUIRE(pool.size == 3);
+  }
+  
   /*
     We need to add and remove components to the world.
   */
   SECTION("remove components")
   {
-    World_data::logic_pool_free_slots(&pool, &id_01, 1);
-    World_data::logic_pool_free_slots(&pool, &id_02, 1);
-    World_data::logic_pool_free_slots(&pool, &id_03, 1);
+    Core::Entity_id remove_hook[]
+    {
+      id_01, id_02, id_03,
+    };
+  
+    World_data::logic_pool_on_end_hook(&pool, remove_hook, 3);
+    World_data::logic_pool_clean_up(&pool);
     
     // How do ew check on_end was called?
-    
     REQUIRE(pool.size == 0);
   }  
   
+  /*
+  */
   SECTION("Correct hooks are called - Complex")
   {
-    
   }
 }

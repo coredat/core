@@ -91,38 +91,34 @@ logic_pool_get_slot_count(Logic_pool *pool, const Core::Entity_id id)
 
 
 void
-logic_pool_free_slots(Logic_pool *pool,
-                      const Core::Entity_id ids[],
-                      const uint32_t number_of_entities)
+logic_pool_clean_up(Logic_pool *pool)
 {
-  // Remove all the entities from the pool
-  // We will call on_end if it is subscribed.
-  for(uint32_t i = 0; i < number_of_entities; ++i)
-  {
-    const Core::Entity_id id = ids[i];
+  // We loop through and find all flags that have been set to_destroy.
+  // We will then shuffle that memory up.
+  uint32_t i = 0;
   
-    uint32_t index(0);
-    if(Core::Entity_id_util::find_index_linearly(&index,
-                                                 id,
-                                                 pool->entity_id,
-                                                 pool->size))
+  while(i < pool->size)
+  {
+    if(pool->regd_hook[i] & Logic_hook::to_destroy)
     {
-      const uint32_t start_move = index + 1;
-      const uint32_t end_move = pool->size - index - 1;
-    
-      memmove(&pool->entity_id[index],      &pool->entity_id[start_move],    end_move * sizeof(*pool->entity_id));
-      memmove(&pool->regd_hook[index],      &pool->regd_hook[start_move],    end_move * sizeof(*pool->regd_hook));
+      const uint32_t src = i + 1;
+      const uint32_t size = pool->size - i - 1;
       
-      // Special case since this is just a storeage.
-      const uint32_t dest_index = index * LOGIC_POOL_SIZE_MAX_SCRIPT_SIZE;
-      const uint32_t src_index = (index + 1) * LOGIC_POOL_SIZE_MAX_SCRIPT_SIZE;
-      const size_t count = src_index * sizeof(uint8_t) * LOGIC_POOL_SIZE_MAX_SCRIPT_SIZE;
+      memmove(&pool->entity_id[i], &pool->entity_id[src], size * sizeof(Core::Entity_id));
+      memmove(&pool->regd_hook[i], &pool->regd_hook[src], size * sizeof(uint32_t));
+
+      // Special case since we need to deal with bytes here.
+      const uint32_t dest_byte = (i * LOGIC_POOL_SIZE_MAX_SCRIPT_SIZE);
+      const uint32_t src_byte  = src * LOGIC_POOL_SIZE_MAX_SCRIPT_SIZE;
+      const uint32_t size_byte = size * LOGIC_POOL_SIZE_MAX_SCRIPT_SIZE;
       
-      memmove(&pool->object_store[dest_index],
-              &pool->object_store[src_index],
-              count);
+      memmove(&pool->object_store[dest_byte], &pool->entity_id[src_byte], size_byte);
       
-      --pool->size;
+      --(pool->size);
+    }
+    else
+    {
+      ++i;
     }
   }
 }
@@ -263,9 +259,42 @@ logic_pool_on_collision_hook(Logic_pool *pool, const Core::Entity_id id_a, const
 
 
 void
-logic_pool_on_end_hook(Logic_pool *pool)
+logic_pool_on_end_hook(Logic_pool *pool,
+                       const Core::Entity_id ids[],
+                       const uint32_t number_of_entities)
 {
+  uint32_t objs_found(0);
+  Core::Component *comps[LOGIC_POOL_NUMBER_OF_SCRIPTS];
   
+  for(uint32_t i = 0; i < number_of_entities; ++i)
+  {
+    const Core::Entity_id id = ids[i];
+  
+    uint32_t index(0);
+    if(Core::Entity_id_util::find_index_linearly(&index,
+                                                    id,
+                                                    pool->entity_id,
+                                                    pool->size))
+    {
+      for(uint32_t j = 0; j < pool->size; ++j)
+      {
+        if(pool->regd_hook[j] & Logic_hook::on_end)
+        {
+          comps[objs_found] = reinterpret_cast<Core::Component*>(get_object_ptr(pool->object_store, j));
+          ++objs_found;
+          
+          pool->regd_hook[j] = 0;                      // Hooks should no longer be called.
+          pool->regd_hook[j] = Logic_hook::to_destroy; // Flags this as space to be destroyed.
+        }
+      }
+    }
+  }
+  
+  // Call all the objects to start
+  for(uint32_t k = 0; k < objs_found; ++k)
+  {
+    comps[k]->on_end();
+  }
 }
 
 

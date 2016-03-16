@@ -80,9 +80,7 @@ logic_pool_get_slot_count(Logic_pool *pool, const Core::Entity_id id);
   Removes all the slots associated with an entity.
 */
 void
-logic_pool_free_slots(Logic_pool *pool,
-                      const Core::Entity_id ids[],
-                      const uint32_t number_of_entities);
+logic_pool_clean_up(Logic_pool *pool);
 
 
 
@@ -122,7 +120,7 @@ logic_pool_on_collision_hook(Logic_pool *pool, const Core::Entity_id id_a, const
   Call the on end hook for objects that are to be removed.
 */
 void
-logic_pool_on_end_hook(Logic_pool *pool);
+logic_pool_on_end_hook(Logic_pool *pool, const Core::Entity_id ids[], const uint32_t number_of_entities);
 
 } // ns
 
