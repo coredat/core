@@ -2,6 +2,7 @@
 #include <core/transform/transform.hpp>
 #include <core/interface/entity.hpp>
 #include <iostream>
+#include "../level_functions.hpp"
 
 
 
@@ -46,7 +47,7 @@ Bullet_controller::on_early_update(const float dt)
   // Time to delete the bullet.
   {
     if(math::vec3_get_z(new_pos) > m_death_zone_top ||
-       math::vec3_get_z(new_pos) < m_death_zone_bottom)
+       math::vec3_get_z(new_pos) < Level::get_far_death_zone())
     {
       get_entity().destroy();
     }

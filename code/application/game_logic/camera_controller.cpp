@@ -38,7 +38,7 @@ Camera_controller::on_early_update(const float dt)
                                            found_player_id.size());
   
   // We set the camera origin as the first point.
-  math::vec3 accum_target = math::vec3_init(0,0,10.f);
+  math::vec3 accum_target = math::vec3_init(0,0,m_keep_distance);
   Core::Transform this_trans = get_entity().get_transform();
   
   // Go through the players and accumulate the target point.

@@ -12,6 +12,19 @@ math::vec2
 get_point_on_cirlce(const float a);
 
 
+constexpr float
+get_bottom_of_level() { return -20.f; }
+
+
+constexpr float
+get_far_death_zone() { return -20.f * 2; }
+
+
+
+constexpr float
+get_top_of_level() { return 0.f; }
+
+
 } // ns
 
 

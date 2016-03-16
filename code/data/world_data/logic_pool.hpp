@@ -23,16 +23,16 @@ namespace World_data {
 */
 namespace Logic_hook {
 
-  enum ENUM
-  {
-    on_start          = 1 << 0,
-    on_early_update   = 1 << 1,
-    on_update         = 1 << 2,
-    on_end            = 1 << 3,
-    on_collision      = 1 << 4,
-    
-    to_destroy        = 1 << 5, // This is a special flag that we use to identity what objects need to be removed.
-  };
+enum ENUM
+{
+  on_start          = 1 << 0,
+  on_early_update   = 1 << 1,
+  on_update         = 1 << 2,
+  on_end            = 1 << 3,
+  on_collision      = 1 << 4,
+  
+  to_destroy        = 1 << 5, // This is a special flag that we use to identity what objects need to be removed.
+};
 
 } // ns
 

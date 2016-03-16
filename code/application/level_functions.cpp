@@ -7,7 +7,7 @@ namespace Level {
 math::vec2
 get_point_on_cirlce(const float a)
 {
-  const float radius = 2.f;
+  const float radius = 5.f;
   const float origin_x = 0.f;
   const float origin_y = 0.f;
   

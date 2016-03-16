@@ -20,7 +20,14 @@ private:
 
 private:
   
+  enum class State
+  {
+    up_down_search,
+  };
   
+  State               m_state = State::up_down_search;
+  
+  int32_t            m_direction = 1;
 
 }; // class
 

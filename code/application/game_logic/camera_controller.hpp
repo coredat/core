@@ -22,7 +22,8 @@ private:
 private:
 
   Core::Camera        m_camera;
-  math::vec3          m_target_position;  
+  math::vec3          m_target_position;
+  float               m_keep_distance = 25.f;
 
 }; // class
 
