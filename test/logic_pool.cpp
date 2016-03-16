@@ -143,6 +143,11 @@ TEST_CASE("LogicPool")
       id_01, id_02, id_03,
     };
   
+    World_data::logic_pool_on_end_hook(&pool, remove_hook, 1);
+    World_data::logic_pool_clean_up(&pool);
+    
+    REQUIRE(pool.size == 2);
+
     World_data::logic_pool_on_end_hook(&pool, remove_hook, 3);
     World_data::logic_pool_clean_up(&pool);
     

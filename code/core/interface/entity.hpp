@@ -85,7 +85,7 @@ public:
       if(m_world_data->logic_pool->entity_id[i] == get_id())
       {
         // Get script.
-        void *comp = m_world_data->logic_pool->object_locations[i];
+        void *comp = &m_world_data->logic_pool->object_store[i * LOGIC_POOL_SIZE_MAX_SCRIPT_SIZE];
       
         if(reinterpret_cast<Core::Component*>(comp)->get_rtti() == rtti_id)
         {

@@ -64,7 +64,8 @@ logic_pool_get_slot(Logic_pool *pool,
   const uint32_t hooks = Logic_hook::on_start |
                          Logic_hook::on_early_update |
                          Logic_hook::on_update |
-                         Logic_hook::on_end;
+                         Logic_hook::on_end |
+                         Logic_hook::on_collision;
   
   pool->regd_hook[index] = hooks;
   
@@ -141,7 +142,7 @@ namespace
   
     for(uint32_t i = 0; i < size_of_flags; ++i)
     {
-      if(flags[i] & flag_to_find)
+      if(flags[i] & flag_to_find || flag_to_find == 0)
       {
         assert(size_of_objects > i); // We assume its the same size as flags[]
         assert(size_of_out_comp > *out_size); // We assume its the same size as flags[]
@@ -232,29 +233,29 @@ logic_pool_on_update_hook(Logic_pool *pool, const float delta_time)
 void
 logic_pool_on_collision_hook(Logic_pool *pool, const Core::Entity_id id_a, const Core::Entity_id id_b)
 {
-//  // Find the entity.
-//  uint32_t index(0);
-//  uint32_t search_from(0);
-//  
-//  // Could be mutliple components attached to the same entity.
-//  while(Core::Entity_id_util::find_index_linearly(&index,
-//                                                  id_a,
-//                                                  &(pool->entity_id[search_from]),
-//                                                  pool->objects_in_use_size - search_from))
-//  {
-//    index += search_from;
-//  
-//    auto obj = reinterpret_cast<Core::Component*>(pool->object_locations[index]);
-//    
-//    // Create the entity.
-//    Core::Entity collision;
-//    World_data::world_find_entity(obj->m_world_data, &collision, id_b);
-//    
-//    obj->on_collision(collision);
-//  
-//    search_from = index + 1;
-//  }
-//  
+  uint32_t objs_found(0);
+  Core::Component *comps[LOGIC_POOL_NUMBER_OF_SCRIPTS];
+
+  build_objs_list(pool->regd_hook,
+                  pool->size,
+                  pool->object_store,
+                  pool->size,
+                  Logic_hook::on_collision,
+                  &objs_found,
+                  comps,
+                  LOGIC_POOL_NUMBER_OF_SCRIPTS);
+  
+  // Call all the objects to start
+  for(uint32_t i = 0; i < objs_found; ++i)
+  {
+    if(comps[i]->get_entity().get_id() == id_a)
+    {
+      Core::Entity entity;
+      World_data::world_find_entity(comps[i]->m_world_data, &entity, id_b);
+      
+      comps[i]->on_collision(entity);
+    }
+  }
 }
 
 

@@ -248,7 +248,8 @@ Entity::send_event(const uint32_t id,
   {
     if(pool->entity_id[i] == m_this_id)
     {
-      reinterpret_cast<Core::Component*>(pool->object_locations[i])->on_event(id, data, size_of_data);
+      assert(false); // Need to fix this.
+//      reinterpret_cast<Core::Component*>(pool->object_locations[i])->on_event(id, data, size_of_data);
     }
   }
 }

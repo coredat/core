@@ -69,5 +69,17 @@ Game_controller::on_start()
 void
 Game_controller::on_early_update(const float dt)
 {
-
+  m_timer += dt;
+  
+  if(m_timer > 3.f)
+  {
+    Core::Entity e = Entity_factory::create_enemy(m_world_data);
+  
+    Core::Transform trans = e.get_transform();
+    trans.set_position(math::vec3_init(0, 0, -10));
+    e.set_transform(trans);
+    e.set_material_id(1);
+    
+    m_timer = 0;
+  }
 }

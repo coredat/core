@@ -115,6 +115,7 @@ host_think(
   // Push in new phy entities.
   World_data::world_update_scene_graph_changes(world, world->entity_graph_changes);
 
+  World_data::logic_pool_clean_up(world->logic_pool);
   
   // Reset the entity pool for new changes.
   World_data::entity_graph_change_pool_init(world->entity_graph_changes);
