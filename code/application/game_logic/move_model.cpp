@@ -40,6 +40,7 @@ Move_model::on_update(const float dt)
     get_entity().set_transform(trans);
   }
   
+  // States
   switch(m_move_state)
   {
     case(Movement_state::jumped):

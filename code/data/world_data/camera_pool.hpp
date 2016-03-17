@@ -100,7 +100,9 @@ camera_pool_get_priority(Camera_pool *pool,
 Camera::Camera_properties
 camera_pool_get_properties_for_priority(Camera_pool *pool,
                                         const uint32_t peer,
-                                        const uint32_t priority);
+                                        const uint32_t priority,
+                                        const uint32_t default_vp_width = 800,
+                                        const uint32_t default_vp_height = 480);
 
 
 /*!

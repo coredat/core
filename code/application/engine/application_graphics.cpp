@@ -22,7 +22,9 @@ graphics_think(World_data::World *world,
   renderer::clear(); // TODO Remove this!!!!
 
   // Get active camera and generate a projection matrix.
+  // TODO: Need to pass in the environment height and width into this function.
   const auto cam = World_data::camera_pool_get_properties_for_priority(world->camera_pool, peer, 1);
+  
   const math::mat4 proj = math::mat4_projection(cam.viewport_width,
                                                 cam.viewport_height,
                                                 cam.near_plane,

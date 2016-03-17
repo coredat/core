@@ -6,6 +6,12 @@
 #include <stddef.h>
 
 
+/*
+  TODO: Move this down to uitls.
+  call it generic_id or something.
+*/
+
+
 namespace Core {
 
 

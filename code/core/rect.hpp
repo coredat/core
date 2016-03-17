@@ -20,8 +20,6 @@ public:
   float           get_bottom() const  { return m_bottom; }
   float           get_right() const   { return m_right;  }
   
-  float           get_area() const;
-  
 private:
 
   const float     m_top        = 0.f;
@@ -30,6 +28,28 @@ private:
   const float     m_right      = 0.f;
   
 }; // class
+
+
+/*!
+  Rect utility functions.
+*/
+namespace Rect_utils
+{
+
+
+float
+get_width(const Rect rect);
+
+
+float
+get_height(const Rect rect);
+
+
+float
+get_area(const Rect rect);
+
+
+} // ns
 
 
 } // ns

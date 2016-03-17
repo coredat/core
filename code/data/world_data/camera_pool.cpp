@@ -106,7 +106,9 @@ camera_pool_get_priority(Camera_pool *pool,
 Camera::Camera_properties
 camera_pool_get_properties_for_priority(Camera_pool *pool,
                                         const uint32_t peer,
-                                        const uint32_t priority)
+                                        const uint32_t priority,
+                                        const uint32_t default_vp_width,
+                                        const uint32_t default_vp_height)
 {
   assert(pool);
   
@@ -114,12 +116,30 @@ camera_pool_get_properties_for_priority(Camera_pool *pool,
   {
     if(pool->peer_priority_00[i] == priority)
     {
-      return pool->camera[i];
+      Camera::Camera_properties cam = pool->camera[i];
+      
+      if(!cam.viewport_height && !cam.viewport_width)
+      {
+        cam.viewport_width = default_vp_width;
+        cam.viewport_height = default_vp_height;
+      }
+    
+      return cam;
     }
   }
   
   // Failed
-  return Camera::Camera_properties{};
+  return Camera::Camera_properties
+  {
+    Camera::Type::perspective,
+    600,
+    480,
+    0.7855f,
+    0.1f,
+    1000.f,
+    true,
+    true,
+  };
 }
 
 
