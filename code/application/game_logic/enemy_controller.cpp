@@ -40,7 +40,7 @@ Enemy_controller::on_early_update(const float dt)
       trans.set_position(new_pos);
       get_entity().set_transform(trans);
       
-      if(math::vec3_get_z(new_pos) < Level::get_bottom_of_level() || math::vec3_get_z(new_pos) > Level::get_top_of_level())
+      if(math::vec3_get_z(new_pos) <= Level::get_bottom_of_level() || math::vec3_get_z(new_pos) >= Level::get_top_of_level())
       {
         m_direction *= -1;
       }

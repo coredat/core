@@ -22,6 +22,7 @@ load_default_resources(World_data::World *world)
     const ::Model::Load_model model[Resource::Model::size] {
       ::Model::Load_model{Resource::Model::unit_cube,     std::string(asset_path + "models/unit_cube.obj")},
       ::Model::Load_model{Resource::Model::unit_plane,    std::string(asset_path + "models/unit_plane.obj")},
+      ::Model::Load_model{Resource::Model::unit_tube,    std::string(asset_path + "models/unit_tube.obj")},
       ::Model::Load_model{Resource::Model::test_aabb,     std::string(asset_path + "models/aabb_offset_test.obj")},
     };
     

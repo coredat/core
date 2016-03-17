@@ -15,6 +15,7 @@ enum ENUM {
 
   unit_cube,
   unit_plane,
+  unit_tube,
 
   test_aabb,
   

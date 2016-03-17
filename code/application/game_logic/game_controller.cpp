@@ -8,6 +8,8 @@
 void
 Game_controller::on_start()
 {
+  Entity_factory::create_level(m_world_data);
+
   Entity_factory::create_enemy(m_world_data);
   Entity_factory::create_enemy(m_world_data);
   Entity_factory::create_enemy(m_world_data);
@@ -28,7 +30,7 @@ Game_controller::on_early_update(const float dt)
 {
   m_timer += dt;
   
-  if(m_timer > 3.f)
+  if(m_timer > 1.f)
   {
     Entity_factory::create_enemy(m_world_data);
     

@@ -9,10 +9,38 @@
 #include <core/physics/box_collider.hpp>
 #include <application/game_logic/game_controller.hpp>
 #include <application/game_logic/enemy_controller.hpp>
+#include <application/resources.hpp>
+#include "level_functions.hpp"
 #include <iostream>
 
 
 namespace Entity_factory {
+
+
+Core::Entity
+create_level(World_data::World *world)
+{
+  Core::Entity entity;
+  World_data::world_create_new_entity(world, &entity, 3);
+  
+  entity.set_name("Level");
+  
+  const float level_length = math::abs(Level::get_top_of_level() - Level::get_bottom_of_level());
+  constexpr float level_origin = (Level::get_top_of_level() - Level::get_bottom_of_level()) * 0.5f;
+  
+  const Core::Transform transform(math::vec3_init(0, 0, -level_origin),
+                                  math::vec3_init(Level::get_radius() * 2.1f, Level::get_radius() * 2.1f, level_length),
+                                  math::quat_init());
+  entity.set_transform(transform);
+  
+  const Core::Box_collider collider(transform.get_scale());
+  //entity.set_collider(collider);
+  
+  entity.set_model_id(Resource::Model::unit_tube);
+  entity.set_material_id(Resource::Texture::dev_green);
+  
+  return entity;
+}
 
 
 Core::Entity

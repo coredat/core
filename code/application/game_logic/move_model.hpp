@@ -38,7 +38,7 @@ private:
   };
   
   Movement_state      m_move_state      = Movement_state::grounded;
-  float               m_jump_speed      = 1.f;
+  float               m_jump_speed      = 1.4f;
   float               m_jump_time       = 0.f;
   float               m_gravity         = -2.f;
   float               m_ground          = 0.f;

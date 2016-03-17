@@ -13,11 +13,15 @@ get_point_on_cirlce(const float a);
 
 
 constexpr float
-get_bottom_of_level() { return -20.f; }
+get_radius() { return 5.f; }
 
 
 constexpr float
-get_far_death_zone() { return -20.f * 2; }
+get_bottom_of_level() { return -30.f; }
+
+
+constexpr float
+get_far_death_zone() { return get_bottom_of_level() * 2; }
 
 
 
