@@ -19,6 +19,7 @@ private:
 private:
 
   float               m_timer = 0.f;
+  float               m_spawn_timer = 0.4f;
 
 };
 

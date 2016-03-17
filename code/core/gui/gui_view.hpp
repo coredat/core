@@ -3,7 +3,7 @@
 
 
 #include <stdint.h>
-#include <core/rect.hpp>
+#include <core/common/rect.hpp>
 #include <core/color/color.hpp>
 
 

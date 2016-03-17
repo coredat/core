@@ -56,7 +56,7 @@ create_bullet(World_data::World *world)
   entity.add_component<Bullet_controller>();
   
   const Core::Transform transform(math::vec3_zero(),
-                                  math::vec3_init(0.25, 0.25, 0.25),
+                                  math::vec3_init(0.25f, 0.25f, 1.5f),
                                   math::quat_init());
   entity.set_transform(transform);
   

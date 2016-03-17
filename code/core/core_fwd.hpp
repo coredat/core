@@ -10,6 +10,7 @@ struct Entity_id;
 class Transform;
 class Ray;
 class Controller;
+class Rect;
 
 
 } // ns

@@ -28,6 +28,7 @@ private:
   State               m_state = State::up_down_search;
   
   int32_t             m_direction = 1;
+  uint32_t            m_climb_speed = 7;
 
 }; // class
 

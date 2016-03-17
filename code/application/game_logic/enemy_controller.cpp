@@ -28,7 +28,7 @@ Enemy_controller::on_early_update(const float dt)
     case(State::up_down_search):
     {
       Core::Transform trans = get_entity().get_transform();
-      float move = static_cast<float>(m_direction * 4) * dt;
+      float move = static_cast<float>(m_direction * m_climb_speed) * dt;
       
       const math::vec3 old_pos = trans.get_position();
       const math::vec3 new_pos = math::vec3_init(

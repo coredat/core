@@ -10,7 +10,7 @@
 #include <data/world_data/world_pools.hpp>
 #include <data/world_data/logic_pool.hpp>
 #include <stdint.h>
-
+#include <iostream>
 
 namespace Core {
 
@@ -65,13 +65,22 @@ public:
   add_component()
   {
     const auto free_slot = World_data::logic_pool_get_slot(m_world_data->logic_pool, get_id());
-    auto comp = new(free_slot) T();
-
-    auto base = reinterpret_cast<Core::Component*>(free_slot);
-    base->m_world_data = m_world_data;
-    base->m_entity_id  = this->get_id();
     
-    return comp;
+    std::cout << m_world_data->logic_pool->size << std::endl;
+    
+    if(free_slot)
+    {
+      auto comp = new(free_slot) T();
+
+      auto base = reinterpret_cast<Core::Component*>(free_slot);
+      base->m_world_data = m_world_data;
+      base->m_entity_id  = this->get_id();
+      
+      return comp;
+    }
+    
+    assert(false); // Soemthing went wrong!
+    return nullptr;
   }
   
   

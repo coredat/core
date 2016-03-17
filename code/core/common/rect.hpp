@@ -13,7 +13,10 @@ class Rect
 {
 public:
 
-  explicit        Rect(const float top, const float left, const float bottom, const float right);
+  explicit        Rect(const float top,
+                       const float left,
+                       const float bottom,
+                       const float right);
   
   float           get_top() const     { return m_top;    }
   float           get_left() const    { return m_left;   }
@@ -28,28 +31,6 @@ private:
   const float     m_right      = 0.f;
   
 }; // class
-
-
-/*!
-  Rect utility functions.
-*/
-namespace Rect_utils
-{
-
-
-float
-get_width(const Rect rect);
-
-
-float
-get_height(const Rect rect);
-
-
-float
-get_area(const Rect rect);
-
-
-} // ns
 
 
 } // ns
