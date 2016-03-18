@@ -81,7 +81,7 @@ host_think(
   Core::Entity_id_util::find_index_linearly(&index, kine_actor_local, world->entity_pool->entity_id, world->entity_pool->size);
   
   // ** Run physics ** //
-  constexpr uint32_t size_of_pairs = 128;
+  constexpr uint32_t size_of_pairs = 2048; // TODO: Alloc mem for this!
   Physics_engine::Collision_pair collision_pairs[size_of_pairs];
   
   uint32_t number_of_collisions(0);

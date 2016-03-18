@@ -2,7 +2,7 @@
 #define GRAPH_CHANGES_INCLUDED_3E94C537_4E59_4CA4_8A58_BC5487EFF734
 
 
-#define GRAPH_CHANGE_POOL 128
+#define GRAPH_CHANGE_POOL 2048
 
 
 #include <core/entity_id.hpp>

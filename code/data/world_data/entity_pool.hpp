@@ -10,7 +10,7 @@
 #include <stddef.h>
 
 
-#define ENTITY_POOL_SIZE 128
+#define ENTITY_POOL_SIZE 2048
 
 
 namespace World_data {

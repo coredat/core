@@ -13,7 +13,11 @@ Move_model::on_start()
   i++;
   
   srand(i);
-  m_pending_strafe = static_cast<float>(rand() & 500);
+  
+  const int32_t random_value = rand() & 1000000;
+  
+  m_strafe = random_value;
+  m_pending_strafe = 0.1f;
 }
 
 
@@ -36,6 +40,12 @@ Move_model::on_update(const float dt)
                         math::vec2_get_y(level_position),
                         math::vec3_get_z(position)
                        ));
+    
+
+    if(math::vec2_length(level_position) < 3)
+      {
+        std::cout << math::vec2_get_x(level_position) << ", " << math::vec2_get_y(level_position) << std::endl;
+      }
     
     get_entity().set_transform(trans);
   }

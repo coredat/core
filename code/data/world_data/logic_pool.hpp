@@ -7,7 +7,7 @@
 #include <stddef.h>
 
 
-#define LOGIC_POOL_NUMBER_OF_SCRIPTS 512
+#define LOGIC_POOL_NUMBER_OF_SCRIPTS 2048
 #define LOGIC_POOL_SIZE_MAX_SCRIPT_SIZE 128
 
 
@@ -122,6 +122,16 @@ logic_pool_on_collision_hook(Logic_pool *pool, const Core::Entity_id id_a, const
 */
 void
 logic_pool_on_end_hook(Logic_pool *pool, const Core::Entity_id ids[], const uint32_t number_of_entities);
+
+
+// ** DEBUG FUNCTIONS ** //
+
+/*
+  Prints out some debug informatino.
+*/
+const char *
+debug_info(const Logic_pool *pool);
+
 
 } // ns
 

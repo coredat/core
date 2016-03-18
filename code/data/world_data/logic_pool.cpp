@@ -5,6 +5,8 @@
 #include <core/interface/entity.hpp>
 #include <data/world_data/world_data.hpp>
 #include <core/memory/memory.hpp>
+#include <string>
+#include <sstream>
 
 
 namespace World_data {
@@ -271,12 +273,16 @@ logic_pool_on_end_hook(Logic_pool *pool,
   {
     const Core::Entity_id id = ids[i];
   
-    uint32_t index(0);
-    if(Core::Entity_id_util::find_index_linearly(&index,
-                                                 id,
-                                                 pool->entity_id,
-                                                 pool->size))
+    uint32_t found_index(0);
+    uint32_t curr_index(0);
+    while(Core::Entity_id_util::find_index_linearly(&found_index,
+                                                    id,
+                                                    &pool->entity_id[curr_index],
+                                                    pool->size - curr_index))
     {
+      const uint32_t index = found_index + curr_index;
+      curr_index += found_index + 1;
+    
       if(pool->regd_hook[index] & Logic_hook::on_end)
       {
         comps[objs_found++] = reinterpret_cast<Core::Component*>(get_object_ptr(pool->object_store, index));
@@ -292,6 +298,36 @@ logic_pool_on_end_hook(Logic_pool *pool,
   {
     comps[k]->on_end();
   }
+}
+
+
+const char *
+debug_info(const Logic_pool *pool)
+{
+  // Get debug info.
+  uint32_t number_pending_destruction(0);
+  {
+    for(uint32_t i = 0; i < pool->size; ++i)
+    {
+      if(pool->regd_hook[i] & Logic_hook::to_destroy)
+      {
+        ++number_pending_destruction;
+      }
+    }
+  }
+
+  static std::string debug_info;
+
+  std::stringstream ss;
+  ss << "Logic Pool Debug Info \n";
+  ss << "--------------------- \n";
+  ss << "size: " << pool->size << "\n";
+  ss << "capacity: " << pool->capacity << "\n";
+  ss << "pending destruction: " << number_pending_destruction << "\n";
+  
+  debug_info = ss.str();
+  
+  return debug_info.c_str();
 }
 
 

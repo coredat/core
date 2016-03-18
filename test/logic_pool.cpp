@@ -71,15 +71,18 @@ TEST_CASE("LogicPool")
   
   const Core::Entity_id id_01{1,1};
   My_test_component *comp_01 = new(World_data::logic_pool_get_slot(&pool, id_01)) My_test_component();
-  REQUIRE(pool.size == 1);
-
-  const Core::Entity_id id_02{2,2};
-  My_test_component *comp_02 = new(World_data::logic_pool_get_slot(&pool, id_02)) My_test_component();
+  My_test_component *comp_02 = new(World_data::logic_pool_get_slot(&pool, id_01)) My_test_component();
   REQUIRE(pool.size == 2);
 
+  const Core::Entity_id id_02{2,2};
+  My_test_component *comp_03 = new(World_data::logic_pool_get_slot(&pool, id_02)) My_test_component();
+  My_test_component *comp_04 = new(World_data::logic_pool_get_slot(&pool, id_02)) My_test_component();
+  REQUIRE(pool.size == 4);
+
   const Core::Entity_id id_03{3,3};
-  My_test_component *comp_03 = new(World_data::logic_pool_get_slot(&pool, id_03)) My_test_component();
-  REQUIRE(pool.size == 3);
+  My_test_component *comp_05 = new(World_data::logic_pool_get_slot(&pool, id_03)) My_test_component();
+  My_test_component *comp_06 = new(World_data::logic_pool_get_slot(&pool, id_03)) My_test_component();
+  REQUIRE(pool.size == 6);
   
   /*
     Check start up hook
@@ -99,18 +102,18 @@ TEST_CASE("LogicPool")
     World_data::logic_pool_on_early_update_hook(&pool, 0.1f);
     REQUIRE(comp_01->has_early_updated == 1);
     REQUIRE(comp_02->has_early_updated == 1);
-    REQUIRE(comp_02->has_early_updated == 1);
+    REQUIRE(comp_03->has_early_updated == 1);
     REQUIRE(comp_01->has_updated == 0);
     REQUIRE(comp_02->has_updated == 0);
-    REQUIRE(comp_02->has_updated == 0);
+    REQUIRE(comp_03->has_updated == 0);
     
     World_data::logic_pool_on_update_hook(&pool, 0.1f);
     REQUIRE(comp_01->has_early_updated == 1);
     REQUIRE(comp_02->has_early_updated == 1);
-    REQUIRE(comp_02->has_early_updated == 1);
+    REQUIRE(comp_03->has_early_updated == 1);
     REQUIRE(comp_01->has_updated == 1);
     REQUIRE(comp_02->has_updated == 1);
-    REQUIRE(comp_02->has_updated == 1);
+    REQUIRE(comp_03->has_updated == 1);
   }
   
   SECTION("on end hook")
@@ -123,14 +126,14 @@ TEST_CASE("LogicPool")
     World_data::logic_pool_on_end_hook(&pool, remove_hook, 3);
     REQUIRE(comp_01->has_ended == 1);
     REQUIRE(comp_02->has_ended == 1);
-    REQUIRE(comp_02->has_ended == 1);
+    REQUIRE(comp_03->has_ended == 1);
     
     World_data::logic_pool_on_end_hook(&pool, remove_hook, 3);
     REQUIRE(comp_01->has_ended == 1);
     REQUIRE(comp_02->has_ended == 1);
-    REQUIRE(comp_02->has_ended == 1);
+    REQUIRE(comp_03->has_ended == 1);
     
-    REQUIRE(pool.size == 3);
+    REQUIRE(pool.size == 6); // components should still be present, as no clean was performed.
   }
   
   /*
@@ -146,7 +149,7 @@ TEST_CASE("LogicPool")
     World_data::logic_pool_on_end_hook(&pool, remove_hook, 1);
     World_data::logic_pool_clean_up(&pool);
     
-    REQUIRE(pool.size == 2);
+    REQUIRE(pool.size == 4);
 
     World_data::logic_pool_on_end_hook(&pool, remove_hook, 3);
     World_data::logic_pool_clean_up(&pool);
