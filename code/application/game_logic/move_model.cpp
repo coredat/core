@@ -41,12 +41,6 @@ Move_model::on_update(const float dt)
                         math::vec3_get_z(position)
                        ));
     
-
-    if(math::vec2_length(level_position) < 3)
-      {
-        std::cout << math::vec2_get_x(level_position) << ", " << math::vec2_get_y(level_position) << std::endl;
-      }
-    
     get_entity().set_transform(trans);
   }
   

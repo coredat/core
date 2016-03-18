@@ -96,9 +96,7 @@ host_think(
     size_of_pairs,
     &number_of_collisions
   );
-  
-  //std::cout << "No Entities: " << world->entity_pool->size << std::endl;
-  
+    
   // Alert the collision callbacks
   for(uint32_t i = 0; i < number_of_collisions; ++i)
   {

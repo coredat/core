@@ -65,9 +65,7 @@ public:
   add_component()
   {
     const auto free_slot = World_data::logic_pool_get_slot(m_world_data->logic_pool, get_id());
-    
-    std::cout << m_world_data->logic_pool->size << std::endl;
-    
+        
     if(free_slot)
     {
       auto comp = new(free_slot) T();
