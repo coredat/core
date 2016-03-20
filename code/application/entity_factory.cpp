@@ -164,4 +164,29 @@ create_enemy(World_data::World *world)
 }
 
 
+Core::Entity
+create_explosion(World_data::World *world)
+{
+  Core::Entity entity;
+  World_data::world_create_new_entity(world, &entity, 4);
+  
+  entity.set_name("Explosions");
+  
+  // Transform
+  const Core::Transform transform(math::vec3_init(0, 3, 0),
+                                  math::vec3_init(1.f, 1.f, 1.f),
+                                  math::quat_init());
+  entity.set_transform(transform);
+  
+  
+  // Physics
+  const Core::Box_collider collider(transform.get_scale());
+  //entity.set_collider(collider);
+  
+  // Other stuff.
+  entity.set_model_id(0);
+  entity.set_material_id(0);
+}
+
+
 } // ns

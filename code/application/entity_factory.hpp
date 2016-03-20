@@ -33,6 +33,10 @@ create_actor(World_data::World *world);
 Core::Entity
 create_enemy(World_data::World *world);
 
+
+Core::Entity
+create_explosion(World_data::World *world);
+
 } // ns
 
 
