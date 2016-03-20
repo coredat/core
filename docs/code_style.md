@@ -1,6 +1,6 @@
 # Code Style
 
-General coding style **guidlines**
+General coding style *guidlines*
 
 ### Naming Conventions
 
@@ -28,9 +28,8 @@ Bar_foo boo_hoo;
 
 ### Curly Braces
 
-- Place namespace curlies inline.
-- No restriction on new line or line for methods and functions.
-
+- No restriction on new line or inline for methods and functions.
+- Namespace must be inline.
 
 
 ### References / Pointers

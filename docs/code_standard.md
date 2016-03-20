@@ -8,6 +8,11 @@ Slightly stricter than the `code_styles` document. Every game I've done has had 
 The game engine has pre-allocated memory, use that.
 
 
+### Braces on If's
+
+Braces must be used. There is next/same line requirement.
+
+
 ### Templates
 
 Shun Templates, they slow compile times down.
