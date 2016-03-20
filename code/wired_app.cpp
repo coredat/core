@@ -17,7 +17,7 @@
 
 #include <sdl_wrapper/sdl_lazy_include.hpp>
 #include <math/math.hpp>
-#include <utils/timer.hpp>
+#include <utilities/timer.hpp>
 
 #include <iostream>
 
