@@ -1,2 +1,2 @@
 # Dummy rake file, that includes all the others.
-Dir.glob('*.rake').each { |r| import r }
+Dir.glob('scripts/*.rake').each { |r| import r }

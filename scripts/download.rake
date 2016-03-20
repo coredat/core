@@ -1,8 +1,12 @@
 # download.rake
+
+# This isn't working on windows!
+
 # This deals only with downloading items.
 
 require 'rake'
 require 'net/http'
+require 'uri'
 require 'zip'
 
 
