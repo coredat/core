@@ -28,6 +28,7 @@
 #define MATH_MAT4_INLINE inline
 #define MATH_QUAT_INLINE inline
 #define MATH_GENR_INLINE inline
+#define MATH_CONSTEXPR constexpr
 
 
 #endif // include guard
