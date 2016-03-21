@@ -37,15 +37,15 @@
     }
 
     includedirs {
-      "../code/",
-      "../code/external/math",
-      "../code/external/graphics_api",
-      "../code/external/utilities",
+      get_proj_root_dir() .. "code/",
+      get_proj_root_dir() .. "code/external/math/",
+      get_proj_root_dir() .. "code/external/graphics_api/",
+      get_proj_root_dir() .. "code/external/utilities/",
       "/usr/local/include/",
       "/usr/local/include/bullet/",
-      "../3rdparty/sdl_mixer/include/",
-      "../3rdparty/bullet/include/",
-      "../3rdparty/enet/include",
+      get_proj_root_dir() .. "3rdparty/sdl_mixer/include/",
+      get_proj_root_dir() .. "3rdparty/bullet/include/",
+      get_proj_root_dir() .. "3rdparty/enet/include",
     }
 
     buildoptions {
