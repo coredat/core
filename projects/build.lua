@@ -2,7 +2,8 @@
 
 function get_proj_root_dir()
   if(os.get() == "macosx") then
-    return "$(SRCROOT)/../"
+    --return "$(SRCROOT)/../"
+    return "../"
   else
     return "../"
   end

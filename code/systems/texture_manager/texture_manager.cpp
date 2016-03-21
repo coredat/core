@@ -1,7 +1,7 @@
 #include "texture_manager.hpp"
-#include <renderer/graphics_api/pixel_format.hpp>
-#include <renderer/graphics_api/ogl/ogl_texture.hpp>
-#include <renderer/graphics_api/ogl/ogl_pixel_format.hpp>
+#include <graphics_api/pixel_format.hpp>
+#include <graphics_api/ogl/ogl_texture.hpp>
+#include <graphics_api/ogl/ogl_pixel_format.hpp>
 #include <algorithm>
 #include <SOIL/SOIL.h>
 #include <assert.h>

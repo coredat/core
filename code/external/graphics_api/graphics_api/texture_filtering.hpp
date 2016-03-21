@@ -22,7 +22,6 @@ struct Texture_filtering
 
 
 namespace Filtering_mode {
-
 enum ENUM {
 
   point = 0,
@@ -31,19 +30,16 @@ enum ENUM {
   anisotropic,
 
 }; // enum
-
 } // ns
 
 
 namespace Wrap_mode {
-
 enum ENUM {
 
   clamp = 0,
   wrap,
 
 }; // enum
-
 } // ns
 
 

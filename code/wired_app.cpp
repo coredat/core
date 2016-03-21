@@ -15,6 +15,9 @@
 #include <renderer/debug_line_renderer/debug_line_renderer.hpp>
 #include <renderer/gui_renderer/gui_renderer.hpp>
 
+#include <graphics_api/initialize.hpp>
+#include <graphics_api/clear.hpp>
+
 #include <sdl_wrapper/sdl_lazy_include.hpp>
 #include <math/math.hpp>
 #include <utilities/timer.hpp>
@@ -60,17 +63,13 @@ main(int argc, char *argv[])
   sdl::input input;
   input.set_mouse_hold(true);
   
-  renderer::set_log_callback([](const int32_t id, const std::string &msg)
-  {
-    std::cout << id << " - " << msg << std::endl;
-  });
-  
   Audio::initialize();
   
   Network::initialize(&std::cout);
   Network::Connection connection;
   
-  renderer::initialize(); // TODO: Needs to go for all it does.
+  
+  Graphics_api::initialize(); // TODO: Needs to go for all it does.
   Simple_renderer::initialize();
   Debug_line_renderer::initialize();
   Gui_renderer::initialize();
@@ -156,7 +155,7 @@ main(int argc, char *argv[])
   util::timer frame_timer;
   frame_timer.start();
   
-  renderer::clear_color(0.4f, 0.2f, 0.2f);
+  Graphics_api::clear_color_set(0.4f, 0.2f, 0.2f);
 
 //  glViewport(0,0,1280, 720);
 //  SDL_GL_SetSwapInterval(0);

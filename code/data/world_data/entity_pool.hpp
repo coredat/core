@@ -5,7 +5,7 @@
 #include <application/resources.hpp>
 #include <core/entity_id.hpp>
 #include <math/math.hpp>
-#include <simple_renderer/lazy_include.hpp>
+//#include <simple_renderer/lazy_include.hpp>
 #include <core/entity_id.hpp>
 #include <stddef.h>
 

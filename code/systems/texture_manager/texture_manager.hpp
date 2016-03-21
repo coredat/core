@@ -4,7 +4,7 @@
 
 #include <cstddef>
 #include <stdint.h>
-#include <renderer/graphics_api/ogl/ogl_fwd.hpp>
+#include <graphics_api/ogl/ogl_fwd.hpp>
 #include <string>
 
 

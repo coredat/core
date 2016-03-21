@@ -3,7 +3,7 @@
 #include <systems/texture_manager/texture_manager.hpp>
 #include <systems/entity/generic_id.hpp>
 #include <data/world_data/world_data.hpp>
-#include <utils/directory.hpp>
+#include <utilities/directory.hpp>
 #include <string>
 
 

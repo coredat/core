@@ -2,7 +2,7 @@
 #define TEXTURE_POOL_INCLUDED_6CFB6B90_56F8_408D_B068_9EB867B41233
 
 
-#include <renderer/graphics_api/ogl/ogl_texture.hpp>
+#include <graphics_api/ogl/ogl_texture.hpp>
 #include <stddef.h>
 #include <stdint.h>
 

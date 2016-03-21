@@ -1,5 +1,5 @@
 #include "model_manager.hpp"
-#include <utils/obj_model_loader.hpp>
+#include <utilities/obj_model_loader.hpp>
 #include <assert.h>
 #include <algorithm>
 #include <math/math.hpp>

@@ -6,7 +6,7 @@
 #include <iostream>
 #include <core/input/input.hpp>
 #include <application/resources.hpp>
-#include <utils/alignment.hpp>
+#include <utilities/alignment.hpp>
 
 
 namespace Application {

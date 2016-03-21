@@ -7,6 +7,7 @@
 #include <renderer/debug_line_renderer/debug_line_renderer_node.hpp>
 #include <renderer/debug_line_renderer/debug_line_renderer.hpp>
 #include <math/math.hpp>
+#include <graphics_api/clear.hpp>
 #include <iostream>
 
 
@@ -19,7 +20,8 @@ graphics_think(World_data::World *world,
                const std::uint32_t size_of_node_pool,
                const std::uint32_t peer)
 {
-  renderer::clear(); // TODO Remove this!!!!
+  const uint32_t flags = Graphics_api::Clear_flag::color | Graphics_api::Clear_flag::depth;
+  Graphics_api::clear(flags);
 
   // Get active camera and generate a projection matrix.
   // TODO: Need to pass in the environment height and width into this function.

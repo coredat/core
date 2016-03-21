@@ -2,8 +2,7 @@
 #define MODEL_POOL_INCLUDED_B5BA64BB_268D_4533_8EE5_509ECFD72F4B
 
 
-#include <simple_renderer/vertex_buffer.hpp>
-#include <renderer/graphics_api/ogl/ogl_vertex_buffer.hpp>
+#include <graphics_api/ogl/ogl_vertex_buffer.hpp>
 #include <math/geometry/geometry.hpp>
 #include <stdint.h>
 

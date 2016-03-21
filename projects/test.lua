@@ -6,10 +6,12 @@
     language "C++"
 
     files {
-      "../**.hpp",
-      "../**.cpp",
-      "../**.h",
-      "../**.c",
+      "../code/**.hpp",
+      "../code/**.cpp",
+      "../code/**.mm",
+      "../code/**.h",
+      "../code/**.c",
+      "../code/**.m",
       "/Users/PhilCK/Developer/utils/*",
       "/Users/PhilCK/Developer/sdl_wrapper/*"
     }

@@ -3,8 +3,8 @@
 
 
 #include <stdint.h>
-#include <renderer/graphics_api/ogl/ogl_vertex_buffer.hpp>
-#include <renderer/graphics_api/ogl/ogl_texture.hpp>
+#include <graphics_api/ogl/ogl_vertex_buffer.hpp>
+#include <graphics_api/ogl/ogl_texture.hpp>
 
 
 namespace Simple_renderer {

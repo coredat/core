@@ -9,8 +9,10 @@
     files {
       "../code/**.hpp",
       "../code/**.cpp",
+      "../code/**.mm",
       "../code/**.h",
       "../code/**.c",
+      "../code/**.m",
       "/Users/PhilCK/Developer/sdl_wrapper/*",
     }
 

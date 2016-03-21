@@ -4,7 +4,7 @@
 
 #include <stdint.h>
 #include <math/transform/transform.hpp>
-#include <utils/alignment.hpp>
+#include <utilities/alignment.hpp>
 
 #include <core/entity_id.hpp>
 #include <systems/camera/camera_properties.hpp>

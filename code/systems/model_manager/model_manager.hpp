@@ -2,7 +2,7 @@
 #define MESH_DATA_INCLUDED_A8754D41_F518_4378_A1D4_7B46EEE7387D
 
 
-#include <renderer/graphics_api/ogl/ogl_vertex_buffer.hpp>
+#include <graphics_api/ogl/ogl_vertex_buffer.hpp>
 #include <math/geometry/geometry.hpp>
 #include <stddef.h>
 #include <stdint.h>
