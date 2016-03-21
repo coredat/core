@@ -5,6 +5,9 @@
 namespace Graphics_api {
 
 
+/*
+  Any initializing that needs to be done.
+*/
 void
 initialize();
 
