@@ -4,6 +4,7 @@
 #include <application/game_logic/actor_controller.hpp>
 #include <application/game_logic/camera_controller.hpp>
 #include <application/game_logic/bullet_controller.hpp>
+#include <application/game_logic/player_stats_model.hpp>
 #include <application/game_logic/enemy_spawner_model.hpp>
 #include <application/game_logic/gun_model.hpp>
 #include <application/game_logic/move_model.hpp>
@@ -131,6 +132,7 @@ create_game_state(World_data::World *world)
   // Logic
   entity.add_component<Game_controller>();
   entity.add_component<Enemy_spawner_model>();
+  entity.add_component<Player_stats_model>();
 
   return entity;
 }

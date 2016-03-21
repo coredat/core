@@ -18,6 +18,7 @@ enum ENUM : uint32_t {
   enemy_controller,
   
   enemy_spawner_model,
+  player_stats_model,
   gun_model,
   move_model,
   explosion_model,
