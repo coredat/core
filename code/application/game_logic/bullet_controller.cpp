@@ -58,4 +58,15 @@ Bullet_controller::on_early_update(const float dt)
 void
 Bullet_controller::on_collision(const Core::Entity &collided_with)
 {
+  if(collided_with.has_tag(m_collide_on))
+  {
+    get_entity().destroy();
+  }
+}
+
+
+void
+Bullet_controller::set_collision_tag(const uint32_t tag)
+{
+  m_collide_on = tag;
 }

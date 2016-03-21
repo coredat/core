@@ -22,6 +22,11 @@ enum ENUM : uint32_t {
   player_walk,
   
   guards_sounded_alarm,
+  
+  game_state_initial_load,
+  game_state_start_menu,
+  game_state_playing,
+  game_state_game_over,
 
 }; // enum
 } // ns

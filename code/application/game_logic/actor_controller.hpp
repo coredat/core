@@ -15,6 +15,7 @@ private:
 
   void                on_start() override;
   void                on_early_update(const float dt) override;
+  void                on_collision(const Core::Entity &entity) override;
 
 private:
 

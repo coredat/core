@@ -4,6 +4,7 @@
 
 #include <core/interface/component.hpp>
 #include "../common/ids_component_types.hpp"
+#include "../common/ids_object_tags.hpp"
 #include <math/vec/vec3.hpp>
 
 
@@ -16,6 +17,7 @@ public:
 
   void          set_position(const math::vec3 position);
   void          set_direction(const uint32_t i);
+  void          set_collision_tag(const uint32_t tag);
 
 private:
 
@@ -24,9 +26,10 @@ private:
   
 private:
 
-  float         m_direction = -1.f;
-  const float   m_death_zone_top = 20.f;
-  const float   m_death_zone_bottom = -20.f;
+  float           m_direction         = -1.f;
+  const float     m_death_zone_top    = 20.f;
+  const float     m_death_zone_bottom = -20.f;
+  uint32_t        m_collide_on        = Tag::npc;
 
 }; // class
 

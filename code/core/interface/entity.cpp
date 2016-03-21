@@ -237,21 +237,15 @@ Entity::get_child(const uint32_t index) const
 
 
 void
-Entity::send_event(const uint32_t id,
+Entity::send_event(const uint32_t event_id,
                    const void *data,
                    const uint32_t size_of_data)
 {
-  // Find all components and send an event to.
-  auto pool = m_world_data->logic_pool;
-  
-  for(uint32_t i = 0; i < pool->size; ++i)
-  {
-    if(pool->entity_id[i] == m_this_id)
-    {
-      assert(false); // Need to fix this.
-//      reinterpret_cast<Core::Component*>(pool->object_locations[i])->on_event(id, data, size_of_data);
-    }
-  }
+  World_data::logic_pool_on_event(m_world_data->logic_pool,
+                                  get_id(),
+                                  event_id,
+                                  data,
+                                  size_of_data);
 }
 
 

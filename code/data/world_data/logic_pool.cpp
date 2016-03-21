@@ -67,7 +67,8 @@ logic_pool_get_slot(Logic_pool *pool,
                          Logic_hook::on_early_update |
                          Logic_hook::on_update |
                          Logic_hook::on_end |
-                         Logic_hook::on_collision;
+                         Logic_hook::on_collision |
+                         Logic_hook::on_event;
   
   pool->regd_hook[index] = hooks;
   
@@ -297,6 +298,36 @@ logic_pool_on_end_hook(Logic_pool *pool,
   for(uint32_t k = 0; k < objs_found; ++k)
   {
     comps[k]->on_end();
+  }
+}
+
+
+void
+logic_pool_on_event(Logic_pool *pool,
+                    const Core::Entity_id id,
+                    const uint32_t event_id,
+                    const void *data,
+                    const uint32_t size_of_data)
+{
+  uint32_t objs_found(0);
+  Core::Component *comps[LOGIC_POOL_NUMBER_OF_SCRIPTS];
+
+  build_objs_list(pool->regd_hook,
+                  pool->size,
+                  pool->object_store,
+                  pool->size,
+                  Logic_hook::on_event,
+                  &objs_found,
+                  comps,
+                  LOGIC_POOL_NUMBER_OF_SCRIPTS);
+  
+  // Call all the objects to start
+  for(uint32_t i = 0; i < objs_found; ++i)
+  {
+    if(comps[i]->get_entity().get_id() == id)
+    {
+      comps[i]->on_event(event_id, data, size_of_data);
+    }
   }
 }
 

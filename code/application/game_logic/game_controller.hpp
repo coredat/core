@@ -18,9 +18,14 @@ private:
 
 private:
 
-  float               m_timer = 0.f;
-  float               m_spawn_timer = 0.4f;
+  enum class State
+  {
+    waiting_to_start,
+    playing,
+    game_over,
+  };
 
+  State               m_state = State::waiting_to_start;
 };
 
 

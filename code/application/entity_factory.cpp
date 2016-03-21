@@ -4,6 +4,7 @@
 #include <application/game_logic/actor_controller.hpp>
 #include <application/game_logic/camera_controller.hpp>
 #include <application/game_logic/bullet_controller.hpp>
+#include <application/game_logic/enemy_spawner_model.hpp>
 #include <application/game_logic/gun_model.hpp>
 #include <application/game_logic/move_model.hpp>
 #include <application/game_logic/explosion_model.hpp>
@@ -129,6 +130,7 @@ create_game_state(World_data::World *world)
 
   // Logic
   entity.add_component<Game_controller>();
+  entity.add_component<Enemy_spawner_model>();
 
   return entity;
 }
@@ -141,6 +143,7 @@ create_enemy(World_data::World *world)
   World_data::world_create_new_entity(world, &entity, Object_type::npc);
   
   entity.set_name("Enemy");
+  entity.add_tag(Tag::npc);
   
   // Logic
   entity.add_component<Enemy_controller>();

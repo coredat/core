@@ -30,8 +30,9 @@ enum ENUM
   on_update         = 1 << 2,
   on_end            = 1 << 3,
   on_collision      = 1 << 4,
+  on_event          = 1 << 5,
   
-  to_destroy        = 1 << 5, // This is a special flag that we use to identity what objects need to be removed.
+  to_destroy        = 1 << 6, // This is a special flag that we use to identity what objects need to be removed.
 };
 
 } // ns
@@ -122,6 +123,13 @@ logic_pool_on_collision_hook(Logic_pool *pool, const Core::Entity_id id_a, const
 */
 void
 logic_pool_on_end_hook(Logic_pool *pool, const Core::Entity_id ids[], const uint32_t number_of_entities);
+
+
+/*!
+  Send an event to an entity.
+*/
+void
+logic_pool_on_event(Logic_pool *pool, const Core::Entity_id id, const uint32_t event_id, const void *data, const uint32_t size_of_data);
 
 
 // ** DEBUG FUNCTIONS ** //

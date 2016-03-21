@@ -58,3 +58,14 @@ Actor_controller::on_early_update(const float dt)
     }
   }
 } // on_update
+
+
+void
+Actor_controller::on_collision(const Core::Entity &entity)
+{
+  if(entity.has_tag(Tag::npc))
+  {
+    get_entity().destroy();
+    Entity_factory::create_explosion(m_world_data, get_entity().get_transform());
+  }
+}
