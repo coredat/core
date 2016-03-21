@@ -1,10 +1,12 @@
 #include "entity_factory.hpp"
 #include <application/common/ids_object_tags.hpp>
+#include <application/common/ids_object_types.hpp>
 #include <application/game_logic/actor_controller.hpp>
 #include <application/game_logic/camera_controller.hpp>
 #include <application/game_logic/bullet_controller.hpp>
 #include <application/game_logic/gun_model.hpp>
 #include <application/game_logic/move_model.hpp>
+#include <application/game_logic/explosion_model.hpp>
 #include <core/interface/entity.hpp>
 #include <core/physics/box_collider.hpp>
 #include <application/game_logic/game_controller.hpp>
@@ -21,7 +23,7 @@ Core::Entity
 create_level(World_data::World *world)
 {
   Core::Entity entity;
-  World_data::world_create_new_entity(world, &entity, 3);
+  World_data::world_create_new_entity(world, &entity, Object_type::level);
   
   entity.set_name("Level");
   
@@ -47,7 +49,7 @@ Core::Entity
 create_bullet(World_data::World *world)
 {
   Core::Entity entity;
-  World_data::world_create_new_entity(world, &entity, 3);
+  World_data::world_create_new_entity(world, &entity, Object_type::bullet);
   
   entity.set_name("Bullet");
   entity.add_tag(Tag::projectile);
@@ -64,7 +66,7 @@ create_bullet(World_data::World *world)
   //entity.set_collider(collider);
   
   entity.set_model_id(0);
-  entity.set_material_id(1);
+  entity.set_material_id(Resource::Texture::dev_red);
   
   return entity;
 }
@@ -74,7 +76,7 @@ Core::Entity
 create_game_play_camera(World_data::World *world)
 {
   Core::Entity entity;
-  World_data::world_create_new_entity(world, &entity, 1);
+  World_data::world_create_new_entity(world, &entity, Object_type::game_camera);
   
   entity.set_name("Camera");
   
@@ -88,7 +90,7 @@ Core::Entity
 create_actor(World_data::World *world)
 {
   Core::Entity entity;
-  World_data::world_create_new_entity(world, &entity, 4);
+  World_data::world_create_new_entity(world, &entity, Object_type::player);
   
   entity.set_name("Player");
   
@@ -111,7 +113,7 @@ create_actor(World_data::World *world)
   
   // Other stuff.
   entity.set_model_id(0);
-  entity.set_material_id(2);
+  entity.set_material_id(Resource::Texture::dev_blue);
   
   return entity;
 }
@@ -121,7 +123,7 @@ Core::Entity
 create_game_state(World_data::World *world)
 {
   Core::Entity entity;
-  World_data::world_create_new_entity(world, &entity, 1);
+  World_data::world_create_new_entity(world, &entity, Object_type::game_state);
   
   entity.set_name("Game State");
 
@@ -136,7 +138,7 @@ Core::Entity
 create_enemy(World_data::World *world)
 {
   Core::Entity entity;
-  World_data::world_create_new_entity(world, &entity, 2);
+  World_data::world_create_new_entity(world, &entity, Object_type::npc);
   
   entity.set_name("Enemy");
   
@@ -158,26 +160,25 @@ create_enemy(World_data::World *world)
   
   // Other stuff.
   entity.set_model_id(0);
-  entity.set_material_id(0);
+  entity.set_material_id(Resource::Texture::dev_orange);
 
   return entity;
 }
 
 
 Core::Entity
-create_explosion(World_data::World *world)
+create_explosion(World_data::World *world, const Core::Transform transform)
 {
   Core::Entity entity;
-  World_data::world_create_new_entity(world, &entity, 4);
+  World_data::world_create_new_entity(world, &entity, Object_type::explosion);
   
   entity.set_name("Explosions");
   
   // Transform
-  const Core::Transform transform(math::vec3_init(0, 3, 0),
-                                  math::vec3_init(1.f, 1.f, 1.f),
-                                  math::quat_init());
   entity.set_transform(transform);
   
+  
+  entity.add_component<Explosion_model>();
   
   // Physics
   const Core::Box_collider collider(transform.get_scale());
@@ -185,7 +186,7 @@ create_explosion(World_data::World *world)
   
   // Other stuff.
   entity.set_model_id(0);
-  entity.set_material_id(0);
+  entity.set_material_id(Resource::Texture::dev_squares);
 }
 
 

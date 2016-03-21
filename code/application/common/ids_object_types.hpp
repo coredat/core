@@ -15,14 +15,12 @@ enum ENUM : uint32_t {
   
   dev_generic,
   
-  dev_dynamic_cube,
-  dev_view_cube,
-  
-  dev_static_ground,
-  
-  dev_actor,
-  dev_gun,
-  dev_npc_actor,
+  game_camera,
+  explosion,
+  bullet,
+  player,
+  npc,
+  level,
   
   game_state,
 

@@ -2,6 +2,7 @@
 #include <core/interface/entity.hpp>
 #include "../common/ids_object_tags.hpp"
 #include "../level_functions.hpp"
+#include "../entity_factory.hpp"
 
 
 void
@@ -10,7 +11,6 @@ Enemy_controller::on_start()
   Core::Transform trans = get_entity().get_transform();
   trans.set_position(math::vec3_init(0, 0, Level::get_bottom_of_level()));
   get_entity().set_transform(trans);
-  get_entity().set_material_id(rand() % 4);
 }
 
 
@@ -55,5 +55,6 @@ Enemy_controller::on_collision(const Core::Entity &collided_with)
   if(collided_with.has_tag(Tag::projectile))
   {
     get_entity().destroy();
+    Entity_factory::create_explosion(m_world_data, get_entity().get_transform());
   }
 }

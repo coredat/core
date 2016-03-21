@@ -3,9 +3,8 @@
 
 
 #include <core/interface/interface_fwd.hpp>
+#include <core/transform/transform.hpp>
 #include <data/world_data/world_data_fwd.hpp>
-#include <math/transform/transform.hpp>
-
 
 namespace Entity_factory {
 
@@ -35,7 +34,7 @@ create_enemy(World_data::World *world);
 
 
 Core::Entity
-create_explosion(World_data::World *world);
+create_explosion(World_data::World *world, const Core::Transform transform);
 
 } // ns
 

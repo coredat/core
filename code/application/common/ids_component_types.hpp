@@ -19,6 +19,7 @@ enum ENUM : uint32_t {
   
   gun_model,
   move_model,
+  explosion_model,
 
 }; // enum
 } // ns
