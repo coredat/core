@@ -71,13 +71,15 @@ Enemy_controller::on_collision(const Core::Entity &collided_with)
     const Move_model *move = get_entity().get_component<Move_model>(Component_type::move_model);
     
     float strafe = 0.f;
+    float climb = 0.f;
     
     if(move)
     {
       strafe = move->get_strafe();
+      climb = move->get_climb();
     }
     
     Entity_factory::create_explosion(m_world_data, trans);
-    Entity_factory::create_multiplier(m_world_data, strafe);
+    Entity_factory::create_multiplier(m_world_data, strafe, climb);
   }
 }

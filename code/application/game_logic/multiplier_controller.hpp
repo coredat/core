@@ -11,7 +11,8 @@ class Multiplier_controller : public Core::Component
 private:
 
   void            on_start() override;
-  void            on_collision(const Core::Entity &actor) override;
+  void            on_update(const float dt) override;
+  void            on_collision(const Core::Entity &entity) override;
 
 private:
 

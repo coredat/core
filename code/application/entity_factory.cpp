@@ -95,6 +95,7 @@ create_actor(World_data::World *world)
   World_data::world_create_new_entity(world, &entity, Object_type::player);
   
   entity.set_name("Player");
+  entity.add_tag(Tag::actor);
   
   // Logic
   entity.add_component<Actor_controller>();
@@ -197,7 +198,7 @@ create_explosion(World_data::World *world, const Core::Transform transform)
 
 
 Core::Entity
-create_multiplier(World_data::World *world, const float strafe = 0.f)
+create_multiplier(World_data::World *world, const float strafe, const float depth)
 {
   Core::Entity entity;
   World_data::world_create_new_entity(world, &entity, Object_type::multiplier);
@@ -218,6 +219,7 @@ create_multiplier(World_data::World *world, const float strafe = 0.f)
   if(move)
   {
     move->strafe_left(strafe);
+    move->climb_up(depth);
   }
   
   // Physics

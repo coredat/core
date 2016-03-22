@@ -39,7 +39,7 @@ Actor_controller::on_early_update(const float dt)
       
       if(movement != 0)
       {
-        move->strafe_left(movement * dt);
+        move->strafe_left(movement * 2.f * dt);
       }
     }
   }
