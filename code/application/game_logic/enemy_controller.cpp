@@ -55,6 +55,10 @@ Enemy_controller::on_collision(const Core::Entity &collided_with)
   if(collided_with.has_tag(Tag::projectile))
   {
     get_entity().destroy();
-    Entity_factory::create_explosion(m_world_data, get_entity().get_transform());
+    
+    const Core::Transform trans = get_entity().get_transform();
+    
+    Entity_factory::create_explosion(m_world_data, trans);
+    Entity_factory::create_multiplier(m_world_data, trans);
   }
 }

@@ -21,6 +21,7 @@ enum ENUM : uint32_t {
   player,
   npc,
   level,
+  multiplier,
   
   game_state,
 

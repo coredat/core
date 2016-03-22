@@ -16,6 +16,7 @@ enum ENUM : uint32_t {
   camera_controller,
   bullet_controller,
   enemy_controller,
+  multiplier_controller,
   
   enemy_spawner_model,
   player_stats_model,

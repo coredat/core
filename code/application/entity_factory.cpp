@@ -1,4 +1,5 @@
 #include "entity_factory.hpp"
+#include "level_functions.hpp"
 #include <application/common/ids_object_tags.hpp>
 #include <application/common/ids_object_types.hpp>
 #include <application/game_logic/actor_controller.hpp>
@@ -9,13 +10,12 @@
 #include <application/game_logic/gun_model.hpp>
 #include <application/game_logic/move_model.hpp>
 #include <application/game_logic/explosion_model.hpp>
-#include <core/interface/entity.hpp>
-#include <core/physics/box_collider.hpp>
 #include <application/game_logic/game_controller.hpp>
 #include <application/game_logic/enemy_controller.hpp>
+#include <application/game_logic/multiplier_controller.hpp>
 #include <application/resources.hpp>
-#include "level_functions.hpp"
-#include <iostream>
+#include <core/interface/entity.hpp>
+#include <core/physics/box_collider.hpp>
 
 
 namespace Entity_factory {
@@ -38,7 +38,7 @@ create_level(World_data::World *world)
   entity.set_transform(transform);
   
   const Core::Box_collider collider(transform.get_scale());
-  //entity.set_collider(collider);
+  //entity.set_collider(collider);e
   
   entity.set_model_id(Resource::Model::unit_tube);
   entity.set_material_id(Resource::Texture::dev_green);
@@ -182,7 +182,6 @@ create_explosion(World_data::World *world, const Core::Transform transform)
   // Transform
   entity.set_transform(transform);
   
-  
   entity.add_component<Explosion_model>();
   
   // Physics
@@ -192,6 +191,36 @@ create_explosion(World_data::World *world, const Core::Transform transform)
   // Other stuff.
   entity.set_model_id(0);
   entity.set_material_id(Resource::Texture::dev_squares);
+  
+  return entity;
+}
+
+
+Core::Entity
+create_multiplier(World_data::World *world, const Core::Transform transform)
+{
+  Core::Entity entity;
+  World_data::world_create_new_entity(world, &entity, Object_type::multiplier);
+  
+  entity.set_name("Multiplier");
+  entity.add_tag(Tag::pickup);
+  
+  // Transform
+  entity.set_transform(transform);
+  
+  // Add logic.
+  entity.add_component<Multiplier_controller>();
+  entity.add_component<Move_model>();
+  
+  // Physics
+  const Core::Box_collider collider(transform.get_scale());
+  //entity.set_collider(collider);
+  
+  // Other stuff.
+  entity.set_model_id(0);
+  entity.set_material_id(Resource::Texture::dev_colored_squares);
+  
+  return entity;
 }
 
 

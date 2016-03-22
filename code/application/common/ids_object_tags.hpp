@@ -18,6 +18,7 @@ enum ENUM : uint32_t {
   player          = 1 << 3,
   network_player  = 1 << 4,
   projectile      = 1 << 5,
+  pickup          = 1 << 6,
 
 }; // enum
 } // ns
