@@ -9,36 +9,22 @@
 void
 Move_model::on_start()
 {
-  static int i = 0;
-  i++;
-  
-  srand(i);
-  
-  const int32_t random_value = rand() & 1000000;
-  
-  m_strafe = random_value;
-  m_pending_strafe = 0.1f;
 }
 
 
 void
 Move_model::on_update(const float dt)
 {
-  // Strafe
-  if(m_pending_strafe != 0.f)
+  // Set transform
   {
-    m_strafe += ((m_pending_strafe * m_move_speed) * dt);
-    m_pending_strafe = 0.f;
-    
     const math::vec2 level_position = Level::get_point_on_cirlce(m_strafe);
     
     Core::Transform trans = get_entity().get_transform();
-    const math::vec3 position = trans.get_position();
     
     trans.set_position(math::vec3_init(
-                        math::vec2_get_x(level_position),
-                        math::vec2_get_y(level_position),
-                        math::vec3_get_z(position)
+                       math::vec2_get_x(level_position),
+                       math::vec2_get_y(level_position),
+                       m_depth
                        ));
     
     get_entity().set_transform(trans);
@@ -63,9 +49,9 @@ Move_model::on_update(const float dt)
       Core::Transform trans = get_entity().get_transform();
       const math::vec3 curr_pos = trans.get_position();
       
-      const float new_z = math::max(math::vec3_get_z(curr_pos) + offset, m_ground);
+      m_depth = math::max(m_depth + offset, m_ground);
       
-      if(new_z <= m_ground)
+      if(m_depth <= m_ground)
       {
         m_move_state = Movement_state::grounded;
       }
@@ -73,7 +59,7 @@ Move_model::on_update(const float dt)
       const math::vec3 new_pos = math::vec3_init(
         math::vec3_get_x(curr_pos),
         math::vec3_get_y(curr_pos),
-        new_z
+        m_depth
       );
       trans.set_position(new_pos);
       
@@ -85,13 +71,30 @@ Move_model::on_update(const float dt)
     default:
       break;
   };
+  
+  // Check if entity is out the map
+  if(m_depth < Level::get_far_death_zone() ||
+     m_depth > Level::get_near_death_zones())
+  {
+    get_entity().destroy();
+  }
 }
 
 
 void
 Move_model::strafe_left(const float left)
 {
-  m_pending_strafe = left;
+  m_strafe += left;
+}
+
+
+void
+Move_model::climb_up(const float up)
+{
+  if(m_move_state == Movement_state::grounded)
+  {
+    m_depth += up;
+  }
 }
 
 

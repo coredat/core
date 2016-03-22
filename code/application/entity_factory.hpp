@@ -39,7 +39,7 @@ create_explosion(World_data::World *world, const Core::Transform transform);
 
 
 Core::Entity
-create_multiplier(World_data::World *world, const Core::Transform transform);
+create_multiplier(World_data::World *world, const float strafe);
 
 
 } // ns

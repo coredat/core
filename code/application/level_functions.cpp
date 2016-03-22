@@ -19,4 +19,5 @@ get_point_on_cirlce(const float a)
 }
 
 
+
 } // ns

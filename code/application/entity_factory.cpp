@@ -197,7 +197,7 @@ create_explosion(World_data::World *world, const Core::Transform transform)
 
 
 Core::Entity
-create_multiplier(World_data::World *world, const Core::Transform transform)
+create_multiplier(World_data::World *world, const float strafe = 0.f)
 {
   Core::Entity entity;
   World_data::world_create_new_entity(world, &entity, Object_type::multiplier);
@@ -206,14 +206,22 @@ create_multiplier(World_data::World *world, const Core::Transform transform)
   entity.add_tag(Tag::pickup);
   
   // Transform
-  entity.set_transform(transform);
+  Core::Transform trans;
+  trans.set_scale(math::vec3_init(0.2f, 0.2f, 0.2f));
+  entity.set_transform(trans);
   
   // Add logic.
   entity.add_component<Multiplier_controller>();
-  entity.add_component<Move_model>();
+  Move_model *move = entity.add_component<Move_model>();
+  assert(move);
+  
+  if(move)
+  {
+    move->strafe_left(strafe);
+  }
   
   // Physics
-  const Core::Box_collider collider(transform.get_scale());
+  const Core::Box_collider collider(trans.get_scale());
   //entity.set_collider(collider);
   
   // Other stuff.

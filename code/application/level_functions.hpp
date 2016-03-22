@@ -21,12 +21,15 @@ get_bottom_of_level() { return -30.f; }
 
 
 constexpr float
-get_far_death_zone() { return get_bottom_of_level() * 2; }
-
+get_top_of_level() { return 0.f; }
 
 
 constexpr float
-get_top_of_level() { return 0.f; }
+get_far_death_zone() { return get_bottom_of_level() * 2; }
+
+
+constexpr float
+get_near_death_zones() { return 10.f; }
 
 
 } // ns

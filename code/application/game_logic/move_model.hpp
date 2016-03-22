@@ -18,7 +18,13 @@ private:
   
 public:
 
+  float             get_strafe() const { return m_strafe; }
+  float             get_climb() const { return m_depth; }
+  
+
   void              strafe_left(const float left);
+  void              climb_up(const float up);
+  
   void              jump();
   void              duck();
   
@@ -38,13 +44,12 @@ private:
   };
   
   Movement_state      m_move_state      = Movement_state::grounded;
+  float               m_depth           = 0.f;
   float               m_jump_speed      = 1.4f;
   float               m_jump_time       = 0.f;
   float               m_gravity         = -2.f;
   float               m_ground          = 0.f;
   float               m_strafe          = 0.f;
-  float               m_pending_strafe  = 0.1f;
-  float               m_move_speed      = 3.f;
 
 }; // class
 
