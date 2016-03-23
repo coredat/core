@@ -22,7 +22,6 @@ World::World(const World_setup &setup)
   const size_t chunk_128_mb = 134217728;
   Core::Memory::initialize(chunk_128_mb);
 
-
 //  sdl::input input;
 //  input.set_mouse_hold(true);
   
@@ -82,16 +81,6 @@ World::World(const World_setup &setup)
 
   Core_data::core_data_init(&m_core_data);
   Core_data::set_core_data(&m_core_data);
-
-  // Network Data
-  Net_data::Net_entity_pool net_entity_pool;
-  Net_data::Interpolation_pool interpolation_pool;
-  
-  Net_data::Network_data net_data;
-  net_data.interpolation_pool = &interpolation_pool;
-  net_data.net_entity_pool    = &net_entity_pool;
-
-  Net_data::set_net_data(&net_data);
 }
 
 

@@ -16,7 +16,6 @@
 #include <renderer/renderer.hpp>
 #include <renderer/simple_renderer/simple_renderer.hpp>
 
-#include <application/engine/application_client.hpp>
 #include <application/engine/application_host.hpp>
 #include <application/engine/application_common.hpp>
 #include <application/engine/application_graphics.hpp>

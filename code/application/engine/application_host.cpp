@@ -5,7 +5,6 @@
 #include <core/entity_id.hpp>
 #include <systems/environment/environment.hpp>
 #include <core/interface/entity.hpp>
-#include <data/network_data/net_entity_pool.hpp>
 #include <data/core_data/input_pool.hpp>
 #include <systems/physics_engine/physics_engine.hpp>
 #include <iostream>
