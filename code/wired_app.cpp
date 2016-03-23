@@ -3,8 +3,6 @@
 #include <application/common/ids_object_tags.hpp>
 
 #include <systems/transform/transformations.hpp>
-#include <systems/network/network.hpp>
-#include <systems/network/network_connection.hpp>
 #include <systems/entity/generic_id.hpp>
 #include <systems/environment/environment.hpp>
 
@@ -33,8 +31,6 @@
 int
 main(int argc, char *argv[])
 {
-  Network::Connection *connection = nullptr;
-
   const std::string title = "Application";
   Environment::Window window;
   Environment::window_create(&window, 800, 480, false, title.c_str());
@@ -43,7 +39,7 @@ main(int argc, char *argv[])
 
   Resource::load_default_resources(&world.m_world_data);
   
-  Application::host_initialize(&world.m_world_data, connection);
+  Application::host_initialize(&world.m_world_data);
   
   // Transform data
   std::vector<Simple_renderer::Node> renderer_nodes;
@@ -70,7 +66,6 @@ main(int argc, char *argv[])
     
     Application::host_think(
       &world.m_world_data,
-      connection,
       delta_time);
     
     uint32_t number_found_with_tag(0);
@@ -89,8 +84,6 @@ main(int argc, char *argv[])
         0
       );
   }
-  
-  Network::destroy_connection(connection);
   
   return 0;
 }

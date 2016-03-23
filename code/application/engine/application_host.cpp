@@ -1,7 +1,6 @@
 #include "application_host.hpp"
 #include "../entity_factory.hpp"
 #include <data/data.hpp>
-#include <systems/network/network.hpp>
 #include <core/entity_id.hpp>
 #include <systems/environment/environment.hpp>
 #include <core/interface/entity.hpp>
@@ -22,8 +21,7 @@ namespace Application {
 
 void
 host_initialize(
-  World_data::World *world,
-  Network::Connection *connection)
+  World_data::World *world)
 {
   // * Add camera's * //
   {
@@ -56,7 +54,6 @@ host_initialize(
 void
 host_think(
   World_data::World *world,
-  Network::Connection *connection,
   const float delta_time)
 {
 //  Network::poll_events(connection,

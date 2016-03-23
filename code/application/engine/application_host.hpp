@@ -3,7 +3,6 @@
 
 
 #include <data/world_data/world_data_fwd.hpp>
-#include <systems/network/network_fwd.hpp>
 #include <systems/environment/environment_fwd.hpp>
 
 
@@ -15,8 +14,7 @@ namespace Application {
 */
 void
 host_initialize(
-  World_data::World *world,
-  Network::Connection *connection);
+  World_data::World *world);
 
 
 /*!
@@ -26,7 +24,6 @@ host_initialize(
 void
 host_think(
   World_data::World *world,
-  Network::Connection *connection,
   const float delta_time);
 
 
