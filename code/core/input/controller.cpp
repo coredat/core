@@ -32,21 +32,21 @@ Controller::is_button_down(const Button::ENUM button) const
 void
 Controller::serialize(uint8_t out_data[16])
 {
-  uint32_t offset = 0;
+ // uint32_t offset = 0;
   
   // Copy axis.
 
-  memcpy(&out_data[offset], &m_axis[0].x, sizeof(float));
-  offset += sizeof(float);
-
-  memcpy(&out_data[offset], &m_axis[0].y, sizeof(float));
-  offset += sizeof(float);
-
-  memcpy(&out_data[offset], &m_axis[1].x, sizeof(float));
-  offset += sizeof(float);
-
-  memcpy(&out_data[offset], &m_axis[1].y, sizeof(float));
-  offset += sizeof(float);
+//  memcpy(&out_data[offset], &m_axis[0].x, sizeof(float));
+//  offset += sizeof(float);
+//
+//  memcpy(&out_data[offset], &m_axis[0].y, sizeof(float));
+//  offset += sizeof(float);
+//
+//  memcpy(&out_data[offset], &m_axis[1].x, sizeof(float));
+//  offset += sizeof(float);
+//
+//  memcpy(&out_data[offset], &m_axis[1].y, sizeof(float));
+//  offset += sizeof(float);
 
   // Buttons
 

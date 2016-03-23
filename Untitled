@@ -1,0 +1,31 @@
+
+
+Core::Entity entity({
+  component,
+  component,
+  component,
+});
+
+
+Core::World world;
+
+Core::World::on_collision([](Core::Entity ent, Core::Entity ent){
+
+});
+
+
+Core::World::new_frame({
+
+});
+
+class IAmEntity
+{
+public:
+
+  IAmEntity()
+  {
+    Core::Collider collider;
+    Core::World::add_collider(collider);
+  }
+
+};

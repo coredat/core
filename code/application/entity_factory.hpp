@@ -35,7 +35,8 @@ create_enemy(World_data::World *world);
 
 
 Core::Entity
-create_explosion(World_data::World *world, const Core::Transform transform);
+create_explosion(World_data::World *world,
+                 const Core::Transform transform);
 
 
 Core::Entity

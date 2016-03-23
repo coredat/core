@@ -12,7 +12,7 @@ namespace Audio {
 void
 play_sample(const uint32_t audio_id)
 {
-  auto world = World_data::get_world();
+  //auto world = World_data::get_world();
   
   // play audio
 }

@@ -38,7 +38,7 @@ create_level(World_data::World *world)
   entity.set_transform(transform);
   
   const Core::Box_collider collider(transform.get_scale());
-  //entity.set_collider(collider);e
+  //entity.set_collider(collider);
   
   entity.set_model_id(Resource::Model::unit_tube);
   entity.set_material_id(Resource::Texture::dev_green);
