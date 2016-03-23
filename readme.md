@@ -1,3 +1,3 @@
-# Wired
+# Core
 
-All rights reserved.
+Hobby 3d game engine thing!
