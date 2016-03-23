@@ -46,6 +46,8 @@ main(int argc, char *argv[])
 
   Resource::load_default_resources(&world.m_world_data);
   
+  Application::host_initialize(&world.m_world_data, connection);
+  
   // Transform data
   std::vector<Simple_renderer::Node> renderer_nodes;
   
@@ -89,14 +91,6 @@ main(int argc, char *argv[])
         renderer_nodes.size(),
         0
       );
-
-    // GUI Test
-    {
-      // Generate views
-      Core::Gui_view view;
-      view.set_color(Core::Color::green());
-      view.set_envelope(Core::Rect(0, 0, 1, 1));
-    }
   }
   
   Network::destroy_connection(connection);
