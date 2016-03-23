@@ -22,7 +22,7 @@ public:
   Entity                create_entity();
   Entity_ref            find_entity(const char *name);
   
-private:
+//private:
 
   Core_data::Core       m_core_data;
   World_data::World     m_world_data;

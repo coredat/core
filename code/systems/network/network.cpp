@@ -239,7 +239,7 @@ poll_events(Connection *connection,
 {
   if(!connection)
   {
-    assert(false);
+    //assert(false);
     
     if(log && !connection)
     {
