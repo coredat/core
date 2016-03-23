@@ -8,8 +8,6 @@
 #include <systems/entity/generic_id.hpp>
 #include <systems/environment/environment.hpp>
 
-#include <core/gui/gui_view.hpp>
-
 #include <math/math.hpp>
 #include <utilities/timer.hpp>
 

@@ -2,9 +2,6 @@
 #include <systems/audio/audio.hpp>
 
 #include <core/memory/memory.hpp>
-#include <core/memory/memory.hpp>
-#include <core/gui/gui_view.hpp>
-#include <core/memory/memory.hpp>
 #include <data/data.hpp>
 
 #include <graphics_api/initialize.hpp>
