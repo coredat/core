@@ -37,23 +37,8 @@ public:
   }
   
   
-  uint32_t                      get_color() const { return m_color; }
-  float                         get_red() const;
-  float                         get_green() const;
-  float                         get_blue() const;
-  float                         get_alpha() const;
+  uint32_t          get_color() const { return m_color; }
   
-  /*
-    Predefined colors
-  */
-  constexpr static Color        white()   { return Color(0xFFFFFFFF); }
-  constexpr static Color        black()   { return Color(0xFF000000); }
-  constexpr static Color        red()     { return Color(0xFFFF0000); }
-  constexpr static Color        green()   { return Color(0xFF00FF00); }
-  constexpr static Color        blue()    { return Color(0xFF0000FF); }
-  constexpr static Color        yellow()  { return Color(0xFFFFFF00); }
-  constexpr static Color        magenta() { return Color(0xFFFF00FF); }
-  constexpr static Color        cyan()    { return Color(0xFF00FFFF); }
   
 private:
 

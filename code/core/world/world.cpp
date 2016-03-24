@@ -17,7 +17,13 @@
 namespace Core {
 
 
+struct World::Impl
+{
+};
+
+
 World::World(const World_setup &setup)
+: m_impl(new World::Impl)
 {
   const size_t chunk_128_mb = 134217728;
   Core::Memory::initialize(chunk_128_mb);
@@ -84,10 +90,18 @@ World::World(const World_setup &setup)
 }
 
 
+World::~World()
+{
+}
+
+
 Entity
 World::create_entity()
 {
-  return Entity();
+  Entity out_entity;
+  World_data::world_create_new_entity(&m_world_data, &out_entity, 99);
+  
+  return out_entity;
 }
 
 

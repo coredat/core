@@ -176,7 +176,7 @@ Camera::get_far_plane() const
 
 
 void
-Camera::set_clear_color(const float r, const float g, const float b)
+Camera::set_clear_color(const Core::Color color)
 {
 
 }

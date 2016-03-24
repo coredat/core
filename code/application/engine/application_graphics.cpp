@@ -25,7 +25,7 @@ graphics_think(World_data::World *world,
 
   // Get active camera and generate a projection matrix.
   // TODO: Need to pass in the environment height and width into this function.
-  const auto cam = World_data::camera_pool_get_properties_for_priority(world->camera_pool, peer, 1);
+  const auto cam = World_data::camera_pool_get_properties_for_priority(world->camera_pool, peer, 0);
   
   const math::mat4 proj = math::mat4_projection(cam.viewport_width,
                                                 cam.viewport_height,
@@ -36,7 +36,7 @@ graphics_think(World_data::World *world,
   // Get entity's transform so we can generate a view.
   math::mat4 view = math::mat4_zero();
   {
-    const auto id = World_data::camera_pool_get_entity_id_for_priority(world->camera_pool, peer, 1);
+    const auto id = World_data::camera_pool_get_entity_id_for_priority(world->camera_pool, peer, 0);
 
     // If we cant find the camera we'll just make a dummy orbit one for the time.
     // This is good for debugging.

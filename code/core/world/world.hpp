@@ -8,6 +8,7 @@
 #include <stdint.h>
 #include <data/core_data/core_data.hpp>
 #include <data/world_data/world_data.hpp>
+#include <memory>
 
 
 namespace Core {
@@ -15,9 +16,14 @@ namespace Core {
 
 class World
 {
+
+  World(const World&) = delete;
+  World& operator=(const World&) = delete;
+
 public:
 
   explicit              World(const World_setup &setup);
+                        ~World();
 
   Entity                create_entity();
   Entity_ref            find_entity(const char *name);
@@ -26,6 +32,12 @@ public:
 
   Core_data::Core       m_core_data;
   World_data::World     m_world_data;
+  
+  
+private:
+
+  struct Impl;
+  std::unique_ptr<Impl> m_impl;
 
 };
 

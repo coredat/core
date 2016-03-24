@@ -3,19 +3,29 @@
 
 
 #include <stdint.h>
+#include <memory>
 
 
 namespace Core {
 
 
-class Window
+class Window final
 {
+
+  Window(Window &) = delete;
+  Window& operator=(Window&) = delete;
+
 public:
+
+  Window(Window &&);
+  Window& operator=(Window&&);
 
   explicit            Window(const uint32_t width,
                              const uint32_t height,
                              const bool is_fullscreen = false,
                              const char *title = "");
+  
+                      ~Window();
   
   uint32_t            get_width() const;
   uint32_t            get_height() const;
@@ -24,7 +34,8 @@ public:
   
 private:
 
-  
+  struct Impl;
+  std::unique_ptr<Impl>   m_impl;
 
 }; // class
 

@@ -4,6 +4,7 @@
 
 #include <stdint.h>
 #include <core/interface/entity.hpp>
+#include <core/color/color.hpp>
 
 
 namespace Core {
@@ -61,7 +62,7 @@ public:
   void                  set_far_plane(const float far_plane);
   float                 get_far_plane() const;
   
-  void                  set_clear_color(const float r, const float g, const float b);
+  void                  set_clear_color(const Core::Color color);
   // TODO: Core::Color should that be a thing? if so we could set get a color here.
   
 private:

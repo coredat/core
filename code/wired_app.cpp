@@ -8,7 +8,7 @@
 
 #include <math/math.hpp>
 #include <utilities/timer.hpp>
-
+#include <core/camera/camera.hpp>
 #include <iostream>
 
 #include <renderer/renderer.hpp>
@@ -49,6 +49,25 @@ main(int argc, char *argv[])
   
   Graphics_api::clear_color_set(0.4f, 0.2f, 0.2f);
 
+  Core::Transform cube_trans;
+  cube_trans.set_position(math::vec3_init(0, 0, -1.f));
+  cube_trans.set_scale(math::vec3_init(0.1f, 0.1f, 0.1f));
+
+  Core::Entity cube = world.create_entity();
+  cube.set_transform(cube_trans);
+  cube.set_model_id(0);
+  cube.set_material_id(1);
+  
+  Core::Entity cam_entity = world.create_entity();
+  cam_entity.set_material_id(1);
+  
+  Core::Transform transform;
+  transform.set_position(math::vec3_init(0.f, 0.5f, 1.f));
+  cam_entity.set_transform(transform);
+  
+  Core::Camera cam;
+  cam.set_attached_entity(cam_entity);
+  
   // Foop
   bool run_game = true;
   
@@ -56,26 +75,22 @@ main(int argc, char *argv[])
   {
     const float delta_time = static_cast<float>(frame_timer.split()) / 1000.f;
 
-    // ** Common ** //
+//    // ** Common ** //
     
     Application::common_think(
       &window,
       &world.m_core_data);
     
-    // ** Update World ** //
-    
-    Application::host_think(
-      &world.m_world_data,
-      delta_time);
-    
-    uint32_t number_found_with_tag(0);
-    Core::Entity_id ids[5];
-    
-    World_data::world_find_entities_with_tag(&world.m_world_data, Tag::player, &number_found_with_tag, &ids[0], 5);
-
-    
-    // ** Graphics ** //
-
+  
+//
+//    // ** Update World ** //
+//    
+//    Application::host_think(
+//      &world.m_world_data,
+//      delta_time);
+//    
+//    // ** Graphics ** //
+//
     renderer_nodes.resize(world.m_world_data.entity_pool->size);
     Application::graphics_think(
         &world.m_world_data,
