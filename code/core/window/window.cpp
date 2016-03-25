@@ -15,6 +15,7 @@ Window::Window(const uint32_t width,
                const char *title)
 : m_impl(new Window::Impl)
 {
+
 }
 
 
@@ -57,6 +58,19 @@ const char *
 Window::get_title() const
 {
   return "";
+}
+
+
+bool
+Window::is_open() const
+{
+  return true;
+}
+
+
+Window::operator bool() const
+{
+  return is_open();
 }
 
 

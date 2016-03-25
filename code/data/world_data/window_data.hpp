@@ -16,8 +16,21 @@ struct Application_window
 };
 
 
+/*!
+  Create an application.
+*/
 void
-application_window_create(Application_window *app, );
+application_window_create(Application_window *app,
+                          const uint32_t width,
+                          const uint32_t height,
+                          const bool is_fullscreen,
+                          const char *title);
+
+/*!
+  Checks to see a window is open.
+*/
+bool
+application_window_is_open(Application_window *app);
 
 
 } // ns
