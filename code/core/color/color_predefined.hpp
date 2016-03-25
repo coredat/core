@@ -7,20 +7,22 @@
 /*
   Predefined colors.
 */
+namespace Core {
 namespace Color_utils {
 
 
 constexpr Color        white()      { return Color(0xFFFFFFFF); }
-constexpr Color        black()      { return Color(0xFF000000); }
-constexpr Color        red()        { return Color(0xFFFF0000); }
-constexpr Color        green()      { return Color(0xFF00FF00); }
-constexpr Color        blue()       { return Color(0xFF0000FF); }
-constexpr Color        yellow()     { return Color(0xFFFFFF00); }
-constexpr Color        magenta()    { return Color(0xFFFF00FF); }
-constexpr Color        cyan()       { return Color(0xFF00FFFF); }
+constexpr Color        black()      { return Color(0x000000FF); }
+constexpr Color        red()        { return Color(0xFF0000FF); }
+constexpr Color        green()      { return Color(0x00FF00FF); }
+constexpr Color        blue()       { return Color(0x0000FFFF); }
+constexpr Color        yellow()     { return Color(0xFFFF00FF); }
+constexpr Color        magenta()    { return Color(0xFF00FFFF); }
+constexpr Color        cyan()       { return Color(0x00FFFFFF); }
 constexpr Color        null_color() { return Color(0x00000000); }
 
 
+} // ns
 } // ns
 
 

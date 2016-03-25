@@ -11,8 +11,12 @@
 #include <core/camera/camera.hpp>
 #include <iostream>
 
+#include <core/window/window.hpp>
+#include <core/color/color_predefined.hpp>
+
 #include <renderer/renderer.hpp>
 #include <renderer/simple_renderer/simple_renderer.hpp>
+#include <core/renderer/mesh_renderer.hpp>
 
 #include <application/engine/application_host.hpp>
 #include <application/engine/application_common.hpp>
@@ -36,7 +40,8 @@ main(int argc, char *argv[])
   Environment::window_create(&window, 800, 480, false, title.c_str());
 
   Core::World world(Core::World_setup{});
-
+  Core::Window app_window(800, 480, false);
+  
   Resource::load_default_resources(&world.m_world_data);
   
   Application::host_initialize(&world.m_world_data);
@@ -47,12 +52,10 @@ main(int argc, char *argv[])
   util::timer frame_timer;
   frame_timer.start();
   
-  Graphics_api::clear_color_set(0.4f, 0.2f, 0.2f);
-
   Core::Transform cube_trans;
   cube_trans.set_position(math::vec3_init(0, 0, -1.f));
   cube_trans.set_scale(math::vec3_init(0.1f, 0.1f, 0.1f));
-
+  
   Core::Entity cube = world.create_entity();
   cube.set_transform(cube_trans);
   cube.set_model_id(0);
@@ -66,38 +69,17 @@ main(int argc, char *argv[])
   cam_entity.set_transform(transform);
   
   Core::Camera cam;
+  cam.set_clear_color(Core::Color_utils::magenta());
   cam.set_attached_entity(cam_entity);
   
-  // Foop
-  bool run_game = true;
+  Core::Mesh_renderer renderer;
   
-  while(run_game)
+  while(app_window)
   {
     const float delta_time = static_cast<float>(frame_timer.split()) / 1000.f;
+    
 
-//    // ** Common ** //
-    
-    Application::common_think(
-      &window,
-      &world.m_core_data);
-    
-  
-//
-//    // ** Update World ** //
-//    
-//    Application::host_think(
-//      &world.m_world_data,
-//      delta_time);
-//    
-//    // ** Graphics ** //
-//
-    renderer_nodes.resize(world.m_world_data.entity_pool->size);
-    Application::graphics_think(
-        &world.m_world_data,
-        renderer_nodes.data(),
-        renderer_nodes.size(),
-        0
-      );
+    renderer.render();
   }
   
   return 0;

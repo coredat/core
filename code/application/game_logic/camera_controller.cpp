@@ -1,6 +1,7 @@
 #include "camera_controller.hpp"
 #include "../common/ids_object_tags.hpp"
 #include <core/interface/entity.hpp>
+#include <core/camera/camera.hpp>
 #include <core/input/input.hpp>
 #include <algorithm>
 

@@ -55,6 +55,17 @@ camera_pool_add_camera(Camera_pool *pool,
                        const Camera::Camera_properties props);
 
 /*!
+  Update a camera in the pool.
+  \param pool The pool to push data into.
+  \param id The id of the camera. This is so we can find the transform.
+  \param props the properties of the transform.
+*/
+void
+camera_pool_update_camera(Camera_pool *pool,
+                          const Core::Entity_id id,
+                          const Camera::Camera_properties props);
+
+/*!
   Removes a camera from the pool.
   \param pool The pool to remove data from.
   \param id The id of the camera you wish to remove.

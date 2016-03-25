@@ -6,6 +6,7 @@
 #include <core/input/controller.hpp>
 #include <core/camera/camera.hpp>
 #include "../common/ids_component_types.hpp"
+#include <math/vec/vec3.hpp>
 
 
 class Camera_controller : public Core::Component

@@ -13,7 +13,7 @@ namespace Core {
   This is an immutable object.
   
   We represent color as.
-  0xAARRGGBB
+  0xRRGGBBAA
 */
 class Color
 {

@@ -9,6 +9,10 @@
 namespace Core {
 
 
+/*!
+  Creates an application window or context.
+  Note: There can only be one window per application.
+*/
 class Window final
 {
 
@@ -17,9 +21,6 @@ class Window final
 
 public:
 
-  Window(Window &&);
-  Window& operator=(Window&&);
-
   explicit            Window(const uint32_t width,
                              const uint32_t height,
                              const bool is_fullscreen = false,
@@ -27,10 +28,17 @@ public:
   
                       ~Window();
   
+                      Window(Window &&);
+  Window&             operator=(Window&&);
+  
   uint32_t            get_width() const;
   uint32_t            get_height() const;
   bool                is_fullscreen() const;
   const char *        get_title() const;
+  
+  
+  bool                is_open() const;
+                      operator bool() const; // Alias for is_open().
   
 private:
 

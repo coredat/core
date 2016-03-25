@@ -2,27 +2,14 @@
 #define CAMERA_INCLUDED_054F2215_600C_4CD3_9A40_DEC0DE5ACE0D
 
 
+#include <core/camera/camera_properties.hpp>
+#include <core/interface/interface_fwd.hpp>
 #include <stdint.h>
-#include <core/interface/entity.hpp>
 #include <core/color/color.hpp>
+#include <memory>
 
 
 namespace Core {
-
-
-enum class Camera_type
-{
-  perspective,
-};
-
-
-namespace Camera_clear {
-enum ENUM
-{
-  color = 1 << 0,
-  depth = 1 << 1,
-};
-};
 
 
 class Camera final
@@ -46,6 +33,8 @@ public:
   
   void                  set_clear_flags(const uint32_t flags);
   uint32_t              get_clear_flags() const;
+  bool                  will_clear_color() const;
+  bool                  will_clear_depth() const;
   
   void                  set_width(const uint32_t width);
   uint32_t              get_width() const;
@@ -63,11 +52,12 @@ public:
   float                 get_far_plane() const;
   
   void                  set_clear_color(const Core::Color color);
-  // TODO: Core::Color should that be a thing? if so we could set get a color here.
+  Core::Color           get_clear_color() const;
   
 private:
 
-  Core::Entity_id       m_attached_entity = Core::Entity_id_util::invalid_id();
+  struct Impl;
+  std::unique_ptr<Impl> m_impl;
 
 };
 

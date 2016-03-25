@@ -36,6 +36,22 @@ camera_pool_add_camera(Camera_pool *pool,
 
 
 void
+camera_pool_update_camera(Camera_pool *pool,
+                          const Core::Entity_id id,
+                          const Camera::Camera_properties props)
+{
+  for(uint32_t i = 0; i < pool->number_of_cameras; ++i)
+  {
+    if(pool->entity_id[i] == id)
+    {
+      pool->camera[i] = props;
+      return;
+    }
+  }
+}
+
+
+void
 camera_pool_remove_camera(Camera_pool *pool,
                           const Core::Entity_id id)
 {
@@ -131,7 +147,7 @@ camera_pool_get_properties_for_priority(Camera_pool *pool,
   // Failed
   return Camera::Camera_properties
   {
-    Camera::Type::perspective,
+    Core::Camera_type::perspective,
     600,
     480,
     0.7855f,

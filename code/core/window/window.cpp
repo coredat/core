@@ -27,10 +27,10 @@ Window::Window(Window &&other)
 {
 }
 
+
 Window& Window::operator=(Window &&other)
 {
 }
-
 
 
 uint32_t

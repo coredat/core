@@ -3,21 +3,16 @@
 
 
 #include <stdint.h>
+#include <core/camera/camera_properties.hpp>
 
 
 namespace Camera {
 
 
-enum class Type
-{
-  perspective,
-}; // enum
-
-
 // TODO: Reduce the size of this struct.
 struct Camera_properties
 {
-  Type      type              = Type::perspective;
+  Core::Camera_type type = Core::Camera_type::perspective;
   
   uint32_t  viewport_width    = 0;
   uint32_t  viewport_height   = 0;
@@ -26,8 +21,8 @@ struct Camera_properties
   float     near_plane        = 0.1f;
   float     far_plane         = 1000.f;
   
-  bool      clear_depth       = true;
-  bool      clear_color       = true;
+  uint16_t  clear_flags       = Core::Camera_clear::color | Core::Camera_clear::depth;
+  uint32_t  clear_color       = 0;
 }; // struct
 
 
