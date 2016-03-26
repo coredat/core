@@ -11,8 +11,14 @@ application_window_create(Application_window *app,
                           const bool is_fullscreen,
                           const char *title)
 {
-  
 }
+
+
+void
+application_window_close(Application_window *app)
+{
+}
+
 
 
 bool

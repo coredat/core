@@ -26,6 +26,14 @@ application_window_create(Application_window *app,
                           const bool is_fullscreen,
                           const char *title);
 
+
+/*!
+  Closes the window.
+*/
+void
+application_window_close(Application_window *app);
+
+
 /*!
   Checks to see a window is open.
 */

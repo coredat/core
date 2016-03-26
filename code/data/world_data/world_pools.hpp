@@ -22,6 +22,7 @@ struct World
   Model_pool                  *model_pool           = nullptr;
   Camera_pool                 *camera_pool          = nullptr;
   Gui_view_pool               *gui_pool             = nullptr;
+  Application_window          *app_window           = nullptr;
 }; // struct
 
 
