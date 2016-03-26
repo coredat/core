@@ -1,4 +1,5 @@
 #include "window_data.hpp"
+#include <systems/environment/window.hpp>
 
 
 namespace World_data {
@@ -11,6 +12,7 @@ application_window_create(Application_window *app,
                           const bool is_fullscreen,
                           const char *title)
 {
+  
 }
 
 

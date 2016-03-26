@@ -13,6 +13,7 @@ struct Application_window
   uint32_t        width         = 0;
   uint32_t        height        = 0;
   bool            is_fullscreen = false;
+  const char      title[128];
 };
 
 

@@ -35,7 +35,11 @@ Window::Window(const uint32_t width,
                const char *title)
 : m_impl(new Window::Impl)
 {
-  
+  World_data::application_window_create(get_window(),
+                                        width,
+                                        height,
+                                        is_fullscreen,
+                                        title);
 }
 
 
@@ -52,6 +56,7 @@ Window::Window(Window &&other)
 
 Window& Window::operator=(Window &&other)
 {
+  assert(false);
   return *this;
 }
 
@@ -59,34 +64,34 @@ Window& Window::operator=(Window &&other)
 uint32_t
 Window::get_width() const
 {
-  return 0;
+  return get_window()->width;
 }
 
 uint32_t
 Window::get_height() const
 {
-  return 0;
+  return get_window()->height;
 }
 
 
 bool
 Window::is_fullscreen() const
 {
-  return false;
+  return get_window()->is_fullscreen;
 }
 
 
 const char *
 Window::get_title() const
 {
-  return "";
+  return get_window()->title;
 }
 
 
 bool
 Window::is_open() const
 {
-  return true;
+  return (get_width() && get_height());
 }
 
 
