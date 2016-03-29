@@ -10,12 +10,6 @@
 namespace Core {
 
 
-/*!
-  Creates an application window or context.
-  Note: There can only be one window per application.
-  
-  Rename to Context or App context
-*/
 class Context final
 {
 
@@ -24,8 +18,7 @@ class Context final
 
 public:
 
-  explicit            Context(const Graphics_api gfx_api,
-                              const uint32_t width,
+  explicit            Context(const uint32_t width,
                               const uint32_t height,
                               const bool is_fullscreen = false,
                               const char *title = "");
@@ -35,11 +28,17 @@ public:
                       Context(Context &&);
   Context&            operator=(Context&&);
   
-  uint32_t            get_width() const;
-  uint32_t            get_height() const;
-  bool                is_fullscreen() const;
   const char *        get_title() const;
+  void                set_title(const char * title);
   
+  uint32_t            get_width() const;
+  void                set_width(const uint32_t width);
+  
+  uint32_t            get_height() const;
+  void                set_height(const uint32_t height);
+  
+  bool                is_fullscreen() const;
+  void                set_fullscreen(const bool fullscreen);
   
   bool                is_open() const;
                       operator bool() const; // Alias for is_open().

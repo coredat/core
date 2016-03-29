@@ -1,9 +1,9 @@
 #!lua
 
  -- A project defines one build target
- project "Wired"
+ project "Core Engine"
 
-    kind "WindowedApp"
+    kind "StaticLib"
     language "C++"
 
     files {
@@ -14,28 +14,6 @@
       "../code/**.c",
       "../code/**.m",
       "/Users/PhilCK/Developer/sdl_wrapper/*",
-    }
-
-    libdirs {
-      "/usr/local/lib/",
-      "../3rdparty/bullet/lib/osx/",
-      "../3rdparty/enet/lib/osx/",
-    }
-
-    linkoptions {
-      "-lsdl2",
-      "-lsdl2_mixer",
-      "-lSOIL",
-      "-lsimple_renderer",
-      "-lbulletdynamics",
-      "-lbulletcollision",
-      "-llinearmath",
-    }
-
-    links {
-      "enet",
-      "OpenGL.framework",
-      "CoreFoundation.framework",
     }
 
     includedirs {

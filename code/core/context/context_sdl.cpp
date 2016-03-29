@@ -1,40 +1,67 @@
+
+/*
+  TODO:
+  This needs better logging.
+*/
+
 #define CORE_USE_SDL // Only have sdl at this point
 
 #ifdef CORE_USE_SDL
 
 #include <core/context/context.hpp>
-#include <core/context/context_graphics_api.hpp>
-#include <data/world_data/window_data.hpp>
-#include <data/world_data/world.hpp>
-#include <data/world_data/world_pools.hpp>
+#include <graphics_api/initialize.hpp>
 #include <systems/sdl_backend/sdl_message_loop.hpp>
+#include <stdatomic.h>
 #include <assert.h>
 
 
 namespace
 {
-  constexpr Uint32 fullscreen_mode = SDL_WINDOW_FULLSCREEN_DESKTOP; // rather than SDL_WINDOW_FULLSCREEN
+  // Rather than SDL_WINDOW_FULLSCREEN - aka fake fullscreen.
+  constexpr Uint32 fullscreen_mode = SDL_WINDOW_FULLSCREEN_DESKTOP;
+  
+  // only one instance allowed in an application lifetime.
+  // This could change, just right now no need.
+  atomic_bool instance_created(false);
 }
 
 
 namespace Core {
 
 
-struct Context::Impl
+/*
+  Holds the SDL impl details.
+*/
+struct
+Context::Impl
 {
-  bool is_open = true;
-  SDL_Window *window    = nullptr;
-  SDL_GLContext context = nullptr;
+  bool is_open               = true;
+  SDL_Window *window         = nullptr;
+  SDL_GLContext context      = nullptr;
 };
 
 
-Context::Context(const Graphics_api gfx_api,
-                 const uint32_t width,
+Context::Context(const uint32_t width,
                  const uint32_t height,
                  const bool is_fullscreen,
                  const char *title)
-: m_impl(new Context::Impl)
+: m_impl(new Context::Impl
 {
+  true,
+  nullptr,
+  nullptr,
+})
+{
+  if(instance_created)
+  {
+    assert(false);
+    return;
+  }
+  else
+  {
+    instance_created = true;
+  }
+
   // Setup hints (Must happen before creation of window)
   {
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
@@ -86,6 +113,10 @@ Context::Context(const Graphics_api gfx_api,
       assert(m_impl->context);
     }
   }
+  
+  
+  // Initialize the graphics api
+  ::Graphics_api::initialize();
 
 
   // Subscribe to the SDL event callback.
@@ -112,14 +143,15 @@ Context::~Context()
 
 
 Context::Context(Context &&other)
+: m_impl(std::move(other.m_impl))
 {
-
 }
 
 
 Context&
 Context::operator=(Context &&other)
 {
+  this->m_impl = std::move(other.m_impl);
   return *this;
 }
 
@@ -127,33 +159,137 @@ Context::operator=(Context &&other)
 uint32_t
 Context::get_width() const
 {
-  return 0;
+  assert(m_impl->window);
+
+	int w = 0;
+  int h = 0;
+	
+	SDL_GetWindowSize(m_impl->window, &w, &h);
+  
+  return static_cast<uint32_t>(w);
 }
+
+
+void
+Context::set_width(const uint32_t width)
+{
+  assert(m_impl);
+
+  int curr_width, curr_height;
+  SDL_GetWindowSize(m_impl->window, &curr_width, &curr_height);
+  
+  if(curr_width == width)
+  {
+    return;
+  }
+  
+  SDL_SetWindowSize(m_impl->window, static_cast<int>(width), curr_height);
+}
+
 
 uint32_t
 Context::get_height() const
 {
-  return 0;
+  assert(m_impl->window);
+
+	int w = 0;
+  int h = 0;
+	
+	SDL_GetWindowSize(m_impl->window, &w, &h);
+  
+  return static_cast<uint32_t>(h);
+}
+
+
+void
+Context::set_height(const uint32_t height)
+{
+  assert(m_impl);
+
+  int curr_width, curr_height;
+  SDL_GetWindowSize(m_impl->window, &curr_width, &curr_height);
+  
+  if(curr_height == height)
+  {
+    return;
+  }
+  
+  SDL_SetWindowSize(m_impl->window, curr_width, static_cast<int>(height));
 }
 
 
 bool
 Context::is_fullscreen() const
 {
-  return false;
+  assert(m_impl);
+  
+  SDL_Surface* surface = SDL_GetWindowSurface(m_impl->window);
+  assert(surface);
+  
+  if(!surface)
+  {
+    assert(false);
+    return false;
+  }
+  
+  return !!(surface->flags & fullscreen_mode);
+}
+
+
+void
+Context::set_fullscreen(const bool is_fullscreen)
+{
+  assert(m_impl);
+  
+  SDL_Surface* surface = SDL_GetWindowSurface(m_impl->window);
+  assert(surface);
+  
+  if(!surface)
+  {
+    assert(false);
+    return;
+  }
+  
+  if((surface->flags & fullscreen_mode) == is_fullscreen)
+  {
+    assert(false);
+    return;
+  }
+
+  if(SDL_SetWindowFullscreen(m_impl->window, is_fullscreen ? fullscreen_mode : 0) < 0)
+  {
+    assert(false);
+    return;
+  }
 }
 
 
 const char *
 Context::get_title() const
 {
-  return "";
+  assert(m_impl);
+
+  return SDL_GetWindowTitle(m_impl->window);
+}
+
+
+void
+Context::set_title(const char * title)
+{
+  assert(m_impl);
+  
+  SDL_SetWindowTitle(m_impl->window, title);
 }
 
 
 bool
 Context::is_open() const
 {
+  assert(m_impl);
+  
+  SDL_GL_SwapWindow(m_impl->window);
+  Sdl::event_process();
+  
   return m_impl->is_open;
 }
 

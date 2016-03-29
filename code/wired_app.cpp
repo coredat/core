@@ -12,7 +12,6 @@
 #include <iostream>
 
 #include <core/context/context.hpp>
-#include <core/context/context_graphics_api.hpp>
 #include <core/color/color_predefined.hpp>
 
 #include <renderer/renderer.hpp>
@@ -41,10 +40,9 @@ int
 main(int argc, char *argv[])
 {
   Core::World world(Core::World_setup{});
-  Core::Context app_window(Core::Graphics_api::OpenGL, 800, 480, false, "Core Window");
+  Core::Context app_window(800, 480, false, "Core Window");
   
   Audio::initialize();
-  Graphics_api::initialize();
   Simple_renderer::initialize();
   Debug_line_renderer::initialize();
   
@@ -83,8 +81,6 @@ main(int argc, char *argv[])
   while(app_window)
   {
     const float delta_time = static_cast<float>(frame_timer.split()) / 1000.f;
-    
-    Sdl::event_process();
 
     renderer.render();
   }

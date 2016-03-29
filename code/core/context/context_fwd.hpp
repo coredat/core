@@ -9,7 +9,6 @@ namespace Core {
 
 
 class Context;
-enum class Graphics_api : uint32_t;
 
 
 };

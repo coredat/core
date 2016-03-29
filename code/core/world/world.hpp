@@ -2,9 +2,9 @@
 #define WORLD_INCLUDED_F6D825F0_D062_4B85_A636_7EDE94635488
 
 
-#include "world_setup.hpp"
-#include "entity.hpp"
-#include "entity_ref.hpp"
+#include "world_setup.hpp" // TODO: Move to fwd dec
+#include <core/interface/entity.hpp>
+#include <core/interface/entity_ref.hpp>
 #include <stdint.h>
 #include <data/core_data/core_data.hpp>
 #include <data/world_data/world_data.hpp>

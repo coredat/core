@@ -11,13 +11,32 @@ namespace Core {
 namespace Context_utils {
 
 
-Core::Context     create_window(const Graphics_api gfx_api,
-                                const uint32_t width,
-                                const uint32_t height,
-                                const bool is_fullscreen = false,
-                                const std::string title = "");
+/*!
+  Sugar method that accepts a STL string as input.
+*/
+Core::Context
+create_window(const uint32_t width,
+              const uint32_t height,
+              const bool is_fullscreen = false,
+              const std::string title = "");
 
-std::string       get_title(const Core::Context &context);
+
+/*!
+  Sugar method that returns an STL string for a title.
+*/
+std::string
+get_title(const Core::Context &context);
+
+
+/*!
+  Sugar method to set the resolution of the window.
+  Internally just calls the the set methods for width etc.
+*/
+void
+set_resolution(Core::Context &context,
+               const uint32_t width,
+               const uint32_t height,
+               const bool is_fullscreen);
 
 
 } // ns
