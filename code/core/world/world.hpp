@@ -25,6 +25,8 @@ public:
   explicit              World(const World_setup &setup);
                         ~World();
 
+  void                  think();
+
   Entity                create_entity();
   Entity_ref            find_entity(const char *name);
   

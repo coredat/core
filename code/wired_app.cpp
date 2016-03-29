@@ -11,11 +11,13 @@
 #include <core/camera/camera.hpp>
 #include <iostream>
 
-#include <core/window/window.hpp>
+#include <core/context/context.hpp>
+#include <core/context/context_graphics_api.hpp>
 #include <core/color/color_predefined.hpp>
 
 #include <renderer/renderer.hpp>
 #include <renderer/simple_renderer/simple_renderer.hpp>
+#include <renderer/debug_line_renderer/debug_line_renderer.hpp>
 #include <core/renderer/mesh_renderer.hpp>
 
 #include <application/engine/application_host.hpp>
@@ -25,7 +27,10 @@
 #include <core/world/world.hpp>
 #include <vector>
 
+#include <graphics_api/initialize.hpp>
 #include <graphics_api/clear.hpp>
+
+#include <systems/sdl_backend/sdl_message_loop.hpp>
 
 #ifdef main
 #undef main
@@ -35,12 +40,13 @@
 int
 main(int argc, char *argv[])
 {
-  const std::string title = "Application";
-  Environment::Window window;
-  Environment::window_create(&window, 800, 480, false, title.c_str());
-
   Core::World world(Core::World_setup{});
-  Core::Window app_window(800, 480, false);
+  Core::Context app_window(Core::Graphics_api::OpenGL, 800, 480, false, "Core Window");
+  
+  Audio::initialize();
+  Graphics_api::initialize();
+  Simple_renderer::initialize();
+  Debug_line_renderer::initialize();
   
   Resource::load_default_resources(&world.m_world_data);
   
@@ -78,6 +84,7 @@ main(int argc, char *argv[])
   {
     const float delta_time = static_cast<float>(frame_timer.split()) / 1000.f;
     
+    Sdl::event_process();
 
     renderer.render();
   }

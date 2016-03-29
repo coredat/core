@@ -2,6 +2,7 @@
 #define WORLD_DATA_INCLUDED_4FAE9F04_0E15_4C3B_816B_F5C1FEA9EADA
 
 
+#include "window_data.hpp"
 #include "audio_pool.hpp"
 #include "camera_pool.hpp"
 #include "entity_pool.hpp"

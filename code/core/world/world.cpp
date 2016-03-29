@@ -31,12 +31,6 @@ World::World(const World_setup &setup)
 //  sdl::input input;
 //  input.set_mouse_hold(true);
   
-  Audio::initialize();
-  
-  Graphics_api::initialize();
-  Simple_renderer::initialize();
-  Debug_line_renderer::initialize();
-  Gui_renderer::initialize();
   
   static World_data::Model_pool model_pool;
   World_data::model_pool_init(&model_pool);
@@ -61,6 +55,9 @@ World::World(const World_setup &setup)
   
   static World_data::Gui_view_pool gui_view_pool;
   World_data::gui_view_pool_init(&gui_view_pool);
+  
+  static World_data::Application_window app_window;
+  World_data::application_window_init(&app_window);
   
 
     m_world_data.audio_pool             = &audio_pool;
