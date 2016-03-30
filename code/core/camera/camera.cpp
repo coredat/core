@@ -1,8 +1,10 @@
-#include "camera.hpp"
+#include <core/camera/camera.hpp>
+#include <core/color/color.hpp>
 #include <core/entity/entity.hpp>
 #include <data/world_data/world.hpp>
 #include <data/world_data/world_pools.hpp>
 #include <data/world_data/camera_pool.hpp>
+#include <core/camera/camera_properties.hpp>
 #include <systems/camera/camera_properties.hpp>
 
 

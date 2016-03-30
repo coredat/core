@@ -1,7 +1,6 @@
 #include <core/color/color_utils.hpp>
 
 
-
 namespace
 {
   constexpr uint8_t

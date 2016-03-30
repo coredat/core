@@ -4,8 +4,8 @@
 
 #include <application/resources.hpp>
 #include <core/entity_id.hpp>
-#include <math/math.hpp>
-//#include <simple_renderer/lazy_include.hpp>
+#include <math/transform/transform_types.hpp>
+#include <math/geometry/geometry_types.hpp>
 #include <core/entity_id.hpp>
 #include <stddef.h>
 

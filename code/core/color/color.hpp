@@ -37,12 +37,13 @@ public:
   }
   
   
-  uint32_t          get_color() const { return m_color; }
+  uint32_t
+  get_color() const { return m_color; }
   
   
 private:
 
-  const uint32_t        m_color;
+  const uint32_t m_color;
 
 };
 

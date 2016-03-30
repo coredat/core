@@ -1,5 +1,7 @@
 #include "entity_interface.hpp"
 #include <data/world_data/world_data.hpp>
+#include <core/transform/transform.hpp>
+#include <math/transform/transform.hpp>
 
 
 namespace Core {

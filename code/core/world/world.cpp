@@ -12,6 +12,10 @@
 #include <core/entity/entity_ref.hpp>
 
 
+#include <data/core_data/core_data.hpp>
+#include <data/world_data/world_data.hpp>
+
+
 #include <sdl_wrapper/sdl_lazy_include.hpp>
 
 #include <renderer/renderer.hpp>
@@ -24,6 +28,8 @@ namespace Core {
 
 struct World::Impl
 {
+  Core_data::Core    core_data;
+  World_data::World  world_data;
 };
 
 
@@ -62,15 +68,15 @@ World::World(const World_setup &setup)
   World_data::application_window_init(&app_window);
   
 
-    m_world_data.audio_pool             = &audio_pool;
-    m_world_data.entity_pool            = &world_entities;
-    m_world_data.entity_graph_changes   = &graph_changes;
-    m_world_data.texture_pool           = &texture_pool;
-    m_world_data.camera_pool            = &camera_pool;
-    m_world_data.model_pool             = &model_pool;
-    m_world_data.gui_pool               = &gui_view_pool;
+    m_impl->world_data.audio_pool             = &audio_pool;
+    m_impl->world_data.entity_pool            = &world_entities;
+    m_impl->world_data.entity_graph_changes   = &graph_changes;
+    m_impl->world_data.texture_pool           = &texture_pool;
+    m_impl->world_data.camera_pool            = &camera_pool;
+    m_impl->world_data.model_pool             = &model_pool;
+    m_impl->world_data.gui_pool               = &gui_view_pool;
   
-  World_data::set_world_data(&m_world_data);
+  World_data::set_world_data(&m_impl->world_data);
   
   // Load some audio data
   {
@@ -81,10 +87,10 @@ World::World(const World_setup &setup)
   // Core Data
   static Core_data::Input_pool core_input;
   
-  m_core_data.input_pool = &core_input;
+  m_impl->core_data.input_pool = &core_input;
 
-  Core_data::core_data_init(&m_core_data);
-  Core_data::set_core_data(&m_core_data);
+  Core_data::core_data_init(&m_impl->core_data);
+  Core_data::set_core_data(&m_impl->core_data);
 }
 
 
@@ -103,7 +109,7 @@ Entity
 World::create_entity()
 {
   Entity out_entity;
-  World_data::world_create_new_entity(&m_world_data, &out_entity, 99);
+  World_data::world_create_new_entity(&m_impl->world_data, &out_entity, 99);
   
   return out_entity;
 }

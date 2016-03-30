@@ -2,9 +2,9 @@
 #define CAMERA_INCLUDED_054F2215_600C_4CD3_9A40_DEC0DE5ACE0D
 
 
-#include <core/camera/camera_properties.hpp>
+#include <core/camera/camera_fwd.hpp>
 #include <core/entity/entity_fwd.hpp>
-#include <core/color/color.hpp>
+#include <core/color/color_fwd.hpp>
 #include <stdint.h>
 #include <memory>
 

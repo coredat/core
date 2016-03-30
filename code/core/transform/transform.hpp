@@ -2,7 +2,8 @@
 #define TRANSFORM_INCLUDED_047C029A_0690_4259_8C7F_EC5C637776A4
 
 
-#include <math/math.hpp>
+#include <math/vec/vec_types.hpp>
+#include <math/quat/quat_types.hpp>
 
 
 namespace Core {
@@ -15,19 +16,11 @@ class Transform final
 {
 public:
 
-  constexpr explicit
-  Transform(const math::vec3 pos,
-            const math::vec3 scale,
-            const math::quat rot)
-  : m_position(pos)
-  , m_scale(scale)
-  , m_rotation(rot)
-  {
-  }
-
+  explicit            Transform(const math::vec3 pos,
+                                const math::vec3 scale,
+                                const math::quat rot);
 
   explicit            Transform();
-  
   
   math::vec3          get_position() const                { return m_position; }
   void                set_position(const math::vec3 pos)  { m_position = pos;  }
@@ -45,9 +38,9 @@ public:
   
 private:
 
-  math::vec3          m_position  = math::vec3_zero();
-  math::vec3          m_scale     = math::vec3_one();
-  math::quat          m_rotation  = math::quat_init();
+  math::vec3          m_position;
+  math::vec3          m_scale;
+  math::quat          m_rotation;
 
 }; // class
 

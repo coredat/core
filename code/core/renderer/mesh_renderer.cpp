@@ -2,6 +2,7 @@
 #include <graphics_api/initialize.hpp>
 #include <core/entity/entity.hpp>
 #include <data/data.hpp>
+#include <core/transform/transform.hpp>
 #include <systems/transform/transformations.hpp>
 #include <renderer/simple_renderer/simple_renderer_node.hpp>
 #include <renderer/simple_renderer/simple_renderer.hpp>

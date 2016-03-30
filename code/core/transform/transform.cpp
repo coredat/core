@@ -1,4 +1,6 @@
 #include "transform.hpp"
+#include <math/vec/vec3.hpp>
+#include <math/quat/quat.hpp>
 
 
 namespace
@@ -13,6 +15,16 @@ namespace
 namespace Core {
 
 
+Transform::Transform(const math::vec3 pos,
+            const math::vec3 scale,
+            const math::quat rot)
+: m_position(pos)
+, m_scale(scale)
+, m_rotation(rot)
+{
+}
+
+
 Transform::Transform()
 : Transform(math::vec3_zero(), math::vec3_one(), math::quat_init())
 {
@@ -24,6 +36,7 @@ Transform::get_eular() const
 {
   assert(false);
   return math::vec3_zero();
+  //return math::quat_get_euler_angles_in_radians(m_rotation);
 }
 
 

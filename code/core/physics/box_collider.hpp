@@ -2,9 +2,6 @@
 #define BOX_COLLIDER_INCLUDED_17A0E0D2_625F_4872_9487_2F43006A04C3
 
 
-#include <math/vec/vec3.hpp>
-
-
 namespace Core {
 
 
@@ -25,15 +22,6 @@ public:
   : m_x_extent(x_extent)
   , m_y_extent(y_extent)
   , m_z_extent(z_extent)
-  {
-  }
-  
-  
-  /* constexpr */ explicit
-  Box_collider(const math::vec3 extents)
-  : m_x_extent(math::vec3_get_x(extents))
-  , m_y_extent(math::vec3_get_y(extents))
-  , m_z_extent(math::vec3_get_z(extents))
   {
   }
   

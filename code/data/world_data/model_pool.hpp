@@ -3,7 +3,7 @@
 
 
 #include <graphics_api/ogl/ogl_vertex_buffer.hpp>
-#include <math/geometry/geometry.hpp>
+#include <math/geometry/geometry_types.hpp>
 #include <stdint.h>
 
 

@@ -3,7 +3,7 @@
 
 
 #include <core/entity_id.hpp>
-#include <core/transform/transform.hpp>
+#include <core/transform/transform_fwd.hpp>
 #include <core/physics/collider.hpp>
 #include "detail/entity_detail.hpp"
 #include <data/world_data/world_pools.hpp>
