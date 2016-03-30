@@ -11,7 +11,6 @@
 #include "vec_types.hpp"
 #include "../detail/detail.hpp"
 #include "../general/general.hpp"
-#include <array>
 #include <assert.h>
 
 
@@ -29,13 +28,11 @@ MATH_INLINE vec2                   vec2_zero_one();
 MATH_INLINE vec2                   vec2_init(const float val);
 MATH_INLINE vec2                   vec2_init(const float x, const float y);
 MATH_INLINE vec2                   vec2_init_with_array(const float *arr);
-MATH_INLINE vec2                   vec2_init_with_array(const std::array<float, 2> &vec);
 
 // ** Get elements ** //
 MATH_INLINE float                  vec2_get_x(const vec2 vec);
 MATH_INLINE float                  vec2_get_y(const vec2 vec);
 MATH_INLINE void                   vec2_to_array(const vec2 a, float *out_array);
-MATH_INLINE std::array<float, 2>   vec2_to_std_array(const vec2 a);
 
 // ** Arithmetic ** //
 MATH_INLINE vec2                   vec2_add(const vec2 a, const vec2 b);
@@ -117,13 +114,6 @@ vec2_init_with_array(const float *arr)
 }
 
 
-vec2
-vec2_init_with_array(const std::array<float, 2> &arr)
-{
-  return vec2_init(arr.at(0), arr.at(1));
-}
-
-
 // Get components.
 
 float
@@ -148,19 +138,6 @@ vec2_to_array(const vec2 a, float *out_array)
   out_array[0] = vec2_get_x(a);
   out_array[1] = vec2_get_y(a);
 }
-
-
-std::array<float, 2>
-vec2_to_std_array(const vec2 a)
-{
-  std::array<float, 2> return_array = {
-    vec2_get_x(a),
-    vec2_get_y(a),
-  };
-
-  return return_array;
-}
-
 
 
 vec2
