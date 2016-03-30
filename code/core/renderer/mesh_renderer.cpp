@@ -1,6 +1,6 @@
 #include <core/renderer/mesh_renderer.hpp>
 #include <graphics_api/initialize.hpp>
-#include <core/interface/entity.hpp>
+#include <core/entity/entity.hpp>
 #include <data/data.hpp>
 #include <systems/transform/transformations.hpp>
 #include <renderer/simple_renderer/simple_renderer_node.hpp>
@@ -21,7 +21,8 @@ namespace Core {
 
 Mesh_renderer::Mesh_renderer()
 {
-  Graphics_api::initialize();
+  Simple_renderer::initialize();
+  Debug_line_renderer::initialize();
 }
 
 

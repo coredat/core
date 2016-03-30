@@ -3,9 +3,9 @@
 
 
 #include <core/camera/camera_properties.hpp>
-#include <core/interface/interface_fwd.hpp>
-#include <stdint.h>
+#include <core/entity/entity_fwd.hpp>
 #include <core/color/color.hpp>
+#include <stdint.h>
 #include <memory>
 
 

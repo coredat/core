@@ -2,19 +2,18 @@
 #define WORLD_INCLUDED_F6D825F0_D062_4B85_A636_7EDE94635488
 
 
-#include "world_setup.hpp" // TODO: Move to fwd dec
-#include <core/interface/entity.hpp>
-#include <core/interface/entity_ref.hpp>
+#include <core/world/world_fwd.hpp>
+#include <core/entity/entity_fwd.hpp>
+#include <data/core_data/core_data.hpp> // TODO: Remove
+#include <data/world_data/world_data.hpp> // TODO: remove
 #include <stdint.h>
-#include <data/core_data/core_data.hpp>
-#include <data/world_data/world_data.hpp>
 #include <memory>
 
 
 namespace Core {
 
 
-class World
+class World final
 {
 
   World(const World&) = delete;
@@ -25,7 +24,7 @@ public:
   explicit              World(const World_setup &setup);
                         ~World();
 
-  void                  think();
+  void                  think(const float dt);
 
   Entity                create_entity();
   Entity_ref            find_entity(const char *name);

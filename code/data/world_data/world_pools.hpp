@@ -4,7 +4,7 @@
 
 #include "world_data_fwd.hpp"
 #include <core/entity_id.hpp>
-#include <core/interface/interface_fwd.hpp>
+#include <core/entity/entity_fwd.hpp>
 #include <stdint.h>
 
 
@@ -16,7 +16,6 @@ struct World
   Audio_pool                  *audio_pool           = nullptr;
   Entity_pool                 *entity_pool          = nullptr;
   Entity_graph_changes_pool   *entity_graph_changes = nullptr;
-  Logic_pool                  *logic_pool           = nullptr;
   Rigidbody_pool              *rigidbody_pool       = nullptr;
   Texture_pool                *texture_pool         = nullptr;
   Model_pool                  *model_pool           = nullptr;

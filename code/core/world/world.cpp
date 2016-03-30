@@ -1,4 +1,5 @@
 #include "world.hpp"
+#include <core/world/world_setup.hpp>
 #include <systems/audio/audio.hpp>
 
 #include <core/memory/memory.hpp>
@@ -6,6 +7,10 @@
 
 #include <graphics_api/initialize.hpp>
 #include <graphics_api/clear.hpp>
+
+#include <core/entity/entity.hpp>
+#include <core/entity/entity_ref.hpp>
+
 
 #include <sdl_wrapper/sdl_lazy_include.hpp>
 
@@ -35,9 +40,6 @@ World::World(const World_setup &setup)
   static World_data::Model_pool model_pool;
   World_data::model_pool_init(&model_pool);
   
-  static World_data::Logic_pool logic_pool;
-  World_data::logic_pool_init(&logic_pool);
-  
   static World_data::Texture_pool texture_pool;
   World_data::texture_pool_init(&texture_pool);
   
@@ -63,7 +65,6 @@ World::World(const World_setup &setup)
     m_world_data.audio_pool             = &audio_pool;
     m_world_data.entity_pool            = &world_entities;
     m_world_data.entity_graph_changes   = &graph_changes;
-    m_world_data.logic_pool             = &logic_pool;
     m_world_data.texture_pool           = &texture_pool;
     m_world_data.camera_pool            = &camera_pool;
     m_world_data.model_pool             = &model_pool;
@@ -88,6 +89,12 @@ World::World(const World_setup &setup)
 
 
 World::~World()
+{
+}
+
+
+void
+World::think(const float dt)
 {
 }
 

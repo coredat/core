@@ -2,7 +2,7 @@
 #define RAY_INCLUDED_0CE26212_29A8_4A9C_BC17_51438D62F208
 
 
-#include "../interface/entity.hpp"
+#include <core/entity/entity.hpp>
 #include <math/vec/vec3.hpp>
 #include <stddef.h>
 #include <vector> // Kill!
@@ -33,7 +33,7 @@ public:
   explicit              Ray(const math::vec3 from, const math::vec3 to, const Search search);
   
   bool                  has_hit() const                             { return m_results.size();          }
-  uint32_t                number_of_hits() const                      { return (uint32_t)m_results.size();  }
+  uint32_t                number_of_hits() const                    { return (uint32_t)m_results.size();  }
 
   Entity                get_entity(const uint32_t i) const;
   math::vec3            get_position_of_hit(const uint32_t i) const   { return m_results.at(i).hit;       }

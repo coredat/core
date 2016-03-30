@@ -2,7 +2,7 @@
 #define ENTITY_FACTORY_INCLUDED_465D023E_7584_4B89_8A1C_92294723073C
 
 
-#include <core/interface/interface_fwd.hpp>
+#include <core/entity/entity_fwd.hpp>
 #include <core/transform/transform.hpp>
 #include <data/world_data/world_data_fwd.hpp>
 

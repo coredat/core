@@ -134,10 +134,13 @@ render_nodes_fullbright(const Node nodes[],
     const Node *curr_node = &nodes[n];
     assert(curr_node);
     
-    Ogl::filtering_apply(filtering);
-    Ogl::shader_uniforms_apply(uni_full_diffuse_map, (void*)&curr_node->diffuse.texture_id);
-    Ogl::shader_uniforms_apply(uni_full_wvp, (void*)&curr_node->wvp);
-    Ogl::vertex_buffer_bind(curr_node->vbo, &vertex_format, &shader_fullbright);
+    if(curr_node->vbo.vertex_buffer_id)
+    {
+      Ogl::filtering_apply(filtering);
+      Ogl::shader_uniforms_apply(uni_full_diffuse_map, (void*)&curr_node->diffuse.texture_id);
+      Ogl::shader_uniforms_apply(uni_full_wvp, (void*)&curr_node->wvp);
+      Ogl::vertex_buffer_bind(curr_node->vbo, &vertex_format, &shader_fullbright);
+    }
 
     const GLsizei count = curr_node->vbo.number_of_entries / vertex_format.number_of_attributes;
 

@@ -1,7 +1,7 @@
 #include "world_pools.hpp"
 #include "entity_pool.hpp"
 #include "graph_change_pool.hpp"
-#include <core/interface/entity.hpp>
+#include <core/entity/entity.hpp>
 #include <atomic>
 
 
@@ -116,8 +116,6 @@ world_update_scene_graph_changes(World_data::World *world_data,
       case(World_data::Entity_graph_change::removed):
       {
         entity_pool_remove_entity(world_data->entity_pool, change.entity_id);
-        //logic_pool_free_slots(world_data->logic_pool, &change.entity_id, 1);
-        logic_pool_on_end_hook(world_data->logic_pool, &change.entity_id, 1);
 
         break;
       }

@@ -6,7 +6,7 @@ namespace Core {
 
 
 class Entity;
-class Logic;
+class Entity_ref;
 
 
 } // ns

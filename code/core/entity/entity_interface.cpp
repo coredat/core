@@ -220,11 +220,7 @@ Entity_interface::send_event(const uint32_t event_id,
                    const void *data,
                    const uint32_t size_of_data)
 {
-  World_data::logic_pool_on_event(m_world_data->logic_pool,
-                                  get_id(),
-                                  event_id,
-                                  data,
-                                  size_of_data);
+  assert(false); // This used to be about components. do we still need it?
 }
 
 
@@ -335,15 +331,6 @@ Entity_interface::get_model_id() const
   uint32_t index;
   assert(get_index(&index, m_this_id, ent_pool->entity_id, ent_pool->size));
   return (uint32_t)ent_pool->model[index];
-}
-
-
-uint32_t
-Entity_interface::get_number_of_components() const
-{
-  const uint32_t count = World_data::logic_pool_get_slot_count(m_world_data->logic_pool, m_this_id);
-
-  return count;
 }
 
 

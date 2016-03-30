@@ -15,7 +15,6 @@ struct Entity_pool;
 enum class Entity_graph_change : uint32_t;
 struct Entity_change;
 struct Entity_graph_changes_pool;
-struct Logic_pool;
 struct Model_pool;
 struct Rigidbody_pool;
 struct Texture_pool;

@@ -1,5 +1,5 @@
 #include "camera.hpp"
-#include <core/interface/entity.hpp>
+#include <core/entity/entity.hpp>
 #include <data/world_data/world.hpp>
 #include <data/world_data/world_pools.hpp>
 #include <data/world_data/camera_pool.hpp>
