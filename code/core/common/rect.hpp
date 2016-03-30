@@ -9,7 +9,7 @@ namespace Core {
   Rect represents a 2D area.
   This structure is immutable.
 */
-class Rect
+class Rect final
 {
 public:
 

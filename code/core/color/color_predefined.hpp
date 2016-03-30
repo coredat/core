@@ -4,6 +4,7 @@
 
 #include <core/color/color.hpp>
 
+
 /*
   Predefined colors.
 */

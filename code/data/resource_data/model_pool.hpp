@@ -10,7 +10,7 @@
 #define SIZE_OF_MODEL_POOL 32
 
 
-namespace World_data {
+namespace Resource_data {
 
 
 struct Model_pool

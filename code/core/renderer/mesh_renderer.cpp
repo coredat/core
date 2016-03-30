@@ -109,8 +109,10 @@ Mesh_renderer::render()
   // Texture/vbo info
   for (uint32_t i = 0; i < size_of_node_pool; ++i)
   {
-    nodes[i].vbo     = world->model_pool->vbo[world->entity_pool->model[i]];
-    nodes[i].diffuse = World_data::texture_pool_find(world->texture_pool, world->entity_pool->texture[i]);
+    assert(false);
+  
+//    nodes[i].vbo     = world->model_pool->vbo[world->entity_pool->model[i]];
+//    nodes[i].diffuse = World_data::texture_pool_find(world->texture_pool, world->entity_pool->texture[i]);
   }
   
   Simple_renderer::render_nodes_fullbright(nodes.data(), size_of_node_pool);

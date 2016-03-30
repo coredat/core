@@ -15,7 +15,7 @@ namespace Core {
   We represent color as.
   0xRRGGBBAA
 */
-class Color
+class Color final
 {
 public:
 

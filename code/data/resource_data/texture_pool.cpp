@@ -2,7 +2,7 @@
 #include <assert.h>
 
 
-namespace World_data {
+namespace Resource_data {
 
 
 void

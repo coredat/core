@@ -13,12 +13,12 @@ namespace World_data {
 
 struct World
 {
-  Audio_pool                  *audio_pool           = nullptr;
+//  Audio_pool                  *audio_pool           = nullptr;
   Entity_pool                 *entity_pool          = nullptr;
   Entity_graph_changes_pool   *entity_graph_changes = nullptr;
   Rigidbody_pool              *rigidbody_pool       = nullptr;
-  Texture_pool                *texture_pool         = nullptr;
-  Model_pool                  *model_pool           = nullptr;
+ // Texture_pool                *texture_pool         = nullptr;
+//  Model_pool                  *model_pool           = nullptr;
   Camera_pool                 *camera_pool          = nullptr;
   Gui_view_pool               *gui_pool             = nullptr;
   Application_window          *app_window           = nullptr;

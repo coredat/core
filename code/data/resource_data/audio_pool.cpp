@@ -2,7 +2,7 @@
 #include <cstring>
 
 
-namespace World_data {
+namespace Resource_data {
 
 
 void

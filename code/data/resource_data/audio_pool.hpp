@@ -9,7 +9,7 @@
 #define AUDIO_SAMPLE_POOL_SIZE 128
 
 
-namespace World_data {
+namespace Resource_data {
 
 
 struct Audio_pool

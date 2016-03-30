@@ -10,13 +10,13 @@
 #define SIZE_OF_TEXTURE_POOL 64
 
 
-namespace World_data {
+namespace Resource_data {
 
 
 struct Texture_pool
 {
-  uint32_t            id[SIZE_OF_TEXTURE_POOL];
-  Ogl::Texture        texture[SIZE_OF_TEXTURE_POOL];
+  uint32_t              id[SIZE_OF_TEXTURE_POOL];
+  Ogl::Texture          texture[SIZE_OF_TEXTURE_POOL];
   
   const uint32_t        size = SIZE_OF_TEXTURE_POOL;
 }; // struct

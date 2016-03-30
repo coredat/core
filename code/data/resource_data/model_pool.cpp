@@ -1,7 +1,7 @@
 #include "model_pool.hpp"
 
 
-namespace World_data {
+namespace Resource_data {
 
 
 void
