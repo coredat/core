@@ -2,20 +2,31 @@
 #define MESH_INCLUDED_3B02E00E_C938_4A7E_93EE_52E659913C99
 
 
-#include <math/geometry/geometry_types.hpp>
+#include <math/geometry/geometry_fwd.hpp>
+#include <memory>
 
 
 namespace Core {
 
 
-class Mesh
+class Mesh final
 {
 public:
 
-  // Need to figure out how to store what data.
-  // ie I only need to store data for meshes that are editable. ie a navmesh.
+  explicit            Mesh();
+                      ~Mesh();
   
+                      Mesh(const Mesh&);
+                      Mesh(Mesh&&);
+
   math::aabb          get_aabb() const;
+  uint32_t            get_number_of_vertices() const;
+  bool                is_valid() const;
+  
+private:
+
+  struct Impl;
+  std::unique_ptr<Impl> m_impl;
 
 }; // class
 

@@ -2,26 +2,37 @@
 #define MODEL_INCLUDED_292C333A_8EB1_40B3_A4AA_19E7E9D0447A
 
 
-#include "mesh.hpp"
-#include <math/geometry/geometry_types.hpp>
+#include <core/model/model_fwd.hpp>
+#include <math/geometry/geometry_fwd.hpp>
+#include <memory>
 #include <stdint.h>
 
 
 namespace Core {
 
 
-class Model
+class Model final
 {
 public:
 
-  explicit            Model(const uint32_t model_resource_id);
+  explicit            Model();
+  explicit            Model(const char *filename);
+                      ~Model();
+  
+                      Model(const Model&);
+                      Model(Model&&);
+
+  bool                has_meshes() const;
+  Mesh                get_mesh(const uint32_t index) const;
+  uint32_t            get_number_of_meshes() const;
   
   math::aabb          get_model_aabb() const;
   
 private:
 
-  const uint32_t      m_model_id;
-  
+  struct Impl;
+  std::unique_ptr<Impl> m_impl;
+
 }; // class
 
 

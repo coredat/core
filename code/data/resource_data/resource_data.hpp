@@ -1,10 +1,10 @@
-#ifndef RESOURCE_DATA_INCLUDED_
-#define RESOURCE_DATA_INCLUDED_
+#ifndef RESOURCE_DATA_INCLUDED_B0311127_B368_4A55_B58E_37C7198A76EA
+#define RESOURCE_DATA_INCLUDED_B0311127_B368_4A55_B58E_37C7198A76EA
 
 
 #include "audio_pool.hpp"
 #include "audio_raw_pool.hpp"
-#include "model_pool.hpp"
+#include "mesh_pool.hpp"
 #include "texture_pool.hpp"
 
 
@@ -15,8 +15,16 @@ struct Resources
 {
   Texture_pool  *texture_pool = nullptr;
   Audio_pool    *audio_pool   = nullptr;
-  Model_pool    *model_pool   = nullptr;
+  Mesh_pool     *mesh_pool    = nullptr;
 };
+
+
+void
+resources_init(Resources *resources);
+
+
+Resources*
+get_horrible_hack_resouces();
 
 
 } // ns

@@ -91,7 +91,8 @@ Mesh_renderer::render()
     }
   }
 
-  const math::mat4 view_proj = math::mat4_multiply(view, proj); // *hurt* camaera or such.
+  const math::mat4 view_proj = math::mat4_multiply(view, proj);
+
   ::Transform::transforms_to_wvp_mats(world->entity_pool->transform,
                                     world->entity_pool->size,
                                     view_proj,
