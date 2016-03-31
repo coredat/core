@@ -1,5 +1,5 @@
 #include "shader_utils.hpp"
-#include <utils/string_helpers.hpp>
+#include <utilities/string_helpers.hpp>
 #include <fstream>
 #include <streambuf>
 #include <string>
