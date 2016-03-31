@@ -49,6 +49,12 @@ MATH_INLINE float                  vec2_length(const vec2 a);
 MATH_INLINE float                  vec2_cross(const vec2 a, const vec2 b);
 MATH_INLINE float                  vec2_dot(const vec2 a, const vec2 b);
 
+// ** Equal Test ** //
+MATH_INLINE bool                   vec2_is_equal(const vec2 a, const vec2 b);
+MATH_INLINE bool                   vec2_is_not_equal(const vec2 a, const vec2 b);
+MATH_INLINE bool                   vec2_is_near(const vec2 a, const vec2 b, const float error);
+MATH_INLINE bool                   vec2_is_not_near(const vec2 a, const vec2 b, const float error);
+
 
 // ** Implimentation ** //
 
@@ -237,6 +243,46 @@ vec2_dot(const vec2 a, const vec2 b)
   return (vec2_get_x(a) * vec2_get_x(b)) +
          (vec2_get_y(a) * vec2_get_y(b));
 }
+
+
+bool
+vec2_is_equal(const vec2 a, const vec2 b)
+{
+	return
+  (
+    (vec2_get_x(a) == vec2_get_x(b))
+    &&
+    (vec2_get_y(a) == vec2_get_y(b))
+  );
+}
+
+
+bool
+vec2_is_not_equal(const vec2 a, const vec2 b)
+{
+	return !vec2_is_equal(a, b);
+}
+
+
+bool
+vec2_is_near(const vec2 a, const vec2 b, const float error)
+{
+  return(
+    is_near(vec2_get_x(a), vec2_get_x(b), error)
+    &&
+    is_near(vec2_get_y(a), vec2_get_y(b), error)
+  );
+}
+
+
+bool
+vec2_is_not_near(const vec2 a, const vec2 b, const float error)
+{
+	return !vec2_is_near(a, b, error);
+}
+
+
+
 
 
 } // namespace
