@@ -27,6 +27,13 @@ Model::Model()
 }
 
 
+Model::Model(const uint32_t id)
+: m_impl(new Impl{id})
+{
+  // TODO: Check that the id is valid.
+}
+
+
 Model::Model(const char *filename)
 : m_impl(new Impl)
 {
@@ -119,5 +126,18 @@ Model::get_model_aabb() const
 //  return return_aabb;
   return math::aabb();
 }
+
+
+uint32_t
+Model::get_id() const
+{
+  if(m_impl)
+  {
+    return m_impl->mesh_id;
+  }
+  
+  return 0;
+}
+
 
 } // ns

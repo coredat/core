@@ -2,7 +2,6 @@
 #define ENTITY_POOL_INCLUDED_1A43BE4E_FC2B_4052_98FB_C7D78CD94C07
 
 
-#include <application/resources.hpp>
 #include <core/entity_id.hpp>
 #include <math/transform/transform_types.hpp>
 #include <math/geometry/geometry_types.hpp>
@@ -39,8 +38,8 @@ struct Entity_pool
   math::transform                 *transform;
   math::aabb                      *aabb;
   
-  Resource::Model::ENUM           *model;
-  Resource::Texture::ENUM         *texture;
+  uint32_t                        *model;
+  uint32_t                        *texture;
   
   const uint32_t                  capacity = ENTITY_POOL_SIZE;
   uint32_t                        size = 0;

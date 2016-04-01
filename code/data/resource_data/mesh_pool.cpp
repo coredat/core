@@ -71,7 +71,7 @@ mesh_pool_push_new(Mesh_pool *pool,
                                   number_of_indices);
   }
 
-  return 0;
+  return ++mesh_id_counter;
 }
 
 

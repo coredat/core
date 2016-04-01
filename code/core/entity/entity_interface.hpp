@@ -5,6 +5,7 @@
 #include <core/entity_id.hpp>
 #include <core/transform/transform_fwd.hpp>
 #include <core/physics/collider.hpp>
+#include <core/model/model_fwd.hpp>
 #include "detail/entity_detail.hpp"
 #include <data/world_data/world_pools.hpp>
 #include <stdint.h>
@@ -28,12 +29,6 @@ public:
   
   void                          set_name(const char* set_name);
   const char*                   get_name() const;
-  
-//  void                          set_parent(const Core::Entity_id id);
-//  Entity                        get_parent() const;
-//  
-//  uint32_t                      get_number_of_children() const;
-//  Entity                        get_child(const uint32_t index) const;
 
   void                          send_event(const uint32_t id, const void *data, const uint32_t size_of_data);
 
@@ -43,11 +38,11 @@ public:
   void                          set_material_id(const uint32_t id);
   uint32_t                      get_material_id() const;
   
-  void                          set_model_id(const uint32_t id);
-  uint32_t                      get_model_id() const;
+  void                          set_model(const Core::Model &model);
+  Core::Model                   get_model() const;
   
-  void                          set_collider(const Collider &collider);
-  Collider                      get_collider() const;
+  void                          set_collider(const Core::Collider &collider);
+  Core::Collider                get_collider() const;
   
 protected: // This should be private!
 

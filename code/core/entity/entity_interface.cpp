@@ -1,4 +1,6 @@
 #include "entity_interface.hpp"
+#include <core/model/model.hpp>
+#include <core/model/mesh.hpp>
 #include <data/world_data/world_data.hpp>
 #include <core/transform/transform.hpp>
 #include <math/transform/transform.hpp>
@@ -126,97 +128,6 @@ namespace
 }
 
 
-//void
-//Entity_interface::set_parent(const Core::Entity_id parent_id)
-//{
-//  if(!is_valid()) { return; }
-//
-//  auto ent_pool = m_world_data->entity_pool;
-//
-//  uint32_t index;
-//  assert(get_index(&index, m_this_id, ent_pool->entity_id, ent_pool->size));
-//  ent_pool->parent_id[index] = parent_id;
-//  
-//  // TODO: Need to check parent is valid?
-//  World_data::entity_graph_change_push(m_world_data->entity_graph_changes, parent_id, World_data::Entity_graph_change::updated);
-//  World_data::entity_graph_change_push(m_world_data->entity_graph_changes, m_this_id, World_data::Entity_graph_change::moved);
-//}
-
-
-//Entity
-//Entity_interface::get_parent() const
-//{
-//  if(!is_valid()) { return Entity(); }
-//  
-//  uint32_t index;
-//  if(Entity_id_util::find_index_linearly(&index, m_this_id, m_world_data->entity_pool->entity_id, m_world_data->entity_pool->size))
-//  {
-//    Entity parent;
-//    Detail::set_entity_members(&parent, m_world_data, m_world_data->entity_pool->parent_id[index]);
-//    
-//    return parent;
-//  }
-//  
-//  return Entity(); // has no parent.
-//}
-
-
-//uint32_t
-//Entity_interface::get_number_of_children() const
-//{
-//  if(!is_valid()) { return 0; }
-//
-//  auto ent_pool = m_world_data->entity_pool;
-//
-//  uint32_t children_count(0);
-//  
-//  for(uint32_t i = 0; i < ent_pool->size; ++i)
-//  {
-//    const Core::Entity_id id = ent_pool->parent_id[i];
-//  
-//    if(id == m_this_id)
-//    {
-//      ++children_count;
-//    }
-//  }
-//  
-//  return children_count;
-//}
-//
-//
-//Entity
-//Entity_interface::get_child(const uint32_t index) const
-//{
-//  if(!is_valid()) { return Entity(); }
-//
-//  auto ent_pool = m_world_data->entity_pool;
-//
-//  uint32_t children_count(0);
-//  
-//  for(uint32_t i = 0; i < ent_pool->size; ++i)
-//  {
-//    const Core::Entity_id id = ent_pool->parent_id[i];
-//
-//    if(id == m_this_id)
-//    {
-//      if(index == children_count)
-//      {
-//        Core::Entity_id child_id = ent_pool->entity_id[i];
-//      
-//        Entity child;
-//        Detail::set_entity_members(&child, m_world_data, child_id);
-//        
-//        return child;
-//      }
-//    
-//      ++children_count;
-//    }
-//  }
-//  
-//  return Entity();
-//}
-
-
 void
 Entity_interface::send_event(const uint32_t event_id,
                    const void *data,
@@ -291,7 +202,7 @@ Entity_interface::set_material_id(const uint32_t id)
 
   uint32_t index;
   assert(get_index(&index, m_this_id, ent_pool->entity_id, ent_pool->size));
-  ent_pool->texture[index] = (Resource::Texture::ENUM)id;
+  ent_pool->texture[index] = id;
 }
 
 
@@ -309,7 +220,7 @@ Entity_interface::get_material_id() const
 
 
 void
-Entity_interface::set_model_id(const uint32_t id)
+Entity_interface::set_model(const Core::Model &model)
 {
   if(!is_valid()) { return; }
   
@@ -317,23 +228,22 @@ Entity_interface::set_model_id(const uint32_t id)
 
   uint32_t index;
   assert(get_index(&index, m_this_id, ent_pool->entity_id, ent_pool->size));
-  ent_pool->model[index] = (Resource::Model::ENUM)id;
+  ent_pool->model[index] = model.get_id();
   
-  assert(false); // just while getting to compile.
   //ent_pool->aabb[index] = m_world_data->model_pool->aabb[id];
 }
 
 
-uint32_t
-Entity_interface::get_model_id() const
+Core::Model
+Entity_interface::get_model() const
 {
-  if(!is_valid()) { return 0; }
+  if(!is_valid()) { return Core::Model(); }
   
   auto ent_pool = m_world_data->entity_pool;
 
   uint32_t index;
   assert(get_index(&index, m_this_id, ent_pool->entity_id, ent_pool->size));
-  return (uint32_t)ent_pool->model[index];
+  return Core::Model((uint32_t)ent_pool->model[index]);
 }
 
 

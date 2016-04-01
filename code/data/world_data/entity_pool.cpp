@@ -43,14 +43,14 @@ entity_pool_init(Entity_pool *pool)
   }
   
   {
-    const Core::Memory::Chunk model_chunk = Core::Memory::request_chunk(ENTITY_POOL_SIZE * sizeof(Resource::Model::ENUM));
-    pool->model = static_cast<Resource::Model::ENUM*>(model_chunk.start_of_chunk);
+    const Core::Memory::Chunk model_chunk = Core::Memory::request_chunk(ENTITY_POOL_SIZE * sizeof(uint32_t));
+    pool->model = static_cast<uint32_t*>(model_chunk.start_of_chunk);
     memset(pool->model, 0, model_chunk.bytes_in_chunk);
   }
   
   {
-    const Core::Memory::Chunk texture_chunk = Core::Memory::request_chunk(ENTITY_POOL_SIZE * sizeof(Resource::Texture::ENUM));
-    pool->texture = static_cast<Resource::Texture::ENUM*>(texture_chunk.start_of_chunk);
+    const Core::Memory::Chunk texture_chunk = Core::Memory::request_chunk(ENTITY_POOL_SIZE * sizeof(uint32_t));
+    pool->texture = static_cast<uint32_t*>(texture_chunk.start_of_chunk);
     memset(pool->texture, 0, texture_chunk.bytes_in_chunk);
   }
   
@@ -93,8 +93,8 @@ entity_pool_push_new_entity(Entity_pool *pool, const Core::Entity_id id)
     pool->parent_id[pool->size] = Core::Entity_id_util::invalid_id();
     pool->entity_properties[pool->size] = Entity_properties{0};
     pool->name[pool->size * max_entity_name_size] = '\0';
-    pool->model[pool->size] = (Resource::Model::ENUM)0;
-    pool->texture[pool->size] = (Resource::Texture::ENUM)0;
+    pool->model[pool->size] = (uint32_t)0;
+    pool->texture[pool->size] = (uint32_t)0;
     pool->aabb[pool->size] = math::aabb();
     
     ++(pool->size);

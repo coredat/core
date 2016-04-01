@@ -16,6 +16,7 @@ class Model final
 public:
 
   explicit            Model();
+  explicit            Model(const uint32_t id);
   explicit            Model(const char *filename);
                       ~Model();
   
@@ -27,6 +28,8 @@ public:
   uint32_t            get_number_of_meshes() const;
   
   math::aabb          get_model_aabb() const;
+  
+  uint32_t            get_id() const;
   
 private:
 

@@ -16,6 +16,8 @@
 #include <vector>
 #include <core/color/color.hpp>
 #include <core/color/color_utils.hpp>
+#include <data/resource_data/resource_data.hpp>
+
 
 namespace Core {
 
@@ -110,10 +112,14 @@ Mesh_renderer::render()
   // Texture/vbo info
   for (uint32_t i = 0; i < size_of_node_pool; ++i)
   {
-    assert(false);
-  
-//    nodes[i].vbo     = world->model_pool->vbo[world->entity_pool->model[i]];
-//    nodes[i].diffuse = World_data::texture_pool_find(world->texture_pool, world->entity_pool->texture[i]);
+    const uint32_t mesh_id = world->entity_pool->model[i];
+    const uint32_t texture_id = world->entity_pool->texture[i];
+    
+    if(mesh_id && texture_id)
+    {
+      nodes[i].vbo     = Resource_data::get_horrible_hack_resouces()->mesh_pool->mesh[mesh_id].vbo;
+      nodes[i].diffuse = Resource_data::texture_pool_find(Resource_data::get_horrible_hack_resouces()->texture_pool, texture_id);
+    }
   }
   
   Simple_renderer::render_nodes_fullbright(nodes.data(), size_of_node_pool);
