@@ -13,6 +13,7 @@
 #include <systems/sdl_backend/sdl_message_loop.hpp>
 #include <stdatomic.h>
 #include <assert.h>
+#include <utilities/logging.hpp>
 
 
 namespace
@@ -74,6 +75,7 @@ Context::Context(const uint32_t width,
     if(SDL_Init(init_flags) != 0)
     {
       assert(false);
+      LOG_FATAL("Failed to initialize SDL");
     }
 
     const Uint32 default_window_flags = SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_OPENGL;
@@ -89,6 +91,7 @@ Context::Context(const uint32_t width,
     if(!m_impl->window)
     {
       assert(false);
+      LOG_FATAL("Failed to create an SDL Window");
     }
   }
   
@@ -111,13 +114,12 @@ Context::Context(const uint32_t width,
     if(!m_impl->context)
     {
       assert(m_impl->context);
+      LOG_FATAL("Failed to create an OpenGL Context");
     }
   }
   
-  
   // Initialize the graphics api
   ::Graphics_api::initialize();
-
 
   // Subscribe to the SDL event callback.
   Sdl::event_add_callback([](const SDL_Event *evt, void *self)
@@ -229,6 +231,7 @@ Context::is_fullscreen() const
   if(!surface)
   {
     assert(false);
+    LOG_ERROR("Failed to find SDL Surface")
     return false;
   }
   
@@ -247,6 +250,7 @@ Context::set_fullscreen(const bool is_fullscreen)
   if(!surface)
   {
     assert(false);
+    LOG_ERROR("Failed to find SDL Surface")
     return;
   }
   
@@ -259,6 +263,7 @@ Context::set_fullscreen(const bool is_fullscreen)
   if(SDL_SetWindowFullscreen(m_impl->window, is_fullscreen ? fullscreen_mode : 0) < 0)
   {
     assert(false);
+    LOG_ERROR("Failed to find set fullscreen")
     return;
   }
 }

@@ -4,6 +4,7 @@
 #include <data/world_data/world_data.hpp>
 #include <core/transform/transform.hpp>
 #include <math/transform/transform.hpp>
+#include <utilities/logging.hpp>
 
 
 namespace Core {
@@ -134,6 +135,7 @@ Entity_interface::send_event(const uint32_t event_id,
                    const uint32_t size_of_data)
 {
   assert(false); // This used to be about components. do we still need it?
+  LOG_ERROR("Send event is disabled currently")
 }
 
 
@@ -150,27 +152,6 @@ Entity_interface::set_transform(const Transform &set_transform)
   
   math::transform new_transform = math::transform_init(set_transform.get_position(), set_transform.get_scale(), set_transform.get_rotation());
   ent_pool->transform[index] = new_transform;
-  
-//  // Apply transforms to children
-//  for(uint32_t c = 0; c < get_number_of_children(); ++c)
-//  {
-//    Entity child = get_child(c);
-//    
-//    const Transform child_transform = child.get_transform();
-//    
-//    // Offset rotation
-//    const math::quat rot_conj  = math::quat_conjugate(old_transform.rotation);
-//    const math::quat rot_prim  = math::quat_multiply(new_transform.rotation, rot_conj);
-//    const math::quat final_rot = math::quat_multiply(rot_prim, child_transform.get_rotation());
-//    
-//    // Offset position TODO: This needs to take into account rotatations, currently the calling code needs to deal with this.
-//    const math::vec3 new_offset = math::vec3_subtract(new_transform.position, old_transform.position);
-//    const math::vec3 final_pos  = math::vec3_add(child_transform.get_position(), new_offset);
-//    
-//    // Apply offset transform.
-//    const Transform offset_transform(final_pos, child_transform.get_scale(), final_rot);
-//    child.set_transform(offset_transform);
-//  }
   
   World_data::entity_graph_change_push(m_world_data->entity_graph_changes, m_this_id, World_data::Entity_graph_change::updated);
 }
