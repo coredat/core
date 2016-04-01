@@ -28,6 +28,7 @@ clear(const uint32_t clear_flags);
 /*!
   Set the clear color.
 */
+void
 clear_color_set(const float r, const float g, const float b);
 
 
