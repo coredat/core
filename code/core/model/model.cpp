@@ -11,6 +11,7 @@
 #include <algorithm>
 #include <graphics_api/mesh.hpp>
 #include <stdint.h>
+#include <utilities/logging.hpp>
 
 
 namespace Core {
@@ -37,7 +38,7 @@ Model::Model(const uint32_t id)
 Model::Model(const char *filename)
 : m_impl(new Impl)
 {
-  // Need to check there is space in the pool.
+  LOG_TODO("Check there is space in the pool first.");
   
   const std::string file(filename);
   const util::obj_model model(util::load_obj(file));
@@ -108,6 +109,7 @@ Model::get_mesh(const uint32_t index) const
 math::aabb
 Model::get_model_aabb() const
 {
+  assert(false);
 //  math::aabb return_aabb;
 //  
 //  World_data::World *world = World_data::get_world();

@@ -2,8 +2,7 @@
 #define TEXTURE_POOL_INCLUDED_6CFB6B90_56F8_408D_B068_9EB867B41233
 
 
-#include <graphics_api/ogl/ogl_texture.hpp>
-#include <stddef.h>
+#include <graphics_api/ogl/ogl_texture.hpp> // TODO: This can be fwd dec
 #include <stdint.h>
 
 
@@ -18,7 +17,7 @@ struct Texture_pool
   uint32_t              id[SIZE_OF_TEXTURE_POOL];
   Ogl::Texture          texture[SIZE_OF_TEXTURE_POOL];
   
-  const uint32_t        size = SIZE_OF_TEXTURE_POOL;
+  const uint32_t        capacity = SIZE_OF_TEXTURE_POOL;
 }; // struct
 
 
@@ -35,6 +34,11 @@ texture_pool_init(Texture_pool *pool);
 */
 Ogl::Texture
 texture_pool_find(const Texture_pool *pool, const uint32_t id);
+
+/*!
+*/
+uint32_t
+texture_pool_add(Texture_pool *pool, Ogl::Texture *texture);
 
 
 } // ns

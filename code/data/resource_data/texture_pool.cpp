@@ -1,5 +1,12 @@
 #include "texture_pool.hpp"
 #include <assert.h>
+#include <stdatomic.h>
+
+
+namespace
+{
+  atomic_uint_least32_t texture_id(0);
+}
 
 
 namespace Resource_data {
@@ -18,7 +25,7 @@ texture_pool_find(const Texture_pool *pool, const uint32_t id)
 {
   assert(pool);
 
-  for(std::uint32_t i = 0; i < pool->size; ++i)
+  for(uint32_t i = 0; i < pool->capacity; ++i)
   {
     if(pool->id[i] == id)
     {
@@ -27,6 +34,15 @@ texture_pool_find(const Texture_pool *pool, const uint32_t id)
   }
   
   return Ogl::Texture();
+}
+
+
+uint32_t
+texture_pool_add(Texture_pool *pool, Ogl::Texture *texture)
+{
+
+
+  return 0;
 }
 
 
