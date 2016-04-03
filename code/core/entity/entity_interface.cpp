@@ -1,6 +1,7 @@
 #include "entity_interface.hpp"
 #include <core/model/model.hpp>
 #include <core/model/mesh.hpp>
+#include <core/physics/collider.hpp>
 #include <data/world_data/world_data.hpp>
 #include <core/transform/transform.hpp>
 #include <math/transform/transform.hpp>
@@ -8,34 +9,35 @@
 
 
 namespace Core {
+namespace Entity_detail {
 
 
 Core::Entity_id
-Entity_interface::get_id() const
+get_id(const Core::Entity_id this_id, World_data::World *world)
 {
-  return m_this_id;
+  return this_id;
 }
 
 
 bool
-Entity_interface::is_valid() const
+is_valid(const Core::Entity_id this_id, World_data::World *world)
 {
-  return !(m_this_id == Core::Entity_id_util::invalid_id());
+  return !(this_id == Core::Entity_id_util::invalid_id());
 }
 
 
 uint32_t
-Entity_interface::get_tags() const
+get_tags(const Core::Entity_id this_id, World_data::World *world)
 {
-  if(!is_valid()) { return 0; }
+  if(!is_valid(this_id, world)) { return 0; }
   
   uint32_t index;
   if(Entity_id_util::find_index_linearly(&index,
-                                         m_this_id,
-                                         m_world_data->entity_pool->entity_id,
-                                         m_world_data->entity_pool->size))
+                                         this_id,
+                                         world->entity_pool->entity_id,
+                                         world->entity_pool->size))
   {
-    return m_world_data->entity_pool->entity_properties[index].tags;
+    return world->entity_pool->entity_properties[index].tags;
   }
   
   return 0;
@@ -43,69 +45,69 @@ Entity_interface::get_tags() const
 
 
 bool
-Entity_interface::has_tag(const uint32_t tag_id) const
+has_tag(const Core::Entity_id this_id, World_data::World *world, const uint32_t tag_id)
 {
-  if(!is_valid()) { return 0; }
+  if(!is_valid(this_id, world)) { return 0; }
   
-  const uint32_t tags = get_tags();
+  const uint32_t tags = get_tags(this_id, world);
   
   return !!(tags & tag_id);
 }
 
 
 void
-Entity_interface::set_tags(const uint32_t set_tags)
+set_tags(const Core::Entity_id this_id, World_data::World *world, const uint32_t set_tags)
 {
-  if(!is_valid()) { return; }
+  if(!is_valid(this_id, world)) { return; }
   
   uint32_t index;
   if(Entity_id_util::find_index_linearly(&index,
-                                         m_this_id,
-                                         m_world_data->entity_pool->entity_id,
-                                         m_world_data->entity_pool->size))
+                                         this_id,
+                                         world->entity_pool->entity_id,
+                                         world->entity_pool->size))
   {
-    m_world_data->entity_pool->entity_properties[index].tags = set_tags;
+    world->entity_pool->entity_properties[index].tags = set_tags;
   }
 }
 
 
 void
-Entity_interface::add_tag(const uint32_t add_tag)
+add_tag(const Core::Entity_id this_id, World_data::World *world, const uint32_t add_tag)
 {
-  if(!is_valid()) { return; }
+  if(!is_valid(this_id, world)) { return; }
 
-  const uint32_t tags = get_tags();
-  set_tags(tags | add_tag);
+  const uint32_t tags = get_tags(this_id, world);
+  set_tags(this_id, world, tags | add_tag);
 }
 
 
 void
-Entity_interface::remove_tag(const uint32_t tag)
+remove_tag(const Core::Entity_id this_id, World_data::World *world, const uint32_t tag)
 {
-  if(!is_valid()) { return; }
+  if(!is_valid(this_id, world)) { return; }
 
-  const uint32_t tags = get_tags();
-  set_tags(tags &~ tag);
+  const uint32_t tags = get_tags(this_id, world);
+  set_tags(this_id, world, tags &~ tag);
 }
 
 
 void
-Entity_interface::set_name(const char* set_name)
+set_name(const Core::Entity_id this_id, World_data::World *world, const char* set_name)
 {
-  if(!is_valid()) { return; }
+  if(!is_valid(this_id, world)) { return; }
   
   // set string.
-  World_data::entity_pool_set_entity_name(m_world_data->entity_pool, m_this_id, set_name);
+  World_data::entity_pool_set_entity_name(world->entity_pool, this_id, set_name);
 }
   
   
 const char*
-Entity_interface::get_name() const
+get_name(const Core::Entity_id this_id, World_data::World *world)
 {
-  if(!is_valid()) { return nullptr; }
+  if(!is_valid(this_id, world)) { return nullptr; }
   
   // set string.
-  return World_data::entity_pool_get_entity_name(m_world_data->entity_pool, m_this_id);
+  return World_data::entity_pool_get_entity_name(world->entity_pool, this_id);
 }
 
 
@@ -130,7 +132,7 @@ namespace
 
 
 void
-Entity_interface::send_event(const uint32_t event_id,
+send_event(const Core::Entity_id this_id, World_data::World *world, const uint32_t event_id,
                    const void *data,
                    const uint32_t size_of_data)
 {
@@ -140,34 +142,33 @@ Entity_interface::send_event(const uint32_t event_id,
 
 
 void
-Entity_interface::set_transform(const Transform &set_transform)
+set_transform(const Core::Entity_id this_id, World_data::World *world,const Transform &set_transform)
 {
-  if(!is_valid()) { return; }
+  if(!is_valid(this_id, world)) { return; }
   
-  auto ent_pool = m_world_data->entity_pool;
+  auto ent_pool = world->entity_pool;
 
   uint32_t index;
-  assert(get_index(&index, m_this_id, ent_pool->entity_id, ent_pool->size));
-  const math::transform old_transform = ent_pool->transform[index];
+  assert(get_index(&index, this_id, ent_pool->entity_id, ent_pool->size));
   
   math::transform new_transform = math::transform_init(set_transform.get_position(), set_transform.get_scale(), set_transform.get_rotation());
   ent_pool->transform[index] = new_transform;
   
-  World_data::entity_graph_change_push(m_world_data->entity_graph_changes, m_this_id, World_data::Entity_graph_change::updated);
+  World_data::entity_graph_change_push(world->entity_graph_changes, this_id, World_data::Entity_graph_change::updated);
 }
 
 
 Transform
-Entity_interface::get_transform() const
+get_transform(const Core::Entity_id this_id, World_data::World *world)
 {
-  if(!is_valid()) {
+  if(!is_valid(this_id, world)) {
     return Transform();
   }
   
-  auto ent_pool = m_world_data->entity_pool;
+  auto ent_pool = world->entity_pool;
 
   uint32_t index;
-  assert(get_index(&index, m_this_id, ent_pool->entity_id, ent_pool->size));
+  assert(get_index(&index, this_id, ent_pool->entity_id, ent_pool->size));
   math::transform* local_transform = &ent_pool->transform[index];
   
   return Core::Transform(local_transform->position, local_transform->scale, local_transform->rotation);
@@ -175,40 +176,40 @@ Entity_interface::get_transform() const
 
 
 void
-Entity_interface::set_material_id(const uint32_t id)
+set_material_id(const Core::Entity_id this_id, World_data::World *world, const uint32_t id)
 {
-  if(!is_valid()) { return; }
+  if(!is_valid(this_id, world)) { return; }
   
-  auto ent_pool = m_world_data->entity_pool;
+  auto ent_pool = world->entity_pool;
 
   uint32_t index;
-  assert(get_index(&index, m_this_id, ent_pool->entity_id, ent_pool->size));
+  assert(get_index(&index, this_id, ent_pool->entity_id, ent_pool->size));
   ent_pool->texture[index] = id;
 }
 
 
 uint32_t
-Entity_interface::get_material_id() const
+get_material_id(const Core::Entity_id this_id, World_data::World *world)
 {
-  if(!is_valid()) { return 0; }
+  if(!is_valid(this_id, world)) { return 0; }
 
-  auto ent_pool = m_world_data->entity_pool;
+  auto ent_pool = world->entity_pool;
 
   uint32_t index;
-  assert(get_index(&index, m_this_id, ent_pool->entity_id, ent_pool->size));
+  assert(get_index(&index, this_id, ent_pool->entity_id, ent_pool->size));
   return (uint32_t)ent_pool->texture[index];
 }
 
 
 void
-Entity_interface::set_model(const Core::Model &model)
+set_model(const Core::Entity_id this_id, World_data::World *world, const Core::Model &model)
 {
-  if(!is_valid()) { return; }
+  if(!is_valid(this_id, world)) { return; }
   
-  auto ent_pool = m_world_data->entity_pool;
+  auto ent_pool = world->entity_pool;
 
   uint32_t index;
-  assert(get_index(&index, m_this_id, ent_pool->entity_id, ent_pool->size));
+  assert(get_index(&index, this_id, ent_pool->entity_id, ent_pool->size));
   ent_pool->model[index] = model.get_id();
   
   //ent_pool->aabb[index] = m_world_data->model_pool->aabb[id];
@@ -216,29 +217,30 @@ Entity_interface::set_model(const Core::Model &model)
 
 
 Core::Model
-Entity_interface::get_model() const
+get_model(const Core::Entity_id this_id, World_data::World *world)
 {
-  if(!is_valid()) { return Core::Model(); }
+  if(!is_valid(this_id, world)) { return Core::Model(); }
   
-  auto ent_pool = m_world_data->entity_pool;
+  auto ent_pool = world->entity_pool;
 
   uint32_t index;
-  assert(get_index(&index, m_this_id, ent_pool->entity_id, ent_pool->size));
+  assert(get_index(&index, this_id, ent_pool->entity_id, ent_pool->size));
   return Core::Model((uint32_t)ent_pool->model[index]);
 }
 
 
 void
-Entity_interface::set_collider(const Core::Collider &collider)
+set_collider(const Core::Entity_id this_id, World_data::World *world, const Core::Collider &collider)
 {
 }
 
 
 Collider
-Entity_interface::get_collider() const
+get_collider(const Core::Entity_id this_id, World_data::World *world)
 {
   return Collider();
 }
 
 
+} // ns
 } // ns

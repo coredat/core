@@ -1,5 +1,6 @@
 #include <core/renderer/mesh_renderer.hpp>
 #include <core/entity/entity.hpp>
+#include <core/entity/entity_ref.hpp>
 #include <core/color/color.hpp>
 #include <core/color/color_utils.hpp>
 #include <core/camera/camera_properties.hpp>
@@ -78,7 +79,7 @@ Mesh_renderer::render()
     if (id != Core::Entity_id_util::invalid_id())
     //if(false) // debug cam route
     {
-      Core::Entity ent;
+      Core::Entity_ref ent;
       World_data::world_find_entity(world, &ent, id);
 
       const Core::Transform cam_transform = ent.get_transform();

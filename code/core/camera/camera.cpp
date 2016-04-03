@@ -1,6 +1,7 @@
 #include <core/camera/camera.hpp>
 #include <core/color/color.hpp>
 #include <core/entity/entity.hpp>
+#include <core/entity/entity_ref.hpp>
 #include <data/world_data/world.hpp>
 #include <data/world_data/world_pools.hpp>
 #include <data/world_data/camera_pool.hpp>
@@ -26,7 +27,7 @@ Camera::Camera()
 
 Camera::~Camera()
 {
-  set_attached_entity(Entity()); // Passing an invalid entity will unload the current entity.
+  set_attached_entity(Entity_ref()); // Passing an invalid entity will unload the current entity.
 }
 
 
@@ -44,7 +45,7 @@ namespace
 
 
 void
-Camera::set_attached_entity(const Entity &entity)
+Camera::set_attached_entity(const Entity_ref entity)
 {
   World_data::World *world = World_data::get_world();
 
@@ -61,17 +62,17 @@ Camera::set_attached_entity(const Entity &entity)
 }
 
 
-Entity
+Entity_ref
 Camera::get_attached_entity() const
 {
   World_data::World* world = World_data::get_world();
   
   if(!world)
   {
-    return Entity();
+    return Entity_ref();
   }
   
-  Entity entity;
+  Entity_ref entity;
   World_data::world_find_entity(world, &entity, m_impl->attached_entity);
   
   return entity;

@@ -19,8 +19,8 @@ public:
   explicit              Camera();
                         ~Camera();
   
-  void                  set_attached_entity(const Entity &entity);
-  Entity                get_attached_entity() const;
+  void                  set_attached_entity(const Entity_ref entity);
+  Entity_ref            get_attached_entity() const;
   
   void                  set_priority(const uint32_t priority);
   uint32_t              get_priority() const;

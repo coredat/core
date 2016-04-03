@@ -48,7 +48,7 @@ world_create_new_entity(World *world_data,
 */
 bool
 world_find_entity(World *world_data,
-                  Core::Entity *out_entity,
+                  Core::Entity_ref *out_entity,
                   const Core::Entity_id id);
 
 

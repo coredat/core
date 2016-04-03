@@ -2,6 +2,7 @@
 #include "entity_pool.hpp"
 #include "graph_change_pool.hpp"
 #include <core/entity/entity.hpp>
+#include <core/entity/entity_ref.hpp>
 #include <atomic>
 
 
@@ -29,7 +30,8 @@ world_create_new_entity(World *world_data,
   
   if(World_data::entity_pool_push_new_entity(entity_pool, new_id))
   {
-    Core::Detail::set_entity_members(out_entity, world_data, new_id);
+    Core::Entity new_entity(new_id, world_data);
+    (*out_entity) = std::move(new_entity);
     
     entity_graph_change_push(world_data->entity_graph_changes,
                              out_entity->get_id(),
@@ -45,7 +47,7 @@ world_create_new_entity(World *world_data,
 
 bool
 world_find_entity(World *world_data,
-                  Core::Entity *out_entity,
+                  Core::Entity_ref *out_entity,
                   const Core::Entity_id id)
 {
   assert(world_data);
@@ -60,7 +62,9 @@ world_find_entity(World *world_data,
                                                entity_pool->entity_id,
                                                entity_pool->size))
   {
-    Core::Detail::set_entity_members(out_entity, world_data, id);
+    Core::Entity_ref found_entity(id, world_data);
+    *out_entity = found_entity;
+
     return true;
   }
   
