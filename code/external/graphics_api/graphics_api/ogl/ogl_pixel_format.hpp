@@ -17,11 +17,15 @@ pixel_format_get_gl_internal_format(const Graphics_api::Pixel_format format)
 
   switch(format)
   {
+  case(gfx::Pixel_format::rgb8):
+    return GL_RGB;
   case(gfx::Pixel_format::rgba8):
   case(gfx::Pixel_format::unknown):
     return GL_RGBA;
   case(gfx::Pixel_format::rgba32f):
     return GL_RGBA32F;
+  case(gfx::Pixel_format::r32f):
+    return GL_R32F;
   
   default:
     assert(false); // Yikes.
@@ -51,9 +55,11 @@ pixel_format_get_type(const GLenum format)
 {
   switch(format)
   {
+  case(GL_RGB):
   case(GL_RGBA):
     return GL_UNSIGNED_BYTE;
     
+  case(GL_R32F):
   case(GL_RGBA32F):
     return GL_FLOAT;
 

@@ -63,6 +63,17 @@ texture_update_texture_2d(Texture *update_texture,
                           const void *data,
                           std::ostream *log = nullptr);
 
+/*!
+  Simplisitc sugar method that just checks it has a
+  non zero texture id.
+  \param check_is_valid Texture to check.
+*/
+inline bool
+texture_is_valid(const Texture *check_is_valid)
+{
+  return !!check_is_valid->texture_id > 0;
+}
+
 
 } // ns
 
