@@ -2,7 +2,7 @@
 #define MESH_POOL_INCLUDED_B5BA64BB_268D_4533_8EE5_509ECFD72F4B
 
 
-#include <graphics_api/mesh.hpp>
+#include <graphics_api/mesh.hpp> // Fwd dec
 #include <math/geometry/geometry_types.hpp>
 #include <stdint.h>
 
@@ -28,6 +28,13 @@ void
 mesh_pool_init(Mesh_pool *pool);
 
 
+/*!
+  Find the mesh for the given id.
+*/
+Graphics_api::Mesh
+mesh_pool_find(const Mesh_pool *pool, const uint32_t id);
+
+
 uint32_t
 mesh_pool_push_new(Mesh_pool *pool,
                    const char *key,
@@ -35,8 +42,6 @@ mesh_pool_push_new(Mesh_pool *pool,
                    const uint32_t number_of_vertices,
                    const uint32_t *index_data,
                    const uint32_t number_of_indices);
-
-
 
 
 } // ns

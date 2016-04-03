@@ -3,7 +3,7 @@
 #include <stddef.h>
 #include <vector>
 #include <core/memory/memory.hpp>
-#include <iostream>
+#include <math/transform/transform.hpp>
 
 
 namespace
@@ -96,6 +96,7 @@ entity_pool_push_new_entity(Entity_pool *pool, const Core::Entity_id id)
     pool->model[pool->size] = (uint32_t)0;
     pool->texture[pool->size] = (uint32_t)0;
     pool->aabb[pool->size] = math::aabb();
+    pool->transform[pool->size] = math::transform_init(math::vec3_zero(), math::vec3_one(), math::quat_init());
     
     ++(pool->size);
     

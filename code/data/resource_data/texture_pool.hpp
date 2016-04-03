@@ -38,7 +38,11 @@ texture_pool_find(const Texture_pool *pool, const uint32_t id);
 /*!
 */
 uint32_t
-texture_pool_add(Texture_pool *pool, Ogl::Texture *texture);
+texture_pool_add(Texture_pool *pool,
+                 const void *data,
+                 const uint32_t height,
+                 const uint32_t width,
+                 const uint32_t depth);
 
 
 } // ns

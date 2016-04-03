@@ -140,11 +140,11 @@ render_nodes_fullbright(const Node nodes[],
       Ogl::shader_uniforms_apply(uni_full_diffuse_map, (void*)&curr_node->diffuse.texture_id);
       Ogl::shader_uniforms_apply(uni_full_wvp, (void*)&curr_node->wvp);
       Ogl::vertex_buffer_bind(curr_node->vbo, &vertex_format, &shader_fullbright);
+      
+      const GLsizei count = curr_node->vbo.number_of_entries / vertex_format.number_of_attributes;
+
+      glDrawArrays(GL_TRIANGLES, 0, count);
     }
-
-    const GLsizei count = curr_node->vbo.number_of_entries / vertex_format.number_of_attributes;
-
-    glDrawArrays(GL_TRIANGLES, 0, count);
   }
   
   Ogl::error_check("Drawing fullbright nodes", &std::cout);
