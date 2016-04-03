@@ -7,6 +7,7 @@
 namespace Core {
 namespace Entity_id_util {
 
+
 void
 init_to_invalid_ids(Entity_id ids[], const uint32_t size_of_entities)
 {

@@ -9,6 +9,8 @@
 /*
   TODO: Move this down to uitls.
   call it generic_id or something.
+  
+  TODO: Move more funcs to cpp file.
 */
 
 
