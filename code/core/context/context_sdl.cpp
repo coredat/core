@@ -10,6 +10,7 @@
 
 #include <core/context/context.hpp>
 #include <graphics_api/initialize.hpp>
+#include <graphics_api/pixel_format.hpp>
 #include <systems/sdl_backend/sdl_message_loop.hpp>
 #include <stdatomic.h>
 #include <assert.h>
@@ -97,12 +98,15 @@ Context::Context(const uint32_t width,
   
   // Create context
   {
+    Graphics_api::Pixel_format fmt = Graphics_api::Pixel_format::rgba8;
+  
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
-    SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
-    SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 5);
-    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
+    SDL_GL_SetAttribute(SDL_GL_RED_SIZE, Graphics_api::pixel_format_red_bits(fmt));
+    SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, Graphics_api::pixel_format_green_bits(fmt));
+    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, Graphics_api::pixel_format_blue_bits(fmt));
+    SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, Graphics_api::pixel_format_alpha_bits(fmt));
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
     SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
@@ -119,7 +123,7 @@ Context::Context(const uint32_t width,
   }
   
   // Initialize the graphics api
-  ::Graphics_api::initialize();
+  Graphics_api::initialize();
 
   // Subscribe to the SDL event callback.
   Sdl::event_add_callback([](const SDL_Event *evt, void *self)

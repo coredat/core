@@ -123,7 +123,7 @@ Camera::set_type(const Core::Camera_type cam_type)
 Camera_type
 Camera::get_type() const
 {
-  return Camera_type::perspective;
+  return m_impl->properties.type;
 }
 
 

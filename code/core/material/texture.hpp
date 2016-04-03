@@ -22,6 +22,9 @@ public:
                       Texture(const Texture&);
                       Texture(Texture&&);
   
+  bool                exists() const;
+                      operator bool() const; // Alias for exists().
+  
   uint32_t            get_id() const;
   
 private:

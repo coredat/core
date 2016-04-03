@@ -11,6 +11,7 @@ namespace Core {
 enum class Camera_type : uint32_t
 {
   perspective,
+  orthographic,
 };
 
 

@@ -9,8 +9,8 @@ namespace Core {
 
 
 /*!
-  Represents a generic color.
-  This is an immutable object.
+  Represents a color.
+  Colors objects are immutable
   
   We represent color as.
   0xRRGGBBAA

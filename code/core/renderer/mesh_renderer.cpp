@@ -1,22 +1,29 @@
 #include <core/renderer/mesh_renderer.hpp>
-#include <graphics_api/initialize.hpp>
 #include <core/entity/entity.hpp>
-#include <data/data.hpp>
+#include <core/color/color.hpp>
+#include <core/color/color_utils.hpp>
+#include <core/camera/camera_properties.hpp>
 #include <core/transform/transform.hpp>
-#include <systems/transform/transformations.hpp>
+
+#include <graphics_api/clear.hpp>
+#include <graphics_api/initialize.hpp>
+#include <graphics_api/mesh.hpp>
+
 #include <renderer/simple_renderer/simple_renderer_node.hpp>
 #include <renderer/simple_renderer/simple_renderer.hpp>
 #include <renderer/debug_line_renderer/debug_line_renderer_node.hpp>
 #include <renderer/debug_line_renderer/debug_line_renderer.hpp>
-#include <math/math.hpp>
-#include <graphics_api/clear.hpp>
-#include <core/camera/camera_properties.hpp>
 #include <renderer/renderer.hpp>
 #include <renderer/simple_renderer/simple_renderer.hpp>
-#include <vector>
-#include <core/color/color.hpp>
-#include <core/color/color_utils.hpp>
+
+#include <data/data.hpp>
 #include <data/resource_data/resource_data.hpp>
+
+#include <systems/transform/transformations.hpp>
+
+#include <math/math.hpp>
+#include <vector>
+
 
 
 namespace Core {
@@ -58,13 +65,14 @@ Mesh_renderer::render()
   
   const uint32_t flags = Graphics_api::Clear_flag::color | Graphics_api::Clear_flag::depth;
   Graphics_api::clear(flags);
-
   
   // Get entity's transform so we can generate a view.
   math::mat4 view = math::mat4_zero();
   {
-    const auto id = World_data::camera_pool_get_entity_id_for_priority(world->camera_pool, peer, 0);
-
+    const auto id = World_data::camera_pool_get_entity_id_for_priority(world->camera_pool,
+                                                                       peer,
+                                                                       0);
+    
     // If we cant find the camera we'll just make a dummy orbit one for the time.
     // This is good for debugging.
     if (id != Core::Entity_id_util::invalid_id())
@@ -80,7 +88,7 @@ Mesh_renderer::render()
     else
     {
       static float time = 4;
-      //time += 0.005f;
+      time += 0.005f;
 
       const float x = math::sin(time) * 9;
       const float z = math::cos(time) * 9;
@@ -96,29 +104,33 @@ Mesh_renderer::render()
   const math::mat4 view_proj = math::mat4_multiply(view, proj);
 
   ::Transform::transforms_to_wvp_mats(world->entity_pool->transform,
-                                    world->entity_pool->size,
-                                    view_proj,
-                                    nodes[0].wvp,
-                                    size_of_node_pool,
-                                    sizeof(Simple_renderer::Node));
-
-
-  ::Transform::transforms_to_world_mats(world->entity_pool->transform,
                                       world->entity_pool->size,
-                                      nodes[0].world_mat,
+                                      view_proj,
+                                      nodes[0].wvp,
                                       size_of_node_pool,
                                       sizeof(Simple_renderer::Node));
 
+  ::Transform::transforms_to_world_mats(world->entity_pool->transform,
+                                        world->entity_pool->size,
+                                        nodes[0].world_mat,
+                                        size_of_node_pool,
+                                        sizeof(Simple_renderer::Node));
+  
   // Texture/vbo info
   for (uint32_t i = 0; i < size_of_node_pool; ++i)
   {
-    const uint32_t mesh_id = world->entity_pool->model[i];
+    const uint32_t mesh_id    = world->entity_pool->model[i];
     const uint32_t texture_id = world->entity_pool->texture[i];
     
     if(mesh_id && texture_id)
     {
-      nodes[i].vbo     = Resource_data::get_horrible_hack_resouces()->mesh_pool->mesh[mesh_id].vbo;
-      nodes[i].diffuse = Resource_data::texture_pool_find(Resource_data::get_horrible_hack_resouces()->texture_pool, texture_id);
+      Resource_data::Resources *resources = Resource_data::get_horrible_hack_resouces();
+      
+      Graphics_api::Mesh get_mesh = Resource_data::mesh_pool_find(resources->mesh_pool, mesh_id);
+      Ogl::Texture get_texture    = Resource_data::texture_pool_find(resources->texture_pool, texture_id);
+      
+      nodes[i].vbo     = get_mesh.vbo;
+      nodes[i].diffuse = get_texture;
     }
   }
   
