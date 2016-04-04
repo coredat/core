@@ -4,6 +4,7 @@
 
 #include <stdint.h>
 
+#define LOGGING_FILE_NAME (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
 
 #if defined __APPLE__ || __linux__
   #define LOGGING_FUNC_STR __PRETTY_FUNCTION__
@@ -32,6 +33,7 @@ enum ENUM {
 
 void
 set_output(const uint32_t out);
+
 
 void
 log(const char *prefix,
