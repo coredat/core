@@ -1,5 +1,6 @@
 #include <core/input/controller.hpp>
 #include <core/context/context.hpp>
+#include <core/context/detail/context_detail.hpp>
 #include <data/core_data/input_pool.hpp>
 #include <data/core_data/core_data.hpp>
 #include <utilities/logging.hpp>
@@ -13,16 +14,15 @@ namespace Input {
 
 struct Controller::Impl
 {
-  Core_data::Input_pool *input_data = nullptr;
   uint32_t controller_number = 0;
+  
+  std::shared_ptr<const Context_detail::Context_data> context_data;
 };
 
 
 Controller::Controller(const Core::Context &ctx, const uint32_t controller_id)
-: m_impl(new Impl{nullptr, controller_id})
+: m_impl(new Impl{controller_id, ctx.get_context_data()})
 {
-  m_impl->input_data = static_cast<Core_data::Core*>(ctx.get_context_data())->input_pool;
-  
   LOG_TODO("Better checks required in this class")
 }
 
@@ -65,14 +65,19 @@ Controller::operator=(Controller &&other)
 Axis
 Controller::get_axis(const uint8_t axis) const
 {
-  return m_impl->input_data->controllers[m_impl->controller_number].axis[axis];
+  if(m_impl->context_data->input_pool)
+  {
+    return m_impl->context_data->input_pool->controllers[0].axis[axis];
+  }
+
+  return Axis();
 }
 
 
 bool
 Controller::is_button_down(const Button::ENUM button) const
 {
-  return m_impl->input_data->controllers[m_impl->controller_number].buttons[(int)button] == Core::Input::Button_state::down;
+  return false;
 }
 
 

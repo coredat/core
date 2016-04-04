@@ -3,6 +3,7 @@
 
 
 #include <core/context/context_fwd.hpp>
+#include <core/context/detail/context_detail_fwd.hpp>
 #include <core/input/input_fwd.hpp>
 #include <stdint.h>
 #include <memory>
@@ -49,7 +50,7 @@ private:
 
   friend class Core::Input::Controller;
 
-  void*               get_context_data() const; // TODO: Is there a better way to hide this? Don't like it in the public header.
+  std::shared_ptr<const Context_detail::Context_data>  get_context_data() const;
   
 private:
 

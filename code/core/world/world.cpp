@@ -24,6 +24,8 @@
 
 #include <utilities/logging.hpp>
 
+#include <core/world/detail/world_detail.hpp>
+
 namespace Core {
 
 
@@ -31,6 +33,8 @@ struct World::Impl
 {
   Core_data::Core    core_data;
   World_data::World  world_data;
+  
+  std::shared_ptr<World_detail::World_data> data;
 };
 
 
@@ -91,6 +95,15 @@ World::find_entity(const char *name)
 {
   return Entity_ref();
 }
+
+
+std::shared_ptr<const World_detail::World_data>
+World::get_world_data() const
+{
+  assert(m_impl);
+  return m_impl->data;
+}
+
 
 
 } // ns

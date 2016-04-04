@@ -2,6 +2,7 @@
 /*
   TODO:
   This needs better logging.
+  Split SDL Out need to trim this stuff outta here.
 */
 
 #define CORE_USE_SDL // Only have sdl at this point
@@ -9,10 +10,12 @@
 #ifdef CORE_USE_SDL
 
 #include <core/context/context.hpp>
+#include <core/context/detail/context_detail.hpp>
 #include <data/core_data/core_data.hpp>
 #include <graphics_api/initialize.hpp>
 #include <graphics_api/pixel_format.hpp>
 #include <systems/sdl_backend/sdl_message_loop.hpp>
+#include <systems/sdl_backend/sdl_input.hpp>
 #include <stdatomic.h>
 #include <assert.h>
 #include <utilities/logging.hpp>
@@ -41,7 +44,7 @@ Context::Impl
   bool is_open               = true;
   SDL_Window *window         = nullptr;
   SDL_GLContext context      = nullptr;
-  Core_data::Core *core_data = nullptr;
+  std::shared_ptr<Context_detail::Context_data> context_data;
 };
 
 
@@ -54,11 +57,13 @@ Context::Context(const uint32_t width,
   true,
   nullptr,
   nullptr,
+  std::make_shared<Context_detail::Context_data>()
 })
 {
   if(instance_created)
   {
-    assert(false);
+    assert(false); // For the moment we only support making one instance per life of an application.
+    
     return;
   }
   else
@@ -148,38 +153,33 @@ Context::Context(const uint32_t width,
     // Not currently used.
   },
   m_impl.get());
-  
+
   // Core data
   LOG_TODO("Remove static data stores")
-  LOG_TODO("Core data initialize is rubbish")
   static Core_data::Input_pool core_input;
   Core_data::input_data_init(&core_input);
-
-  static Core_data::Core core_data;
-  core_data.input_pool = &core_input;
   
-  Core_data::core_data_init(&core_data);
-  Core_data::set_core_data(&core_data);
-
-  m_impl->core_data = &core_data;
+  m_impl->context_data->input_pool = &core_input;
 }
 
 
 Context::~Context()
 {
-
+  LOG_TODO("Need to deal with core data here");
 }
 
 
 Context::Context(Context &&other)
 : m_impl(std::move(other.m_impl))
 {
+  LOG_TODO("Need to explicitly clear other")
 }
 
 
 Context&
 Context::operator=(Context &&other)
 {
+  LOG_TODO("Need to explicitly clear other")
   this->m_impl = std::move(other.m_impl);
   return *this;
 }
@@ -324,7 +324,7 @@ Context::is_open() const
   Sdl::event_process();
   
   // Update input
-  
+  Sdl::update_keyboard_controller(&(m_impl->context_data->input_pool->controllers[0]));
   
   return m_impl->is_open;
 }
@@ -336,12 +336,11 @@ Context::operator bool() const
 }
 
 
-void*
+std::shared_ptr<const Context_detail::Context_data>
 Context::get_context_data() const
 {
   assert(m_impl);
-  
-  return m_impl->core_data;
+  return m_impl->context_data;
 }
 
 

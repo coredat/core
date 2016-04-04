@@ -3,6 +3,7 @@
 
 
 #include <core/world/world_fwd.hpp>
+#include <core/world/detail/world_detail_fwd.hpp>
 #include <core/entity/entity_fwd.hpp>
 #include <stdint.h>
 #include <memory>
@@ -27,6 +28,10 @@ public:
   Entity                create_entity();
   Entity_ref            find_entity(const char *name);
   
+private:
+
+  std::shared_ptr<const World_detail::World_data>  get_world_data() const;
+
 private:
 
   struct Impl;
