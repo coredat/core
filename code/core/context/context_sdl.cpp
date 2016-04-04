@@ -9,6 +9,7 @@
 #ifdef CORE_USE_SDL
 
 #include <core/context/context.hpp>
+#include <data/core_data/core_data.hpp>
 #include <graphics_api/initialize.hpp>
 #include <graphics_api/pixel_format.hpp>
 #include <systems/sdl_backend/sdl_message_loop.hpp>
@@ -40,6 +41,7 @@ Context::Impl
   bool is_open               = true;
   SDL_Window *window         = nullptr;
   SDL_GLContext context      = nullptr;
+  Core_data::Core *core_data = nullptr;
 };
 
 
@@ -146,6 +148,20 @@ Context::Context(const uint32_t width,
     // Not currently used.
   },
   m_impl.get());
+  
+  // Core data
+  LOG_TODO("Remove static data stores")
+  LOG_TODO("Core data initialize is rubbish")
+  static Core_data::Input_pool core_input;
+  Core_data::input_data_init(&core_input);
+
+  static Core_data::Core core_data;
+  core_data.input_pool = &core_input;
+  
+  Core_data::core_data_init(&core_data);
+  Core_data::set_core_data(&core_data);
+
+  m_impl->core_data = &core_data;
 }
 
 
@@ -317,6 +333,15 @@ Context::is_open() const
 Context::operator bool() const
 {
   return is_open();
+}
+
+
+void*
+Context::get_context_data() const
+{
+  assert(m_impl);
+  
+  return m_impl->core_data;
 }
 
 

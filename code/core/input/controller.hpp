@@ -16,7 +16,7 @@ class Controller final
 {
 public:
 
-  explicit          Controller(const Core::Context &ctx, const int player);
+  explicit          Controller(const Core::Context &ctx, const uint32_t controller_id);
                     ~Controller();
   
                     Controller(const Controller &);
@@ -27,13 +27,11 @@ public:
 
   Axis              get_axis(const uint8_t axis) const;
   bool              is_button_down(const Button::ENUM button) const;
-
+  
 private:
 
   struct Impl;
   std::unique_ptr<Impl> m_impl;
-
-  INPUT_CONTROLLER_MEMBERS
   
 }; // classs
 

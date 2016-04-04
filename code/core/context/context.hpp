@@ -3,6 +3,7 @@
 
 
 #include <core/context/context_fwd.hpp>
+#include <core/input/input_fwd.hpp>
 #include <stdint.h>
 #include <memory>
 
@@ -12,9 +13,10 @@ namespace Core {
 
 class Context final
 {
+private:
 
-  Context(Context &) = delete;
-  Context& operator=(Context&) = delete;
+                      Context(Context &) = delete;
+                      Context& operator=(Context&) = delete;
 
 public:
 
@@ -42,6 +44,12 @@ public:
   
   bool                is_open() const;
                       operator bool() const; // Alias for is_open().
+  
+private:
+
+  friend class Core::Input::Controller;
+
+  void*               get_context_data() const; // TODO: Is there a better way to hide this? Don't like it in the public header.
   
 private:
 

@@ -12,7 +12,6 @@
 #include <core/entity/entity_ref.hpp>
 
 
-#include <data/core_data/core_data.hpp>
 #include <data/world_data/world_data.hpp>
 
 
@@ -22,6 +21,8 @@
 #include <renderer/simple_renderer/simple_renderer.hpp>
 #include <renderer/debug_line_renderer/debug_line_renderer.hpp>
 #include <renderer/gui_renderer/gui_renderer.hpp>
+
+#include <utilities/logging.hpp>
 
 namespace Core {
 
@@ -39,6 +40,7 @@ World::World(const World_setup &setup)
   const size_t chunk_128_mb = 134217728;
   Core::Memory::initialize(chunk_128_mb);
 
+  LOG_TODO("Remove static data stores")
   static World_data::Entity_pool world_entities;
   World_data::entity_pool_init(&world_entities);
   
@@ -60,15 +62,6 @@ World::World(const World_setup &setup)
   m_impl->world_data.gui_pool               = &gui_view_pool;
   
   World_data::set_world_data(&m_impl->world_data);
-  
-  // Core Data
-  static Core_data::Input_pool core_input;
-  Core_data::input_data_init(&core_input);
-  
-  m_impl->core_data.input_pool = &core_input;
-
-  Core_data::core_data_init(&m_impl->core_data);
-  Core_data::set_core_data(&m_impl->core_data);
 }
 
 

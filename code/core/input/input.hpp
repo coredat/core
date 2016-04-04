@@ -22,12 +22,12 @@ enum ENUM {
 } // ns
 
 
-Controller
-get_controller(const Context &ctx, const Player::ENUM player);
-
-
-Controller
-get_controller(const Player::ENUM player);
+//Controller
+//get_controller(const Context &ctx, const Player::ENUM player);
+//
+//
+//Controller
+//get_controller(const Player::ENUM player);
 
 
 } // ns
