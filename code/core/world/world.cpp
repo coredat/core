@@ -63,6 +63,7 @@ World::World(const World_setup &setup)
   
   // Core Data
   static Core_data::Input_pool core_input;
+  Core_data::input_data_init(&core_input);
   
   m_impl->core_data.input_pool = &core_input;
 

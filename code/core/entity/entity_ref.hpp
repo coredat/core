@@ -14,6 +14,9 @@
 namespace Core {
 
 
+/*!
+  Entity_ref is a non owning entity.
+*/
 class Entity_ref final
 {
 public:

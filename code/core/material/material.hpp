@@ -2,9 +2,14 @@
 #define MATERIAL_INCLUDED_0898BDC5_BA5E_4FB9_80D8_90978B814B3A
 
 
+#include <core/material/material_fwd.hpp>
+#include <memory>
 #include <stdint.h>
 
 
+/*
+  WIP
+*/
 namespace Core {
 
 
@@ -12,12 +17,22 @@ class Material final
 {
 public:
 
-  const char *          get_name() const;
+  explicit              Material();
+                        ~Material();
   
+  void                  set_shader(const Shader shader);
+  void                  set_map_01(const Texture texture);
+  void                  set_map_02(const Texture texture);
+  void                  set_map_03(const Texture texture);
+  
+  const char *          get_name() const;
   uint32_t              get_shader_id() const;
   uint32_t              get_texture_id() const;
   
 private:
+
+  struct Impl;
+  std::unique_ptr<Impl> m_impl;
 
 };
 

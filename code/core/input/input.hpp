@@ -2,7 +2,7 @@
 #define INPUT_INCLUDED_98612EE1_83F4_4CC9_9D9B_757ABB3ACB76
 
 
-#include "controller.hpp"
+#include <core/input/controller.hpp>
 #include <stdint.h>
 
 
@@ -20,6 +20,10 @@ enum ENUM {
 
 }; // enum
 } // ns
+
+
+Controller
+get_controller(const Context &ctx, const Player::ENUM player);
 
 
 Controller

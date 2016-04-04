@@ -125,7 +125,7 @@ Context::Context(const uint32_t width,
   // Initialize the graphics api
   Graphics_api::initialize();
 
-  // Subscribe to the SDL event callback.
+  // Window callback
   Sdl::event_add_callback([](const SDL_Event *evt, void *self)
   {
     Context::Impl *impl = reinterpret_cast<Context::Impl*>(self);
@@ -137,6 +137,13 @@ Context::Context(const uint32_t width,
         impl->is_open = false;
         break;
     }
+  },
+  m_impl.get());
+  
+  // Input callback
+  Sdl::event_add_callback([](const SDL_Event *evt, void *self)
+  {
+    // Not currently used.
   },
   m_impl.get());
 }
@@ -296,8 +303,12 @@ Context::is_open() const
 {
   assert(m_impl);
   
+  // Flip buffer and process events.
   SDL_GL_SwapWindow(m_impl->window);
   Sdl::event_process();
+  
+  // Update input
+  
   
   return m_impl->is_open;
 }

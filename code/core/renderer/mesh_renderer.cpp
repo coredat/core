@@ -51,11 +51,23 @@ Mesh_renderer::render()
   // TODO: Need to pass in the environment height and width into this function.
   const auto cam = World_data::camera_pool_get_properties_for_priority(world->camera_pool, peer, 0);
   
-  const math::mat4 proj = math::mat4_projection(cam.viewport_width,
-                                                cam.viewport_height,
-                                                cam.near_plane,
-                                                cam.far_plane,
-                                                cam.fov);
+  math::mat4 proj;
+  
+  if(cam.type == Core::Camera_type::orthographic)
+  {
+    proj = math::mat4_orthographic(cam.viewport_width,
+                                   cam.viewport_height,
+                                   cam.near_plane,
+                                   cam.far_plane);
+  }
+  else
+  {
+    proj = math::mat4_projection(cam.viewport_width,
+                                 cam.viewport_height,
+                                 cam.near_plane,
+                                 cam.far_plane,
+                                 cam.fov);
+}
   
   const Core::Color clear_color(cam.clear_color);
   const float red = Core::Color_utils::get_red_f(clear_color);

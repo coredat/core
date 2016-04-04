@@ -7,10 +7,41 @@ namespace Core {
 namespace Input {
 
 
-Controller::Controller()
+struct Controller::Impl
+{
+  void *controller_data = nullptr;
+};
+
+
+Controller::Controller(const Core::Context &ctx, const int player)
+: m_impl(new Impl)
 {
   memset(m_axis, 0, sizeof(m_axis));
   memset(m_buttons, 0, sizeof(m_buttons));
+}
+
+
+Controller::Controller(const Controller &other)
+{
+}
+
+
+Controller::Controller(Controller &&other)
+{
+}
+
+  
+Controller&
+Controller::operator=(const Controller &other)
+{
+  return *this;
+}
+
+
+Controller&
+Controller::operator=(Controller &&other)
+{
+  return *this;
 }
 
 
@@ -26,31 +57,6 @@ bool
 Controller::is_button_down(const Button::ENUM button) const
 {
   return m_buttons[(uint32_t)button] == Button_state::down;
-}
-
-
-void
-Controller::serialize(uint8_t out_data[16])
-{
- // uint32_t offset = 0;
-  
-  // Copy axis.
-
-//  memcpy(&out_data[offset], &m_axis[0].x, sizeof(float));
-//  offset += sizeof(float);
-//
-//  memcpy(&out_data[offset], &m_axis[0].y, sizeof(float));
-//  offset += sizeof(float);
-//
-//  memcpy(&out_data[offset], &m_axis[1].x, sizeof(float));
-//  offset += sizeof(float);
-//
-//  memcpy(&out_data[offset], &m_axis[1].y, sizeof(float));
-//  offset += sizeof(float);
-
-  // Buttons
-
-  // Not doing buttons just yet.
 }
 
 

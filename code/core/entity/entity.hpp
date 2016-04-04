@@ -16,8 +16,9 @@ namespace Core {
 
 
 /*!
-  Entity is how we access the properties of an entity.
-  This abstracts how all the data is handled underneath.
+  Entity represents an object on the screen.
+  This is an owning object, if it goes out of scope it will
+  destroy the entity.
 */
 class Entity final
 {

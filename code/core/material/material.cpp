@@ -25,5 +25,4 @@ Material::get_texture_id() const
 }
 
 
-
 } // ns
