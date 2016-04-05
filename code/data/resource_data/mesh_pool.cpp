@@ -75,7 +75,7 @@ mesh_pool_push_new(Mesh_pool *pool,
   {
     if(pool->id[i] == 0)
     {
-      free_index = 0;
+      free_index = i;
       break;
     }
   }

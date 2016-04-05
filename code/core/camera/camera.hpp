@@ -14,10 +14,17 @@ namespace Core {
 
 class Camera final
 {
+
+                        Camera(const Camera&) = delete;
+  Camera&               operator=(const Camera&) = delete;
+
 public:
 
   explicit              Camera();
                         ~Camera();
+  
+                        Camera(Camera &&);
+  Camera&               operator=(Camera&&);
   
   void                  set_attached_entity(const Entity_ref entity);
   Entity_ref            get_attached_entity() const;

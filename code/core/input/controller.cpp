@@ -23,7 +23,7 @@ struct Controller::Impl
 Controller::Controller(const Core::Context &ctx, const uint32_t controller_id)
 : m_impl(new Impl{controller_id, ctx.get_context_data()})
 {
-  LOG_TODO("Better checks required in this class")
+  assert(m_impl->context_data);
 }
 
 
@@ -65,7 +65,10 @@ Controller::operator=(Controller &&other)
 Axis
 Controller::get_axis(const uint8_t axis) const
 {
-  if(m_impl->context_data->input_pool)
+  assert(m_impl && m_impl->context_data);
+  const Core_data::Input_pool *input = m_impl->context_data->input_pool;
+
+  if(input)
   {
     return m_impl->context_data->input_pool->controllers[0].axis[axis];
   }
@@ -77,6 +80,14 @@ Controller::get_axis(const uint8_t axis) const
 bool
 Controller::is_button_down(const Button::ENUM button) const
 {
+  assert(m_impl && m_impl->context_data);
+  const Core_data::Input_pool *input = m_impl->context_data->input_pool;
+
+  if(input)
+  {
+    return input->controllers[0].buttons[(uint32_t)button] == Core::Input::Button_state::down;
+  }
+
   return false;
 }
 

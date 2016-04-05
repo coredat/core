@@ -31,6 +31,33 @@ Camera::~Camera()
 }
 
 
+Camera::Camera(Camera &&other)
+: m_impl(new Impl{
+  other.m_impl->attached_entity,
+  other.m_impl->properties
+})
+{
+  // Null the other stuff
+  other.m_impl->attached_entity = Core::Entity_id_util::invalid_id();
+  other.m_impl->properties = ::Camera::Camera_properties();
+}
+
+
+Camera&
+Camera::operator=(Camera &&other)
+{
+  // Copy other.
+  m_impl->attached_entity = other.m_impl->attached_entity;
+  m_impl->properties = other.m_impl->properties;
+
+  // Null the other stuff
+  other.m_impl->attached_entity = Core::Entity_id_util::invalid_id();
+  other.m_impl->properties = ::Camera::Camera_properties();
+
+  return *this;
+}
+
+
 namespace
 {
   void
