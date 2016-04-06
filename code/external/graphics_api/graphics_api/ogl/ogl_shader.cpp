@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <utilities/logging.hpp>
 
 
 namespace Ogl {
@@ -43,7 +44,7 @@ shader_create(Shader *out_shader,
       glGetShaderInfoLog(shader_id, log_length, 0, output_log.data());
     }
 
-		if(!output_log.empty() && log)
+		if(!output_log.empty())
 		{
       std::string log_str;
       log_str.reserve(output_log.size());
@@ -55,14 +56,12 @@ shader_create(Shader *out_shader,
 
       if(is_compiled == GL_FALSE)
       {
-        (*log) << "Ogl::shader_create - errors compiling shader.\n";
-        (*log) << log_str << "\n";
+        LOG_ERROR(log_str.c_str());
         return 0;
       }
       else
       {
-        (*log) << "Ogl::shader_create - warnings compiling shader.\n";
-        (*log) << log_str << "\n";
+        LOG_WARNING(log_str.c_str());
       }
 		}
 
@@ -107,7 +106,7 @@ shader_create(Shader *out_shader,
 		output_log.resize(log_length);
   }
   
-  if(!output_log.empty() && log)
+  if(!output_log.empty())
   {
     std::string log_str;
     log_str.reserve(output_log.size());
@@ -115,8 +114,7 @@ shader_create(Shader *out_shader,
     
     if(!log_str.empty())
     {
-      (*log) << "Ogl::shader_create - issues linking shader.\n";
-      (*log) << log_str << "\n";
+      LOG_ERROR(log_str.c_str());
     }
   }
   
