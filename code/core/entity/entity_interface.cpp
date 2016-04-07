@@ -26,6 +26,20 @@ is_valid(const Core::Entity_id this_id, World_data::World *world)
 }
 
 
+bool
+is_active(const Core::Entity_id this_id, World_data::World *world)
+{
+  return true;
+}
+
+
+void
+set_active(const Core::Entity_id this_id, World_data::World *world, const bool set)
+{
+  
+}
+
+
 uint32_t
 get_tags(const Core::Entity_id this_id, World_data::World *world)
 {

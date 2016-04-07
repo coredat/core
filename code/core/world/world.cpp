@@ -3,17 +3,12 @@
 #include <systems/audio/audio.hpp>
 
 #include <core/memory/memory.hpp>
-#include <data/data.hpp>
 
 #include <graphics_api/initialize.hpp>
 #include <graphics_api/clear.hpp>
 
 #include <core/entity/entity.hpp>
 #include <core/entity/entity_ref.hpp>
-
-
-#include <data/world_data/world_data.hpp>
-
 
 #include <sdl_wrapper/sdl_lazy_include.hpp>
 
@@ -22,19 +17,16 @@
 #include <renderer/debug_line_renderer/debug_line_renderer.hpp>
 #include <renderer/gui_renderer/gui_renderer.hpp>
 
-#include <utilities/logging.hpp>
-
 #include <core/world/detail/world_detail.hpp>
+
+#include <utilities/logging.hpp>
 
 namespace Core {
 
 
 struct World::Impl
 {
-  Core_data::Core    core_data;
-  World_data::World  world_data;
-  
-  std::shared_ptr<World_detail::World_data> data;
+  std::shared_ptr<World_detail::World_data> world_data = std::make_shared<World_detail::World_data>();
 };
 
 
@@ -60,12 +52,13 @@ World::World(const World_setup &setup)
   static World_data::Application_window app_window;
   World_data::application_window_init(&app_window);
   
-  m_impl->world_data.entity_pool            = &world_entities;
-  m_impl->world_data.entity_graph_changes   = &graph_changes;
-  m_impl->world_data.camera_pool            = &camera_pool;
-  m_impl->world_data.gui_pool               = &gui_view_pool;
+  m_impl->world_data->data.entity_pool            = &world_entities;
+  m_impl->world_data->data.entity_graph_changes   = &graph_changes;
+  m_impl->world_data->data.camera_pool            = &camera_pool;
+  m_impl->world_data->data.gui_pool               = &gui_view_pool;
   
-  World_data::set_world_data(&m_impl->world_data);
+  LOG_TODO("We can store the data directly and get rid of ::World_data::World")
+  World_data::set_world_data(&m_impl->world_data->data);
 }
 
 
@@ -84,7 +77,7 @@ Entity
 World::create_entity()
 {
   Entity out_entity;
-  World_data::world_create_new_entity(&m_impl->world_data, &out_entity, 99);
+  World_data::world_create_new_entity(&m_impl->world_data->data, &out_entity, 99);
   
   return out_entity;
 }
@@ -101,7 +94,7 @@ std::shared_ptr<const World_detail::World_data>
 World::get_world_data() const
 {
   assert(m_impl);
-  return m_impl->data;
+  return m_impl->world_data;
 }
 
 

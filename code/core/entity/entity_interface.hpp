@@ -19,6 +19,9 @@ namespace Entity_detail {
 Core::Entity_id               get_id(const Core::Entity_id this_id, World_data::World *world);
 bool                          is_valid(const Core::Entity_id this_id, World_data::World *world);
 
+bool                          is_active(const Core::Entity_id this_id, World_data::World *world);
+void                          set_active(const Core::Entity_id this_id, World_data::World *world, const bool set_active);
+
 uint32_t                      get_tags(const Core::Entity_id this_id, World_data::World *world);
 bool                          has_tag(const Core::Entity_id this_id, World_data::World *world, const uint32_t tag_id);
 void                          set_tags(const Core::Entity_id this_id, World_data::World *world, const uint32_t set_tags);

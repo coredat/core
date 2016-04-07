@@ -22,26 +22,26 @@ world_create_new_entity(World *world_data,
                         Core::Entity *out_entity,
                         const uint32_t type_id)
 {
-  // Param check.
-  assert(world_data && out_entity && type_id);
-  
-  auto entity_pool = world_data->entity_pool;
-  Core::Entity_id new_id{type_id, ++instance};
-  
-  if(World_data::entity_pool_push_new_entity(entity_pool, new_id))
-  {
-    Core::Entity new_entity(new_id, world_data);
-    (*out_entity) = std::move(new_entity);
-    
-    entity_graph_change_push(world_data->entity_graph_changes,
-                             out_entity->get_id(),
-                             Entity_graph_change::inserted);
-    
-    return true;
-  }
-  
-  // Didn't find an index. Entity data is full.
-  return false;
+//  // Param check.
+//  assert(world_data && out_entity && type_id);
+//  
+//  auto entity_pool = world_data->entity_pool;
+//  Core::Entity_id new_id{type_id, ++instance};
+//  
+//  if(World_data::entity_pool_push_new_entity(entity_pool, new_id))
+//  {
+//    Core::Entity new_entity(new_id, world_data);
+//    (*out_entity) = std::move(new_entity);
+//    
+//    entity_graph_change_push(world_data->entity_graph_changes,
+//                             out_entity->get_id(),
+//                             Entity_graph_change::inserted);
+//    
+//    return true;
+//  }
+//  
+//  // Didn't find an index. Entity data is full.
+//  return false;
 }
 
 

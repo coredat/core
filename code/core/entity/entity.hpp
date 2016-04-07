@@ -7,7 +7,7 @@
 #include <core/transform/transform_fwd.hpp>
 #include <core/physics/collider.hpp>
 #include <core/model/model_fwd.hpp>
-#include <data/world_data/world_pools.hpp>
+#include <core/world/world_fwd.hpp>
 #include <stdint.h>
 #include <memory>
 
@@ -29,7 +29,7 @@ class Entity final
 public:
 
   explicit                      Entity();
-  explicit                      Entity(const Core::Entity_id id, World_data::World *world);
+  explicit                      Entity(const Core::World &world);
   
                                 ~Entity();
   
@@ -44,6 +44,9 @@ public:
   
   Core::Entity_id               get_id() const;
   bool                          is_valid() const;
+  
+  bool                          is_active() const;
+  void                          set_active(const bool set_active);
   
   uint32_t                      get_tags() const;
   bool                          has_tag(const uint32_t tag_id) const;

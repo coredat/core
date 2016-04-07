@@ -5,6 +5,11 @@
 #include <core/model/model.hpp>
 #include <core/physics/collider.hpp>
 #include <data/world_data/graph_change_pool.hpp>
+#include <data/world_data/world_pools.hpp>
+#include <core/world/world.hpp>
+#include <core/world/detail/world_detail.hpp>
+#include <assert.h>
+
 
 
 namespace Core {
@@ -18,14 +23,18 @@ struct Entity::Impl
 
 
 Entity::Entity()
-: Entity::Entity(Core::Entity_id_util::invalid_id(), nullptr)
+: m_impl()
 {
 }
 
 
-Entity::Entity(const Core::Entity_id id, World_data::World *world)
-: m_impl(new Impl{id, world})
+Entity::Entity(const Core::World &world)
+: m_impl(new Impl{Core::Entity_id{1,1}, nullptr})
 {
+  if(world.get_world_data())
+  {
+    m_impl->world = const_cast<World_data::World*>(&world.get_world_data()->data);
+  }
 }
 
 
@@ -100,6 +109,20 @@ bool
 Entity::is_valid() const
 {
   return Entity_detail::is_valid(m_impl->id, m_impl->world);
+}
+
+
+bool
+Entity::is_active() const
+{
+  return Entity_detail::is_active(m_impl->id, m_impl->world);
+}
+
+
+void
+Entity::set_active(const bool set_active)
+{
+  Entity_detail::set_active(m_impl->id, m_impl->world, set_active);
 }
 
 

@@ -47,32 +47,4 @@ debug_line(const math::vec3 from_vec, const math::vec3 to_vec, const math::vec3 
 }
 
 
-void
-debug_line(const btVector3 &from_vec, const btVector3 &to_vec, const btVector3 &rgb_color_vec)
-{
-  float from[3];
-  {
-    from[0] = from_vec.x();
-    from[1] = from_vec.y();
-    from[2] = from_vec.z();
-  }
-  
-  float to[3];
-  {
-    to[0] = to_vec.x();
-    to[1] = to_vec.y();
-    to[2] = to_vec.z();
-  }
-  
-  float color[3];
-  {
-    color[0] = rgb_color_vec.x();
-    color[1] = rgb_color_vec.y();
-    color[2] = rgb_color_vec.z();
-  }
-  
-  debug_line(from, to, color);
-}
-
-
 } // ns
