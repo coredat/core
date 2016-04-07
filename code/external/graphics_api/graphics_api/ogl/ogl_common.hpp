@@ -11,6 +11,7 @@
 #endif
 
 #include <iostream> // for error stream this needs to change.
+#include <utilities/logging.hpp>
 
 namespace Ogl {
 
@@ -80,29 +81,18 @@ vao_init()
   Checks glGetError, if an error is found it will push it out
   in the stream that was provided.
 */
-inline void
-error_check(const char* msg, std::ostream *stream)
-{
-  if(stream) // Check stream first, if none given we don't want to clear the error.
-  {
-    const auto err_id = glGetError();
+void
+error_check(const char* msg, std::ostream *stream);
 
-    if(err_id != GL_NO_ERROR)
-    {
-      (*stream) << err_id << " " << msg << "\n";
-    }
-  }
-}
 
+void
+error_output(const char *msg);
 
 /*!
   Clears any pending error.
 */
-inline void
-error_clear()
-{
-  while(glGetError()) {}
-}
+void
+error_clear();
 
 
 } // ns
