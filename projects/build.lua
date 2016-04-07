@@ -1,1 +1,0 @@
--- A solution contains projects, and defines the available configurations
