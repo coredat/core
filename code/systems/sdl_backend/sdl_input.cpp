@@ -9,6 +9,7 @@ void
 update_keyboard_controller(Core_data::Game_controller *controller)
 {
   const Uint8 *key_state = SDL_GetKeyboardState(nullptr);
+  const Uint32 mouse_state = SDL_GetMouseState(nullptr, nullptr);
   
   if(key_state)
   {
@@ -42,9 +43,8 @@ update_keyboard_controller(Core_data::Game_controller *controller)
 
     // Keys
     {
-      // Not all keys are done here.
-      // And ability to change default keys needs to be dealt with.
-      
+      controller->buttons[Core::Input::Button::button_0] = mouse_state & SDL_BUTTON(SDL_BUTTON_LEFT) ? Core::Input::Button_state::down : Core::Input::Button_state::up;
+      controller->buttons[Core::Input::Button::button_1] = mouse_state & SDL_BUTTON(SDL_BUTTON_RIGHT) ? Core::Input::Button_state::down : Core::Input::Button_state::up;
       controller->buttons[Core::Input::Button::button_2] = (key_state[SDL_SCANCODE_LSHIFT] ? Core::Input::Button_state::down : Core::Input::Button_state::up);
       controller->buttons[Core::Input::Button::button_3] = (key_state[SDL_SCANCODE_SPACE] ? Core::Input::Button_state::down : Core::Input::Button_state::up);
     }
