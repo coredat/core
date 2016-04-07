@@ -105,7 +105,7 @@ Context::Context(const uint32_t width,
   
   // Create context
   {
-    Graphics_api::Pixel_format fmt = Graphics_api::Pixel_format::rgba8;
+    constexpr Graphics_api::Pixel_format fmt = Graphics_api::Pixel_format::rgba8;
   
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
@@ -117,7 +117,7 @@ Context::Context(const uint32_t width,
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
     SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 2);
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 0);
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
     
     m_impl->context = SDL_GL_CreateContext(m_impl->window);
@@ -127,6 +127,9 @@ Context::Context(const uint32_t width,
       assert(m_impl->context);
       LOG_FATAL("Failed to create an OpenGL Context");
     }
+    
+    SDL_GL_MakeCurrent(m_impl->window, m_impl->context);
+    SDL_GL_SetSwapInterval(0); // Vsync
   }
   
   // Initialize the graphics api
