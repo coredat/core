@@ -30,6 +30,7 @@ public:
 
   explicit                      Entity();
   explicit                      Entity(const Core::World &world);
+//  explicit                      Entity(const Core::Entity_id id, World_data::World *data);
   
                                 ~Entity();
   

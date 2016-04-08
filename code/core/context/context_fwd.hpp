@@ -9,6 +9,7 @@ namespace Core {
 
 
 class Context;
+class Context_setup;
 
 
 };

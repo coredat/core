@@ -13,7 +13,6 @@
 #include <core/context/detail/context_detail.hpp>
 #include <data/core_data/core_data.hpp>
 #include <graphics_api/initialize.hpp>
-#include <graphics_api/pixel_format.hpp>
 #include <systems/sdl_backend/sdl_message_loop.hpp>
 #include <systems/sdl_backend/sdl_input.hpp>
 #include <stdatomic.h>
@@ -51,7 +50,8 @@ Context::Impl
 Context::Context(const uint32_t width,
                  const uint32_t height,
                  const bool is_fullscreen,
-                 const char *title)
+                 const char *title,
+                 Context_setup settings)
 : m_impl(new Context::Impl
 {
   true,
@@ -105,15 +105,13 @@ Context::Context(const uint32_t width,
   
   // Create context
   {
-    constexpr Graphics_api::Pixel_format fmt = Graphics_api::Pixel_format::rgba8;
-  
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
-    SDL_GL_SetAttribute(SDL_GL_RED_SIZE, Graphics_api::pixel_format_red_bits(fmt));
-    SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, Graphics_api::pixel_format_green_bits(fmt));
-    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, Graphics_api::pixel_format_blue_bits(fmt));
-    SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, Graphics_api::pixel_format_alpha_bits(fmt));
+    SDL_GL_SetAttribute(SDL_GL_RED_SIZE, Graphics_api::pixel_format_red_bits(settings.backbuffer_fmt));
+    SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, Graphics_api::pixel_format_green_bits(settings.backbuffer_fmt));
+    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, Graphics_api::pixel_format_blue_bits(settings.backbuffer_fmt));
+    SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, Graphics_api::pixel_format_alpha_bits(settings.backbuffer_fmt));
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
     SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
@@ -129,7 +127,7 @@ Context::Context(const uint32_t width,
     }
     
     SDL_GL_MakeCurrent(m_impl->window, m_impl->context);
-    SDL_GL_SetSwapInterval(0); // Vsync
+    SDL_GL_SetSwapInterval(settings.vsync); // Vsync
   }
   
   // Initialize the graphics api

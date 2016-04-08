@@ -3,6 +3,7 @@
 
 
 #include <core/context/context_fwd.hpp>
+#include <core/context/context_setup.hpp>
 #include <core/context/detail/context_detail_fwd.hpp>
 #include <core/input/input_fwd.hpp>
 #include <stdint.h>
@@ -24,7 +25,8 @@ public:
   explicit            Context(const uint32_t width,
                               const uint32_t height,
                               const bool is_fullscreen = false,
-                              const char *title = "");
+                              const char *title = "",
+                              const Context_setup setup_options = Context_setup{});
   
                       ~Context();
   
