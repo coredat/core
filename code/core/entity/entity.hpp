@@ -46,9 +46,6 @@ public:
   Core::Entity_id               get_id() const;
   bool                          is_valid() const;
   
-  bool                          is_active() const;
-  void                          set_active(const bool set_active);
-  
   uint32_t                      get_tags() const;
   bool                          has_tag(const uint32_t tag_id) const;
   void                          set_tags(const uint32_t set_tags);
@@ -71,6 +68,8 @@ public:
   
   void                          set_collider(const Core::Collider &collider);
   Core::Collider                get_collider() const;
+  
+                                operator bool() const;
 
 private:
 

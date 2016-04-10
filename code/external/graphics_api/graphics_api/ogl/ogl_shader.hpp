@@ -17,6 +17,7 @@ struct Shader
   GLuint vert_shader_id    = 0;
   GLuint geo_shader_id     = 0;
   GLuint frag_shader_id    = 0;
+  GLuint compute_shader_id = 0;
 };
 
 
@@ -30,10 +31,9 @@ struct Shader
 */
 void
 shader_create(Shader *out_shader,
-                     const char *vert_shader_code,
-                     const char *geo_shader_code,
-                     const char *frag_shader_code,
-                     std::ostream *log = nullptr);
+              const char *vert_shader_code,
+              const char *geo_shader_code,
+              const char *frag_shader_code);
 
 /*!
   Attempts to create a shader for rendering.
@@ -63,6 +63,23 @@ shader_is_valid(Shader shader_to_check)
 {
   return shader_to_check.program_id != 0;
 }
+
+
+namespace Detail {
+
+
+/*!
+  Compiles an individual shader program.
+  Does not do any linking etc.
+  \param shader_type Should be GL_VERTEX_SHADER, GL_GEOMETRY_SHADER, GL_FRAGMENT_SHADER, or GL_COMPUTE_SHADER
+  \param shader_code Is the code to compile.
+*/
+GLuint
+compile_shader(const GLenum shader_type,
+               const char *shader_code);
+
+
+} // ns
 
 
 } // ns

@@ -51,8 +51,8 @@ initialize()
     const auto full_code = Graphics_api::Util::shader_code_from_tagged_file(fullbright.c_str());
     const auto dir_code  = Graphics_api::Util::shader_code_from_tagged_file(directional.c_str());
 
-    Ogl::shader_create(&shader_fullbright, full_code.vs_code.c_str(), full_code.gs_code.c_str(), full_code.ps_code.c_str(), &std::cout);
-    Ogl::shader_create(&shader_dir_light, dir_code.vs_code.c_str(), dir_code.gs_code.c_str(), dir_code.ps_code.c_str(), &std::cout);
+    Ogl::shader_create(&shader_fullbright, full_code.vs_code.c_str(), full_code.gs_code.c_str(), full_code.ps_code.c_str());
+    Ogl::shader_create(&shader_dir_light, dir_code.vs_code.c_str(), dir_code.gs_code.c_str(), dir_code.ps_code.c_str());
   }
 
   // Dir light shader uniforms

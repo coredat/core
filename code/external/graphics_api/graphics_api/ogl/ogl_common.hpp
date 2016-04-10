@@ -10,8 +10,12 @@
 #include <OpenGL/gl3ext.h>
 #endif
 
-#include <iostream> // for error stream this needs to change.
+#include <iostream> // kill!
 #include <utilities/logging.hpp>
+
+
+#define LOG_GL_ERROR(msg)
+
 
 namespace Ogl {
 

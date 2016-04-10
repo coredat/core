@@ -43,7 +43,7 @@ initialize()
   const std::string debug_lines = util::get_resource_path() + "assets/" + "shaders/debug_line.ogl";
   auto debug_code = Graphics_api::Util::shader_code_from_tagged_file(debug_lines.c_str());
   
-  Ogl::shader_create(&debug_line_shader, debug_code.vs_code.c_str(), debug_code.gs_code.c_str(), debug_code.ps_code.c_str(), &std::cout);
+  Ogl::shader_create(&debug_line_shader, debug_code.vs_code.c_str(), debug_code.gs_code.c_str(), debug_code.ps_code.c_str());
   assert(Ogl::shader_is_valid(debug_line_shader));
 
   if(Ogl::shader_is_valid(debug_line_shader))

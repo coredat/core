@@ -82,20 +82,6 @@ Entity_ref::is_valid() const
 }
 
 
-bool
-Entity_ref::is_active() const
-{
-  return Entity_detail::is_active(m_impl->id, m_impl->world);
-}
-
-
-void
-Entity_ref::set_active(const bool set_active)
-{
-  return Entity_detail::set_active(m_impl->id, m_impl->world, set_active);
-}
-
-
 uint32_t
 Entity_ref::get_tags() const
 {

@@ -31,9 +31,8 @@ struct Entity_properties
 struct Entity_pool
 {
   Core::Entity_id                 *entity_id;
-  Core::Entity_id                 *parent_id;
+  Core::Entity_id                 *parent_id; // TODO: Impl or remove
   Entity_properties               *entity_properties;
-  bool                            *is_active;
   char                            *name;
   
   math::transform                 *transform;
@@ -94,6 +93,9 @@ const char *
 entity_pool_get_entity_name(const Entity_pool *pool, const Core::Entity_id id);
 
 
+/*
+  Update the name of entity. This is primarly about debugging.
+*/
 void
 entity_pool_set_entity_name(const Entity_pool *pool, const Core::Entity_id id, const char *set_name);
 

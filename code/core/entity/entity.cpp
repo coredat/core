@@ -105,6 +105,11 @@ Entity::destroy()
 }
 
 
+Entity::operator bool() const
+{
+  return m_impl->id != Entity_id_util::invalid_id();
+}
+
 // ** Common Entity Interface ** //
 
 
@@ -119,20 +124,6 @@ bool
 Entity::is_valid() const
 {
   return Entity_detail::is_valid(m_impl->id, &m_impl->world->data);
-}
-
-
-bool
-Entity::is_active() const
-{
-  return Entity_detail::is_active(m_impl->id, &m_impl->world->data);
-}
-
-
-void
-Entity::set_active(const bool set_active)
-{
-  Entity_detail::set_active(m_impl->id, &m_impl->world->data, set_active);
 }
 
 

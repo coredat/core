@@ -46,7 +46,7 @@ initialize()
     
     const auto gui_code = Graphics_api::Util::shader_code_from_tagged_file(gui_shader.c_str());
     
-    Ogl::shader_create(&shader_gui, gui_code.vs_code.c_str(), gui_code.gs_code.c_str(), gui_code.ps_code.c_str(), &std::cout);
+    Ogl::shader_create(&shader_gui, gui_code.vs_code.c_str(), gui_code.gs_code.c_str(), gui_code.ps_code.c_str());
     
     assert(Ogl::shader_is_valid(shader_gui));
   }
