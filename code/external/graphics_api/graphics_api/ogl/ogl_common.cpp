@@ -11,6 +11,8 @@ namespace Ogl {
 void
 error_check(const char* msg, std::ostream *stream)
 {
+  //LOG_DEPRECATED;
+
   if(stream) // Check stream first, if none given we don't want to clear the error.
   {
     const auto err_id = glGetError();
