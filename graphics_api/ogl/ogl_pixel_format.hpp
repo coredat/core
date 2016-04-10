@@ -39,6 +39,9 @@ pixel_format_get_format(const GLenum format)
 {
   switch(format)
   {
+  case(GL_R32F):
+    return GL_RED;
+  
   case(GL_RGBA):
   case(GL_RGBA32F):
     return GL_RGBA;
