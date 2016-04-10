@@ -5,8 +5,9 @@
 #include <core/world/world_fwd.hpp>
 #include <core/world/detail/world_detail_fwd.hpp>
 #include <core/entity/entity_fwd.hpp>
-#include <stdint.h>
+#include <functional>
 #include <memory>
+#include <stdint.h>
 
 
 namespace Core {
@@ -24,8 +25,8 @@ public:
                         ~World();
 
   void                  think(const float dt);
+  void                  get_overlapping_aabbs(const std::function<void(const Entity_ref ref_a, const Entity_ref ref_b)> &callback);
 
-  Entity                create_entity();
   Entity_ref            find_entity(const char *name);
   
 private:

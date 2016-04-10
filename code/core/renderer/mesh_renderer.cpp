@@ -137,7 +137,7 @@ Mesh_renderer::render()
     
     if(mesh_id && texture_id)
     {
-      Resource_data::Resources *resources = Resource_data::get_horrible_hack_resouces();
+      Resource_data::Resources *resources = Resource_data::get_resources();
       
       Graphics_api::Mesh get_mesh = Resource_data::mesh_pool_find(resources->mesh_pool, mesh_id);
       Ogl::Texture get_texture    = Resource_data::texture_pool_find(resources->texture_pool, texture_id);

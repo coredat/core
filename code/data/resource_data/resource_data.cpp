@@ -1,4 +1,5 @@
 #include <data/resource_data/resource_data.hpp>
+#include <graphics_api/initialize.hpp>
 #include <assert.h>
 
 
@@ -12,9 +13,10 @@ namespace Resource_data {
 
 
 void
-resources_init(Resources *resources)
+resources_init()
 {
-  assert(resources);
+  static Resources resource_data;
+  data = &resource_data;
   
   static Audio_pool audio;
   audio_pool_init(&audio);
@@ -25,17 +27,20 @@ resources_init(Resources *resources)
   static Mesh_pool model;
   mesh_pool_init(&model);
   
-  resources->audio_pool   = &audio;
-  resources->texture_pool = &texture;
-  resources->mesh_pool    = &model;
-  
-  data = resources;
+  data->audio_pool   = &audio;
+  data->texture_pool = &texture;
+  data->mesh_pool    = &model;
 }
 
 
 Resources*
-get_horrible_hack_resouces()
+get_resources()
 {
+  if(!data)
+  {
+    resources_init();
+  }
+
   return data;
 }
 

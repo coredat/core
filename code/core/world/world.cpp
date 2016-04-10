@@ -21,6 +21,9 @@
 
 #include <utilities/logging.hpp>
 
+#include <systems/physics_engine/physics_engine.hpp>
+
+
 namespace Core {
 
 
@@ -70,16 +73,43 @@ World::~World()
 void
 World::think(const float dt)
 {
+  // Push in new phy entities.
+  World_data::world_update_scene_graph_changes(&m_impl->world_data->data, m_impl->world_data->data.entity_graph_changes);
+  
+  // Reset the entity pool for new changes.
+  World_data::entity_graph_change_pool_init(m_impl->world_data->data.entity_graph_changes);
 }
 
 
-Entity
-World::create_entity()
+void
+World::get_overlapping_aabbs(const std::function<void(const Entity_ref ref_a, const Entity_ref ref_b)> &callback)
 {
-  Entity out_entity;
-  World_data::world_create_new_entity(&m_impl->world_data->data, &out_entity, 99);
+  // Check we have a callback.
+  if(!callback) { return; }
+
+  Physics_engine::Collision_pair out_collisions[256];
+  uint32_t out_number_of_collisions(0);
+  {
+    const World_data::Entity_pool *entity_data = m_impl->world_data->data.entity_pool;
+
+    // Get the collisions.
+    Physics_engine::get_collisions(entity_data->entity_id,
+                                   entity_data->transform,
+                                   entity_data->aabb,
+                                   entity_data->size,
+                                   out_collisions,
+                                   256,
+                                   &out_number_of_collisions);
+  }
   
-  return out_entity;
+  // Call back of collisions
+  for(uint32_t i = 0; i < out_number_of_collisions; ++i)
+  {
+    Entity_ref a(out_collisions[i].obj_a, &m_impl->world_data->data);
+    Entity_ref b(out_collisions[i].obj_b, &m_impl->world_data->data);
+    
+    callback(a,b);
+  }
 }
 
 

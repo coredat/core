@@ -20,11 +20,11 @@ struct Resources
 
 
 void
-resources_init(Resources *resources);
+resources_init();
 
 
 Resources*
-get_horrible_hack_resouces();
+get_resources();
 
 
 } // ns

@@ -22,6 +22,9 @@ public:
                       Texture(const Texture&);
                       Texture(Texture&&);
   
+  Texture&            operator=(const Texture&);
+  Texture&            operator=(Texture&&);
+  
   bool                exists() const;
                       operator bool() const; // Alias for exists().
   

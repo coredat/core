@@ -55,7 +55,9 @@ Model::Model(const char *filename)
   // Add mesh to mesh manager.
   if(!imported_mesh.mesh_data.empty())
   {
-    m_impl->mesh_id = Resource_data::mesh_pool_push_new(Resource_data::get_horrible_hack_resouces()->mesh_pool,
+    Resource_data::Resources *resources = Resource_data::get_resources();
+  
+    m_impl->mesh_id = Resource_data::mesh_pool_push_new(resources->mesh_pool,
                                                         filename,
                                                         imported_mesh.mesh_data.data(),
                                                         imported_mesh.mesh_data.size(),
@@ -79,6 +81,24 @@ Model::Model(const Model &other)
 Model::Model(Model &&other)
 : m_impl(new Impl(*other.m_impl))
 {
+}
+
+
+Model&
+Model::operator=(const Model &other)
+{
+  m_impl.reset(new Impl);
+  m_impl->mesh_id = other.m_impl->mesh_id;
+  return *this;
+}
+
+
+Model&
+Model::operator=(Model &&other)
+{
+  m_impl.reset(new Impl);
+  m_impl->mesh_id = other.m_impl->mesh_id;
+  return *this;
 }
 
 
@@ -109,24 +129,22 @@ Model::get_mesh(const uint32_t index) const
 math::aabb
 Model::get_model_aabb() const
 {
-  assert(false);
-//  math::aabb return_aabb;
-//  
-//  World_data::World *world = World_data::get_world();
-//  size_t id_index;
-//  
-//  assert(false); // Just while getting to compile.
+  math::aabb return_aabb;
   
-//  if(world && math::index_linear_search(m_model_id,
-//                                        world->model_pool->id,
-//                                        world->model_pool->size,
-//                                        &id_index))
-//  {
-//    return_aabb = world->model_pool->aabb[id_index];
-//  }
+  Resource_data::Mesh_pool *mesh_pool = Resource_data::get_resources()->mesh_pool;
+  assert(mesh_pool);
   
-//  return return_aabb;
-  return math::aabb();
+  size_t id_index;
+  
+  if(math::index_linear_search(m_impl->mesh_id,
+                               mesh_pool->id,
+                               mesh_pool->capacity,
+                               &id_index))
+  {
+    return_aabb = mesh_pool->aabb[id_index];
+  }
+  
+  return return_aabb;
 }
 
 

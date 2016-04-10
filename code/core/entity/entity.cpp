@@ -23,7 +23,7 @@ namespace Core {
 
 struct Entity::Impl
 {
-  const Core::Entity_id id = Core::Entity_id_util::invalid_id();
+  Core::Entity_id id = Core::Entity_id_util::invalid_id();
   std::shared_ptr<World_detail::World_data> world;
 };
 
@@ -102,6 +102,8 @@ Entity::destroy()
   World_data::entity_graph_change_push(m_impl->world->data.entity_graph_changes,
                                        m_impl->id,
                                        World_data::Entity_graph_change::removed);
+  
+  m_impl->id = Core::Entity_id_util::invalid_id();
 }
 
 

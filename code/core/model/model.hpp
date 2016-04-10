@@ -22,6 +22,9 @@ public:
   
                       Model(const Model&);
                       Model(Model&&);
+  
+  Model&              operator=(const Model&);
+  Model&              operator=(Model&&);
 
   bool                has_meshes() const;
   Mesh                get_mesh(const uint32_t index) const;

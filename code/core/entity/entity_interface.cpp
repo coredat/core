@@ -3,6 +3,7 @@
 #include <core/model/mesh.hpp>
 #include <core/physics/collider.hpp>
 #include <data/world_data/world_data.hpp>
+#include <data/resource_data/resource_data.hpp>
 #include <core/transform/transform.hpp>
 #include <math/transform/transform.hpp>
 #include <utilities/logging.hpp>
@@ -212,7 +213,8 @@ set_model(const Core::Entity_id this_id, World_data::World *world, const Core::M
   assert(get_index(&index, this_id, ent_pool->entity_id, ent_pool->size));
   ent_pool->model[index] = model.get_id();
   
-  //ent_pool->aabb[index] = m_world_data->model_pool->aabb[id];
+  Resource_data::Resources *resource = Resource_data::get_resources();
+  ent_pool->aabb[index] = model.get_model_aabb();
 }
 
 

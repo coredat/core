@@ -29,7 +29,7 @@ Texture::Texture(const uint32_t id)
 Texture::Texture(const char *filepath)
 : m_impl(new Impl)
 {
-  auto tex_pool = Resource_data::get_horrible_hack_resouces()->texture_pool;
+  auto tex_pool = Resource_data::get_resources()->texture_pool;
   m_impl->texture_id = Resource_data::texture_pool_load(tex_pool, filepath);  
 }
 
@@ -48,6 +48,24 @@ Texture::Texture(const Texture &other)
 Texture::Texture(Texture &&other)
 : m_impl(new Impl{other.m_impl->texture_id})
 {
+}
+
+
+Texture&
+Texture::operator=(const Texture &other)
+{
+  m_impl.reset(new Impl);
+  m_impl->texture_id = other.m_impl->texture_id;
+  return *this;
+}
+
+
+Texture&
+Texture::operator=(Texture &&other)
+{
+  m_impl.reset(new Impl);
+  m_impl->texture_id = other.m_impl->texture_id;
+  return *this;
 }
 
 

@@ -1,5 +1,6 @@
 #include "mesh_pool.hpp"
 #include <utilities/logging.hpp>
+#include <math/geometry/aabb.hpp>
 #include <stdatomic.h>
 
 
@@ -93,7 +94,7 @@ mesh_pool_push_new(Mesh_pool *pool,
     
     pool->id[free_index] = new_id;
     pool->mesh[free_index] = mesh;
-    
+    pool->aabb[free_index] = math::aabb_from_xyz_array(vertex_data, number_of_vertices);
     return new_id;
   }
 
