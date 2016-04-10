@@ -1,5 +1,4 @@
-projects/Wired.xcodeproj/
-projects/UnitTest.xcodeproj/
+*.xcodeproj
 
 # Xcode
 .DS_Store
