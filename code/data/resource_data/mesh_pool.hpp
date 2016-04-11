@@ -24,6 +24,9 @@ struct Mesh_pool
 }; // struct
 
 
+/*
+  Initialize the mesh pool
+*/
 void
 mesh_pool_init(Mesh_pool *pool);
 
@@ -35,10 +38,15 @@ Graphics_api::Mesh
 mesh_pool_find(const Mesh_pool *pool, const uint32_t id);
 
 
+/*!
+  Push a new mesh via data into the pool.
+*/
 uint32_t
 mesh_pool_push_new(Mesh_pool *pool,
                    const char *key,
-                   const float *vertex_data,
+                   const float *positions,
+                   const float *normals,
+                   const float *uvs,
                    const uint32_t number_of_vertices,
                    const uint32_t *index_data,
                    const uint32_t number_of_indices);

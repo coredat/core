@@ -1,5 +1,6 @@
 #include "mesh_pool.hpp"
 #include <utilities/logging.hpp>
+#include <utilities/obj_model_loader.hpp>
 #include <math/geometry/aabb.hpp>
 #include <stdatomic.h>
 
@@ -62,7 +63,9 @@ mesh_pool_find(const Mesh_pool *pool, const uint32_t id)
 uint32_t
 mesh_pool_push_new(Mesh_pool *pool,
                    const char *key,
-                   const float *vertex_data,
+                   const float *positions,
+                   const float *normals,
+                   const float *uvs,
                    const uint32_t number_of_vertices,
                    const uint32_t *index_data,
                    const uint32_t number_of_indices)
@@ -81,20 +84,27 @@ mesh_pool_push_new(Mesh_pool *pool,
     }
   }
   
+  // Create mesh format.
+  std::vector<float> pos(positions, positions + number_of_vertices);
+  std::vector<float> norm(normals, normals + number_of_vertices);
+  std::vector<float> tex_c(uvs, uvs + number_of_vertices);
+  std::vector<uint32_t> ind(index_data, index_data + number_of_indices);
+  const util::gl_mesh imported_mesh = util::create_open_gl_mesh(pos, tex_c, norm, ind);
+
   // Create graphics mesh and insert it.
   {
     Graphics_api::Mesh mesh;
     Graphics_api::mesh_create_new(&mesh,
-                                  vertex_data,
-                                  number_of_vertices,
-                                  index_data,
-                                  number_of_indices);
+                                  imported_mesh.mesh_data.data(),
+                                  imported_mesh.mesh_data.size(),
+                                  nullptr,
+                                  0);
     
     const uint32_t new_id = ++mesh_id_counter;
     
     pool->id[free_index] = new_id;
     pool->mesh[free_index] = mesh;
-    pool->aabb[free_index] = math::aabb_from_xyz_array(vertex_data, number_of_vertices);
+    pool->aabb[free_index] = math::aabb_from_xyz_array(positions, number_of_vertices);
     return new_id;
   }
 

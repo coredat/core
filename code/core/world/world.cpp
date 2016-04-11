@@ -87,7 +87,7 @@ World::get_overlapping_aabbs(const std::function<void(const Entity_ref ref_a, co
   // Check we have a callback.
   if(!callback) { return; }
 
-  Physics_engine::Collision_pair out_collisions[256];
+  Physics_engine::Collision_pair out_collisions[1024];
   uint32_t out_number_of_collisions(0);
   {
     const World_data::Entity_pool *entity_data = m_impl->world_data->data.entity_pool;
@@ -98,7 +98,7 @@ World::get_overlapping_aabbs(const std::function<void(const Entity_ref ref_a, co
                                    entity_data->aabb,
                                    entity_data->size,
                                    out_collisions,
-                                   256,
+                                   1024,
                                    &out_number_of_collisions);
   }
   

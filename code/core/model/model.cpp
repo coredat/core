@@ -49,20 +49,20 @@ Model::Model(const char *filename)
     assert(false);
     return;
   }
-  
-  const util::gl_mesh imported_mesh(util::convert_to_open_gl_mesh(model.meshes.front()));
-  
+
   // Add mesh to mesh manager.
-  if(!imported_mesh.mesh_data.empty())
+  if(!model.meshes.empty())
   {
     Resource_data::Resources *resources = Resource_data::get_resources();
   
     m_impl->mesh_id = Resource_data::mesh_pool_push_new(resources->mesh_pool,
                                                         filename,
-                                                        imported_mesh.mesh_data.data(),
-                                                        imported_mesh.mesh_data.size(),
-                                                        nullptr,
-                                                        0);
+                                                        model.meshes.at(0).positions.data(),
+                                                        model.meshes.at(0).normals.data(),
+                                                        model.meshes.at(0).uvs.data(),
+                                                        model.meshes.at(0).positions.size(),
+                                                        model.meshes.at(0).index.data(),
+                                                        model.meshes.at(0).index.size());
   }
 }
 
