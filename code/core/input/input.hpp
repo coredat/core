@@ -3,6 +3,7 @@
 
 
 #include <core/input/controller.hpp>
+#include <core/context/context_fwd.hpp>
 #include <stdint.h>
 
 
@@ -22,12 +23,12 @@ enum ENUM {
 } // ns
 
 
-//Controller
-//get_controller(const Context &ctx, const Player::ENUM player);
-//
-//
-//Controller
-//get_controller(const Player::ENUM player);
+void
+mouse_set_capture(Core::Context &context, const bool capture);
+
+
+bool
+mouse_is_capture(Core::Context &context);
 
 
 } // ns

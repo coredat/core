@@ -9,7 +9,8 @@ namespace Sdl {
 
 
 void update_keyboard_controller(Core_data::Game_controller *controller);
-
+void capture_mouse(const bool set);
+bool is_mouse_captured();
 
 } // ns
 

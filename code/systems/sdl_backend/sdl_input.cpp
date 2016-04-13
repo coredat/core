@@ -52,4 +52,19 @@ update_keyboard_controller(Core_data::Game_controller *controller)
 }
 
 
+void
+capture_mouse(const bool set)
+{
+  const SDL_bool set_mouse_hold = set ? SDL_TRUE : SDL_FALSE;
+  SDL_SetRelativeMouseMode(set_mouse_hold);
+}
+
+
+bool
+is_mouse_captured()
+{
+  const SDL_bool is_mouse_held = SDL_GetRelativeMouseMode();
+  return is_mouse_held == SDL_TRUE;
+}
+
 } // ns
