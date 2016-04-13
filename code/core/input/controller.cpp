@@ -68,9 +68,9 @@ Controller::get_axis(const uint8_t axis) const
   assert(m_impl && m_impl->context_data);
   const Core_data::Input_pool *input = m_impl->context_data->input_pool;
 
-  if(input)
+  if(input && input->size > m_impl->controller_number)
   {
-    return m_impl->context_data->input_pool->controllers[0].axis[axis];
+    return input->controllers[m_impl->controller_number].axis[axis];
   }
 
   return Axis();
@@ -83,9 +83,9 @@ Controller::is_button_down(const Button::ENUM button) const
   assert(m_impl && m_impl->context_data);
   const Core_data::Input_pool *input = m_impl->context_data->input_pool;
 
-  if(input)
+  if(input && input->size > m_impl->controller_number)
   {
-    return input->controllers[0].buttons[(uint32_t)button] == Core::Input::Button_state::down;
+    return input->controllers[m_impl->controller_number].buttons[(uint32_t)button] == Core::Input::Button_state::down;
   }
 
   return false;

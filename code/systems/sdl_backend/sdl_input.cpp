@@ -47,6 +47,7 @@ update_keyboard_controller(Core_data::Game_controller *controller)
       controller->buttons[Core::Input::Button::button_1] = mouse_state & SDL_BUTTON(SDL_BUTTON_RIGHT) ? Core::Input::Button_state::down : Core::Input::Button_state::up;
       controller->buttons[Core::Input::Button::button_2] = (key_state[SDL_SCANCODE_LSHIFT] ? Core::Input::Button_state::down : Core::Input::Button_state::up);
       controller->buttons[Core::Input::Button::button_3] = (key_state[SDL_SCANCODE_SPACE] ? Core::Input::Button_state::down : Core::Input::Button_state::up);
+      controller->buttons[Core::Input::Button::button_4] = (key_state[SDL_SCANCODE_RETURN] ? Core::Input::Button_state::down : Core::Input::Button_state::up);
     }
   }
 }
