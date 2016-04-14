@@ -7,8 +7,9 @@
 #include <stdint.h>
 
 
-/*
-  WIP
+/*!
+  Materials are used to encapsulate shader and uniforms
+  for the mesh renderer.
 */
 namespace Core {
 
@@ -17,17 +18,15 @@ class Material final
 {
 public:
 
-  explicit              Material();
+  explicit              Material(const char *name);
                         ~Material();
   
-  void                  set_shader(const Shader shader);
-  void                  set_map_01(const Texture texture);
-  void                  set_map_02(const Texture texture);
-  void                  set_map_03(const Texture texture);
+  void                  set_shader(const Material_shader &shader);
+  void                  set_map_01(const Texture &texture);
+  void                  set_map_02(const Texture &texture);
+  void                  set_map_03(const Texture &texture);
   
   const char *          get_name() const;
-  uint32_t              get_shader_id() const;
-  uint32_t              get_texture_id() const;
   
 private:
 

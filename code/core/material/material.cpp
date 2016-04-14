@@ -11,18 +11,5 @@ Material::get_name() const
 }
 
 
-uint32_t
-Material::get_shader_id() const
-{
-  return 0;
-}
-
-
-uint32_t
-Material::get_texture_id() const
-{
-  return 0;
-}
-
 
 } // ns

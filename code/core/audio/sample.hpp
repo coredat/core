@@ -17,6 +17,12 @@ public:
   explicit        Sample(const char *filename);
                   ~Sample();
   
+                  Sample(const Sample&);
+                  Sample(Sample&&);
+  
+  Sample&         operator=(const Sample&);
+  Sample&         operator=(Sample&&);
+  
   void            play(const math::vec3 position);
   void            set_volume(const float vol);
   float           get_volume() const;

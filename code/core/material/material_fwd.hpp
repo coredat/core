@@ -7,7 +7,7 @@ namespace Core {
 
 class Material;
 class Texture;
-class Shader;
+class Material_shader;
 
 
 } // ns
