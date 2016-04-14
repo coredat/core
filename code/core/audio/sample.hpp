@@ -23,7 +23,11 @@ public:
   Sample&         operator=(const Sample&);
   Sample&         operator=(Sample&&);
   
-  void            play(const math::vec3 position);
+  void            play();
+  
+  void            set_position(const math::vec3 position);
+  math::vec3      get_position() const;
+  
   void            set_volume(const float vol);
   float           get_volume() const;
   

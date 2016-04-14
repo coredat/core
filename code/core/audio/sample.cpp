@@ -57,7 +57,7 @@ Sample::~Sample()
 
 
 void
-Sample::play(const math::vec3 position)
+Sample::play()
 {
   auto pool = Resource_data::get_resources()->audio_pool;
   Resource_data::audio_pool_play_sample(pool);
