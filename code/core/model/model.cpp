@@ -38,6 +38,15 @@ Model::Model(const uint32_t id)
 Model::Model(const char *filename)
 : m_impl(new Impl)
 {
+  Resource_data::Resources *resources = Resource_data::get_resources();
+  assert(resources);
+
+  // Check if id already exists, avoid loading the mesh again.
+  if(Resource_data::mesh_pool_find_id_by_name(resources->mesh_pool, filename, &(m_impl->mesh_id)))
+  {
+    return;
+  }
+
   const std::string file(filename);
   const util::obj_model model(util::load_obj(file));
   
@@ -51,8 +60,6 @@ Model::Model(const char *filename)
   // Add mesh to mesh manager.
   if(!model.meshes.empty())
   {
-    Resource_data::Resources *resources = Resource_data::get_resources();
-  
     m_impl->mesh_id = Resource_data::mesh_pool_push_new(resources->mesh_pool,
                                                         filename,
                                                         model.meshes.at(0).positions.data(),
