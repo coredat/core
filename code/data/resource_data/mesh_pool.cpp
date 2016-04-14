@@ -60,6 +60,27 @@ mesh_pool_find(const Mesh_pool *pool, const uint32_t id)
 }
 
 
+bool
+mesh_pool_find_id_by_name(const Mesh_pool *pool,
+                          const char *name,
+                          uint32_t *result)
+{
+  for(uint32_t i = 0; i < pool->capacity; ++i)
+  {
+    const uint32_t str_offset = i * MESH_POOL_MAX_FILEPATH_SIZE;
+    
+    if(strcmp(name, &pool->filename[str_offset]) == 0)
+    {
+      *result = pool->id[i];
+      return true;
+    }
+  }
+  
+  return false;
+}
+
+
+
 uint32_t
 mesh_pool_push_new(Mesh_pool *pool,
                    const char *key,
@@ -71,6 +92,11 @@ mesh_pool_push_new(Mesh_pool *pool,
                    const uint32_t number_of_indices)
 {
   // Search for key (todo)
+  uint32_t search_index(0);
+  if(mesh_pool_find_id_by_name(pool, key, &search_index))
+  {
+    return search_index;
+  }
   
   // search for a zero
   // TODO: Has no mechanism to fail.
@@ -105,6 +131,12 @@ mesh_pool_push_new(Mesh_pool *pool,
     pool->id[free_index] = new_id;
     pool->mesh[free_index] = mesh;
     pool->aabb[free_index] = math::aabb_from_xyz_array(positions, number_of_vertices);
+
+    // string
+    const uint32_t str_offset = free_index * MESH_POOL_MAX_FILEPATH_SIZE;
+    memset(&pool->filename[str_offset], 0, sizeof(char) * MESH_POOL_MAX_FILEPATH_SIZE);
+    memcpy(&pool->filename[str_offset], key, sizeof(char) * strlen(key));
+    
     return new_id;
   }
 

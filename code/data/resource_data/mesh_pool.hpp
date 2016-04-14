@@ -8,6 +8,7 @@
 
 
 #define SIZE_OF_MODEL_POOL 32
+#define MESH_POOL_MAX_FILEPATH_SIZE 256
 
 
 namespace Resource_data {
@@ -16,7 +17,7 @@ namespace Resource_data {
 struct Mesh_pool
 {
   uint32_t                    id[SIZE_OF_MODEL_POOL];
-  char                        filename[SIZE_OF_MODEL_POOL * 256];
+  char                        filename[SIZE_OF_MODEL_POOL * MESH_POOL_MAX_FILEPATH_SIZE];
   Graphics_api::Mesh          mesh[SIZE_OF_MODEL_POOL];
   math::aabb                  aabb[SIZE_OF_MODEL_POOL];
   
@@ -37,6 +38,14 @@ mesh_pool_init(Mesh_pool *pool);
 Graphics_api::Mesh
 mesh_pool_find(const Mesh_pool *pool, const uint32_t id);
 
+
+/*!
+ 
+*/
+bool
+mesh_pool_find_id_by_name(const Mesh_pool *pool,
+                          const char *name,
+                          uint32_t *result);
 
 /*!
   Push a new mesh via data into the pool.

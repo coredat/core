@@ -38,8 +38,6 @@ Model::Model(const uint32_t id)
 Model::Model(const char *filename)
 : m_impl(new Impl)
 {
-  LOG_TODO("Check there is space in the pool first.");
-  
   const std::string file(filename);
   const util::obj_model model(util::load_obj(file));
   
