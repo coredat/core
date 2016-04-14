@@ -1,8 +1,8 @@
 #include "ogl_shader.hpp"
 #include <assert.h>
-#include <vector>
-#include <string>
-#include <iostream>
+#include <string> // remove?
+#include <iostream> // remove
+#include <vector> // remove
 #include <utilities/logging.hpp>
 
 
@@ -13,108 +13,52 @@ void
 shader_create(Shader *out_shader,
                      const char *vert_shader_code,
                      const char *geo_shader_code,
-                     const char *frag_shader_code,
-                     std::ostream *log)
+                     const char *frag_shader_code)
 {
   assert(out_shader);
   
-  auto create_shader = [](const GLenum shader_type, const char *shader_code, std::ostream *log) -> GLuint
-  {
-    // Param check
-    if(strlen(shader_code) == 0)
-    {
-      return 0;
-    }
-  
-    const GLuint shader_id = glCreateShader(shader_type);
-    
-    // Compile the shader.
-    {
-      glShaderSource(shader_id, 1, &shader_code, NULL);
-      glCompileShader(shader_id);
-    }
-
-		// Log
-    std::vector<GLchar> output_log;
-    {
-      GLint log_length = 0;
-      glGetShaderiv(shader_id, GL_INFO_LOG_LENGTH, &log_length);
-
-      output_log.resize(log_length);
-      glGetShaderInfoLog(shader_id, log_length, 0, output_log.data());
-    }
-
-		if(!output_log.empty())
-		{
-      std::string log_str;
-      log_str.reserve(output_log.size());
-      log_str.append(output_log.data());
-
-		  // Did it compile
-		  GLint is_compiled = false;
-		  glGetShaderiv(shader_id, GL_COMPILE_STATUS, &is_compiled);
-
-      if(is_compiled == GL_FALSE)
-      {
-        LOG_ERROR(log_str.c_str());
-        return 0;
-      }
-      else
-      {
-        LOG_WARNING(log_str.c_str());
-      }
-		}
-
-    return shader_id;
-  };
-  
-  const auto vert_shader_id = create_shader(GL_VERTEX_SHADER,   vert_shader_code, log);
-  Ogl::error_check("creating vert shader", log);
+  const auto vert_shader_id = Detail::compile_shader(GL_VERTEX_SHADER, vert_shader_code);
+  LOG_GL_ERROR("creating vert shader");
   
   GLuint geo_shader_id(0);
   if(strlen(geo_shader_code))
   {
-    geo_shader_id = create_shader(GL_GEOMETRY_SHADER, geo_shader_code,  log);
-    Ogl::error_check("creating geo shader", log);
+    geo_shader_id = Detail::compile_shader(GL_GEOMETRY_SHADER, geo_shader_code);
+    LOG_GL_ERROR("creating geo shader");
   }
   
-  const auto frag_shader_id = create_shader(GL_FRAGMENT_SHADER, frag_shader_code, log);
-  Ogl::error_check("creating frag shader", log);
+  const auto frag_shader_id = Detail::compile_shader(GL_FRAGMENT_SHADER, frag_shader_code);
+  LOG_GL_ERROR("creating frag shader");
   
   const auto program_id = glCreateProgram();
-  Ogl::error_check("creating program", log);
+  LOG_GL_ERROR("creating program");
   
   glAttachShader(program_id, vert_shader_id);
-  Ogl::error_check("attach shader to program", log);
+  LOG_GL_ERROR("attach shader to program");
   
   if(strlen(geo_shader_code))
   {
     glAttachShader(program_id, geo_shader_id);
-    Ogl::error_check("attach shader to program", log);
+    LOG_GL_ERROR("attach shader to program");
   }
   
   glAttachShader(program_id, frag_shader_id);
   glLinkProgram(program_id);
-  Ogl::error_check("linking program", log);
+  LOG_GL_ERROR("linking program");
  
   // Log
-  std::vector<GLchar> output_log;
   {
-    GLint log_length;
+    GLint log_length(0);
 		glGetProgramiv(program_id, GL_INFO_LOG_LENGTH, &log_length);
-
-		output_log.resize(log_length);
-  }
-  
-  if(!output_log.empty())
-  {
-    std::string log_str;
-    log_str.reserve(output_log.size());
-    log_str.append(output_log.data());
     
-    if(!log_str.empty())
+    if(log_length)
     {
-      LOG_ERROR(log_str.c_str());
+      GLchar output_log[512];
+      memset(output_log, 0, sizeof(output_log));
+      
+      glGetProgramInfoLog(program_id, log_length, 0, output_log);
+      
+      LOG_ERROR(output_log);
     }
   }
   
@@ -124,10 +68,7 @@ shader_create(Shader *out_shader,
   
   if(!is_linked) // Failed
   {
-    if(log)
-    {
-      (*log) << "Ogl::shader_create - failed to link shader program.\n";
-    }
+    LOG_ERROR("Failed to link shader program.")
     
     Shader clean_up;
     clean_up.program_id     = program_id;
@@ -135,7 +76,7 @@ shader_create(Shader *out_shader,
     clean_up.geo_shader_id  = geo_shader_id;
     clean_up.frag_shader_id = frag_shader_id;
     
-    shader_destroy(&clean_up, log);
+    shader_destroy(&clean_up);
     
     return;
   }
@@ -184,6 +125,62 @@ shader_bind(Shader *shader_to_bind)
     Ogl::error_check("Binding shader", &std::cout);
   }
 }
+
+
+namespace Detail {
+
+
+GLuint
+compile_shader(const GLenum shader_type,
+               const char *shader_code)
+{
+  // Param check
+  if(strlen(shader_code) == 0)
+  {
+    return 0;
+  }
+
+  const GLuint shader_id = glCreateShader(shader_type);
+  
+  // Compile the shader.
+  {
+    glShaderSource(shader_id, 1, &shader_code, NULL);
+    glCompileShader(shader_id);
+  }
+
+  // Log
+  {
+    GLint log_length = 0;
+    glGetShaderiv(shader_id, GL_INFO_LOG_LENGTH, &log_length);
+    
+    if(log_length)
+    {
+      GLchar output_log[512];
+      memset(output_log, 0, sizeof(output_log));
+      
+      glGetShaderInfoLog(shader_id, log_length, 0, output_log);
+      
+      // Did it compile
+      GLint is_compiled = false;
+      glGetShaderiv(shader_id, GL_COMPILE_STATUS, &is_compiled);
+
+      if(is_compiled == GL_FALSE)
+      {
+        LOG_ERROR(output_log);
+        return 0;
+      }
+      else
+      {
+        LOG_WARNING(output_log);
+      }
+    }
+  }
+
+  return shader_id;
+}
+
+
+} // ns
 
 
 } // ns

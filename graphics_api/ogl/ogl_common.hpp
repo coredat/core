@@ -10,6 +10,9 @@
 #include <OpenGL/gl3ext.h>
 #endif
 
+
+#define LOG_GL_ERROR(msg)
+
 #include <iostream> // for error stream this needs to change.
 #include <utilities/logging.hpp>
 
