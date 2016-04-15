@@ -127,7 +127,7 @@ Context::Context(const uint32_t width,
     }
     
     SDL_GL_MakeCurrent(m_impl->window, m_impl->context);
-    SDL_GL_SetSwapInterval(settings.vsync); // Vsync
+    SDL_GL_SetSwapInterval(settings.vsync ? 1 : 0); // Vsync
   }
   
   // Initialize the graphics api
