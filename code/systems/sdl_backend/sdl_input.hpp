@@ -8,6 +8,7 @@
 namespace Sdl {
 
 
+void update_gamepad_controller(Core_data::Game_controller *controller, const uint32_t controller_id);
 void update_keyboard_controller(Core_data::Game_controller *controller);
 void capture_mouse(const bool set);
 bool is_mouse_captured();

@@ -65,15 +65,34 @@ Controller::operator=(Controller &&other)
 Axis
 Controller::get_axis(const uint8_t axis) const
 {
+  constexpr uint8_t max_axes = 2;
+
   assert(m_impl && m_impl->context_data);
   const Core_data::Input_pool *input = m_impl->context_data->input_pool;
 
-  if(input && input->size > m_impl->controller_number)
+  if(input && input->size > m_impl->controller_number && axis < max_axes)
   {
     return input->controllers[m_impl->controller_number].axis[axis];
   }
 
   return Axis();
+}
+
+
+float
+Controller::get_trigger(const uint8_t trigger) const
+{
+  constexpr uint8_t max_triggers = 2;
+
+  assert(m_impl && m_impl->context_data);
+  const Core_data::Input_pool *input = m_impl->context_data->input_pool;
+
+  if(input && input->size > m_impl->controller_number && trigger < max_triggers)
+  {
+    return input->controllers[m_impl->controller_number].triggers[trigger];
+  }
+
+  return 0.f;
 }
 
 

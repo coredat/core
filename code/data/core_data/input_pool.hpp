@@ -16,6 +16,7 @@ namespace Core_data {
 struct Game_controller
 {
   ::Core::Input::Axis axis[2];
+  float triggers[2];
   ::Core::Input::Button_state buttons[16];
 }; // struct
 

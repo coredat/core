@@ -324,8 +324,31 @@ Context::is_open() const
   SDL_GL_SwapWindow(m_impl->window);
   Sdl::event_process();
   
-  // Update input
-  Sdl::update_keyboard_controller(&(m_impl->context_data->input_pool->controllers[0]));
+  const uint32_t num_controllers = SDL_NumJoysticks();
+  
+  if(num_controllers)
+  {
+    Sdl::update_gamepad_controller(&(m_impl->context_data->input_pool->controllers[0]), 0);
+    
+    if(num_controllers > 1)
+    {
+      Sdl::update_gamepad_controller(&(m_impl->context_data->input_pool->controllers[1]), 1);
+    }
+    
+    if(num_controllers > 2)
+    {
+      Sdl::update_gamepad_controller(&(m_impl->context_data->input_pool->controllers[2]), 2);
+    }
+
+    if(num_controllers > 3)
+    {
+      Sdl::update_gamepad_controller(&(m_impl->context_data->input_pool->controllers[3]), 3);
+    }
+  }
+  else
+  {
+    Sdl::update_keyboard_controller(&(m_impl->context_data->input_pool->controllers[0]));
+  }
   
   return m_impl->is_open;
 }
