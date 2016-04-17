@@ -2,6 +2,7 @@
 
  -- A project defines one build target
  project "CoreEngine"
+    location("./")
 
     kind "StaticLib"
     language "C++"
@@ -17,23 +18,26 @@
     }
 
     includedirs {
-      get_proj_root_dir() .. "code/",
-      get_proj_root_dir() .. "code/external/math/",
-      get_proj_root_dir() .. "code/external/graphics_api/",
-      get_proj_root_dir() .. "code/external/utilities/",
+      get_solution_root_dir() .. "code/",
+      get_solution_root_dir() .. "code/external/math/",
+      get_solution_root_dir() .. "code/external/graphics_api/",
+      get_solution_root_dir() .. "code/external/utilities/",
       "/usr/local/include/",
-      get_proj_root_dir() .. "3rdparty/sdl_mixer/include/",
+      get_solution_root_dir() .. "3rdparty/sdl_mixer/include/",
+      get_solution_root_dir() .. "3rdparty/SDL/include/",
+      get_solution_root_dir() .. "3rdparty/GLEW/include/",
+      get_solution_root_dir() .. "3rdparty/SOIL/include/",
     }
 
     buildoptions {
-      "-std=c++14",
-      "-stdlib=libc++",
+      "-std=c++14", -- Clang/GCC only?
+      "-stdlib=libc++", -- Clang/GCC only?
     } --, "-framework OpenGL", "-framework CoreFoundation"}
 
     configuration "Debug"
        defines { "DEBUG" }
-       flags { "Symbols" }
+       flags { "Symbols", "Unicode" }
 
     configuration "Release"
        defines { "NDEBUG" }
-       flags { "Optimize" }
+       flags { "Optimize", "Unicode" }
