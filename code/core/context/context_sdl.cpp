@@ -13,11 +13,18 @@
 #include <core/context/detail/context_detail.hpp>
 #include <data/core_data/core_data.hpp>
 #include <graphics_api/initialize.hpp>
+#include <graphics_api/ogl/ogl_common.hpp>
 #include <systems/sdl_backend/sdl_message_loop.hpp>
 #include <systems/sdl_backend/sdl_input.hpp>
-#include <stdatomic.h>
 #include <assert.h>
 #include <utilities/logging.hpp>
+
+#ifdef _WIN32
+#include <atomic>
+using std::atomic_bool;
+#else
+#include <stdatomic.h>
+#endif
 
 
 namespace
@@ -40,9 +47,9 @@ namespace Core {
 struct
 Context::Impl
 {
-  bool is_open               = true;
-  SDL_Window *window         = nullptr;
-  SDL_GLContext context      = nullptr;
+  bool is_open;
+  SDL_Window *window;
+  SDL_GLContext context;
   std::shared_ptr<Context_detail::Context_data> context_data;
 };
 
@@ -117,7 +124,7 @@ Context::Context(const uint32_t width,
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 0);
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
-    
+
     m_impl->context = SDL_GL_CreateContext(m_impl->window);
     
     if(!m_impl->context)
@@ -128,6 +135,16 @@ Context::Context(const uint32_t width,
     
     SDL_GL_MakeCurrent(m_impl->window, m_impl->context);
     SDL_GL_SetSwapInterval(settings.vsync ? 1 : 0); // Vsync
+
+                                                    // We initialize GLEW first.
+#ifdef _WIN32
+    glewExperimental = GL_TRUE;
+    const  GLenum err = glewInit();
+    if (err != GLEW_OK)
+    {
+      LOG_ERROR("GLew failed to initialize")
+    }
+#endif
   }
   
   // Initialize the graphics api

@@ -14,7 +14,7 @@ namespace Core {
   
 struct Camera::Impl
 {
-  Core::Entity_id attached_entity = Core::Entity_id_util::invalid_id();
+  Core::Entity_id attached_entity;
   ::Camera::Camera_properties properties;
 };
 

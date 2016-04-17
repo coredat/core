@@ -8,8 +8,14 @@
 #include <data/world_data/world_pools.hpp>
 #include <core/world/world.hpp>
 #include <core/world/detail/world_detail.hpp>
-#include <stdatomic.h>
 #include <assert.h>
+
+#ifdef _WIN32
+#include <atomic>
+using std::atomic_uint_least32_t;
+#else
+#include <stdatomic.h>
+#endif
 
 
 namespace
@@ -23,7 +29,7 @@ namespace Core {
 
 struct Entity::Impl
 {
-  Core::Entity_id id = Core::Entity_id_util::invalid_id();
+  Core::Entity_id id;
   std::shared_ptr<World_detail::World_data> world;
 };
 

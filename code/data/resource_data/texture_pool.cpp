@@ -1,8 +1,14 @@
 #include "texture_pool.hpp"
 #include <assert.h>
-#include <stdatomic.h>
 #include <utilities/logging.hpp>
 #include <SOIL/SOIL.h>
+
+#ifdef _WIN32
+#include <atomic>
+using std::atomic_uint_least32_t;
+#else
+#include <stdatomic.h>
+#endif
 
 
 namespace

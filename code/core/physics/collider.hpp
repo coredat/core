@@ -32,7 +32,7 @@ public:
   }
   
   
-  constexpr
+  //constexpr stubbed out because enum is non const.
   Collider(Box_collider &collider)
   : Collider(Type::box,
              collider.get_x_extent(),

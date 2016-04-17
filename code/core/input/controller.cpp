@@ -14,7 +14,7 @@ namespace Input {
 
 struct Controller::Impl
 {
-  uint32_t controller_number = 0;
+  uint32_t controller_number;
   
   std::shared_ptr<const Context_detail::Context_data> context_data;
 };

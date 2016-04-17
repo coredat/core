@@ -1,6 +1,5 @@
 #include "world.hpp"
 #include <core/world/world_setup.hpp>
-#include <systems/audio/audio.hpp>
 
 #include <core/memory/memory.hpp>
 
@@ -9,8 +8,6 @@
 
 #include <core/entity/entity.hpp>
 #include <core/entity/entity_ref.hpp>
-
-#include <sdl_wrapper/sdl_lazy_include.hpp>
 
 #include <renderer/renderer.hpp>
 #include <renderer/simple_renderer/simple_renderer.hpp>
