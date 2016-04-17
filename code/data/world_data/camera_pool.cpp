@@ -145,17 +145,7 @@ camera_pool_get_properties_for_priority(Camera_pool *pool,
   }
   
   // Failed
-  return Camera::Camera_properties
-  {
-    Core::Camera_type::perspective,
-    600,
-    480,
-    0.7855f,
-    0.1f,
-    1000.f,
-    true,
-    true,
-  };
+  return Camera::Camera_properties();
 }
 
 

@@ -10,8 +10,8 @@ namespace Core {
 
 struct Entity_ref::Impl
 {
-  const Core::Entity_id id = Core::Entity_id_util::invalid_id();
-  World_data::World *world = nullptr;
+  const Core::Entity_id id;
+  World_data::World *world;
 };
 
 

@@ -67,7 +67,7 @@ initialize()
   // Vertex attr
   {
     constexpr uint32_t number_of_attrs = 2;
-    constexpr Ogl::Attribute_desc vert_desc[number_of_attrs]
+    const Ogl::Attribute_desc vert_desc[number_of_attrs]
     {
       Ogl::Attribute_desc{"in_vs_position",       Ogl::Attr_type::FLOAT2},
       Ogl::Attribute_desc{"in_vs_texture_coord",  Ogl::Attr_type::FLOAT2},

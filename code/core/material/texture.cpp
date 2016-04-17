@@ -9,7 +9,7 @@ namespace Core {
 
 struct Texture::Impl
 {
-  uint32_t texture_id = 0;
+  uint32_t texture_id;
 };
 
 

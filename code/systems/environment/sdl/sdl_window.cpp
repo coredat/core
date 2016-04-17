@@ -3,7 +3,7 @@
 #include "sdl_common.hpp" 
 #include <assert.h>
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <GL/glew.h>
 #else
 #include <OpenGL/gl3.h>

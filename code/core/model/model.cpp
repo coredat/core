@@ -19,7 +19,7 @@ namespace Core {
 
 struct Model::Impl
 {
-  uint32_t mesh_id = 0; // currently a model only supports one mesh.
+  uint32_t mesh_id;
 };
 
 

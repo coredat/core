@@ -4,7 +4,10 @@
 
 #include <string>
 #include <sys/stat.h>
+
+#ifndef _WIN32
 #include <unistd.h>
+#endif
 
 
 namespace util {
@@ -14,8 +17,12 @@ namespace file {
 inline bool
 exists(const std::string &filename)
 {
+	#ifndef _WIN32
   struct stat buffer;   
   return (stat (filename.c_str(), &buffer) == 0);
+	#else
+	return true;
+	#endif
 }
 
 

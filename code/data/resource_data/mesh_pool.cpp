@@ -2,13 +2,18 @@
 #include <utilities/logging.hpp>
 #include <utilities/obj_model_loader.hpp>
 #include <math/geometry/aabb.hpp>
+
+#ifdef _WIN32
+#include <atomic>
+using std::atomic_uint_least32_t;
+#else
 #include <stdatomic.h>
+#endif
 
 
 namespace
 {
   atomic_uint_least32_t mesh_id_counter(0);
-  
   
   uint64_t
   hash(const char *str)

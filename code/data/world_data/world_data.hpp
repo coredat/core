@@ -3,12 +3,10 @@
 
 
 #include "window_data.hpp"
-#include "audio_pool.hpp"
 #include "camera_pool.hpp"
 #include "entity_pool.hpp"
 #include "graph_change_pool.hpp"
 #include "gui_view_pool.hpp"
-#include "texture_pool.hpp"
 #include "world.hpp"
 #include "world_pools.hpp"
 #include "world_data_fwd.hpp"
