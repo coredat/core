@@ -1,43 +1,49 @@
 #!lua
 
- -- A project defines one build target
- project "CoreEngine"
-    location("./")
+core_project_data = {
+  name     = "CoreEngine",
+  kind     = "StaticLib",
+  language = "C++",
+  location = make.get_proj_root(),
 
-    kind "StaticLib"
-    language "C++"
+  src_files = {
+    make.get_proj_root() .. "../code/**.hpp",
+    make.get_proj_root() .. "../code/**.cpp",
+    make.get_proj_root() .. "../code/**.mm",
+    make.get_proj_root() .. "../code/**.h",
+    make.get_proj_root() .. "../code/**.c",
+    make.get_proj_root() .. "../code/**.m",
+    make.get_proj_root() .. "../code/**.md",
+  },
 
-    files {
-      "../code/**.hpp",
-      "../code/**.cpp",
-      "../code/**.mm",
-      "../code/**.h",
-      "../code/**.c",
-      "../code/**.m",
-      "../code/**.md",
-    }
+  src_files_exclude_windows = {
+    make.get_proj_root() .. "../code/external/utilities/utilities/directory_nix.cpp",
+    make.get_proj_root() .. "../code/external/utilities/utilities/directory_mac.mm",
+  },
 
-    includedirs {
-      get_solution_root_dir() .. "code/",
-      get_solution_root_dir() .. "code/external/math/",
-      get_solution_root_dir() .. "code/external/graphics_api/",
-      get_solution_root_dir() .. "code/external/utilities/",
-      "/usr/local/include/",
-      get_solution_root_dir() .. "3rdparty/sdl_mixer/include/",
-      get_solution_root_dir() .. "3rdparty/SDL/include/",
-      get_solution_root_dir() .. "3rdparty/GLEW/include/",
-      get_solution_root_dir() .. "3rdparty/SOIL/include/",
-    }
+  src_files_exclude_mac = {
+    make.get_proj_root() .. "../code/external/utilities/utilities/directory_win.cpp",
+  },
 
-    buildoptions {
-      "-std=c++14", -- Clang/GCC only?
-      "-stdlib=libc++", -- Clang/GCC only?
-    } --, "-framework OpenGL", "-framework CoreFoundation"}
+  include_directories = {
+    make.get_proj_root() .. "../code/",
+    make.get_proj_root() .. "../code/external/math/",
+    make.get_proj_root() .. "../code/external/graphics_api/",
+    make.get_proj_root() .. "../code/external/utilities/",
+    make.get_proj_root() .. "../3rdparty/sdl_mixer/include/",
+    make.get_proj_root() .. "../3rdparty/sdl/include/",
+    make.get_proj_root() .. "../3rdparty/glew/include/",
+    make.get_proj_root() .. "../3rdparty/soil/include/",
+  },
 
-    configuration "Debug"
-       defines { "DEBUG" }
-       flags { "Symbols", "Unicode" }
+  include_directories_mac = {
+    "/usr/local/include/",
+  },
 
-    configuration "Release"
-       defines { "NDEBUG" }
-       flags { "Optimize", "Unicode" }
+  link_dependencies_mac = {
+    "OpenGL.framework",
+    "CoreFoundation.framework",
+    "Foundation.framework",
+    "CoreEngine",
+  },
+}
