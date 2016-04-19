@@ -1,6 +1,7 @@
 #!lua
 
 core_project_data = {
+  
   name     = "CoreEngine",
   kind     = "StaticLib",
   language = "C++",
@@ -44,6 +45,11 @@ core_project_data = {
     "OpenGL.framework",
     "CoreFoundation.framework",
     "Foundation.framework",
-    "CoreEngine",
   },
+
+  linkoption_dependencies_macosx = {
+    "-lsdl2",
+    "-lsdl2_mixer",
+    "-lSOIL",
+  }
 }
