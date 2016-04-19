@@ -21,11 +21,11 @@ core_project_data = {
     make.get_proj_root() .. "../code/external/utilities/utilities/directory_mac.mm",
   },
 
-  src_files_exclude_mac = {
+  src_files_exclude_macosx = {
     make.get_proj_root() .. "../code/external/utilities/utilities/directory_win.cpp",
   },
 
-  include_directories = {
+  inc_dirs = {
     make.get_proj_root() .. "../code/",
     make.get_proj_root() .. "../code/external/math/",
     make.get_proj_root() .. "../code/external/graphics_api/",
@@ -36,11 +36,11 @@ core_project_data = {
     make.get_proj_root() .. "../3rdparty/soil/include/",
   },
 
-  include_directories_mac = {
+  inc_dirs_macosx = {
     "/usr/local/include/",
   },
 
-  link_dependencies_mac = {
+  link_dependencies_macosx = {
     "OpenGL.framework",
     "CoreFoundation.framework",
     "Foundation.framework",
