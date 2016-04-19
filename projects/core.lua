@@ -1,7 +1,7 @@
 #!lua
 
 core_project_data = {
-  
+
   name     = "CoreEngine",
   kind     = "StaticLib",
   language = "C++",
