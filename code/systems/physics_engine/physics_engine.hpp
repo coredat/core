@@ -28,6 +28,18 @@ get_collisions(
 );
 
 
+void
+get_collisions(
+  const Core::Entity_id ids[],
+  const math::transform transforms[],
+  const math::aabb aabbs[],
+  const uint32_t number_of_entities_to_test,
+  Collision_pair out_collision[],
+  const uint32_t size_of_out_buffer,
+  uint32_t *number_of_collisions
+);
+
+
 } // ns
 
 

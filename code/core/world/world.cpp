@@ -79,7 +79,9 @@ World::think(const float dt)
 
 
 void
-World::get_overlapping_aabbs(const std::function<void(const Entity_ref ref_a, const Entity_ref ref_b)> &callback)
+//World::get_overlapping_aabbs(const std::function<void(const Entity_ref ref_a, const Entity_ref ref_b)> &callback)
+World::get_overlapping_aabbs(const std::function<void(const Physics_engine::Collision_pair pairs[],
+                                                      const uint32_t number_of_pairs)> &callback)
 {
   // Check we have a callback.
   if(!callback) { return; }
@@ -98,22 +100,31 @@ World::get_overlapping_aabbs(const std::function<void(const Entity_ref ref_a, co
                                    1024,
                                    &out_number_of_collisions);
   }
+
+  callback(out_collisions, out_number_of_collisions);
   
   // Call back of collisions
-  for(uint32_t i = 0; i < out_number_of_collisions; ++i)
-  {
-    Entity_ref a(out_collisions[i].obj_a, &m_impl->world_data->data);
-    Entity_ref b(out_collisions[i].obj_b, &m_impl->world_data->data);
-    
-    callback(a,b);
-  }
+//  for(uint32_t i = 0; i < out_number_of_collisions; ++i)
+//  {
+//    Entity_ref a(out_collisions[i].obj_a, &m_impl->world_data->data);
+//    Entity_ref b(out_collisions[i].obj_b, &m_impl->world_data->data);
+//    
+//    callback(a,b);
+//  }
 }
 
 
 Entity_ref
-World::find_entity(const char *name)
+World::find_entity_by_name(const char *name)
 {
   return Entity_ref();
+}
+
+
+Entity_ref
+World::find_entity_by_id(const Core::Entity_id id)
+{
+  return Entity_ref(id, &m_impl->world_data->data);
 }
 
 

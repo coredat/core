@@ -33,10 +33,10 @@ get_tags(const Core::Entity_id this_id, World_data::World *world)
   if(!is_valid(this_id, world)) { return 0; }
   
   uint32_t index;
-  if(Entity_id_util::find_index_linearly(&index,
-                                         this_id,
-                                         world->entity_pool->entity_id,
-                                         world->entity_pool->size))
+  if(Entity_id_util::find_index_binary(&index,
+                                       this_id,
+                                       world->entity_pool->entity_id,
+                                       world->entity_pool->size))
   {
     return world->entity_pool->entity_properties[index].tags;
   }

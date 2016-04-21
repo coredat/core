@@ -101,6 +101,13 @@ bool
 find_index_linearly(uint32_t *out_index, const Entity_id id_to_find, const Entity_id ids[], const uint32_t number_of_entities);
 
 
+bool
+find_index_binary(uint32_t *out_index,
+                  const Entity_id id_to_find,
+                  const Entity_id ids[],
+                  const uint32_t number_of_entities);
+
+
 } // ns
 } // ns
 
