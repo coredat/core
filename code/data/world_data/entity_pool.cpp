@@ -4,7 +4,7 @@
 #include <vector>
 #include <core/memory/memory.hpp>
 #include <math/transform/transform.hpp>
-
+#include <utilities/logging.hpp>
 
 namespace
 {
@@ -55,15 +55,30 @@ entity_pool_init(Entity_pool *pool)
   }
   
   {
-    const Core::Memory::Chunk transform_chunk = Core::Memory::request_chunk(ENTITY_POOL_SIZE * sizeof(math::transform));
-    pool->transform = static_cast<math::transform*>(transform_chunk.start_of_chunk);
-    memset(pool->transform, 0, transform_chunk.bytes_in_chunk);
+    //const Core::Memory::Chunk transform_chunk = Core::Memory::request_chunk(ENTITY_POOL_SIZE * sizeof(math::transform));
+    //pool->transform = static_cast<math::transform*>(transform_chunk.start_of_chunk);
+    //memset(pool->transform, 0, transform_chunk.bytes_in_chunk);
+    
+    LOG_TODO("Stack allocated transform pool, because we need memory 16 byte aligned.");
+    
+    static math::transform dummy_alloc[ENTITY_POOL_SIZE];
+    pool->transform = dummy_alloc;
+    
+    for(uint32_t i = 0; i < ENTITY_POOL_SIZE; ++i)
+    {
+      pool->transform[i] = math::transform();
+    }
   }
   
   {
-    const Core::Memory::Chunk aabb_chunk = Core::Memory::request_chunk(ENTITY_POOL_SIZE * sizeof(math::aabb));
-    pool->aabb = static_cast<math::aabb*>(aabb_chunk.start_of_chunk);
-    memset(pool->aabb, 0, aabb_chunk.bytes_in_chunk);
+    LOG_TODO("Stack allocated aabb pool, because we need memory 16 byte aligned.");
+    
+    //const Core::Memory::Chunk aabb_chunk = Core::Memory::request_chunk(ENTITY_POOL_SIZE * sizeof(math::aabb));
+    //pool->aabb = static_cast<math::aabb*>(aabb_chunk.start_of_chunk);
+    //memset(pool->aabb, 0, aabb_chunk.bytes_in_chunk);
+    
+    static math::aabb dumm_alloc_2[ENTITY_POOL_SIZE];
+    pool->aabb = dumm_alloc_2;
   }
 }
 

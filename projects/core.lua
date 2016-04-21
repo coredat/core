@@ -9,6 +9,7 @@ core_project_data = {
 
   src_files = {
     make.get_proj_root() .. "../code/**.hpp",
+    make.get_proj_root() .. "../code/**.inl",
     make.get_proj_root() .. "../code/**.cpp",
     make.get_proj_root() .. "../code/**.mm",
     make.get_proj_root() .. "../code/**.h",

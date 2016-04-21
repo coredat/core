@@ -16,8 +16,8 @@ namespace Core {
 
 
 Transform::Transform(const math::vec3 pos,
-            const math::vec3 scale,
-            const math::quat rot)
+                     const math::vec3 scale,
+                     const math::quat rot)
 : m_position(pos)
 , m_scale(scale)
 , m_rotation(rot)

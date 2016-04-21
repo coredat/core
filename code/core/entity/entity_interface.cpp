@@ -170,9 +170,14 @@ get_transform(const Core::Entity_id this_id, World_data::World *world)
 
   uint32_t index;
   assert(get_index(&index, this_id, ent_pool->entity_id, ent_pool->size));
-  math::transform* local_transform = &ent_pool->transform[index];
+  math::transform local_transform = ent_pool->transform[index];
   
-  return Core::Transform(local_transform->position, local_transform->scale, local_transform->rotation);
+  const math::vec3 pos = local_transform.position;
+  const math::vec3 scale = local_transform.scale;
+  
+  return Core::Transform(pos,
+                         scale,
+                         local_transform.rotation);
 }
 
 
