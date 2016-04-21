@@ -4,6 +4,7 @@
 
 #include "ogl_common.hpp"
 #include "../pixel_format.hpp"
+#include <utilities/optimizations.hpp>
 #include <assert.h>
 
 
@@ -28,6 +29,7 @@ pixel_format_get_gl_internal_format(const Graphics_api::Pixel_format format)
     return GL_R32F;
   
   default:
+    UNREACHABLE;
     assert(false); // Yikes.
     return GL_RGBA;
   }
@@ -47,6 +49,7 @@ pixel_format_get_format(const GLenum format)
     return GL_RGBA;
 
   default:
+    UNREACHABLE;
     assert(false); // Yikes.
     return GL_RGBA;
   }
@@ -67,6 +70,7 @@ pixel_format_get_type(const GLenum format)
     return GL_FLOAT;
 
   default:
+    UNREACHABLE;
     assert(false); // Yikes.
     return GL_UNSIGNED_BYTE;
   }
