@@ -14,4 +14,4 @@
 #include "geometry/geometry.hpp"
 
 
-#endif // inc guard
+#endif // include guard

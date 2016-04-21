@@ -10,6 +10,7 @@
 
 #include <cmath>
 #include <algorithm>
+#include "../detail/detail.hpp"
 
 
 namespace math {

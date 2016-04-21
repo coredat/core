@@ -2,31 +2,16 @@
 #define VECTOR_TYPES_INCLUDED_76A0D96A_8385_4283_9EA9_CF89D0D5A10C
 
 
-#include "../detail/detail.hpp"
-
-
 /*
   Vector Types.
   These are the vector types in caffeine math.
 */
 
 
-#ifdef MATH_ON_SSE2
-
-
 namespace math {
 
-using vec4 = __m128;
-using vec3 = __m128;
-using vec2 = __m128;
 
-} // ns
-
-
-#else // Fallback
-
-
-namespace math {
+// To access the components you should go through the vector interface.
 
 class vec4
 {
@@ -43,10 +28,8 @@ class vec2
   float data[2];
 };
 
-} // ns
+  
+} // namespace
 
 
-#endif // simd types
-
-
-#endif // inc guard
+#endif // include guard
