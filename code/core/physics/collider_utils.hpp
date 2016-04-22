@@ -14,10 +14,6 @@ Box_collider
 cast_to_box_collider(const Collider collider);
 
 
-Collider
-cast_to_collider(const Box_collider collider);
-
-
 } // ns
 } // ns
 

@@ -1,10 +1,21 @@
 #include <core/physics/box_collider_utils.hpp>
 #include <core/physics/box_collider.hpp>
+#include <core/physics/collider.hpp>
 #include <math/vec/vec3.hpp>
 
 
 namespace Core {
 namespace Box_collider_utils {
+
+
+Collider
+cast_to_collider(const Box_collider coll)
+{
+  return Collider(Core::Collider::Type::box,
+                  coll.get_x_half_extent(),
+                  coll.get_y_half_extent(),
+                  coll.get_z_half_extent());
+}
 
 
 math::vec3

@@ -2,6 +2,9 @@
 #define BOX_COLLIDER_INCLUDED_17A0E0D2_625F_4872_9487_2F43006A04C3
 
 
+#include <core/physics/physics_fwd.hpp>
+
+
 namespace Core {
 
 
@@ -28,6 +31,9 @@ public:
   float                 get_x_half_extent() const { return m_x_half_extent; }
   float                 get_y_half_extent() const { return m_y_half_extent; }
   float                 get_z_half_extent() const { return m_z_half_extent; }
+  
+  
+                        operator Collider() const;
   
 private:
 

@@ -10,18 +10,37 @@ namespace Core {
 namespace Box_collider_utils {
 
 
+/*!
+  An explicit cast to collider type.
+*/
+Collider
+cast_to_collider(const Box_collider collider);
+
+
+/*!
+  Get a math::vec3 of the full extent.
+*/
 math::vec3
 get_full_extents(const Box_collider collider);
 
 
+/*!
+  Get a math::vec3 of the half extent.
+*/
 math::vec3
 get_half_extents(const Box_collider collider);
 
 
+/*!
+  Create a box collider with the full extent math::vec3.
+*/
 Box_collider
 create_with_full_extents(const math::vec3 extents);
 
 
+/*!
+  Create a box collider with a half extent math::vec3.
+*/
 Box_collider
 create_with_half_extents(const math::vec3 half_extents);
 
