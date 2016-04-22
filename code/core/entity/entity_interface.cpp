@@ -62,10 +62,10 @@ set_tags(const Core::Entity_id this_id, World_data::World *world, const uint32_t
   if(!is_valid(this_id, world)) { return; }
   
   uint32_t index;
-  if(Entity_id_util::find_index_linearly(&index,
-                                         this_id,
-                                         world->entity_pool->entity_id,
-                                         world->entity_pool->size))
+  if(Entity_id_util::find_index_binary(&index,
+                                       this_id,
+                                       world->entity_pool->entity_id,
+                                       world->entity_pool->size))
   {
     world->entity_pool->entity_properties[index].tags = set_tags;
   }
@@ -122,7 +122,7 @@ namespace
       return false;
     }
     
-    if(Entity_id_util::find_index_linearly(index, id, ents, size))
+    if(Entity_id_util::find_index_binary(index, id, ents, size))
     {
       return true;
     }

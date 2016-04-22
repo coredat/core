@@ -131,10 +131,10 @@ entity_pool_remove_entity(Entity_pool *pool, const Core::Entity_id id)
   // This way we can keep fragmentation and cache misses out
   // when processing the data, but take a hit here.1
   uint32_t remove_id;
-  if(Core::Entity_id_util::find_index_linearly(&remove_id,
-                                               id,
-                                               pool->entity_id,
-                                               pool->size))
+  if(Core::Entity_id_util::find_index_binary(&remove_id,
+                                             id,
+                                             pool->entity_id,
+                                             pool->size))
   {
     const uint32_t start_move = remove_id + 1;
     const uint32_t end_move = pool->size - remove_id - 1;
@@ -165,10 +165,10 @@ entity_pool_get_entity_name(const Entity_pool *pool, const Core::Entity_id id)
   assert(id != Core::Entity_id_util::invalid_id());
   
   uint32_t remove_id(0);
-  if(Core::Entity_id_util::find_index_linearly(&remove_id,
-                                               id,
-                                               pool->entity_id,
-                                               pool->size))
+  if(Core::Entity_id_util::find_index_binary(&remove_id,
+                                             id,
+                                             pool->entity_id,
+                                             pool->size))
   {
     return &pool->name[remove_id * max_entity_name_size];
   }
@@ -187,11 +187,11 @@ entity_pool_set_entity_name(const Entity_pool *pool,
   assert(id != Core::Entity_id_util::invalid_id());
   
   uint32_t set_id(0);
-  if(Core::Entity_id_util::find_index_linearly(&set_id,
-                                               id,
-                                               pool->entity_id,
-                                               pool->size))
-  {
+  if(Core::Entity_id_util::find_index_binary(&set_id,
+                                             id,
+                                             pool->entity_id,
+                                             pool->size))
+{
     const uint32_t index = set_id * max_entity_name_size;
   
     strncpy(&pool->name[index],
