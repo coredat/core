@@ -11,7 +11,11 @@ namespace Collider_utis {
 
 
 Box_collider
-create_box_collider(const math::vec3 collider);
+cast_to_box_collider(const Collider collider);
+
+
+Collider
+cast_to_collider(const Box_collider collider);
 
 
 } // ns

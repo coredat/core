@@ -2,9 +2,6 @@
 #define COLLIDER_INCLUDED_0D024E3F_0D76_41B3_878D_6CB217255EDD
 
 
-#include "box_collider.hpp"
-
-
 namespace Core {
 
 
@@ -21,29 +18,20 @@ public:
   // These ctors are implicit by design.
   constexpr
   Collider(Type type = Type::unknown,
-           const float arg0 = 0.f,
            const float arg1 = 0.f,
-           const float arg2 = 0.f)
+           const float arg2 = 0.f,
+           const float arg3 = 0.f)
   : m_type(type)
-  , m_arg_01(arg0)
-  , m_arg_02(arg1)
-  , m_arg_03(arg2)
+  , m_arg_01(arg1)
+  , m_arg_02(arg2)
+  , m_arg_03(arg3)
   {
   }
   
-  
-  //constexpr stubbed out because enum is non const.
-  Collider(Box_collider &collider)
-  : Collider(Type::box,
-             collider.get_x_extent(),
-             collider.get_y_extent(),
-             collider.get_z_extent())
-  {
-  }
-  
-  Type                  get_type() const { return m_type; };
-  
-  Box_collider          cast_to_box_collider() const { return Box_collider(m_arg_01, m_arg_02, m_arg_03); }
+  Type                  get_type() const    { return m_type;   }
+  float                 get_arg_01() const  { return m_arg_01; }
+  float                 get_arg_02() const  { return m_arg_02; }
+  float                 get_arg_03() const  { return m_arg_03; }
   
 private:
 
