@@ -1,7 +1,7 @@
 #!lua
 
 core_project_data = {
-  
+
   name     = "CoreEngine",
   kind     = "StaticLib",
   language = "C++",
@@ -42,15 +42,28 @@ core_project_data = {
     "/usr/local/include/",
   },
 
+  lib_dirs_windows = {
+    make.get_proj_root() .. "../3rdparty/glew/lib/win32/",
+    make.get_proj_root() .. "../3rdparty/soil/lib/win32/",
+    make.get_proj_root() .. "../3rdparty/sdl/lib/win32/",
+  },
+
   link_dependencies_macosx = {
     "OpenGL.framework",
     "CoreFoundation.framework",
     "Foundation.framework",
   },
 
+  link_dependencies_windows = {
+    "glew32.lib",
+    "SDL2.lib",
+    "SOIL.lib",
+    "opengl32.lib",
+  },
+
   linkoption_dependencies_macosx = {
     "-lsdl2",
     "-lsdl2_mixer",
     "-lSOIL",
-  }
+  },
 }
