@@ -69,16 +69,16 @@ texture_pool_load(Texture_pool *pool,
                                        SOIL_LOAD_RGBA);
   
   // Add to pool
-  const uint32_t texture_id = Resource_data::texture_pool_add(pool,
-                                                              img,
-                                                              width,
-                                                              height,
-                                                              0,
-                                                              filepath);
+  const uint32_t new_texture_id = Resource_data::texture_pool_add(pool,
+                                                                  img,
+                                                                  width,
+                                                                  height,
+                                                                  0,
+                                                                  filepath);
   
   SOIL_free_image_data(img);
   
-  return texture_id;
+  return new_texture_id;
 }
 
 

@@ -1,5 +1,4 @@
 #include "window_data.hpp"
-#include <systems/environment/window.hpp>
 #include <cstring>
 
 

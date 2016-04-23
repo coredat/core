@@ -96,7 +96,9 @@ Mesh_renderer::render()
 
       const Core::Transform cam_transform = ent.get_transform();
       
-      view = math::mat4_lookat(cam_transform.get_position(), math::vec3_add(cam_transform.get_position(), cam_transform.get_forward()), cam_transform.get_up());
+      view = math::mat4_lookat(cam_transform.get_position(),
+                               math::vec3_add(cam_transform.get_position(), cam_transform.get_forward()),
+                               cam_transform.get_up());
     }
     else
     {
@@ -106,7 +108,7 @@ Mesh_renderer::render()
       const float x = math::sin(time) * 9;
       const float z = math::cos(time) * 9;
 
-      const math::vec3 eye_pos = math::vec3_init(x, 5, z);
+      const math::vec3 eye_pos = math::vec3_init(x, 5.f, z);
       const math::vec3 look_at = math::vec3_zero();
       const math::vec3 up      = math::vec3_init(0.f, 1.f, 0.f);
       
