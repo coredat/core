@@ -1,5 +1,6 @@
 #include "ogl_shader_uniform.hpp"
 #include "ogl_shader.hpp"
+#include <utilities/optimizations.hpp>
 #include <assert.h>
 
 
@@ -151,9 +152,9 @@ shader_uniforms_apply(const Uniform uniform_to_apply, void *data)
       glBindTexture(GL_TEXTURE_2D, tex_id);
       break;
     }
-    
 
     default:
+      UNREACHABLE;
       assert(false); // Why did you get here?
   };  
 }
