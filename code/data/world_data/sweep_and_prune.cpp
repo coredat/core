@@ -17,42 +17,43 @@ sweep_and_prune_create(Sweep_and_prune *mark_and_sweep,
   for(uint32_t i = 0; i < number_of_entities; ++i)
   {
     const math::aabb *curr_bounds = &bounds[i];
-    
     const float number_of_buckets = 64.f;
     
-    const float x_bucket_scale = (math::vec3_get_x(bounds_size.half_extents) * 2.f) / number_of_buckets;
-    const uint32_t x_bucket_start = (math::floor(math::vec3_get_x(curr_bounds->min) - math::vec3_get_x(curr_bounds->origin) / x_bucket_scale));
-    const uint32_t x_bucket_end   = (math::floor(math::vec3_get_x(curr_bounds->max) - math::vec3_get_x(curr_bounds->origin) / x_bucket_scale));
+    const math::vec3 buckets = math::vec3_init(64.f, 64.f, 64.f);
+    const math::vec3 extent = math::vec3_scale(bounds_size.half_extents, 2.f);
+    const math::vec3 scale = math::vec3_divide(buckets, extent);
     
-    const float y_bucket_scale = (math::vec3_get_y(bounds_size.half_extents) * 2.f) / number_of_buckets;
-    const uint32_t y_bucket_start = (math::floor(math::vec3_get_y(curr_bounds->min) - math::vec3_get_y(curr_bounds->origin) / y_bucket_scale));
-    const uint32_t y_bucket_end   = (math::floor(math::vec3_get_y(curr_bounds->max) - math::vec3_get_y(curr_bounds->origin) / y_bucket_scale));
-
-    const float z_bucket_scale = (math::vec3_get_z(bounds_size.half_extents) * 2.f) / number_of_buckets;
-    const uint32_t z_bucket_start = (math::floor(math::vec3_get_z(curr_bounds->min) - math::vec3_get_z(curr_bounds->origin) / z_bucket_scale));
-    const uint32_t z_bucket_end   = (math::floor(math::vec3_get_z(curr_bounds->max) - math::vec3_get_z(curr_bounds->origin) / z_bucket_scale));
+    const math::vec3 min = math::vec3_add(curr_bounds->min, curr_bounds->origin);
+    const math::vec3 max = math::vec3_add(curr_bounds->max, curr_bounds->origin);
     
-    // Push the aabb into all the buckets it belongs to.
-    // What about 0 index? eeks?
-    for(uint32_t x = x_bucket_start; x < x_bucket_end; ++x) {
-      for(uint32_t y = y_bucket_start; y < y_bucket_end; ++y) {
-        for(uint32_t z = z_bucket_start; z < z_bucket_end; ++z)
+    const math::vec3 offset_origin_min = math::vec3_add(bounds_size.origin, min);
+    const math::vec3 offset_origin_max = math::vec3_add(bounds_size.origin, max);
+    
+    const math::vec3 offset_min = math::vec3_multiply(math::vec3_add(offset_origin_min, bounds_size.half_extents), scale);
+    const math::vec3 offset_max = math::vec3_multiply(math::vec3_add(offset_origin_max, bounds_size.half_extents), scale);
+    
+    // Get ranges.
+    const uint32_t get_x_start = math::vec3_get_x(offset_min);
+    const uint32_t get_x_end = math::vec3_get_x(offset_max);
+    
+    const uint32_t get_y_start = math::vec3_get_y(offset_min);
+    const uint32_t get_y_end = math::vec3_get_y(offset_max);
+    
+    const uint32_t get_z_start = math::vec3_get_z(offset_min);
+    const uint32_t get_z_end = math::vec3_get_z(offset_max);
+    
+    for(uint32_t x = get_x_start; x < get_x_end; ++x) {
+      for(uint32_t y = get_y_start; y < get_y_end; ++y) {
+        for(uint32_t z = get_z_start; z < get_z_end; ++z)
         {
-          const uint32_t no_buckets = math::to_uint(number_of_buckets);
-          const uint32_t index = (x + (y * no_buckets) + (z * no_buckets * no_buckets));
-          Bucket *bucket = &mark_and_sweep->bucket[index];
-          const uint32_t curr_size = bucket->size;
+          const uint32_t index = x + (y * 64) + (z * 64 * 64);
           
-//          bucket->entity_bounds[curr_size] = bounds[i];
-//          bucket->id[curr_size] = id[i];
-
-          bucket->entity_bounds.push_back(bounds[i]);
-          bucket->ids.push_back(id[i]);
-          
-          ++(bucket->size);
+          mark_and_sweep->bucket[index].entity_bounds.push_back(bounds[i]);
+          mark_and_sweep->bucket[index].ids.push_back(id[i]);
         }
       }
     }
+    
   }
 }
 

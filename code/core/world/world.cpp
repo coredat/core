@@ -117,18 +117,20 @@ World::get_overlapping_aabbs(const std::function<void(const Physics_engine::Coll
     transformed_aabbs.push_back(copy);
   }
   
+  constexpr float size = 100;
+  
   World_data::Sweep_and_prune sweep;
   World_data::sweep_and_prune_create(&sweep,
                                      entity_data->entity_id,
                                      transformed_aabbs.data(),
                                      entity_data->size,
-                                     math::aabb_init(math::vec3_init(50, 50, 50), math::vec3_init(-50, -50, -50), math::vec3_zero()));
+                                     math::aabb_init(math::vec3_init(size, size, size), math::vec3_init(-size, -size, -size), math::vec3_zero()));
   
-  for(uint32_t i = 0; i < 8 * 8 * 8; ++i)
+  for(uint32_t i = 0; i < 64 * 64 * 64; ++i)
   {
-    if(sweep.bucket[i].size)
+    if(sweep.bucket[i].entity_bounds.size() > 2)
     {
-      const std::string size = "bucket " + std::to_string(i) + " size:" + std::to_string(sweep.bucket[i].size);
+      const std::string size = "bucket " + std::to_string(i) + " size:" + std::to_string(sweep.bucket[i].entity_bounds.size());
       
       LOG_INFO(size.c_str())
     }
