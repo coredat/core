@@ -21,17 +21,20 @@ struct Bucket
 {
   math::aabb bounds;
 
-  Core::Entity_id id[64];
-  math::aabb entity_bounds[64];
+  std::vector<Core::Entity_id> ids;
+  std::vector<math::aabb> entity_bounds;
+  //Core::Entity_id id[32];
+  //math::aabb entity_bounds[32];
   
   uint32_t size = 0;
-  const uint32_t capacity = 64;
+  const uint32_t capacity = 32;
 };
 
 
 struct Sweep_and_prune
 {
-  Bucket bucket[8 * 8 * 8];
+//  Bucket bucket[4 * 4 * 4];
+  std::vector<Bucket> bucket;
 };
 
 

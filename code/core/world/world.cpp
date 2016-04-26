@@ -1,4 +1,4 @@
-#include "world.hpp"
+ #include "world.hpp"
 #include <core/world/world_setup.hpp>
 
 #include <core/memory/memory.hpp>
@@ -104,12 +104,25 @@ World::get_overlapping_aabbs(const std::function<void(const Physics_engine::Coll
 //                                   max_collisions,
 //                                   &out_number_of_collisions);
   
+  // Create aabbs with tranforms
+//  math::aabb transformed_aabbs[2048];
+  std::vector<math::aabb> transformed_aabbs;
+  
+  for(uint32_t i = 0; i < entity_data->size; ++i)
+  {
+    math::aabb copy(entity_data->aabb[i]);
+    math::aabb_scale(copy, entity_data->transform[i].scale);
+    copy.origin = entity_data->transform[i].position;
+    //transformed_aabbs[i] = copy;
+    transformed_aabbs.push_back(copy);
+  }
+  
   World_data::Sweep_and_prune sweep;
   World_data::sweep_and_prune_create(&sweep,
                                      entity_data->entity_id,
-                                     entity_data->aabb,
+                                     transformed_aabbs.data(),
                                      entity_data->size,
-                                     math::aabb_init(math::vec3_init(100, 100, 100), math::vec3_init(-100, -100, -100), math::vec3_zero()));
+                                     math::aabb_init(math::vec3_init(50, 50, 50), math::vec3_init(-50, -50, -50), math::vec3_zero()));
   
   for(uint32_t i = 0; i < 8 * 8 * 8; ++i)
   {
