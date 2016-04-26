@@ -20,6 +20,8 @@
 
 #include <systems/physics_engine/physics_engine.hpp>
 
+#include <data/world_data/sweep_and_prune.hpp>
+
 
 namespace Core {
 
@@ -87,33 +89,50 @@ World::get_overlapping_aabbs(const std::function<void(const Physics_engine::Coll
   if(!callback) { return; }
 
   // TODO need this on a memory pool, get it out of the stack.
-  constexpr uint32_t max_collisions = 1 << 13;
-  Physics_engine::Collision_pair out_collisions[max_collisions];
-  uint32_t out_number_of_collisions(0);
-  {
+//  constexpr uint32_t max_collisions = 1 << 13;
+//  Physics_engine::Collision_pair out_collisions[max_collisions];
+//  uint32_t out_number_of_collisions(0);
+//  {
     const World_data::Entity_pool *entity_data = m_impl->world_data->data.entity_pool;
-
-    // Get the collisions.
-    Physics_engine::get_collisions(entity_data->entity_id,
-                                   entity_data->transform,
-                                   entity_data->aabb,
-                                   entity_data->size,
-                                   out_collisions,
-                                   max_collisions,
-                                   &out_number_of_collisions);
-  }
-
-  callback(out_collisions, out_number_of_collisions);
-
-  // Log a warning if we have max out the collision buffer.
+//
+//    // Get the collisions.
+//    Physics_engine::get_collisions(entity_data->entity_id,
+//                                   entity_data->transform,
+//                                   entity_data->aabb,
+//                                   entity_data->size,
+//                                   out_collisions,
+//                                   max_collisions,
+//                                   &out_number_of_collisions);
+  
+  World_data::Sweep_and_prune sweep;
+  World_data::sweep_and_prune_create(&sweep,
+                                     entity_data->entity_id,
+                                     entity_data->aabb,
+                                     entity_data->size,
+                                     math::aabb_init(math::vec3_init(100, 100, 100), math::vec3_init(-100, -100, -100), math::vec3_zero()));
+  
+  for(uint32_t i = 0; i < 8 * 8 * 8; ++i)
   {
-    static int log_max_warning_once = 0;
-    if(out_number_of_collisions >= max_collisions && !log_max_warning_once)
+    if(sweep.bucket[i].size)
     {
-      log_max_warning_once = 1;
-      LOG_WARNING("Collisions have maxed out.")
+      const std::string size = "bucket " + std::to_string(i) + " size:" + std::to_string(sweep.bucket[i].size);
+      
+      LOG_INFO(size.c_str())
     }
   }
+//  }
+
+//  callback(out_collisions, out_number_of_collisions);
+
+  // Log a warning if we have max out the collision buffer.
+//  {
+//    static int log_max_warning_once = 0;
+//    if(out_number_of_collisions >= max_collisions && !log_max_warning_once)
+//    {
+//      log_max_warning_once = 1;
+//      LOG_WARNING("Collisions have maxed out.")
+//    }
+//  }
 }
 
 
