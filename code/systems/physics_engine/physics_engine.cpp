@@ -21,7 +21,7 @@ get_collisions(
   {
     math::aabb aabb_a = aabbs[i];
 //    math::aabb_scale(aabb_a, transforms[i].scale);
-    aabb_a.origin = transforms[i].position;
+//    aabb_a.origin = transforms[i].position;
   
     for(uint32_t j = 0; j < number_of_entities_to_test; ++j)
     {
@@ -30,7 +30,7 @@ get_collisions(
         math::aabb aabb_b = aabbs[j];
 //        math::aabb_scale(aabb_b, transforms[j].scale);
         
-        aabb_b.origin = transforms[j].position;
+//        aabb_b.origin = transforms[j].position;
         
         if(math::aabb_intersection_test(aabb_a, aabb_b))
         {

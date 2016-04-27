@@ -20,17 +20,17 @@ sweep_and_prune_create(Sweep_and_prune *mark_and_sweep,
     const float number_of_buckets = 64.f;
     
     const math::vec3 buckets = math::vec3_init(64.f, 64.f, 64.f);
-    const math::vec3 extent = math::vec3_scale(bounds_size.half_extents, 2.f);
+    const math::vec3 extent = math::vec3_scale(math::aabb_get_half_extents(bounds_size), 2.f);
     const math::vec3 scale = math::vec3_divide(buckets, extent);
     
-    const math::vec3 min = math::vec3_add(curr_bounds->min, curr_bounds->origin);
-    const math::vec3 max = math::vec3_add(curr_bounds->max, curr_bounds->origin);
+    const math::vec3 min = math::vec3_add(curr_bounds->min, math::aabb_get_origin(*curr_bounds));
+    const math::vec3 max = math::vec3_add(curr_bounds->max, math::aabb_get_origin(*curr_bounds));
     
-    const math::vec3 offset_origin_min = math::vec3_add(bounds_size.origin, min);
-    const math::vec3 offset_origin_max = math::vec3_add(bounds_size.origin, max);
+    const math::vec3 offset_origin_min = math::vec3_add(math::aabb_get_origin(bounds_size), min);
+    const math::vec3 offset_origin_max = math::vec3_add(math::aabb_get_origin(bounds_size), max);
     
-    const math::vec3 offset_min = math::vec3_multiply(math::vec3_add(offset_origin_min, bounds_size.half_extents), scale);
-    const math::vec3 offset_max = math::vec3_multiply(math::vec3_add(offset_origin_max, bounds_size.half_extents), scale);
+    const math::vec3 offset_min = math::vec3_multiply(math::vec3_add(offset_origin_min, math::aabb_get_half_extents(bounds_size)), scale);
+    const math::vec3 offset_max = math::vec3_multiply(math::vec3_add(offset_origin_max, math::aabb_get_half_extents(bounds_size)), scale);
     
     // Get ranges.
     const uint32_t get_x_start = math::vec3_get_x(offset_min);

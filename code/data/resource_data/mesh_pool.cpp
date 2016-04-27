@@ -135,7 +135,7 @@ mesh_pool_push_new(Mesh_pool *pool,
     
     pool->id[free_index] = new_id;
     pool->mesh[free_index] = mesh;
-    pool->aabb[free_index] = math::aabb_from_xyz_array(positions, number_of_vertices);
+    pool->aabb[free_index] = math::aabb_init_from_xyz_data(positions, number_of_vertices);
 
     // string
     const uint32_t str_offset = free_index * MESH_POOL_MAX_FILEPATH_SIZE;
