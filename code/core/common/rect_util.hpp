@@ -30,6 +30,9 @@ float
 get_area(const Rect rect);
 
 
+// TODO: Rects overlapping?
+
+
 } // ns
 } // ns
 

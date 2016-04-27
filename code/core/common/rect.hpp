@@ -13,6 +13,7 @@ class Rect final
 {
 public:
 
+  explicit        Rect();
   explicit        Rect(const float top,
                        const float left,
                        const float bottom,

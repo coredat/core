@@ -112,29 +112,35 @@ World::get_overlapping_aabbs(const std::function<void(const Physics_engine::Coll
   {
     math::aabb copy(entity_data->aabb[i]);
     math::aabb_scale(copy, entity_data->transform[i].scale);
-    copy.origin = entity_data->transform[i].position;
+    //copy.origin = entity_data->transform[i].position;
     //transformed_aabbs[i] = copy;
     transformed_aabbs.push_back(copy);
   }
   
-  constexpr float size = 100;
+  constexpr float size = 200;
   
-  World_data::Sweep_and_prune sweep;
+  static World_data::Sweep_and_prune sweep; // Temp we need to hold onto the memory!
   World_data::sweep_and_prune_create(&sweep,
                                      entity_data->entity_id,
                                      transformed_aabbs.data(),
                                      entity_data->size,
-                                     math::aabb_init(math::vec3_init(size, size, size), math::vec3_init(-size, -size, -size), math::vec3_zero()));
+                                     math::aabb_init(math::vec3_init(size, size, size),
+                                                     math::vec3_init(-size, -size, -size)));
   
-  for(uint32_t i = 0; i < 64 * 64 * 64; ++i)
-  {
-    if(sweep.bucket[i].entity_bounds.size() > 2)
-    {
-      const std::string size = "bucket " + std::to_string(i) + " size:" + std::to_string(sweep.bucket[i].entity_bounds.size());
-      
-      LOG_INFO(size.c_str())
-    }
-  }
+  static std::vector<Physics_engine::Collision_pair> collision_pairs;
+  collision_pairs.reserve(2048);
+  uint32_t start_point = 0;
+
+  
+//  for(uint32_t i = 0; i < 64 * 64 * 64; ++i)
+//  {
+//    if(sweep.bucket[i].entity_bounds.size() > 2)
+//    {
+//      const std::string size = "bucket " + std::to_string(i) + " size:" + std::to_string(sweep.bucket[i].entity_bounds.size());
+//      
+//      //LOG_INFO(size.c_str())
+//    }
+//  }
 //  }
 
 //  callback(out_collisions, out_number_of_collisions);

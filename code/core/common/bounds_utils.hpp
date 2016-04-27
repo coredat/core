@@ -10,10 +10,17 @@ namespace Bound_utils {
 
 
 /*!
-  Creats a bounding area from an origin and extent.
+  Create a bounding area from an origin and extent.
 */
 Bounds
 create_with_origin_extents(const math::vec3 origin, const math::vec3 extents);
+
+
+/*!
+  Create a bounding area from an origin and half extents
+*/
+Bounds
+create_with_origin_half_extents(const math::vec3 origin, const math::vec3 half_extents);
 
 
 /*!
@@ -37,6 +44,13 @@ get_extents(const Bounds &bounds);
 */
 math::vec3
 get_half_extents(const Bounds &bounds);
+
+
+/*!
+  Returns true if two bounds are intersecting.
+*/
+bool
+are_intersecting(const Bounds &a, const Bounds &b);
 
 
 } // ns

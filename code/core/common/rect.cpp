@@ -5,6 +5,12 @@
 namespace Core {
 
 
+Rect::Rect()
+: Rect(0,0,0,0)
+{
+}
+
+
 Rect::Rect(const float top,
            const float left,
            const float bottom,
