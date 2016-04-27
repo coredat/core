@@ -1,7 +1,10 @@
 #include "texture_pool.hpp"
 #include <assert.h>
 #include <utilities/logging.hpp>
+
+#ifdef CORE_USE_SOIL
 #include <SOIL/SOIL.h>
+#endif
 
 #ifdef _WIN32
 #include <atomic>
@@ -58,7 +61,7 @@ texture_pool_load(Texture_pool *pool,
   {
     return result_id;
   }
-
+#ifdef CORE_USE_SOIL
   // Create texture
   int width, height;
   
@@ -79,6 +82,9 @@ texture_pool_load(Texture_pool *pool,
   SOIL_free_image_data(img);
   
   return new_texture_id;
+  #else
+  return 0;
+  #endif
 }
 
 
