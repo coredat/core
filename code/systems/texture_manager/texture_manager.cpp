@@ -3,7 +3,9 @@
 #include <graphics_api/ogl/ogl_texture.hpp>
 #include <graphics_api/ogl/ogl_pixel_format.hpp>
 #include <algorithm>
+#ifdef CORE_USE_SOIL
 #include <SOIL/SOIL.h>
+#endif
 #include <assert.h>
 
 
@@ -16,6 +18,7 @@ texture_load(const Load_texture textures_to_load[],
              Ogl::Texture output[],
              const std::uint32_t size_of_output_pool)
 {
+#ifdef CORE_USE_SOIL
   const std::uint32_t number_to_load = std::min(number_of_textures_to_load, size_of_output_pool);
 
   for(std::uint32_t i = 0; i < number_to_load; ++i)
@@ -44,6 +47,7 @@ texture_load(const Load_texture textures_to_load[],
     
     SOIL_free_image_data(image_data);
   }
+#endif
 }
 
 
