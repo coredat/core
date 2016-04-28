@@ -12,49 +12,84 @@ sweep_and_prune_create(Sweep_and_prune *mark_and_sweep,
                        const uint32_t number_of_entities,
                        const math::aabb bounds_size)
 {
-  mark_and_sweep->bucket.resize(64 * 64 * 64);
+//  mark_and_sweep->bucket.resize(64 * 64 * 64);
 
+  static std::vector<Core::Entity_id> ids;
+  // position and half extent
+  static std::vector<std::pair<float, float>> x_pairs;
+  static std::vector<std::pair<float, float>> y_pairs;
+  static std::vector<std::pair<float, float>> z_pairs;
+  
+  ids.clear();
+  x_pairs.clear();
+  y_pairs.clear();
+  z_pairs.clear();
+
+  // Sweep
   for(uint32_t i = 0; i < number_of_entities; ++i)
   {
-    const math::aabb *curr_bounds = &bounds[i];
-    const float number_of_buckets = 64.f;
+    const math::aabb *curr_bound = &bounds[i];
     
-    const math::vec3 buckets = math::vec3_init(64.f, 64.f, 64.f);
-    const math::vec3 extent = math::vec3_scale(math::aabb_get_half_extents(bounds_size), 2.f);
-    const math::vec3 scale = math::vec3_divide(buckets, extent);
+    math::vec3 center = math::aabb_get_origin(*curr_bound);
+    math::vec3 half_extent = math::aabb_get_half_extents(*curr_bound);
     
-    const math::vec3 min = math::vec3_add(curr_bounds->min, math::aabb_get_origin(*curr_bounds));
-    const math::vec3 max = math::vec3_add(curr_bounds->max, math::aabb_get_origin(*curr_bounds));
+    ids.push_back(id[i]);
+    x_pairs.push_back(std::pair<float, float>(math::vec3_get_x(center), math::vec3_get_x(half_extent)));
+    y_pairs.push_back(std::pair<float, float>(math::vec3_get_y(center), math::vec3_get_y(half_extent)));
+    z_pairs.push_back(std::pair<float, float>(math::vec3_get_z(center), math::vec3_get_z(half_extent)));
+  }
+  
+  // Prune x
+  auto prune = [&](auto axis)
+  {
+    uint32_t i = 0;
     
-    const math::vec3 offset_origin_min = math::vec3_add(math::aabb_get_origin(bounds_size), min);
-    const math::vec3 offset_origin_max = math::vec3_add(math::aabb_get_origin(bounds_size), max);
-    
-    const math::vec3 offset_min = math::vec3_multiply(math::vec3_add(offset_origin_min, math::aabb_get_half_extents(bounds_size)), scale);
-    const math::vec3 offset_max = math::vec3_multiply(math::vec3_add(offset_origin_max, math::aabb_get_half_extents(bounds_size)), scale);
-    
-    // Get ranges.
-    const uint32_t get_x_start = math::vec3_get_x(offset_min);
-    const uint32_t get_x_end = math::vec3_get_x(offset_max);
-    
-    const uint32_t get_y_start = math::vec3_get_y(offset_min);
-    const uint32_t get_y_end = math::vec3_get_y(offset_max);
-    
-    const uint32_t get_z_start = math::vec3_get_z(offset_min);
-    const uint32_t get_z_end = math::vec3_get_z(offset_max);
-    
-    for(uint32_t x = get_x_start; x < get_x_end; ++x) {
-      for(uint32_t y = get_y_start; y < get_y_end; ++y) {
-        for(uint32_t z = get_z_start; z < get_z_end; ++z)
+    while(i < axis.size())
+    {
+      uint32_t j = 0;
+      std::pair<float, float> self = axis[i];
+      
+      while(j < axis.size())
+      {
+        std::pair<float, float> test = axis[j];
+        
+        // Do these overlap? if so break they might be colliding.
         {
-          const uint32_t index = x + (y * 64) + (z * 64 * 64);
+          const float distance = math::abs(test.first - self.first);
+          const float combined_half_extents = test.second + self.second;
           
-          mark_and_sweep->bucket[index].entity_bounds.push_back(bounds[i]);
-          mark_and_sweep->bucket[index].ids.push_back(id[i]);
+          // If we have a potential collision stop.
+          if(distance < combined_half_extents && (j != i))
+          {
+            break;
+          }
+          // Keep looking.
+          else if(j < axis.size() - 1)
+          {
+            ++j;
+            continue;
+          }
+          // No collision on this axis, means no valid collision
+          else
+          {
+            ids.erase(std::begin(ids) + i - 1);
+            x_pairs.erase(std::begin(x_pairs) + i - 1);
+            y_pairs.erase(std::begin(y_pairs) + i - 1);
+            z_pairs.erase(std::begin(z_pairs) + i - 1);
+            
+            ++i;
+          }
         }
       }
+      
+      ++i;
     }
-    
-  }
+  };
+  
+  prune(x_pairs);
+  prune(y_pairs);
+  prune(z_pairs);
+  
 }
 
 

@@ -112,7 +112,7 @@ World::get_overlapping_aabbs(const std::function<void(const Physics_engine::Coll
   {
     math::aabb copy(entity_data->aabb[i]);
     math::aabb_scale(copy, entity_data->transform[i].scale);
-    //copy.origin = entity_data->transform[i].position;
+    math::aabb_set_origin(copy, entity_data->transform[i].position);
     //transformed_aabbs[i] = copy;
     transformed_aabbs.push_back(copy);
   }
