@@ -15,7 +15,7 @@ struct Prune
   uint32_t *ids; // array of overlapping index.
   uint32_t size = 0;
   uint32_t capacity = 0;
-}
+};
 
 
 /*!

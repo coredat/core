@@ -11,7 +11,7 @@ namespace Broadphase {
 void
 prune_init(Prune *prune, const uint32_t size_hint)
 {
-  assert(init);
+  assert(prune);
 
   prune->ids = new uint32_t[size_hint];
 }
@@ -22,7 +22,7 @@ prune_calculate(Prune *prune, const Sweep *sweep)
 {
   // For each axis prune out objects that really can't be touching.
   constexpr uint32_t number_of_axis = 3;
-  const Sweep_axis axis *axis[number_of_axis] = {sweep->x_axis, sweep->y_axis, sweep->z_axis};
+  const Sweep_axis *axis[number_of_axis] = {sweep->x_axis, sweep->y_axis, sweep->z_axis};
 
   for(uint32_t a = 0; a < number_of_axis; ++a)
   {
@@ -32,7 +32,7 @@ prune_calculate(Prune *prune, const Sweep *sweep)
 
     while(obj_id < sweep->size)
     {
-      Sweep_axis *test_obj = axis[a][obj_id];
+      const Sweep_axis *test_obj = &axis[a][obj_id];
 
       uint32_t sweep_id = 0;
 
@@ -46,7 +46,7 @@ prune_calculate(Prune *prune, const Sweep *sweep)
         }
 
         // Test if this object is overlapping
-        Sweep_axis *sweep_obj = &axis[a][sweep_id]
+        const Sweep_axis *sweep_obj = &axis[a][sweep_id];
         
         const float distance = math::abs(test_obj->center - sweep_obj->center);        
         const float combined_extent = test_obj->half_extent + sweep_obj->half_extent;
@@ -90,7 +90,7 @@ prune_calculate(Prune *prune, const Sweep *sweep)
         // Don't self check
         if(prune_index == search_index)
         {
-          ++search_id;
+          ++search_index;
           continue;
         }
 
@@ -98,17 +98,15 @@ prune_calculate(Prune *prune, const Sweep *sweep)
 
         if(curr_id == id_to_search)
         {
-          assert(false);
-
-          // remove this id
+          // Remove duplicate id.
+          memmove(&prune->ids[search_index], &prune->ids[search_index+1], (prune->size-search_index-1)*sizeof(prune->ids));
+          --prune->size;
         }
 
-        if(prune->ids[search_id] 
-
-        ++search_id;
+        ++search_index;
       }
 
-      ++prune_id;
+      ++prune_index;
     } // remove duplicate ids
   }
 }
