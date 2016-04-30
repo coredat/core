@@ -3,7 +3,7 @@
 
 
 #include <stdint.h>
-#include "sweep.hpp" // use fwd dec file.
+#include "broadphase_fwd.hpp"
 
 
 namespace Physics {
@@ -19,13 +19,10 @@ struct Prune
 
 
 /*!
- * Allocates memory for the results.
- * You should apply a hint to this, a good hint
- * would be the number of bounding boxes you gave
- * to the sweep method.
+ * Allocates the memory required for the prune method.
  */
 void
-prune_init(Prune *init, const uint32_t hint);
+prune_init(Prune *init, const Sweep *sweep);
 
 
 /*!

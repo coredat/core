@@ -23,6 +23,11 @@
 #include <data/world_data/sweep_and_prune.hpp>
 
 
+#include <systems/physics_engine/broadphase/sweep.hpp>
+#include <systems/physics_engine/broadphase/prune.hpp>
+#include <systems/physics_engine/collision/aabb_overlap.hpp>
+#include <systems/physics_engine/collision/collision_pairs.hpp>
+
 namespace Core {
 
 
@@ -106,30 +111,59 @@ World::get_overlapping_aabbs(const std::function<void(const Physics_engine::Coll
   
   // Create aabbs with tranforms
 //  math::aabb transformed_aabbs[2048];
-  std::vector<math::aabb> transformed_aabbs;
-  
-  for(uint32_t i = 0; i < entity_data->size; ++i)
-  {
-    math::aabb copy(entity_data->aabb[i]);
-    math::aabb_scale(copy, entity_data->transform[i].scale);
-    math::aabb_set_origin(copy, entity_data->transform[i].position);
-    //transformed_aabbs[i] = copy;
-    transformed_aabbs.push_back(copy);
-  }
   
   constexpr float size = 200;
   
-  static World_data::Sweep_and_prune sweep; // Temp we need to hold onto the memory!
-  World_data::sweep_and_prune_create(&sweep,
-                                     entity_data->entity_id,
-                                     transformed_aabbs.data(),
-                                     entity_data->size,
-                                     math::aabb_init(math::vec3_init(size, size, size),
-                                                     math::vec3_init(-size, -size, -size)));
+  Physics::Broadphase::Sweep sweep;
+  Physics::Broadphase::sweep_init(&sweep, entity_data->size);
+  Physics::Broadphase::sweep_calculate(&sweep, entity_data->aabb, entity_data->size);
   
-  static std::vector<Physics_engine::Collision_pair> collision_pairs;
-  collision_pairs.reserve(2048);
-  uint32_t start_point = 0;
+  Physics::Broadphase::Prune prune;
+  Physics::Broadphase::prune_init(&prune, &sweep);
+  Physics::Broadphase::prune_calculate(&prune, &sweep);
+
+  
+  // Prune out
+  std::vector<Core::Entity_id> id;
+  std::vector<math::aabb> boxes;
+  
+  uint32_t prune_stack = 0;
+  
+  for(uint32_t i = 0; i < entity_data->size; ++i)
+  {
+    if(prune_stack < prune.size && i == prune.ids[prune_stack])
+    {
+      ++prune_stack;
+      continue;
+    }
+    
+    id.push_back(entity_data->entity_id[i]);
+    boxes.push_back(entity_data->aabb[i]);
+  }
+  
+  // Calculate collisions
+  Physics::Collision::Pairs out_pairs;
+  Physics::Collision::pairs_init(&out_pairs, 2048);
+  
+  Physics::Collision::aabb_calculate_overlaps_pairs(&out_pairs, boxes.data(), boxes.size());
+  
+  
+  Physics::Broadphase::sweep_free(&sweep);
+  Physics::Broadphase::prune_free(&prune);
+  Physics::Collision::pairs_free(&out_pairs);
+
+  
+//  static World_data::Sweep_and_prune sweep; // Temp we need to hold onto the memory!
+//  World_data::sweep_and_prune_create(&sweep,
+//                                     entity_data->entity_id,
+//                                     transformed_aabbs.data(),
+//                                     entity_data->size,
+//                                     math::aabb_init(math::vec3_init(size, size, size),
+//                                                     math::vec3_init(-size, -size, -size)));
+//  
+//  static std::vector<Physics_engine::Collision_pair> collision_pairs;
+//  collision_pairs.reserve(2048);
+//  uint32_t start_point = 0;
 
   
 //  for(uint32_t i = 0; i < 64 * 64 * 64; ++i)

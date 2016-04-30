@@ -1,7 +1,7 @@
 #include "prune.hpp"
-#include <assert.h>
 #include "sweep.hpp"
 #include <math/general/general.hpp>
+#include <assert.h>
 
 
 namespace Physics {
@@ -9,11 +9,15 @@ namespace Broadphase {
 
 
 void
-prune_init(Prune *prune, const uint32_t size_hint)
+prune_init(Prune *prune, const Sweep *sweep)
 {
   assert(prune);
 
-  prune->ids = new uint32_t[size_hint];
+  const uint32_t capacity = sweep->size * 3;
+
+  prune->ids = new uint32_t[capacity];
+  prune->capacity = capacity;
+  prune->size = 0;
 }
 
 
@@ -68,8 +72,12 @@ prune_calculate(Prune *prune, const Sweep *sweep)
       // This can be pruned out.
       if(!potential_collision)
       {
-        prune->ids[prune->size++] = obj_id;
+        assert(prune->size < prune->capacity);
+        prune->ids[prune->size] = obj_id;
+        ++(prune->size);
       }
+      
+      potential_collision = false;
 
       ++obj_id;
     }
@@ -98,9 +106,17 @@ prune_calculate(Prune *prune, const Sweep *sweep)
 
         if(curr_id == id_to_search)
         {
+          const uint32_t start_move = search_index + 1;
+          const uint32_t end_move = prune->size - search_index - 1;
+        
+          memmove(&prune->ids[search_index],
+                  &prune->ids[start_move],
+                  end_move * sizeof(*prune->ids));
+        
           // Remove duplicate id.
-          memmove(&prune->ids[search_index], &prune->ids[search_index+1], (prune->size-search_index-1)*sizeof(prune->ids));
-          --prune->size;
+          --(prune->size);
+          
+          continue;
         }
 
         ++search_index;
