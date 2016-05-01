@@ -5,6 +5,8 @@
 #include <core/memory/memory.hpp>
 #include <math/transform/transform.hpp>
 #include <utilities/logging.hpp>
+#include <utilities/memory.hpp>
+
 
 namespace
 {
@@ -22,12 +24,6 @@ entity_pool_init(Entity_pool *pool)
     const Core::Memory::Chunk id_chunk = Core::Memory::request_chunk(ENTITY_POOL_SIZE * sizeof(Core::Entity_id));
     pool->entity_id = static_cast<Core::Entity_id*>(id_chunk.start_of_chunk);
     memset(pool->entity_id, 0, id_chunk.bytes_in_chunk);
-  }
-  
-  {
-    const Core::Memory::Chunk parent_id_chunk = Core::Memory::request_chunk(ENTITY_POOL_SIZE * sizeof(Core::Entity_id));
-    pool->parent_id = static_cast<Core::Entity_id*>(parent_id_chunk.start_of_chunk);
-    memset(pool->parent_id, 0, parent_id_chunk.bytes_in_chunk);
   }
   
   {
@@ -100,12 +96,26 @@ entity_pool_de_init(Entity_pool *pool)
 
 
 bool
+entity_pool_find_index(Entity_pool *pool, const Core::Entity_id id, uint32_t *out_index)
+{
+  if(Core::Entity_id_util::find_index_binary(out_index,
+                                             id,
+                                             pool->entity_id,
+                                             pool->size))
+  {
+    return true;
+  }
+  
+  return false;
+}
+
+
+bool
 entity_pool_push_new_entity(Entity_pool *pool, const Core::Entity_id id)
 {
   if(pool->size < pool->capacity)
   {
     pool->entity_id[pool->size] = id;
-    pool->parent_id[pool->size] = Core::Entity_id_util::invalid_id();
     pool->entity_properties[pool->size] = Entity_properties{0};
     pool->name[pool->size * max_entity_name_size] = '\0';
     pool->model[pool->size] = (uint32_t)0;
@@ -140,7 +150,6 @@ entity_pool_remove_entity(Entity_pool *pool, const Core::Entity_id id)
     const uint32_t end_move = pool->size - remove_id - 1;
   
     memmove(&pool->entity_id[remove_id],          &pool->entity_id[start_move],          end_move * sizeof(*pool->entity_id));
-    memmove(&pool->parent_id[remove_id],          &pool->parent_id[start_move],          end_move * sizeof(*pool->parent_id));
     memmove(&pool->entity_properties[remove_id],  &pool->entity_properties[start_move],  end_move * sizeof(*pool->entity_properties));
     memmove(&pool->name[remove_id + max_entity_name_size],  &pool->entity_properties[start_move + max_entity_name_size],  end_move * sizeof(*pool->name));
     memmove(&pool->model[remove_id],              &pool->model[start_move],              end_move * sizeof(*pool->model));
@@ -191,7 +200,7 @@ entity_pool_set_entity_name(const Entity_pool *pool,
                                              id,
                                              pool->entity_id,
                                              pool->size))
-{
+  {
     const uint32_t index = set_id * max_entity_name_size;
   
     strncpy(&pool->name[index],
@@ -200,6 +209,27 @@ entity_pool_set_entity_name(const Entity_pool *pool,
     
     pool->name[index + max_entity_name_size] = '\0'; // Make sure last char is nullptr
   }
+}
+
+
+math::transform
+entity_pool_get_transform(Entity_pool *pool,
+                          const Core::Entity_id id)
+{
+  assert(pool);
+  assert(id != Core::Entity_id_util::invalid_id());
+
+  uint32_t find_index(0);
+  if(Core::Entity_id_util::find_index_binary(&find_index,
+                                             id,
+                                             pool->entity_id,
+                                             pool->size))
+  {
+    return pool->transform[find_index];
+  }
+
+  LOG_ERROR("Unable to find transform");
+  return math::transform_init(math::vec3_zero(), math::vec3_one(), math::quat_init());
 }
 
 

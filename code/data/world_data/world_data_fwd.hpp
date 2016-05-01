@@ -20,6 +20,7 @@ struct Rigidbody_pool;
 struct Texture_pool;
 struct World;
 struct Gui_view_pool;
+struct Physics_data;
 
 
 } // ns

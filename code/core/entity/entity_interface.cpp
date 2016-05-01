@@ -2,10 +2,13 @@
 #include <core/model/model.hpp>
 #include <core/model/mesh.hpp>
 #include <core/physics/collider.hpp>
+#include <core/physics/collider_utils.hpp>
+#include <core/physics/box_collider.hpp>
 #include <data/world_data/world_data.hpp>
 #include <data/resource_data/resource_data.hpp>
 #include <core/transform/transform.hpp>
 #include <math/transform/transform.hpp>
+#include <math/geometry/aabb.hpp>
 #include <utilities/logging.hpp>
 
 
@@ -239,6 +242,44 @@ get_model(const Core::Entity_id this_id, World_data::World *world)
 void
 set_collider(const Core::Entity_id this_id, World_data::World *world, const Core::Collider &collider)
 {
+  auto phys_pool = world->physics_data;
+  assert(phys_pool);
+  
+  if(phys_pool)
+  {
+    auto entity_pool = world->entity_pool;
+    assert(entity_pool);
+  
+    uint32_t index;
+    assert(World_data::entity_pool_find_index(entity_pool, this_id, &index));
+    
+    const math::transform transform = World_data::entity_pool_get_transform(entity_pool, this_id);
+    math::aabb aabb = entity_pool->aabb[index];
+  
+    switch(collider.get_type())
+    {
+      case(Core::Collider::Type::box):
+      {
+        const Box_collider box_collider = Collider_utis::cast_to_box_collider(collider);
+        const math::vec3 box_scale = math::vec3_init(box_collider.get_x_half_extent() * 2.f, box_collider.get_y_half_extent() * 2.f, box_collider.get_z_half_extent() * 2.f);
+        const math::vec3 final_box_scale = math::vec3_multiply(box_scale, transform.scale);
+        
+        math::aabb_scale(aabb, final_box_scale);
+        
+        World_data::physics_add(phys_pool, this_id, &aabb, &transform);
+        break;
+      }
+        
+      case(Core::Collider::Type::unknown):
+      default:
+        assert(false);
+        LOG_ERROR("Unknown collider type.");
+    }
+  }
+  else
+  {
+    LOG_ERROR("No physics data has been setups.");
+  }
 }
 
 

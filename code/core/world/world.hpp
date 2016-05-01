@@ -29,7 +29,6 @@ public:
   //void                  get_overlapping_aabbs(const std::function<void(const Entity_ref ref_a, const Entity_ref ref_b)> &callback);
   void                  get_overlapping_aabbs(const std::function<void(const Physics_engine::Collision_pair pairs[], const uint32_t number_of_pairs)> &callback);
 
-
   Entity_ref            find_entity_by_name(const char *name);
   Entity_ref            find_entity_by_id(const Core::Entity_id id);
   

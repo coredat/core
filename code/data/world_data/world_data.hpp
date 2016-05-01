@@ -10,6 +10,7 @@
 #include "world.hpp"
 #include "world_pools.hpp"
 #include "world_data_fwd.hpp"
+#include "physics_data.hpp"
 
 
 #endif // inc guard

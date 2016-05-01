@@ -8,25 +8,26 @@
 
 #include <core/entity/entity.hpp>
 #include <core/entity/entity_ref.hpp>
+#include <core/world/detail/world_detail.hpp>
 
 #include <renderer/renderer.hpp>
 #include <renderer/simple_renderer/simple_renderer.hpp>
 #include <renderer/debug_line_renderer/debug_line_renderer.hpp>
 #include <renderer/gui_renderer/gui_renderer.hpp>
 
-#include <core/world/detail/world_detail.hpp>
+#include <data/world_data/physics_data.hpp>
 
 #include <utilities/logging.hpp>
-
-#include <systems/physics_engine/physics_engine.hpp>
-
-#include <data/world_data/sweep_and_prune.hpp>
-
+#include <core/entity_id.hpp>
+#include <math/math.hpp> // remove
+#include <vector> // remove
 
 #include <systems/physics_engine/broadphase/sweep.hpp>
 #include <systems/physics_engine/broadphase/prune.hpp>
 #include <systems/physics_engine/collision/aabb_overlap.hpp>
 #include <systems/physics_engine/collision/collision_pairs.hpp>
+#include <systems/physics_engine/physics_engine.hpp>
+
 
 namespace Core {
 
@@ -59,10 +60,15 @@ World::World(const World_setup &setup)
   static World_data::Application_window app_window;
   World_data::application_window_init(&app_window);
   
-  m_impl->world_data->data.entity_pool            = &world_entities;
-  m_impl->world_data->data.entity_graph_changes   = &graph_changes;
-  m_impl->world_data->data.camera_pool            = &camera_pool;
-  m_impl->world_data->data.gui_pool               = &gui_view_pool;
+  static World_data::Physics_data physics_data;
+  World_data::physics_init(&physics_data, 2048);
+  
+  
+  m_impl->world_data->data.entity_pool          = &world_entities;
+  m_impl->world_data->data.entity_graph_changes = &graph_changes;
+  m_impl->world_data->data.camera_pool          = &camera_pool;
+  m_impl->world_data->data.gui_pool             = &gui_view_pool;
+  m_impl->world_data->data.physics_data         = &physics_data;
   
   LOG_TODO("We can store the data directly and get rid of ::World_data::World")
   World_data::set_world_data(&m_impl->world_data->data);
@@ -94,25 +100,11 @@ World::get_overlapping_aabbs(const std::function<void(const Physics_engine::Coll
   if(!callback) { return; }
 
   // TODO need this on a memory pool, get it out of the stack.
-//  constexpr uint32_t max_collisions = 1 << 13;
-//  Physics_engine::Collision_pair out_collisions[max_collisions];
-//  uint32_t out_number_of_collisions(0);
-//  {
-    const World_data::Entity_pool *entity_data = m_impl->world_data->data.entity_pool;
-//
-//    // Get the collisions.
-//    Physics_engine::get_collisions(entity_data->entity_id,
-//                                   entity_data->transform,
-//                                   entity_data->aabb,
-//                                   entity_data->size,
-//                                   out_collisions,
-//                                   max_collisions,
-//                                   &out_number_of_collisions);
+  const World_data::Entity_pool *entity_data = m_impl->world_data->data.entity_pool;
   
   // Create aabbs with tranforms
 //  math::aabb transformed_aabbs[2048];
   
-  constexpr float size = 200;
   
   Physics::Broadphase::Sweep sweep;
   Physics::Broadphase::sweep_init(&sweep, entity_data->size);

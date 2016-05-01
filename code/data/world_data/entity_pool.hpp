@@ -30,16 +30,15 @@ struct Entity_properties
 */
 struct Entity_pool
 {
-  Core::Entity_id                 *entity_id;
-  Core::Entity_id                 *parent_id; // TODO: Impl or remove
-  Entity_properties               *entity_properties;
-  char                            *name;
+  Core::Entity_id                 *entity_id          = nullptr;
+  Entity_properties               *entity_properties  = nullptr;
+  char                            *name               = nullptr;
   
-  math::transform                 *transform;
-  math::aabb                      *aabb;
+  math::transform                 *transform          = nullptr;
+  math::aabb                      *aabb               = nullptr;
   
-  uint32_t                        *model;
-  uint32_t                        *texture;
+  uint32_t                        *model              = nullptr;
+  uint32_t                        *texture            = nullptr;
   
   const uint32_t                  capacity = ENTITY_POOL_SIZE;
   uint32_t                        size = 0;
@@ -61,6 +60,12 @@ entity_pool_init(Entity_pool *pool);
 void
 entity_pool_de_init(Entity_pool *pool);
 
+
+/*!
+
+*/
+bool
+entity_pool_find_index(Entity_pool *pool, const Core::Entity_id id, uint32_t *out_index);
 
 
 /*!
@@ -99,6 +104,13 @@ entity_pool_get_entity_name(const Entity_pool *pool, const Core::Entity_id id);
 void
 entity_pool_set_entity_name(const Entity_pool *pool, const Core::Entity_id id, const char *set_name);
 
+
+/*!
+  Get the entity transform
+*/
+math::transform
+entity_pool_get_transform(Entity_pool *pool,
+                          const Core::Entity_id id);
 
 } // ns
 
