@@ -159,6 +159,11 @@ set_transform(const Core::Entity_id this_id, World_data::World *world,const Tran
   ent_pool->transform[index] = new_transform;
   
   World_data::entity_graph_change_push(world->entity_graph_changes, this_id, World_data::Entity_graph_change::updated);
+  
+  // Update collider
+  {
+    World_data::physics_update(world->physics_data, this_id, &ent_pool->aabb[index], &ent_pool->transform[index]);
+  }
 }
 
 

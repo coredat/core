@@ -1,5 +1,6 @@
 #include "world_pools.hpp"
 #include "entity_pool.hpp"
+#include "physics_data.hpp"
 #include "graph_change_pool.hpp"
 #include <core/entity/entity.hpp>
 #include <core/entity/entity_ref.hpp>
@@ -117,7 +118,8 @@ world_update_scene_graph_changes(World_data::World *world_data,
       case(World_data::Entity_graph_change::removed):
       {
         entity_pool_remove_entity(world_data->entity_pool, change.entity_id);
-
+        physics_remove(world_data->physics_data, change.entity_id);
+      
         break;
       }
       

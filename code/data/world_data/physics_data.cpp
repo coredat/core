@@ -58,6 +58,7 @@ physics_add(Physics_data *data,
   
   if(index < (uint32_t)-1)
   {
+    data->entity_id[index] = id;
     data->aabb_collider[index] = *aabb;
     data->transform[index] = *trans;
   }
@@ -65,32 +66,49 @@ physics_add(Physics_data *data,
   {
     LOG_ERROR("Failed to find a free slot");
   }
+  
+  ++data->size;
 }
 
 
 void
-physics_remove(Physics_data *data, const Core::Entity_id id)
+physics_remove(Physics_data *data,
+               const Core::Entity_id id)
 {
   for(uint32_t i = 0; i < data->capacity; ++i)
   {
     if(data->entity_id[i] == id)
     {
       const uint32_t start = i;
-    
+      
       const uint32_t start_move = i + 1;
       const uint32_t end_move = data->capacity - i - 1;
-    
-      memmove(&data->entity_id[i], &data->entity_id[start_move], end_move * sizeof(*data->entity_id));
-      memmove(&data->transform[i], &data->transform[start_move], end_move * sizeof(*data->transform));
-      memmove(&data->aabb_collider[i], &data->aabb_collider[start_move], end_move * sizeof(*data->aabb_collider));
+      
+      memmove(&data->entity_id[start], &data->entity_id[start_move], end_move * sizeof(*data->entity_id));
+      memmove(&data->transform[start], &data->transform[start_move], end_move * sizeof(*data->transform));
+      memmove(&data->aabb_collider[start], &data->aabb_collider[start_move], end_move * sizeof(*data->aabb_collider));
+      
+      --data->size;
     }
   }
 }
 
 
 void
-physics_update(Physics_data *data)
+physics_update(Physics_data *data,
+               const Core::Entity_id id,
+               const math::aabb *aabb,
+               const math::transform *trans)
 {
+  for(uint32_t i = 0; i < data->capacity; ++i)
+  {
+    // Found an existing entity that shares same id.
+    if(data->entity_id[i] == id)
+    {
+      data->aabb_collider[i] = *aabb;
+      data->transform[i] = *trans;
+    }
+  }
 }
 
 

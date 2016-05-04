@@ -39,12 +39,15 @@ physics_add(Physics_data *data,
 
 
 void
-physics_remove(Physics_data *data, const Core::Entity_id id);
+physics_remove(Physics_data *data,
+               const Core::Entity_id id);
 
 
 void
-physics_update(Physics_data *data);
-
+physics_update(Physics_data *data,
+               const Core::Entity_id id,
+               const math::aabb *aabb,
+               const math::transform *trans);
 
 uint32_t
 physics_find_index(Physics_data *data, const Core::Entity_id id);
