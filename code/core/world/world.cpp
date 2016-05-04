@@ -92,7 +92,7 @@ World::think(const float dt)
 
 void
 //World::get_overlapping_aabbs(const std::function<void(const Entity_ref ref_a, const Entity_ref ref_b)> &callback)
-World::get_overlapping_aabbs(const std::function<void(const Physics_engine::Collision_pair pairs[],
+World::get_overlapping_aabbs(const std::function<void(const Core::Collision_pair pairs[],
                                                       const uint32_t number_of_pairs)> &callback)
 {
   // Check we have a callback.
@@ -129,19 +129,43 @@ World::get_overlapping_aabbs(const std::function<void(const Physics_engine::Coll
     }
     
     id.push_back(data->entity_id[i]);
-    boxes.push_back(data->aabb_collider[i]);
+    
+    math::aabb box_copy(data->aabb_collider[i]);
+    math::aabb_scale(box_copy, data->transform[i].scale);
+    math::aabb_set_origin(box_copy, data->transform[i].position);
+    
+    boxes.push_back(box_copy);
   }
   
   // Calculate collisions
   Physics::Collision::Pairs out_pairs;
   Physics::Collision::pairs_init(&out_pairs, 2048 * 10);
   
+  
+  
   Physics::Collision::aabb_calculate_overlaps_pairs(&out_pairs, boxes.data(), boxes.size());
+  
+  static Core::Collision_pair *pairs = nullptr;
+  if(!pairs)
+  {
+    pairs = new Core::Collision_pair[2048];
+  }
+  
+  uint32_t number_of_pairs = 0;
+  const uint32_t max_pairs = 2048;
   
   if(out_pairs.size)
   {
-    // callbacks
-    const int i = 0;
+    // Build collision pairs array.
+    for(int32_t i = 0; i < std::min(out_pairs.size, max_pairs); ++i)
+    {
+      const uint32_t index_a = out_pairs.pair_arr[i].a;
+      const uint32_t index_b = out_pairs.pair_arr[i].b;
+
+      pairs[number_of_pairs++] = Core::Collision_pair{find_entity_by_id(data->entity_id[index_a]), find_entity_by_id(data->entity_id[index_b])};
+    }
+  
+    callback(pairs, number_of_pairs);
   }
   
   Physics::Broadphase::sweep_free(&sweep);

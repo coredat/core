@@ -5,11 +5,11 @@
 #include <core/world/world_fwd.hpp>
 #include <core/world/detail/world_detail_fwd.hpp>
 #include <core/entity/entity_fwd.hpp>
+#include <core/physics/collision_pair.hpp>
 #include <functional>
 #include <memory>
 #include <stdint.h>
 
-#include <systems/physics_engine/physics_engine.hpp>
 
 namespace Core {
 
@@ -27,7 +27,7 @@ public:
 
   void                  think(const float dt);
   //void                  get_overlapping_aabbs(const std::function<void(const Entity_ref ref_a, const Entity_ref ref_b)> &callback);
-  void                  get_overlapping_aabbs(const std::function<void(const Physics_engine::Collision_pair pairs[], const uint32_t number_of_pairs)> &callback);
+  void                  get_overlapping_aabbs(const std::function<void(const Core::Collision_pair pairs[], const uint32_t number_of_pairs)> &callback);
 
   Entity_ref            find_entity_by_name(const char *name);
   Entity_ref            find_entity_by_id(const Core::Entity_id id);
