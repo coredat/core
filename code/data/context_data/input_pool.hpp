@@ -10,7 +10,7 @@
 #define NUMBER_OF_CONTROLLERS 4
 
 
-namespace Core_data {
+namespace Context_data {
 
 
 struct Game_controller

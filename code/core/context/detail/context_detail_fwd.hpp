@@ -6,7 +6,7 @@ namespace Core {
 namespace Context_detail {
 
 
-struct Context_data;
+struct Data;
 
 
 } // ns

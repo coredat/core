@@ -7,7 +7,7 @@ namespace Sdl {
 
 
 void
-update_gamepad_controller(Core_data::Game_controller *controller, const uint32_t controller_id)
+update_gamepad_controller(Context_data::Game_controller *controller, const uint32_t controller_id)
 {
   SDL_GameController *sdl_controller = SDL_GameControllerOpen(controller_id);
 
@@ -64,7 +64,7 @@ update_gamepad_controller(Core_data::Game_controller *controller, const uint32_t
 
 
 void
-update_keyboard_controller(Core_data::Game_controller *controller)
+update_keyboard_controller(Context_data::Game_controller *controller)
 {
   const Uint8 *key_state = SDL_GetKeyboardState(nullptr);
   const Uint32 mouse_state = SDL_GetMouseState(nullptr, nullptr);

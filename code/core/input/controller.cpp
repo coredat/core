@@ -2,7 +2,6 @@
 #include <core/context/context.hpp>
 #include <core/context/detail/context_detail.hpp>
 #include <data/context_data/input_pool.hpp>
-#include <data/context_data/core_data.hpp>
 #include <utilities/logging.hpp>
 #include <assert.h>
 #include <cstring>
@@ -16,7 +15,7 @@ struct Controller::Impl
 {
   uint32_t controller_number;
   
-  std::shared_ptr<const Context_detail::Context_data> context_data;
+  std::shared_ptr<const Context_detail::Data> context_data;
 };
 
 
@@ -68,7 +67,7 @@ Controller::get_axis(const uint8_t axis) const
   constexpr uint8_t max_axes = 2;
 
   assert(m_impl && m_impl->context_data);
-  const Core_data::Input_pool *input = m_impl->context_data->input_pool;
+  const Context_data::Input_pool *input = m_impl->context_data->input_pool;
 
   if(input && input->size > m_impl->controller_number && axis < max_axes)
   {
@@ -85,7 +84,7 @@ Controller::get_trigger(const uint8_t trigger) const
   constexpr uint8_t max_triggers = 2;
 
   assert(m_impl && m_impl->context_data);
-  const Core_data::Input_pool *input = m_impl->context_data->input_pool;
+  const Context_data::Input_pool *input = m_impl->context_data->input_pool;
 
   if(input && input->size > m_impl->controller_number && trigger < max_triggers)
   {
@@ -100,7 +99,7 @@ bool
 Controller::is_button_down(const Button::ENUM button) const
 {
   assert(m_impl && m_impl->context_data);
-  const Core_data::Input_pool *input = m_impl->context_data->input_pool;
+  const Context_data::Input_pool *input = m_impl->context_data->input_pool;
 
   if(input && input->size > m_impl->controller_number)
   {

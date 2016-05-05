@@ -13,6 +13,10 @@
 namespace Core {
 
 
+/*
+  Core Context represents the hardware in your application.
+  Input, windows etc.
+*/
 class Context final
 {
 private:
@@ -52,7 +56,7 @@ private:
 
   friend class Core::Input::Controller;
 
-  std::shared_ptr<const Context_detail::Context_data>  get_context_data() const;
+  std::shared_ptr<const Context_detail::Data>  get_context_data() const;
   
 private:
 

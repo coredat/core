@@ -11,7 +11,6 @@
 
 #include <core/context/context.hpp>
 #include <core/context/detail/context_detail.hpp>
-#include <data/context_data/core_data.hpp>
 #include <graphics_api/initialize.hpp>
 #include <graphics_api/ogl/ogl_common.hpp>
 #include <systems/sdl_backend/sdl_message_loop.hpp>
@@ -47,10 +46,10 @@ namespace Core {
 struct
 Context::Impl
 {
-  bool is_open;
-  SDL_Window *window;
-  SDL_GLContext context;
-  std::shared_ptr<Context_detail::Context_data> context_data;
+  bool is_open = true;
+  SDL_Window *window = nullptr;
+  SDL_GLContext context = nullptr;
+  std::shared_ptr<Context_detail::Data> context_data = std::make_shared<Context_detail::Data>();
 };
 
 
@@ -59,13 +58,7 @@ Context::Context(const uint32_t width,
                  const bool is_fullscreen,
                  const char *title,
                  Context_setup settings)
-: m_impl(new Context::Impl
-{
-  true,
-  nullptr,
-  nullptr,
-  std::make_shared<Context_detail::Context_data>()
-})
+: m_impl(new Context::Impl{})
 {
   if(instance_created)
   {
@@ -174,8 +167,8 @@ Context::Context(const uint32_t width,
 
   // Core data
   LOG_TODO("Remove static data stores")
-  static Core_data::Input_pool core_input;
-  Core_data::input_data_init(&core_input);
+  static Context_data::Input_pool core_input;
+  Context_data::input_data_init(&core_input);
   
   m_impl->context_data->input_pool = &core_input;
 }
@@ -377,7 +370,7 @@ Context::operator bool() const
 }
 
 
-std::shared_ptr<const Context_detail::Context_data>
+std::shared_ptr<const Context_detail::Data>
 Context::get_context_data() const
 {
   assert(m_impl);
