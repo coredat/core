@@ -25,7 +25,6 @@ public:
   math::vec3          get_position() const                { return m_position; }
   void                set_position(const math::vec3 pos)  { m_position = pos;  }
   
-  math::vec3          get_eular() const;
   math::quat          get_rotation() const                { return m_rotation; }
   void                set_rotation(const math::quat rot)  { m_rotation = rot;  }
   

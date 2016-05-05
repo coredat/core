@@ -5,7 +5,7 @@
 #include <core/entity_id.hpp>
 #include <core/entity/entity_fwd.hpp>
 #include <core/transform/transform_fwd.hpp>
-#include <core/physics/collider.hpp>
+#include <core/physics/physics_fwd.hpp>
 #include <core/model/model_fwd.hpp>
 #include <core/world/world_fwd.hpp>
 #include <stdint.h>

@@ -32,15 +32,6 @@ Transform::Transform()
 
 
 math::vec3
-Transform::get_eular() const
-{
-  assert(false);
-  return math::vec3_zero();
-  //return math::quat_get_euler_angles_in_radians(m_rotation);
-}
-
-
-math::vec3
 Transform::get_forward() const
 {
   return math::quat_rotate_point(m_rotation, world_forward);

@@ -2,7 +2,8 @@
 #define BOUNDS_UTILS_INCLUDED_B526F540_56AA_4DFA_89E2_0806AFDB6284
 
 
-#include <core/common/bounds.hpp>
+#include <core/common/common_fwd.hpp>
+#include <math/vec/vec_fwd.hpp>
 
 
 namespace Core {

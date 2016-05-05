@@ -1,4 +1,5 @@
 #include <core/common/bounds_utils.hpp>
+#include <core/common/bounds.hpp>
 #include <math/vec/vec3.hpp>
 #include <utilities/logging.hpp>
 #include <assert.h>

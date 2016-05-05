@@ -6,6 +6,7 @@
 #include <graphics_api/initialize.hpp>
 #include <graphics_api/clear.hpp>
 
+#include <core/physics/collision_pair.hpp>
 #include <core/entity/entity.hpp>
 #include <core/entity/entity_ref.hpp>
 #include <core/world/detail/world_detail.hpp>
@@ -39,7 +40,7 @@ struct World::Impl
 };
 
 
-World::World(const World_setup &setup)
+World::World(const World_setup setup)
 : m_impl(new World::Impl)
 {
   const size_t chunk_128_mb = 134217728;

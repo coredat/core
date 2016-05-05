@@ -6,7 +6,7 @@
 #include <core/transform/transform_fwd.hpp>
 #include <core/physics/physics_fwd.hpp>
 #include <core/model/model_fwd.hpp>
-#include <data/world_data/world_pools.hpp>
+#include <data/world_data/world_data_fwd.hpp>
 #include <stdint.h>
 #include <memory>
 

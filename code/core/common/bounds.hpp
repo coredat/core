@@ -2,7 +2,7 @@
 #define BOUNDS_INCLUDED_CAD9D322_AF6A_4578_9287_8AC13E2DCC5C
 
 
-#include <math/vec/vec_types.hpp>
+#include <math/vec/vec_fwd.hpp>
 
 
 namespace Core {

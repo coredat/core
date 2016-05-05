@@ -4,7 +4,7 @@
 
 #include <core/entity_id.hpp>
 #include <core/transform/transform_fwd.hpp>
-#include <core/physics/collider.hpp>
+#include <core/physics/physics_fwd.hpp>
 #include <core/model/model_fwd.hpp>
 #include <data/world_data/world_pools.hpp>
 #include <stdint.h>
