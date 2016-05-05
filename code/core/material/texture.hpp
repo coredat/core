@@ -9,7 +9,7 @@
 namespace Core {
 
 
-class Texture
+class Texture final
 {
 public:
 

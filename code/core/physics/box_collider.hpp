@@ -11,7 +11,7 @@ namespace Core {
 /*
   Box Collider.
 */
-class Box_collider
+class Box_collider final
 {
 public:
 

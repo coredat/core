@@ -5,7 +5,7 @@
 namespace Core {
 
 
-class Collider
+class Collider final
 {
 public:
 
