@@ -46,7 +46,7 @@ pixel_format_green_bits(const Pixel_format fmt)
       assert(false);
       return 0;
   }
-  
+  UNREACHABLE;
   return 0;
 }
 
@@ -69,7 +69,7 @@ pixel_format_blue_bits(const Pixel_format fmt)
       assert(false);
       return 0;
   }
-  
+  UNREACHABLE;
   return 0;
 }
 
@@ -91,7 +91,7 @@ pixel_format_alpha_bits(const Pixel_format fmt)
       assert(false);    
       return 0;
   }
-  
+  UNREACHABLE;
   return 0;
 }
 

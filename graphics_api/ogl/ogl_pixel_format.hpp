@@ -33,6 +33,8 @@ pixel_format_get_gl_internal_format(const Graphics_api::Pixel_format format)
     assert(false); // Yikes.
     return GL_RGBA;
   }
+
+  UNREACHABLE;
 }
 
 
@@ -53,6 +55,8 @@ pixel_format_get_format(const GLenum format)
     assert(false); // Yikes.
     return GL_RGBA;
   }
+
+  UNREACHABLE;
 }
 
 
@@ -74,6 +78,8 @@ pixel_format_get_type(const GLenum format)
     assert(false); // Yikes.
     return GL_UNSIGNED_BYTE;
   }
+
+  UNREACHABLE;
 }
 
 

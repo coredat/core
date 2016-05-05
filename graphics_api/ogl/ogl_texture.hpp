@@ -71,7 +71,7 @@ texture_update_texture_2d(Texture *update_texture,
 inline bool
 texture_is_valid(const Texture *check_is_valid)
 {
-  return !!check_is_valid->texture_id > 0;
+  return check_is_valid->texture_id > 0;
 }
 
 
