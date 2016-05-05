@@ -28,10 +28,10 @@ public:
                         ~World();
 
   void                  think(const float dt);
-  void                  get_overlapping_aabbs(const std::function<void(const Core::Collision_pair pairs[], const uint32_t number_of_pairs)> &callback);
+  void                  get_overlapping_aabbs(const std::function<void(const Core::Collision_pair pairs[],
+                                                                       const uint32_t number_of_pairs)> &callback);
 
-  Entity_ref            find_entity_by_name(const char *name);
-  Entity_ref            find_entity_by_id(const Core::Entity_id id);
+  Entity_ref            find_entity_by_id(const Core::Entity_id id) const;
   
 private:
 

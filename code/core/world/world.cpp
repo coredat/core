@@ -177,14 +177,7 @@ World::get_overlapping_aabbs(const std::function<void(const Core::Collision_pair
 
 
 Entity_ref
-World::find_entity_by_name(const char *name)
-{
-  return Entity_ref();
-}
-
-
-Entity_ref
-World::find_entity_by_id(const Core::Entity_id id)
+World::find_entity_by_id(const Core::Entity_id id) const
 {
   return Entity_ref(id, &m_impl->world_data->data);
 }
