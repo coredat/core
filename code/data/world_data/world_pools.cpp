@@ -27,7 +27,7 @@ world_create_new_entity(World *world_data,
   assert(world_data && out_entity && type_id);
   
   auto entity_pool = world_data->entity_pool;
-  //Core::Entity_id new_id{type_id, ++instance};
+  //util::generic_id new_id{type_id, ++instance};
   
   if(World_data::entity_pool_push_new_entity(entity_pool, out_entity->get_id()))
   {
@@ -46,19 +46,19 @@ world_create_new_entity(World *world_data,
 bool
 world_find_entity(World *world_data,
                   Core::Entity_ref *out_entity,
-                  const Core::Entity_id id)
+                  const util::generic_id id)
 {
   assert(world_data);
-  assert(id != Core::Entity_id_util::invalid_id());
+  assert(id != util::generic_id_invalid());
 
   auto entity_pool = world_data->entity_pool;
 
   // Search the list for the entity.
-  uint32_t index;
-  if(Core::Entity_id_util::find_index_linearly(&index,
-                                               id,
-                                               entity_pool->entity_id,
-                                               entity_pool->size))
+  size_t index;
+  if(util::generic_id_search_linearly(&index,
+                                      id,
+                                      entity_pool->entity_id,
+                                      entity_pool->size))
   {
     Core::Entity_ref found_entity(id, world_data);
     *out_entity = found_entity;
@@ -75,7 +75,7 @@ void
 world_find_entities_with_tag(World *world_data,
                              const uint32_t tag,
                              uint32_t *out_entities_for_tag,
-                             Core::Entity_id out_ids[],
+                             util::generic_id out_ids[],
                              const uint32_t size_of_out)
 {
   assert(world_data);

@@ -6,7 +6,7 @@ namespace Physics_engine {
 
 void
 get_collisions(
-  const Core::Entity_id ids[],
+  const util::generic_id ids[],
   const math::transform transforms[],
   const math::aabb aabbs[],
   const uint32_t number_of_entities_to_test,
@@ -50,7 +50,7 @@ get_collisions(
 
 //void
 //get_collisions(
-//  const Core::Entity_id ids[],
+//  const util::generic_id ids[],
 //  const math::transform transforms[],
 //  const math::aabb aabbs[],
 //  const uint32_t number_of_entities_to_test,

@@ -19,7 +19,7 @@
 #include <data/world_data/physics_data.hpp>
 
 #include <utilities/logging.hpp>
-#include <core/entity_id.hpp>
+#include <utilities/generic_id.hpp>
 #include <math/math.hpp> // remove
 #include <vector> // remove
 
@@ -117,7 +117,7 @@ World::get_overlapping_aabbs(const std::function<void(const Core::Collision_pair
   Physics::Broadphase::prune_calculate(&prune, &sweep);
 
   // Prune out
-  std::vector<Core::Entity_id> id;
+  std::vector<util::generic_id> id;
   std::vector<Physics::Collision::Axis_collidable> boxes;
   
   uint32_t prune_stack = 0;
@@ -177,7 +177,7 @@ World::get_overlapping_aabbs(const std::function<void(const Core::Collision_pair
 
 
 Entity_ref
-World::find_entity_by_id(const Core::Entity_id id) const
+World::find_entity_by_id(const util::generic_id id) const
 {
   return Entity_ref(id, &m_impl->world_data->data);
 }

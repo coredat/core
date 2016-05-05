@@ -21,8 +21,8 @@ void
 entity_pool_init(Entity_pool *pool)
 {
   {
-    const Core::Memory::Chunk id_chunk = Core::Memory::request_chunk(ENTITY_POOL_SIZE * sizeof(Core::Entity_id));
-    pool->entity_id = static_cast<Core::Entity_id*>(id_chunk.start_of_chunk);
+    const Core::Memory::Chunk id_chunk = Core::Memory::request_chunk(ENTITY_POOL_SIZE * sizeof(util::generic_id));
+    pool->entity_id = static_cast<util::generic_id*>(id_chunk.start_of_chunk);
     memset(pool->entity_id, 0, id_chunk.bytes_in_chunk);
   }
   
@@ -86,7 +86,7 @@ entity_pool_de_init(Entity_pool *pool)
   
   for(uint32_t i = 0; i < pool->size; ++i)
   {
-    if(pool->entity_id[i] != Core::Entity_id_util::invalid_id())
+    if(pool->entity_id[i] != util::generic_id_invalid())
     {
       // TODO: Re add this when more scene graph things in.
       //assert(false);
@@ -96,12 +96,12 @@ entity_pool_de_init(Entity_pool *pool)
 
 
 bool
-entity_pool_find_index(Entity_pool *pool, const Core::Entity_id id, uint32_t *out_index)
+entity_pool_find_index(Entity_pool *pool, const util::generic_id id, size_t *out_index)
 {
-  if(Core::Entity_id_util::find_index_binary(out_index,
-                                             id,
-                                             pool->entity_id,
-                                             pool->size))
+  if(util::generic_id_search_binary(out_index,
+                                    id,
+                                    pool->entity_id,
+                                    pool->size))
   {
     return true;
   }
@@ -111,7 +111,7 @@ entity_pool_find_index(Entity_pool *pool, const Core::Entity_id id, uint32_t *ou
 
 
 bool
-entity_pool_push_new_entity(Entity_pool *pool, const Core::Entity_id id)
+entity_pool_push_new_entity(Entity_pool *pool, const util::generic_id id)
 {
   if(pool->size < pool->capacity)
   {
@@ -135,16 +135,16 @@ entity_pool_push_new_entity(Entity_pool *pool, const Core::Entity_id id)
 
 
 bool
-entity_pool_remove_entity(Entity_pool *pool, const Core::Entity_id id)
+entity_pool_remove_entity(Entity_pool *pool, const util::generic_id id)
 {
   // We move down all the elements in the data down one.
   // This way we can keep fragmentation and cache misses out
   // when processing the data, but take a hit here.1
-  uint32_t remove_id;
-  if(Core::Entity_id_util::find_index_binary(&remove_id,
-                                             id,
-                                             pool->entity_id,
-                                             pool->size))
+  size_t remove_id;
+  if(util::generic_id_search_binary(&remove_id,
+                                    id,
+                                    pool->entity_id,
+                                    pool->size))
   {
     const uint32_t start_move = remove_id + 1;
     const uint32_t end_move = pool->size - remove_id - 1;
@@ -168,16 +168,16 @@ entity_pool_remove_entity(Entity_pool *pool, const Core::Entity_id id)
 
 
 const char *
-entity_pool_get_entity_name(const Entity_pool *pool, const Core::Entity_id id)
+entity_pool_get_entity_name(const Entity_pool *pool, const util::generic_id id)
 {
   assert(pool);
-  assert(id != Core::Entity_id_util::invalid_id());
+  assert(id != util::generic_id_invalid());
   
-  uint32_t remove_id(0);
-  if(Core::Entity_id_util::find_index_binary(&remove_id,
-                                             id,
-                                             pool->entity_id,
-                                             pool->size))
+  size_t remove_id(0);
+  if(util::generic_id_search_binary(&remove_id,
+                                    id,
+                                    pool->entity_id,
+                                    pool->size))
   {
     return &pool->name[remove_id * max_entity_name_size];
   }
@@ -189,17 +189,17 @@ entity_pool_get_entity_name(const Entity_pool *pool, const Core::Entity_id id)
 
 void
 entity_pool_set_entity_name(const Entity_pool *pool,
-                            const Core::Entity_id id,
+                            const util::generic_id id,
                             const char *set_name)
 {
   assert(pool);
-  assert(id != Core::Entity_id_util::invalid_id());
+  assert(id != util::generic_id_invalid());
   
-  uint32_t set_id(0);
-  if(Core::Entity_id_util::find_index_binary(&set_id,
-                                             id,
-                                             pool->entity_id,
-                                             pool->size))
+  size_t set_id(0);
+  if(util::generic_id_search_binary(&set_id,
+                                    id,
+                                    pool->entity_id,
+                                    pool->size))
   {
     const uint32_t index = set_id * max_entity_name_size;
   
@@ -214,16 +214,16 @@ entity_pool_set_entity_name(const Entity_pool *pool,
 
 math::transform
 entity_pool_get_transform(Entity_pool *pool,
-                          const Core::Entity_id id)
+                          const util::generic_id id)
 {
   assert(pool);
-  assert(id != Core::Entity_id_util::invalid_id());
+  assert(id != util::generic_id_invalid());
 
-  uint32_t find_index(0);
-  if(Core::Entity_id_util::find_index_binary(&find_index,
-                                             id,
-                                             pool->entity_id,
-                                             pool->size))
+  size_t find_index(0);
+  if(util::generic_id_search_binary(&find_index,
+                                    id,
+                                    pool->entity_id,
+                                    pool->size))
   {
     return pool->transform[find_index];
   }

@@ -3,7 +3,7 @@
 
 
 #include "world_data_fwd.hpp"
-#include <core/entity_id.hpp>
+#include <utilities/generic_id.hpp>
 #include <core/entity/entity_fwd.hpp>
 #include <stdint.h>
 
@@ -51,7 +51,7 @@ world_create_new_entity(World *world_data,
 bool
 world_find_entity(World *world_data,
                   Core::Entity_ref *out_entity,
-                  const Core::Entity_id id);
+                  const util::generic_id id);
 
 
 /*!
@@ -66,7 +66,7 @@ void
 world_find_entities_with_tag(World *world_data,
                              const uint32_t tag,
                              uint32_t *out_entities_for_tag,
-                             Core::Entity_id out_ids[],
+                             util::generic_id out_ids[],
                              const uint32_t size_of_out);
   
   

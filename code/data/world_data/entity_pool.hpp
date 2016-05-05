@@ -2,10 +2,10 @@
 #define ENTITY_POOL_INCLUDED_1A43BE4E_FC2B_4052_98FB_C7D78CD94C07
 
 
-#include <core/entity_id.hpp>
+#include <utilities/generic_id.hpp>
 #include <math/transform/transform_types.hpp>
 #include <math/geometry/geometry_types.hpp>
-#include <core/entity_id.hpp>
+#include <utilities/generic_id.hpp>
 #include <stddef.h>
 
 
@@ -30,7 +30,7 @@ struct Entity_properties
 */
 struct Entity_pool
 {
-  Core::Entity_id                 *entity_id          = nullptr;
+  util::generic_id                 *entity_id          = nullptr;
   Entity_properties               *entity_properties  = nullptr;
   char                            *name               = nullptr;
   
@@ -65,7 +65,7 @@ entity_pool_de_init(Entity_pool *pool);
 
 */
 bool
-entity_pool_find_index(Entity_pool *pool, const Core::Entity_id id, uint32_t *out_index);
+entity_pool_find_index(Entity_pool *pool, const util::generic_id id, size_t *out_index);
 
 
 /*!
@@ -75,7 +75,7 @@ entity_pool_find_index(Entity_pool *pool, const Core::Entity_id id, uint32_t *ou
  \return true if it successfully inserted an object.
 */
 bool
-entity_pool_push_new_entity(Entity_pool *pool, const Core::Entity_id id);
+entity_pool_push_new_entity(Entity_pool *pool, const util::generic_id id);
 
 
 /*!
@@ -85,7 +85,7 @@ entity_pool_push_new_entity(Entity_pool *pool, const Core::Entity_id id);
   \return true if the id was found and removed.
 */
 bool
-entity_pool_remove_entity(Entity_pool *pool, const Core::Entity_id id);
+entity_pool_remove_entity(Entity_pool *pool, const util::generic_id id);
 
 
 /*!
@@ -95,14 +95,14 @@ entity_pool_remove_entity(Entity_pool *pool, const Core::Entity_id id);
   \return returns the name of the entity or nullptr if it couldn't find one.
 */
 const char *
-entity_pool_get_entity_name(const Entity_pool *pool, const Core::Entity_id id);
+entity_pool_get_entity_name(const Entity_pool *pool, const util::generic_id id);
 
 
 /*
   Update the name of entity. This is primarly about debugging.
 */
 void
-entity_pool_set_entity_name(const Entity_pool *pool, const Core::Entity_id id, const char *set_name);
+entity_pool_set_entity_name(const Entity_pool *pool, const util::generic_id id, const char *set_name);
 
 
 /*!
@@ -110,7 +110,7 @@ entity_pool_set_entity_name(const Entity_pool *pool, const Core::Entity_id id, c
 */
 math::transform
 entity_pool_get_transform(Entity_pool *pool,
-                          const Core::Entity_id id);
+                          const util::generic_id id);
 
 } // ns
 

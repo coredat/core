@@ -16,7 +16,7 @@ entity_graph_change_pool_init(Entity_graph_changes_pool *pool)
 
 void
 entity_graph_change_push(Entity_graph_changes_pool *pool,
-                         const Core::Entity_id entity_id,
+                         const util::generic_id entity_id,
                          Entity_graph_change change_type)
 {
   assert(pool && pool->size < pool->capacity);

@@ -14,7 +14,7 @@ namespace Core {
   
 struct Camera::Impl
 {
-  Core::Entity_id attached_entity;
+  util::generic_id attached_entity;
   ::Camera::Camera_properties properties;
 };
 
@@ -38,7 +38,7 @@ Camera::Camera(Camera &&other)
 })
 {
   // Null the other stuff
-  other.m_impl->attached_entity = Core::Entity_id_util::invalid_id();
+  other.m_impl->attached_entity = util::generic_id_invalid();
   other.m_impl->properties = ::Camera::Camera_properties();
 }
 
@@ -51,7 +51,7 @@ Camera::operator=(Camera &&other)
   m_impl->properties = other.m_impl->properties;
 
   // Null the other stuff
-  other.m_impl->attached_entity = Core::Entity_id_util::invalid_id();
+  other.m_impl->attached_entity = util::generic_id_invalid();
   other.m_impl->properties = ::Camera::Camera_properties();
 
   return *this;
@@ -62,7 +62,7 @@ namespace
 {
   void
   update_properties(::Camera::Camera_properties props,
-                    Core::Entity_id id)
+                    util::generic_id id)
   {
     World_data::World* world = World_data::get_world();
     World_data::camera_pool_update_camera(world->camera_pool, id, props);
@@ -78,7 +78,7 @@ Camera::set_attached_entity(const Entity_ref entity)
 
   // If we are retargeting this to another transform.
   // Then we must remove the old one.
-  if(m_impl->attached_entity != Core::Entity_id_util::invalid_id())
+  if(m_impl->attached_entity != util::generic_id_invalid())
   {
     World_data::camera_pool_remove_camera(world->camera_pool, m_impl->attached_entity);
   }
@@ -141,7 +141,7 @@ Camera::set_type(const Core::Camera_type cam_type)
 {
   m_impl->properties.type = cam_type;
 
-  if(m_impl->attached_entity != Core::Entity_id_util::invalid_id())
+  if(m_impl->attached_entity != util::generic_id_invalid())
   {
     update_properties(m_impl->properties, m_impl->attached_entity);
   }
@@ -160,7 +160,7 @@ Camera::set_clear_flags(const uint32_t flags)
 {
   m_impl->properties.clear_flags = flags;
   
-  if(m_impl->attached_entity != Core::Entity_id_util::invalid_id())
+  if(m_impl->attached_entity != util::generic_id_invalid())
   {
     update_properties(m_impl->properties, m_impl->attached_entity);
   }
@@ -193,7 +193,7 @@ Camera::set_width(const uint32_t width)
 {
   m_impl->properties.viewport_width = width;
 
-  if(m_impl->attached_entity != Core::Entity_id_util::invalid_id())
+  if(m_impl->attached_entity != util::generic_id_invalid())
   {
     update_properties(m_impl->properties, m_impl->attached_entity);
   }
@@ -212,7 +212,7 @@ Camera::set_height(const uint32_t height)
 {
   m_impl->properties.viewport_height = height;
 
-  if(m_impl->attached_entity != Core::Entity_id_util::invalid_id())
+  if(m_impl->attached_entity != util::generic_id_invalid())
   {
     update_properties(m_impl->properties, m_impl->attached_entity);
   }
@@ -231,7 +231,7 @@ Camera::set_feild_of_view(const float fov_radians)
 {
   m_impl->properties.fov = fov_radians;
 
-  if(m_impl->attached_entity != Core::Entity_id_util::invalid_id())
+  if(m_impl->attached_entity != util::generic_id_invalid())
   {
     update_properties(m_impl->properties, m_impl->attached_entity);
   }
@@ -250,7 +250,7 @@ Camera::set_near_plane(const float near_plane)
 {
   m_impl->properties.near_plane = near_plane;
 
-  if(m_impl->attached_entity != Core::Entity_id_util::invalid_id())
+  if(m_impl->attached_entity != util::generic_id_invalid())
   {
     update_properties(m_impl->properties, m_impl->attached_entity);
   }
@@ -269,7 +269,7 @@ Camera::set_far_plane(const float far_plane)
 {
   m_impl->properties.far_plane = far_plane;
 
-  if(m_impl->attached_entity != Core::Entity_id_util::invalid_id())
+  if(m_impl->attached_entity != util::generic_id_invalid())
   {
     update_properties(m_impl->properties, m_impl->attached_entity);
   }
@@ -288,7 +288,7 @@ Camera::set_clear_color(const Core::Color color)
 {
   m_impl->properties.clear_color = color.get_color();
 
-  if(m_impl->attached_entity != Core::Entity_id_util::invalid_id())
+  if(m_impl->attached_entity != util::generic_id_invalid())
   {
     update_properties(m_impl->properties, m_impl->attached_entity);
   }

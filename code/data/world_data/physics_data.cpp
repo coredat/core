@@ -10,7 +10,7 @@ physics_init(Physics_data *data, const uint32_t size)
 {
   LOG_TODO("get rid of static data");
 
-  static Core::Entity_id entity_data[2048];
+  static util::generic_id entity_data[2048];
   data->entity_id = entity_data;
   memset(entity_data, 0, sizeof(entity_data));
   
@@ -34,7 +34,7 @@ physics_free(Physics_data *data)
 
 void
 physics_add(Physics_data *data,
-            const Core::Entity_id id,
+            const util::generic_id id,
             const math::aabb *aabb,
             const math::transform *trans)
 {
@@ -43,7 +43,7 @@ physics_add(Physics_data *data,
   for(uint32_t i = 0; i < data->capacity; ++i)
   {
     // Found a free slot
-    if(i < index && data->entity_id[i] == Core::Entity_id_util::invalid_id())
+    if(i < index && data->entity_id[i] == util::generic_id_invalid())
     {
       index = i;
     }
@@ -73,7 +73,7 @@ physics_add(Physics_data *data,
 
 void
 physics_remove(Physics_data *data,
-               const Core::Entity_id id)
+               const util::generic_id id)
 {
   for(uint32_t i = 0; i < data->capacity; ++i)
   {
@@ -96,7 +96,7 @@ physics_remove(Physics_data *data,
 
 void
 physics_update(Physics_data *data,
-               const Core::Entity_id id,
+               const util::generic_id id,
                const math::aabb *aabb,
                const math::transform *trans)
 {

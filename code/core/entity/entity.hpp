@@ -2,7 +2,7 @@
 #define ENTITY_INCLUDED_EF96529C_E89E_4D4E_9DC2_9988B4774899
 
 
-#include <core/entity_id.hpp>
+#include <utilities/generic_id.hpp>
 #include <core/entity/entity_fwd.hpp>
 #include <core/transform/transform_fwd.hpp>
 #include <core/physics/physics_fwd.hpp>
@@ -30,7 +30,7 @@ public:
 
   explicit                      Entity();
   explicit                      Entity(const Core::World &world);
-//  explicit                      Entity(const Core::Entity_id id, World_data::World *data);
+//  explicit                      Entity(const util::generic_id id, World_data::World *data);
   
                                 ~Entity();
   
@@ -43,7 +43,7 @@ public:
   
   // ** Common Entity Interface ** //
   
-  Core::Entity_id               get_id() const;
+  util::generic_id               get_id() const;
   bool                          is_valid() const;
   
   uint32_t                      get_tags() const;

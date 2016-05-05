@@ -43,7 +43,7 @@ private:
   
   struct Ray_result
   {
-    Core::Entity_id id;
+    util::generic_id id;
     math::vec3 hit;
     math::vec3 normal;
   };

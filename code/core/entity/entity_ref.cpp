@@ -10,18 +10,18 @@ namespace Core {
 
 struct Entity_ref::Impl
 {
-  const Core::Entity_id id;
+  const util::generic_id id;
   World_data::World *world;
 };
 
 
 Entity_ref::Entity_ref()
-: Entity_ref::Entity_ref(Core::Entity_id_util::invalid_id(), nullptr)
+: Entity_ref::Entity_ref(util::generic_id_invalid(), nullptr)
 {
 }
 
 
-Entity_ref::Entity_ref(const Core::Entity_id id, World_data::World *world)
+Entity_ref::Entity_ref(const util::generic_id id, World_data::World *world)
 : m_impl(new Impl{id, world})
 {
 }
@@ -48,7 +48,7 @@ Entity_ref::Entity_ref(Entity_ref &&other)
 Entity_ref&
 Entity_ref::operator=(const Entity_ref &other)
 {
-  const_cast<Core::Entity_id&>(m_impl->id) = other.m_impl->id;
+  const_cast<util::generic_id&>(m_impl->id) = other.m_impl->id;
   m_impl->world = other.m_impl->world;
   
   return *this;
@@ -58,7 +58,7 @@ Entity_ref::operator=(const Entity_ref &other)
 Entity_ref&
 Entity_ref::operator=(Entity_ref &&other)
 {
-  const_cast<Core::Entity_id&>(m_impl->id) = other.m_impl->id;
+  const_cast<util::generic_id&>(m_impl->id) = other.m_impl->id;
   m_impl->world = other.m_impl->world;
   
   return *this;
@@ -68,7 +68,7 @@ Entity_ref::operator=(Entity_ref &&other)
 // ** Common Entity Interface ** //
 
 
-Core::Entity_id
+util::generic_id
 Entity_ref::get_id() const
 {
   return Entity_detail::get_id(m_impl->id, m_impl->world);

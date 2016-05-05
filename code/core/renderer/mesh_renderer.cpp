@@ -88,7 +88,7 @@ Mesh_renderer::render()
     
     // If we cant find the camera we'll just make a dummy orbit one for the time.
     // This is good for debugging.
-    if (id != Core::Entity_id_util::invalid_id())
+    if (id != util::generic_id_invalid())
     //if(false) // debug cam route
     {
       Core::Entity_ref ent;

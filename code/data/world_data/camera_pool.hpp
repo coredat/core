@@ -2,7 +2,7 @@
 #define CAMERA_POOL_INCLUDED_8872977A_D39E_4A73_915A_A0058E6B3550
 
 
-#include <core/entity_id.hpp>
+#include <utilities/generic_id.hpp>
 #include <systems/camera/camera_properties.hpp>
 #include <stddef.h>
 
@@ -24,7 +24,7 @@ namespace World_data {
 */
 struct Camera_pool
 {
-  Core::Entity_id             entity_id[MAX_CAMERAS];
+  util::generic_id            entity_id[MAX_CAMERAS];
   Camera::Camera_properties   camera[MAX_CAMERAS];
   uint32_t                    peer_priority_00[MAX_CAMERAS];
   uint32_t                    peer_priority_01[MAX_CAMERAS];
@@ -51,7 +51,7 @@ camera_pool_init(Camera_pool *pool);
 */
 void
 camera_pool_add_camera(Camera_pool *pool,
-                       const Core::Entity_id id,
+                       const util::generic_id id,
                        const Camera::Camera_properties props);
 
 /*!
@@ -62,7 +62,7 @@ camera_pool_add_camera(Camera_pool *pool,
 */
 void
 camera_pool_update_camera(Camera_pool *pool,
-                          const Core::Entity_id id,
+                          const util::generic_id id,
                           const Camera::Camera_properties props);
 
 /*!
@@ -72,7 +72,7 @@ camera_pool_update_camera(Camera_pool *pool,
 */
 void
 camera_pool_remove_camera(Camera_pool *pool,
-                          const Core::Entity_id id);
+                          const util::generic_id id);
 
 /*!
   Set priority of the camera
@@ -84,7 +84,7 @@ camera_pool_remove_camera(Camera_pool *pool,
 */
 void
 camera_pool_set_priority(Camera_pool *pool,
-                         const Core::Entity_id id,
+                         const util::generic_id id,
                          const uint32_t peer,
                          const uint32_t priority);
 
@@ -98,7 +98,7 @@ camera_pool_set_priority(Camera_pool *pool,
 */
 uint32_t
 camera_pool_get_priority(Camera_pool *pool,
-                         const Core::Entity_id id,
+                         const util::generic_id id,
                          const uint32_t peer);
 
 /*!
@@ -123,7 +123,7 @@ camera_pool_get_properties_for_priority(Camera_pool *pool,
   \param priority The priority you want.
   \return The entity_id. invalid_entity if none found.
 */
-Core::Entity_id
+util::generic_id
 camera_pool_get_entity_id_for_priority(Camera_pool *pool,
                                        const uint32_t peer,
                                        const uint32_t priority);

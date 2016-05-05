@@ -2,7 +2,7 @@
 #define ENTITY_REF_INCLUDED_6EB9BAB7_7AB4_4092_9FBC_BD003D9C8F83
 
 
-#include <core/entity_id.hpp>
+#include <utilities/generic_id.hpp>
 #include <core/transform/transform_fwd.hpp>
 #include <core/physics/physics_fwd.hpp>
 #include <core/model/model_fwd.hpp>
@@ -22,7 +22,7 @@ class Entity_ref final
 public:
 
   explicit                      Entity_ref();
-  explicit                      Entity_ref(const Core::Entity_id id, World_data::World *world);
+  explicit                      Entity_ref(const util::generic_id id, World_data::World *world);
                                 ~Entity_ref();
   
                                 Entity_ref(const Entity_ref&);
@@ -33,7 +33,7 @@ public:
 
   // ** Common Entity Interface ** //
   
-  Core::Entity_id               get_id() const;
+  util::generic_id               get_id() const;
   bool                          is_valid() const;
     
   uint32_t                      get_tags() const;

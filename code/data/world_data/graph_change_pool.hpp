@@ -5,7 +5,7 @@
 #define GRAPH_CHANGE_POOL 2048
 
 
-#include <core/entity_id.hpp>
+#include <utilities/generic_id.hpp>
 #include <stdint.h>
 
 
@@ -27,7 +27,7 @@ enum class Entity_graph_change : uint32_t
 struct Entity_change
 {
   Entity_graph_change change_type;
-  Core::Entity_id entity_id;
+  util::generic_id entity_id;
 };
 
 
@@ -50,7 +50,7 @@ entity_graph_change_pool_init(Entity_graph_changes_pool *pool);
   Push pending graph changes in
 */
 void
-entity_graph_change_push(Entity_graph_changes_pool *pool, const Core::Entity_id entity_id, Entity_graph_change change_type);
+entity_graph_change_push(Entity_graph_changes_pool *pool, const util::generic_id entity_id, Entity_graph_change change_type);
 
 
 } // ns

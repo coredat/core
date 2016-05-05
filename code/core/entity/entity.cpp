@@ -29,19 +29,19 @@ namespace Core {
 
 struct Entity::Impl
 {
-  Core::Entity_id id;
+  util::generic_id id;
   std::shared_ptr<World_detail::World_data> world;
 };
 
 
 Entity::Entity()
-: m_impl(new Impl{Core::Entity_id_util::invalid_id(), nullptr})
+: m_impl(new Impl{util::generic_id_invalid(), nullptr})
 {
 }
 
 
 Entity::Entity(const Core::World &world)
-: m_impl(new Impl{Core::Entity_id{1,++instance_id}, nullptr})
+: m_impl(new Impl{util::generic_id{++instance_id}, nullptr})
 {
   if(world.get_world_data())
   {
@@ -56,7 +56,7 @@ Entity::Entity(const Core::World &world)
 
 Entity::~Entity()
 {
-  if(m_impl->id != Core::Entity_id_util::invalid_id())
+  if(m_impl->id != util::generic_id_invalid())
   {
     destroy();
   }
@@ -67,7 +67,7 @@ Entity::Entity(Entity &&other)
 : m_impl(new Impl{other.m_impl->id, other.m_impl->world})
 {
   // Null other
-  const_cast<Core::Entity_id&>(other.m_impl->id) = Core::Entity_id_util::invalid_id();
+  const_cast<util::generic_id&>(other.m_impl->id) = util::generic_id_invalid();
   other.m_impl->world = nullptr;
 }
 
@@ -76,17 +76,17 @@ Entity&
 Entity::operator=(Entity &&other)
 {
   // If we just moved onto a valid entity destoy it.
-  if(m_impl->id != Core::Entity_id_util::invalid_id())
+  if(m_impl->id != util::generic_id_invalid())
   {
     destroy();
   }
 
   // Transfer the members.
-  const_cast<Core::Entity_id&>(m_impl->id) = other.m_impl->id;
+  const_cast<util::generic_id&>(m_impl->id) = other.m_impl->id;
   m_impl->world = other.m_impl->world;
   
   // Null other
-  const_cast<Core::Entity_id&>(other.m_impl->id) = Core::Entity_id_util::invalid_id();
+  const_cast<util::generic_id&>(other.m_impl->id) = util::generic_id_invalid();
   other.m_impl->world = nullptr;
   
   return *this;
@@ -109,19 +109,19 @@ Entity::destroy()
                                        m_impl->id,
                                        World_data::Entity_graph_change::removed);
   
-  m_impl->id = Core::Entity_id_util::invalid_id();
+  m_impl->id = util::generic_id_invalid();
 }
 
 
 Entity::operator bool() const
 {
-  return m_impl->id != Entity_id_util::invalid_id();
+  return m_impl->id != util::generic_id_invalid();
 }
 
 // ** Common Entity Interface ** //
 
 
-Core::Entity_id
+util::generic_id
 Entity::get_id() const
 {
   return Entity_detail::get_id(m_impl->id, &m_impl->world->data);

@@ -20,12 +20,12 @@ camera_pool_init(Camera_pool *pool)
 
 void
 camera_pool_add_camera(Camera_pool *pool,
-                       const Core::Entity_id id,
+                       const util::generic_id id,
                        const Camera::Camera_properties props)
 {
   for(uint32_t i = 0; i < pool->number_of_cameras; ++i)
   {
-    if(pool->entity_id[i] == Core::Entity_id_util::invalid_id())
+    if(pool->entity_id[i] == util::generic_id_invalid())
     {
       pool->entity_id[i] = id;
       pool->camera[i] = props;
@@ -37,7 +37,7 @@ camera_pool_add_camera(Camera_pool *pool,
 
 void
 camera_pool_update_camera(Camera_pool *pool,
-                          const Core::Entity_id id,
+                          const util::generic_id id,
                           const Camera::Camera_properties props)
 {
   for(uint32_t i = 0; i < pool->number_of_cameras; ++i)
@@ -53,16 +53,16 @@ camera_pool_update_camera(Camera_pool *pool,
 
 void
 camera_pool_remove_camera(Camera_pool *pool,
-                          const Core::Entity_id id)
+                          const util::generic_id id)
 {
   // Find index of camera pool
-  uint32_t index(0);
-  if(Core::Entity_id_util::find_index_linearly(&index,
-                                               id,
-                                               pool->entity_id,
-                                               pool->number_of_cameras))
+  size_t index(0);
+  if(util::generic_id_search_linearly(&index,
+                                      id,
+                                      pool->entity_id,
+                                      pool->number_of_cameras))
   {
-    pool->entity_id[index] = Core::Entity_id_util::invalid_id();
+    pool->entity_id[index] = util::generic_id_invalid();
     pool->peer_priority_00[index] = 0;
     pool->peer_priority_01[index] = 0;
     pool->peer_priority_02[index] = 0;
@@ -73,16 +73,16 @@ camera_pool_remove_camera(Camera_pool *pool,
 
 void
 camera_pool_set_priority(Camera_pool *pool,
-                         const Core::Entity_id id,
+                         const util::generic_id id,
                          const uint32_t peer,
                          const uint32_t priority)
 
 {
-  uint32_t index(0);
-  if(Core::Entity_id_util::find_index_linearly(&index,
-                                               id,
-                                               pool->entity_id,
-                                               pool->number_of_cameras))
+  size_t index(0);
+  if(util::generic_id_search_linearly(&index,
+                                      id,
+                                      pool->entity_id,
+                                      pool->number_of_cameras))
   {
     switch(peer)
     {
@@ -97,14 +97,14 @@ camera_pool_set_priority(Camera_pool *pool,
 
 uint32_t
 camera_pool_get_priority(Camera_pool *pool,
-                         const Core::Entity_id id,
+                         const util::generic_id id,
                          const uint32_t peer)
 {
-  uint32_t index(0);
-  if(Core::Entity_id_util::find_index_linearly(&index,
-                                               id,
-                                               pool->entity_id,
-                                               pool->number_of_cameras))
+  size_t index(0);
+  if(util::generic_id_search_linearly(&index,
+                                      id,
+                                      pool->entity_id,
+                                      pool->number_of_cameras))
   {
     switch(peer)
     {
@@ -149,7 +149,7 @@ camera_pool_get_properties_for_priority(Camera_pool *pool,
 }
 
 
-Core::Entity_id
+util::generic_id
 camera_pool_get_entity_id_for_priority(Camera_pool *pool,
                                        const uint32_t peer,
                                        const uint32_t priority)
@@ -178,7 +178,7 @@ camera_pool_get_entity_id_for_priority(Camera_pool *pool,
   }
 
   // Failed
-  return Core::Entity_id_util::invalid_id();
+  return util::generic_id_invalid();
 }
 
 
