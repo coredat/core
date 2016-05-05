@@ -8,6 +8,7 @@ namespace Collision {
 
 struct Pair;
 struct Pairs;
+struct Axis_collidable;
 
 
 } // ns

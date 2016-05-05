@@ -27,6 +27,7 @@
 #include <systems/physics_engine/collision/aabb_overlap.hpp>
 #include <systems/physics_engine/collision/collision_pairs.hpp>
 #include <systems/physics_engine/physics_engine.hpp>
+#include <systems/physics_engine/collision/axis_collidable.hpp>
 
 
 namespace Core {
@@ -116,7 +117,7 @@ World::get_overlapping_aabbs(const std::function<void(const Core::Collision_pair
 
   // Prune out
   std::vector<Core::Entity_id> id;
-  std::vector<math::aabb> boxes;
+  std::vector<Physics::Collision::Axis_collidable> boxes;
   
   uint32_t prune_stack = 0;
   
@@ -134,7 +135,7 @@ World::get_overlapping_aabbs(const std::function<void(const Core::Collision_pair
     math::aabb_scale(box_copy, data->transform[i].scale);
     math::aabb_set_origin(box_copy, data->transform[i].position);
     
-    boxes.push_back(box_copy);
+    boxes.push_back(Physics::Collision::Axis_collidable{1, box_copy});
   }
   
   // Calculate collisions

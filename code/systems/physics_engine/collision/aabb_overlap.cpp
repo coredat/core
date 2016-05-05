@@ -1,5 +1,6 @@
 #include "aabb_overlap.hpp"
 #include "collision_pairs.hpp"
+#include "axis_collidable.hpp"
 #include <math/geometry/aabb.hpp>
 
 
@@ -9,26 +10,29 @@ namespace Collision {
 
 void
 aabb_calculate_overlaps_pairs(Pairs *out_pairs,
-                              const math::aabb aabbs[],
-                              const uint32_t number_of_transforms)
+                              const Axis_collidable axis_colliders[],
+                              const uint32_t number_of_colliders)
 {
-  for(uint32_t i = 0; i < number_of_transforms; ++i)
+  for(uint32_t i = 0; i < number_of_colliders; ++i)
   {
-    const math::aabb *to_test = &aabbs[i];
-  
-    for(uint32_t j = 0; j < number_of_transforms; ++j)
+    const Axis_collidable *to_test = &axis_colliders[i];
+    
+    for(uint32_t j = 0; j < number_of_colliders; ++j)
     {
       // Don't self test.
       if(i == j)
       {
         continue;
       }
-    
-      const math::aabb *test_against = &aabbs[j];
       
-      if(math::aabb_intersection_test(*to_test, *test_against))
+      const Axis_collidable *test_against = &axis_colliders[j];
+
+      if(test_against->mask & to_test->mask)
       {
-        pairs_add(out_pairs, Pair{i, j});
+        if(math::aabb_intersection_test(to_test->bounding_box, test_against->bounding_box))
+        {
+          pairs_add(out_pairs, Pair{i, j});
+        }
       }
     }
   }

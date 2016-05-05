@@ -58,7 +58,7 @@ sweep_init(Sweep *sweep, const uint32_t number_of_bounds);
  *  order of the output sweep axis information.
  */
 void
-sweep_calculate(Sweep *sweep,
+sweep_calculate(Sweep *out_sweep,
                 const math::aabb bounding_area[],
                 const uint32_t number_of_aabbs);
 

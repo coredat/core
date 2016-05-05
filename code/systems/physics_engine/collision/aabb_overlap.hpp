@@ -11,10 +11,17 @@ namespace Physics {
 namespace Collision {
 
 
+/*!
+  Calculates which aabb's are overlapping.
+  This will take the Axis_collidable mask into account.
+  \param out_pairs The result.
+  \param axis_colliders[] The aabb's and masks to test.
+  \param number_of_colliders The size of the axis_colliders.
+*/
 void
 aabb_calculate_overlaps_pairs(Pairs *out_pairs,
-                              const math::aabb aabb[],
-                              const uint32_t number_of_transforms);
+                              const Axis_collidable axis_colliders[],
+                              const uint32_t number_of_colliders);
 
 
 } // ns
