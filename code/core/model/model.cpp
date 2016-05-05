@@ -2,8 +2,8 @@
 #include <core/model/mesh.hpp>
 #include <data/world_data/world.hpp>
 #include <data/world_data/world_pools.hpp>
-#include <data/resource_data/mesh_pool.hpp>
-#include <data/resource_data/resource_data.hpp>
+#include <data/global_data/mesh_pool.hpp>
+#include <data/global_data/resource_data.hpp>
 #include <stddef.h>
 #include <assert.h>
 

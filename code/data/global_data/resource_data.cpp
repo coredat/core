@@ -1,4 +1,4 @@
-#include <data/resource_data/resource_data.hpp>
+#include <data/global_data/resource_data.hpp>
 #include <graphics_api/initialize.hpp>
 #include <assert.h>
 

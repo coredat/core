@@ -1,6 +1,6 @@
 #include "input.hpp"
 #include "detail/controller_members.hpp"
-#include <data/core_data/core_data.hpp>
+#include <data/context_data/core_data.hpp>
 #include <systems/sdl_backend/sdl_input.hpp>
 #include <stddef.h>
 #include <string.h>

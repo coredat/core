@@ -55,20 +55,13 @@ World::World(const World_setup setup)
   
   static World_data::Camera_pool camera_pool;
   World_data::camera_pool_init(&camera_pool);
-  
-  static World_data::Gui_view_pool gui_view_pool;
-  World_data::gui_view_pool_init(&gui_view_pool);
-  
-  static World_data::Application_window app_window;
-  World_data::application_window_init(&app_window);
-  
+    
   static World_data::Physics_data physics_data;
   World_data::physics_init(&physics_data, 2048);
   
   m_impl->world_data->data.entity_pool          = &world_entities;
   m_impl->world_data->data.entity_graph_changes = &graph_changes;
   m_impl->world_data->data.camera_pool          = &camera_pool;
-  m_impl->world_data->data.gui_pool             = &gui_view_pool;
   m_impl->world_data->data.physics_data         = &physics_data;
   
   LOG_TODO("We can store the data directly and get rid of ::World_data::World")

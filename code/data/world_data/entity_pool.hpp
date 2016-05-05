@@ -30,7 +30,7 @@ struct Entity_properties
 */
 struct Entity_pool
 {
-  util::generic_id                 *entity_id          = nullptr;
+  util::generic_id                *entity_id          = nullptr;
   Entity_properties               *entity_properties  = nullptr;
   char                            *name               = nullptr;
   

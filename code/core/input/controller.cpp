@@ -1,8 +1,8 @@
 #include <core/input/controller.hpp>
 #include <core/context/context.hpp>
 #include <core/context/detail/context_detail.hpp>
-#include <data/core_data/input_pool.hpp>
-#include <data/core_data/core_data.hpp>
+#include <data/context_data/input_pool.hpp>
+#include <data/context_data/core_data.hpp>
 #include <utilities/logging.hpp>
 #include <assert.h>
 #include <cstring>

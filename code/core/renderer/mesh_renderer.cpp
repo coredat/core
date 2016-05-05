@@ -17,11 +17,10 @@
 #include <renderer/renderer.hpp>
 #include <renderer/simple_renderer/simple_renderer.hpp>
 
-#include <data/data.hpp>
-#include <data/resource_data/resource_data.hpp>
+#include <data/global_data/resource_data.hpp>
 
 #include <systems/transform/transformations.hpp>
-
+#include <data/world_data/world_data.hpp>
 #include <math/math.hpp>
 #include <vector>
 

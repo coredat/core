@@ -1,7 +1,7 @@
 #include <core/material/texture.hpp>
 #include <utilities/logging.hpp>
-#include <data/resource_data/texture_pool.hpp>
-#include <data/resource_data/resource_data.hpp>
+#include <data/global_data/texture_pool.hpp>
+#include <data/global_data/resource_data.hpp>
 
 
 namespace Core {

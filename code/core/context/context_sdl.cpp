@@ -11,7 +11,7 @@
 
 #include <core/context/context.hpp>
 #include <core/context/detail/context_detail.hpp>
-#include <data/core_data/core_data.hpp>
+#include <data/context_data/core_data.hpp>
 #include <graphics_api/initialize.hpp>
 #include <graphics_api/ogl/ogl_common.hpp>
 #include <systems/sdl_backend/sdl_message_loop.hpp>

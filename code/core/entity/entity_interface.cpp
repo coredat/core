@@ -5,7 +5,7 @@
 #include <core/physics/collider_utils.hpp>
 #include <core/physics/box_collider.hpp>
 #include <data/world_data/world_data.hpp>
-#include <data/resource_data/resource_data.hpp>
+#include <data/global_data/resource_data.hpp>
 #include <core/transform/transform.hpp>
 #include <math/transform/transform.hpp>
 #include <math/geometry/aabb.hpp>
