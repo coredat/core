@@ -21,6 +21,7 @@ using std::atomic_uint_least32_t;
 
 namespace
 {
+  // Each new entity will get a new instance id.
   atomic_uint_least32_t instance_id(0);
 }
 
@@ -263,6 +264,33 @@ Entity::get_world_data()
   return m_impl->world;
 }
 
+
+bool
+Entity::operator==(const Entity &other) const
+{
+  return this->get_id() == other.get_id();
+}
+
+
+bool
+Entity::operator==(const Entity_ref &other) const
+{
+  return this->get_id() == other.get_id();
+}
+
+
+bool
+Entity::operator!=(const Entity &other) const
+{
+  return this->get_id() != other.get_id();
+}
+
+
+bool
+Entity::operator !=(const Entity_ref &other) const
+{
+  return this->get_id() != other.get_id();
+}
 
 
 } // ns

@@ -203,4 +203,32 @@ Entity_ref::get_collider() const
 }
 
 
+bool
+Entity_ref::operator==(const Entity &other) const
+{
+  return this->get_id() == other.get_id();
+}
+
+
+bool
+Entity_ref::operator==(const Entity_ref &other) const
+{
+  return this->get_id() == other.get_id();
+}
+
+
+bool
+Entity_ref::operator!=(const Entity &other) const
+{
+  return this->get_id() != other.get_id();
+}
+
+
+bool
+Entity_ref::operator !=(const Entity_ref &other) const
+{
+  return this->get_id() != other.get_id();
+}
+
+
 } // ns

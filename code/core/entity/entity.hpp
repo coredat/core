@@ -71,15 +71,19 @@ public:
   
                                 operator bool() const;
 
-  util::generic_id                           get_id() const; // todo make private friend
-
-  // todo operators for equality etc.
+  // ** Equality ** //
+  
+  bool                          operator ==(const Entity &other) const;
+  bool                          operator ==(const Entity_ref &other) const;
+  bool                          operator !=(const Entity &other) const;
+  bool                          operator !=(const Entity_ref &other) const;
 
 private:
 
   friend class Entity_ref;
-
-
+  friend class Camera;
+  
+  util::generic_id                           get_id() const; // todo make private friend
   std::shared_ptr<const World_detail::Data>  get_world_data() const;
   std::shared_ptr<World_detail::Data>        get_world_data();
 

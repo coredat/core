@@ -35,7 +35,6 @@ public:
 
   // ** Common Entity Interface ** //
   
-  util::generic_id               get_id() const;
   bool                          is_valid() const;
     
   uint32_t                      get_tags() const;
@@ -60,6 +59,21 @@ public:
   
   void                          set_collider(const Core::Collider &collider);
   Core::Collider                get_collider() const;
+
+
+  // ** Equality ** //
+  
+  bool                          operator ==(const Entity &other) const;
+  bool                          operator ==(const Entity_ref &other) const;
+  bool                          operator !=(const Entity &other) const;
+  bool                          operator !=(const Entity_ref &other) const;
+
+private:
+
+  friend class Entity;
+  friend class Camera;
+  
+  util::generic_id              get_id() const;
 
 private:
 
