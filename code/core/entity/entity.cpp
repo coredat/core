@@ -4,10 +4,11 @@
 #include <core/transform/transform.hpp>
 #include <core/model/model.hpp>
 #include <core/physics/collider.hpp>
-#include <data/world_data/graph_change_pool.hpp>
-#include <data/world_data/world_pools.hpp>
 #include <core/world/world.hpp>
 #include <core/world/detail/world_detail.hpp>
+#include <data/world_data/graph_change_pool.hpp>
+#include <data/world_data/world_pools.hpp>
+#include <utilities/logging.hpp>
 #include <assert.h>
 
 #ifdef _WIN32
@@ -30,7 +31,7 @@ namespace Core {
 struct Entity::Impl
 {
   util::generic_id id;
-  std::shared_ptr<World_detail::World_data> world;
+  std::shared_ptr<World_detail::Data> world;
 };
 
 
@@ -40,16 +41,18 @@ Entity::Entity()
 }
 
 
-Entity::Entity(const Core::World &world)
+Entity::Entity(Core::World &world)
 : m_impl(new Impl{util::generic_id{++instance_id}, nullptr})
 {
-  if(world.get_world_data())
+  m_impl->world = world.get_world_data();
+ 
+  if(m_impl->world)
   {
-    // Not pretty! Alternativily we could have the World create the entity
-    // but that would expose the internal data types.
-    m_impl->world = std::const_pointer_cast<World_detail::World_data>(world.get_world_data());
-    
-    World_data::world_create_new_entity(&m_impl->world->data, this, 99);
+    World_data::world_create_new_entity(&m_impl->world->data, get_id());
+  }
+  else
+  {
+    LOG_ERROR("Failed to create a new entity.");
   }
 }
 
@@ -95,7 +98,7 @@ Entity::operator=(Entity &&other)
 
 Entity::operator Entity_ref() const
 {
-  return Entity_ref(m_impl->id, &m_impl->world->data);
+  return Entity_ref(*const_cast<Entity*>(this));
 }
 
 
@@ -119,13 +122,6 @@ Entity::operator bool() const
 }
 
 // ** Common Entity Interface ** //
-
-
-util::generic_id
-Entity::get_id() const
-{
-  return Entity_detail::get_id(m_impl->id, &m_impl->world->data);
-}
 
 
 bool
@@ -245,6 +241,28 @@ Entity::get_collider() const
 {
   return Entity_detail::get_collider(m_impl->id, &m_impl->world->data);
 }
+
+
+util::generic_id
+Entity::get_id() const
+{
+  return Entity_detail::get_id(m_impl->id, &m_impl->world->data);
+}
+
+
+std::shared_ptr<const World_detail::Data>
+Entity::get_world_data() const
+{
+  return m_impl->world;
+}
+
+
+std::shared_ptr<World_detail::Data>
+Entity::get_world_data()
+{
+  return m_impl->world;
+}
+
 
 
 } // ns

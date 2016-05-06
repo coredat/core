@@ -32,8 +32,7 @@ struct World
 */
 bool
 world_create_new_entity(World *world_data,
-                        Core::Entity *out_entity,
-                        const uint32_t type_id);
+                        util::generic_id id);
 
 
 /*!
@@ -43,10 +42,10 @@ world_create_new_entity(World *world_data,
   \param id is the entity we are searching.
   \return true or false depending on if we found it or not.
 */
-bool
-world_find_entity(World *world_data,
-                  Core::Entity_ref *out_entity,
-                  const util::generic_id id);
+//bool
+//world_find_entity(World *world_data,
+//                  Core::Entity_ref *out_entity,
+//                  const util::generic_id id);
 
 
 /*!

@@ -20,19 +20,18 @@ namespace World_data {
 
 bool
 world_create_new_entity(World *world_data,
-                        Core::Entity *out_entity,
-                        const uint32_t type_id)
+                        util::generic_id id)
 {
   // Param check.
-  assert(world_data && out_entity && type_id);
+  assert(world_data);
   
   auto entity_pool = world_data->entity_pool;
   //util::generic_id new_id{type_id, ++instance};
   
-  if(World_data::entity_pool_push_new_entity(entity_pool, out_entity->get_id()))
+  if(World_data::entity_pool_push_new_entity(entity_pool, id))
   {
     entity_graph_change_push(world_data->entity_graph_changes,
-                             out_entity->get_id(),
+                             id,
                              Entity_graph_change::inserted);
     
     return true;
@@ -43,32 +42,32 @@ world_create_new_entity(World *world_data,
 }
 
 
-bool
-world_find_entity(World *world_data,
-                  Core::Entity_ref *out_entity,
-                  const util::generic_id id)
-{
-  assert(world_data);
-  assert(id != util::generic_id_invalid());
-
-  auto entity_pool = world_data->entity_pool;
-
-  // Search the list for the entity.
-  size_t index;
-  if(util::generic_id_search_linearly(&index,
-                                      id,
-                                      entity_pool->entity_id,
-                                      entity_pool->size))
-  {
-    Core::Entity_ref found_entity(id, world_data);
-    *out_entity = found_entity;
-
-    return true;
-  }
-  
-  // Didn't find the entity that was requested.
-  return false;
-}
+//bool
+//world_find_entity(World *world_data,
+//                  Core::Entity_ref *out_entity,
+//                  const util::generic_id id)
+//{
+//  assert(world_data);
+//  assert(id != util::generic_id_invalid());
+//
+//  auto entity_pool = world_data->entity_pool;
+//
+//  // Search the list for the entity.
+//  size_t index;
+//  if(util::generic_id_search_linearly(&index,
+//                                      id,
+//                                      entity_pool->entity_id,
+//                                      entity_pool->size))
+//  {
+//    Core::Entity_ref found_entity(id, world_data);
+//    *out_entity = found_entity;
+//
+//    return true;
+//  }
+//  
+//  // Didn't find the entity that was requested.
+//  return false;
+//}
 
 
 void

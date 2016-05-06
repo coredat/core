@@ -38,7 +38,8 @@ private:
   friend class Core::Entity;
   friend class Core::Entity_ref;
 
-  std::shared_ptr<const World_detail::World_data>  get_world_data() const;
+  std::shared_ptr<const World_detail::Data>  get_world_data() const;
+  std::shared_ptr<World_detail::Data>        get_world_data();
 
 private:
 

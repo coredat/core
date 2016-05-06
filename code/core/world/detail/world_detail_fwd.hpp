@@ -6,7 +6,7 @@ namespace Core {
 namespace World_detail {
 
 
-struct World_data;
+struct Data;
 
 
 } // ns

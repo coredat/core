@@ -36,7 +36,7 @@ namespace Core {
 
 struct World::Impl
 {
-  std::shared_ptr<World_detail::World_data> world_data = std::make_shared<World_detail::World_data>();
+  std::shared_ptr<World_detail::Data> world_data = std::make_shared<World_detail::Data>();
 };
 
 
@@ -86,7 +86,6 @@ World::think(const float dt)
 
 
 void
-//World::get_overlapping_aabbs(const std::function<void(const Entity_ref ref_a, const Entity_ref ref_b)> &callback)
 World::get_overlapping_aabbs(const std::function<void(const Core::Collision_pair pairs[],
                                                       const uint32_t number_of_pairs)> &callback)
 {
@@ -172,17 +171,24 @@ World::get_overlapping_aabbs(const std::function<void(const Core::Collision_pair
 Entity_ref
 World::find_entity_by_id(const util::generic_id id) const
 {
-  return Entity_ref(id, &m_impl->world_data->data);
+  return Entity_ref(id, *const_cast<World*>(this));
 }
 
 
-std::shared_ptr<const World_detail::World_data>
+std::shared_ptr<const World_detail::Data>
 World::get_world_data() const
 {
   assert(m_impl);
   return m_impl->world_data;
 }
 
+
+std::shared_ptr<World_detail::Data>
+World::get_world_data()
+{
+  assert(m_impl);
+  return m_impl->world_data;
+}
 
 
 } // ns

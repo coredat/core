@@ -90,10 +90,11 @@ Mesh_renderer::render()
     if (id != util::generic_id_invalid())
     //if(false) // debug cam route
     {
-      Core::Entity_ref ent;
-      World_data::world_find_entity(world, &ent, id);
+      size_t ent_index;
+      World_data::entity_pool_find_index(world->entity_pool, id, &ent_index);
 
-      const Core::Transform cam_transform = ent.get_transform();
+      const math::transform trans = world->entity_pool->transform[ent_index];
+      const Core::Transform cam_transform(trans.position, trans.scale, trans.rotation);
       
       view = math::mat4_lookat(cam_transform.get_position(),
                                math::vec3_add(cam_transform.get_position(), cam_transform.get_forward()),

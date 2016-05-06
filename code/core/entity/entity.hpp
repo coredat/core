@@ -8,6 +8,7 @@
 #include <core/physics/physics_fwd.hpp>
 #include <core/model/model_fwd.hpp>
 #include <core/world/world_fwd.hpp>
+#include <core/world/detail/world_detail_fwd.hpp>
 #include <stdint.h>
 #include <memory>
 
@@ -29,7 +30,7 @@ class Entity final
 public:
 
   explicit                      Entity();
-  explicit                      Entity(const Core::World &world);
+  explicit                      Entity(Core::World &world);
 //  explicit                      Entity(const util::generic_id id, World_data::World *data);
   
                                 ~Entity();
@@ -42,8 +43,7 @@ public:
   void                          destroy(); // TODO: Should this move to the common interface?
   
   // ** Common Entity Interface ** //
-  
-  util::generic_id               get_id() const;
+
   bool                          is_valid() const;
   
   uint32_t                      get_tags() const;
@@ -70,6 +70,18 @@ public:
   Core::Collider                get_collider() const;
   
                                 operator bool() const;
+
+  util::generic_id                           get_id() const; // todo make private friend
+
+  // todo operators for equality etc.
+
+private:
+
+  friend class Entity_ref;
+
+
+  std::shared_ptr<const World_detail::Data>  get_world_data() const;
+  std::shared_ptr<World_detail::Data>        get_world_data();
 
 private:
 

@@ -89,21 +89,21 @@ Camera::set_attached_entity(const Entity_ref entity)
 }
 
 
-Entity_ref
-Camera::get_attached_entity() const
-{
-  World_data::World* world = World_data::get_world();
-  
-  if(!world)
-  {
-    return Entity_ref();
-  }
-  
-  Entity_ref entity;
-  World_data::world_find_entity(world, &entity, m_impl->attached_entity);
-  
-  return entity;
-}
+//Entity_ref
+//Camera::get_attached_entity() const
+//{
+//  World_data::World* world = World_data::get_world();
+//  
+//  if(!world)
+//  {
+//    return Entity_ref();
+//  }
+//  
+//  Entity_ref entity;
+//  World_data::world_find_entity(world, &entity, m_impl->attached_entity);
+//  
+//  return entity;
+//}
 
 
 void

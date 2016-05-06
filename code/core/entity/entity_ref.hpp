@@ -6,7 +6,8 @@
 #include <core/transform/transform_fwd.hpp>
 #include <core/physics/physics_fwd.hpp>
 #include <core/model/model_fwd.hpp>
-#include <data/world_data/world_pools.hpp>
+#include <core/world/world_fwd.hpp>
+#include <core/entity/entity_fwd.hpp>
 #include <stdint.h>
 #include <memory>
 
@@ -22,7 +23,8 @@ class Entity_ref final
 public:
 
   explicit                      Entity_ref();
-  explicit                      Entity_ref(const util::generic_id id, World_data::World *world);
+  explicit                      Entity_ref(Entity &entity);
+  explicit                      Entity_ref(const util::generic_id id, World &world);
                                 ~Entity_ref();
   
                                 Entity_ref(const Entity_ref&);

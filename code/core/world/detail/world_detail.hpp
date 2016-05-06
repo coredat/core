@@ -9,7 +9,7 @@ namespace Core {
 namespace World_detail {
 
 
-struct World_data
+struct Data
 {
   ::World_data::World  data;
 };
