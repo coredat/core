@@ -14,8 +14,10 @@
 #include <graphics_api/ogl/ogl_common.hpp>
 #include <systems/sdl_backend/sdl_message_loop.hpp>
 #include <systems/sdl_backend/sdl_input.hpp>
-#include <assert.h>
+#include <data/global_data/memory_data.hpp>
 #include <utilities/logging.hpp>
+#include <assert.h>
+
 
 #ifdef _WIN32
 #include <atomic>
@@ -59,6 +61,12 @@ Context::Context(const uint32_t width,
                  Context_setup settings)
 : m_impl(new Context::Impl{})
 {
+  const size_t to_bytes = 1048576;
+  const size_t pool_bytes = 64 * to_bytes;
+  const size_t scratch_bytes = 64 * to_bytes;
+
+  memory::memory_initialize(pool_bytes, scratch_bytes);
+
   if(instance_created)
   {
     assert(false); // For the moment we only support making one instance per life of an application.
@@ -328,6 +336,9 @@ bool
 Context::is_open() const
 {
   assert(m_impl);
+  
+  // Reset the memory pool.
+  memory::scratch_reset();
   
   // Flip buffer and process events.
   SDL_GL_SwapWindow(m_impl->window);
