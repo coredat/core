@@ -54,6 +54,7 @@ are_intersecting(const Bounds &a, const Bounds &b)
 {
   LOG_TODO("Changes to math::aabb need to happen first");
   assert(false);
+  return false;
 }
 
 
