@@ -3,6 +3,13 @@
 #include <math/general/general.hpp>
 #include <assert.h>
 
+#define CORE_USE_SCRATCH_ALLOC
+
+#ifdef CORE_USE_SCRATCH_ALLOC
+#include <data/global_data/memory_data.hpp>
+#include <new>
+#endif
+
 
 namespace Physics {
 namespace Broadphase {
@@ -14,10 +21,16 @@ prune_init(Prune *prune, const Sweep *sweep)
   assert(prune);
 
   const uint32_t capacity = sweep->size * 3;
-
-  prune->ids = new uint32_t[capacity];
   prune->capacity = capacity;
   prune->size = 0;
+
+  #ifdef CORE_USE_SCRATCH_ALLOC
+  const size_t bytes = sizeof(uint32_t) * capacity;
+   
+  prune->ids = new(memory::scratch_alloc(bytes)) uint32_t[capacity];
+  #else
+  prune->ids = new uint32_t[capacity];
+  #endif
 }
 
 
@@ -132,8 +145,10 @@ void
 prune_free(Prune *prune)
 {
   assert(prune);
-
+  
+  #ifndef CORE_USE_SCRATCH_ALLOC
   delete[] prune->ids;
+  #endif
 }
 
 

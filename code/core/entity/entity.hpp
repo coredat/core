@@ -9,6 +9,7 @@
 #include <core/model/model_fwd.hpp>
 #include <core/world/world_fwd.hpp>
 #include <core/world/detail/world_detail_fwd.hpp>
+#include <core/material/material_fwd.hpp>
 #include <stdint.h>
 #include <memory>
 
@@ -63,6 +64,9 @@ public:
   void                          set_material_id(const uint32_t id);
   uint32_t                      get_material_id() const;
   
+  void                          set_material(const Core::Material &material);
+  Core::Material                get_material() const;
+
   void                          set_model(const Core::Model &model);
   Core::Model                   get_model() const;
   

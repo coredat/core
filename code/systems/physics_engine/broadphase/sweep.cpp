@@ -2,6 +2,12 @@
 #include <math/geometry/aabb.hpp>
 #include <assert.h>
 
+#define CORE_USE_SCRATCH_ALLOC
+
+#ifdef CORE_USE_SCRATCH_ALLOC
+#include <data/global_data/memory_data.hpp>
+#endif
+
 
 namespace Physics {
 namespace Broadphase {
@@ -15,9 +21,17 @@ sweep_init(Sweep *sweep,
   
   sweep->size = number_of_aabbs;
 
+  #ifdef CORE_USE_SCRATCH_ALLOC
+  size_t bytes = sizeof(Sweep_axis) * number_of_aabbs;
+
+  sweep->x_axis = new(memory::scratch_alloc(bytes)) Sweep_axis[number_of_aabbs];
+  sweep->y_axis = new(memory::scratch_alloc(bytes)) Sweep_axis[number_of_aabbs];
+  sweep->z_axis = new(memory::scratch_alloc(bytes)) Sweep_axis[number_of_aabbs];
+  #else
   sweep->x_axis = new Sweep_axis[number_of_aabbs];
   sweep->y_axis = new Sweep_axis[number_of_aabbs];
   sweep->z_axis = new Sweep_axis[number_of_aabbs];
+  #endif
 }
 
 
@@ -54,9 +68,11 @@ sweep_free(Sweep *sweep)
 {
   assert(sweep);
 
+  #ifndef CORE_USE_SCRATCH_ALLOC
   delete[] sweep->x_axis;
   delete[] sweep->y_axis;
   delete[] sweep->z_axis;
+  #endif
 }
 
 

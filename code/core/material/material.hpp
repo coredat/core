@@ -21,6 +21,12 @@ public:
   explicit              Material(const char *name);
                         ~Material();
   
+                        Material(const Material &mat);
+                        Material(Material &&mat);
+
+  Material&             operator=(const Material &mat);
+  Material&             operator=(Material &&mat);
+
   void                  set_shader(const Material_shader &shader);
   void                  set_map_01(const Texture &texture);
   void                  set_map_02(const Texture &texture);

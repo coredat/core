@@ -92,12 +92,7 @@ World::get_overlapping_aabbs(const std::function<void(const Core::Collision_pair
   // Check we have a callback.
   if(!callback) { return; }
 
-  // TODO need this on a memory pool, get it out of the stack.
   const World_data::Entity_pool *entity_data = m_impl->world_data->data.entity_pool;
-  
-  // Create aabbs with tranforms
-//  math::aabb transformed_aabbs[2048];
-  
   const World_data::Physics_data *data = m_impl->world_data->data.physics_data;
   
   Physics::Broadphase::Sweep sweep;
@@ -109,8 +104,11 @@ World::get_overlapping_aabbs(const std::function<void(const Core::Collision_pair
   Physics::Broadphase::prune_calculate(&prune, &sweep);
 
   // Prune out
-  std::vector<util::generic_id> id;
-  std::vector<Physics::Collision::Axis_collidable> boxes;
+  static std::vector<util::generic_id> id;
+  static std::vector<Physics::Collision::Axis_collidable> boxes;
+  
+  id.clear();
+  boxes.clear();
   
   uint32_t prune_stack = 0;
   
@@ -134,8 +132,6 @@ World::get_overlapping_aabbs(const std::function<void(const Core::Collision_pair
   // Calculate collisions
   Physics::Collision::Pairs out_pairs;
   Physics::Collision::pairs_init(&out_pairs, 2048 * 10);
-  
-  
   
   Physics::Collision::aabb_calculate_overlaps_pairs(&out_pairs, boxes.data(), boxes.size());
   

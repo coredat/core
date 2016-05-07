@@ -4,6 +4,7 @@
 #include <core/physics/collider.hpp>
 #include <core/physics/collider_utils.hpp>
 #include <core/physics/box_collider.hpp>
+#include <core/material/material.hpp>
 #include <data/world_data/world_data.hpp>
 #include <data/global_data/resource_data.hpp>
 #include <core/transform/transform.hpp>
@@ -212,6 +213,20 @@ get_material_id(const util::generic_id this_id, World_data::World *world)
   size_t index;
   assert(get_index(&index, this_id, ent_pool->entity_id, ent_pool->size));
   return (uint32_t)ent_pool->texture[index];
+}
+
+
+void
+set_material(const util::generic_id this_id, World_data::World *world, Core::Material &material)
+{
+
+}
+
+
+Core::Material
+get_material(const util::generic_id this_id, World_data::World *world)
+{
+  return Core::Material("");
 }
 
 

@@ -36,7 +36,7 @@ struct Chunk_header
   \param number_of_bytes_to_reserve How many bytes should you allocate.
   \return true if we allocated the requested size.
 */
-bool
+bool [[deprecated("Use memory pool in data instead.")]]
 initialize(const size_t number_of_bytes_to_reserve);
 
 
