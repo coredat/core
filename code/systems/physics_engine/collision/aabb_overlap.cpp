@@ -27,7 +27,7 @@ aabb_calculate_overlaps_pairs(Pairs *out_pairs,
       
       const Axis_collidable *test_against = &axis_colliders[j];
 
-      if(test_against->mask & to_test->mask)
+      if(test_against->mask.id_and_mask[0] & to_test->mask.id_and_mask[1])
       {
         if(math::aabb_intersection_test(to_test->bounding_box, test_against->bounding_box))
         {

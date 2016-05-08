@@ -20,6 +20,7 @@ struct Physics_data
   util::generic_id    *entity_id      = nullptr;
   math::transform     *transform      = nullptr;
   math::aabb          *aabb_collider  = nullptr;
+  uint64_t            *collision_id   = nullptr;
   
   uint32_t            size      = 0;
   uint32_t            capacity  = 0;
@@ -37,7 +38,7 @@ physics_init(Physics_data *data,
 
 
 /*!
-  Frees the entity pool.
+  Free's the entity pool.
   \param data The data to free.
 */
 void
@@ -55,6 +56,42 @@ physics_add(Physics_data *data,
             const util::generic_id entity_id,
             const math::aabb *aabb,
             const math::transform *trans);
+
+
+void
+physics_add(Physics_data *data,
+            const util::generic_id entity_id);
+
+
+/*!
+  Check to see if entity_id has already been added
+  to the data pool. Optional index will return its position in the data.
+  \param data The data pool.
+  \param entity_id The id to check.
+  \param index Optional, retuns the position in the data.
+*/
+bool
+physics_exists(Physics_data *data,
+               const util::generic_id entity_id,
+               size_t *index = nullptr);
+
+void
+physics_update_aabb(Physics_data *data,
+                    const util::generic_id entity_id,
+                    const math::aabb *aabb);
+
+
+void
+physics_update_transform(Physics_data *data,
+                         const util::generic_id entity_id,
+                         const math::transform *transform);
+
+
+void
+physics_update_collision_mask(Physics_data *data,
+                              const util::generic_id entity_id,
+                              const uint32_t this_id,
+                              const uint32_t mask_ids);
 
 
 /*!

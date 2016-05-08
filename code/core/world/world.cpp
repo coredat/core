@@ -123,10 +123,11 @@ World::get_overlapping_aabbs(const std::function<void(const Core::Collision_pair
     id.push_back(data->entity_id[i]);
     
     math::aabb box_copy(data->aabb_collider[i]);
+    uint64_t collision_mask(data->collision_id[i]);
     math::aabb_scale(box_copy, data->transform[i].scale);
     math::aabb_set_origin(box_copy, data->transform[i].position);
     
-    boxes.push_back(Physics::Collision::Axis_collidable{1, box_copy});
+    boxes.push_back(Physics::Collision::Axis_collidable{collision_mask, box_copy});
   }
   
   // Calculate collisions

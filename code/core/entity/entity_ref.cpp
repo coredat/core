@@ -3,6 +3,7 @@
 #include <core/transform/transform.hpp>
 #include <core/model/model.hpp>
 #include <core/physics/collider.hpp>
+#include <core/physics/rigidbody_properties.hpp>
 #include <core/entity/entity.hpp>
 #include <core/world/world.hpp>
 #include <core/world/detail/world_detail.hpp>
@@ -207,6 +208,20 @@ bool
 Entity_ref::operator==(const Entity &other) const
 {
   return this->get_id() == other.get_id();
+}
+
+
+void
+Entity_ref::set_rigidbody_properties(const Core::Rigidbody_properties rb_props)
+{
+  Entity_detail::set_rigidbody_properties(m_impl->id, &m_impl->world->data, rb_props);
+}
+
+
+Core::Rigidbody_properties
+Entity_ref::set_rigidbody_properties() const
+{
+  return Entity_detail::get_rigidbody_properties(m_impl->id, &m_impl->world->data);
 }
 
 

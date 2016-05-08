@@ -4,6 +4,7 @@
 #include <core/transform/transform.hpp>
 #include <core/model/model.hpp>
 #include <core/physics/collider.hpp>
+#include <core/physics/rigidbody_properties.hpp>
 #include <core/world/world.hpp>
 #include <core/world/detail/world_detail.hpp>
 #include <data/world_data/graph_change_pool.hpp>
@@ -241,6 +242,20 @@ Core::Collider
 Entity::get_collider() const
 {
   return Entity_detail::get_collider(m_impl->id, &m_impl->world->data);
+}
+
+
+void
+Entity::set_rigidbody_properties(const Core::Rigidbody_properties rb_props)
+{
+  Entity_detail::set_rigidbody_properties(m_impl->id, &m_impl->world->data, rb_props);
+}
+
+
+Core::Rigidbody_properties
+Entity::set_rigidbody_properties() const
+{
+  return Entity_detail::get_rigidbody_properties(m_impl->id, &m_impl->world->data);
 }
 
 

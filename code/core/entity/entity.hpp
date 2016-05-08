@@ -32,7 +32,6 @@ public:
 
   explicit                      Entity();
   explicit                      Entity(Core::World &world);
-//  explicit                      Entity(const util::generic_id id, World_data::World *data);
   
                                 ~Entity();
   
@@ -72,6 +71,9 @@ public:
   
   void                          set_collider(const Core::Collider &collider);
   Core::Collider                get_collider() const;
+
+  void                          set_rigidbody_properties(const Core::Rigidbody_properties rb_props);
+  Core::Rigidbody_properties    set_rigidbody_properties() const;
   
                                 operator bool() const;
 

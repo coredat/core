@@ -4,6 +4,7 @@
 #include <core/physics/collider.hpp>
 #include <core/physics/collider_utils.hpp>
 #include <core/physics/box_collider.hpp>
+#include <core/physics/rigidbody_properties.hpp>
 #include <core/material/material.hpp>
 #include <data/world_data/world_data.hpp>
 #include <data/global_data/resource_data.hpp>
@@ -307,6 +308,26 @@ Collider
 get_collider(const util::generic_id this_id, World_data::World *world)
 {
   return Collider();
+}
+
+
+void
+set_rigidbody_properties(const util::generic_id this_id, World_data::World *world, const Core::Rigidbody_properties props)
+{
+  auto phys_pool = world->physics_data;
+  assert(phys_pool);
+
+  if (phys_pool)
+  {
+    World_data::physics_update_collision_mask(phys_pool, this_id, props.get_rb_id(), props.get_rb_mask());
+  }
+}
+
+
+Core::Rigidbody_properties
+get_rigidbody_properties(const util::generic_id this_id, World_data::World *world)
+{
+  return Rigidbody_properties();
 }
 
 

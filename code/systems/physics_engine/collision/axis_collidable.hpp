@@ -12,7 +12,12 @@ namespace Collision {
 
 struct Axis_collidable
 {
-  uint32_t      mask;
+  union Mask
+  {
+    uint64_t      bits;
+    uint32_t      id_and_mask[2];
+  } mask;
+
   math::aabb    bounding_box;
 };
 
