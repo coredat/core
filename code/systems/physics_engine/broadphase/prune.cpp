@@ -40,8 +40,6 @@ prune_init(Prune *prune, const Sweep *sweep)
 void
 prune_calculate(Prune *prune, const Sweep *sweep)
 {
-  std::cout << "prune" << std::endl;
-
   // For each axis prune out objects that really can't be touching.
   constexpr uint32_t number_of_axis = 3;
   const Sweep_axis *axis[number_of_axis] = {sweep->x_axis, sweep->y_axis, sweep->z_axis};

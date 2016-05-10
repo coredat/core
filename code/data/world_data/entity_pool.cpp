@@ -151,9 +151,7 @@ entity_pool_remove_entity(Entity_pool *pool, const util::generic_id id)
     const uint32_t start_move = remove_id + 1;
     const uint32_t end_move = pool->size - remove_id - 1;
     --(pool->size);
-  
-    std::cout << "start: " << start_move << " end_move: " << end_move << std::endl;
-  
+    
     memmove(&pool->entity_id[remove_id],          &pool->entity_id[start_move],          end_move * sizeof(*pool->entity_id));
     memmove(&pool->entity_properties[remove_id],  &pool->entity_properties[start_move],  end_move * sizeof(*pool->entity_properties));
     memmove(&pool->name[remove_id * max_entity_name_size],  &pool->name[start_move * max_entity_name_size],  end_move * (sizeof(char) * max_entity_name_size));

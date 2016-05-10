@@ -146,17 +146,13 @@ World::get_overlapping_aabbs(const std::function<void(const Core::Collision_pair
   boxes.clear();
   
   uint32_t prune_stack = 0;
-  
-//  std::cout << "PRUNED" << prune.size << std::endl;
-  
+    
   for(uint32_t i = 0; i < data->size; ++i)
   {
     if(prune_stack < prune.size && i == prune.ids[prune_stack])
     {
       ++prune_stack;
-      
-      std::cout << "Pruned out: " << World_data::entity_pool_get_entity_name(entity_data, data->entity_id[i]) << std::endl;
-      
+            
       continue;
     }
     
