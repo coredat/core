@@ -32,6 +32,7 @@
 
 #include <3rdparty/imgui/imgui.h>
 #include <3rdparty/imgui/imgui_impl_sdl_gl3.h>
+#include <string>
 
 
 namespace Core {
