@@ -63,8 +63,11 @@ Model::Model(const char *filename)
     m_impl->mesh_id = Resource_data::mesh_pool_push_new(resources->mesh_pool,
                                                         filename,
                                                         model.meshes.at(0).positions.data(),
+                                                        model.meshes.at(0).positions.size(),
                                                         model.meshes.at(0).normals.data(),
+                                                        model.meshes.at(0).normals.size(),
                                                         model.meshes.at(0).uvs.data(),
+                                                        model.meshes.at(0).uvs.size(),
                                                         model.meshes.at(0).positions.size(),
                                                         model.meshes.at(0).index.data(),
                                                         model.meshes.at(0).index.size());

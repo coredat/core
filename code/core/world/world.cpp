@@ -99,7 +99,39 @@ World::think(const float dt)
     
     std::string number = std::to_string(data->entity_pool->entity_id[i]);
   
-    ImGui::LabelText(name, number.c_str());
+    if(ImGui::TreeNode(name))
+    {
+      static char buf[32];
+      strlcpy(buf, name, sizeof(char) * 32);
+      
+      struct Input_data
+      {
+        World_data::Entity_pool *pool;
+        util::generic_id id;
+      };
+      
+      static Input_data input_data;
+      input_data = Input_data{data->entity_pool, data->entity_pool->entity_id[i]};
+      
+//      ImGui::InputText("Name",
+//                       buf,
+//                       32,
+//                       ImGuiInputTextFlags_::ImGuiInputTextFlags_EnterReturnsTrue,
+//                       [](ImGuiTextEditCallbackData *cb_data) -> int
+//                       {
+//                         Input_data *in_data = reinterpret_cast<Input_data*>(cb_data->UserData);
+//                         World_data::entity_pool_set_entity_name(in_data->pool, in_data->id, buf);
+//                         return 1;
+//                       },
+//                       (void*)&input_data);
+
+      ImGui::InputText("Name",
+                        World_data::entity_pool_get_entity_name(data->entity_pool, data->entity_pool->entity_id[i]),
+                       32);
+
+    
+      ImGui::TreePop();
+    }
   }
   
   ImGui::End();

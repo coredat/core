@@ -142,20 +142,20 @@ bool ImGui_ImplSdlGL3_ProcessEvent(SDL_Event* event)
                 g_MouseWheel = 1;
             if (event->wheel.y < 0)
                 g_MouseWheel = -1;
-            return true;
+            return io.WantCaptureMouse;
         }
     case SDL_MOUSEBUTTONDOWN:
         {
             if (event->button.button == SDL_BUTTON_LEFT) g_MousePressed[0] = true;
             if (event->button.button == SDL_BUTTON_RIGHT) g_MousePressed[1] = true;
             if (event->button.button == SDL_BUTTON_MIDDLE) g_MousePressed[2] = true;
-            return true;
+            return io.WantCaptureMouse;;
         }
     case SDL_TEXTINPUT:
         {
             ImGuiIO& io = ImGui::GetIO();
             io.AddInputCharactersUTF8(event->text.text);
-            return true;
+            return io.WantCaptureKeyboard;;
         }
     case SDL_KEYDOWN:
     case SDL_KEYUP:

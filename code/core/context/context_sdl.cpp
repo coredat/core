@@ -152,6 +152,7 @@ Context::Context(const uint32_t width,
   // Initialize the graphics api
   Graphics_api::initialize();
   
+//  SDL_StartTextInput();
   
   ImGui_ImplSdlGL3_Init(m_impl->window);
   ImGui_ImplSdlGL3_NewFrame(m_impl->window);
@@ -342,13 +343,13 @@ bool
 Context::is_open() const
 {
   assert(m_impl);
+  ImGui::Render();
   
   // Reset the memory pool.
   memory::scratch_reset();
   Sdl::event_process();
 
   // Flip buffer and process events.
-  ImGui::Render();
   SDL_GL_SwapWindow(m_impl->window);
   ImGui_ImplSdlGL3_NewFrame(m_impl->window);
   

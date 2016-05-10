@@ -94,7 +94,7 @@ entity_pool_remove_entity(Entity_pool *pool, const util::generic_id id);
   \param id The id of the entity you wish.
   \return returns the name of the entity or nullptr if it couldn't find one.
 */
-const char *
+char *
 entity_pool_get_entity_name(const Entity_pool *pool, const util::generic_id id);
 
 

@@ -90,8 +90,11 @@ uint32_t
 mesh_pool_push_new(Mesh_pool *pool,
                    const char *key,
                    const float *positions,
+                   const uint32_t size_of_positions,
                    const float *normals,
+                   const uint32_t size_of_normals,
                    const float *uvs,
+                   const uint32_t size_of_uvs,
                    const uint32_t number_of_vertices,
                    const uint32_t *index_data,
                    const uint32_t number_of_indices)
@@ -116,9 +119,9 @@ mesh_pool_push_new(Mesh_pool *pool,
   }
   
   // Create mesh format.
-  std::vector<float> pos(positions, positions + number_of_vertices);
-  std::vector<float> norm(normals, normals + number_of_vertices);
-  std::vector<float> tex_c(uvs, uvs + number_of_vertices);
+  std::vector<float> pos(positions, positions + size_of_positions);
+  std::vector<float> norm(normals, normals + size_of_normals);
+  std::vector<float> tex_c(uvs, uvs + size_of_uvs);
   std::vector<uint32_t> ind(index_data, index_data + number_of_indices);
   const util::gl_mesh imported_mesh = util::create_open_gl_mesh(pos, tex_c, norm, ind);
 

@@ -54,8 +54,11 @@ uint32_t
 mesh_pool_push_new(Mesh_pool *pool,
                    const char *key,
                    const float *positions,
+                   const uint32_t size_of_positions,
                    const float *normals,
+                   const uint32_t size_of_normals,
                    const float *uvs,
+                   const uint32_t size_of_uvs,
                    const uint32_t number_of_vertices,
                    const uint32_t *index_data,
                    const uint32_t number_of_indices);
