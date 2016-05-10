@@ -46,9 +46,9 @@ prune_calculate(Prune *prune, const Sweep *sweep)
   constexpr uint32_t number_of_axis = 3;
   const Sweep_axis *axis[number_of_axis] = {sweep->x_axis, sweep->y_axis, sweep->z_axis};
 
-  for(uint32_t a = 0; a < number_of_axis; ++a)
+  //for(uint32_t a = 0; a < number_of_axis; ++a)
   {
-    const Sweep_axis *curr_axis = axis[a];
+    //const Sweep_axis *curr_axis = axis[a];
   
     // Loop through each item and check if it collides with something on that axis.
     uint32_t obj_id = 0;
@@ -56,7 +56,9 @@ prune_calculate(Prune *prune, const Sweep *sweep)
 
     while(obj_id < sweep->size)
     {
-      const Sweep_axis *test_obj = &curr_axis[obj_id];
+      const Sweep_axis *test_obj_x = &sweep->x_axis[obj_id];
+      const Sweep_axis *test_obj_y = &sweep->y_axis[obj_id];
+      const Sweep_axis *test_obj_z = &sweep->z_axis[obj_id];
 
       uint32_t sweep_id = 0;
       potential_collision = false;
@@ -71,17 +73,30 @@ prune_calculate(Prune *prune, const Sweep *sweep)
         }
 
         // Test if this object is overlapping
-        const Sweep_axis *sweep_obj = &curr_axis[sweep_id];
+        const Sweep_axis *sweep_obj_x = &sweep->x_axis[sweep_id];
+        const Sweep_axis *sweep_obj_y = &sweep->y_axis[sweep_id];
+        const Sweep_axis *sweep_obj_z = &sweep->z_axis[sweep_id];
         
-        const float c1 = math::min(test_obj->center, sweep_obj->center);
-        const float c2 = math::max(test_obj->center, sweep_obj->center);
+        const float c1_x = math::min(test_obj_x->center, sweep_obj_x->center);
+        const float c2_x = math::max(test_obj_x->center, sweep_obj_x->center);
+
+        const float c1_y = math::min(test_obj_y->center, sweep_obj_y->center);
+        const float c2_y = math::max(test_obj_y->center, sweep_obj_y->center);
         
-        const float distance = math::abs(c2 - c1);
-        const float combined_extent = test_obj->half_extent + sweep_obj->half_extent;
+        const float c1_z = math::min(test_obj_z->center, sweep_obj_z->center);
+        const float c2_z = math::max(test_obj_z->center, sweep_obj_z->center);
+        
+        const float distance_x = math::abs(c2_x - c1_x);
+        const float distance_y = math::abs(c2_y - c1_y);
+        const float distance_z = math::abs(c2_z - c1_z);
+        
+        const float combined_extent_x = test_obj_x->half_extent + sweep_obj_x->half_extent;
+        const float combined_extent_y = test_obj_y->half_extent + sweep_obj_y->half_extent;
+        const float combined_extent_z = test_obj_z->half_extent + sweep_obj_z->half_extent;
 
         // If distance < combined_extent
         // then they are colliding.
-        if(distance < combined_extent)
+        if(distance_x < combined_extent_x && distance_y < combined_extent_y && distance_z < combined_extent_z)
         {
           // No point testing this object
           // anymore we know its potentially
