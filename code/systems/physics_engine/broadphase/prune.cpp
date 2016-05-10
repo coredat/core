@@ -3,12 +3,15 @@
 #include <math/general/general.hpp>
 #include <assert.h>
 
-#define CORE_USE_SCRATCH_ALLOC
+//#define CORE_USE_SCRATCH_ALLOC
 
 #ifdef CORE_USE_SCRATCH_ALLOC
 #include <data/global_data/memory_data.hpp>
 #include <new>
 #endif
+
+
+#include <iostream> // die
 
 
 namespace Physics {
@@ -37,21 +40,26 @@ prune_init(Prune *prune, const Sweep *sweep)
 void
 prune_calculate(Prune *prune, const Sweep *sweep)
 {
+  std::cout << "prune" << std::endl;
+
   // For each axis prune out objects that really can't be touching.
   constexpr uint32_t number_of_axis = 3;
   const Sweep_axis *axis[number_of_axis] = {sweep->x_axis, sweep->y_axis, sweep->z_axis};
 
   for(uint32_t a = 0; a < number_of_axis; ++a)
   {
+    const Sweep_axis *curr_axis = axis[a];
+  
     // Loop through each item and check if it collides with something on that axis.
     uint32_t obj_id = 0;
     bool potential_collision = false;
 
     while(obj_id < sweep->size)
     {
-      const Sweep_axis *test_obj = &axis[a][obj_id];
+      const Sweep_axis *test_obj = &curr_axis[obj_id];
 
       uint32_t sweep_id = 0;
+      potential_collision = false;
 
       while(sweep_id < sweep->size)
       {
@@ -63,9 +71,12 @@ prune_calculate(Prune *prune, const Sweep *sweep)
         }
 
         // Test if this object is overlapping
-        const Sweep_axis *sweep_obj = &axis[a][sweep_id];
+        const Sweep_axis *sweep_obj = &curr_axis[sweep_id];
         
-        const float distance = math::abs(test_obj->center - sweep_obj->center);        
+        const float c1 = math::min(test_obj->center, sweep_obj->center);
+        const float c2 = math::max(test_obj->center, sweep_obj->center);
+        
+        const float distance = math::abs(c2 - c1);
         const float combined_extent = test_obj->half_extent + sweep_obj->half_extent;
 
         // If distance < combined_extent
@@ -75,6 +86,9 @@ prune_calculate(Prune *prune, const Sweep *sweep)
           // No point testing this object
           // anymore we know its potentially
           // colliding.
+          
+//          std::cout << "coll on axis: " << a << " id: " << obj_id << std::endl;
+          
           potential_collision = true;
           break;
         }
@@ -90,8 +104,6 @@ prune_calculate(Prune *prune, const Sweep *sweep)
         ++(prune->size);
       }
       
-      potential_collision = false;
-
       ++obj_id;
     }
   } // for axis
@@ -120,19 +132,21 @@ prune_calculate(Prune *prune, const Sweep *sweep)
         if(curr_id == id_to_search)
         {
           const uint32_t start_move = search_index + 1;
-          const uint32_t end_move = prune->size - search_index - 1;
+          const uint32_t end_move   = prune->size - 1 - search_index;
         
           memmove(&prune->ids[search_index],
                   &prune->ids[start_move],
-                  end_move * sizeof(*prune->ids));
+                  end_move * sizeof(prune->ids[0]));
         
           // Remove duplicate id.
           --(prune->size);
           
           continue;
         }
-
-        ++search_index;
+        else
+        {
+          ++search_index;
+        }
       }
 
       ++prune_index;

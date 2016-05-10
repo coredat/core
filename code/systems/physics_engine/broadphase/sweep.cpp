@@ -2,7 +2,7 @@
 #include <math/geometry/aabb.hpp>
 #include <assert.h>
 
-#define CORE_USE_SCRATCH_ALLOC
+//#define CORE_USE_SCRATCH_ALLOC
 
 #ifdef CORE_USE_SCRATCH_ALLOC
 #include <data/global_data/memory_data.hpp>

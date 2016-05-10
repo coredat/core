@@ -30,6 +30,9 @@
 #include <systems/physics_engine/physics_engine.hpp>
 #include <systems/physics_engine/collision/axis_collidable.hpp>
 
+#include <3rdparty/imgui/imgui.h>
+#include <3rdparty/imgui/imgui_impl_sdl_gl3.h>
+
 
 namespace Core {
 
@@ -77,11 +80,29 @@ World::~World()
 void
 World::think(const float dt)
 {
+  auto data = &m_impl->world_data->data;
+  auto graph_changes = m_impl->world_data->data.entity_graph_changes;
+
   // Push in new phy entities.
-  World_data::world_update_scene_graph_changes(&m_impl->world_data->data, m_impl->world_data->data.entity_graph_changes);
+  World_data::world_update_scene_graph_changes(data, graph_changes);
   
   // Reset the entity pool for new changes.
-  World_data::entity_graph_change_pool_init(m_impl->world_data->data.entity_graph_changes);
+  World_data::entity_graph_change_pool_init(graph_changes);
+  
+  
+  ImGui::Begin("Entities");
+  
+  // Loop through all
+  for(uint32_t i = 0; i < data->entity_pool->size; ++i)
+  {
+    const char *name = World_data::entity_pool_get_entity_name(data->entity_pool, data->entity_pool->entity_id[i]);
+    
+    std::string number = std::to_string(data->entity_pool->entity_id[i]);
+  
+    ImGui::LabelText(name, number.c_str());
+  }
+  
+  ImGui::End();
 }
 
 
@@ -95,9 +116,23 @@ World::get_overlapping_aabbs(const std::function<void(const Core::Collision_pair
   const World_data::Entity_pool *entity_data = m_impl->world_data->data.entity_pool;
   const World_data::Physics_data *data = m_impl->world_data->data.physics_data;
   
+  static std::vector<math::aabb> boundings;
+  boundings.clear();
+  
+  for(uint32_t i = 0; i < data->size; ++i)
+  {
+    math::aabb box_copy(data->aabb_collider[i]);
+    math::aabb_scale(box_copy, data->transform[i].scale);
+    math::aabb_set_origin(box_copy, data->transform[i].position);
+    
+    boundings.push_back(box_copy);
+  }
+  
   Physics::Broadphase::Sweep sweep;
   Physics::Broadphase::sweep_init(&sweep, data->size);
-  Physics::Broadphase::sweep_calculate(&sweep, data->aabb_collider, data->size);
+  Physics::Broadphase::sweep_calculate(&sweep, boundings.data(), boundings.size());
+  
+  assert(sweep.size == boundings.size());
   
   Physics::Broadphase::Prune prune;
   Physics::Broadphase::prune_init(&prune, &sweep);
@@ -112,11 +147,16 @@ World::get_overlapping_aabbs(const std::function<void(const Core::Collision_pair
   
   uint32_t prune_stack = 0;
   
+//  std::cout << "PRUNED" << prune.size << std::endl;
+  
   for(uint32_t i = 0; i < data->size; ++i)
   {
     if(prune_stack < prune.size && i == prune.ids[prune_stack])
     {
       ++prune_stack;
+      
+      std::cout << "Pruned out: " << World_data::entity_pool_get_entity_name(entity_data, data->entity_id[i]) << std::endl;
+      
       continue;
     }
     
@@ -129,6 +169,8 @@ World::get_overlapping_aabbs(const std::function<void(const Core::Collision_pair
     
     boxes.push_back(Physics::Collision::Axis_collidable{collision_mask, box_copy});
   }
+  
+  assert(prune_stack == prune.size);
   
   // Calculate collisions
   Physics::Collision::Pairs out_pairs;
@@ -153,11 +195,28 @@ World::get_overlapping_aabbs(const std::function<void(const Core::Collision_pair
       const uint32_t index_a = out_pairs.pair_arr[i].a;
       const uint32_t index_b = out_pairs.pair_arr[i].b;
 
-      pairs[number_of_pairs++] = Core::Collision_pair{find_entity_by_id(data->entity_id[index_a]), find_entity_by_id(data->entity_id[index_b])};
+      pairs[number_of_pairs++] = Core::Collision_pair{find_entity_by_id(id[index_a]), find_entity_by_id(id[index_b])};
     }
   
     callback(pairs, number_of_pairs);
   }
+  
+  ImGui::Begin("Sweep And Prune");
+  
+  ImVec2 window_size = ImGui::GetWindowSize();
+  ImVec2 cursor = ImGui::GetCursorScreenPos();
+  
+  // Loop through all
+  for(uint32_t i = 0; i < data->size; ++i)
+  {
+    const math::aabb *box_coll = &data->aabb_collider[i];
+    // z x
+    {
+      
+    }
+  }
+  
+  ImGui::End();
   
   Physics::Broadphase::sweep_free(&sweep);
   Physics::Broadphase::prune_free(&prune);

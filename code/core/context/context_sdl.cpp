@@ -18,6 +18,8 @@
 #include <utilities/logging.hpp>
 #include <assert.h>
 
+#include <3rdparty/imgui/imgui.h>
+#include <3rdparty/imgui/imgui_impl_sdl_gl3.h>
 
 #ifdef _WIN32
 #include <atomic>
@@ -149,6 +151,10 @@ Context::Context(const uint32_t width,
   
   // Initialize the graphics api
   Graphics_api::initialize();
+  
+  
+  ImGui_ImplSdlGL3_Init(m_impl->window);
+  ImGui_ImplSdlGL3_NewFrame(m_impl->window);
 
   // Window callback
   Sdl::event_add_callback([](const SDL_Event *evt, void *self)
@@ -339,10 +345,12 @@ Context::is_open() const
   
   // Reset the memory pool.
   memory::scratch_reset();
-  
-  // Flip buffer and process events.
-  SDL_GL_SwapWindow(m_impl->window);
   Sdl::event_process();
+
+  // Flip buffer and process events.
+  ImGui::Render();
+  SDL_GL_SwapWindow(m_impl->window);
+  ImGui_ImplSdlGL3_NewFrame(m_impl->window);
   
   const uint32_t num_controllers = SDL_NumJoysticks();
   
