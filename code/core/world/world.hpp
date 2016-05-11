@@ -33,6 +33,8 @@ public:
 
   Entity_ref            find_entity_by_id(const util::generic_id id) const;
   
+  
+  
 private:
 
   friend class Core::Entity;

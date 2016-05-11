@@ -48,6 +48,8 @@ struct World::Impl
 World::World(const World_setup setup)
 : m_impl(new World::Impl)
 {
+  LOG_TODO("Make world require context to setup.");
+
   const size_t chunk_128_mb = 134217728;
   Core::Memory::initialize(chunk_128_mb);
 

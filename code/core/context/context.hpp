@@ -4,6 +4,7 @@
 
 #include <core/context/context_setup.hpp>
 #include <core/context/context_fwd.hpp>
+#include <core/world/world_fwd.hpp>
 #include <core/context/detail/context_detail_fwd.hpp>
 #include <core/input/input_fwd.hpp>
 #include <stdint.h>
@@ -55,6 +56,9 @@ public:
 private:
 
   friend class Core::Input::Controller;
+  friend class Core::World;
+  
+  explicit            Context(std::shared_ptr<Context_detail::Data> data);
 
   std::shared_ptr<const Context_detail::Data>  get_context_data() const;
   
