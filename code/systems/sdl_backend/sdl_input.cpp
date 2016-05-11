@@ -11,13 +11,19 @@ namespace
   inline Core::Input::Button_state
   button_down(const Core::Input::Button_state *curr_state)
   {
-    return *curr_state == Core::Input::Button_state::down_on_frame ? Core::Input::Button_state::down : Core::Input::Button_state::down_on_frame;
+    if(*curr_state == Core::Input::Button_state::down)          { return Core::Input::Button_state::down; }
+    if(*curr_state == Core::Input::Button_state::down_on_frame) { return Core::Input::Button_state::down; }
+    
+    return Core::Input::Button_state::down_on_frame;
   };
   
   inline Core::Input::Button_state
   button_up(const Core::Input::Button_state *curr_state)
   {
-    return *curr_state == Core::Input::Button_state::up_on_frame ? Core::Input::Button_state::up : Core::Input::Button_state::up_on_frame;
+    if(*curr_state == Core::Input::Button_state::up)          { return Core::Input::Button_state::up; }
+    if(*curr_state == Core::Input::Button_state::up_on_frame) { return Core::Input::Button_state::up; }
+    
+    return Core::Input::Button_state::up_on_frame;
   };
 }
 
@@ -121,7 +127,7 @@ update_keyboard_controller(Context_data::Game_controller *controller)
       {
         Core::Input::Button_state *button_state_0 = &controller->buttons[Core::Input::Button::button_0];
         *button_state_0 = mouse_state & SDL_BUTTON(SDL_BUTTON_LEFT) ? button_down(button_state_0) : button_up(button_state_0);
-        
+
         Core::Input::Button_state *button_state_1 = &controller->buttons[Core::Input::Button::button_1];
         *button_state_1 = mouse_state & SDL_BUTTON(SDL_BUTTON_RIGHT) ? button_down(button_state_1) : button_up(button_state_1);
       }

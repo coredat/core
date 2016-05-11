@@ -114,7 +114,7 @@ Controller::is_button_down(const Button::ENUM button) const
   if(input && input->size > m_impl->controller_number)
   {
     const Core::Input::Button_state curr_state = get_state(input, m_impl->controller_number, button);
-    return curr_state== Core::Input::Button_state::down || curr_state == Core::Input::Button_state::down_on_frame;
+    return curr_state == Core::Input::Button_state::down || curr_state == Core::Input::Button_state::down_on_frame;
   }
 
   return false;
