@@ -29,6 +29,10 @@ public:
   float             get_trigger(const uint8_t trigger) const;
   
   bool              is_button_down(const Button::ENUM button) const;
+  bool              is_button_down_on_frame(const Button::ENUM button) const;
+  
+  bool              is_button_up(const Button::ENUM button) const;
+  bool              is_button_up_on_frame(const Button::ENUM button) const;
   
 private:
 

@@ -6,6 +6,22 @@
 namespace Sdl {
 
 
+namespace
+{
+  inline Core::Input::Button_state
+  button_down(const Core::Input::Button_state *curr_state)
+  {
+    return *curr_state == Core::Input::Button_state::down_on_frame ? Core::Input::Button_state::down : Core::Input::Button_state::down_on_frame;
+  };
+  
+  inline Core::Input::Button_state
+  button_up(const Core::Input::Button_state *curr_state)
+  {
+    return *curr_state == Core::Input::Button_state::up_on_frame ? Core::Input::Button_state::up : Core::Input::Button_state::up_on_frame;
+  };
+}
+
+
 void
 update_gamepad_controller(Context_data::Game_controller *controller, const uint32_t controller_id)
 {
@@ -101,11 +117,26 @@ update_keyboard_controller(Context_data::Game_controller *controller)
 
     // Keys
     {
-      controller->buttons[Core::Input::Button::button_0] = mouse_state & SDL_BUTTON(SDL_BUTTON_LEFT) ? Core::Input::Button_state::down : Core::Input::Button_state::up;
-      controller->buttons[Core::Input::Button::button_1] = mouse_state & SDL_BUTTON(SDL_BUTTON_RIGHT) ? Core::Input::Button_state::down : Core::Input::Button_state::up;
-      controller->buttons[Core::Input::Button::button_2] = (key_state[SDL_SCANCODE_LSHIFT] ? Core::Input::Button_state::down : Core::Input::Button_state::up);
-      controller->buttons[Core::Input::Button::button_3] = (key_state[SDL_SCANCODE_SPACE] ? Core::Input::Button_state::down : Core::Input::Button_state::up);
-      controller->buttons[Core::Input::Button::button_4] = (key_state[SDL_SCANCODE_RETURN] ? Core::Input::Button_state::down : Core::Input::Button_state::up);
+      // Mouse keys
+      {
+        Core::Input::Button_state *button_state_0 = &controller->buttons[Core::Input::Button::button_0];
+        *button_state_0 = mouse_state & SDL_BUTTON(SDL_BUTTON_LEFT) ? button_down(button_state_0) : button_up(button_state_0);
+        
+        Core::Input::Button_state *button_state_1 = &controller->buttons[Core::Input::Button::button_1];
+        *button_state_1 = mouse_state & SDL_BUTTON(SDL_BUTTON_RIGHT) ? button_down(button_state_1) : button_up(button_state_1);
+      }
+      
+      // Keyboard
+      {
+        Core::Input::Button_state *button_state_4 = &controller->buttons[Core::Input::Button::button_2];
+        *button_state_4 = key_state[SDL_SCANCODE_LSHIFT] ? button_down(button_state_4) : button_up(button_state_4);
+
+        Core::Input::Button_state *button_state_5 = &controller->buttons[Core::Input::Button::button_3];
+        *button_state_5 = key_state[SDL_SCANCODE_SPACE] ? button_down(button_state_5) : button_up(button_state_5);
+        
+        Core::Input::Button_state *button_state_6 = &controller->buttons[Core::Input::Button::button_4];
+        *button_state_6 = key_state[SDL_SCANCODE_RETURN] ? button_down(button_state_6) : button_up(button_state_6);
+      }
     }
   }
 }

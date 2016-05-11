@@ -95,6 +95,16 @@ Controller::get_trigger(const uint8_t trigger) const
 }
 
 
+namespace
+{
+  inline Core::Input::Button_state
+  get_state(const Context_data::Input_pool *data, const uint32_t controller, const uint32_t button_id)
+  {
+    return data->controllers[controller].buttons[button_id];
+  }
+}
+
+
 bool
 Controller::is_button_down(const Button::ENUM button) const
 {
@@ -103,7 +113,56 @@ Controller::is_button_down(const Button::ENUM button) const
 
   if(input && input->size > m_impl->controller_number)
   {
-    return input->controllers[m_impl->controller_number].buttons[(uint32_t)button] == Core::Input::Button_state::down;
+    const Core::Input::Button_state curr_state = get_state(input, m_impl->controller_number, button);
+    return curr_state== Core::Input::Button_state::down || curr_state == Core::Input::Button_state::down_on_frame;
+  }
+
+  return false;
+}
+
+
+bool
+Controller::is_button_down_on_frame(const Button::ENUM button) const
+{
+  assert(m_impl && m_impl->context_data);
+  const Context_data::Input_pool *input = m_impl->context_data->input_pool;
+
+  if(input && input->size > m_impl->controller_number)
+  {
+    const Core::Input::Button_state curr_state = get_state(input, m_impl->controller_number, button);
+    return curr_state == Core::Input::Button_state::down_on_frame;
+  }
+
+  return false;
+}
+ 
+ 
+bool
+Controller::is_button_up(const Button::ENUM button) const
+{
+  assert(m_impl && m_impl->context_data);
+  const Context_data::Input_pool *input = m_impl->context_data->input_pool;
+
+  if(input && input->size > m_impl->controller_number)
+  {
+    const Core::Input::Button_state curr_state = get_state(input, m_impl->controller_number, button);
+    return curr_state== Core::Input::Button_state::up || curr_state == Core::Input::Button_state::up_on_frame;
+  }
+
+  return false;
+}
+
+
+bool
+Controller::is_button_up_on_frame(const Button::ENUM button) const
+{
+  assert(m_impl && m_impl->context_data);
+  const Context_data::Input_pool *input = m_impl->context_data->input_pool;
+
+  if(input && input->size > m_impl->controller_number)
+  {
+    const Core::Input::Button_state curr_state = get_state(input, m_impl->controller_number, button);
+    return curr_state == Core::Input::Button_state::up_on_frame;
   }
 
   return false;

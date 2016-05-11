@@ -27,6 +27,9 @@ enum class Button_state {
 
   up,
   down,
+  
+  up_on_frame,
+  down_on_frame,
 
 }; // enum
 
