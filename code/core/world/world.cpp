@@ -30,6 +30,8 @@
 #include <systems/physics_engine/physics_engine.hpp>
 #include <systems/physics_engine/collision/axis_collidable.hpp>
 
+#include <data/global_data/resource_data.hpp>
+
 #include <3rdparty/imgui/imgui.h>
 #include <3rdparty/imgui/imgui_impl_sdl_gl3.h>
 
@@ -88,6 +90,49 @@ World::think(const float dt)
   
   // Reset the entity pool for new changes.
   World_data::entity_graph_change_pool_init(graph_changes);
+  
+  
+  ImGui::Begin("Texture");
+  
+  auto resource_data = Resource_data::get_resources();
+  uint32_t count = 0;
+  
+  for(uint32_t i = 0; i < resource_data->texture_pool->capacity; ++i)
+  {
+    if(resource_data->texture_pool->id[i] != 0)
+    {
+      if(count > 3)
+      {
+        count = 0;
+      }
+    
+      if(count > 0)
+      {
+        ImGui::SameLine();
+      }
+      
+      count++;
+      
+      ImGui::PushID(count);
+      ImGui::Image((void*)resource_data->texture_pool->texture[i].texture_id,
+                   ImVec2(64, 64),
+                   ImVec2(0,0),
+                   ImVec2(1,1),
+                   ImColor(255,255,255,255),
+                   ImColor(255,255,255,128));
+
+//      ImGui::ImageButton((void*)resource_data->texture_pool->texture[i].texture_id,
+//                          ImVec2(64,64),
+//                          ImVec2(0,0),
+//                          ImVec2(1,1),
+//                          1,
+//                          ImColor(0,0,0,255));
+
+      ImGui::PopID();
+    }
+  }
+  
+  ImGui::End();
   
   
   ImGui::Begin("Entities");
@@ -229,22 +274,6 @@ World::get_overlapping_aabbs(const std::function<void(const Core::Collision_pair
     callback(pairs, number_of_pairs);
   }
   
-  ImGui::Begin("Sweep And Prune");
-  
-  ImVec2 window_size = ImGui::GetWindowSize();
-  ImVec2 cursor = ImGui::GetCursorScreenPos();
-  
-  // Loop through all
-  for(uint32_t i = 0; i < data->size; ++i)
-  {
-    const math::aabb *box_coll = &data->aabb_collider[i];
-    // z x
-    {
-      
-    }
-  }
-  
-  ImGui::End();
   
   Physics::Broadphase::sweep_free(&sweep);
   Physics::Broadphase::prune_free(&prune);
