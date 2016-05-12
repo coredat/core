@@ -21,6 +21,8 @@ struct Texture_pool;
 struct World;
 struct Gui_view_pool;
 struct Physics_data;
+struct Mesh_renderer_data;
+struct Text_renderer_data;
 
 
 } // ns

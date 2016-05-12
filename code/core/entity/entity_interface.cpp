@@ -196,11 +196,8 @@ set_material_id(const util::generic_id this_id, World_data::World *world, const 
 {
   if(!is_valid(this_id, world)) { return; }
   
-  auto ent_pool = world->entity_pool;
-
-  size_t index;
-  assert(get_index(&index, this_id, ent_pool->entity_id, ent_pool->size));
-  ent_pool->texture[index] = id;
+  auto data = world->mesh_data;
+  World_data::mesh_renderer_update_texture(data, this_id, id);
 }
 
 
@@ -209,11 +206,11 @@ get_material_id(const util::generic_id this_id, World_data::World *world)
 {
   if(!is_valid(this_id, world)) { return 0; }
 
-  auto ent_pool = world->entity_pool;
+  auto data = world->mesh_data;
 
   size_t index;
-  assert(get_index(&index, this_id, ent_pool->entity_id, ent_pool->size));
-  return (uint32_t)ent_pool->texture[index];
+  assert(get_index(&index, this_id, data->entity_id, data->size));
+  return (uint32_t)data->texture[index];
 }
 
 
@@ -236,13 +233,14 @@ set_model(const util::generic_id this_id, World_data::World *world, const Core::
 {
   if(!is_valid(this_id, world)) { return; }
   
+  auto data = world->mesh_data;
   auto ent_pool = world->entity_pool;
+
+  World_data::mesh_renderer_update_model(data, this_id, model.get_id());
 
   size_t index;
   assert(get_index(&index, this_id, ent_pool->entity_id, ent_pool->size));
-  ent_pool->model[index] = model.get_id();
   
-  Resource_data::Resources *resource = Resource_data::get_resources();
   ent_pool->aabb[index] = model.get_model_aabb();
 }
 
@@ -255,8 +253,8 @@ get_model(const util::generic_id this_id, World_data::World *world)
   auto ent_pool = world->entity_pool;
 
   size_t index;
-  assert(get_index(&index, this_id, ent_pool->entity_id, ent_pool->size));
-  return Core::Model((uint32_t)ent_pool->model[index]);
+//  assert(get_index(&index, this_id, ent_pool->entity_id, ent_pool->size));
+//  return Core::Model((uint32_t)ent_pool->model[index]);
 }
 
 

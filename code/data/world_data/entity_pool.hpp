@@ -37,8 +37,8 @@ struct Entity_pool
   math::transform                 *transform          = nullptr;
   math::aabb                      *aabb               = nullptr;
   
-  uint32_t                        *model              = nullptr;
-  uint32_t                        *texture            = nullptr;
+//  uint32_t                        *model              = nullptr;
+//  uint32_t                        *texture            = nullptr;
   
   const uint32_t                  capacity = ENTITY_POOL_SIZE;
   uint32_t                        size = 0;

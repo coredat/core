@@ -11,7 +11,13 @@ public:
 
   explicit              Mesh_renderer();
   
-  void                  render();
+  void                  set_material(const int mesh);
+  int                   get_material() const;
+
+  void                  set_mesh(const int mesh);
+  int                   get_mesh() const;
+  
+  void                  render(); // Move to the world process.
   
 private:
 

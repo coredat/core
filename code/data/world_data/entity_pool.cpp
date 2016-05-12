@@ -39,15 +39,15 @@ entity_pool_init(Entity_pool *pool)
   }
   
   {
-    const Core::Memory::Chunk model_chunk = Core::Memory::request_chunk(ENTITY_POOL_SIZE * sizeof(uint32_t));
-    pool->model = static_cast<uint32_t*>(model_chunk.start_of_chunk);
-    memset(pool->model, 0, model_chunk.bytes_in_chunk);
+//    const Core::Memory::Chunk model_chunk = Core::Memory::request_chunk(ENTITY_POOL_SIZE * sizeof(uint32_t));
+//    pool->model = static_cast<uint32_t*>(model_chunk.start_of_chunk);
+//    memset(pool->model, 0, model_chunk.bytes_in_chunk);
   }
   
   {
-    const Core::Memory::Chunk texture_chunk = Core::Memory::request_chunk(ENTITY_POOL_SIZE * sizeof(uint32_t));
-    pool->texture = static_cast<uint32_t*>(texture_chunk.start_of_chunk);
-    memset(pool->texture, 0, texture_chunk.bytes_in_chunk);
+//    const Core::Memory::Chunk texture_chunk = Core::Memory::request_chunk(ENTITY_POOL_SIZE * sizeof(uint32_t));
+//    pool->texture = static_cast<uint32_t*>(texture_chunk.start_of_chunk);
+//    memset(pool->texture, 0, texture_chunk.bytes_in_chunk);
   }
   
   {
@@ -121,8 +121,8 @@ entity_pool_push_new_entity(Entity_pool *pool, const util::generic_id id)
     pool->entity_id[index] = id;
     pool->entity_properties[index] = Entity_properties{0};
     pool->name[index * max_entity_name_size] = '\0';
-    pool->model[index] = (uint32_t)0;
-    pool->texture[index] = (uint32_t)0;
+//    pool->model[index] = (uint32_t)0;
+//    pool->texture[index] = (uint32_t)0;
     pool->aabb[index] = math::aabb();
     pool->transform[index] = math::transform_init(math::vec3_zero(), math::vec3_one(), math::quat_init());
     
@@ -151,14 +151,14 @@ entity_pool_remove_entity(Entity_pool *pool, const util::generic_id id)
     const uint32_t start_move = remove_id + 1;
     const uint32_t end_move = pool->size - remove_id - 1;
     --(pool->size);
-    
+        
     memmove(&pool->entity_id[remove_id],          &pool->entity_id[start_move],          end_move * sizeof(*pool->entity_id));
     memmove(&pool->entity_properties[remove_id],  &pool->entity_properties[start_move],  end_move * sizeof(*pool->entity_properties));
     memmove(&pool->name[remove_id * max_entity_name_size],  &pool->name[start_move * max_entity_name_size],  end_move * (sizeof(char) * max_entity_name_size));
     memmove(&pool->transform[remove_id],          &pool->transform[start_move],          end_move * sizeof(*pool->transform));
     memmove(&pool->aabb[remove_id],               &pool->aabb[start_move],               end_move * sizeof(*pool->aabb));
-    memmove(&pool->model[remove_id],              &pool->model[start_move],              end_move * sizeof(*pool->model));
-    memmove(&pool->texture[remove_id],            &pool->texture[start_move],            end_move * sizeof(*pool->texture));
+//    memmove(&pool->model[remove_id],              &pool->model[start_move],              end_move * sizeof(*pool->model));
+//    memmove(&pool->texture[remove_id],            &pool->texture[start_move],            end_move * sizeof(*pool->texture));
     
     
     return true;

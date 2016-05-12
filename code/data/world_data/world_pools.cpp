@@ -1,5 +1,6 @@
 #include "world_pools.hpp"
 #include "entity_pool.hpp"
+#include "renderer_mesh_data.hpp"
 #include "physics_data.hpp"
 #include "graph_change_pool.hpp"
 #include <core/entity/entity.hpp>
@@ -30,6 +31,8 @@ world_create_new_entity(World *world_data,
   
   if(World_data::entity_pool_push_new_entity(entity_pool, id))
   {
+    World_data::mesh_renderer_add(world_data->mesh_data, id, 0, 0);
+    
     entity_graph_change_push(world_data->entity_graph_changes,
                              id,
                              Entity_graph_change::inserted);
@@ -117,6 +120,8 @@ world_update_scene_graph_changes(World_data::World *world_data,
       case(World_data::Entity_graph_change::removed):
       {
         entity_pool_remove_entity(world_data->entity_pool, change.entity_id);
+        mesh_renderer_remove(world_data->mesh_data, change.entity_id);
+        
         physics_remove(world_data->physics_data, change.entity_id);
       
         break;

@@ -34,6 +34,8 @@ void                          send_event(const util::generic_id this_id, World_d
 void                          set_transform(const util::generic_id this_id, World_data::World *world, const Transform &transform);
 Transform                     get_transform(const util::generic_id this_id, World_data::World *world);
 
+// Move rendering things into renderer.
+
 void                          set_material_id(const util::generic_id this_id, World_data::World *world, const uint32_t id);
 uint32_t                      get_material_id(const util::generic_id this_id, World_data::World *world);
 
