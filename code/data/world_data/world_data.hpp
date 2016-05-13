@@ -3,7 +3,6 @@
 
 
 #include "camera_pool.hpp"
-#include "entity_pool.hpp"
 #include "graph_change_pool.hpp"
 #include "world.hpp"
 #include "world_pools.hpp"

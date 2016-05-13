@@ -55,8 +55,6 @@ public:
   void                          set_name(const char* set_name);
   const char*                   get_name() const;
 
-  void                          send_event(const uint32_t id, const void *data, const uint32_t size_of_data);
-
   void                          set_transform(const Transform &transform);
   Transform                     get_transform() const;
 

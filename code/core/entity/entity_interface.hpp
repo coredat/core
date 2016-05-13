@@ -29,8 +29,6 @@ void                          remove_tag(const util::generic_id this_id, World_d
 void                          set_name(const util::generic_id this_id, World_data::World *world, const char* set_name);
 const char*                   get_name(const util::generic_id this_id, World_data::World *world);
 
-void                          send_event(const util::generic_id this_id, World_data::World *world, const uint32_t id, const void *data, const uint32_t size_of_data);
-
 void                          set_transform(const util::generic_id this_id, World_data::World *world, const Transform &transform);
 Transform                     get_transform(const util::generic_id this_id, World_data::World *world);
 

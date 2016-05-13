@@ -9,6 +9,8 @@
 #include <core/world/detail/world_detail.hpp>
 #include <data/world_data/graph_change_pool.hpp>
 #include <data/world_data/world_pools.hpp>
+#include <data/world_data/entity_data.hpp>
+#include <data/world_data/transform_data.hpp>
 #include <utilities/logging.hpp>
 #include <assert.h>
 
@@ -50,7 +52,9 @@ Entity::Entity(Core::World &world)
  
   if(m_impl->world)
   {
-    World_data::world_create_new_entity(&m_impl->world->data, get_id());
+    World_data::entity_data_add_entity(m_impl->world->data.entity, get_id());
+    World_data::transform_data_add_transform(m_impl->world->data.transform, get_id());
+    World_data::mesh_renderer_add(m_impl->world->data.mesh_data, get_id(), 0, 0);
   }
   else
   {
@@ -110,9 +114,10 @@ Entity::destroy()
   if(!is_valid()) { return; }
   
   // Destroy this.
-  World_data::entity_graph_change_push(m_impl->world->data.entity_graph_changes,
-                                       m_impl->id,
-                                       World_data::Entity_graph_change::removed);
+  World_data::entity_data_remove_entity(m_impl->world->data.entity, get_id());
+  World_data::transform_data_remove_transform(m_impl->world->data.transform, get_id());
+  World_data::mesh_renderer_remove(m_impl->world->data.mesh_data, get_id());
+  World_data::physics_remove(m_impl->world->data.physics_data, get_id());
   
   m_impl->id = util::generic_id_invalid();
 }
@@ -179,13 +184,6 @@ const char*
 Entity::get_name() const
 {
   return Entity_detail::get_name(m_impl->id, &m_impl->world->data);
-}
-
-
-void
-Entity::send_event(const uint32_t id, const void *data, const uint32_t size_of_data)
-{
-  Entity_detail::send_event(m_impl->id, &m_impl->world->data, id, data, size_of_data);
 }
 
 

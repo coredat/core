@@ -1,5 +1,4 @@
 #include "world_pools.hpp"
-#include "entity_pool.hpp"
 #include "renderer_mesh_data.hpp"
 #include "physics_data.hpp"
 #include "graph_change_pool.hpp"
@@ -29,17 +28,15 @@ world_create_new_entity(World *world_data,
   assert(world_data);
   
   auto entity_data = world_data->entity;
-  //util::generic_id new_id{type_id, ++instance};
   
-//  if(World_data::entity_pool_push_new_entity(entity_pool, id))
   {
     World_data::entity_data_add_entity(entity_data, id);
     World_data::transform_data_add_transform(world_data->transform, id);
     World_data::mesh_renderer_add(world_data->mesh_data, id, 0, 0);
     
-    entity_graph_change_push(world_data->entity_graph_changes,
-                             id,
-                             Entity_graph_change::inserted);
+//    entity_graph_change_push(world_data->entity_graph_changes,
+//                             id,
+//                             Entity_graph_change::inserted);
     
     return true;
   }

@@ -142,13 +142,6 @@ Entity_ref::get_name() const
 
 
 void
-Entity_ref::send_event(const uint32_t id, const void *data, const uint32_t size_of_data)
-{
-  Entity_detail::send_event(m_impl->id, &m_impl->world->data, id, data, size_of_data);
-}
-
-
-void
 Entity_ref::set_transform(const Transform &transform)
 {
   Entity_detail::set_transform(m_impl->id, &m_impl->world->data, transform);
