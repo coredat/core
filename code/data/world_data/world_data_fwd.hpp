@@ -25,6 +25,10 @@ struct Mesh_renderer_data;
 struct Text_renderer_data;
 
 
+struct Transform_data;
+struct Entity_data;
+
+
 } // ns
 
 

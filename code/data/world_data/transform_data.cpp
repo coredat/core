@@ -1,4 +1,5 @@
 #include <data/world_data/transform_data.hpp>
+#include <common/error_strings.hpp>
 #include <utilities/logging.hpp>
 #include <assert.h>
 
@@ -58,10 +59,10 @@ transform_data_free(Transform_data *data)
 
 
 void
-transform_data_add_entity(Transform_data *data,
-                          const util::generic_id id,
-                          math::transform *trans,
-                          math::aabb *aabb)
+transform_data_add_transform(Transform_data *data,
+                             const util::generic_id id,
+                             math::transform *trans,
+                             math::aabb *aabb)
 {
   assert(data && data->size < data->capacity);
   assert(id);
@@ -81,8 +82,8 @@ transform_data_add_entity(Transform_data *data,
 
 
 void
-transform_data_remove_entity(Transform_data *data,
-                             const util::generic_id id)
+transform_data_remove_transform(Transform_data *data,
+                                const util::generic_id id)
 {
   assert(id && data);
   
@@ -101,8 +102,8 @@ transform_data_remove_entity(Transform_data *data,
   }
   else
   {
-    LOG_ERROR("Tried removing an entity that doesn't exist");
     assert(false);
+    LOG_ERROR(Error_string::entity_not_found());    
   }
   
   unlock(data);
@@ -115,8 +116,6 @@ transform_data_exists(Transform_data *data,
                       size_t *out_index)
 {
   assert(data && id);
-
-  lock(data);
   
   bool found = false;
   
@@ -125,8 +124,6 @@ transform_data_exists(Transform_data *data,
   
   found = util::generic_id_search_binary(out_index, id, data->entity_id, data->size);
   
-  unlock(data);
-
   return found;
 }
 

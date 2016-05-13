@@ -32,6 +32,9 @@
 
 #include <data/global_data/resource_data.hpp>
 
+#include <data/world_data/transform_data.hpp>
+#include <data/world_data/entity_data.hpp>
+
 #include <3rdparty/imgui/imgui.h>
 #include <3rdparty/imgui/imgui_impl_sdl_gl3.h>
 #include <string>
@@ -84,8 +87,6 @@ World::World(const World_setup setup)
   Core::Memory::initialize(chunk_128_mb);
 
   LOG_TODO("Remove static data stores")
-  static World_data::Entity_pool world_entities;
-  World_data::entity_pool_init(&world_entities);
   
   static World_data::Entity_graph_changes_pool graph_changes;
   World_data::entity_graph_change_pool_init(&graph_changes);
@@ -99,11 +100,19 @@ World::World(const World_setup setup)
   static World_data::Mesh_renderer_data mesh_data;
   World_data::mesh_renderer_init(&mesh_data);
   
-  m_impl->world_data->data.entity_pool          = &world_entities;
+  static World_data::Transform_data transform_data;
+  World_data::transform_data_init(&transform_data, 2048);
+  
+  static World_data::Entity_data entity_data;
+  World_data::entity_data_init(&entity_data, 2048);
+  
   m_impl->world_data->data.entity_graph_changes = &graph_changes;
   m_impl->world_data->data.camera_pool          = &camera_pool;
   m_impl->world_data->data.physics_data         = &physics_data;
   m_impl->world_data->data.mesh_data            = &mesh_data;
+  
+  m_impl->world_data->data.transform            = &transform_data;
+  m_impl->world_data->data.entity               = &entity_data;
   
   LOG_TODO("We can store the data directly and get rid of ::World_data::World")
   World_data::set_world_data(&m_impl->world_data->data);
@@ -174,51 +183,51 @@ World::think(const float dt)
   ImGui::End();
   
   
-  ImGui::Begin("Entities");
-  
-  // Loop through all
-  for(uint32_t i = 0; i < data->entity_pool->size; ++i)
-  {
-    const char *name = World_data::entity_pool_get_entity_name(data->entity_pool, data->entity_pool->entity_id[i]);
-    
-    std::string number = std::to_string(data->entity_pool->entity_id[i]);
-  
-    if(ImGui::TreeNode(name))
-    {
-      static char buf[32];
-      strlcpy(buf, name, sizeof(char) * 32);
-      
-      struct Input_data
-      {
-        World_data::Entity_pool *pool;
-        util::generic_id id;
-      };
-      
-      static Input_data input_data;
-      input_data = Input_data{data->entity_pool, data->entity_pool->entity_id[i]};
-      
+//  ImGui::Begin("Entities");
+//  
+//  // Loop through all
+//  for(uint32_t i = 0; i < data->entity_pool->size; ++i)
+//  {
+//    const char *name = World_data::entity_pool_get_entity_name(data->entity_pool, data->entity_pool->entity_id[i]);
+//    
+//    std::string number = std::to_string(data->entity_pool->entity_id[i]);
+//  
+//    if(ImGui::TreeNode(name))
+//    {
+//      static char buf[32];
+//      strlcpy(buf, name, sizeof(char) * 32);
+//      
+//      struct Input_data
+//      {
+//        World_data::Entity_pool *pool;
+//        util::generic_id id;
+//      };
+//      
+//      static Input_data input_data;
+//      input_data = Input_data{data->entity_pool, data->entity_pool->entity_id[i]};
+//      
+////      ImGui::InputText("Name",
+////                       buf,
+////                       32,
+////                       ImGuiInputTextFlags_::ImGuiInputTextFlags_EnterReturnsTrue,
+////                       [](ImGuiTextEditCallbackData *cb_data) -> int
+////                       {
+////                         Input_data *in_data = reinterpret_cast<Input_data*>(cb_data->UserData);
+////                         World_data::entity_pool_set_entity_name(in_data->pool, in_data->id, buf);
+////                         return 1;
+////                       },
+////                       (void*)&input_data);
+//
 //      ImGui::InputText("Name",
-//                       buf,
-//                       32,
-//                       ImGuiInputTextFlags_::ImGuiInputTextFlags_EnterReturnsTrue,
-//                       [](ImGuiTextEditCallbackData *cb_data) -> int
-//                       {
-//                         Input_data *in_data = reinterpret_cast<Input_data*>(cb_data->UserData);
-//                         World_data::entity_pool_set_entity_name(in_data->pool, in_data->id, buf);
-//                         return 1;
-//                       },
-//                       (void*)&input_data);
-
-      ImGui::InputText("Name",
-                        World_data::entity_pool_get_entity_name(data->entity_pool, data->entity_pool->entity_id[i]),
-                       32);
-
-    
-      ImGui::TreePop();
-    }
-  }
-  
-  ImGui::End();
+//                        World_data::entity_pool_get_entity_name(data->entity_pool, data->entity_pool->entity_id[i]),
+//                       32);
+//
+//    
+//      ImGui::TreePop();
+//    }
+//  }
+//  
+//  ImGui::End();
   
   
   // Render world
@@ -227,7 +236,7 @@ World::think(const float dt)
   World_data::World *world = World_data::get_world();
 
   static std::vector<Simple_renderer::Node> nodes;
-  nodes.resize(world->entity_pool->size);
+  nodes.resize(world->entity->size);
   const uint32_t size_of_node_pool = nodes.size();
 
   // Get active camera and generate a projection matrix.
@@ -275,9 +284,10 @@ World::think(const float dt)
     //if(false) // debug cam route
     {
       size_t ent_index;
-      World_data::entity_pool_find_index(world->entity_pool, id, &ent_index);
+//      World_data::entity_pool_find_index(world->entity_pool, id, &ent_index);
+      World_data::transform_data_exists(world->transform, id, &ent_index);
 
-      const math::transform trans = world->entity_pool->transform[ent_index];
+      const math::transform trans = world->transform->transform[ent_index];
       const Core::Transform cam_transform(trans.position, trans.scale, trans.rotation);
       
       view = math::mat4_lookat(cam_transform.get_position(),
@@ -302,15 +312,15 @@ World::think(const float dt)
 
   const math::mat4 view_proj = math::mat4_multiply(view, proj);
 
-  ::Transform::transforms_to_wvp_mats(world->entity_pool->transform,
-                                      world->entity_pool->size,
+  ::Transform::transforms_to_wvp_mats(world->transform->transform,
+                                      world->transform->size,
                                       view_proj,
                                       nodes[0].wvp,
                                       size_of_node_pool,
                                       sizeof(Simple_renderer::Node));
 
-  ::Transform::transforms_to_world_mats(world->entity_pool->transform,
-                                        world->entity_pool->size,
+  ::Transform::transforms_to_world_mats(world->transform->transform,
+                                        world->transform->size,
                                         nodes[0].world_mat,
                                         size_of_node_pool,
                                         sizeof(Simple_renderer::Node));
@@ -350,7 +360,7 @@ World::get_overlapping_aabbs(const std::function<void(const Core::Collision_pair
   // Check we have a callback.
   if(!callback) { return; }
 
-  const World_data::Entity_pool *entity_data = m_impl->world_data->data.entity_pool;
+  const World_data::Entity_data  *entity_data = m_impl->world_data->data.entity;
   const World_data::Physics_data *data = m_impl->world_data->data.physics_data;
   
   static std::vector<math::aabb> boundings;

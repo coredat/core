@@ -13,7 +13,10 @@ namespace World_data {
 
 struct World
 {
-  Entity_pool                 *entity_pool          = nullptr;
+//  Entity_pool                 *entity_pool          = nullptr;
+  Transform_data              *transform            = nullptr;
+  Entity_data                 *entity               = nullptr;
+  
   Entity_graph_changes_pool   *entity_graph_changes = nullptr;
   Rigidbody_pool              *rigidbody_pool       = nullptr;
   Camera_pool                 *camera_pool          = nullptr;

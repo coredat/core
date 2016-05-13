@@ -3,6 +3,8 @@
 #include "renderer_mesh_data.hpp"
 #include "physics_data.hpp"
 #include "graph_change_pool.hpp"
+#include "entity_data.hpp"
+#include "transform_data.hpp"
 #include <core/entity/entity.hpp>
 #include <core/entity/entity_ref.hpp>
 #include <atomic>
@@ -26,11 +28,13 @@ world_create_new_entity(World *world_data,
   // Param check.
   assert(world_data);
   
-  auto entity_pool = world_data->entity_pool;
+  auto entity_data = world_data->entity;
   //util::generic_id new_id{type_id, ++instance};
   
-  if(World_data::entity_pool_push_new_entity(entity_pool, id))
+//  if(World_data::entity_pool_push_new_entity(entity_pool, id))
   {
+    World_data::entity_data_add_entity(entity_data, id);
+    World_data::transform_data_add_transform(world_data->transform, id);
     World_data::mesh_renderer_add(world_data->mesh_data, id, 0, 0);
     
     entity_graph_change_push(world_data->entity_graph_changes,
@@ -82,19 +86,19 @@ world_find_entities_with_tag(World *world_data,
 {
   assert(world_data);
   
-  auto entity_pool = world_data->entity_pool;
+  auto entity_data = world_data->entity;
   
   uint32_t number_found(0);
   
-  for(uint32_t i = 0; i < entity_pool->size; ++i)
+  for(uint32_t i = 0; i < entity_data->size; ++i)
   {
-    auto prop = entity_pool->entity_properties[i];
+    auto tags = entity_data->tags[i];
     
-    if(prop.tags & tag)
+    if(tags & tag)
     {
       if(size_of_out > number_found)
       {
-        out_ids[number_found++] = entity_pool->entity_id[i];
+        out_ids[number_found++] = entity_data->entity_id[i];
       }
       else
       {
@@ -119,7 +123,10 @@ world_update_scene_graph_changes(World_data::World *world_data,
     {
       case(World_data::Entity_graph_change::removed):
       {
-        entity_pool_remove_entity(world_data->entity_pool, change.entity_id);
+//        entity_pool_remove_entity(world_data->entity_pool, change.entity_id);
+        entity_data_remove_entity(world_data->entity, change.entity_id);
+        transform_data_remove_transform(world_data->transform, change.entity_id);
+        
         mesh_renderer_remove(world_data->mesh_data, change.entity_id);
         
         physics_remove(world_data->physics_data, change.entity_id);

@@ -13,11 +13,9 @@ namespace World_data {
 struct Entity_data
 {
   util::generic_id      *entity_id    = nullptr;
-  char                  **entity_name = nullptr;
+  char                  *entity_name  = nullptr;
   uint32_t              *tags         = nullptr;
   
-  char                  *entity_name_buffer = nullptr;
-
   uint32_t              size          = 0;
   const uint32_t        capacity      = 0;
 };
@@ -41,18 +39,31 @@ entity_data_free(Entity_data *data);
 
 
 void
-entity_data_add_entity(Entity_data &data,
-                       const util::generic_id id);
+entity_data_add_entity(Entity_data *data,
+                       const util::generic_id id,
+                       const char *name = nullptr,
+                       const uint32_t *tags = nullptr);
+
+void
+entity_data_set_name(Entity_data *data,
+                     const util::generic_id id,
+                     const char *name);
+  
+  
+char*
+entity_data_get_name(Entity_data *data,
+                     const util::generic_id id);
 
 
 void
-entity_data_remove_entity(Entity_data &data,
+entity_data_remove_entity(Entity_data *data,
                           const util::generic_id id);
 
 
 bool
 entity_data_exists(Entity_data *data,
-                   const util::generic_id id);
+                   const util::generic_id id,
+                   size_t *out_index = nullptr);
 
 
 } // ns

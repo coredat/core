@@ -9,9 +9,12 @@
 #include <data/world_data/world_data.hpp>
 #include <data/global_data/resource_data.hpp>
 #include <core/transform/transform.hpp>
+#include <common/error_strings.hpp>
 #include <math/transform/transform.hpp>
 #include <math/geometry/aabb.hpp>
 #include <utilities/logging.hpp>
+#include <data/world_data/transform_data.hpp>
+#include <data/world_data/entity_data.hpp>
 
 
 namespace Core {
@@ -35,25 +38,44 @@ is_valid(const util::generic_id this_id, World_data::World *world)
 uint32_t
 get_tags(const util::generic_id this_id, World_data::World *world)
 {
-  if(!is_valid(this_id, world)) { return 0; }
-  
-  size_t index;
-  if(util::generic_id_search_binary(&index,
-                                    this_id,
-                                    world->entity_pool->entity_id,
-                                    world->entity_pool->size))
+  if(!is_valid(this_id, world))
   {
-    return world->entity_pool->entity_properties[index].tags;
+    LOG_ERROR(Error_string::entity_is_invalid());
+    assert(false);
+    return 0;
   }
   
-  return 0;
+  auto entity_data = world->entity;
+  
+  uint32_t tags = 0;
+  
+  size_t index;
+  lock(entity_data);
+  
+  if(World_data::entity_data_exists(entity_data, this_id, &index))
+  {
+    tags = entity_data->tags[index];
+  }
+  else
+  {
+    assert(false);
+    LOG_WARNING(Error_string::entity_not_found());
+  }
+  
+  unlock(entity_data);
+  
+  return tags;
 }
 
 
 bool
 has_tag(const util::generic_id this_id, World_data::World *world, const uint32_t tag_id)
 {
-  if(!is_valid(this_id, world)) { return 0; }
+  if(!is_valid(this_id, world))
+  {
+    LOG_ERROR(Error_string::entity_is_invalid());
+    return 0;
+  }
   
   const uint32_t tags = get_tags(this_id, world);
   
@@ -64,23 +86,38 @@ has_tag(const util::generic_id this_id, World_data::World *world, const uint32_t
 void
 set_tags(const util::generic_id this_id, World_data::World *world, const uint32_t set_tags)
 {
-  if(!is_valid(this_id, world)) { return; }
+  if(!is_valid(this_id, world))
+  {
+    LOG_ERROR(Error_string::entity_is_invalid());
+    return;
+  }
+  
+  auto entity_data = world->entity;
   
   size_t index;
-  if(util::generic_id_search_binary(&index,
-                                    this_id,
-                                    world->entity_pool->entity_id,
-                                    world->entity_pool->size))
-{
-    world->entity_pool->entity_properties[index].tags = set_tags;
+  lock(entity_data);
+  
+  if(World_data::entity_data_exists(entity_data, this_id, &index))
+  {
+    entity_data->tags[index] = set_tags;
   }
+  else
+  {
+    LOG_WARNING(Error_string::entity_not_found());
+  }
+  
+  unlock(entity_data);
 }
 
 
 void
 add_tag(const util::generic_id this_id, World_data::World *world, const uint32_t add_tag)
 {
-  if(!is_valid(this_id, world)) { return; }
+  if(!is_valid(this_id, world))
+  {
+    LOG_ERROR(Error_string::entity_is_invalid());
+    return;
+  }
 
   const uint32_t tags = get_tags(this_id, world);
   set_tags(this_id, world, tags | add_tag);
@@ -90,7 +127,11 @@ add_tag(const util::generic_id this_id, World_data::World *world, const uint32_t
 void
 remove_tag(const util::generic_id this_id, World_data::World *world, const uint32_t tag)
 {
-  if(!is_valid(this_id, world)) { return; }
+  if(!is_valid(this_id, world))
+  {
+    LOG_ERROR(Error_string::entity_is_invalid());
+    return;
+  }
 
   const uint32_t tags = get_tags(this_id, world);
   set_tags(this_id, world, tags &~ tag);
@@ -100,20 +141,27 @@ remove_tag(const util::generic_id this_id, World_data::World *world, const uint3
 void
 set_name(const util::generic_id this_id, World_data::World *world, const char* set_name)
 {
-  if(!is_valid(this_id, world)) { return; }
+  if(!is_valid(this_id, world))
+  {
+    LOG_ERROR(Error_string::entity_is_invalid());
+    return;
+  }
   
   // set string.
-  World_data::entity_pool_set_entity_name(world->entity_pool, this_id, set_name);
+  World_data::entity_data_set_name(world->entity, this_id, set_name);
 }
   
   
 const char*
 get_name(const util::generic_id this_id, World_data::World *world)
 {
-  if(!is_valid(this_id, world)) { return nullptr; }
+  if(!is_valid(this_id, world))
+  {
+    LOG_ERROR(Error_string::entity_is_invalid());
+    return nullptr;
+  }
   
-  // set string.
-  return World_data::entity_pool_get_entity_name(world->entity_pool, this_id);
+  return World_data::entity_data_get_name(world->entity, this_id);
 }
 
 
@@ -138,33 +186,28 @@ namespace
 
 
 void
-send_event(const util::generic_id this_id, World_data::World *world, const uint32_t event_id,
-                   const void *data,
-                   const uint32_t size_of_data)
-{
-  assert(false); // This used to be about components. do we still need it?
-  LOG_ERROR("Send event is disabled currently")
-}
-
-
-void
 set_transform(const util::generic_id this_id, World_data::World *world,const Transform &set_transform)
 {
-  if(!is_valid(this_id, world)) { return; }
+  if(!is_valid(this_id, world))
+  {
+    LOG_ERROR(Error_string::entity_is_invalid());
+    return;
+  }
   
-  auto ent_pool = world->entity_pool;
+  auto data = world->transform;
 
   size_t index;
-  assert(get_index(&index, this_id, ent_pool->entity_id, ent_pool->size));
-  
-  math::transform new_transform = math::transform_init(set_transform.get_position(), set_transform.get_scale(), set_transform.get_rotation());
-  ent_pool->transform[index] = new_transform;
-  
-  World_data::entity_graph_change_push(world->entity_graph_changes, this_id, World_data::Entity_graph_change::updated);
-  
-  // Update collider
+  if(World_data::transform_data_exists(data, this_id, &index))
   {
-    World_data::physics_update(world->physics_data, this_id, &ent_pool->aabb[index], &ent_pool->transform[index]);
+    const math::transform new_transform = math::transform_init(set_transform.get_position(), set_transform.get_scale(), set_transform.get_rotation());
+    data->transform[index] = new_transform;
+    
+    World_data::entity_graph_change_push(world->entity_graph_changes, this_id, World_data::Entity_graph_change::updated);
+    World_data::physics_update(world->physics_data, this_id, &data->aabb[index], &data->transform[index]);
+  }
+  else
+  {
+    LOG_ERROR(Error_string::entity_not_found());
   }
 }
 
@@ -172,29 +215,44 @@ set_transform(const util::generic_id this_id, World_data::World *world,const Tra
 Transform
 get_transform(const util::generic_id this_id, World_data::World *world)
 {
-  if(!is_valid(this_id, world)) {
+  if(!is_valid(this_id, world))
+  {
+    LOG_ERROR(Error_string::entity_is_invalid());
     return Transform();
   }
   
-  auto ent_pool = world->entity_pool;
+  auto data = world->transform;
 
   size_t index;
-  assert(get_index(&index, this_id, ent_pool->entity_id, ent_pool->size));
-  math::transform local_transform = ent_pool->transform[index];
+  if(World_data::transform_data_exists(data, this_id, &index))
+  {
+    assert(get_index(&index, this_id, data->entity_id, data->size));
+    math::transform local_transform = data->transform[index];
+    
+    const math::vec3 pos = local_transform.position;
+    const math::vec3 scale = local_transform.scale;
+    
+    return Core::Transform(pos,
+                           scale,
+                           local_transform.rotation);
+  }
+  else
+  {
+    LOG_ERROR(Error_string::entity_not_found());
+  }
   
-  const math::vec3 pos = local_transform.position;
-  const math::vec3 scale = local_transform.scale;
-  
-  return Core::Transform(pos,
-                         scale,
-                         local_transform.rotation);
+  return Core::Transform();
 }
 
 
 void
 set_material_id(const util::generic_id this_id, World_data::World *world, const uint32_t id)
 {
-  if(!is_valid(this_id, world)) { return; }
+  if(!is_valid(this_id, world))
+  {
+    LOG_ERROR(Error_string::entity_is_invalid());
+    return;
+  }
   
   auto data = world->mesh_data;
   World_data::mesh_renderer_update_texture(data, this_id, id);
@@ -204,7 +262,11 @@ set_material_id(const util::generic_id this_id, World_data::World *world, const 
 uint32_t
 get_material_id(const util::generic_id this_id, World_data::World *world)
 {
-  if(!is_valid(this_id, world)) { return 0; }
+  if(!is_valid(this_id, world))
+  {
+    LOG_ERROR(Error_string::entity_is_invalid());
+    return 0;
+  }
 
   auto data = world->mesh_data;
 
@@ -231,28 +293,42 @@ get_material(const util::generic_id this_id, World_data::World *world)
 void
 set_model(const util::generic_id this_id, World_data::World *world, const Core::Model &model)
 {
-  if(!is_valid(this_id, world)) { return; }
+  if(!is_valid(this_id, world))
+  {
+    LOG_ERROR(Error_string::entity_is_invalid());
+    return;
+  }
   
   auto data = world->mesh_data;
-  auto ent_pool = world->entity_pool;
+  auto transform_data = world->transform;
 
   World_data::mesh_renderer_update_model(data, this_id, model.get_id());
 
   size_t index;
-  assert(get_index(&index, this_id, ent_pool->entity_id, ent_pool->size));
-  
-  ent_pool->aabb[index] = model.get_model_aabb();
+  if(World_data::transform_data_exists(transform_data, this_id, &index))
+  {
+    transform_data->aabb[index] = model.get_model_aabb();
+  }
+  else
+  {
+    assert(false);
+    LOG_ERROR(Error_string::entity_not_found());
+  }
 }
 
 
 Core::Model
 get_model(const util::generic_id this_id, World_data::World *world)
 {
-  if(!is_valid(this_id, world)) { return Core::Model(); }
+  if(!is_valid(this_id, world))
+  {
+    LOG_ERROR(Error_string::entity_is_invalid());
+    return Core::Model();
+  }
   
-  auto ent_pool = world->entity_pool;
-
-  size_t index;
+//  auto ent_pool = world->entity_pool;
+//
+//  size_t index;
 //  assert(get_index(&index, this_id, ent_pool->entity_id, ent_pool->size));
 //  return Core::Model((uint32_t)ent_pool->model[index]);
 }
@@ -261,43 +337,55 @@ get_model(const util::generic_id this_id, World_data::World *world)
 void
 set_collider(const util::generic_id this_id, World_data::World *world, const Core::Collider &collider)
 {
+  if(!is_valid(this_id, world))
+  {
+    LOG_ERROR(Error_string::entity_is_invalid());
+    return;
+  }
+
   auto phys_pool = world->physics_data;
   assert(phys_pool);
   
   if(phys_pool)
   {
-    auto entity_pool = world->entity_pool;
-    assert(entity_pool);
+    auto transform_data = world->transform;
+    assert(transform_data);
   
     size_t index;
-    assert(World_data::entity_pool_find_index(entity_pool, this_id, &index));
-    
-    const math::transform transform = World_data::entity_pool_get_transform(entity_pool, this_id);
-    math::aabb aabb = entity_pool->aabb[index];
-  
-    switch(collider.get_type())
+    if(World_data::transform_data_exists(transform_data, this_id, &index))
     {
-      case(Core::Collider::Type::box):
+      const math::transform transform = transform_data->transform[index];
+      math::aabb aabb = transform_data->aabb[index];
+    
+      switch(collider.get_type())
       {
-        const Box_collider box_collider = Collider_utis::cast_to_box_collider(collider);
-        const math::vec3 box_scale = math::vec3_init(box_collider.get_x_half_extent() * 2.f, box_collider.get_y_half_extent() * 2.f, box_collider.get_z_half_extent() * 2.f);
-        const math::vec3 final_box_scale = math::vec3_multiply(box_scale, transform.scale);
+        case(Core::Collider::Type::box):
+        {
+          const Box_collider box_collider = Collider_utis::cast_to_box_collider(collider);
+          const math::vec3 box_scale = math::vec3_init(box_collider.get_x_half_extent() * 2.f, box_collider.get_y_half_extent() * 2.f, box_collider.get_z_half_extent() * 2.f);
+          const math::vec3 final_box_scale = math::vec3_multiply(box_scale, transform.scale);
+          
+          math::aabb_scale(aabb, final_box_scale);
+          
+          World_data::physics_add(phys_pool, this_id, &aabb, &transform);
+          break;
+        }
         
-        math::aabb_scale(aabb, final_box_scale);
-        
-        World_data::physics_add(phys_pool, this_id, &aabb, &transform);
-        break;
+        case(Core::Collider::Type::unknown):
+        default:
+          assert(false);
+          LOG_ERROR(Error_string::unknown_type());
       }
-        
-      case(Core::Collider::Type::unknown):
-      default:
-        assert(false);
-        LOG_ERROR("Unknown collider type.");
+    }
+    else
+    {
+      LOG_ERROR(Error_string::entity_not_found());
+      return;
     }
   }
   else
   {
-    LOG_ERROR("No physics data has been setups.");
+    LOG_ERROR(Error_string::data_not_found());
   }
 }
 
