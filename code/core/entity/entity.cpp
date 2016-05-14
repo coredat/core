@@ -7,7 +7,7 @@
 #include <core/physics/rigidbody_properties.hpp>
 #include <core/world/world.hpp>
 #include <core/world/detail/world_detail.hpp>
-#include <data/world_data/graph_change_pool.hpp>
+#include <data/world_data/pending_scene_graph_change_data.hpp>
 #include <data/world_data/world_pools.hpp>
 #include <data/world_data/entity_data.hpp>
 #include <data/world_data/transform_data.hpp>
@@ -114,10 +114,7 @@ Entity::destroy()
   if(!is_valid()) { return; }
   
   // Destroy this.
-  World_data::entity_data_remove_entity(m_impl->world->data.entity, get_id());
-  World_data::transform_data_remove_transform(m_impl->world->data.transform, get_id());
-  World_data::mesh_renderer_remove(m_impl->world->data.mesh_data, get_id());
-  World_data::physics_remove(m_impl->world->data.physics_data, get_id());
+  World_data::pending_scene_graph_change_delete(m_impl->world->data.entity_graph_changes, get_id());
   
   m_impl->id = util::generic_id_invalid();
 }

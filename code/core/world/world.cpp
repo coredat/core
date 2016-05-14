@@ -66,6 +66,8 @@
 #include <data/world_data/world_data.hpp>
 #include <math/math.hpp>
 #include <vector>
+
+#include <utilities/conversion.hpp>
 // Header dump end
 
 
@@ -83,28 +85,29 @@ World::World(const World_setup setup)
 {
   LOG_TODO("Make world require context to setup.");
 
-  const size_t chunk_128_mb = 134217728;
-  Core::Memory::initialize(chunk_128_mb);
+  Core::Memory::initialize(util::convert_mb_to_bytes(128));
 
-  LOG_TODO("Remove static data stores")
+  LOG_TODO("Remove static data stores");
   
-  static World_data::Entity_graph_changes_pool graph_changes;
-  World_data::entity_graph_change_pool_init(&graph_changes);
+  constexpr uint32_t entity_hint = 2048;
+  
+  static World_data::Pending_scene_graph_change_data graph_changes;
+  World_data::pending_scene_graph_change_init(&graph_changes, entity_hint);
   
   static World_data::Camera_pool camera_pool;
   World_data::camera_pool_init(&camera_pool);
     
   static World_data::Physics_data physics_data;
-  World_data::physics_init(&physics_data, 2048);
+  World_data::physics_init(&physics_data, entity_hint);
   
   static World_data::Mesh_renderer_data mesh_data;
   World_data::mesh_renderer_init(&mesh_data);
   
   static World_data::Transform_data transform_data;
-  World_data::transform_data_init(&transform_data, 2048);
+  World_data::transform_data_init(&transform_data, entity_hint);
   
   static World_data::Entity_data entity_data;
-  World_data::entity_data_init(&entity_data, 2048);
+  World_data::entity_data_init(&entity_data, entity_hint);
   
   m_impl->world_data->data.entity_graph_changes = &graph_changes;
   m_impl->world_data->data.camera_pool          = &camera_pool;
@@ -137,7 +140,7 @@ World::think(const float dt)
   World_data::world_update_scene_graph_changes(data, graph_changes);
   
   // Reset the entity pool for new changes.
-  World_data::entity_graph_change_pool_init(graph_changes);
+  World_data::pending_scene_graph_change_reset(graph_changes);
   
   
   ImGui::Begin("Texture");

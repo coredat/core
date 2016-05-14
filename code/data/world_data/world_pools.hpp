@@ -13,11 +13,10 @@ namespace World_data {
 
 struct World
 {
-//  Entity_pool                 *entity_pool          = nullptr;
-  Transform_data              *transform            = nullptr;
-  Entity_data                 *entity               = nullptr;
+  Transform_data                    *transform            = nullptr;
+  Entity_data                       *entity               = nullptr;
+  Pending_scene_graph_change_data   *entity_graph_changes = nullptr;
   
-  Entity_graph_changes_pool   *entity_graph_changes = nullptr;
   Rigidbody_pool              *rigidbody_pool       = nullptr;
   Camera_pool                 *camera_pool          = nullptr;
   Physics_data                *physics_data         = nullptr;
@@ -38,19 +37,6 @@ struct World
 bool
 world_create_new_entity(World *world_data,
                         util::generic_id id);
-
-
-/*!
-  Find an existing entity.
-  \param world_data is the world in which to search.
-  \param out_entity is the result of the find.
-  \param id is the entity we are searching.
-  \return true or false depending on if we found it or not.
-*/
-//bool
-//world_find_entity(World *world_data,
-//                  Core::Entity_ref *out_entity,
-//                  const util::generic_id id);
 
 
 /*!
@@ -76,7 +62,7 @@ world_find_entities_with_tag(World *world_data,
 */
 void
 world_update_scene_graph_changes(World *world_data,
-                                 const Entity_graph_changes_pool *graph_changes);
+                                 const Pending_scene_graph_change_data *graph_changes);
 
 
 } // ns

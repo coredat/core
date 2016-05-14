@@ -202,7 +202,6 @@ set_transform(const util::generic_id this_id, World_data::World *world,const Tra
     const math::transform new_transform = math::transform_init(set_transform.get_position(), set_transform.get_scale(), set_transform.get_rotation());
     data->transform[index] = new_transform;
     
-    World_data::entity_graph_change_push(world->entity_graph_changes, this_id, World_data::Entity_graph_change::updated);
     World_data::physics_update(world->physics_data, this_id, &data->aabb[index], &data->transform[index]);
   }
   else
