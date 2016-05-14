@@ -5,7 +5,6 @@
 #include <utilities/generic_id.hpp>
 #include <core/transform/transform_fwd.hpp>
 #include <core/physics/physics_fwd.hpp>
-#include <core/material/material_fwd.hpp>
 #include <core/model/model_fwd.hpp>
 #include <data/world_data/world_data_fwd.hpp>
 #include <stdint.h>
@@ -37,8 +36,8 @@ Transform                     get_transform(const util::generic_id this_id, Worl
 void                          set_material_id(const util::generic_id this_id, World_data::World *world, const uint32_t id);
 uint32_t                      get_material_id(const util::generic_id this_id, World_data::World *world);
 
-void                          set_material(const util::generic_id this_id, World_data::World *world, Core::Material &material);
-Core::Material                get_material(const util::generic_id this_id, World_data::World *world);
+//void                          set_material(const util::generic_id this_id, World_data::World *world, Core::Material &material);
+//Core::Material                get_material(const util::generic_id this_id, World_data::World *world);
 
 void                          set_model(const util::generic_id this_id, World_data::World *world, const Core::Model &model);
 Core::Model                   get_model(const util::generic_id this_id, World_data::World *world);

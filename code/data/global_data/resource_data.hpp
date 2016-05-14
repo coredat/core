@@ -6,6 +6,8 @@
 #include "audio_raw_pool.hpp"
 #include "mesh_pool.hpp"
 #include "texture_pool.hpp"
+#include "shader_data.hpp"
+#include "material_data.hpp"
 
 
 namespace Resource_data {
@@ -13,9 +15,12 @@ namespace Resource_data {
 
 struct Resources
 {
-  Texture_pool  *texture_pool = nullptr;
-  Audio_pool    *audio_pool   = nullptr;
-  Mesh_pool     *mesh_pool    = nullptr;
+  Shader_data   *shader_data    = nullptr;
+  Material_data *material_data  = nullptr;
+
+  Texture_pool  *texture_pool   = nullptr;
+  Audio_pool    *audio_pool     = nullptr;
+  Mesh_pool     *mesh_pool      = nullptr;
 };
 
 

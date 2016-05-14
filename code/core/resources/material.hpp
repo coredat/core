@@ -2,7 +2,7 @@
 #define MATERIAL_INCLUDED_0898BDC5_BA5E_4FB9_80D8_90978B814B3A
 
 
-#include <core/material/material_fwd.hpp>
+#include <core/resources/resources_fwd.hpp>
 #include <memory>
 #include <stdint.h>
 
@@ -27,7 +27,7 @@ public:
   Material&             operator=(const Material &mat);
   Material&             operator=(Material &&mat);
 
-  void                  set_shader(const Material_shader &shader);
+  void                  set_shader(const Shader &shader);
   void                  set_map_01(const Texture &texture);
   void                  set_map_02(const Texture &texture);
   void                  set_map_03(const Texture &texture);

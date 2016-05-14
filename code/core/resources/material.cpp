@@ -1,4 +1,5 @@
-#include "material.hpp"
+#include <core/resources/material.hpp>
+#include <data/global_data/resource_data.hpp>
 
 
 namespace Core {
@@ -6,13 +7,21 @@ namespace Core {
 
 struct Material::Impl
 {
+  util::generic_id material_id = 0;
 };
 
 
 Material::Material(const char *name)
 : m_impl(new Impl())
 {
+  assert(m_impl);
 
+  auto resources = Resource_data::get_resources();
+  assert(resources);
+  
+  auto data = resources->material_data;
+  
+  m_impl->material_id = Resource_data::material_data_add(data, name, 0, 0);
 }
 
 
@@ -45,7 +54,7 @@ Material::operator=(Material &&mat)
 
 
 void
-Material::set_shader(const Material_shader &shader)
+Material::set_shader(const Shader &shader)
 {
 }
 

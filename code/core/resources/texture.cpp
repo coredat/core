@@ -1,4 +1,4 @@
-#include <core/material/texture.hpp>
+#include <core/resources/texture.hpp>
 #include <utilities/logging.hpp>
 #include <data/global_data/texture_pool.hpp>
 #include <data/global_data/resource_data.hpp>

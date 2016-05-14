@@ -41,7 +41,7 @@
 
 
 // Header dump start
-#include <core/renderer/mesh_renderer.hpp>
+#include <core/renderer/material_renderer.hpp>
 #include <core/entity/entity.hpp>
 #include <core/entity/entity_ref.hpp>
 #include <core/color/color.hpp>
@@ -119,6 +119,10 @@ World::World(const World_setup setup)
   
   LOG_TODO("We can store the data directly and get rid of ::World_data::World")
   World_data::set_world_data(&m_impl->world_data->data);
+  
+  Simple_renderer::initialize();
+  Debug_line_renderer::initialize();
+  
 }
 
 

@@ -25,6 +25,10 @@ constexpr const char *
 unknown_type() { return "Unknown type."; }
 
 
+constexpr const char *
+resource_not_found() { return "Resource not found."; }
+
+
 }
 
 
