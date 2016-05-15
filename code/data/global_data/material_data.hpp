@@ -50,11 +50,16 @@ material_data_add(Material_data *data,
                   const util::generic_id texture_map_01);
 
 
+const char *
+material_data_get_name(Material_data *data,
+                       const util::generic_id id);
+
+
 bool
-material_data_exsits(Material_data *data,
-                     util::generic_id id,
+material_data_exsits(const Material_data *data,
+                     const util::generic_id id,
                      size_t *out_index);
-                     
+  
 
 } // ns
 

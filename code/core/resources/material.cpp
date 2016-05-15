@@ -80,7 +80,11 @@ Material::set_map_03(const Texture &texture)
 const char *
 Material::get_name() const
 {
-  return "";
+  assert(m_impl);
+  
+  auto data = Resource_data::get_resources()->material_data;
+
+  return Resource_data::material_data_get_name(data, m_impl->material_id);
 }
 
 

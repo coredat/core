@@ -21,6 +21,14 @@ struct Shader_data
 
 
 void
+lock(Shader_data *data);
+
+
+void
+unlock(Shader_data *data);
+
+
+void
 shader_data_init(Shader_data *data);
 
 
@@ -36,6 +44,10 @@ shader_data_add_from_code(Shader_data *data,
                           const char *gs,
                           const char *ps);
 
+
+const char*
+shader_data_get_name(Shader_data *data,
+                     const util::generic_id id);
 
 } // ns
 

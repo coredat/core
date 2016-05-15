@@ -39,6 +39,7 @@
 #include <3rdparty/imgui/imgui_impl_sdl_gl3.h>
 #include <string>
 
+#include <debug_gui/debug_menu.hpp>
 
 // Header dump start
 #include <core/renderer/material_renderer.hpp>
@@ -134,6 +135,8 @@ World::~World()
 void
 World::think(const float dt)
 {
+  Debug_menu::display_global_data_menu();
+
   // Update world
   
 
@@ -145,49 +148,6 @@ World::think(const float dt)
   
   // Reset the entity pool for new changes.
   World_data::pending_scene_graph_change_reset(graph_changes);
-  
-  
-  ImGui::Begin("Texture");
-  
-  auto resource_data = Resource_data::get_resources();
-  uint32_t count = 0;
-  
-  for(uint32_t i = 0; i < resource_data->texture_pool->capacity; ++i)
-  {
-    if(resource_data->texture_pool->id[i] != 0)
-    {
-      if(count > 3)
-      {
-        count = 0;
-      }
-    
-      if(count > 0)
-      {
-        ImGui::SameLine();
-      }
-      
-      count++;
-      
-      ImGui::PushID(count);
-      ImGui::Image((void*)resource_data->texture_pool->texture[i].texture_id,
-                   ImVec2(64, 64),
-                   ImVec2(0,0),
-                   ImVec2(1,1),
-                   ImColor(255,255,255,255),
-                   ImColor(255,255,255,128));
-
-//      ImGui::ImageButton((void*)resource_data->texture_pool->texture[i].texture_id,
-//                          ImVec2(64,64),
-//                          ImVec2(0,0),
-//                          ImVec2(1,1),
-//                          1,
-//                          ImColor(0,0,0,255));
-
-      ImGui::PopID();
-    }
-  }
-  
-  ImGui::End();
   
   
 //  ImGui::Begin("Entities");
