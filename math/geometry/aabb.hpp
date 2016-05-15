@@ -14,42 +14,40 @@ namespace math {
 
 // ** Interface ** //
 
-inline aabb         aabb_init(const vec3 max, const vec3 min, const vec3 origin);
-inline aabb         aabb_from_xyz_array(const float vertex[], const size_t number_of_floats);
-inline math::vec3   aabb_get_extents(const aabb &a);
-inline vec3         aabb_get_half_extents(const aabb &a);
-inline vec3         aabb_get_offset_min(const aabb &a);
-inline vec3         aabb_get_offset_max(const aabb &a);
+inline aabb         aabb_init(const vec3 min, const vec3 max);
+inline aabb         aabb_init_from_xyz_data(const float vertex[], const size_t number_of_floats);
 
+inline vec3         aabb_get_extents(const aabb &a);
+inline vec3         aabb_get_half_extents(const aabb &a);
+inline vec3         aabb_get_min(const aabb &a);
+inline vec3         aabb_get_max(const aabb &a);
+inline vec3         aabb_get_origin(const aabb &a);
+
+inline void         aabb_set_origin(aabb &aabb_to_move, const vec3 new_origin);
 inline void         aabb_scale(aabb &aabb_to_scale, const vec3 scale);
 inline void         aabb_scale(aabb &aabb_to_scale, const float scale);
+
 inline bool         aabb_intersection_test(const aabb &a, const aabb &b);
-inline bool         aabb_intersection_ray_test(const ray &ray, const aabb &box);
-inline bool         aabb_fits_inside_aabb(const aabb &a, const aabb &b);
-inline void         aabb_subdivide(const aabb &a, aabb out_aabb[8]);
 
 
 // ** Impl ** //
 
 
 aabb
-aabb_init(const vec3 max,
-          const vec3 min,
-          const vec3 origin)
+aabb_init(const vec3 min, const vec3 max)
 {
   aabb return_aabb;
+  
   return_aabb.max = max;
   return_aabb.min = min;
-  return_aabb.half_extents = vec3_scale(vec3_subtract(max, min), 0.5f);
-  return_aabb.origin = origin;
   
   return return_aabb;
 }
 
 
 aabb
-aabb_from_xyz_array(const float vertex[],
-                    const size_t number_of_floats)
+aabb_init_from_xyz_data(const float vertex[],
+                        const size_t number_of_floats)
 {
   aabb out_aabb;
 
@@ -86,24 +84,47 @@ aabb_from_xyz_array(const float vertex[],
   out_aabb.max = vec3_init(max_x, max_y, max_z);
   out_aabb.min = vec3_init(min_x, min_y, min_z);
 
-  // Calculate extents
-  out_aabb.half_extents = vec3_scale(vec3_subtract(out_aabb.max, out_aabb.min), 0.5f);
-
-  // Calculate origin.
-  const float origin_x = vec3_get_x(out_aabb.max) - (vec3_get_x(out_aabb.half_extents));
-  const float origin_y = vec3_get_y(out_aabb.max) - (vec3_get_y(out_aabb.half_extents));
-  const float origin_z = vec3_get_z(out_aabb.max) - (vec3_get_z(out_aabb.half_extents));
-
-  out_aabb.origin = vec3_init(origin_x, origin_y, origin_z);
-
   return out_aabb;
+}
+vec3
+aabb_get_extents(const aabb &a)
+{
+  const vec3 extent = vec3_subtract(a.max, a.min);
+  const float x = math::abs(vec3_get_x(extent));
+  const float y = math::abs(vec3_get_y(extent));
+  const float z = math::abs(vec3_get_z(extent));
+  
+  return vec3_init(x, y, z);
 }
 
 
-math::vec3
-aabb_get_extents(const aabb &a)
+vec3
+aabb_get_half_extents(const aabb &a)
 {
-  return math::vec3_scale(a.half_extents, 2.f);
+  return vec3_scale(aabb_get_extents(a), 0.5f);
+}
+
+
+vec3
+aabb_get_min(const aabb &a)
+{
+  return a.min;
+}
+
+
+vec3
+aabb_get_max(const aabb &a)
+{
+  return a.max;
+}
+
+
+vec3
+aabb_get_origin(const aabb &a)
+{
+  const vec3 half_extent = aabb_get_half_extents(a);
+
+  return vec3_add(a.min, half_extent);
 }
 
 
@@ -112,8 +133,6 @@ aabb_scale(aabb &aabb_to_scale, const vec3 scale)
 {
   aabb_to_scale.max = math::vec3_multiply(aabb_to_scale.max, scale);
   aabb_to_scale.min = math::vec3_multiply(aabb_to_scale.min, scale);
-  aabb_to_scale.half_extents = math::vec3_multiply(aabb_to_scale.half_extents, scale);
-  aabb_to_scale.origin = math::vec3_multiply(aabb_to_scale.origin, scale);
 }
 
 
@@ -121,6 +140,15 @@ void
 aabb_scale(aabb &aabb_to_scale, const float scale)
 {
   return aabb_scale(aabb_to_scale, vec3_init(scale));
+}
+
+
+void
+aabb_set_origin(aabb &aabb_to_move, const vec3 new_position)
+{
+  const vec3 diff = vec3_subtract(aabb_get_origin(aabb_to_move), new_position);
+  aabb_to_move.min = vec3_add(aabb_to_move.min, diff);
+  aabb_to_move.max = vec3_add(aabb_to_move.max, diff);
 }
 
 
@@ -142,23 +170,18 @@ bool
 aabb_intersection_test(const aabb &a,
                        const aabb &b)
 {
-  return (detail::sat_test(math::vec3_get_x(a.origin), math::vec3_get_x(b.origin), (math::vec3_get_x(a.half_extents) + math::vec3_get_x(b.half_extents))) &&
-          detail::sat_test(math::vec3_get_y(a.origin), math::vec3_get_y(b.origin), (math::vec3_get_y(a.half_extents) + math::vec3_get_y(b.half_extents))) &&
-          detail::sat_test(math::vec3_get_z(a.origin), math::vec3_get_z(b.origin), (math::vec3_get_z(a.half_extents) + math::vec3_get_z(b.half_extents))));
+  const vec3 origin_a = aabb_get_origin(a);
+  const vec3 origin_b = aabb_get_origin(b);
+  
+  const vec3 half_ext_a = aabb_get_half_extents(a);
+  const vec3 half_ext_b = aabb_get_half_extents(b);
+  const vec3 combined_half_extent = vec3_add(half_ext_a, half_ext_b);
+
+  return (detail::sat_test(math::vec3_get_x(origin_a), math::vec3_get_x(origin_b), math::vec3_get_x(combined_half_extent)) &&
+          detail::sat_test(math::vec3_get_y(origin_a), math::vec3_get_y(origin_b), math::vec3_get_y(combined_half_extent)) &&
+          detail::sat_test(math::vec3_get_z(origin_a), math::vec3_get_z(origin_b), math::vec3_get_z(combined_half_extent)));
 }
 
-
-bool
-aabb_fits_inside_aabb(const aabb &a, const aabb &b)
-{
-  return false; // place holder
-}
-
-
-void
-aabb_subdivide(const aabb &a, aabb out_aabb[8])
-{
-}
 
 } // ns
 
