@@ -149,84 +149,36 @@ World::think(const float dt)
   // Reset the entity pool for new changes.
   World_data::pending_scene_graph_change_reset(graph_changes);
   
-  
-//  ImGui::Begin("Entities");
-//  
-//  // Loop through all
-//  for(uint32_t i = 0; i < data->entity_pool->size; ++i)
-//  {
-//    const char *name = World_data::entity_pool_get_entity_name(data->entity_pool, data->entity_pool->entity_id[i]);
-//    
-//    std::string number = std::to_string(data->entity_pool->entity_id[i]);
-//  
-//    if(ImGui::TreeNode(name))
-//    {
-//      static char buf[32];
-//      strlcpy(buf, name, sizeof(char) * 32);
-//      
-//      struct Input_data
-//      {
-//        World_data::Entity_pool *pool;
-//        util::generic_id id;
-//      };
-//      
-//      static Input_data input_data;
-//      input_data = Input_data{data->entity_pool, data->entity_pool->entity_id[i]};
-//      
-////      ImGui::InputText("Name",
-////                       buf,
-////                       32,
-////                       ImGuiInputTextFlags_::ImGuiInputTextFlags_EnterReturnsTrue,
-////                       [](ImGuiTextEditCallbackData *cb_data) -> int
-////                       {
-////                         Input_data *in_data = reinterpret_cast<Input_data*>(cb_data->UserData);
-////                         World_data::entity_pool_set_entity_name(in_data->pool, in_data->id, buf);
-////                         return 1;
-////                       },
-////                       (void*)&input_data);
-//
-//      ImGui::InputText("Name",
-//                        World_data::entity_pool_get_entity_name(data->entity_pool, data->entity_pool->entity_id[i]),
-//                       32);
-//
-//    
-//      ImGui::TreePop();
-//    }
-//  }
-//  
-//  ImGui::End();
-  
-  
   // Render world
   {
     const uint32_t peer = 0;
-  World_data::World *world = World_data::get_world();
+    World_data::World *world = World_data::get_world();
 
-  static std::vector<Simple_renderer::Node> nodes;
-  nodes.resize(world->entity->size);
-  const uint32_t size_of_node_pool = nodes.size();
+    static std::vector<Simple_renderer::Node> nodes;
+    nodes.resize(world->entity->size);
+    const uint32_t size_of_node_pool = nodes.size();
 
-  // Get active camera and generate a projection matrix.
-  // TODO: Need to pass in the environment height and width into this function.
-  const auto cam = World_data::camera_pool_get_properties_for_priority(world->camera_pool, peer, 0);
-  
-  math::mat4 proj;
-  
-  if(cam.type == Core::Camera_type::orthographic)
-  {
-    proj = math::mat4_orthographic(cam.viewport_width,
+    // Get active camera and generate a projection matrix.
+    // TODO: Need to pass in the environment height and width into this function.
+    const auto cam = World_data::camera_pool_get_properties_for_priority(world->camera_pool, peer, 0);
+    
+    math::mat4 proj;
+    
+    if(cam.type == Core::Camera_type::orthographic)
+    {
+      proj = math::mat4_orthographic(cam.viewport_width,
+                                     cam.viewport_height,
+                                     cam.near_plane,
+                                     cam.far_plane);
+    }
+    else
+    {
+      proj = math::mat4_projection(cam.viewport_width,
                                    cam.viewport_height,
                                    cam.near_plane,
-                                   cam.far_plane);
+                                   cam.far_plane,
+                                   cam.fov);
   }
-  else
-  {
-    proj = math::mat4_projection(cam.viewport_width,
-                                 cam.viewport_height,
-                                 cam.near_plane,
-                                 cam.far_plane,
-                                 cam.fov);
-}
   
   const Core::Color clear_color(cam.clear_color);
   const float red = Core::Color_utils::get_red_f(clear_color);
@@ -286,17 +238,17 @@ World::think(const float dt)
                                       size_of_node_pool,
                                       sizeof(Simple_renderer::Node));
 
-  ::Transform::transforms_to_world_mats(world->transform->transform,
-                                        world->transform->size,
-                                        nodes[0].world_mat,
-                                        size_of_node_pool,
-                                        sizeof(Simple_renderer::Node));
+//  ::Transform::transforms_to_world_mats(world->transform->transform,
+//                                        world->transform->size,
+//                                        nodes[0].world_mat,
+//                                        size_of_node_pool,
+//                                        sizeof(Simple_renderer::Node));
   
   // Texture/vbo info
   for (uint32_t i = 0; i < size_of_node_pool; ++i)
   {
-    const uint32_t mesh_id    = world->mesh_data->model[i];
-    const uint32_t texture_id = world->mesh_data->texture[i];
+    const uint32_t mesh_id    = world->mesh_data->mesh_draw_calls[i].model;
+    const uint32_t texture_id = world->mesh_data->mesh_draw_calls[i].texture;
     
     if(mesh_id && texture_id)
     {
@@ -307,6 +259,7 @@ World::think(const float dt)
       
       nodes[i].vbo     = get_mesh.vbo;
       nodes[i].diffuse = get_texture;
+      memcpy(nodes[i].world_mat, world->mesh_data->mesh_draw_calls[i].world_matrix, sizeof(float) * 16);
     }
   }
   

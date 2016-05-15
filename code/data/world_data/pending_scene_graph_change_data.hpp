@@ -18,7 +18,7 @@ struct Pending_scene_graph_change_data
   util::generic_id    *entities_to_delete = nullptr;
   uint32_t            delete_size         = 0;
   
-  const uint32_t      capacity = 0;
+  const uint32_t      capacity            = 0;
 };
 
 
@@ -32,7 +32,7 @@ unlock(Pending_scene_graph_change_data *graph_unlock);
 
 void
 pending_scene_graph_change_init(Pending_scene_graph_change_data *graph_changes,
-                 const uint32_t size_hint);
+                                const uint32_t size_hint);
 
 
 void
@@ -41,7 +41,7 @@ pending_scene_graph_change_reset(Pending_scene_graph_change_data *graph);
 
 void
 pending_scene_graph_change_delete(Pending_scene_graph_change_data *graph_changes,
-                           const util::generic_id id);
+                                  const util::generic_id id);
 
 
 } // ns

@@ -10,14 +10,21 @@
 namespace World_data {
 
 
+struct Mesh_renderer_draw_call
+{
+  uint32_t    model;
+  uint32_t    texture; // Move this to the material.
+  float       world_matrix[16];
+};
+
+
 struct Mesh_renderer_data
 {
-  util::generic_id              *entity_id          = nullptr;
-  uint32_t                      *model              = nullptr;
-  uint32_t                      *texture            = nullptr;
+  util::generic_id        *entity_id       = nullptr;
+  Mesh_renderer_draw_call *mesh_draw_calls = nullptr;
   
-  const uint32_t                capacity = 2048;
-  uint32_t                      size = 0;
+  const uint32_t   capacity   = 2048;
+  uint32_t         size       = 0;
 };
 
 

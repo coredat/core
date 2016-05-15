@@ -17,7 +17,7 @@ namespace World_data {
   Transform data
   --
   Every entity has a transform, we store entities in sequential order.
-  A new entity will be pushed to the back. Erasing an entity will 
+  A new entity will be pushed to the back. Erasing an entity will
   shuffle down all the entities.
   
   We also keep an unscaled, unmoved aabb for transformations.

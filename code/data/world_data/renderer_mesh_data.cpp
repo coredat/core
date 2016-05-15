@@ -12,11 +12,8 @@ mesh_renderer_init(Mesh_renderer_data *data)
   static util::generic_id ents[2048];
   data->entity_id = ents;
   
-  static uint32_t model_ids[2048];
-  data->model = model_ids;
-  
-  static uint32_t texture_ids[2048];
-  data->texture = texture_ids;
+  static Mesh_renderer_draw_call draw_call[2048];
+  data->mesh_draw_calls = draw_call;
   
   data->size = 0;
 }
@@ -35,9 +32,12 @@ mesh_renderer_add(Mesh_renderer_data *data,
     return;
   }
   
-  data->entity_id[data->size] = id;
-  data->model[data->size] = model_id;
-  data->texture[data->size] = texture_id;
+  const uint32_t new_index = data->size;
+  
+  data->entity_id[new_index] = id;
+  data->mesh_draw_calls[new_index].model = model_id;
+  data->mesh_draw_calls[new_index].texture = texture_id;
+  
   ++(data->size);
 }
 
@@ -50,7 +50,7 @@ mesh_renderer_update_model(Mesh_renderer_data *data,
   size_t index;
   if(mesh_renderer_exists(data, id, &index))
   {
-    data->model[index] = model_id;
+    data->mesh_draw_calls[index].model = model_id;
   }
 }
 
@@ -63,7 +63,7 @@ mesh_renderer_update_texture(Mesh_renderer_data *data,
   size_t index;
   if(mesh_renderer_exists(data, id, &index))
   {
-    data->texture[index] = texture_id;
+    data->mesh_draw_calls[index].texture = texture_id;
   }
 }
 
@@ -79,9 +79,8 @@ mesh_renderer_remove(Mesh_renderer_data *data,
     const size_t end_move = data->size - index - 1;
     --(data->size);
     
-    memmove(&data->entity_id[index],  &data->entity_id[start_move],  end_move * sizeof(*data->entity_id));
-    memmove(&data->model[index],      &data->model[start_move],      end_move * sizeof(*data->model));
-    memmove(&data->texture[index],    &data->texture[start_move],    end_move * sizeof(*data->texture));
+    memmove(&data->entity_id[index],        &data->entity_id[start_move],       end_move * sizeof(*data->entity_id));
+    memmove(&data->mesh_draw_calls[index],  &data->mesh_draw_calls[start_move], end_move * sizeof(*data->mesh_draw_calls));
   }
   else
   {

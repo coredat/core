@@ -202,6 +202,16 @@ set_transform(const util::generic_id this_id, World_data::World *world,const Tra
     const math::transform new_transform = math::transform_init(set_transform.get_position(), set_transform.get_scale(), set_transform.get_rotation());
     data->transform[index] = new_transform;
     
+    // Update mesh renderer data
+    {
+      size_t mesh_index;
+      if(World_data::mesh_renderer_exists(world->mesh_data, this_id, &mesh_index))
+      {
+        const math::mat4 world_mat = math::transform_get_world_matrix(new_transform);
+        memcpy(world->mesh_data->mesh_draw_calls[mesh_index].world_matrix, &world_mat, sizeof(world_mat));
+      }
+    }
+    
     World_data::physics_update(world->physics_data, this_id, &data->aabb[index], &data->transform[index]);
   }
   else
@@ -271,7 +281,7 @@ get_material_id(const util::generic_id this_id, World_data::World *world)
 
   size_t index;
   assert(get_index(&index, this_id, data->entity_id, data->size));
-  return (uint32_t)data->texture[index];
+  return (uint32_t)data->mesh_draw_calls[index].texture;
 }
 
 
