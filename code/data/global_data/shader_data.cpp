@@ -1,7 +1,8 @@
 #include <data/global_data/shader_data.hpp>
 #include <graphics_api/utils/shader_utils.hpp>
-#include <utilities/logging.hpp>
 #include <common/error_strings.hpp>
+#include <utilities/logging.hpp>
+#include <utilities/string_helpers.hpp>
 #include <assert.h>
 
 
@@ -102,8 +103,10 @@ shader_data_add_from_code(Shader_data *data,
   
   if(Ogl::shader_is_valid(new_shader))
   {
+    const std::string filename = util::get_filename_from_path(name);
+  
     data->shader_ids[index] = id;
-    strlcpy(&data->shader_name[index * max_shader_name], name, sizeof(char) * max_shader_name);
+    strlcpy(&data->shader_name[index * max_shader_name], filename.c_str(), sizeof(char) * max_shader_name);
     data->shader[index] = new_shader;
   }
   else
