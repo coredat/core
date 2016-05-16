@@ -31,7 +31,7 @@ struct Camera_pool
   uint32_t                    peer_priority_02[MAX_CAMERAS];
   uint32_t                    peer_priority_03[MAX_CAMERAS];
   
-  const uint32_t                number_of_cameras = MAX_CAMERAS;
+  const uint32_t              number_of_cameras = MAX_CAMERAS;
 };
 
 

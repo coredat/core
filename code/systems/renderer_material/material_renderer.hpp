@@ -4,6 +4,7 @@
 
 #include <graphics_api/mesh.hpp>
 #include <graphics_api/ogl/ogl_shader.hpp>
+#include <graphics_api/ogl/ogl_texture.hpp>
 #include <math/mat/mat_types.hpp>
 #include <stdint.h>
 
@@ -13,8 +14,9 @@ namespace Material_renderer {
 
 struct Material
 {
-  Ogl::Shader shader;
-  int index_01;
+  Ogl::Shader   shader;
+  Ogl::Texture  diffuse_texture;
+  int32_t       diffuse_texture_index = -1;
 };
 
 

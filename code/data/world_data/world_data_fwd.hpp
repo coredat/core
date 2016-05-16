@@ -8,23 +8,11 @@
 namespace World_data {
 
 
-struct Audio_pool;
-struct Application_window;
-struct Camera_pool;
-struct Entity_pool;
-enum class Entity_graph_change : uint32_t;
-struct Entity_change;
-struct Entity_graph_changes_pool;
-struct Model_pool;
-struct Rigidbody_pool;
-struct Texture_pool;
 struct World;
-struct Gui_view_pool;
+struct Camera_pool;
 struct Physics_data;
 struct Mesh_renderer_data;
 struct Text_renderer_data;
-
-
 struct Transform_data;
 struct Entity_data;
 struct Pending_scene_graph_change_data;

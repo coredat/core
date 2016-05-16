@@ -7,7 +7,6 @@
 #include <math/geometry/geometry_types.hpp>
 #include <stdint.h>
 #include <stddef.h>
-#include <stdatomic.h>
 
 
 namespace World_data {

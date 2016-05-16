@@ -150,7 +150,6 @@ render_nodes_fullbright(const Node nodes[],
         }
       }
       
-      
       // Simplistic state change check.
       {
         static GLuint last_vbo(-1);

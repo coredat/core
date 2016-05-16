@@ -3,6 +3,8 @@
 
 
 #include <utilities/generic_id.hpp>
+#include <graphics_api/ogl/ogl_texture.hpp>
+#include <graphics_api/mesh.hpp>
 #include <stdint.h>
 #include <stddef.h>
 
@@ -12,9 +14,9 @@ namespace World_data {
 
 struct Mesh_renderer_draw_call
 {
-  uint32_t    model;
-  uint32_t    texture; // Move this to the material.
-  float       world_matrix[16];
+  uint32_t model;
+  uint32_t texture; // Move this to the material.
+  float    world_matrix[16];
 };
 
 
@@ -23,8 +25,8 @@ struct Mesh_renderer_data
   util::generic_id        *entity_id       = nullptr;
   Mesh_renderer_draw_call *mesh_draw_calls = nullptr;
   
-  const uint32_t   capacity   = 2048;
-  uint32_t         size       = 0;
+  const uint32_t capacity = 2048;
+  uint32_t       size     = 0;
 };
 
 
@@ -50,11 +52,13 @@ mesh_renderer_update_model(Mesh_renderer_data *data,
                            const util::generic_id id,
                            const uint32_t model_id);
 
+
 void
 mesh_renderer_update_texture(Mesh_renderer_data *data,
                              const util::generic_id id,
                              const uint32_t texture_id);
-  
+
+
 /*!
   Remove a mesh rendenring node.
 */

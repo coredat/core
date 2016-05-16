@@ -1,4 +1,4 @@
- #include "world.hpp"
+#include <core/world/world.hpp>
 #include <core/world/world_setup.hpp>
 
 #include <core/memory/memory.hpp>
@@ -71,6 +71,8 @@
 #include <utilities/conversion.hpp>
 // Header dump end
 
+#include <systems/renderer_material/material_renderer.hpp>
+
 
 namespace Core {
 
@@ -123,6 +125,8 @@ World::World(const World_setup setup)
   
   Simple_renderer::initialize();
   Debug_line_renderer::initialize();
+  
+  ::Material_renderer::initialize();
   
 }
 

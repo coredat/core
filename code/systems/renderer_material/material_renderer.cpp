@@ -45,6 +45,9 @@ initialize()
 void
 reset()
 {
+  mat_renderer_last_ibo     = -1;
+  mat_renderer_last_vbo     = -1;
+  mat_renderer_last_program = -1;
 }
 
 

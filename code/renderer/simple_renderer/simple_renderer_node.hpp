@@ -12,11 +12,11 @@ namespace Simple_renderer {
 
 struct Node
 {
-  float                     wvp[16];
-  float                     world_mat[16];
-  Ogl::Texture              diffuse;
-  Ogl::Vertex_buffer        vbo;
-  uint32_t                  number_of_verts;
+  float               wvp[16];
+  float               world_mat[16];
+  Ogl::Texture        diffuse;
+  Ogl::Vertex_buffer  vbo;
+  uint32_t            number_of_verts;
 };
 
 
