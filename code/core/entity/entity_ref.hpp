@@ -3,6 +3,7 @@
 
 
 #include <utilities/generic_id.hpp>
+#include <core/world/world.hpp>
 #include <core/transform/transform_fwd.hpp>
 #include <core/physics/physics_fwd.hpp>
 #include <core/model/model_fwd.hpp>
@@ -25,6 +26,7 @@ public:
   explicit                      Entity_ref();
   explicit                      Entity_ref(Entity &entity);
   explicit                      Entity_ref(const util::generic_id id, World &world);
+  explicit                      Entity_ref(const util::generic_id id, std::shared_ptr<World_detail::Data> world_data);
                                 ~Entity_ref();
   
                                 Entity_ref(const Entity_ref&);

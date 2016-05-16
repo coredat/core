@@ -18,6 +18,13 @@ math::mat4
 camera_get_inverse_projection_matrix(const Camera &camera);
 
 
+math::mat4
+camera_get_view_matrix(const Camera &camera);
+
+
+math::mat4
+camera_get_inverse_view_matrix(const Camera &cam);
+
 
 } // ns
 } // ns

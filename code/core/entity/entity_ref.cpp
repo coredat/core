@@ -20,19 +20,25 @@ struct Entity_ref::Impl
 
 
 Entity_ref::Entity_ref()
-: m_impl(new Impl{util::generic_id_invalid(), nullptr})
+: Entity_ref(util::generic_id_invalid(), nullptr)
 {
 }
 
 
 Entity_ref::Entity_ref(Entity &entity)
-: m_impl(new Impl{entity.get_id(), entity.get_world_data()})
+: Entity_ref(entity.get_id(), entity.get_world_data())
 {
 }
 
 
 Entity_ref::Entity_ref(const util::generic_id id, World &world)
-: m_impl(new Impl{id, world.get_world_data()})
+: Entity_ref(id, world.get_world_data())
+{
+}
+
+
+Entity_ref::Entity_ref(const util::generic_id id, std::shared_ptr<World_detail::Data> world_data)
+: m_impl(new Impl{id, world_data})
 {
 }
 

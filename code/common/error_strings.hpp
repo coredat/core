@@ -6,11 +6,15 @@ namespace Error_string {
 
 
 constexpr const char *
-entity_is_invalid() { return "Entity is invalid."; }
+entity_is_invalid() { return "Core::Entity is invalid."; }
 
 
 constexpr const char *
-entity_not_found() { return "Entity not found."; }
+entity_not_found() { return "Core::Entity not found."; }
+
+
+constexpr const char *
+object_has_no_valid_world() { return "Object has no valid Core::World."; }
 
 
 constexpr const char *

@@ -7,6 +7,7 @@
 #include <core/world/world_setup.hpp>
 #include <core/world/detail/world_detail_fwd.hpp>
 #include <core/entity/entity_fwd.hpp>
+#include <core/camera/camera_fwd.hpp>
 #include <core/physics/physics_fwd.hpp>
 #include <functional>
 #include <memory>
@@ -39,6 +40,7 @@ private:
 
   friend class Core::Entity;
   friend class Core::Entity_ref;
+  friend class Core::Camera;
 
   std::shared_ptr<const World_detail::Data>  get_world_data() const;
   std::shared_ptr<World_detail::Data>        get_world_data();

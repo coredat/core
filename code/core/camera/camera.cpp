@@ -1,4 +1,5 @@
 #include <core/camera/camera.hpp>
+#include <core/world/world.hpp>
 #include <core/color/color.hpp>
 #include <core/entity/entity.hpp>
 #include <core/entity/entity_ref.hpp>
@@ -7,22 +8,33 @@
 #include <data/world_data/camera_pool.hpp>
 #include <core/camera/camera_properties.hpp>
 #include <systems/camera/camera_properties.hpp>
+#include <common/error_strings.hpp>
 #include <math/mat/mat4.hpp>
+#include <utilities/logging.hpp>
 
 
 namespace Core {
-  
-  
+
+
 struct Camera::Impl
 {
   util::generic_id attached_entity;
   ::Camera::Camera_properties properties;
+  std::shared_ptr<World_detail::Data> world;
 };
 
 
 Camera::Camera()
 : m_impl(new Impl)
 {
+  LOG_WARNING("Created Core::Camera with no world.");
+}
+
+
+Camera::Camera(Core::World &world)
+: m_impl(new Impl)
+{
+  m_impl->world = world.get_world_data();
 }
 
 
@@ -35,7 +47,8 @@ Camera::~Camera()
 Camera::Camera(Camera &&other)
 : m_impl(new Impl{
   other.m_impl->attached_entity,
-  other.m_impl->properties
+  other.m_impl->properties,
+  other.m_impl->world
 })
 {
   // Null the other stuff
@@ -49,11 +62,12 @@ Camera::operator=(Camera &&other)
 {
   // Copy other.
   m_impl->attached_entity = other.m_impl->attached_entity;
-  m_impl->properties = other.m_impl->properties;
+  m_impl->properties      = other.m_impl->properties;
+  m_impl->world           = other.m_impl->world;
 
   // Null the other stuff
   other.m_impl->attached_entity = util::generic_id_invalid();
-  other.m_impl->properties = ::Camera::Camera_properties();
+  other.m_impl->properties      = ::Camera::Camera_properties();
 
   return *this;
 }
@@ -75,6 +89,12 @@ namespace
 void
 Camera::set_attached_entity(const Entity_ref entity)
 {
+  if(!m_impl)
+  {
+    LOG_ERROR(Error_string::object_has_no_valid_world());
+    return;
+  }
+
   World_data::World *world = World_data::get_world();
 
   // If we are retargeting this to another transform.
@@ -90,21 +110,26 @@ Camera::set_attached_entity(const Entity_ref entity)
 }
 
 
-//Entity_ref
-//Camera::get_attached_entity() const
-//{
-//  World_data::World* world = World_data::get_world();
-//  
-//  if(!world)
-//  {
-//    return Entity_ref();
-//  }
-//  
-//  Entity_ref entity;
-//  World_data::world_find_entity(world, &entity, m_impl->attached_entity);
-//  
-//  return entity;
-//}
+Entity_ref
+Camera::get_attached_entity() const
+{
+  if(!m_impl)
+  {
+    LOG_ERROR(Error_string::object_has_no_valid_world());
+    return Entity_ref();
+  }
+
+  World_data::World* world = World_data::get_world();
+  
+  if(!world)
+  {
+    return Entity_ref();
+  }
+  
+  Entity_ref entity(m_impl->attached_entity, m_impl->world);
+  
+  return entity;
+}
 
 
 void

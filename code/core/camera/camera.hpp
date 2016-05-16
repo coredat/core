@@ -3,6 +3,7 @@
 
 
 #include <core/camera/camera_fwd.hpp>
+#include <core/world/world_fwd.hpp>
 #include <core/entity/entity_fwd.hpp>
 #include <core/color/color_fwd.hpp>
 #include <math/mat/mat_types.hpp>
@@ -22,6 +23,7 @@ class Camera final
 public:
 
   explicit              Camera();
+  explicit              Camera(Core::World &world);
                         ~Camera();
   
                         Camera(Camera &&);
