@@ -4,6 +4,7 @@
 #include <data/world_data/world_pools.hpp>
 #include <data/global_data/mesh_pool.hpp>
 #include <data/global_data/resource_data.hpp>
+#include <math/geometry/aabb.hpp>
 #include <stddef.h>
 #include <assert.h>
 
@@ -138,6 +139,13 @@ Model::get_mesh(const uint32_t index) const
 math::aabb
 Model::get_model_aabb() const
 {
+  // If no aabb
+  if(!m_impl || !m_impl->mesh_id)
+  {
+    const math::aabb zero_aabb = math::aabb_init(math::vec3_zero(), math::vec3_zero());
+    return zero_aabb;
+  }
+
   math::aabb return_aabb;
   
   Resource_data::Mesh_pool *mesh_pool = Resource_data::get_resources()->mesh_pool;
