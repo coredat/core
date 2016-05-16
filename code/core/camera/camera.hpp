@@ -5,6 +5,7 @@
 #include <core/camera/camera_fwd.hpp>
 #include <core/entity/entity_fwd.hpp>
 #include <core/color/color_fwd.hpp>
+#include <math/mat/mat_types.hpp>
 #include <stdint.h>
 #include <memory>
 

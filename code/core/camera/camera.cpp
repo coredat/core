@@ -7,6 +7,7 @@
 #include <data/world_data/camera_pool.hpp>
 #include <core/camera/camera_properties.hpp>
 #include <systems/camera/camera_properties.hpp>
+#include <math/mat/mat4.hpp>
 
 
 namespace Core {
