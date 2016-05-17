@@ -37,7 +37,9 @@ camera_get_view_matrix(const Camera &camera)
   
   const Transform trans = attached_entity.get_transform();
   
-  return math::mat4_lookat(trans.get_position(), trans.get_forward(), trans.get_up());
+  return math::mat4_lookat(trans.get_position(),
+                           math::vec3_add(trans.get_position(), trans.get_forward()),
+                           trans.get_up());
 }
 
 
