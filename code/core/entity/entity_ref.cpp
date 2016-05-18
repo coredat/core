@@ -98,6 +98,20 @@ Entity_ref::is_valid() const
 }
 
 
+void
+Entity_ref::set_user_data(const uintptr_t user_data)
+{
+  Entity_detail::set_user_data(m_impl->id, &m_impl->world->data, user_data);
+}
+
+
+uintptr_t
+Entity_ref::get_user_data() const
+{
+  return Entity_detail::get_user_data(m_impl->id, &m_impl->world->data);
+}
+
+
 uint32_t
 Entity_ref::get_tags() const
 {

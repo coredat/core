@@ -142,6 +142,20 @@ Entity::get_tags() const
 }
 
 
+void
+Entity::set_user_data(const uintptr_t user_data)
+{
+  Entity_detail::set_user_data(m_impl->id, &m_impl->world->data, user_data);
+}
+
+
+uintptr_t
+Entity::get_user_data() const
+{
+  return Entity_detail::get_user_data(m_impl->id, &m_impl->world->data);
+}
+
+
 bool
 Entity::has_tag(const uint32_t tag_id) const
 {
