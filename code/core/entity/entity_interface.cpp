@@ -35,6 +35,68 @@ is_valid(const util::generic_id this_id, World_data::World *world)
 }
 
 
+void
+set_user_data(const util::generic_id this_id, World_data::World *world, const uintptr_t user_data)
+{
+  if(!is_valid(this_id, world))
+  {
+    LOG_ERROR(Error_string::entity_is_invalid());
+    assert(false);
+    return;
+  }
+  
+  auto entity_data = world->entity;
+  
+  size_t index;
+  lock(entity_data);
+  
+  if(World_data::entity_data_exists(entity_data, this_id, &index))
+  {
+    entity_data->user_data[index] = user_data;
+  }
+  else
+  {
+    assert(false);
+    LOG_WARNING(Error_string::entity_not_found());
+  }
+  
+  unlock(entity_data);
+}
+
+
+uintptr_t
+get_user_data(const util::generic_id this_id, World_data::World *world)
+{
+  if(!is_valid(this_id, world))
+  {
+    LOG_ERROR(Error_string::entity_is_invalid());
+    assert(false);
+    return 0;
+  }
+  
+  auto entity_data = world->entity;
+  
+  size_t index;
+  uintptr_t user_data(0);
+  
+  lock(entity_data);
+  
+  if(World_data::entity_data_exists(entity_data, this_id, &index))
+  {
+    user_data = entity_data->user_data[index];
+  }
+  else
+  {
+    assert(false);
+    LOG_WARNING(Error_string::entity_not_found());
+  }
+  
+  unlock(entity_data);
+  
+  return user_data;
+}
+
+
 uint32_t
 get_tags(const util::generic_id this_id, World_data::World *world)
 {

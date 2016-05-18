@@ -36,16 +36,28 @@ entity_data_init(Entity_data *data,
   LOG_TODO("Use memory pool");
   
   static util::generic_id ids[entity_data_max_entities];
+  #ifndef NDEBUG
   memset(ids, 0, sizeof(ids));
+  #endif
   data->entity_id = ids;
   
   static char name_ptrs[entity_data_max_entities];
+  #ifndef NDEBUG
   memset(name_ptrs, 0, sizeof(name_ptrs));
+  #endif
   data->entity_name = name_ptrs;
   
   static uint32_t tags[entity_data_max_entities];
+  #ifndef NDEBUG
   memset(tags, 0, sizeof(tags));
+  #endif
   data->tags = tags;
+  
+  static uintptr_t user_data[entity_data_max_entities];
+  #ifndef NDEBUG
+  memset(user_data, 9, sizeof(user_data));
+  #endif
+  data->user_data = user_data;
   
   uint32_t *capacity = const_cast<uint32_t*>(&data->capacity);
   *capacity = entity_data_max_entities;

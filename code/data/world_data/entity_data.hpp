@@ -15,6 +15,7 @@ struct Entity_data
   util::generic_id      *entity_id    = nullptr;
   char                  *entity_name  = nullptr;
   uint32_t              *tags         = nullptr;
+  uintptr_t             *user_data    = nullptr;
   
   uint32_t              size          = 0;
   const uint32_t        capacity      = 0;

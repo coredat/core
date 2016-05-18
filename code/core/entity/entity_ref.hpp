@@ -38,6 +38,9 @@ public:
   // ** Common Entity Interface ** //
   
   bool                          is_valid() const;
+  
+  void                          set_user_data(const uintptr_t user_data);
+  uintptr_t                     get_user_data() const;  
     
   uint32_t                      get_tags() const;
   bool                          has_tag(const uint32_t tag_id) const;

@@ -16,8 +16,11 @@ namespace Entity_detail {
 
 
 
-util::generic_id               get_id(const util::generic_id this_id, World_data::World *world);
+util::generic_id              get_id(const util::generic_id this_id, World_data::World *world);
 bool                          is_valid(const util::generic_id this_id, World_data::World *world);
+
+void                          set_user_data(const util::generic_id this_id, World_data::World *world, const uintptr_t user_data);
+uintptr_t                     get_user_data(const util::generic_id this_id, World_data::World *world);
 
 uint32_t                      get_tags(const util::generic_id this_id, World_data::World *world);
 bool                          has_tag(const util::generic_id this_id, World_data::World *world, const uint32_t tag_id);
