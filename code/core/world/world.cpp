@@ -348,11 +348,11 @@ World::get_overlapping_aabbs(const std::function<void(const Core::Collision_pair
   static Core::Collision_pair *pairs = nullptr;
   if(!pairs)
   {
-    pairs = new Core::Collision_pair[2048];
+    pairs = new Core::Collision_pair[2048 * 10];
   }
   
   uint32_t number_of_pairs = 0;
-  const uint32_t max_pairs = 2048;
+  const uint32_t max_pairs = 2048 * 10;
   
   if(out_pairs.size)
   {
@@ -379,6 +379,39 @@ Entity_ref
 World::find_entity_by_id(const util::generic_id id) const
 {
   return Entity_ref(id, *const_cast<World*>(this));
+}
+
+
+void
+World::find_entities_by_tag(const uint32_t tag_id,
+                            Entity_ref **out_array,
+                            size_t *out_array_size)
+{
+  static Entity_ref found_ents[1024];
+  static size_t count = 0;
+  
+  count = 0;
+  
+  // Loop through entity data and find entities.
+  
+  auto data = m_impl->world_data->data.entity;
+  
+  
+  lock(data);
+  
+  for(uint32_t i = 0; i < data->size; ++i)
+  {
+    if(data->tags[i] & tag_id)
+    {
+      found_ents[count] = Entity_ref(data->entity_id[i], *const_cast<World*>(this));
+      count++;
+    }
+  }
+  
+  unlock(data);
+  
+  *out_array = found_ents;
+  *out_array_size = count;
 }
 
 
