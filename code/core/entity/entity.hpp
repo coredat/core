@@ -40,7 +40,7 @@ public:
   
                                 operator Entity_ref() const;
   
-  void                          destroy(); // TODO: Should this move to the common interface?
+  void                          destroy();
   
   // ** Common Entity Interface ** //
 

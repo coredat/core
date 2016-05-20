@@ -91,6 +91,15 @@ Entity_ref::get_id() const
 }
 
 
+void
+Entity_ref::destroy()
+{
+  Entity_detail::destroy(m_impl->id, &m_impl->world->data);
+  util::generic_id *id = const_cast<util::generic_id*>(&m_impl->id);
+  *id = util::generic_id_invalid();
+}
+
+
 bool
 Entity_ref::is_valid() const
 {

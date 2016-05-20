@@ -111,11 +111,7 @@ Entity::operator Entity_ref() const
 void
 Entity::destroy()
 {
-  if(!is_valid()) { return; }
-  
-  // Destroy this.
-  World_data::pending_scene_graph_change_delete(m_impl->world->data.entity_graph_changes, get_id());
-  
+  Entity_detail::destroy(m_impl->id, &m_impl->world->data);
   m_impl->id = util::generic_id_invalid();
 }
 

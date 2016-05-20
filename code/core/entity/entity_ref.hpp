@@ -39,9 +39,11 @@ public:
   
   bool                          is_valid() const;
   
+  void                          destroy();
+
   void                          set_user_data(const uintptr_t user_data);
-  uintptr_t                     get_user_data() const;  
-    
+  uintptr_t                     get_user_data() const;
+  
   uint32_t                      get_tags() const;
   bool                          has_tag(const uint32_t tag_id) const;
   void                          set_tags(const uint32_t set_tags);

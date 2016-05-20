@@ -15,6 +15,7 @@
 #include <utilities/logging.hpp>
 #include <data/world_data/transform_data.hpp>
 #include <data/world_data/entity_data.hpp>
+#include <data/world_data/pending_scene_graph_change_data.hpp>
 
 
 namespace Core {
@@ -32,6 +33,16 @@ bool
 is_valid(const util::generic_id this_id, World_data::World *world)
 {
   return !(this_id == util::generic_id_invalid());
+}
+
+
+void
+destroy(const util::generic_id this_id, World_data::World *world)
+{
+  if(!is_valid(this_id, world)) { return; }
+  
+  // Destroy this.
+  World_data::pending_scene_graph_change_delete(world->entity_graph_changes, this_id);
 }
 
 
