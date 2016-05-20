@@ -64,8 +64,22 @@ pending_scene_graph_change_delete(Pending_scene_graph_change_data *graph_changes
   
   lock(graph_changes);
   
-  graph_changes->entities_to_delete[graph_changes->delete_size] = id;
-  ++(graph_changes->delete_size);
+  // Search to see if entity is already pending destruction
+  bool already_deleted = false;
+  
+  for(uint32_t i = 0; i < graph_changes->delete_size; ++i)
+  {
+    if(graph_changes->entities_to_delete[i] == id)
+    {
+      already_deleted = true;
+    }
+  }
+  
+  if(!already_deleted)
+  {
+    graph_changes->entities_to_delete[graph_changes->delete_size] = id;
+    ++(graph_changes->delete_size);
+  }
   
   unlock(graph_changes);
 }
