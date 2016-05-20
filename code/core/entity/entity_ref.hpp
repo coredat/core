@@ -79,7 +79,10 @@ private:
   friend class Entity;
   friend class Camera;
   
-  util::generic_id              get_id() const;
+  util::generic_id                            get_id() const;
+  std::shared_ptr<const World_detail::Data>   get_world_data() const;
+  std::shared_ptr<World_detail::Data>         get_world_data();
+  
 
 private:
 

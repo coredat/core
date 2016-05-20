@@ -238,6 +238,20 @@ Entity_ref::set_rigidbody_properties() const
 }
 
 
+std::shared_ptr<const World_detail::Data>
+Entity_ref::get_world_data() const
+{
+  return m_impl->world;
+}
+
+
+std::shared_ptr<World_detail::Data>
+Entity_ref::get_world_data()
+{
+  return m_impl->world;
+}
+
+
 bool
 Entity_ref::operator==(const Entity_ref &other) const
 {

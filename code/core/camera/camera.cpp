@@ -1,5 +1,6 @@
 #include <core/camera/camera.hpp>
 #include <core/world/world.hpp>
+#include <core/world/detail/world_detail.hpp>
 #include <core/color/color.hpp>
 #include <core/entity/entity.hpp>
 #include <core/entity/entity_ref.hpp>
@@ -87,7 +88,7 @@ namespace
 
 
 void
-Camera::set_attached_entity(const Entity_ref entity)
+Camera::set_attached_entity(Entity_ref entity)
 {
   if(!m_impl)
   {
@@ -95,18 +96,19 @@ Camera::set_attached_entity(const Entity_ref entity)
     return;
   }
 
-  World_data::World *world = World_data::get_world();
+//  World_data::World *world = World_data::get_world();
+  m_impl->world = entity.get_world_data();
 
   // If we are retargeting this to another transform.
   // Then we must remove the old one.
   if(m_impl->attached_entity != util::generic_id_invalid())
   {
-    World_data::camera_pool_remove_camera(world->camera_pool, m_impl->attached_entity);
+    World_data::camera_pool_remove_camera(m_impl->world->data.camera_pool, m_impl->attached_entity);
   }
 
   m_impl->attached_entity = entity.get_id();
   
-  World_data::camera_pool_add_camera(world->camera_pool, m_impl->attached_entity, m_impl->properties);
+  World_data::camera_pool_add_camera(m_impl->world->data.camera_pool, m_impl->attached_entity, m_impl->properties);
 }
 
 

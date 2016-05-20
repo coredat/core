@@ -29,7 +29,7 @@ public:
                         Camera(Camera &&);
   Camera&               operator=(Camera&&);
   
-  void                  set_attached_entity(const Entity_ref entity);
+  void                  set_attached_entity(Entity_ref entity);
   Entity_ref            get_attached_entity() const;
   
   void                  set_priority(const uint32_t priority);
