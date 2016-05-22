@@ -173,6 +173,7 @@ entity_data_remove_entity(Entity_data *data,
     
     memmove(&data->entity_id[index_to_erase],   &data->entity_id[start_index],    size_to_end * sizeof(*data->entity_id));
     memmove(&data->entity_name[index_to_erase], &data->entity_name[start_index],  size_to_end * sizeof(*data->entity_name));
+    memmove(&data->user_data[index_to_erase],   &data->user_data[start_index],    size_to_end * sizeof(*data->user_data));
     memmove(&data->tags[index_to_erase],        &data->tags[start_index],         size_to_end * sizeof(*data->tags));
   }
   else
