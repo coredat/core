@@ -55,7 +55,7 @@ entity_data_init(Entity_data *data,
   
   static uintptr_t user_data[entity_data_max_entities];
   #ifndef NDEBUG
-  memset(user_data, 9, sizeof(user_data));
+  memset(user_data, 0, sizeof(user_data));
   #endif
   data->user_data = user_data;
   
@@ -172,7 +172,7 @@ entity_data_remove_entity(Entity_data *data,
     --(data->size);
     
     memmove(&data->entity_id[index_to_erase],   &data->entity_id[start_index],    size_to_end * sizeof(*data->entity_id));
-    memmove(&data->entity_name[index_to_erase], &data->entity_name[start_index],  size_to_end * sizeof(*data->entity_name));
+    memmove(&data->entity_name[index_to_erase * entity_data_size_of_name], &data->entity_name[start_index * entity_data_size_of_name],  size_to_end * entity_data_size_of_name * sizeof(*data->entity_name));
     memmove(&data->user_data[index_to_erase],   &data->user_data[start_index],    size_to_end * sizeof(*data->user_data));
     memmove(&data->tags[index_to_erase],        &data->tags[start_index],         size_to_end * sizeof(*data->tags));
   }

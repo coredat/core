@@ -140,6 +140,7 @@ void
 World::think(const float dt)
 {
   Debug_menu::display_global_data_menu();
+  Debug_menu::dispaly_world_data_menu(&m_impl->world_data->data);
 
   // Update world
   
