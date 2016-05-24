@@ -20,7 +20,7 @@ pairs_init(Pairs *pairs,
   #ifdef CORE_USE_SCRATCH_ALLOC
   const size_t bytes = sizeof(Pair) * capacity;
 
-  pairs->pair_arr = new(memory::scratch_alloc(bytes)) Pair[capacity];
+  pairs->pair_arr = new(Memory::scratch_alloc(bytes)) Pair[capacity];
   #else
   pairs->pair_arr = new Pair[capacity];
   #endif

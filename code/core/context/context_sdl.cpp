@@ -67,7 +67,7 @@ Context::Context(const uint32_t width,
   const size_t pool_bytes = 64 * to_bytes;
   const size_t scratch_bytes = 64 * to_bytes;
 
-  memory::memory_initialize(pool_bytes, scratch_bytes);
+  Memory::memory_initialize(pool_bytes, scratch_bytes);
 
   if(instance_created)
   {
@@ -346,7 +346,7 @@ Context::is_open() const
   ImGui::Render();
   
   // Reset the memory pool.
-  memory::scratch_reset();
+  Memory::scratch_reset();
   Sdl::event_process();
 
   // Flip buffer and process events.

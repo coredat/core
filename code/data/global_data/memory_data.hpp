@@ -6,14 +6,15 @@
 #include <stddef.h>
 
 
-namespace memory {
+namespace Memory {
 
 
 /*!
   Initialize the memory pool
 */
 void
-memory_initialize(const size_t pool_byte, const size_t scratch_size);
+memory_initialize(const size_t pool_byte,
+                  const size_t scratch_size);
 
 
 /*!

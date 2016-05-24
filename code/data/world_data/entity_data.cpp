@@ -1,5 +1,7 @@
 #include <data/world_data/entity_data.hpp>
+#include <data/global_data/memory_data.hpp>
 #include <utilities/logging.hpp>
+#include <utilities/conversion.hpp>
 #include <assert.h>
 
 
@@ -30,6 +32,9 @@ entity_data_init(Entity_data *data,
                  const uint32_t size_hint)
 {
   assert(data);
+  
+  constexpr uint32_t bytes = util::convert_mb_to_bytes(8);
+  util::memory_chunk chunk = Memory::request_memory_chunk(bytes);
 
   lock(data);
   
@@ -41,7 +46,7 @@ entity_data_init(Entity_data *data,
   #endif
   data->entity_id = ids;
   
-  static char name_ptrs[entity_data_max_entities];
+  static char name_ptrs[entity_data_max_entities * entity_data_size_of_name];
   #ifndef NDEBUG
   memset(name_ptrs, 0, sizeof(name_ptrs));
   #endif
@@ -90,8 +95,17 @@ entity_data_add_entity(Entity_data *data,
   
   data->entity_id[index] = id;
   
-  if(tags) { data->tags[index] = *tags; }
+  // Set Tags
+  if(tags)
+  {
+    data->tags[index] = *tags;
+  }
+  else
+  {
+    data->tags[index] = 0;
+  }
 
+  // Set Name
   if(name)
   {
     strlcpy(&data->entity_name[index * entity_data_size_of_name], name, entity_data_size_of_name);
@@ -167,14 +181,21 @@ entity_data_remove_entity(Entity_data *data,
   size_t index_to_erase;
   if(entity_data_exists(data, id, &index_to_erase))
   {
+    assert(index_to_erase < data->size);
+  
     const size_t start_index = index_to_erase + 1;
     const size_t size_to_end = data->size - index_to_erase - 1;
+    
     --(data->size);
     
     memmove(&data->entity_id[index_to_erase],   &data->entity_id[start_index],    size_to_end * sizeof(*data->entity_id));
-    memmove(&data->entity_name[index_to_erase * entity_data_size_of_name], &data->entity_name[start_index * entity_data_size_of_name],  size_to_end * entity_data_size_of_name * sizeof(*data->entity_name));
     memmove(&data->user_data[index_to_erase],   &data->user_data[start_index],    size_to_end * sizeof(*data->user_data));
     memmove(&data->tags[index_to_erase],        &data->tags[start_index],         size_to_end * sizeof(*data->tags));
+    
+    // Name we need to mul by the size of the string.
+    memmove(&data->entity_name[index_to_erase * entity_data_size_of_name],
+            &data->entity_name[start_index * entity_data_size_of_name],
+            (size_to_end * entity_data_size_of_name) * sizeof(*data->entity_name));
   }
   else
   {

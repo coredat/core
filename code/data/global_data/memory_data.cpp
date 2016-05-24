@@ -15,7 +15,7 @@ namespace
 }
 
 
-namespace memory {
+namespace Memory {
 
 
 void
@@ -23,11 +23,11 @@ memory_initialize(const size_t pool_bytes, const size_t scratch_size)
 {
   if(!memory_pool.header)
   {
-    memory_pool      = util::memory_pool_create(pool_bytes + scratch_size);
-    scratch_chunk    = util::memory_pool_get_chunk(&memory_pool, scratch_size);
-    scratch_pointer  = scratch_chunk.chunk_start;
+    memory_pool           = util::memory_pool_create(pool_bytes + scratch_size);
+    scratch_chunk         = util::memory_pool_get_chunk(&memory_pool, scratch_size);
+    scratch_pointer       = scratch_chunk.chunk_start;
     scratch_pointer_start = scratch_pointer;
-    scratch_capacity = scratch_chunk.bytes_in_chunk;
+    scratch_capacity      = scratch_chunk.bytes_in_chunk;
   }
 }
 
