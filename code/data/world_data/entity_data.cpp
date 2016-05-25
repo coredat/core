@@ -33,8 +33,8 @@ entity_data_init(Entity_data *data,
 {
   assert(data);
   
-  constexpr uint32_t bytes = util::convert_mb_to_bytes(8);
-  util::memory_chunk chunk = Memory::request_memory_chunk(bytes);
+  constexpr uint32_t bytes = util::convert_mb_to_bytes(1);
+  util::memory_chunk chunk = Memory::request_memory_chunk(bytes, "ent-data");
 
   lock(data);
   

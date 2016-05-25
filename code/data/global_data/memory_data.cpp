@@ -24,7 +24,7 @@ memory_initialize(const size_t pool_bytes, const size_t scratch_size)
   if(!memory_pool.header)
   {
     memory_pool           = util::memory_pool_create(pool_bytes + scratch_size);
-    scratch_chunk         = util::memory_pool_get_chunk(&memory_pool, scratch_size);
+    scratch_chunk         = util::memory_pool_get_chunk(&memory_pool, scratch_size, "scratch");
     scratch_pointer       = scratch_chunk.chunk_start;
     scratch_pointer_start = scratch_pointer;
     scratch_capacity      = scratch_chunk.bytes_in_chunk;
@@ -67,11 +67,11 @@ scratch_alloc_aligned(const size_t bytes)
 
 
 util::memory_chunk
-request_memory_chunk(const size_t bytes)
+request_memory_chunk(const size_t bytes, const char *name)
 {
   if(memory_pool.header)
   {
-    return util::memory_pool_get_chunk(&memory_pool, bytes);
+    return util::memory_pool_get_chunk(&memory_pool, bytes, name);
   }
   
   return util::memory_chunk();
@@ -87,6 +87,13 @@ return_memory_chunk(util::memory_chunk *chunk)
   {
     util::memory_pool_return_chunk(&memory_pool, chunk);
   }
+}
+
+
+util::memory_pool*
+_get_pool()
+{
+  return &memory_pool;
 }
 
 
