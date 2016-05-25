@@ -1,5 +1,6 @@
 #include <data/world_data/entity_data.hpp>
 #include <data/global_data/memory_data.hpp>
+#include <utilities/memory.hpp>
 #include <utilities/logging.hpp>
 #include <utilities/conversion.hpp>
 #include <assert.h>
@@ -8,7 +9,6 @@
 namespace
 {
   constexpr uint32_t entity_data_size_of_name = 32;
-  constexpr uint32_t entity_data_max_entities = 2048; // temp.
 }
 
 
@@ -32,40 +32,77 @@ entity_data_init(Entity_data *data,
                  const uint32_t size_hint)
 {
   assert(data);
+  assert(size_hint);
   
-  constexpr uint32_t bytes = util::convert_mb_to_bytes(1);
-  util::memory_chunk chunk = Memory::request_memory_chunk(bytes, "ent-data");
-
+  // 16 byte alignement buffer, apply to all for safty.
+  constexpr size_t simd_buffer = 16;
+  
+  // Calculate the various sizes of things.
+  const size_t bytes_entity_id = sizeof(data->entity_id) * size_hint + simd_buffer;
+  const size_t bytes_tags      = sizeof(data->tags) * size_hint + simd_buffer;
+  const size_t bytes_name      = sizeof(data->entity_name) * entity_data_size_of_name * size_hint + simd_buffer;
+  const size_t bytes_user_data = sizeof(data->user_data) * size_hint + simd_buffer;
+  const size_t mem_to_alloc    = bytes_entity_id + bytes_tags + bytes_name + bytes_user_data;
+  
+  // Allocate some memory.
+  util::memory_chunk *data_memory = const_cast<util::memory_chunk*>(&data->memory);
+  *data_memory = Memory::request_memory_chunk(mem_to_alloc, "entity-data");
+  
   lock(data);
   
-  LOG_TODO("Use memory pool");
+  // Setup the memory
+  {
+    size_t byte_counter = 0;
+    const void *alloc_start = data->memory.chunk_16_byte_aligned_start;
+    
+    // Set ids memory
+    {
+      data->entity_id = reinterpret_cast<util::generic_id*>(util::mem_offset(alloc_start, byte_counter));
+      #ifndef NDEBUG
+      memset(data->entity_id, 0, bytes_entity_id);
+      #endif
+      byte_counter += bytes_entity_id;
+      assert(byte_counter <= mem_to_alloc);
+    }
+    
+    // Set name memory
+    {
+      data->entity_name = reinterpret_cast<char*>(util::mem_offset(alloc_start, byte_counter));
+      #ifndef NDEBUG
+      memset(data->entity_name, 0, bytes_name);
+      #endif
+      byte_counter += bytes_name;
+      assert(byte_counter <= mem_to_alloc);
+    }
+    
+    // Set tag memory
+    {
+      data->tags = reinterpret_cast<uint32_t*>(util::mem_offset(alloc_start, byte_counter));
+      #ifndef NDEBUG
+      memset(data->tags, 0, bytes_tags);
+      #endif
+      byte_counter += bytes_tags;
+      assert(byte_counter <= mem_to_alloc);
+    }
+    
+    // Set user data memory
+    {
+      data->user_data = reinterpret_cast<uintptr_t*>(util::mem_offset(alloc_start, byte_counter));
+      #ifndef NDEBUG
+      memset(data->user_data, 0, bytes_user_data);
+      #endif
+      byte_counter += bytes_user_data;
+      assert(byte_counter <= mem_to_alloc);
+    }
+  }
   
-  static util::generic_id ids[entity_data_max_entities];
-  #ifndef NDEBUG
-  memset(ids, 0, sizeof(ids));
-  #endif
-  data->entity_id = ids;
-  
-  static char name_ptrs[entity_data_max_entities * entity_data_size_of_name];
-  #ifndef NDEBUG
-  memset(name_ptrs, 0, sizeof(name_ptrs));
-  #endif
-  data->entity_name = name_ptrs;
-  
-  static uint32_t tags[entity_data_max_entities];
-  #ifndef NDEBUG
-  memset(tags, 0, sizeof(tags));
-  #endif
-  data->tags = tags;
-  
-  static uintptr_t user_data[entity_data_max_entities];
-  #ifndef NDEBUG
-  memset(user_data, 0, sizeof(user_data));
-  #endif
-  data->user_data = user_data;
-  
-  uint32_t *capacity = const_cast<uint32_t*>(&data->capacity);
-  *capacity = entity_data_max_entities;
+  // Set the size and capacity
+  {
+    data->size = 0;
+    
+    uint32_t *capacity = const_cast<uint32_t*>(&data->capacity);
+    *capacity = size_hint;
+  }
   
   unlock(data);
 }

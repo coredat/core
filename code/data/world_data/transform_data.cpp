@@ -1,5 +1,7 @@
 #include <data/world_data/transform_data.hpp>
+#include <data/global_data/memory_data.hpp>
 #include <common/error_strings.hpp>
+#include <utilities/memory.hpp>
 #include <utilities/logging.hpp>
 #include <assert.h>
 
@@ -29,24 +31,67 @@ void
 transform_data_init(Transform_data *data,
                     const uint32_t size_hint)
 {
+  assert(data);
+  assert(size_hint);
+  
+  // SIMD buffer, we apply to all arrays.
+  constexpr size_t simd_buffer = 16;
+  
+  // Calculate consumed memory.
+  const size_t bytes_entity_id = sizeof(data->entity_id) * size_hint + simd_buffer;
+  const size_t bytes_transforms = sizeof(data->transform) * size_hint + simd_buffer;
+  const size_t bytes_aabb = sizeof(data->aabb) * size_hint + simd_buffer;
+  const size_t mem_to_alloc = bytes_entity_id + bytes_transforms + bytes_aabb;
+  
+  // Allocate memory
+  util::memory_chunk *data_memory = const_cast<util::memory_chunk*>(&data->memory);
+  *data_memory = Memory::request_memory_chunk(mem_to_alloc, "trans-data");
+  
   lock(data);
+  
+  // Setup the memory
+  {
+    size_t byte_counter = 0;
+    const void *alloc_start = data->memory.chunk_16_byte_aligned_start;
+    
+    // Set ids memory
+    {
+      data->entity_id = reinterpret_cast<util::generic_id*>(util::mem_offset(alloc_start, byte_counter));
+      #ifndef NDEBUG
+      memset(data->entity_id, 0, bytes_entity_id);
+      #endif
+      byte_counter += bytes_entity_id;
+      assert(byte_counter <= mem_to_alloc);
+    }
+    
+    // Set ids memory
+    {
+      data->transform = reinterpret_cast<math::transform*>(util::mem_offset(alloc_start, byte_counter));
+      #ifndef NDEBUG
+      memset(data->transform, 0, bytes_transforms);
+      #endif
+      byte_counter += bytes_transforms;
+      assert(byte_counter <= mem_to_alloc);
+    }
+    
+    // Set ids memory
+    {
+      data->aabb = reinterpret_cast<math::aabb*>(util::mem_offset(alloc_start, byte_counter));
+      #ifndef NDEBUG
+      memset(data->aabb, 0, bytes_aabb);
+      #endif
+      byte_counter += bytes_aabb;
+      assert(byte_counter <= mem_to_alloc);
+    }
+  }
 
-  LOG_TODO("Use a memory pool");
-  
-  static util::generic_id ids[transform_max_entities];
-  memset(ids, 0, sizeof(ids));
-  data->entity_id = ids;
-  
-  static math::transform transforms[transform_max_entities];
-  memset(transforms, 0, sizeof(transforms));
-  data->transform = transforms;
-  
-  static math::aabb aabb[transform_max_entities];
-  memset(aabb, 0, sizeof(aabb));
-  data->aabb = aabb;
-  
-  uint32_t *capacity_bump = const_cast<uint32_t*>(&data->capacity);
-  *capacity_bump = transform_max_entities;
+  // Set the size and capacity
+  {
+    data->size = 0;
+    
+    uint32_t *capacity = const_cast<uint32_t*>(&data->capacity);
+    *capacity = size_hint;
+  }
   
   unlock(data);
 }

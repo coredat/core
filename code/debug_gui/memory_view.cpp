@@ -20,22 +20,22 @@ display_memory_useage(util::memory_pool *data)
     {
       util::memory_chunk chunk = util::memory_pool_get_chunk_by_index(data, n);
     
-        if (n > 0) ImGui::SameLine();
-        ImGui::PushID(n * 1000);
-        ImColor color = chunk.in_use ? ImColor::HSV(0.f, 1.f, 1.f) : ImColor::HSV(0.3f, 0.8f, 0.8f);
-      
-        ImGui::PushStyleColor(ImGuiCol_Button, color);
-        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, color);
-        ImGui::PushStyleColor(ImGuiCol_ButtonActive, color);
-      
+      if (n > 0) ImGui::SameLine();
+      ImGui::PushID(n * 1000);
+      ImColor color = chunk.in_use ? ImColor::HSV(0.f, 1.f, 1.f) : ImColor::HSV(0.3f, 0.8f, 0.8f);
+    
+      ImGui::PushStyleColor(ImGuiCol_Button, color);
+      ImGui::PushStyleColor(ImGuiCol_ButtonHovered, color);
+      ImGui::PushStyleColor(ImGuiCol_ButtonActive, color);
+    
 //        constexpr uint32_t constant = 1048576 / 7; // half mb to byte
-        ImGui::Button(chunk.name, ImVec2(60, 0.0f));
-        if (ImGui::IsItemHovered())
-        {
-          ImGui::SetTooltip("%s", chunk.name);
-        }
-        ImGui::PopStyleColor(3);
-        ImGui::PopID();
+      ImGui::Button(chunk.name, ImVec2(60, 0.0f));
+      if (ImGui::IsItemHovered())
+      {
+        ImGui::SetTooltip("%s", chunk.name);
+      }
+      ImGui::PopStyleColor(3);
+      ImGui::PopID();
     }
     ImGui::EndChild();
   }
