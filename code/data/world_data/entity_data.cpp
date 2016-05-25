@@ -48,6 +48,8 @@ entity_data_init(Entity_data *data,
   util::memory_chunk *data_memory = const_cast<util::memory_chunk*>(&data->memory);
   *data_memory = Memory::request_memory_chunk(mem_to_alloc, "entity-data");
   
+  assert(data_memory->bytes_in_chunk == mem_to_alloc);
+  
   lock(data);
   
   // Setup the memory
