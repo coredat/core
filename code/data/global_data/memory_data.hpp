@@ -59,6 +59,19 @@ util::memory_pool*
 _get_pool();
 
 
+/*!
+  For debug only.
+*/
+size_t
+_get_scratch_bytes_used();
+
+
+/*!
+  For debug only.
+*/
+size_t
+_get_scratch_bytes_total();
+
 } // ns
 
 

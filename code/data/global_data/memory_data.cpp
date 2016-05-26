@@ -97,4 +97,18 @@ _get_pool()
 }
 
 
+size_t
+_get_scratch_bytes_used()
+{
+  return (uintptr_t)scratch_pointer - (uintptr_t)scratch_pointer_start;
+}
+
+
+size_t
+_get_scratch_bytes_total()
+{
+  return scratch_capacity;
+}
+
+
 } // ns

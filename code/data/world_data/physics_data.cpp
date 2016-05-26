@@ -18,10 +18,10 @@ physics_init(Physics_data *data,
   // SIMD Buffer, apply to all data.
   constexpr size_t simd_buffer = 16;
   
-  const size_t bytes_entity_id = sizeof(data->entity_id) * size_hint + simd_buffer;
-  const size_t bytes_transform = sizeof(data->transform) * size_hint + simd_buffer;
-  const size_t bytes_aabb      = sizeof(data->aabb_collider) * size_hint + simd_buffer;
-  const size_t bytes_mask      = sizeof(data->collision_id) * size_hint + simd_buffer;
+  const size_t bytes_entity_id = sizeof(*data->entity_id) * size_hint + simd_buffer;
+  const size_t bytes_transform = sizeof(*data->transform) * size_hint + simd_buffer;
+  const size_t bytes_aabb      = sizeof(*data->aabb_collider) * size_hint + simd_buffer;
+  const size_t bytes_mask      = sizeof(*data->collision_id) * size_hint + simd_buffer;
   
   const size_t bytes_to_alloc  = bytes_entity_id + bytes_transform + bytes_aabb + bytes_mask;
   

@@ -36,13 +36,13 @@ transform_data_init(Transform_data *data,
   const size_t bytes_transforms = sizeof(*data->transform) * size_hint + simd_buffer;
   const size_t bytes_aabb       = sizeof(*data->aabb) * size_hint + simd_buffer;
   
-  const size_t mem_to_alloc     = bytes_entity_id + bytes_transforms + bytes_aabb;
+  const size_t bytes_to_alloc   = bytes_entity_id + bytes_transforms + bytes_aabb;
   
   // Allocate memory
   util::memory_chunk *data_memory = const_cast<util::memory_chunk*>(&data->memory);
-  *data_memory = Memory::request_memory_chunk(mem_to_alloc, "trans-data");
+  *data_memory = Memory::request_memory_chunk(bytes_to_alloc, "trans-data");
   
-  assert(data_memory->bytes_in_chunk == mem_to_alloc);
+  assert(data_memory->bytes_in_chunk == bytes_to_alloc);
   
   lock(data);
   
@@ -61,7 +61,7 @@ transform_data_init(Transform_data *data,
       memset(offset, 0, bytes_entity_id);
       #endif
       byte_counter += bytes_entity_id;
-      assert(byte_counter <= mem_to_alloc);
+      assert(byte_counter <= bytes_to_alloc);
     }
     
     // Set ids memory
@@ -74,7 +74,7 @@ transform_data_init(Transform_data *data,
       memset(offset, 0, bytes_transforms);
       #endif
       byte_counter += bytes_transforms;
-      assert(byte_counter <= mem_to_alloc);
+      assert(byte_counter <= bytes_to_alloc);
     }
     
     // Set ids memory
@@ -87,7 +87,7 @@ transform_data_init(Transform_data *data,
       memset(offset, 0, bytes_aabb);
       #endif
       byte_counter += bytes_aabb;
-      assert(byte_counter <= mem_to_alloc);
+      assert(byte_counter <= bytes_to_alloc);
     }
   }
 
@@ -112,8 +112,8 @@ transform_data_free(Transform_data *data)
 void
 transform_data_add_transform(Transform_data *data,
                              const util::generic_id id,
-                             math::transform *trans,
-                             math::aabb *aabb)
+                             const math::transform *trans,
+                             const math::aabb *aabb)
 {
   assert(data && data->size < data->capacity);
   assert(id);
@@ -147,8 +147,7 @@ transform_data_remove_transform(Transform_data *data,
     const size_t size_to_end = data->size - index_to_erase - 1;
     --(data->size);
     
-    const size_t entity_size = sizeof(*data->entity_id);
-    memmove(&data->entity_id[index_to_erase], &data->entity_id[start_index], size_to_end * entity_size);
+    memmove(&data->entity_id[index_to_erase], &data->entity_id[start_index], size_to_end * sizeof(*data->entity_id));
     memmove(&data->transform[index_to_erase], &data->transform[start_index], size_to_end * sizeof(*data->transform));
     memmove(&data->aabb[index_to_erase],      &data->aabb[start_index],      size_to_end * sizeof(*data->aabb));
   }
@@ -163,7 +162,7 @@ transform_data_remove_transform(Transform_data *data,
 
 
 bool
-transform_data_exists(Transform_data *data,
+transform_data_exists(const Transform_data *data,
                       const util::generic_id id,
                       size_t *out_index)
 {

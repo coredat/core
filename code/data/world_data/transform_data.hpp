@@ -54,8 +54,8 @@ transform_data_free(Transform_data *data);
 void
 transform_data_add_transform(Transform_data *data,
                              const util::generic_id id,
-                             math::transform *trans = nullptr,
-                             math::aabb *aabb = nullptr);
+                             const math::transform *trans = nullptr,
+                             const math::aabb *aabb = nullptr);
 
 
 void
@@ -64,7 +64,7 @@ transform_data_remove_transform(Transform_data *data,
 
 
 bool
-transform_data_exists(Transform_data *data,
+transform_data_exists(const Transform_data *data,
                       const util::generic_id id,
                       size_t *out_index = nullptr);
 
