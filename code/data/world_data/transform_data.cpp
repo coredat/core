@@ -38,10 +38,11 @@ transform_data_init(Transform_data *data,
   constexpr size_t simd_buffer = 16;
   
   // Calculate consumed memory.
-  const size_t bytes_entity_id = sizeof(data->entity_id) * size_hint + simd_buffer;
+  const size_t bytes_entity_id  = sizeof(data->entity_id) * size_hint + simd_buffer;
   const size_t bytes_transforms = sizeof(data->transform) * size_hint + simd_buffer;
-  const size_t bytes_aabb = sizeof(data->aabb) * size_hint + simd_buffer;
-  const size_t mem_to_alloc = bytes_entity_id + bytes_transforms + bytes_aabb;
+  const size_t bytes_aabb       = sizeof(data->aabb) * size_hint + simd_buffer;
+  
+  const size_t mem_to_alloc     = bytes_entity_id + bytes_transforms + bytes_aabb;
   
   // Allocate memory
   util::memory_chunk *data_memory = const_cast<util::memory_chunk*>(&data->memory);

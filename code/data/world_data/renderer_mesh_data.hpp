@@ -3,6 +3,7 @@
 
 
 #include <utilities/generic_id.hpp>
+#include <utilities/memory_pool.hpp>
 #include <graphics_api/ogl/ogl_texture.hpp>
 #include <graphics_api/mesh.hpp>
 #include <stdint.h>
@@ -22,11 +23,12 @@ struct Mesh_renderer_draw_call
 
 struct Mesh_renderer_data
 {
-  util::generic_id        *entity_id       = nullptr;
-  Mesh_renderer_draw_call *mesh_draw_calls = nullptr;
+  util::generic_id          *entity_id       = nullptr;
+  Mesh_renderer_draw_call   *mesh_draw_calls = nullptr;
   
-  const uint32_t capacity = 2048;
-  uint32_t       size     = 0;
+  uint32_t                  size             = 0;
+  const uint32_t            capacity         = 0;
+  const util::memory_chunk  memory           = util::memory_chunk();
 };
 
 
@@ -34,7 +36,8 @@ struct Mesh_renderer_data
   Initialize the mesh renderer data.
 */
 void
-mesh_renderer_init(Mesh_renderer_data *data);
+mesh_renderer_init(Mesh_renderer_data *data,
+                   const uint32_t entity_hint);
 
 
 /*!

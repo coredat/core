@@ -104,7 +104,7 @@ World::World(const World_setup setup)
   World_data::physics_init(&physics_data, entity_hint);
   
   static World_data::Mesh_renderer_data mesh_data;
-  World_data::mesh_renderer_init(&mesh_data);
+  World_data::mesh_renderer_init(&mesh_data, entity_hint);
   
   static World_data::Transform_data transform_data;
   World_data::transform_data_init(&transform_data, entity_hint);

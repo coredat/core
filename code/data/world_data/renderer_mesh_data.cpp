@@ -1,4 +1,6 @@
 #include <data/world_data/renderer_mesh_data.hpp>
+#include <data/global_data/memory_data.hpp>
+#include <utilities/memory.hpp>
 #include <string.h>
 #include <assert.h>
 
@@ -7,15 +9,71 @@ namespace World_data {
   
 
 void
-mesh_renderer_init(Mesh_renderer_data *data)
+mesh_renderer_init(Mesh_renderer_data *data,
+                   const uint32_t size_hint)
 {
-  static util::generic_id ents[2048];
-  data->entity_id = ents;
+  assert(data);
+  assert(size_hint);
+
+  // We align everything by 16 bytes.
+  constexpr size_t simd_buffer = 16;
+
+  // Calculate the size of things
+  const size_t bytes_entity_id  = sizeof(data->entity_id) * size_hint + simd_buffer;
+  const size_t bytes_draw_calls = sizeof(data->mesh_draw_calls) * size_hint + simd_buffer;
   
-  static Mesh_renderer_draw_call draw_call[2048];
-  data->mesh_draw_calls = draw_call;
+  const size_t bytes_to_alloc   = bytes_entity_id + bytes_draw_calls;
   
-  data->size = 0;
+  // Allocate some memory
+  util::memory_chunk *data_memory = const_cast<util::memory_chunk*>(&data->memory);
+  *data_memory = Memory::request_memory_chunk(bytes_to_alloc, "draw-call-data");
+  
+  assert(data_memory->bytes_in_chunk == bytes_to_alloc);
+  
+//  lock(data);
+  
+  // Setup the memory
+  {
+    size_t byte_counter = 0;
+    const void *alloc_start = data->memory.chunk_16_byte_aligned_start;
+
+    // Entity ids
+    {
+      data->entity_id = reinterpret_cast<util::generic_id*>(util::mem_offset(alloc_start, byte_counter));
+      #ifndef NDEBUG
+      memset(data->entity_id, 0, bytes_entity_id);
+      #endif
+      byte_counter += bytes_entity_id;
+      assert(byte_counter <= bytes_to_alloc);
+    }
+
+    // Draw calls
+    {
+      data->mesh_draw_calls = reinterpret_cast<Mesh_renderer_draw_call*>(util::mem_offset(alloc_start, byte_counter));
+      #ifndef NDEBUG
+      memset(data->mesh_draw_calls, 0, bytes_draw_calls);
+      #endif
+      byte_counter += bytes_draw_calls;
+      assert(byte_counter <= bytes_to_alloc);
+    }
+  }
+  
+  {
+    data->size = 0;
+    
+    uint32_t *capacity = const_cast<uint32_t*>(&data->capacity);
+    *capacity = size_hint;
+  }
+  
+//  unlock(data);
+
+//  static util::generic_id ents[2048];
+//  data->entity_id = ents;
+//  
+//  static Mesh_renderer_draw_call draw_call[2048];
+//  data->mesh_draw_calls = draw_call;
+//  
+//  data->size = 0;
 }
 
 

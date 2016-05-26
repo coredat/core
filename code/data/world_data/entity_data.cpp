@@ -42,6 +42,7 @@ entity_data_init(Entity_data *data,
   const size_t bytes_tags      = sizeof(data->tags) * size_hint + simd_buffer;
   const size_t bytes_name      = sizeof(data->entity_name) * entity_data_size_of_name * size_hint + simd_buffer;
   const size_t bytes_user_data = sizeof(data->user_data) * size_hint + simd_buffer;
+  
   const size_t mem_to_alloc    = bytes_entity_id + bytes_tags + bytes_name + bytes_user_data;
   
   // Allocate some memory.
