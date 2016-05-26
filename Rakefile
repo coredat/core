@@ -1,9 +1,2 @@
-
-
-task :ci do |t, args|
-
-  Dir.chdir("../utilities-test/")
-  sh("premake4 --file=premake.lua gmake")
-  sh("make CXX=g++-5 && ./Unit")
-
-end
+# Dummy rake file, that includes all the others.
+Dir.glob('scripts/*.rake').each { |r| import r }
