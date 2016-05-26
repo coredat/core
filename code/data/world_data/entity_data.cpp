@@ -3,6 +3,7 @@
 #include <utilities/memory.hpp>
 #include <utilities/logging.hpp>
 #include <utilities/conversion.hpp>
+#include <common/error_strings.hpp>
 #include <assert.h>
 
 
@@ -189,7 +190,7 @@ entity_data_set_name(Entity_data *data,
   }
   else
   {
-    LOG_WARNING("Entity id wasn't found");
+    LOG_ERROR(Error_string::entity_not_found());
   }
   
   unlock(data);
@@ -213,7 +214,7 @@ entity_data_get_name(Entity_data *data,
   }
   else
   {
-    LOG_WARNING("Entity id wasn't found");
+    LOG_ERROR(Error_string::entity_not_found());
   }
   
   unlock(data);
@@ -251,7 +252,7 @@ entity_data_remove_entity(Entity_data *data,
   }
   else
   {
-    LOG_ERROR("Tried removing an entity that doesn't exist");
+    LOG_ERROR(Error_string::entity_not_found());
     assert(false);
   }
   

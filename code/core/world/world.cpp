@@ -143,8 +143,6 @@ World::think(const float dt)
   Debug_menu::dispaly_world_data_menu(&m_impl->world_data->data);
 
   // Update world
-  
-
   auto data = &m_impl->world_data->data;
   auto graph_changes = m_impl->world_data->data.entity_graph_changes;
 
