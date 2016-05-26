@@ -72,6 +72,14 @@ _get_scratch_bytes_used();
 size_t
 _get_scratch_bytes_total();
 
+
+/*!
+  Max useage of the scratch pool.
+*/
+size_t
+_get_scratch_max_used();
+
+
 } // ns
 
 

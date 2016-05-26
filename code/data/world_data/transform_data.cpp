@@ -125,8 +125,19 @@ transform_data_add_transform(Transform_data *data,
   
   data->entity_id[index] = id;
   
-  if(trans) { data->transform[index] = *trans; }
-  if(aabb)  { data->aabb[index] = *aabb;       }
+  if(trans) {
+    data->transform[index] = *trans;
+  }
+  else {
+    data->transform[index] = math::transform();
+  }
+  
+  if(aabb) {
+    data->aabb[index] = *aabb;
+  }
+  else {
+    data->aabb[index] = math::aabb();
+  }
   
   unlock(data);
 }

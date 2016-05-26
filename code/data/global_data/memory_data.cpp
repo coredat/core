@@ -1,4 +1,5 @@
 #include <data/global_data/memory_data.hpp>
+#include <utilities/memory.hpp>
 #include <assert.h>
 
 
@@ -12,6 +13,8 @@ namespace
   
   size_t              scratch_size = 0;
   size_t              scratch_capacity = 0;
+  
+  size_t              max_use_stat = 0;
 }
 
 
@@ -35,6 +38,9 @@ memory_initialize(const size_t pool_bytes, const size_t scratch_size)
 void
 scratch_reset()
 {
+  const size_t used = _get_scratch_bytes_used();
+  if(used > max_use_stat) { max_use_stat = used; }
+
   scratch_pointer = scratch_pointer_start;
   scratch_size    = 0;
 }
@@ -49,7 +55,7 @@ scratch_alloc(const size_t bytes)
     
     void *ptr = scratch_pointer;
     
-    scratch_pointer = (void*)((uintptr_t)scratch_pointer + bytes);
+    scratch_pointer = util::mem_offset(scratch_pointer, bytes);
     
     return ptr;
   }
@@ -108,6 +114,13 @@ size_t
 _get_scratch_bytes_total()
 {
   return scratch_capacity;
+}
+
+
+size_t
+_get_scratch_max_used()
+{
+  return max_use_stat;
 }
 
 

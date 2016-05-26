@@ -44,9 +44,9 @@ display_memory_useage(util::memory_pool *data)
     ImGui::EndChild();
     
     
-    ImGui::TextWrapped("Usage of the scratch memory.");
+    ImGui::TextWrapped("Max use of the scratch memory.");
     {
-      float progress = static_cast<float>(Memory::_get_scratch_bytes_used()) / static_cast<float>(Memory::_get_scratch_bytes_total());
+      float progress = static_cast<float>(Memory::_get_scratch_max_used()) / static_cast<float>(Memory::_get_scratch_bytes_total());
       float progress_saturated = (progress < 0.0f) ? 0.0f : (progress > 1.0f) ? 1.0f : progress;
       char buf[32];
       sprintf(buf, "%d/%d", (int)(progress_saturated*1753), 1753);

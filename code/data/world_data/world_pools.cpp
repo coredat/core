@@ -34,10 +34,6 @@ world_create_new_entity(World *world_data,
     World_data::transform_data_add_transform(world_data->transform, id);
     World_data::mesh_renderer_add(world_data->mesh_data, id, 0, 0);
     
-//    entity_graph_change_push(world_data->entity_graph_changes,
-//                             id,
-//                             Entity_graph_change::inserted);
-    
     return true;
   }
   
