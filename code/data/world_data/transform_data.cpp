@@ -32,9 +32,9 @@ transform_data_init(Transform_data *data,
   constexpr size_t simd_buffer = 16;
   
   // Calculate consumed memory.
-  const size_t bytes_entity_id  = sizeof(data->entity_id) * size_hint + simd_buffer;
-  const size_t bytes_transforms = sizeof(data->transform) * size_hint + simd_buffer;
-  const size_t bytes_aabb       = sizeof(data->aabb) * size_hint + simd_buffer;
+  const size_t bytes_entity_id  = sizeof(*data->entity_id) * size_hint + simd_buffer;
+  const size_t bytes_transforms = sizeof(*data->transform) * size_hint + simd_buffer;
+  const size_t bytes_aabb       = sizeof(*data->aabb) * size_hint + simd_buffer;
   
   const size_t mem_to_alloc     = bytes_entity_id + bytes_transforms + bytes_aabb;
   
@@ -58,7 +58,7 @@ transform_data_init(Transform_data *data,
     
       data->entity_id = reinterpret_cast<util::generic_id*>(aligned);
       #ifndef NDEBUG
-      memset(data->entity_id, 0, bytes_entity_id);
+      memset(offset, 0, bytes_entity_id);
       #endif
       byte_counter += bytes_entity_id;
       assert(byte_counter <= mem_to_alloc);
@@ -71,7 +71,7 @@ transform_data_init(Transform_data *data,
     
       data->transform = reinterpret_cast<math::transform*>(aligned);
       #ifndef NDEBUG
-      memset(data->transform, 0, bytes_transforms);
+      memset(offset, 0, bytes_transforms);
       #endif
       byte_counter += bytes_transforms;
       assert(byte_counter <= mem_to_alloc);
@@ -84,7 +84,7 @@ transform_data_init(Transform_data *data,
       
       data->aabb = reinterpret_cast<math::aabb*>(aligned);
       #ifndef NDEBUG
-      memset(data->aabb, 0, bytes_aabb);
+      memset(offset, 0, bytes_aabb);
       #endif
       byte_counter += bytes_aabb;
       assert(byte_counter <= mem_to_alloc);

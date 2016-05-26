@@ -38,10 +38,10 @@ entity_data_init(Entity_data *data,
   constexpr size_t simd_buffer = 16;
   
   // Calculate the various sizes of things.
-  const size_t bytes_entity_id = sizeof(data->entity_id) * size_hint + simd_buffer;
-  const size_t bytes_tags      = sizeof(data->tags) * size_hint + simd_buffer;
-  const size_t bytes_name      = sizeof(data->entity_name) * entity_data_size_of_name * size_hint + simd_buffer;
-  const size_t bytes_user_data = sizeof(data->user_data) * size_hint + simd_buffer;
+  const size_t bytes_entity_id = sizeof(*data->entity_id) * size_hint + simd_buffer;
+  const size_t bytes_tags      = sizeof(*data->tags) * size_hint + simd_buffer;
+  const size_t bytes_name      = sizeof(*data->entity_name) * entity_data_size_of_name * size_hint + simd_buffer;
+  const size_t bytes_user_data = sizeof(*data->user_data) * size_hint + simd_buffer;
   
   const size_t mem_to_alloc    = bytes_entity_id + bytes_tags + bytes_name + bytes_user_data;
   
@@ -56,13 +56,16 @@ entity_data_init(Entity_data *data,
   // Setup the memory
   {
     size_t byte_counter = 0;
-    const void *alloc_start = data->memory.chunk_16_byte_aligned_start;
+    const void *alloc_start = data->memory.chunk_start;
     
     // Set ids memory
     {
-      data->entity_id = reinterpret_cast<util::generic_id*>(util::mem_offset(alloc_start, byte_counter));
+      void *offset = util::mem_offset(alloc_start, byte_counter);
+      void *aligned = util::mem_next_16byte_boundry(offset);
+    
+      data->entity_id = reinterpret_cast<util::generic_id*>(aligned);
       #ifndef NDEBUG
-      memset(data->entity_id, 0, bytes_entity_id);
+      memset(offset, 0, bytes_entity_id);
       #endif
       byte_counter += bytes_entity_id;
       assert(byte_counter <= mem_to_alloc);
@@ -70,9 +73,12 @@ entity_data_init(Entity_data *data,
     
     // Set name memory
     {
-      data->entity_name = reinterpret_cast<char*>(util::mem_offset(alloc_start, byte_counter));
+      void *offset = util::mem_offset(alloc_start, byte_counter);
+      void *aligned = util::mem_next_16byte_boundry(offset);
+    
+      data->entity_name = reinterpret_cast<char*>(aligned);
       #ifndef NDEBUG
-      memset(data->entity_name, 0, bytes_name);
+      memset(offset, 0, bytes_name);
       #endif
       byte_counter += bytes_name;
       assert(byte_counter <= mem_to_alloc);
@@ -80,9 +86,12 @@ entity_data_init(Entity_data *data,
     
     // Set tag memory
     {
-      data->tags = reinterpret_cast<uint32_t*>(util::mem_offset(alloc_start, byte_counter));
+      void *offset = util::mem_offset(alloc_start, byte_counter);
+      void *aligned = util::mem_next_16byte_boundry(offset);
+    
+      data->tags = reinterpret_cast<uint32_t*>(aligned);
       #ifndef NDEBUG
-      memset(data->tags, 0, bytes_tags);
+      memset(offset, 0, bytes_tags);
       #endif
       byte_counter += bytes_tags;
       assert(byte_counter <= mem_to_alloc);
@@ -90,9 +99,12 @@ entity_data_init(Entity_data *data,
     
     // Set user data memory
     {
-      data->user_data = reinterpret_cast<uintptr_t*>(util::mem_offset(alloc_start, byte_counter));
+      void *offset = util::mem_offset(alloc_start, byte_counter);
+      void *aligned = util::mem_next_16byte_boundry(offset);
+      
+      data->user_data = reinterpret_cast<uintptr_t*>(aligned);
       #ifndef NDEBUG
-      memset(data->user_data, 0, bytes_user_data);
+      memset(offset, 0, bytes_user_data);
       #endif
       byte_counter += bytes_user_data;
       assert(byte_counter <= mem_to_alloc);

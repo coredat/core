@@ -31,8 +31,8 @@ mesh_renderer_init(Mesh_renderer_data *data,
   constexpr size_t simd_buffer = 16;
 
   // Calculate the size of things
-  const size_t bytes_entity_id  = sizeof(data->entity_id) * size_hint + simd_buffer;
-  const size_t bytes_draw_calls = sizeof(data->mesh_draw_calls) * size_hint + simd_buffer;
+  const size_t bytes_entity_id  = sizeof(*data->entity_id) * size_hint + simd_buffer;
+  const size_t bytes_draw_calls = sizeof(*data->mesh_draw_calls) * size_hint + simd_buffer;
   
   const size_t bytes_to_alloc   = bytes_entity_id + bytes_draw_calls;
   
@@ -51,9 +51,12 @@ mesh_renderer_init(Mesh_renderer_data *data,
 
     // Entity ids
     {
-      data->entity_id = reinterpret_cast<util::generic_id*>(util::mem_offset(alloc_start, byte_counter));
+      void *offset = util::mem_offset(alloc_start, byte_counter);
+      void *aligned = util::mem_next_16byte_boundry(offset);
+    
+      data->entity_id = reinterpret_cast<util::generic_id*>(aligned);
       #ifndef NDEBUG
-      memset(data->entity_id, 0, bytes_entity_id);
+      memset(offset, 0, bytes_entity_id);
       #endif
       byte_counter += bytes_entity_id;
       assert(byte_counter <= bytes_to_alloc);
@@ -61,9 +64,12 @@ mesh_renderer_init(Mesh_renderer_data *data,
 
     // Draw calls
     {
-      data->mesh_draw_calls = reinterpret_cast<Mesh_renderer_draw_call*>(util::mem_offset(alloc_start, byte_counter));
+      void *offset = util::mem_offset(alloc_start, byte_counter);
+      void *aligned = util::mem_next_16byte_boundry(offset);
+    
+      data->mesh_draw_calls = reinterpret_cast<Mesh_renderer_draw_call*>(aligned);
       #ifndef NDEBUG
-      memset(data->mesh_draw_calls, 0, bytes_draw_calls);
+      memset(offset, 0, bytes_draw_calls);
       #endif
       byte_counter += bytes_draw_calls;
       assert(byte_counter <= bytes_to_alloc);
