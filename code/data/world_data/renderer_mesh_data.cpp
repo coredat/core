@@ -6,6 +6,18 @@
 
 
 namespace World_data {
+
+
+void
+lock(Mesh_renderer_data *data)
+{
+}
+
+
+void
+unlock(Mesh_renderer_data *data)
+{
+}
   
 
 void
@@ -30,7 +42,7 @@ mesh_renderer_init(Mesh_renderer_data *data,
   
   assert(data_memory->bytes_in_chunk == bytes_to_alloc);
   
-//  lock(data);
+  lock(data);
   
   // Setup the memory
   {
@@ -65,15 +77,7 @@ mesh_renderer_init(Mesh_renderer_data *data,
     *capacity = size_hint;
   }
   
-//  unlock(data);
-
-//  static util::generic_id ents[2048];
-//  data->entity_id = ents;
-//  
-//  static Mesh_renderer_draw_call draw_call[2048];
-//  data->mesh_draw_calls = draw_call;
-//  
-//  data->size = 0;
+  unlock(data);
 }
 
 
@@ -83,6 +87,11 @@ mesh_renderer_add(Mesh_renderer_data *data,
                   const uint32_t model_id,
                   const uint32_t texture_id)
 {
+  assert(data);
+  assert(id);
+  
+  lock(data);
+
   size_t index;
   if(mesh_renderer_exists(data, id, &index))
   {
@@ -97,6 +106,8 @@ mesh_renderer_add(Mesh_renderer_data *data,
   data->mesh_draw_calls[new_index].texture = texture_id;
   
   ++(data->size);
+  
+  unlock(data);
 }
 
 
@@ -105,11 +116,17 @@ mesh_renderer_update_model(Mesh_renderer_data *data,
                            const util::generic_id id,
                            const uint32_t model_id)
 {
+  assert(data && id);
+
+  lock(data);
+
   size_t index;
   if(mesh_renderer_exists(data, id, &index))
   {
     data->mesh_draw_calls[index].model = model_id;
   }
+  
+  unlock(data);
 }
 
 
@@ -118,11 +135,17 @@ mesh_renderer_update_texture(Mesh_renderer_data *data,
                              const util::generic_id id,
                              const uint32_t texture_id)
 {
+  assert(data && id);
+  
+  lock(data);
+
   size_t index;
   if(mesh_renderer_exists(data, id, &index))
   {
     data->mesh_draw_calls[index].texture = texture_id;
   }
+  
+  unlock(data);
 }
 
 
@@ -130,6 +153,10 @@ void
 mesh_renderer_remove(Mesh_renderer_data *data,
                      const util::generic_id id)
 {
+  assert(data && id);
+  
+  lock(data);
+
   size_t index;
   if(mesh_renderer_exists(data, id, &index))
   {
@@ -144,14 +171,18 @@ mesh_renderer_remove(Mesh_renderer_data *data,
   {
     assert(false); // change to warning.
   }
+  
+  unlock(data);
 }
   
   
 bool
-mesh_renderer_exists(Mesh_renderer_data *data,
+mesh_renderer_exists(const Mesh_renderer_data *data,
                      const util::generic_id id,
                      size_t *index)
 {
+  assert(data && id);
+
   size_t *search_index = index;
   size_t dummy_index;
   

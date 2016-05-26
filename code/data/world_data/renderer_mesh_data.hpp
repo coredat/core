@@ -32,6 +32,14 @@ struct Mesh_renderer_data
 };
 
 
+void
+lock(Mesh_renderer_data *data);
+
+
+void
+unlock(Mesh_renderer_data *data);
+
+
 /*!
   Initialize the mesh renderer data.
 */
@@ -74,7 +82,7 @@ mesh_renderer_remove(Mesh_renderer_data *data,
   Checks to see if an id exists
 */
 bool
-mesh_renderer_exists(Mesh_renderer_data *data,
+mesh_renderer_exists(const Mesh_renderer_data *data,
                      const util::generic_id id,
                      size_t *index = nullptr);
 

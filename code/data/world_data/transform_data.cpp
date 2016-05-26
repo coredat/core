@@ -6,12 +6,6 @@
 #include <assert.h>
 
 
-namespace
-{
-  constexpr uint32_t transform_max_entities = 2048; // temp.
-}
-
-
 namespace World_data {
 
 
@@ -59,7 +53,10 @@ transform_data_init(Transform_data *data,
     
     // Set ids memory
     {
-      data->entity_id = reinterpret_cast<util::generic_id*>(util::mem_offset(alloc_start, byte_counter));
+      void *offset = util::mem_offset(alloc_start, byte_counter);
+      void *aligned = util::mem_next_16byte_boundry(offset);
+    
+      data->entity_id = reinterpret_cast<util::generic_id*>(aligned);
       #ifndef NDEBUG
       memset(data->entity_id, 0, bytes_entity_id);
       #endif
@@ -69,7 +66,10 @@ transform_data_init(Transform_data *data,
     
     // Set ids memory
     {
-      data->transform = reinterpret_cast<math::transform*>(util::mem_offset(alloc_start, byte_counter));
+      void *offset = util::mem_offset(alloc_start, byte_counter);
+      void *aligned = util::mem_next_16byte_boundry(offset);
+    
+      data->transform = reinterpret_cast<math::transform*>(aligned);
       #ifndef NDEBUG
       memset(data->transform, 0, bytes_transforms);
       #endif
@@ -79,7 +79,10 @@ transform_data_init(Transform_data *data,
     
     // Set ids memory
     {
-      data->aabb = reinterpret_cast<math::aabb*>(util::mem_offset(alloc_start, byte_counter));
+      void *offset = util::mem_offset(alloc_start, byte_counter);
+      void *aligned = util::mem_next_16byte_boundry(offset);
+      
+      data->aabb = reinterpret_cast<math::aabb*>(aligned);
       #ifndef NDEBUG
       memset(data->aabb, 0, bytes_aabb);
       #endif
@@ -144,9 +147,10 @@ transform_data_remove_transform(Transform_data *data,
     const size_t size_to_end = data->size - index_to_erase - 1;
     --(data->size);
     
-    memmove(&data->entity_id[index_to_erase], &data->entity_id[start_index], size_to_end * sizeof(*data->entity_id));
+    const size_t entity_size = sizeof(*data->entity_id);
+    memmove(&data->entity_id[index_to_erase], &data->entity_id[start_index], size_to_end * entity_size);
     memmove(&data->transform[index_to_erase], &data->transform[start_index], size_to_end * sizeof(*data->transform));
-    memmove(&data->aabb[index_to_erase],      &data->aabb[start_index], size_to_end *      sizeof(*data->aabb));
+    memmove(&data->aabb[index_to_erase],      &data->aabb[start_index],      size_to_end * sizeof(*data->aabb));
   }
   else
   {

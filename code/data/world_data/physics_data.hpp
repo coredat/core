@@ -3,6 +3,7 @@
 
 
 #include <utilities/generic_id.hpp>
+#include <utilities/memory_pool.hpp>
 #include <core/physics/collider.hpp>
 #include <math/geometry/geometry_types.hpp>
 #include <math/transform/transform_types.hpp>
@@ -17,13 +18,14 @@ namespace World_data {
 */
 struct Physics_data
 {
-  util::generic_id    *entity_id      = nullptr;
-  math::transform     *transform      = nullptr;
-  math::aabb          *aabb_collider  = nullptr;
-  uint64_t            *collision_id   = nullptr;
+  util::generic_id          *entity_id      = nullptr;
+  math::transform           *transform      = nullptr;
+  math::aabb                *aabb_collider  = nullptr;
+  uint64_t                  *collision_id   = nullptr;
   
-  uint32_t            size      = 0;
-  uint32_t            capacity  = 0;
+  uint32_t                  size            = 0;
+  const uint32_t            capacity        = 0;
+  const util::memory_chunk  memory          = util::memory_chunk();
 };
 
 

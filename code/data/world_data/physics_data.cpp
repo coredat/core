@@ -1,32 +1,122 @@
-#include "physics_data.hpp"
+#include <data/world_data/physics_data.hpp>
+#include <data/global_data/memory_data.hpp>
+#include <utilities/memory.hpp>
 #include <utilities/logging.hpp>
 #include <utilities/bits.hpp>
+#include <assert.h>
 
 
 namespace World_data {
 
 
 void
-physics_init(Physics_data *data, const uint32_t size)
+physics_init(Physics_data *data,
+             const uint32_t size_hint)
 {
-  LOG_TODO("get rid of static data");
+  assert(data && size_hint);
+  
+  // SIMD Buffer, apply to all data.
+  constexpr size_t simd_buffer = 16;
+  
+  const size_t bytes_entity_id = sizeof(data->entity_id) * size_hint + simd_buffer;
+  const size_t bytes_transform = sizeof(data->transform) * size_hint + simd_buffer;
+  const size_t bytes_aabb      = sizeof(data->aabb_collider) * size_hint + simd_buffer;
+  const size_t bytes_mask      = sizeof(data->collision_id) * size_hint + simd_buffer;
+  
+  const size_t bytes_to_alloc  = bytes_entity_id + bytes_transform + bytes_aabb + bytes_mask;
+  
+  // Allocate memory
+  util::memory_chunk *data_memory = const_cast<util::memory_chunk*>(&data->memory);
+  *data_memory = Memory::request_memory_chunk(bytes_to_alloc, "phys-data");
+  
+  assert(data_memory->bytes_in_chunk == bytes_to_alloc);
+  
+//  lock(data);
 
-  static util::generic_id entity_data[2048];
-  data->entity_id = entity_data;
-  memset(entity_data, 0, sizeof(entity_data));
-  
-  static math::transform trans[2048];
-  data->transform = trans;
-  memset(trans, 0, sizeof(trans));
-  
-  static math::aabb aabbs[2048];
-  data->aabb_collider = aabbs;
+  // Setup memory
+  {
+    size_t byte_counter = 0;
+    const void *alloc_start = data->memory.chunk_16_byte_aligned_start;
+    
+    // Set ids
+    {
+      void *offset  = util::mem_offset(alloc_start, byte_counter);
+      void *aligned = util::mem_next_16byte_boundry(offset);
+    
+      data->entity_id = reinterpret_cast<util::generic_id*>(aligned);
+      #ifndef NDEBUG
+      memset(data->entity_id, 0, bytes_entity_id);
+      #endif
+      byte_counter += bytes_entity_id;
+      assert(byte_counter <= bytes_to_alloc);
+    }
+    
+    // Set transforms
+    {
+      void *offset  = util::mem_offset(alloc_start, byte_counter);
+      void *aligned = util::mem_next_16byte_boundry(offset);
 
-  static uint64_t collision_mask[2048];
-  data->collision_id = collision_mask;
-  memset(collision_mask, 0, sizeof(collision_mask));
+      data->transform = reinterpret_cast<math::transform*>(aligned);
+      #ifndef NDEBUG
+      memset(data->entity_id, 0, bytes_transform);
+      #endif
+      byte_counter += bytes_transform;
+      assert(byte_counter <= bytes_to_alloc);
+    }
+
+    // AABB's
+    {
+      void *offset  = util::mem_offset(alloc_start, byte_counter);
+      void *aligned = util::mem_next_16byte_boundry(offset);
+    
+      data->aabb_collider = reinterpret_cast<math::aabb*>(aligned);
+      #ifndef NDEBUG
+      memset(data->entity_id, 0, bytes_aabb);
+      #endif
+      byte_counter += bytes_aabb;
+      assert(byte_counter <= bytes_to_alloc);
+    }
+    
+    // Collision mask
+    {
+      void *offset  = util::mem_offset(alloc_start, byte_counter);
+      void *aligned = util::mem_next_16byte_boundry(offset);
+      
+      data->collision_id = reinterpret_cast<uint64_t*>(aligned);
+      #ifndef NDEBUG
+      memset(data->entity_id, 0, bytes_mask);
+      #endif
+      byte_counter += bytes_mask;
+      assert(byte_counter <= bytes_to_alloc);
+    }
+    
+    // Set the size and capacity
+    {
+      data->size = 0;
+      
+      uint32_t *capacity = const_cast<uint32_t*>(&data->capacity);
+      *capacity = size_hint;
+    }
+  }
   
-  data->capacity = 2048;
+//  unlock(data);
+  
+//  static util::generic_id entity_data[2048];
+//  data->entity_id = entity_data;
+//  memset(entity_data, 0, sizeof(entity_data));
+//  
+//  static math::transform trans[2048];
+//  data->transform = trans;
+//  memset(trans, 0, sizeof(trans));
+//  
+//  static math::aabb aabbs[2048];
+//  data->aabb_collider = aabbs;
+//
+//  static uint64_t collision_mask[2048];
+//  data->collision_id = collision_mask;
+//  memset(collision_mask, 0, sizeof(collision_mask));
+//  
+//  data->capacity = 2048;
 }
 
 

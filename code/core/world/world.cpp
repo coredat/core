@@ -209,14 +209,20 @@ World::think(const float dt)
     {
       size_t ent_index;
 //      World_data::entity_pool_find_index(world->entity_pool, id, &ent_index);
-      World_data::transform_data_exists(world->transform, id, &ent_index);
-
-      const math::transform trans = world->transform->transform[ent_index];
-      const Core::Transform cam_transform(trans.position, trans.scale, trans.rotation);
-      
-      view = math::mat4_lookat(cam_transform.get_position(),
-                               math::vec3_add(cam_transform.get_position(), cam_transform.get_forward()),
-                               cam_transform.get_up());
+      if(World_data::transform_data_exists(world->transform, id, &ent_index))
+      {
+        const math::transform trans = world->transform->transform[ent_index];
+        const Core::Transform cam_transform(trans.position, trans.scale, trans.rotation);
+        
+        view = math::mat4_lookat(cam_transform.get_position(),
+                                 math::vec3_add(cam_transform.get_position(), cam_transform.get_forward()),
+                                 cam_transform.get_up());
+      }
+      else
+      {
+        assert(false);
+        LOG_FATAL("");
+      }
     }
     else
     {

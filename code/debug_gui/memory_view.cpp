@@ -1,6 +1,6 @@
 #include <debug_gui/memory_view.hpp>
 #include <3rdparty/imgui/imgui.h>
-#include <cmath>
+#include <math/general/general.hpp>
 
 
 namespace Debug_menu {
@@ -28,11 +28,14 @@ display_memory_useage(util::memory_pool *data)
       ImGui::PushStyleColor(ImGuiCol_ButtonHovered, color);
       ImGui::PushStyleColor(ImGuiCol_ButtonActive, color);
     
-//        constexpr uint32_t constant = 1048576 / 7; // half mb to byte
-      ImGui::Button(chunk.name, ImVec2(60, 0.0f));
+      constexpr float constant = 1048576.f / 60.f;
+      const float width = static_cast<float>(chunk.bytes_in_chunk) / constant;
+      const float final_width = math::clamp(width, 10.f, 100.f);
+      
+      ImGui::Button(chunk.name, ImVec2(final_width, 0.0f));
       if (ImGui::IsItemHovered())
       {
-        ImGui::SetTooltip("%s", chunk.name);
+        ImGui::SetTooltip("%s - bytes %d", chunk.name, chunk.bytes_in_chunk);
       }
       ImGui::PopStyleColor(3);
       ImGui::PopID();

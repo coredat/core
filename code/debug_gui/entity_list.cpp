@@ -14,7 +14,7 @@ display_entity_list(World_data::Entity_data *data)
   {
     for(uint32_t i = 0; i < data->size; ++i)
     {
-      ImGui::Text("%s", std::to_string(i).c_str());
+      ImGui::Text("%s", std::to_string(data->entity_id[i]).c_str());
       ImGui::Text("%s", World_data::entity_data_get_name(data, data->entity_id[i]));
       ImGui::Text("%s", std::to_string(data->tags[i]).c_str());
       ImGui::Text("%s", std::to_string(data->user_data[i]).c_str());
