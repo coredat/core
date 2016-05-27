@@ -1,5 +1,6 @@
 *.xcodeproj
 *.swp
+Makefile
 
 # Xcode
 .DS_Store
