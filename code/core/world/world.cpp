@@ -1,6 +1,6 @@
 #include <core/world/world.hpp>
 #include <core/world/world_setup.hpp>
-
+#include <core/context/context.hpp>
 #include <core/memory/memory.hpp>
 
 #include <graphics_api/initialize.hpp>
@@ -70,7 +70,7 @@
 
 #include <utilities/conversion.hpp>
 // Header dump end
-
+#include <common/error_strings.hpp>
 #include <systems/renderer_material/material_renderer.hpp>
 
 
@@ -85,16 +85,14 @@ struct World::Impl
 };
 
 
-World::World(const World_setup setup)
+World::World(const Context &ctx, const World_setup setup)
 : m_impl(new World::Impl)
 {
-  LOG_TODO("Make world require context to setup.");
-
   Core::Memory::initialize(util::convert_mb_to_bytes(128));
 
   LOG_TODO("Remove static data stores");
   
-  constexpr uint32_t entity_hint = 2048;
+  const uint32_t entity_hint = setup.entity_pool_size;
   
   static World_data::Pending_scene_graph_change_data graph_changes;
   World_data::pending_scene_graph_change_init(&graph_changes, entity_hint);
@@ -149,14 +147,12 @@ World::get_delta_time() const
 void
 World::think()
 {
-  const util::milliseconds frame_time = m_impl->dt_timer.split();
-  m_impl->dt = static_cast<float>(frame_time) / 1000.f;
+  // Calculate delta_time
+  {
+    const util::milliseconds frame_time = m_impl->dt_timer.split();
+    m_impl->dt = static_cast<float>(frame_time) / 1000.f;
+  }
   
-  const float dt = m_impl->dt;
-
-  Debug_menu::display_global_data_menu();
-  Debug_menu::dispaly_world_data_menu(&m_impl->world_data->data);
-
   // Update world
   auto data = &m_impl->world_data->data;
   auto graph_changes = m_impl->world_data->data.entity_graph_changes;
@@ -234,7 +230,7 @@ World::think()
       else
       {
         assert(false);
-        LOG_FATAL("");
+        LOG_FATAL(Error_string::entity_not_found());
       }
     }
     else
@@ -293,6 +289,12 @@ World::think()
   math::mat4 wvp = math::mat4_multiply(math::mat4_id(), view, proj);
   Debug_line_renderer::render(math::mat4_get_data(wvp));
 
+  }
+  
+  // Debug menu
+  {
+    Debug_menu::display_global_data_menu();
+    Debug_menu::dispaly_world_data_menu(&m_impl->world_data->data);
   }
 }
 

@@ -11,7 +11,7 @@ namespace Core {
 struct Context_setup
 {
   bool vsync = false;
-  Graphics_api::Pixel_format backbuffer_fmt = Graphics_api::Pixel_format::rgba8;
+  Graphics_api::Pixel_format backbuffer_fmt = Graphics_api::Pixel_format::rgb8;
 };
 
 

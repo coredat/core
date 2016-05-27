@@ -11,6 +11,7 @@
 #include <data/world_data/world_pools.hpp>
 #include <data/world_data/entity_data.hpp>
 #include <data/world_data/transform_data.hpp>
+#include <common/error_strings.hpp>
 #include <utilities/logging.hpp>
 #include <assert.h>
 
@@ -58,7 +59,7 @@ Entity::Entity(Core::World &world)
   }
   else
   {
-    LOG_ERROR("Failed to create a new entity.");
+    LOG_ERROR(Error_string::entity_is_invalid());
   }
 }
 

@@ -1,5 +1,6 @@
 #include <data/world_data/physics_data.hpp>
 #include <data/global_data/memory_data.hpp>
+#include <common/error_strings.hpp>
 #include <utilities/memory.hpp>
 #include <utilities/logging.hpp>
 #include <utilities/bits.hpp>
@@ -159,7 +160,7 @@ physics_add(Physics_data *data,
   }
   else
   {
-    LOG_ERROR("Failed to find a free slot");
+    LOG_ERROR(Error_string::no_free_space());
   }
   
   ++data->size;

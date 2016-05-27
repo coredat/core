@@ -33,6 +33,18 @@ constexpr const char *
 resource_not_found() { return "Resource not found."; }
 
 
+constexpr const char *
+no_free_space() { return "Cannot find free space."; }
+
+
+constexpr const char *
+failed_to_create_resource() { return "Failed to create resource."; }
+
+
+constexpr const char *
+failed_to_find_resource() { return "Failed to find resource."; }
+
+
 }
 
 

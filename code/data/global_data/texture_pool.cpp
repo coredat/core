@@ -1,5 +1,6 @@
 #include "texture_pool.hpp"
 #include <assert.h>
+#include <common/error_strings.hpp>
 #include <utilities/logging.hpp>
 
 #ifdef CORE_USE_SOIL
@@ -45,7 +46,7 @@ texture_pool_find(const Texture_pool *pool, const uint32_t id)
     }
   }
   
-  LOG_ERROR("Couldn't find resource for requested id")
+  LOG_ERROR(Error_string::failed_to_find_resource());
   
   return Ogl::Texture();
 }
@@ -130,7 +131,7 @@ texture_pool_add(Texture_pool *pool,
     // Error
     if(i == pool->capacity - 1)
     {
-      LOG_ERROR("Failed to find a free slot")
+      LOG_ERROR(Error_string::no_free_space());
       return 0;
     }
   }
@@ -150,7 +151,7 @@ texture_pool_add(Texture_pool *pool,
   }
   else
   {
-    LOG_ERROR("Failed to create a texture")
+    LOG_ERROR(Error_string::failed_to_create_resource());
     return 0;
   }
   

@@ -1,4 +1,5 @@
 #include "mesh_pool.hpp"
+#include <common/error_strings.hpp>
 #include <utilities/logging.hpp>
 #include <utilities/obj_model_loader.hpp>
 #include <math/geometry/aabb.hpp>
@@ -59,7 +60,7 @@ mesh_pool_find(const Mesh_pool *pool, const uint32_t id)
     }
   }
   
-  LOG_ERROR("Couldn't find resources for requested id")
+  LOG_ERROR(Error_string::failed_to_find_resource());
   
   return Graphics_api::Mesh();
 }

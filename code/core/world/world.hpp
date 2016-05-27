@@ -4,6 +4,7 @@
 
 #include <utilities/generic_id.hpp>
 #include <core/world/world_fwd.hpp>
+#include <core/context/context_fwd.hpp>
 #include <core/world/world_setup.hpp>
 #include <core/world/detail/world_detail_fwd.hpp>
 #include <core/entity/entity_fwd.hpp>
@@ -25,7 +26,7 @@ class World final
 
 public:
 
-  explicit              World(const World_setup setup = World_setup{});
+  explicit              World(const Context &ctx, const World_setup setup = World_setup{});
                         ~World();
 
   float                 get_delta_time() const;

@@ -10,7 +10,7 @@ namespace Core {
 
 struct World_setup
 {
-  uint32_t entity_pool_size = 1024;
+  uint32_t entity_pool_size = 2048;
 };
 
 
