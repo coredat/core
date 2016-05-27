@@ -8,6 +8,7 @@ namespace Core {
 
 struct Sample::Impl
 {
+  uint32_t audio_id = 0;
 };
 
 
@@ -62,6 +63,20 @@ Sample::play()
   auto pool = Resource_data::get_resources()->audio_pool;
   Resource_data::audio_pool_play_sample(pool);
 }
+
+
+bool
+Sample::exists() const
+{
+  return !!m_impl->audio_id;
+}
+
+  
+Sample::operator bool() const
+{
+  return exists();
+}
+
 
 
 } // ns

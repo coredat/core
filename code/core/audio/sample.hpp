@@ -31,6 +31,10 @@ public:
   void            set_volume(const float vol);
   float           get_volume() const;
   
+  bool            exists() const;
+                  operator bool() const; // Alias for exists().
+  
+  
 private:
 
   struct Impl;

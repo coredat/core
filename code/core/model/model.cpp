@@ -25,6 +25,7 @@ struct Model::Impl
 
 
 Model::Model()
+: Model((uint32_t)0)
 {
 }
 
@@ -32,7 +33,7 @@ Model::Model()
 Model::Model(const uint32_t id)
 : m_impl(new Impl{id})
 {
-  // TODO: Check that the id is valid.
+  LOG_TODO("Check this id is valid");
 }
 
 
@@ -176,5 +177,17 @@ Model::get_id() const
   return 0;
 }
 
+
+bool
+Model::exists() const
+{
+  return !!m_impl->mesh_id;
+}
+
+
+Model::operator bool() const
+{
+  return exists();
+}
 
 } // ns

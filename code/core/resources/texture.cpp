@@ -14,7 +14,7 @@ struct Texture::Impl
 
 
 Texture::Texture()
-: m_impl(new Impl)
+: Texture((uint32_t) 0)
 {
 }
 
@@ -22,7 +22,7 @@ Texture::Texture()
 Texture::Texture(const uint32_t id)
 : m_impl(new Impl{id})
 {
-  
+  LOG_TODO("Check this id is valid");
 }
 
 

@@ -34,6 +34,9 @@ public:
   
   uint32_t            get_id() const;
   
+  bool                exists() const;
+                      operator bool() const; // Alias for exists().
+  
 private:
 
   struct Impl;
