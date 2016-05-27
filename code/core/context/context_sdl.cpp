@@ -16,6 +16,7 @@
 #include <systems/sdl_backend/sdl_input.hpp>
 #include <data/global_data/memory_data.hpp>
 #include <utilities/logging.hpp>
+#include <utilities/conversion.hpp>
 #include <assert.h>
 
 #include <3rdparty/imgui/imgui.h>
@@ -63,12 +64,6 @@ Context::Context(const uint32_t width,
                  Context_setup settings)
 : m_impl(new Context::Impl{})
 {
-  const size_t to_bytes = 1048576;
-  const size_t pool_bytes = 64 * to_bytes;
-  const size_t scratch_bytes = 64 * to_bytes;
-
-  Memory::memory_initialize(pool_bytes, scratch_bytes);
-
   if(instance_created)
   {
     assert(false); // For the moment we only support making one instance per life of an application.
@@ -79,6 +74,14 @@ Context::Context(const uint32_t width,
   {
     instance_created = true;
   }
+  
+  // Initialize memory
+  {
+    constexpr size_t pool_bytes    = util::convert_mb_to_bytes(64);
+    constexpr size_t scratch_bytes = util::convert_mb_to_bytes(64);
+    
+    Memory::memory_initialize(pool_bytes, scratch_bytes);
+  }  
 
   // Setup hints (Must happen before creation of window)
   {
