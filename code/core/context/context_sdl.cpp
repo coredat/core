@@ -81,7 +81,7 @@ Context::Context(const uint32_t width,
     constexpr size_t scratch_bytes = util::convert_mb_to_bytes(64);
     
     Memory::memory_initialize(pool_bytes, scratch_bytes);
-  }  
+  }
 
   // Setup hints (Must happen before creation of window)
   {
