@@ -28,7 +28,9 @@ public:
   explicit              World(const World_setup setup = World_setup{});
                         ~World();
 
-  void                  think(const float dt);
+  float                 get_delta_time() const;
+
+  void                  think();
   void                  get_overlapping_aabbs(const std::function<void(const Core::Collision_pair pairs[],
                                                                        const uint32_t number_of_pairs)> &callback);
 

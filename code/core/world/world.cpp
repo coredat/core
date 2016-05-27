@@ -17,7 +17,7 @@
 #include <renderer/gui_renderer/gui_renderer.hpp>
 
 #include <data/world_data/physics_data.hpp>
-
+#include <utilities/timer.hpp>
 #include <utilities/logging.hpp>
 #include <utilities/generic_id.hpp>
 #include <math/math.hpp> // remove
@@ -80,6 +80,8 @@ namespace Core {
 struct World::Impl
 {
   std::shared_ptr<World_detail::Data> world_data = std::make_shared<World_detail::Data>();
+  util::timer dt_timer;
+  float       dt = 0.f;
 };
 
 
@@ -128,6 +130,7 @@ World::World(const World_setup setup)
   
   ::Material_renderer::initialize();
   
+  m_impl->dt_timer.start();
 }
 
 
@@ -136,9 +139,21 @@ World::~World()
 }
 
 
-void
-World::think(const float dt)
+float
+World::get_delta_time() const
 {
+  return m_impl->dt;
+}
+
+
+void
+World::think()
+{
+  const util::milliseconds frame_time = m_impl->dt_timer.split();
+  m_impl->dt = static_cast<float>(frame_time) / 1000.f;
+  
+  const float dt = m_impl->dt;
+
   Debug_menu::display_global_data_menu();
   Debug_menu::dispaly_world_data_menu(&m_impl->world_data->data);
 
