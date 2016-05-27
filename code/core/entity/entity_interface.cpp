@@ -32,7 +32,16 @@ get_id(const util::generic_id this_id, World_data::World *world)
 bool
 is_valid(const util::generic_id this_id, World_data::World *world)
 {
-  return !(this_id == util::generic_id_invalid());
+  // Invalid data, means invalid entity.
+  if(this_id == util::generic_id_invalid()) { return false; }
+  if(!world)                                { return false; }
+
+  // Our id might have expired, so we need to check it.
+  lock(world->entity);
+  const bool exists = World_data::entity_data_exists(world->entity, this_id);
+  unlock(world->entity);
+  
+  return exists;
 }
 
 
