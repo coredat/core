@@ -17,6 +17,7 @@
 #include <data/global_data/memory_data.hpp>
 #include <utilities/logging.hpp>
 #include <utilities/conversion.hpp>
+#include <common/error_strings.hpp>
 #include <assert.h>
 
 #include <3rdparty/imgui/imgui.h>
@@ -95,7 +96,7 @@ Context::Context(const uint32_t width,
     if(SDL_Init(init_flags) != 0)
     {
       assert(false);
-      LOG_FATAL("Failed to initialize SDL");
+      LOG_FATAL(Error_string::generic_sdl_fail());
     }
 
     const Uint32 default_window_flags = SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_OPENGL;
@@ -135,7 +136,7 @@ Context::Context(const uint32_t width,
     if(!m_impl->context)
     {
       assert(m_impl->context);
-      LOG_FATAL("Failed to create an OpenGL Context");
+      LOG_FATAL(Error_string::generic_ogl_fail());
     }
     
     SDL_GL_MakeCurrent(m_impl->window, m_impl->context);
@@ -147,7 +148,7 @@ Context::Context(const uint32_t width,
     const  GLenum err = glewInit();
     if (err != GLEW_OK)
     {
-      LOG_ERROR("GLew failed to initialize")
+      LOG_ERROR(Error_string::generic_ogl_fail());
     }
 #endif
   }
@@ -286,7 +287,7 @@ Context::is_fullscreen() const
   if(!surface)
   {
     assert(false);
-    LOG_ERROR("Failed to find SDL Surface")
+    LOG_ERROR(Error_string::generic_sdl_fail())
     return false;
   }
   
@@ -305,7 +306,7 @@ Context::set_fullscreen(const bool is_fullscreen)
   if(!surface)
   {
     assert(false);
-    LOG_ERROR("Failed to find SDL Surface")
+    LOG_ERROR(Error_string::generic_sdl_fail())
     return;
   }
   
@@ -318,7 +319,7 @@ Context::set_fullscreen(const bool is_fullscreen)
   if(SDL_SetWindowFullscreen(m_impl->window, is_fullscreen ? fullscreen_mode : 0) < 0)
   {
     assert(false);
-    LOG_ERROR("Failed to find set fullscreen")
+    LOG_ERROR(Error_string::generic_sdl_fail())
     return;
   }
 }

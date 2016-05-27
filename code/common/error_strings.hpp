@@ -45,6 +45,14 @@ constexpr const char *
 failed_to_find_resource() { return "Failed to find resource."; }
 
 
+constexpr const char *
+generic_sdl_fail() { return "SDL error."; }
+
+
+constexpr const char *
+generic_ogl_fail() { return "OpenGL error."; }
+
+
 }
 
 
