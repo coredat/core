@@ -1,4 +1,5 @@
 #include <data/global_data/material_data.hpp>
+#include <utilities/string_helpers.hpp>
 #include <assert.h>
 #include <cstring>
 
@@ -111,7 +112,7 @@ material_data_get_name(Material_data *data,
   
   unlock(data);
   
-  
+  return "";
 }
 
 
