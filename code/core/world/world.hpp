@@ -26,7 +26,8 @@ class World final
 
 public:
 
-  explicit              World(const Context &ctx, const World_setup setup = World_setup{});
+  explicit              World(const Context &ctx,
+                              const World_setup setup = World_setup{});
                         ~World();
 
   float                 get_delta_time() const;

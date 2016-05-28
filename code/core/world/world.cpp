@@ -294,7 +294,7 @@ World::think()
   // Debug menu
   {
     Debug_menu::display_global_data_menu();
-    Debug_menu::dispaly_world_data_menu(&m_impl->world_data->data);
+    Debug_menu::display_world_data_menu(&m_impl->world_data->data);
   }
 }
 

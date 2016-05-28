@@ -11,6 +11,8 @@
 #include <data/world_data/world_pools.hpp>
 #include <data/world_data/entity_data.hpp>
 
+#include <string>
+
 
 namespace Debug_menu {
 
@@ -58,7 +60,7 @@ namespace
 
 
 void
-dispaly_world_data_menu(World_data::World *world_data)
+display_world_data_menu(World_data::World *world_data)
 {
   if(!world_data)
   {

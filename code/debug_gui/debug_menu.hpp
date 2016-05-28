@@ -13,7 +13,7 @@ display_global_data_menu();
 
 
 void
-dispaly_world_data_menu(World_data::World *world_data);
+display_world_data_menu(World_data::World *world_data);
 
 
 } // ns
