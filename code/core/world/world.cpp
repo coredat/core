@@ -292,10 +292,12 @@ World::think()
   }
   
   // Debug menu
+  #ifndef NDEBUG
   {
     Debug_menu::display_global_data_menu();
     Debug_menu::display_world_data_menu(&m_impl->world_data->data);
   }
+  #endif
 }
 
 
