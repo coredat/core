@@ -81,8 +81,8 @@ struct World::Impl
 {
   std::shared_ptr<World_detail::Data> world_data = std::make_shared<World_detail::Data>();
   util::timer dt_timer;
-  float       dt = 0.f;
-  float       dt_mul = 1.f;
+  float       dt      = 0.f;
+  float       dt_mul  = 1.f;
 };
 
 
