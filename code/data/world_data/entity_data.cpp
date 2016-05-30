@@ -40,18 +40,19 @@ entity_data_init(Entity_data *data,
   constexpr size_t simd_buffer = 16;
   
   // Calculate the various sizes of things.
-  const size_t bytes_entity_id = sizeof(*data->entity_id) * size_hint + simd_buffer;
-  const size_t bytes_tags      = sizeof(*data->tags) * size_hint + simd_buffer;
+  const size_t bytes_entity_id = sizeof(*data->entity_id)   * size_hint + simd_buffer;
+  const size_t bytes_tags      = sizeof(*data->tags)        * size_hint + simd_buffer;
+  const size_t bytes_comps     = sizeof(*data->components)  * size_hint + simd_buffer;
   const size_t bytes_name      = sizeof(*data->entity_name) * entity_data_size_of_name * size_hint + simd_buffer;
-  const size_t bytes_user_data = sizeof(*data->user_data) * size_hint + simd_buffer;
+  const size_t bytes_user_data = sizeof(*data->user_data)   * size_hint + simd_buffer;
   
-  const size_t mem_to_alloc    = bytes_entity_id + bytes_tags + bytes_name + bytes_user_data;
+  const size_t bytes_to_alloc  = bytes_entity_id + bytes_tags + bytes_comps + bytes_name + bytes_user_data;
   
   // Allocate some memory.
   util::memory_chunk *data_memory = const_cast<util::memory_chunk*>(&data->memory);
-  *data_memory = Memory::request_memory_chunk(mem_to_alloc, "entity-data");
+  *data_memory = Memory::request_memory_chunk(bytes_to_alloc, "entity-data");
   
-  assert(data_memory->bytes_in_chunk == mem_to_alloc);
+  assert(data_memory->bytes_in_chunk == bytes_to_alloc);
   
   lock(data);
   
@@ -70,7 +71,7 @@ entity_data_init(Entity_data *data,
       memset(offset, 0, bytes_entity_id);
       #endif
       byte_counter += bytes_entity_id;
-      assert(byte_counter <= mem_to_alloc);
+      assert(byte_counter <= bytes_to_alloc);
     }
     
     // Set name memory
@@ -83,7 +84,7 @@ entity_data_init(Entity_data *data,
       memset(offset, 0, bytes_name);
       #endif
       byte_counter += bytes_name;
-      assert(byte_counter <= mem_to_alloc);
+      assert(byte_counter <= bytes_to_alloc);
     }
     
     // Set tag memory
@@ -96,7 +97,20 @@ entity_data_init(Entity_data *data,
       memset(offset, 0, bytes_tags);
       #endif
       byte_counter += bytes_tags;
-      assert(byte_counter <= mem_to_alloc);
+      assert(byte_counter <= bytes_to_alloc);
+    }
+    
+    // Set component flag memory
+    {
+      void *offset = util::mem_offset(alloc_start, byte_counter);
+      void *aligned = util::mem_next_16byte_boundry(offset);
+    
+      data->components = reinterpret_cast<uint32_t*>(aligned);
+      #ifndef NDEBUG
+      memset(offset, 0, bytes_comps);
+      #endif
+      byte_counter += bytes_comps;
+      assert(byte_counter <= bytes_to_alloc);
     }
     
     // Set user data memory
@@ -109,7 +123,7 @@ entity_data_init(Entity_data *data,
       memset(offset, 0, bytes_user_data);
       #endif
       byte_counter += bytes_user_data;
-      assert(byte_counter <= mem_to_alloc);
+      assert(byte_counter <= bytes_to_alloc);
     }
   }
   
@@ -168,6 +182,9 @@ entity_data_add_entity(Entity_data *data,
   {
     data->entity_name[index * entity_data_size_of_name] = '\0';
   }
+  
+  // Clear components
+  data->components[index] = 0;
 
   unlock(data);
 }
@@ -245,6 +262,7 @@ entity_data_remove_entity(Entity_data *data,
     memmove(&data->entity_id[index_to_erase],   &data->entity_id[start_index],    size_to_end * sizeof(*data->entity_id));
     memmove(&data->user_data[index_to_erase],   &data->user_data[start_index],    size_to_end * sizeof(*data->user_data));
     memmove(&data->tags[index_to_erase],        &data->tags[start_index],         size_to_end * sizeof(*data->tags));
+    memmove(&data->components[index_to_erase],  &data->components[start_index],   size_to_end * sizeof(*data->components));
     
     // Name we need to mul by the size of the string.
     memmove(&data->entity_name[index_to_erase * entity_data_size_of_name],
