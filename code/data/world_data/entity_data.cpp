@@ -148,6 +148,61 @@ entity_data_free(Entity_data *data)
 
 
 void
+entity_data_set_component(Entity_data *data,
+                          const util::generic_id id,
+                          const Entity_component::ENUM bit)
+{
+  assert(data && data->size);
+  assert(id);
+  
+  lock(data);
+  
+  size_t index;
+  
+  if(entity_data_exists(data, id, &index))
+  {
+    const uint32_t comps = data->components[index] & bit;
+    data->components[index] = comps;
+  }
+  else
+  {
+    LOG_ERROR(Error_string::entity_not_found());
+  }
+  
+  unlock(data);
+}
+
+
+bool
+entity_data_has_component(Entity_data *data,
+                          const util::generic_id id,
+                          const Entity_component::ENUM bit)
+{
+  assert(data && data->size);
+  assert(id);
+  
+  bool has_comp = false;
+  
+  lock(data);
+  
+  size_t index;
+  
+  if(entity_data_exists(data, id, &index))
+  {
+    has_comp = !!(data->components[index] & bit);
+  }
+  else
+  {
+    LOG_ERROR(Error_string::entity_not_found());
+  }
+  
+  unlock(data);
+  
+  return has_comp;
+}
+
+
+void
 entity_data_add_entity(Entity_data *data,
                        const util::generic_id id,
                        const char *name,

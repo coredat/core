@@ -4,11 +4,22 @@
 
 #include <utilities/generic_id.hpp>
 #include <utilities/memory_pool.hpp>
+#include <utilities/bits.hpp>
 #include <stdint.h>
 #include <stddef.h>
 
 
 namespace World_data {
+
+
+namespace Entity_component {
+
+enum ENUM
+{
+  has_physics = BIT(0),
+};
+
+} // ns
 
 
 struct Entity_data
@@ -40,6 +51,18 @@ entity_data_init(Entity_data *data,
 
 void
 entity_data_free(Entity_data *data);
+
+
+void
+entity_data_set_component(Entity_data *data,
+                          const util::generic_id id,
+                          const Entity_component::ENUM bit);
+
+
+bool
+entity_data_has_component(Entity_data *data,
+                          const util::generic_id id,
+                          const Entity_component::ENUM bit);
 
 
 void

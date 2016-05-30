@@ -294,7 +294,20 @@ set_transform(const util::generic_id this_id, World_data::World *world,const Tra
       }
     }
     
-    World_data::physics_update(world->physics_data, this_id, &data->aabb[index], &data->transform[index]);
+    // If this is a physics object then update it.
+    if(World_data::entity_data_has_component(world->entity,
+                                             this_id,
+                                             World_data::Entity_component::has_physics))
+    {
+      World_data::physics_update(world->physics_data,
+                                 this_id,
+                                 &data->aabb[index],
+                                 &data->transform[index]);
+    }
+    else
+    {
+      int i = 0;
+    }
   }
   else
   {
@@ -434,6 +447,9 @@ set_collider(const util::generic_id this_id, World_data::World *world, const Cor
     return;
   }
 
+  auto entity_data = world->entity;
+  assert(entity_data);
+
   auto phys_pool = world->physics_data;
   assert(phys_pool);
   
@@ -458,6 +474,7 @@ set_collider(const util::generic_id this_id, World_data::World *world, const Cor
           
           math::aabb_scale(aabb, final_box_scale);
           
+          World_data::entity_data_set_component(entity_data, this_id, World_data::Entity_component::has_physics);
           World_data::physics_add(phys_pool, this_id, &aabb, &transform);
           break;
         }
