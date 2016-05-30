@@ -82,6 +82,7 @@ struct World::Impl
   std::shared_ptr<World_detail::Data> world_data = std::make_shared<World_detail::Data>();
   util::timer dt_timer;
   float       dt = 0.f;
+  float       dt_mul = 1.f;
 };
 
 
@@ -140,8 +141,26 @@ World::~World()
 float
 World::get_delta_time() const
 {
-  return m_impl->dt;
+  return m_impl->dt * m_impl->dt_mul;
 }
+
+void
+World::set_delta_time_multiplier(const float multiplier)
+{
+  assert(m_impl);
+  
+  m_impl->dt_mul = multiplier;
+}
+  
+  
+float
+World::get_delta_time_multiplier() const
+{
+  assert(m_impl);
+  
+  return m_impl->dt_mul;
+}
+
 
 
 void

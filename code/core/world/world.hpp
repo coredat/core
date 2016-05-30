@@ -31,6 +31,9 @@ public:
                         ~World();
 
   float                 get_delta_time() const;
+  
+  void                  set_delta_time_multiplier(const float multiplier);
+  float                 get_delta_time_multiplier() const;
 
   void                  think();
   void                  get_overlapping_aabbs(const std::function<void(const Core::Collision_pair pairs[],

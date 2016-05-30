@@ -161,7 +161,7 @@ entity_data_set_component(Entity_data *data,
   
   if(entity_data_exists(data, id, &index))
   {
-    const uint32_t comps = data->components[index] & bit;
+    const uint32_t comps = data->components[index] | bit;
     data->components[index] = comps;
   }
   else
