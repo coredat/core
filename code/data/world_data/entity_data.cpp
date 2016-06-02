@@ -108,14 +108,14 @@ data_unlock(Entity_data *data)
 
 
 bool
-entity_data_get_name(const Entity_data *data, const util::generic_id key, char *out_value)
+entity_data_get_name(const Entity_data *data, const util::generic_id key, const char **out_value)
 {
   size_t index;
   bool success = false;
 
   if(entity_data_exists(data, key, &index));
   {
-    out_value = &data->property_name[index * 32];
+    *out_value = &data->property_name[index * 32];
     success = true;
   }
   return success;

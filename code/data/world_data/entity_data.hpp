@@ -72,7 +72,7 @@ data_unlock(Entity_data *data);
 
 
 bool
-entity_data_get_name(const Entity_data *data, const util::generic_id key, char *out_value);
+entity_data_get_name(const Entity_data *data, const util::generic_id key, const char **out_value);
 
 
 bool
