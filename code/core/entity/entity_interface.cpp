@@ -37,9 +37,9 @@ is_valid(const util::generic_id this_id, World_data::World *world)
   if(!world)                                { return false; }
 
   // Our id might have expired, so we need to check it.
-  lock(world->entity);
+  data_lock(world->entity);
   const bool exists = World_data::entity_data_exists(world->entity, this_id);
-  unlock(world->entity);
+  data_unlock(world->entity);
   
   return exists;
 }
@@ -68,11 +68,11 @@ set_user_data(const util::generic_id this_id, World_data::World *world, const ui
   auto entity_data = world->entity;
   
   size_t index;
-  lock(entity_data);
+  data_lock(entity_data);
   
   if(World_data::entity_data_exists(entity_data, this_id, &index))
   {
-    entity_data->user_data[index] = user_data;
+    entity_data->property_user_data[index] = user_data;
   }
   else
   {
@@ -80,7 +80,7 @@ set_user_data(const util::generic_id this_id, World_data::World *world, const ui
     LOG_WARNING(Error_string::entity_not_found());
   }
   
-  unlock(entity_data);
+  data_unlock(entity_data);
 }
 
 
@@ -99,11 +99,11 @@ get_user_data(const util::generic_id this_id, World_data::World *world)
   size_t index;
   uintptr_t user_data(0);
   
-  lock(entity_data);
+  data_lock(entity_data);
   
   if(World_data::entity_data_exists(entity_data, this_id, &index))
   {
-    user_data = entity_data->user_data[index];
+    user_data = entity_data->property_user_data[index];
   }
   else
   {
@@ -111,7 +111,7 @@ get_user_data(const util::generic_id this_id, World_data::World *world)
     LOG_WARNING(Error_string::entity_not_found());
   }
   
-  unlock(entity_data);
+  data_unlock(entity_data);
   
   return user_data;
 }
@@ -132,11 +132,11 @@ get_tags(const util::generic_id this_id, World_data::World *world)
   uint32_t tags = 0;
   
   size_t index;
-  lock(entity_data);
+  data_lock(entity_data);
   
   if(World_data::entity_data_exists(entity_data, this_id, &index))
   {
-    tags = entity_data->tags[index];
+    tags = entity_data->property_tag[index];
   }
   else
   {
@@ -144,7 +144,7 @@ get_tags(const util::generic_id this_id, World_data::World *world)
     LOG_WARNING(Error_string::entity_not_found());
   }
   
-  unlock(entity_data);
+  data_unlock(entity_data);
   
   return tags;
 }
@@ -177,18 +177,18 @@ set_tags(const util::generic_id this_id, World_data::World *world, const uint32_
   auto entity_data = world->entity;
   
   size_t index;
-  lock(entity_data);
+  data_lock(entity_data);
   
   if(World_data::entity_data_exists(entity_data, this_id, &index))
   {
-    entity_data->tags[index] = set_tags;
+    entity_data->property_tag[index] = set_tags;
   }
   else
   {
     LOG_WARNING(Error_string::entity_not_found());
   }
   
-  unlock(entity_data);
+  data_unlock(entity_data);
 }
 
 
@@ -242,8 +242,11 @@ get_name(const util::generic_id this_id, World_data::World *world)
     LOG_ERROR(Error_string::entity_is_invalid());
     return nullptr;
   }
+  assert(false);
+//  const char *name;
+//  World_data::entity_data_get_name(world->entity, this_id, name);
   
-  return World_data::entity_data_get_name(world->entity, this_id);
+  return "";
 }
 
 
@@ -282,7 +285,7 @@ set_transform(const util::generic_id this_id, World_data::World *world,const Tra
   if(World_data::transform_data_exists(data, this_id, &index))
   {
     const math::transform new_transform = math::transform_init(set_transform.get_position(), set_transform.get_scale(), set_transform.get_rotation());
-    data->transform[index] = new_transform;
+    data->property_transform[index] = new_transform;
     
     // Update mesh renderer data
     {
@@ -295,14 +298,16 @@ set_transform(const util::generic_id this_id, World_data::World *world,const Tra
     }
     
     // If this is a physics object then update it.
-    if(World_data::entity_data_has_component(world->entity,
+    uint32_t components;
+    World_data::entity_data_get_components(world->entity,
                                              this_id,
-                                             World_data::Entity_component::has_physics))
+                                             &components);
+    if(components & World_data::Entity_component::has_physics)
     {
       World_data::physics_update(world->physics_data,
                                  this_id,
-                                 &data->aabb[index],
-                                 &data->transform[index]);
+                                 &data->property_aabb[index],
+                                 &data->property_transform[index]);
     }
     else
     {
@@ -330,8 +335,8 @@ get_transform(const util::generic_id this_id, World_data::World *world)
   size_t index;
   if(World_data::transform_data_exists(data, this_id, &index))
   {
-    assert(get_index(&index, this_id, data->entity_id, data->size));
-    math::transform local_transform = data->transform[index];
+    assert(get_index(&index, this_id, data->data_key, data->size));
+    math::transform local_transform = data->property_transform[index];
     
     const math::vec3 pos = local_transform.position;
     const math::vec3 scale = local_transform.scale;
@@ -411,7 +416,7 @@ set_model(const util::generic_id this_id, World_data::World *world, const Core::
   size_t index;
   if(World_data::transform_data_exists(transform_data, this_id, &index))
   {
-    transform_data->aabb[index] = model.get_model_aabb();
+    transform_data->property_aabb[index] = model.get_model_aabb();
   }
   else
   {
@@ -461,8 +466,8 @@ set_collider(const util::generic_id this_id, World_data::World *world, const Cor
     size_t index;
     if(World_data::transform_data_exists(transform_data, this_id, &index))
     {
-      const math::transform transform = transform_data->transform[index];
-      math::aabb aabb = transform_data->aabb[index];
+      const math::transform transform = transform_data->property_transform[index];
+      math::aabb aabb = transform_data->property_aabb[index];
     
       switch(collider.get_type())
       {
@@ -474,7 +479,14 @@ set_collider(const util::generic_id this_id, World_data::World *world, const Cor
           
           math::aabb_scale(aabb, final_box_scale);
           
-          World_data::entity_data_set_component(entity_data, this_id, World_data::Entity_component::has_physics);
+          // Get the current components
+          uint32_t comps;
+          World_data::entity_data_get_components(entity_data, this_id, &comps);
+          
+          // Add physics and set it.
+          comps = comps | World_data::Entity_component::has_physics;
+          
+          World_data::entity_data_set_components(entity_data, this_id, &comps);
           World_data::physics_add(phys_pool, this_id, &aabb, &transform);
           break;
         }

@@ -30,8 +30,8 @@ world_create_new_entity(World *world_data,
   auto entity_data = world_data->entity;
   
   {
-    World_data::entity_data_add_entity(entity_data, id);
-    World_data::transform_data_add_transform(world_data->transform, id);
+    World_data::entity_data_push_back(entity_data, id);
+    World_data::transform_data_push_back(world_data->transform, id);
     World_data::mesh_renderer_add(world_data->mesh_data, id, 0, 0);
     
     return true;
@@ -57,13 +57,13 @@ world_find_entities_with_tag(World *world_data,
   
   for(uint32_t i = 0; i < entity_data->size; ++i)
   {
-    auto tags = entity_data->tags[i];
+    auto tags = entity_data->property_tag[i];
     
     if(tags & tag)
     {
       if(size_of_out > number_found)
       {
-        out_ids[number_found++] = entity_data->entity_id[i];
+        out_ids[number_found++] = entity_data->data_key[i];
       }
       else
       {
@@ -84,8 +84,8 @@ world_update_scene_graph_changes(World_data::World *world_data,
   {
     const util::generic_id id = graph_changes->entities_to_delete[i];
     
-    entity_data_remove_entity(world_data->entity, id);
-    transform_data_remove_transform(world_data->transform, id);
+    entity_data_erase(world_data->entity, id);
+    transform_data_erase(world_data->transform, id);
     mesh_renderer_remove(world_data->mesh_data, id);
     physics_remove(world_data->physics_data, id);
   }

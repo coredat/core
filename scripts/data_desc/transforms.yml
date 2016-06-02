@@ -1,0 +1,23 @@
+:data:
+  type: Transform_data
+  name: transform_data
+  namespace: World_data
+  header_dir: data/world_data/
+
+
+  key:
+    type: util::generic_id
+    name: data_key
+    include: <utilities/generic_id.hpp>
+
+
+  properties:
+    - name: transform
+      type: math::transform
+      return: value
+      include: <math/transform/transform.hpp>
+
+    - name: aabb
+      type: math::aabb
+      return: value
+      include: <math/geometry/aabb.hpp>

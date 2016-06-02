@@ -239,7 +239,7 @@ World::think()
 //      World_data::entity_pool_find_index(world->entity_pool, id, &ent_index);
       if(World_data::transform_data_exists(world->transform, id, &ent_index))
       {
-        const math::transform trans = world->transform->transform[ent_index];
+        const math::transform trans = world->transform->property_transform[ent_index];
         const Core::Transform cam_transform(trans.position, trans.scale, trans.rotation);
         
         view = math::mat4_lookat(cam_transform.get_position(),
@@ -270,7 +270,7 @@ World::think()
 
   const math::mat4 view_proj = math::mat4_multiply(view, proj);
 
-  ::Transform::transforms_to_wvp_mats(world->transform->transform,
+  ::Transform::transforms_to_wvp_mats(world->transform->property_transform,
                                       world->transform->size,
                                       view_proj,
                                       nodes[0].wvp,
@@ -440,18 +440,18 @@ World::find_entities_by_tag(const uint32_t tag_id,
   auto data = m_impl->world_data->data.entity;
   
   
-  lock(data);
+  data_lock(data);
   
   for(uint32_t i = 0; i < data->size; ++i)
   {
-    if(data->tags[i] & tag_id)
+    if(data->property_tag[i] & tag_id)
     {
-      found_ents[count] = Entity_ref(data->entity_id[i], *const_cast<World*>(this));
+      found_ents[count] = Entity_ref(data->data_key[i], *const_cast<World*>(this));
       count++;
     }
   }
   
-  unlock(data);
+  data_unlock(data);
   
   *out_array = found_ents;
   *out_array_size = count;

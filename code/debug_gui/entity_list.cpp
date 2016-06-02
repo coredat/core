@@ -17,10 +17,10 @@ display_entity_list(World_data::Entity_data *data)
   
     for(uint32_t i = 0; i < data->size; ++i)
     {
-      ImGui::Text("%d", data->entity_id[i]);
-      ImGui::Text("%s", World_data::entity_data_get_name(data, data->entity_id[i]));
-      ImGui::Text("%d", data->tags[i]);
-      ImGui::Text("%p", (void*)data->user_data[i]);
+      ImGui::Text("%d", data->data_key[i]);
+//      ImGui::Text("%s", World_data::entity_data_get_name(data, data->data_key[i]));
+      ImGui::Text("%d", data->property_tag[i]);
+      ImGui::Text("%p", (void*)data->property_user_data[i]);
       
       ImGui::Separator();
     }

@@ -53,8 +53,8 @@ Entity::Entity(Core::World &world)
  
   if(m_impl->world)
   {
-    World_data::entity_data_add_entity(m_impl->world->data.entity, get_id());
-    World_data::transform_data_add_transform(m_impl->world->data.transform, get_id());
+    World_data::entity_data_push_back(m_impl->world->data.entity, get_id());
+    World_data::transform_data_push_back(m_impl->world->data.transform, get_id());
     World_data::mesh_renderer_add(m_impl->world->data.mesh_data, get_id(), 0, 0);
   }
   else

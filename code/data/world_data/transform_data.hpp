@@ -1,72 +1,101 @@
-#ifndef TRANSFORM_DATA_INCLUDED_0D78D4DD_CB3D_4FD3_AF0D_6DD965264754
-#define TRANSFORM_DATA_INCLUDED_0D78D4DD_CB3D_4FD3_AF0D_6DD965264754
+
+/*
+ Warning: This file is auto generated. Any changes could be overwritten!
+*/
+
+#ifndef TRANSFORM_DATA_INCLUDED_56435B4C_2003_45F9_B3B2_3289BB50567E
+#define TRANSFORM_DATA_INCLUDED_56435B4C_2003_45F9_B3B2_3289BB50567E
 
 
 #include <utilities/generic_id.hpp>
-#include <utilities/memory_pool.hpp>
-#include <math/transform/transform_types.hpp>
-#include <math/geometry/geometry_types.hpp>
-#include <stdint.h>
+#include <math/transform/transform.hpp>
+#include <math/geometry/aabb.hpp>
 #include <stddef.h>
+#include <utilities/memory_pool.hpp>
 
 
 namespace World_data {
 
 
-/*!
-  Transform data
-  --
-  Every entity has a transform, we store entities in sequential order.
-  A new entity will be pushed to the back. Erasing an entity will
-  shuffle down all the entities.
-  
-  We also keep an unscaled, unmoved aabb for transformations.
-*/
 struct Transform_data
 {
-  util::generic_id          *entity_id  = nullptr;
-  math::transform           *transform  = nullptr;
-  math::aabb                *aabb       = nullptr;
-  
-  uint32_t                  size        = 0;
-  const uint32_t            capacity    = 0;
-  const util::memory_chunk  memory      = util::memory_chunk();
+  // Index keys;
+  util::generic_id *data_key = nullptr;
+  // Properties;
+  math::transform *property_transform = nullptr;
+  math::aabb *property_aabb = nullptr;
+  // Size and capacity;
+  size_t size = 0;
+  const size_t capacity = 0;
+  //Memory Pool;
+  const util::memory_chunk memory = util::memory_chunk();
 };
 
 
+// Insert a new entry to the resource
+bool
+transform_data_push_back(Transform_data *data, const util::generic_id key);
+
+
+// Remove an entry from the resource
+bool
+transform_data_erase(Transform_data *data, const util::generic_id key);
+
+
+// Checks to see if a entry exists for the key
+bool
+transform_data_exists(const Transform_data *data, const util::generic_id key, size_t *out_index = nullptr);
+
+
+// Is data valid.
+bool
+transform_data_is_valid(const Transform_data *data);
+
+
+// Locks the resources
 void
-lock(Transform_data *data);
+data_lock(Transform_data *data);
 
 
+// Unlocks the resource
 void
-unlock(Transform_data *data);
-
-
-void
-transform_data_init(Transform_data *data,
-                    const uint32_t size_hint);
-
-
-void
-transform_data_free(Transform_data *data);
-
-
-void
-transform_data_add_transform(Transform_data *data,
-                             const util::generic_id id,
-                             const math::transform *trans = nullptr,
-                             const math::aabb *aabb = nullptr);
-
-
-void
-transform_data_remove_transform(Transform_data *data,
-                                const util::generic_id id);
+data_unlock(Transform_data *data);
 
 
 bool
-transform_data_exists(const Transform_data *data,
-                      const util::generic_id id,
-                      size_t *out_index = nullptr);
+transform_data_get_transform(const Transform_data *data, const util::generic_id key, math::transform *out_value);
+
+
+bool
+transform_data_set_transform(Transform_data *data, const util::generic_id key, const math::transform *value);
+
+
+bool
+transform_data_get_aabb(const Transform_data *data, const util::generic_id key, math::aabb *out_value);
+
+
+bool
+transform_data_set_aabb(Transform_data *data, const util::generic_id key, const math::aabb *value);
+
+
+// Current size of the data store.
+size_t
+transform_data_get_size(const Transform_data *data);
+
+
+// Current capacity of the data store.
+size_t
+transform_data_get_capacity(const Transform_data *data);
+
+
+// Initilizes the data resource.
+void
+transform_data_init(Transform_data *data, const size_t size_hint);
+
+
+// Frees the resources.
+void
+transform_data_free(Transform_data *data);
 
 
 } // ns
