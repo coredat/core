@@ -436,9 +436,7 @@ World::find_entities_by_tag(const uint32_t tag_id,
   count = 0;
   
   // Loop through entity data and find entities.
-  
   auto data = m_impl->world_data->data.entity;
-  
   
   data_lock(data);
   

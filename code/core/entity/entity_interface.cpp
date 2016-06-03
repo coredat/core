@@ -302,6 +302,7 @@ set_transform(const util::generic_id this_id, World_data::World *world,const Tra
     World_data::entity_data_get_components(world->entity,
                                              this_id,
                                              &components);
+    
     if(components & World_data::Entity_component::has_physics)
     {
       World_data::physics_update(world->physics_data,
@@ -309,7 +310,7 @@ set_transform(const util::generic_id this_id, World_data::World *world,const Tra
                                  &data->property_aabb[index],
                                  &data->property_transform[index]);
     }
-    else
+//    else
     {
       int i = 0;
     }
@@ -479,15 +480,17 @@ set_collider(const util::generic_id this_id, World_data::World *world, const Cor
           
           math::aabb_scale(aabb, final_box_scale);
           
-          // Get the current components
-          uint32_t comps;
-          World_data::entity_data_get_components(entity_data, this_id, &comps);
-          
-          // Add physics and set it.
-          comps = comps | World_data::Entity_component::has_physics;
-          
-          World_data::entity_data_set_components(entity_data, this_id, &comps);
-          World_data::physics_add(phys_pool, this_id, &aabb, &transform);
+          // Get the current components and add physics
+          {
+            uint32_t comps;
+            World_data::entity_data_get_components(entity_data, this_id, &comps);
+            
+            // Add physics and set it.
+            comps = comps | World_data::Entity_component::has_physics;
+            
+            World_data::entity_data_set_components(entity_data, this_id, &comps);
+            World_data::physics_add(phys_pool, this_id, &aabb, &transform);
+          }
           break;
         }
         

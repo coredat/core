@@ -179,7 +179,7 @@ entity_data_get_components(const Entity_data *data, const util::generic_id key, 
 
   if(entity_data_exists(data, key, &index));
   {
-    out_value = &data->property_components[index];
+    *out_value = data->property_components[index];
     success = true;
   }
   return success;
