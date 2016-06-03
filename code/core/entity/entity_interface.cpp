@@ -243,7 +243,7 @@ get_name(const util::generic_id this_id, World_data::World *world)
     return nullptr;
   }
   assert(false);
-  const char *name;
+  char *name;
   World_data::entity_data_get_name(world->entity, this_id, &name);
   
   return name;
@@ -488,7 +488,7 @@ set_collider(const util::generic_id this_id, World_data::World *world, const Cor
             // Add physics and set it.
             comps = comps | World_data::Entity_component::has_physics;
             
-            World_data::entity_data_set_components(entity_data, this_id, &comps);
+            World_data::entity_data_set_components(entity_data, this_id, comps);
             World_data::physics_add(phys_pool, this_id, &aabb, &transform);
           }
           break;

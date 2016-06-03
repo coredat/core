@@ -72,7 +72,7 @@ data_unlock(Entity_data *data);
 
 
 bool
-entity_data_get_name(const Entity_data *data, const util::generic_id key, const char **out_value);
+entity_data_get_name(const Entity_data *data, const util::generic_id key, char **out_value);
 
 
 bool
@@ -84,7 +84,7 @@ entity_data_get_tag(const Entity_data *data, const util::generic_id key, uint32_
 
 
 bool
-entity_data_set_tag(Entity_data *data, const util::generic_id key, const uint32_t *value);
+entity_data_set_tag(Entity_data *data, const util::generic_id key, const uint32_t value);
 
 
 bool
@@ -92,7 +92,7 @@ entity_data_get_components(const Entity_data *data, const util::generic_id key, 
 
 
 bool
-entity_data_set_components(Entity_data *data, const util::generic_id key, const uint32_t *value);
+entity_data_set_components(Entity_data *data, const util::generic_id key, const uint32_t value);
 
 
 bool
@@ -100,7 +100,7 @@ entity_data_get_user_data(const Entity_data *data, const util::generic_id key, u
 
 
 bool
-entity_data_set_user_data(Entity_data *data, const util::generic_id key, const uintptr_t *value);
+entity_data_set_user_data(Entity_data *data, const util::generic_id key, const uintptr_t value);
 
 
 // Current size of the data store.

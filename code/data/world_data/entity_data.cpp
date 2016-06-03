@@ -64,9 +64,11 @@ entity_data_erase(Entity_data *data, const util::generic_id key)
   {
     LOG_ERROR(Error_string::entity_not_found());
     assert(false);
+    return false;
   }
 
   data_unlock(data);
+  return true;
 }
 
 
@@ -108,7 +110,7 @@ data_unlock(Entity_data *data)
 
 
 bool
-entity_data_get_name(const Entity_data *data, const util::generic_id key, const char **out_value)
+entity_data_get_name(const Entity_data *data, const util::generic_id key, char **out_value)
 {
   size_t index;
   bool success = false;
@@ -125,7 +127,7 @@ entity_data_get_name(const Entity_data *data, const util::generic_id key, const 
 bool
 entity_data_set_name(Entity_data *data, const util::generic_id key, const char *value)
 {
-  assert(data && key && value);
+  assert(data && key);
 
   size_t index;
   bool success = false;
@@ -147,7 +149,7 @@ entity_data_get_tag(const Entity_data *data, const util::generic_id key, uint32_
 
   if(entity_data_exists(data, key, &index));
   {
-    out_value = &data->property_tag[index];
+    *out_value = data->property_tag[index];
     success = true;
   }
   return success;
@@ -155,16 +157,16 @@ entity_data_get_tag(const Entity_data *data, const util::generic_id key, uint32_
 
 
 bool
-entity_data_set_tag(Entity_data *data, const util::generic_id key, const uint32_t *value)
+entity_data_set_tag(Entity_data *data, const util::generic_id key, const uint32_t value)
 {
-  assert(data && key && value);
+  assert(data && key);
 
   size_t index;
   bool success = false;
 
   if(entity_data_exists(data, key, &index))
   {
-    data->property_tag[index * 0] = *value;
+    data->property_tag[index] = value;
     success = true;
   }
   return success;
@@ -187,16 +189,16 @@ entity_data_get_components(const Entity_data *data, const util::generic_id key, 
 
 
 bool
-entity_data_set_components(Entity_data *data, const util::generic_id key, const uint32_t *value)
+entity_data_set_components(Entity_data *data, const util::generic_id key, const uint32_t value)
 {
-  assert(data && key && value);
+  assert(data && key);
 
   size_t index;
   bool success = false;
 
   if(entity_data_exists(data, key, &index))
   {
-    data->property_components[index * 0] = *value;
+    data->property_components[index] = value;
     success = true;
   }
   return success;
@@ -211,7 +213,7 @@ entity_data_get_user_data(const Entity_data *data, const util::generic_id key, u
 
   if(entity_data_exists(data, key, &index));
   {
-    out_value = &data->property_user_data[index];
+    *out_value = data->property_user_data[index];
     success = true;
   }
   return success;
@@ -219,16 +221,16 @@ entity_data_get_user_data(const Entity_data *data, const util::generic_id key, u
 
 
 bool
-entity_data_set_user_data(Entity_data *data, const util::generic_id key, const uintptr_t *value)
+entity_data_set_user_data(Entity_data *data, const util::generic_id key, const uintptr_t value)
 {
-  assert(data && key && value);
+  assert(data && key);
 
   size_t index;
   bool success = false;
 
   if(entity_data_exists(data, key, &index))
   {
-    data->property_user_data[index * 0] = *value;
+    data->property_user_data[index] = value;
     success = true;
   }
   return success;

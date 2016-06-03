@@ -19,7 +19,7 @@ display_entity_list(World_data::Entity_data *data)
     {
       ImGui::Text("%d", data->data_key[i]);
       
-      const char *name;
+      char *name;
       World_data::entity_data_get_name(data, data->data_key[i], &name);
       
       ImGui::Text("%s", name);
