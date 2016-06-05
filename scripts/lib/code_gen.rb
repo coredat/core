@@ -54,7 +54,10 @@ def parse_desc(yml)
 
     # What type of get set we have
     return_data[:properties][-1][:get_indirection] = if prop['return'].downcase == "pointer" then "**" else "*" end
+    return_data[:properties][-1][:get_indirection_value] = if prop['return'].downcase == "pointer" then "&" else "" end
+
     return_data[:properties][-1][:set_indirection] = if prop['return'].downcase == "pointer" then "*" else "" end
+    return_data[:properties][-1][:set_indirection_value] = if prop['return'].downcase == "pointer" then "*" else "" end
 
     # Has a dependent include
     if(prop['include'])

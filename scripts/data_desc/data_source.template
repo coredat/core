@@ -213,7 +213,7 @@ bool
     % if(prop[:multiple]) != 1
     *out_value = &data->{{prop[:name]}}[index * {{prop[:multiple]}}];
     % else
-    *out_value = data->{{prop[:name]}}[index];
+    *out_value = {{prop[:get_indirection_value]}}data->{{prop[:name]}}[index];
     % end
   }
   else
@@ -239,7 +239,7 @@ bool
     %# Currently we just assume that multiples are strings only.
     strlcpy(&data->{{prop[:name]}}[index * {{prop[:multiple]}}], value, {{prop[:multiple]}});
     % else
-    data->{{prop[:name]}}[index] = value;
+    data->{{prop[:name]}}[index] = {{prop[:set_indirection_value]}}value;
     % end
   }
   else
