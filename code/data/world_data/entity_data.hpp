@@ -22,105 +22,100 @@ enum ENUM
 
 } // ns
 
+} // ns
+
+
+
+namespace World_data {
 
 
 struct Entity_data
 {
-  // Index keys;
+  // Data Key
   util::generic_id *data_key = nullptr;
-  // Properties;
+
+  // Properties
   char *property_name = nullptr;
   uint32_t *property_tag = nullptr;
   uint32_t *property_components = nullptr;
   uintptr_t *property_user_data = nullptr;
-  // Size and capacity;
+
+  // Size information
   size_t size = 0;
   const size_t capacity = 0;
-  //Memory Pool;
+
+  // Memory chunk
   const util::memory_chunk memory = util::memory_chunk();
-};
+
+}; // struct
 
 
-// Insert a new entry to the resource
-bool
-entity_data_push_back(Entity_data *data, const util::generic_id key);
+void
+entity_data_init(Entity_data *data, const size_t size_hint);
 
 
-// Remove an entry from the resource
-bool
-entity_data_erase(Entity_data *data, const util::generic_id key);
+void
+entity_data_free(Entity_data *data);
 
 
-// Checks to see if a entry exists for the key
-bool
-entity_data_exists(const Entity_data *data, const util::generic_id key, size_t *out_index = nullptr);
+size_t
+entity_data_get_size(const Entity_data *data);
 
 
-// Is data valid.
-bool
-entity_data_is_valid(const Entity_data *data);
+size_t
+entity_data_get_capacity(const Entity_data *data);
 
 
-// Locks the resources
 void
 data_lock(Entity_data *data);
 
 
-// Unlocks the resource
 void
 data_unlock(Entity_data *data);
 
 
 bool
-entity_data_get_name(const Entity_data *data, const util::generic_id key, char **out_value);
+entity_data_push_back(Entity_data *data, const util::generic_id key);
 
 
 bool
-entity_data_set_name(Entity_data *data, const util::generic_id key, const char *value);
+entity_data_erase(Entity_data *data, const util::generic_id key);
 
 
 bool
-entity_data_get_tag(const Entity_data *data, const util::generic_id key, uint32_t *out_value);
+entity_data_exists(const Entity_data *data, const util::generic_id key, size_t *out_index = nullptr);
 
 
 bool
-entity_data_set_tag(Entity_data *data, const util::generic_id key, const uint32_t value);
+entity_data_get_property_name(const Entity_data *data, const util::generic_id key, const char **value);
 
 
 bool
-entity_data_get_components(const Entity_data *data, const util::generic_id key, uint32_t *out_value);
+entity_data_set_property_name(Entity_data *data,  const util::generic_id key, const char *value);
 
 
 bool
-entity_data_set_components(Entity_data *data, const util::generic_id key, const uint32_t value);
+entity_data_get_property_tag(const Entity_data *data, const util::generic_id key, uint32_t *value);
 
 
 bool
-entity_data_get_user_data(const Entity_data *data, const util::generic_id key, uintptr_t *out_value);
+entity_data_set_property_tag(Entity_data *data,  const util::generic_id key, const uint32_t value);
 
 
 bool
-entity_data_set_user_data(Entity_data *data, const util::generic_id key, const uintptr_t value);
+entity_data_get_property_components(const Entity_data *data, const util::generic_id key, uint32_t *value);
 
 
-// Current size of the data store.
-size_t
-entity_data_get_size(const Entity_data *data);
+bool
+entity_data_set_property_components(Entity_data *data,  const util::generic_id key, const uint32_t value);
 
 
-// Current capacity of the data store.
-size_t
-entity_data_get_capacity(const Entity_data *data);
+bool
+entity_data_get_property_user_data(const Entity_data *data, const util::generic_id key, uintptr_t *value);
 
 
-// Initilizes the data resource.
-void
-entity_data_init(Entity_data *data, const size_t size_hint);
-
-
-// Frees the resources.
-void
-entity_data_free(Entity_data *data);
+bool
+entity_data_set_property_user_data(Entity_data *data,  const util::generic_id key, const uintptr_t value);
 
 
 } // ns

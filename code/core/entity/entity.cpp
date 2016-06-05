@@ -55,11 +55,11 @@ Entity::Entity(Core::World &world)
   {
     World_data::entity_data_push_back(m_impl->world->data.entity, get_id());
     const uint32_t zero(0);
-    World_data::entity_data_set_components(m_impl->world->data.entity, get_id(), zero);
-    World_data::entity_data_set_tag(m_impl->world->data.entity, get_id(), zero);
+    World_data::entity_data_set_property_components(m_impl->world->data.entity, get_id(), zero);
+    World_data::entity_data_set_property_tag(m_impl->world->data.entity, get_id(), zero);
     
     const char *nilstr = "";
-    World_data::entity_data_set_name(m_impl->world->data.entity, get_id(), nilstr);
+    World_data::entity_data_set_property_name(m_impl->world->data.entity, get_id(), nilstr);
     
     
     World_data::transform_data_push_back(m_impl->world->data.transform, get_id());

@@ -230,7 +230,7 @@ set_name(const util::generic_id this_id, World_data::World *world, const char* s
   }
   
   // set string.
-  World_data::entity_data_set_name(world->entity, this_id, set_name);
+  World_data::entity_data_set_property_name(world->entity, this_id, set_name);
 }
   
   
@@ -243,8 +243,8 @@ get_name(const util::generic_id this_id, World_data::World *world)
     return nullptr;
   }
   assert(false);
-  char *name;
-  World_data::entity_data_get_name(world->entity, this_id, &name);
+  const char *name;
+  World_data::entity_data_get_property_name(world->entity, this_id, &name);
   
   return name;
 }
@@ -299,7 +299,7 @@ set_transform(const util::generic_id this_id, World_data::World *world,const Tra
     
     // If this is a physics object then update it.
     uint32_t components;
-    World_data::entity_data_get_components(world->entity,
+    World_data::entity_data_get_property_components(world->entity,
                                              this_id,
                                              &components);
     
@@ -483,12 +483,12 @@ set_collider(const util::generic_id this_id, World_data::World *world, const Cor
           // Get the current components and add physics
           {
             uint32_t comps;
-            World_data::entity_data_get_components(entity_data, this_id, &comps);
+            World_data::entity_data_get_property_components(entity_data, this_id, &comps);
             
             // Add physics and set it.
             comps = comps | World_data::Entity_component::has_physics;
             
-            World_data::entity_data_set_components(entity_data, this_id, comps);
+            World_data::entity_data_set_property_components(entity_data, this_id, comps);
             World_data::physics_add(phys_pool, this_id, &aabb, &transform);
           }
           break;
