@@ -1,0 +1,20 @@
+data:
+  type: Renderer_mesh_data
+  name: renderer_mesh_data
+  namespace: World_data
+  header_dir: data/world_data/
+  path: code/data/world_data/
+
+  header:
+    additional_code: >
+      struct Mesh_renderer_draw_call
+      {
+        uint32_t model;
+        uint32_t texture; // Move this to the material.
+        float    world_matrix[16];
+      };
+
+  properties:
+    - name: draw_call
+      type: Mesh_renderer_draw_call
+      return: pointer

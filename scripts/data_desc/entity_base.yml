@@ -1,0 +1,34 @@
+data:
+  type: Entity_data
+  name: entity_data
+  namespace: World_data
+  header_dir: data/world_data/
+  path: code/data/world_data/
+
+  header:
+    additional_code: >
+      namespace Entity_component {
+        enum ENUM {
+          has_physics = 1 << 0,
+        };
+      } // ns
+
+  properties:
+    - name: name
+      type: char_32
+      return: pointer
+
+    - name: tag
+      type: uint32_t
+      return: value
+      include: <stdint.h>
+
+    - name: components
+      type: uint32_t
+      return: value
+      include: <stdint.h>
+
+    - name: user_data
+      type: uintptr_t
+      return: value
+      include: <stdint.h>

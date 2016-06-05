@@ -1,0 +1,277 @@
+
+/*
+  Warning:
+  This file is auto_generated any changes here may be overwritten.
+*/
+
+% src_includes.each do |inc|
+#include {{inc}}
+% end
+
+
+namespace {{namespace}} {
+
+
+void
+{{data_name}}_init({{data_type}} *data, const size_t size_hint)
+{
+  // Argument validation.
+  assert(data && size_hint);
+
+  // 16 byte alignment buffer, apply to all for safety.
+  constexpr size_t simd_buffer = 16;
+
+  // Calculate the various sizes of things.
+  % byte_names = []
+  % allocs.each do |alloc|
+  % byte_names << 'bytes_' + alloc[:name]
+  % if alloc[:multiple] == 1
+  const size_t {{byte_names[-1]}} = sizeof(*data->{{alloc[:name]}}) * size_hint + simd_buffer;
+  % else
+  const size_t {{byte_names[-1]}} = sizeof(*data->{{alloc[:name]}}) * {{alloc[:multiple]}} * size_hint + simd_buffer;
+  % end
+  % end
+
+  const size_t bytes_to_alloc = {{byte_names.join(' + ')}};
+
+  // Allocate some memory.
+  util::memory_chunk *data_memory = const_cast<util::memory_chunk*>(&data->memory);
+  *data_memory = Memory::request_memory_chunk(bytes_to_alloc, \"{{data_name}}\");
+
+  assert(data_memory->bytes_in_chunk == bytes_to_alloc);
+
+  data_lock(data);
+
+  // Init memory
+  {
+    size_t byte_counter = 0;
+    const void *alloc_start = data->memory.chunk_start;
+
+    % byte_counter = 0
+    % allocs.each do |alloc|
+    // Assign {{alloc[:name]}} memory
+    {
+      void *offset = util::mem_offset(alloc_start, byte_counter);
+      void *aligned = util::mem_next_16byte_boundry(offset);
+
+      data->{{alloc[:name]}} = reinterpret_cast<{{alloc[:type]}}*>(aligned);
+      #ifndef NDEBUG
+      memset(offset, 0, {{byte_names[byte_counter]}});
+      #endif
+
+      byte_counter += {{byte_names[byte_counter]}};
+      assert(byte_counter <= bytes_to_alloc);
+    }
+    % byte_counter += 1
+    % end
+  }
+
+  // Set the size and capacity
+  {
+    data->size = 0;
+
+    size_t *capacity = const_cast<size_t*>(&data->capacity);
+    *capacity = size_hint;
+  }
+
+  data_unlock(data);
+}
+
+
+void
+{{data_name}}_free({{data_type}} *data)
+{
+  assert(data);
+}
+
+
+size_t
+{{data_name}}_get_size(const {{data_type}} *data)
+{
+  assert(data);
+  return data->size;
+}
+
+
+size_t
+{{data_name}}_get_capacity(const {{data_type}} *data)
+{
+  assert(data);
+  return data->capacity;
+}
+
+
+void
+data_lock({{data_type}} *data)
+{
+  assert(data);
+}
+
+
+void
+data_unlock({{data_type}} *data)
+{
+  assert(data);
+}
+
+
+bool
+{{data_name}}_push_back({{data_type}} *data, const {{key_type}} key, size_t *out_index)
+{
+  assert(data && key);
+  assert(data->size < data->capacity);
+
+  if(data->size >= data->capacity)
+  {
+    LOG_ERROR(Error_string::no_free_space());
+
+    return false;
+  }
+
+  const uint32_t index = data->size;
+
+  if(out_index)
+  {
+    *out_index = index;
+  }
+
+  ++(data->size);
+
+  data->{{key_name}}[index] = key;
+
+  // Memset the properties
+  {
+    % properties.each do |prop|
+    memset(&data->{{prop[:name]}}[index], 0, sizeof(*data->{{prop[:name]}}));
+    % end
+  }
+
+  return true;
+}
+
+
+bool
+{{data_name}}_erase({{data_type}} *data, const {{key_type}} key)
+{
+  // Param check
+  assert(data && key);
+
+  size_t index_to_erase;
+
+  if({{data_name}}_exists(data, key, &index_to_erase))
+  {
+    assert(index_to_erase < data->size);
+
+    const size_t start_index = index_to_erase + 1;
+    const size_t size_to_end = data->size - index_to_erase - 1;
+
+    --(data->size);
+
+    // Shuffle the memory down.
+    % allocs.each do |alloc|
+    % if alloc[:multiple] != 1
+    memmove(&data->{{alloc[:name]}}[index_to_erase * {{alloc[:multiple]}}], &data->{{alloc[:name]}}[start_index * {{alloc[:multiple]}}], (size_to_end * {{alloc[:multiple]}}) * sizeof(*data->{{alloc[:name]}}));
+    % else
+    memmove(&data->{{alloc[:name]}}[index_to_erase], &data->{{alloc[:name]}}[start_index], size_to_end * sizeof(*data->{{alloc[:name]}}));
+    % end
+    % end
+  }
+  else
+  {
+    % if key_missing_error
+    LOG_ERROR(Error_string::entity_not_found());
+    assert(false);
+
+    % end
+    return false;
+  }
+
+  return true;
+}
+
+
+bool
+{{data_name}}_exists(const {{data_type}} *data, const {{key_type}} key, size_t *out_index)
+{
+  assert(data && key);
+
+  if(data->size == 0)
+  {
+    return false;
+  }
+
+  bool found = false;
+
+  size_t no_index;
+  if(!out_index) { out_index = &no_index; }
+
+  found = util::generic_id_search_{{key_search_type}}(out_index, key, data->{{key_name}}, data->size);
+
+  return found;
+}
+
+
+% properties.each do |prop|
+bool
+% if prop[:multiple] != 1
+{{data_name}}_get_{{prop[:name]}}(const {{data_type}} *data, const {{key_type}} key, {{prop[:type]}} const {{prop[:get_indirection]}}out_value)
+% else
+{{data_name}}_get_{{prop[:name]}}(const {{data_type}} *data, const {{key_type}} key, {{prop[:type]}} {{prop[:get_indirection]}}out_value)
+%end
+{
+  size_t index;
+
+  if({{data_name}}_exists(data, key, &index))
+  {
+    % if(prop[:multiple]) != 1
+    *out_value = &data->{{prop[:name]}}[index * {{prop[:multiple]}}];
+    % else
+    *out_value = {{prop[:get_indirection_value]}}data->{{prop[:name]}}[index];
+    % end
+  }
+  else
+  {
+    % if key_missing_error
+    LOG_ERROR(Error_string::entity_not_found());
+    assert(false);
+
+    % end
+    return false;
+  }
+
+  return true;
+}
+
+
+bool
+{{data_name}}_set_{{prop[:name]}}({{data_type}} *data,  const {{key_type}} key, const {{prop[:type]}} {{prop[:set_indirection]}}value)
+{
+  assert(data && key);
+
+  size_t index;
+
+  if({{data_name}}_exists(data, key, &index))
+  {
+    % if prop[:multiple] != 1
+    %# Currently we just assume that multiples are strings only.
+    strlcpy(&data->{{prop[:name]}}[index * {{prop[:multiple]}}], value, {{prop[:multiple]}});
+    % else
+    data->{{prop[:name]}}[index] = {{prop[:set_indirection_value]}}value;
+    % end
+  }
+  else
+  {
+    % if key_missing_error
+    LOG_ERROR(Error_string::entity_not_found());
+    assert(false);
+
+    % end
+    return false;
+  }
+
+  return true;
+}
+
+
+% end
+} // ns

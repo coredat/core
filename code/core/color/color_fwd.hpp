@@ -1,0 +1,14 @@
+#ifndef COLOR_FWD_INCLUDED_10ACCAD2_73D5_4569_9F5B_E91F8B3BB298
+#define COLOR_FWD_INCLUDED_10ACCAD2_73D5_4569_9F5B_E91F8B3BB298
+
+
+namespace Core {
+
+
+class Color;
+
+
+} // ns
+
+
+#endif // inc guard
