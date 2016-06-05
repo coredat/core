@@ -63,7 +63,7 @@ world_find_entities_with_tag(World *world_data,
     {
       if(size_of_out > number_found)
       {
-        out_ids[number_found++] = entity_data->data_key[i];
+        out_ids[number_found++] = entity_data->entity_id[i];
       }
       else
       {

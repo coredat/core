@@ -17,10 +17,10 @@ display_entity_list(World_data::Entity_data *data)
   
     for(uint32_t i = 0; i < data->size; ++i)
     {
-      ImGui::Text("%d", data->data_key[i]);
+      ImGui::Text("%d", data->entity_id[i]);
       
       const char *name;
-      World_data::entity_data_get_property_name(data, data->data_key[i], &name);
+      World_data::entity_data_get_property_name(data, data->entity_id[i], &name);
       
       ImGui::Text("%s", name);
       ImGui::Text("%d", data->property_tag[i]);

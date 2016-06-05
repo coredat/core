@@ -25,13 +25,13 @@ entity_data_init(Entity_data *data, const size_t size_hint)
   constexpr size_t simd_buffer = 16;
 
   // Calculate the various sizes of things.
-  const size_t bytes_data_key = sizeof(*data->data_key) * size_hint + simd_buffer;
+  const size_t bytes_entity_id = sizeof(*data->entity_id) * size_hint + simd_buffer;
   const size_t bytes_property_name = sizeof(*data->property_name) * 32 * size_hint + simd_buffer;
   const size_t bytes_property_tag = sizeof(*data->property_tag) * size_hint + simd_buffer;
   const size_t bytes_property_components = sizeof(*data->property_components) * size_hint + simd_buffer;
   const size_t bytes_property_user_data = sizeof(*data->property_user_data) * size_hint + simd_buffer;
 
-  const size_t bytes_to_alloc = bytes_data_key + bytes_property_name + bytes_property_tag + bytes_property_components + bytes_property_user_data;
+  const size_t bytes_to_alloc = bytes_entity_id + bytes_property_name + bytes_property_tag + bytes_property_components + bytes_property_user_data;
 
   // Allocate some memory.
   util::memory_chunk *data_memory = const_cast<util::memory_chunk*>(&data->memory);
@@ -46,17 +46,17 @@ entity_data_init(Entity_data *data, const size_t size_hint)
     size_t byte_counter = 0;
     const void *alloc_start = data->memory.chunk_start;
 
-    // Assign data_key memory
+    // Assign entity_id memory
     {
       void *offset = util::mem_offset(alloc_start, byte_counter);
       void *aligned = util::mem_next_16byte_boundry(offset);
 
-      data->data_key = reinterpret_cast<util::generic_id*>(aligned);
+      data->entity_id = reinterpret_cast<util::generic_id*>(aligned);
       #ifndef NDEBUG
-      memset(offset, 0, bytes_data_key);
+      memset(offset, 0, bytes_entity_id);
       #endif
 
-      byte_counter += bytes_data_key;
+      byte_counter += bytes_entity_id;
       assert(byte_counter <= bytes_to_alloc);
     }
     // Assign property_name memory
@@ -184,7 +184,7 @@ entity_data_push_back(Entity_data *data, const util::generic_id key, size_t *out
 
   ++(data->size);
 
-  data->data_key[index] = key;
+  data->entity_id[index] = key;
 
   // Memset the properties
   {
@@ -216,7 +216,7 @@ entity_data_erase(Entity_data *data, const util::generic_id key)
     --(data->size);
 
     // Shuffle the memory down.
-    memmove(&data->data_key[index_to_erase], &data->data_key[start_index], size_to_end * sizeof(*data->data_key));
+    memmove(&data->entity_id[index_to_erase], &data->entity_id[start_index], size_to_end * sizeof(*data->entity_id));
     memmove(&data->property_name[index_to_erase * 32], &data->property_name[start_index * 32], (size_to_end * 32) * sizeof(*data->property_name));
     memmove(&data->property_tag[index_to_erase], &data->property_tag[start_index], size_to_end * sizeof(*data->property_tag));
     memmove(&data->property_components[index_to_erase], &data->property_components[start_index], size_to_end * sizeof(*data->property_components));
@@ -249,7 +249,7 @@ entity_data_exists(const Entity_data *data, const util::generic_id key, size_t *
   size_t no_index;
   if(!out_index) { out_index = &no_index; }
 
-  found = util::generic_id_search_linearly(out_index, key, data->data_key, data->size);
+  found = util::generic_id_search_linearly(out_index, key, data->entity_id, data->size);
 
   return found;
 }

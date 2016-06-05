@@ -6,8 +6,8 @@
 */
 
 
-#ifndef TRANSFORM_DATA_INCLUDED_DFDBD588_553C_428A_9C28_78777C1FADCC
-#define TRANSFORM_DATA_INCLUDED_DFDBD588_553C_428A_9C28_78777C1FADCC
+#ifndef TRANSFORM_DATA_INCLUDED_E36993D9_6479_4D0A_948E_701B557A8FCB
+#define TRANSFORM_DATA_INCLUDED_E36993D9_6479_4D0A_948E_701B557A8FCB
 
 
 #include <utilities/generic_id.hpp>
@@ -27,7 +27,7 @@ namespace World_data {
 struct Transform_data
 {
   // Data Key
-  util::generic_id *data_key = nullptr;
+  util::generic_id *entity_id = nullptr;
 
   // Properties
   math::transform *property_transform = nullptr;

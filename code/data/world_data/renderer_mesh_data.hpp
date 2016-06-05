@@ -6,8 +6,8 @@
 */
 
 
-#ifndef RENDERER_MESH_DATA_INCLUDED_E22AC210_26C2_4097_BF41_C8EE64194DFB
-#define RENDERER_MESH_DATA_INCLUDED_E22AC210_26C2_4097_BF41_C8EE64194DFB
+#ifndef RENDERER_MESH_DATA_INCLUDED_18267A32_BE36_494F_8A5A_B4254CAB3BB0
+#define RENDERER_MESH_DATA_INCLUDED_18267A32_BE36_494F_8A5A_B4254CAB3BB0
 
 
 #include <utilities/generic_id.hpp>
@@ -33,7 +33,7 @@ struct Mesh_renderer_draw_call {
 struct Renderer_mesh_data
 {
   // Data Key
-  util::generic_id *data_key = nullptr;
+  util::generic_id *entity_id = nullptr;
 
   // Properties
   Mesh_renderer_draw_call *property_draw_call = nullptr;

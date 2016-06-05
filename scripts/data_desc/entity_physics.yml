@@ -8,6 +8,7 @@ data:
   key:
     error_on_missing_key: false
     search_type: linearly
+    name: entity_id
 
   properties:
     - name: transform

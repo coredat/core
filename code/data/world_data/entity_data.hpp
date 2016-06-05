@@ -6,8 +6,8 @@
 */
 
 
-#ifndef ENTITY_DATA_INCLUDED_322CAB5F_D464_4388_A27B_92E413CE3A40
-#define ENTITY_DATA_INCLUDED_322CAB5F_D464_4388_A27B_92E413CE3A40
+#ifndef ENTITY_DATA_INCLUDED_7337009D_1C27_4084_9459_EEBC00E83A86
+#define ENTITY_DATA_INCLUDED_7337009D_1C27_4084_9459_EEBC00E83A86
 
 
 #include <utilities/generic_id.hpp>
@@ -34,7 +34,7 @@ namespace Entity_component {
 struct Entity_data
 {
   // Data Key
-  util::generic_id *data_key = nullptr;
+  util::generic_id *entity_id = nullptr;
 
   // Properties
   char *property_name = nullptr;

@@ -370,7 +370,7 @@ World::get_overlapping_aabbs(const std::function<void(const Core::Collision_pair
       continue;
     }
     
-    id.push_back(data->data_key[i]);
+    id.push_back(data->entity_id[i]);
     
     math::aabb box_copy(data->property_aabb_collider[i]);
     uint64_t collision_mask(data->property_collision_id[i]);
@@ -444,7 +444,7 @@ World::find_entities_by_tag(const uint32_t tag_id,
   {
     if(data->property_tag[i] & tag_id)
     {
-      found_ents[count] = Entity_ref(data->data_key[i], *const_cast<World*>(this));
+      found_ents[count] = Entity_ref(data->entity_id[i], *const_cast<World*>(this));
       count++;
     }
   }
