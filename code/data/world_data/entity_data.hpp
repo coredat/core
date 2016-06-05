@@ -1,32 +1,28 @@
-#ifndef ENTITY_DATA_INCLUDED_18E6DF4A_1B5A_44CE_A75F_FBC3054389B2
-#define ENTITY_DATA_INCLUDED_18E6DF4A_1B5A_44CE_A75F_FBC3054389B2
+
+/*
+  Warning:
+  This file is auto_generated any changes here may be overwritten.
+*/
+
+#ifndef ENTITY_DATA_INCLUDED_65CE2E8B_AE72_4BCF_80FE_7547FA17BE75
+#define ENTITY_DATA_INCLUDED_65CE2E8B_AE72_4BCF_80FE_7547FA17BE75
 
 
 #include <utilities/generic_id.hpp>
 #include <utilities/memory_pool.hpp>
-#include <utilities/bits.hpp>
-#include <utilities/generic_id.hpp>
-#include <stdint.h>
 #include <stddef.h>
-#include <utilities/memory_pool.hpp>
+#include <stdint.h>
+
 
 namespace World_data {
 
 
 namespace Entity_component {
-
-enum ENUM
-{
-  has_physics = BIT(0),
-};
-
+  enum ENUM {
+    has_physics = 1 << 0,
+  };
 } // ns
 
-} // ns
-
-
-
-namespace World_data {
 
 
 struct Entity_data
@@ -75,7 +71,7 @@ data_unlock(Entity_data *data);
 
 
 bool
-entity_data_push_back(Entity_data *data, const util::generic_id key);
+entity_data_push_back(Entity_data *data, const util::generic_id key, size_t *out_index = nullptr);
 
 
 bool

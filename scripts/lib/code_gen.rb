@@ -16,12 +16,16 @@ def parse_desc(yml)
   return_data[:data_name]  = data['name'] || "data"
   return_data[:guid]       = SecureRandom.uuid.upcase.gsub("-", "_")
   return_data[:namespace]  = data['namespace'] || "Data"
+  return_data[:path]       = data['path']
 
   # Header Includes
   return_data[:header_includes] = []
   return_data[:header_includes] << "<utilities/generic_id.hpp>"
   return_data[:header_includes] << "<utilities/memory_pool.hpp>"
   return_data[:header_includes] << "<stddef.h>"
+
+  # Header aditional code
+  return_data[:header_add_code] = if data['header'] and data['header']['additional_code'] then data['header']['additional_code'] else "" end
 
   # Source Includes
   return_data[:src_includes] = []
@@ -33,7 +37,7 @@ def parse_desc(yml)
   return_data[:src_includes] << "<assert.h>"
 
   # Key information
-  data_key = data['key']
+  data_key = data['key'] || {}
 
   return_data[:key_type] = "util::generic_id"
   return_data[:key_name] = data_key['name'] || "data_key"
@@ -105,4 +109,3 @@ def parse_template(template, vars = {})
   eval(func).call(vars.values)
 
 end
-

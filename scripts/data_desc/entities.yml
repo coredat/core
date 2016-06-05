@@ -3,18 +3,23 @@ data:
   name: entity_data
   namespace: World_data
   header_dir: data/world_data/
+  path: code/data/world_data/
 
+  header:
+    additional_code: >
+      namespace Entity_component {
+        enum ENUM {
+          has_physics = 1 << 0,
+        };
+      } // ns
 
   key:
-    type: util::generic_id
     name: data_key
-    include: <utilities/generic_id.hpp>
-
 
   properties:
     - name: name
       type: char_32
-      return: value
+      return: pointer
 
     - name: tag
       type: uint32_t

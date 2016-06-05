@@ -163,7 +163,7 @@ data_unlock(Entity_data *data)
 
 
 bool
-entity_data_push_back(Entity_data *data, const util::generic_id key)
+entity_data_push_back(Entity_data *data, const util::generic_id key, size_t *out_index)
 {
   assert(data && key);
   assert(data->size < data->capacity);
@@ -172,19 +172,20 @@ entity_data_push_back(Entity_data *data, const util::generic_id key)
   {
     LOG_ERROR(Error_string::no_free_space());
 
-    // Return not currently locked.
     return false;
   }
 
-  data_lock(data);
-
   const uint32_t index = data->size;
+
+  if(out_index)
+  {
+    *out_index = index;
+  }
+
   ++(data->size);
 
   data->data_key[index] = key;
 
-  // Unlock and return.
-  data_unlock(data);
   return true;
 }
 
@@ -195,7 +196,6 @@ entity_data_erase(Entity_data *data, const util::generic_id key)
   // Param check
   assert(data && key);
 
-  data_lock(data);
   size_t index_to_erase;
 
   if(entity_data_exists(data, key, &index_to_erase))
@@ -220,13 +220,9 @@ entity_data_erase(Entity_data *data, const util::generic_id key)
 
     assert(false);
 
-    // Unlock and return
-    data_unlock(data);
     return false;
   }
 
-  // Unlock and return
-  data_unlock(data);
   return true;
 }
 

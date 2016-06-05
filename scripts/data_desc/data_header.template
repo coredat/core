@@ -1,0 +1,101 @@
+
+/*
+  Warning:
+  This file is auto_generated any changes here may be overwritten.
+*/
+
+#ifndef {{data_name.upcase}}_INCLUDED_{{guid}}
+#define {{data_name.upcase}}_INCLUDED_{{guid}}
+
+
+% header_includes.each do |inc|
+#include {{inc}}
+% end
+
+
+namespace {{namespace}} {
+
+% if header_add_code
+
+{{header_add_code}}
+
+% end
+
+struct {{data_type}}
+{
+  // Data Key
+  util::generic_id *{{key_name}} = nullptr;
+
+  // Properties
+  % properties.each do |prop|
+    % if prop[:type] == "char_32"
+  char *{{prop[:name]}} = nullptr;
+    % else
+  {{prop[:type]}} *{{prop[:name]}} = nullptr;
+    % end
+  % end
+
+  // Size information
+  size_t size = 0;
+  const size_t capacity = 0;
+
+  // Memory chunk
+  const util::memory_chunk memory = util::memory_chunk();
+
+}; // struct
+
+
+void
+{{data_name}}_init({{data_type}} *data, const size_t size_hint);
+
+
+void
+{{data_name}}_free({{data_type}} *data);
+
+
+size_t
+{{data_name}}_get_size(const {{data_type}} *data);
+
+
+size_t
+{{data_name}}_get_capacity(const {{data_type}} *data);
+
+
+void
+data_lock({{data_type}} *data);
+
+
+void
+data_unlock({{data_type}} *data);
+
+
+bool
+{{data_name}}_push_back({{data_type}} *data, const {{key_type}} key, size_t *out_index = nullptr);
+
+
+bool
+{{data_name}}_erase({{data_type}} *data, const {{key_type}} key);
+
+
+bool
+{{data_name}}_exists(const {{data_type}} *data, const {{key_type}} key, size_t *out_index = nullptr);
+
+
+% properties.each do |prop|
+bool
+% if prop[:multiple] != 1
+{{data_name}}_get_{{prop[:name]}}(const {{data_type}} *data, const {{key_type}} key, const {{prop[:type]}} {{prop[:get_indirection]}}value);
+% else
+{{data_name}}_get_{{prop[:name]}}(const {{data_type}} *data, const {{key_type}} key, {{prop[:type]}} {{prop[:get_indirection]}}value);
+% end
+
+
+bool
+{{data_name}}_set_{{prop[:name]}}({{data_type}} *data,  const {{key_type}} key, const {{prop[:type]}} {{prop[:set_indirection]}}value);
+
+
+% end
+} // ns
+
+
+#endif // inc guard

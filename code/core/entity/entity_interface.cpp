@@ -298,21 +298,19 @@ set_transform(const util::generic_id this_id, World_data::World *world,const Tra
     }
     
     // If this is a physics object then update it.
-    uint32_t components;
-    World_data::entity_data_get_property_components(world->entity,
-                                             this_id,
-                                             &components);
-    
-    if(components & World_data::Entity_component::has_physics)
     {
-      World_data::physics_update(world->physics_data,
-                                 this_id,
-                                 &data->property_aabb[index],
-                                 &data->property_transform[index]);
-    }
-//    else
-    {
-      int i = 0;
+      uint32_t components;
+      World_data::entity_data_get_property_components(world->entity,
+                                               this_id,
+                                               &components);
+      
+      if(components & World_data::Entity_component::has_physics)
+      {
+        World_data::physics_update(world->physics_data,
+                                   this_id,
+                                   &data->property_aabb[index],
+                                   &data->property_transform[index]);
+      }
     }
   }
   else
@@ -336,7 +334,6 @@ get_transform(const util::generic_id this_id, World_data::World *world)
   size_t index;
   if(World_data::transform_data_exists(data, this_id, &index))
   {
-    assert(get_index(&index, this_id, data->data_key, data->size));
     math::transform local_transform = data->property_transform[index];
     
     const math::vec3 pos = local_transform.position;

@@ -1,15 +1,13 @@
-:data:
+data:
   type: Transform_data
   name: transform_data
   namespace: World_data
   header_dir: data/world_data/
+  path: code/data/world_data/
 
-
+  
   key:
-    type: util::generic_id
     name: data_key
-    include: <utilities/generic_id.hpp>
-
 
   properties:
     - name: transform

@@ -10,6 +10,10 @@ entity_is_invalid() { return "Core::Entity is invalid."; }
 
 
 constexpr const char *
+entity_failed_to_construct() { return "Core::Entity failed in construction."; }
+
+
+constexpr const char *
 entity_not_found() { return "Core::Entity not found."; }
 
 

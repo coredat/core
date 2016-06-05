@@ -50,20 +50,73 @@ Entity::Entity(Core::World &world)
 : m_impl(new Impl{util::generic_id{++instance_id}, nullptr})
 {
   m_impl->world = world.get_world_data();
+  util::generic_id id = get_id();
+  
+  bool success = true;
  
   if(m_impl->world)
   {
-    World_data::entity_data_push_back(m_impl->world->data.entity, get_id());
-    const uint32_t zero(0);
-    World_data::entity_data_set_property_components(m_impl->world->data.entity, get_id(), zero);
-    World_data::entity_data_set_property_tag(m_impl->world->data.entity, get_id(), zero);
+    // Create Entity record
+    {
+      auto entity_data = m_impl->world->data.entity;
+      
+      World_data::data_lock(entity_data);
+      
+      if(World_data::entity_data_push_back(entity_data, id) && success)
+      {
+        const uint32_t zero(0);
+        World_data::entity_data_set_property_components(entity_data, id, zero);
+        World_data::entity_data_set_property_tag(entity_data, id, zero);
+        
+        const char *nilstr = "";
+        World_data::entity_data_set_property_name(m_impl->world->data.entity, id, nilstr);
+      }
+      else
+      {
+        success = false;
+      }
+      
+      World_data::data_unlock(entity_data);
+    }
     
-    const char *nilstr = "";
-    World_data::entity_data_set_property_name(m_impl->world->data.entity, get_id(), nilstr);
+    // Create Transform record
+    {
+      auto transform_data = m_impl->world->data.transform;
+      
+      World_data::data_lock(transform_data);
     
+      if(World_data::transform_data_push_back(transform_data, id) && success)
+      {
+        const math::transform trans{};
+        World_data::transform_data_set_property_transform(transform_data, id, trans);
+        
+        const math::aabb bounding_box{};
+        World_data::transform_data_set_property_aabb(transform_data, id, bounding_box);
+      }
+      
+      World_data::data_unlock(transform_data);
+    }
     
-    World_data::transform_data_push_back(m_impl->world->data.transform, get_id());
-    World_data::mesh_renderer_add(m_impl->world->data.mesh_data, get_id(), 0, 0);
+    // Create Mesh record
+    {
+      auto mesh_data = m_impl->world->data.mesh_data;
+      
+      World_data::lock(mesh_data);
+      
+      if(success)
+      {
+        World_data::mesh_renderer_add(m_impl->world->data.mesh_data, id, 0, 0);
+      }
+      
+      World_data::unlock(mesh_data);
+    }
+    
+    // If we failed then destroy the entity.
+    if(!success)
+    {
+      LOG_ERROR(Error_string::entity_failed_to_construct());
+      destroy();
+    }
   }
   else
   {
