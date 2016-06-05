@@ -32,7 +32,7 @@ world_create_new_entity(World *world_data,
   {
     World_data::entity_data_push_back(entity_data, id);
     World_data::transform_data_push_back(world_data->transform, id);
-    World_data::mesh_renderer_add(world_data->mesh_data, id, 0, 0);
+    World_data::renderer_mesh_data_push_back(world_data->mesh_data, id);
     
     return true;
   }
@@ -86,7 +86,7 @@ world_update_scene_graph_changes(World_data::World *world_data,
     
     entity_data_erase(world_data->entity, id);
     transform_data_erase(world_data->transform, id);
-    mesh_renderer_remove(world_data->mesh_data, id);
+    renderer_mesh_data_erase(world_data->mesh_data, id);
     physics_remove(world_data->physics_data, id);
   }
 }

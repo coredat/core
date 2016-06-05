@@ -104,8 +104,8 @@ World::World(const Context &ctx, const World_setup setup)
   static World_data::Physics_data physics_data;
   World_data::physics_init(&physics_data, entity_hint);
   
-  static World_data::Mesh_renderer_data mesh_data;
-  World_data::mesh_renderer_init(&mesh_data, entity_hint);
+  static World_data::Renderer_mesh_data mesh_data;
+  World_data::renderer_mesh_data_init(&mesh_data, entity_hint);
   
   static World_data::Transform_data transform_data;
   World_data::transform_data_init(&transform_data, entity_hint);
@@ -286,8 +286,8 @@ World::think()
   // Texture/vbo info
   for (uint32_t i = 0; i < size_of_node_pool; ++i)
   {
-    const uint32_t mesh_id    = world->mesh_data->mesh_draw_calls[i].model;
-    const uint32_t texture_id = world->mesh_data->mesh_draw_calls[i].texture;
+    const uint32_t mesh_id    = world->mesh_data->property_draw_call[i].model;
+    const uint32_t texture_id = world->mesh_data->property_draw_call[i].texture;
     
     if(mesh_id && texture_id)
     {
@@ -298,7 +298,7 @@ World::think()
       
       nodes[i].vbo     = get_mesh.vbo;
       nodes[i].diffuse = get_texture;
-      memcpy(nodes[i].world_mat, world->mesh_data->mesh_draw_calls[i].world_matrix, sizeof(float) * 16);
+      memcpy(nodes[i].world_mat, world->mesh_data->property_draw_call[i].world_matrix, sizeof(float) * 16);
     }
   }
   

@@ -1,7 +1,14 @@
+
+/*
+  Warning:
+  This file is auto_generated any changes here may be overwritten.
+*/
+
 #include <data/world_data/renderer_mesh_data.hpp>
 #include <data/global_data/memory_data.hpp>
+#include <common/error_strings.hpp>
+#include <utilities/logging.hpp>
 #include <utilities/memory.hpp>
-#include <string.h>
 #include <assert.h>
 
 
@@ -9,201 +16,226 @@ namespace World_data {
 
 
 void
-lock(Mesh_renderer_data *data)
+renderer_mesh_data_init(Renderer_mesh_data *data, const size_t size_hint)
 {
-}
+  // Argument validation.
+  assert(data && size_hint);
 
-
-void
-unlock(Mesh_renderer_data *data)
-{
-}
-  
-
-void
-mesh_renderer_init(Mesh_renderer_data *data,
-                   const uint32_t size_hint)
-{
-  assert(data);
-  assert(size_hint);
-
-  // We align everything by 16 bytes.
+  // 16 byte alignment buffer, apply to all for safety.
   constexpr size_t simd_buffer = 16;
 
-  // Calculate the size of things
-  const size_t bytes_entity_id  = sizeof(*data->entity_id) * size_hint + simd_buffer;
-  const size_t bytes_draw_calls = sizeof(*data->mesh_draw_calls) * size_hint + simd_buffer;
-  
-  const size_t bytes_to_alloc   = bytes_entity_id + bytes_draw_calls;
-  
-  // Allocate some memory
+  // Calculate the various sizes of things.
+  const size_t bytes_data_key = sizeof(*data->data_key) * size_hint + simd_buffer;
+  const size_t bytes_property_draw_call = sizeof(*data->property_draw_call) * size_hint + simd_buffer;
+
+  const size_t bytes_to_alloc = bytes_data_key + bytes_property_draw_call;
+
+  // Allocate some memory.
   util::memory_chunk *data_memory = const_cast<util::memory_chunk*>(&data->memory);
-  *data_memory = Memory::request_memory_chunk(bytes_to_alloc, "draw-call-data");
-  
+  *data_memory = Memory::request_memory_chunk(bytes_to_alloc, "entity_data");
+
   assert(data_memory->bytes_in_chunk == bytes_to_alloc);
-  
-  lock(data);
-  
-  // Setup the memory
+
+  data_lock(data);
+
+  // Init memory
   {
     size_t byte_counter = 0;
-    const void *alloc_start = data->memory.chunk_16_byte_aligned_start;
+    const void *alloc_start = data->memory.chunk_start;
 
-    // Entity ids
+    // Assign data_key memory
     {
       void *offset = util::mem_offset(alloc_start, byte_counter);
       void *aligned = util::mem_next_16byte_boundry(offset);
-    
-      data->entity_id = reinterpret_cast<util::generic_id*>(aligned);
+
+      data->data_key = reinterpret_cast<util::generic_id*>(aligned);
       #ifndef NDEBUG
-      memset(offset, 0, bytes_entity_id);
+      memset(offset, 0, bytes_data_key);
       #endif
-      byte_counter += bytes_entity_id;
+
+      byte_counter += bytes_data_key;
       assert(byte_counter <= bytes_to_alloc);
     }
-
-    // Draw calls
+    // Assign property_draw_call memory
     {
       void *offset = util::mem_offset(alloc_start, byte_counter);
       void *aligned = util::mem_next_16byte_boundry(offset);
-    
-      data->mesh_draw_calls = reinterpret_cast<Mesh_renderer_draw_call*>(aligned);
+
+      data->property_draw_call = reinterpret_cast<Mesh_renderer_draw_call*>(aligned);
       #ifndef NDEBUG
-      memset(offset, 0, bytes_draw_calls);
+      memset(offset, 0, bytes_property_draw_call);
       #endif
-      byte_counter += bytes_draw_calls;
+
+      byte_counter += bytes_property_draw_call;
       assert(byte_counter <= bytes_to_alloc);
     }
   }
-  
+
+  // Set the size and capacity
   {
     data->size = 0;
-    
-    uint32_t *capacity = const_cast<uint32_t*>(&data->capacity);
+
+    size_t *capacity = const_cast<size_t*>(&data->capacity);
     *capacity = size_hint;
   }
-  
-  unlock(data);
+
+  data_unlock(data);
 }
 
 
 void
-mesh_renderer_add(Mesh_renderer_data *data,
-                  const util::generic_id id,
-                  const uint32_t model_id,
-                  const uint32_t texture_id)
+renderer_mesh_data_free(Renderer_mesh_data *data)
 {
   assert(data);
-  assert(id);
-  
-  lock(data);
+}
 
-  size_t index;
-  if(mesh_renderer_exists(data, id, &index))
+
+size_t
+renderer_mesh_data_get_size(const Renderer_mesh_data *data)
+{
+  assert(data);
+  return data->size;
+}
+
+
+size_t
+renderer_mesh_data_get_capacity(const Renderer_mesh_data *data)
+{
+  assert(data);
+  return data->capacity;
+}
+
+
+void
+data_lock(Renderer_mesh_data *data)
+{
+  assert(data);
+}
+
+
+void
+data_unlock(Renderer_mesh_data *data)
+{
+  assert(data);
+}
+
+
+bool
+renderer_mesh_data_push_back(Renderer_mesh_data *data, const util::generic_id key, size_t *out_index)
+{
+  assert(data && key);
+  assert(data->size < data->capacity);
+
+  if(data->size >= data->capacity)
   {
-    assert(false); // already exsits, maybe just update the detail with log msg.
-    return;
+    LOG_ERROR(Error_string::no_free_space());
+
+    return false;
   }
-  
-  const uint32_t new_index = data->size;
-  
-  data->entity_id[new_index] = id;
-  data->mesh_draw_calls[new_index].model = model_id;
-  data->mesh_draw_calls[new_index].texture = texture_id;
-  
+
+  const uint32_t index = data->size;
+
+  if(out_index)
+  {
+    *out_index = index;
+  }
+
   ++(data->size);
-  
-  unlock(data);
+
+  data->data_key[index] = key;
+
+  return true;
 }
 
 
-void
-mesh_renderer_update_model(Mesh_renderer_data *data,
-                           const util::generic_id id,
-                           const uint32_t model_id)
+bool
+renderer_mesh_data_erase(Renderer_mesh_data *data, const util::generic_id key)
 {
-  assert(data && id);
+  // Param check
+  assert(data && key);
 
-  lock(data);
+  size_t index_to_erase;
 
-  size_t index;
-  if(mesh_renderer_exists(data, id, &index))
+  if(renderer_mesh_data_exists(data, key, &index_to_erase))
   {
-    data->mesh_draw_calls[index].model = model_id;
-  }
-  
-  unlock(data);
-}
+    assert(index_to_erase < data->size);
 
+    const size_t start_index = index_to_erase + 1;
+    const size_t size_to_end = data->size - index_to_erase - 1;
 
-void
-mesh_renderer_update_texture(Mesh_renderer_data *data,
-                             const util::generic_id id,
-                             const uint32_t texture_id)
-{
-  assert(data && id);
-  
-  lock(data);
-
-  size_t index;
-  if(mesh_renderer_exists(data, id, &index))
-  {
-    data->mesh_draw_calls[index].texture = texture_id;
-  }
-  
-  unlock(data);
-}
-
-
-void
-mesh_renderer_remove(Mesh_renderer_data *data,
-                     const util::generic_id id)
-{
-  assert(data && id);
-  
-  lock(data);
-
-  size_t index;
-  if(mesh_renderer_exists(data, id, &index))
-  {
-    const size_t start_move = index + 1;
-    const size_t end_move = data->size - index - 1;
     --(data->size);
-    
-    memmove(&data->entity_id[index],        &data->entity_id[start_move],       end_move * sizeof(*data->entity_id));
-    memmove(&data->mesh_draw_calls[index],  &data->mesh_draw_calls[start_move], end_move * sizeof(*data->mesh_draw_calls));
+
+    // Shuffle the memory down.
+    memmove(&data->data_key[index_to_erase], &data->data_key[start_index], size_to_end * sizeof(*data->data_key));
+    memmove(&data->property_draw_call[index_to_erase], &data->property_draw_call[start_index], size_to_end * sizeof(*data->property_draw_call));
   }
   else
   {
-    assert(false); // change to warning.
-  }
-  
-  unlock(data);
-}
-  
-  
-bool
-mesh_renderer_exists(const Mesh_renderer_data *data,
-                     const util::generic_id id,
-                     size_t *index)
-{
-  assert(data && id);
+    LOG_ERROR(Error_string::entity_not_found());
 
-  size_t *search_index = index;
-  size_t dummy_index;
-  
-  if(data->size == 0)
-  {
+    assert(false);
+
     return false;
   }
-  
-  if(search_index == nullptr)
-  {
-    search_index = &dummy_index;
-  }
-  
-  return util::generic_id_search_binary(search_index, id, data->entity_id, data->size);
+
+  return true;
 }
-  
-  
+
+
+bool
+renderer_mesh_data_exists(const Renderer_mesh_data *data, const util::generic_id key, size_t *out_index)
+{
+  assert(data && key);
+
+  bool found = false;
+
+  size_t no_index;
+  if(!out_index) { out_index = &no_index; }
+
+  found = util::generic_id_search_binary(out_index, key, data->data_key, data->size);
+
+  return found;
+}
+
+
+bool
+renderer_mesh_data_get_property_draw_call(const Renderer_mesh_data *data, const util::generic_id key, Mesh_renderer_draw_call **out_value)
+{
+  size_t index;
+
+  if(renderer_mesh_data_exists(data, key, &index))
+  {
+    *out_value = &data->property_draw_call[index];
+  }
+  else
+  {
+    LOG_ERROR(Error_string::entity_not_found());
+    return false;
+  }
+
+  return true;
+}
+
+
+bool
+renderer_mesh_data_set_property_draw_call(Renderer_mesh_data *data,  const util::generic_id key, const Mesh_renderer_draw_call *value)
+{
+  assert(data && key);
+
+  size_t index;
+
+  if(renderer_mesh_data_exists(data, key, &index))
+  {
+    data->property_draw_call[index] = *value;
+  }
+  else
+  {
+    LOG_ERROR(Error_string::entity_not_found());
+    return false;
+  }
+
+  return true;
+}
+
+
 } // ns

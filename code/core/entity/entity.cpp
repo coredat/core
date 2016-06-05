@@ -101,14 +101,13 @@ Entity::Entity(Core::World &world)
     {
       auto mesh_data = m_impl->world->data.mesh_data;
       
-      World_data::lock(mesh_data);
+      World_data::data_lock(mesh_data);
       
-      if(success)
+      if(World_data::renderer_mesh_data_push_back(mesh_data, id) && success)
       {
-        World_data::mesh_renderer_add(m_impl->world->data.mesh_data, id, 0, 0);
       }
       
-      World_data::unlock(mesh_data);
+      World_data::data_unlock(mesh_data);
     }
     
     // If we failed then destroy the entity.

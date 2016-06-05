@@ -1,90 +1,89 @@
-#ifndef RENDERER_MESH_DATA_INCLUDED_07A2C7C0_DD0B_4188_8F36_F68046D09FF0
-#define RENDERER_MESH_DATA_INCLUDED_07A2C7C0_DD0B_4188_8F36_F68046D09FF0
+
+/*
+  Warning:
+  This file is auto_generated any changes here may be overwritten.
+*/
+
+#ifndef RENDERER_MESH_DATA_INCLUDED_A3C64FF0_941B_4C9B_9A5E_23C2F5A91445
+#define RENDERER_MESH_DATA_INCLUDED_A3C64FF0_941B_4C9B_9A5E_23C2F5A91445
 
 
 #include <utilities/generic_id.hpp>
 #include <utilities/memory_pool.hpp>
-#include <graphics_api/ogl/ogl_texture.hpp>
-#include <graphics_api/mesh.hpp>
-#include <stdint.h>
 #include <stddef.h>
 
 
 namespace World_data {
 
 
-struct Mesh_renderer_draw_call
-{
+struct Mesh_renderer_draw_call {
   uint32_t model;
   uint32_t texture; // Move this to the material.
   float    world_matrix[16];
 };
 
 
-struct Mesh_renderer_data
+
+struct Renderer_mesh_data
 {
-  util::generic_id          *entity_id       = nullptr;
-  Mesh_renderer_draw_call   *mesh_draw_calls = nullptr;
-  
-  uint32_t                  size             = 0;
-  const uint32_t            capacity         = 0;
-  const util::memory_chunk  memory           = util::memory_chunk();
-};
+  // Data Key
+  util::generic_id *data_key = nullptr;
+
+  // Properties
+  Mesh_renderer_draw_call *property_draw_call = nullptr;
+
+  // Size information
+  size_t size = 0;
+  const size_t capacity = 0;
+
+  // Memory chunk
+  const util::memory_chunk memory = util::memory_chunk();
+
+}; // struct
 
 
 void
-lock(Mesh_renderer_data *data);
+renderer_mesh_data_init(Renderer_mesh_data *data, const size_t size_hint);
 
 
 void
-unlock(Mesh_renderer_data *data);
+renderer_mesh_data_free(Renderer_mesh_data *data);
 
 
-/*!
-  Initialize the mesh renderer data.
-*/
-void
-mesh_renderer_init(Mesh_renderer_data *data,
-                   const uint32_t entity_hint);
+size_t
+renderer_mesh_data_get_size(const Renderer_mesh_data *data);
 
 
-/*!
-  Add a new mesh renderering node to the data.
-*/
-void
-mesh_renderer_add(Mesh_renderer_data *data,
-                  const util::generic_id id,
-                  const uint32_t model_id,
-                  const uint32_t texture_id);
+size_t
+renderer_mesh_data_get_capacity(const Renderer_mesh_data *data);
 
 
 void
-mesh_renderer_update_model(Mesh_renderer_data *data,
-                           const util::generic_id id,
-                           const uint32_t model_id);
+data_lock(Renderer_mesh_data *data);
 
 
 void
-mesh_renderer_update_texture(Mesh_renderer_data *data,
-                             const util::generic_id id,
-                             const uint32_t texture_id);
+data_unlock(Renderer_mesh_data *data);
 
 
-/*!
-  Remove a mesh rendenring node.
-*/
-void
-mesh_renderer_remove(Mesh_renderer_data *data,
-                     const util::generic_id id);
-  
-
-/*!
-  Checks to see if an id exists
-*/
 bool
-mesh_renderer_exists(const Mesh_renderer_data *data,
-                     const util::generic_id id,
-                     size_t *index = nullptr);
+renderer_mesh_data_push_back(Renderer_mesh_data *data, const util::generic_id key, size_t *out_index = nullptr);
+
+
+bool
+renderer_mesh_data_erase(Renderer_mesh_data *data, const util::generic_id key);
+
+
+bool
+renderer_mesh_data_exists(const Renderer_mesh_data *data, const util::generic_id key, size_t *out_index = nullptr);
+
+
+bool
+renderer_mesh_data_get_property_draw_call(const Renderer_mesh_data *data, const util::generic_id key, Mesh_renderer_draw_call **value);
+
+
+bool
+renderer_mesh_data_set_property_draw_call(Renderer_mesh_data *data,  const util::generic_id key, const Mesh_renderer_draw_call *value);
 
 
 } // ns

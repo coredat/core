@@ -11,7 +11,7 @@ namespace World_data {
 struct World;
 struct Camera_pool;
 struct Physics_data;
-struct Mesh_renderer_data;
+struct Renderer_mesh_data;
 struct Text_renderer_data;
 struct Transform_data;
 struct Entity_data;

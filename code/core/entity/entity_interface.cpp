@@ -289,12 +289,16 @@ set_transform(const util::generic_id this_id, World_data::World *world,const Tra
     
     // Update mesh renderer data
     {
+      World_data::data_lock(world->mesh_data);
+    
       size_t mesh_index;
-      if(World_data::mesh_renderer_exists(world->mesh_data, this_id, &mesh_index))
+      if(World_data::renderer_mesh_data_exists(world->mesh_data, this_id, &mesh_index))
       {
         const math::mat4 world_mat = math::transform_get_world_matrix(new_transform);
-        memcpy(world->mesh_data->mesh_draw_calls[mesh_index].world_matrix, &world_mat, sizeof(world_mat));
+        memcpy(world->mesh_data->property_draw_call[mesh_index].world_matrix, &world_mat, sizeof(world_mat));
       }
+      
+      World_data::data_unlock(world->mesh_data);
     }
     
     // If this is a physics object then update it.
@@ -361,8 +365,20 @@ set_material_id(const util::generic_id this_id, World_data::World *world, const 
     return;
   }
   
+  // Update mesh renderer data
   auto data = world->mesh_data;
-  World_data::mesh_renderer_update_texture(data, this_id, id);
+  {
+    World_data::data_lock(data);
+    
+    size_t index;
+    
+    if(World_data::renderer_mesh_data_exists(data, this_id, &index))
+    {
+      data->property_draw_call[index].texture = id;
+    }
+    
+    World_data::data_unlock(data);
+  }
 }
 
 
@@ -375,11 +391,22 @@ get_material_id(const util::generic_id this_id, World_data::World *world)
     return 0;
   }
 
-  auto data = world->mesh_data;
+  uint32_t return_id = 0;
 
+  auto data = world->mesh_data;
+  
+  World_data::data_lock(data);
+  
   size_t index;
-  assert(get_index(&index, this_id, data->entity_id, data->size));
-  return (uint32_t)data->mesh_draw_calls[index].texture;
+  
+  if(World_data::renderer_mesh_data_exists(data, this_id, &index))
+  {
+    return_id = data->property_draw_call[index].texture;
+  }
+  
+  World_data::data_unlock(data);
+  
+  return return_id;
 }
 
 
@@ -406,20 +433,27 @@ set_model(const util::generic_id this_id, World_data::World *world, const Core::
     return;
   }
   
-  auto data = world->mesh_data;
-  auto transform_data = world->transform;
-
-  World_data::mesh_renderer_update_model(data, this_id, model.get_id());
-
-  size_t index;
-  if(World_data::transform_data_exists(transform_data, this_id, &index))
+  // Update mesh renderer data
+  auto mesh_data = world->mesh_data;
   {
-    transform_data->property_aabb[index] = model.get_model_aabb();
+    World_data::data_lock(mesh_data);
+    
+    size_t index;
+    
+    if(World_data::renderer_mesh_data_exists(mesh_data, this_id, &index))
+    {
+      mesh_data->property_draw_call[index].model = model.get_id();
+    }
+    
+    World_data::data_unlock(mesh_data);
   }
-  else
+
+  // Update aabb
+  auto transform_data = world->transform;
   {
-    assert(false);
-    LOG_ERROR(Error_string::entity_not_found());
+    World_data::data_lock(transform_data);
+    World_data::transform_data_set_property_aabb(transform_data, this_id, model.get_model_aabb());
+    World_data::data_unlock(transform_data);
   }
 }
 
