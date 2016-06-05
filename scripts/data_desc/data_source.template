@@ -205,7 +205,7 @@ bool
   size_t no_index;
   if(!out_index) { out_index = &no_index; }
 
-  found = util::generic_id_search_binary(out_index, key, data->{{key_name}}, data->size);
+  found = util::generic_id_search_{{key_search_type}}(out_index, key, data->{{key_name}}, data->size);
 
   return found;
 }

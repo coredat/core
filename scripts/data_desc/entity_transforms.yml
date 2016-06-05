@@ -4,7 +4,6 @@ data:
   namespace: World_data
   header_dir: data/world_data/
   path: code/data/world_data/
-
   
   key:
     name: data_key
