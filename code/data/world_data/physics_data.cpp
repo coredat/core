@@ -1,9 +1,14 @@
+
+/*
+  Warning:
+  This file is auto_generated any changes here may be overwritten.
+*/
+
 #include <data/world_data/physics_data.hpp>
 #include <data/global_data/memory_data.hpp>
 #include <common/error_strings.hpp>
-#include <utilities/memory.hpp>
 #include <utilities/logging.hpp>
-#include <utilities/bits.hpp>
+#include <utilities/memory.hpp>
 #include <assert.h>
 
 
@@ -11,278 +16,338 @@ namespace World_data {
 
 
 void
-physics_init(Physics_data *data,
-             const uint32_t size_hint)
+physics_data_init(Physics_data *data, const size_t size_hint)
 {
+  // Argument validation.
   assert(data && size_hint);
-  
-  // SIMD Buffer, apply to all data.
-  constexpr size_t simd_buffer = 16;
-  
-  const size_t bytes_entity_id = sizeof(*data->entity_id) * size_hint + simd_buffer;
-  const size_t bytes_transform = sizeof(*data->transform) * size_hint + simd_buffer;
-  const size_t bytes_aabb      = sizeof(*data->aabb_collider) * size_hint + simd_buffer;
-  const size_t bytes_mask      = sizeof(*data->collision_id) * size_hint + simd_buffer;
-  
-  const size_t bytes_to_alloc  = bytes_entity_id + bytes_transform + bytes_aabb + bytes_mask;
-  
-  // Allocate memory
-  util::memory_chunk *data_memory = const_cast<util::memory_chunk*>(&data->memory);
-  *data_memory = Memory::request_memory_chunk(bytes_to_alloc, "phys-data");
-  
-  assert(data_memory->bytes_in_chunk == bytes_to_alloc);
-  
-//  lock(data);
 
-  // Setup memory
+  // 16 byte alignment buffer, apply to all for safety.
+  constexpr size_t simd_buffer = 16;
+
+  // Calculate the various sizes of things.
+  const size_t bytes_data_key = sizeof(*data->data_key) * size_hint + simd_buffer;
+  const size_t bytes_property_transform = sizeof(*data->property_transform) * size_hint + simd_buffer;
+  const size_t bytes_property_aabb_collider = sizeof(*data->property_aabb_collider) * size_hint + simd_buffer;
+  const size_t bytes_property_collision_id = sizeof(*data->property_collision_id) * size_hint + simd_buffer;
+
+  const size_t bytes_to_alloc = bytes_data_key + bytes_property_transform + bytes_property_aabb_collider + bytes_property_collision_id;
+
+  // Allocate some memory.
+  util::memory_chunk *data_memory = const_cast<util::memory_chunk*>(&data->memory);
+  *data_memory = Memory::request_memory_chunk(bytes_to_alloc, "physics_data");
+
+  assert(data_memory->bytes_in_chunk == bytes_to_alloc);
+
+  data_lock(data);
+
+  // Init memory
   {
     size_t byte_counter = 0;
-    const void *alloc_start = data->memory.chunk_16_byte_aligned_start;
-    
-    // Set ids
+    const void *alloc_start = data->memory.chunk_start;
+
+    // Assign data_key memory
     {
-      void *offset  = util::mem_offset(alloc_start, byte_counter);
-      void *aligned = util::mem_next_16byte_boundry(offset);
-    
-      data->entity_id = reinterpret_cast<util::generic_id*>(aligned);
-      #ifndef NDEBUG
-      memset(data->entity_id, 0, bytes_entity_id);
-      #endif
-      byte_counter += bytes_entity_id;
-      assert(byte_counter <= bytes_to_alloc);
-    }
-    
-    // Set transforms
-    {
-      void *offset  = util::mem_offset(alloc_start, byte_counter);
+      void *offset = util::mem_offset(alloc_start, byte_counter);
       void *aligned = util::mem_next_16byte_boundry(offset);
 
-      data->transform = reinterpret_cast<math::transform*>(aligned);
+      data->data_key = reinterpret_cast<util::generic_id*>(aligned);
       #ifndef NDEBUG
-      memset(data->entity_id, 0, bytes_transform);
+      memset(offset, 0, bytes_data_key);
       #endif
-      byte_counter += bytes_transform;
-      assert(byte_counter <= bytes_to_alloc);
-    }
 
-    // AABB's
-    {
-      void *offset  = util::mem_offset(alloc_start, byte_counter);
-      void *aligned = util::mem_next_16byte_boundry(offset);
-    
-      data->aabb_collider = reinterpret_cast<math::aabb*>(aligned);
-      #ifndef NDEBUG
-      memset(data->entity_id, 0, bytes_aabb);
-      #endif
-      byte_counter += bytes_aabb;
+      byte_counter += bytes_data_key;
       assert(byte_counter <= bytes_to_alloc);
     }
-    
-    // Collision mask
+    // Assign property_transform memory
     {
-      void *offset  = util::mem_offset(alloc_start, byte_counter);
+      void *offset = util::mem_offset(alloc_start, byte_counter);
       void *aligned = util::mem_next_16byte_boundry(offset);
-      
-      data->collision_id = reinterpret_cast<uint64_t*>(aligned);
+
+      data->property_transform = reinterpret_cast<math::transform*>(aligned);
       #ifndef NDEBUG
-      memset(data->entity_id, 0, bytes_mask);
+      memset(offset, 0, bytes_property_transform);
       #endif
-      byte_counter += bytes_mask;
+
+      byte_counter += bytes_property_transform;
       assert(byte_counter <= bytes_to_alloc);
     }
-    
-    // Set the size and capacity
+    // Assign property_aabb_collider memory
     {
-      data->size = 0;
-      
-      uint32_t *capacity = const_cast<uint32_t*>(&data->capacity);
-      *capacity = size_hint;
+      void *offset = util::mem_offset(alloc_start, byte_counter);
+      void *aligned = util::mem_next_16byte_boundry(offset);
+
+      data->property_aabb_collider = reinterpret_cast<math::aabb*>(aligned);
+      #ifndef NDEBUG
+      memset(offset, 0, bytes_property_aabb_collider);
+      #endif
+
+      byte_counter += bytes_property_aabb_collider;
+      assert(byte_counter <= bytes_to_alloc);
+    }
+    // Assign property_collision_id memory
+    {
+      void *offset = util::mem_offset(alloc_start, byte_counter);
+      void *aligned = util::mem_next_16byte_boundry(offset);
+
+      data->property_collision_id = reinterpret_cast<uint64_t*>(aligned);
+      #ifndef NDEBUG
+      memset(offset, 0, bytes_property_collision_id);
+      #endif
+
+      byte_counter += bytes_property_collision_id;
+      assert(byte_counter <= bytes_to_alloc);
     }
   }
-  
-//  unlock(data);
-  
-//  static util::generic_id entity_data[2048];
-//  data->entity_id = entity_data;
-//  memset(entity_data, 0, sizeof(entity_data));
-//  
-//  static math::transform trans[2048];
-//  data->transform = trans;
-//  memset(trans, 0, sizeof(trans));
-//  
-//  static math::aabb aabbs[2048];
-//  data->aabb_collider = aabbs;
-//
-//  static uint64_t collision_mask[2048];
-//  data->collision_id = collision_mask;
-//  memset(collision_mask, 0, sizeof(collision_mask));
-//  
-//  data->capacity = 2048;
+
+  // Set the size and capacity
+  {
+    data->size = 0;
+
+    size_t *capacity = const_cast<size_t*>(&data->capacity);
+    *capacity = size_hint;
+  }
+
+  data_unlock(data);
 }
 
 
 void
-physics_free(Physics_data *data)
+physics_data_free(Physics_data *data)
 {
-  // Delete the contents.
+  assert(data);
+}
+
+
+size_t
+physics_data_get_size(const Physics_data *data)
+{
+  assert(data);
+  return data->size;
+}
+
+
+size_t
+physics_data_get_capacity(const Physics_data *data)
+{
+  assert(data);
+  return data->capacity;
 }
 
 
 void
-physics_add(Physics_data *data,
-            const util::generic_id id,
-            const math::aabb *aabb,
-            const math::transform *trans)
+data_lock(Physics_data *data)
 {
-  uint32_t index = -1;
-  
-  for(uint32_t i = 0; i < data->capacity; ++i)
-  {
-    // Found a free slot
-    if(i < index && data->entity_id[i] == util::generic_id_invalid())
-    {
-      index = i;
-    }
-    
-    // Found an existing entity that shares same id.
-    if(data->entity_id[i] == id)
-    {
-      index = i;
-      break;
-    }
-  }
-  
-  if(index < (uint32_t)-1)
-  {
-    data->entity_id[index] = id;
-    data->aabb_collider[index] = *aabb;
-    data->transform[index] = *trans;
-  }
-  else
-  {
-    LOG_ERROR(Error_string::no_free_space());
-  }
-  
-  ++data->size;
+  assert(data);
 }
 
 
 void
-physics_add(Physics_data *data,
-            const util::generic_id entity_id)
+data_unlock(Physics_data *data)
 {
-  // If it doens't exist push a new entity in.
-  if(!physics_exists(data, entity_id))
-  {
-    if(data->size <= data->capacity)
-    {
-      data->entity_id[data->size++] = entity_id;
-    }
-  }
+  assert(data);
 }
 
 
 bool
-physics_exists(Physics_data *data,
-               const util::generic_id entity_id,
-               size_t *index)
+physics_data_push_back(Physics_data *data, const util::generic_id key, size_t *out_index)
 {
-  size_t search_index;
-  if(!index)
+  assert(data && key);
+  assert(data->size < data->capacity);
+
+  if(data->size >= data->capacity)
   {
-    index = &search_index;
+    LOG_ERROR(Error_string::no_free_space());
+
+    return false;
   }
 
-  return util::generic_id_search_binary(index,
-                                        entity_id,
-                                        data->entity_id,
-                                        data->size);
+  const uint32_t index = data->size;
+
+  if(out_index)
+  {
+    *out_index = index;
+  }
+
+  ++(data->size);
+
+  data->data_key[index] = key;
+
+  // Memset the properties
+  {
+    memset(&data->property_transform[index], 0, sizeof(*data->property_transform));
+    memset(&data->property_aabb_collider[index], 0, sizeof(*data->property_aabb_collider));
+    memset(&data->property_collision_id[index], 0, sizeof(*data->property_collision_id));
+  }
+
+  return true;
 }
 
 
-void
-physics_update_aabb(Physics_data *data,
-                    const util::generic_id entity_id,
-                    const math::aabb *aabb)
+bool
+physics_data_erase(Physics_data *data, const util::generic_id key)
+{
+  // Param check
+  assert(data && key);
+
+  size_t index_to_erase;
+
+  if(physics_data_exists(data, key, &index_to_erase))
+  {
+    assert(index_to_erase < data->size);
+
+    const size_t start_index = index_to_erase + 1;
+    const size_t size_to_end = data->size - index_to_erase - 1;
+
+    --(data->size);
+
+    // Shuffle the memory down.
+    memmove(&data->data_key[index_to_erase], &data->data_key[start_index], size_to_end * sizeof(*data->data_key));
+    memmove(&data->property_transform[index_to_erase], &data->property_transform[start_index], size_to_end * sizeof(*data->property_transform));
+    memmove(&data->property_aabb_collider[index_to_erase], &data->property_aabb_collider[start_index], size_to_end * sizeof(*data->property_aabb_collider));
+    memmove(&data->property_collision_id[index_to_erase], &data->property_collision_id[start_index], size_to_end * sizeof(*data->property_collision_id));
+  }
+  else
+  {
+    return false;
+  }
+
+  return true;
+}
+
+
+bool
+physics_data_exists(const Physics_data *data, const util::generic_id key, size_t *out_index)
+{
+  assert(data && key);
+
+  if(data->size == 0)
+  {
+    return false;
+  }
+
+  bool found = false;
+
+  size_t no_index;
+  if(!out_index) { out_index = &no_index; }
+
+  found = util::generic_id_search_binary(out_index, key, data->data_key, data->size);
+
+  return found;
+}
+
+
+bool
+physics_data_get_property_transform(const Physics_data *data, const util::generic_id key, math::transform *out_value)
 {
   size_t index;
-  if(physics_exists(data, entity_id, &index))
+
+  if(physics_data_exists(data, key, &index))
   {
-    data->aabb_collider[index] = *aabb;
+    *out_value = data->property_transform[index];
   }
+  else
+  {
+    return false;
+  }
+
+  return true;
 }
 
 
-void
-physics_update_transform(Physics_data *data,
-                         const util::generic_id entity_id,
-                         const math::transform *transform)
+bool
+physics_data_set_property_transform(Physics_data *data,  const util::generic_id key, const math::transform value)
+{
+  assert(data && key);
+
+  size_t index;
+
+  if(physics_data_exists(data, key, &index))
+  {
+    data->property_transform[index] = value;
+  }
+  else
+  {
+    return false;
+  }
+
+  return true;
+}
+
+
+bool
+physics_data_get_property_aabb_collider(const Physics_data *data, const util::generic_id key, math::aabb *out_value)
 {
   size_t index;
-  if(physics_exists(data, entity_id, &index))
+
+  if(physics_data_exists(data, key, &index))
   {
-    data->transform[index] = *transform;
+    *out_value = data->property_aabb_collider[index];
   }
+  else
+  {
+    return false;
+  }
+
+  return true;
 }
 
 
-void
-physics_update_collision_mask(Physics_data *data,
-                              const util::generic_id entity_id,
-                              const uint32_t this_id,
-                              const uint32_t mask_ids)
+bool
+physics_data_set_property_aabb_collider(Physics_data *data,  const util::generic_id key, const math::aabb value)
+{
+  assert(data && key);
+
+  size_t index;
+
+  if(physics_data_exists(data, key, &index))
+  {
+    data->property_aabb_collider[index] = value;
+  }
+  else
+  {
+    return false;
+  }
+
+  return true;
+}
+
+
+bool
+physics_data_get_property_collision_id(const Physics_data *data, const util::generic_id key, uint64_t *out_value)
 {
   size_t index;
-  if(physics_exists(data, entity_id, &index))
+
+  if(physics_data_exists(data, key, &index))
   {
-    const uint64_t flags = util::bits_pack(this_id, mask_ids);
-    data->collision_id[index] = flags;
+    *out_value = data->property_collision_id[index];
   }
+  else
+  {
+    return false;
+  }
+
+  return true;
 }
 
 
-
-void
-physics_remove(Physics_data *data,
-               const util::generic_id id)
+bool
+physics_data_set_property_collision_id(Physics_data *data,  const util::generic_id key, const uint64_t value)
 {
-  for(uint32_t i = 0; i < data->capacity; ++i)
+  assert(data && key);
+
+  size_t index;
+
+  if(physics_data_exists(data, key, &index))
   {
-    if(data->entity_id[i] == id)
-    {
-      const uint32_t start = i;
-      
-      const uint32_t start_move = i + 1;
-      const uint32_t end_move = data->capacity - i - 1;
-      
-      memmove(&data->entity_id[start], &data->entity_id[start_move], end_move * sizeof(*data->entity_id));
-      memmove(&data->transform[start], &data->transform[start_move], end_move * sizeof(*data->transform));
-      memmove(&data->aabb_collider[start], &data->aabb_collider[start_move], end_move * sizeof(*data->aabb_collider));
-      memmove(&data->collision_id[start], &data->collision_id[start_move], end_move * sizeof(*data->collision_id));
-
-      --data->size;
-    }
+    data->property_collision_id[index] = value;
   }
-}
-
-
-void
-physics_update(Physics_data *data,
-               const util::generic_id id,
-               const math::aabb *aabb,
-               const math::transform *trans)
-{
-  for(uint32_t i = 0; i < data->capacity; ++i)
+  else
   {
-    // Found an existing entity that shares same id.
-    if(data->entity_id[i] == id)
-    {
-      data->aabb_collider[i] = *aabb;
-      data->transform[i] = *trans;
-    }
+    return false;
   }
-}
 
+  return true;
+}
 
 
 } // ns

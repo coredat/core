@@ -42,6 +42,15 @@ def parse_desc(yml)
   return_data[:key_type] = "util::generic_id"
   return_data[:key_name] = data_key['name'] || "data_key"
 
+  if data_key.has_key?('error_on_missing_key')
+    return_data[:key_missing_error] = data_key['error_on_missing_key']
+  else
+    return_data[:key_missing_error] = true
+  end
+
+  return_data[:key_search_type] = data_key['search_type'] || "linear"
+
+
   # Properties
   properties = data['properties']
   return_data[:properties] = []

@@ -1,0 +1,26 @@
+data:
+  type: Physics_data
+  name: physics_data
+  namespace: World_data
+  header_dir: data/world_data/
+  path: code/data/world_data/
+
+  key:
+    error_on_missing_key: false
+    search_type: linear
+
+  properties:
+    - name: transform
+      type: math::transform
+      return: value
+      include: <math/transform/transform.hpp>
+
+    - name: aabb_collider
+      type: math::aabb
+      return: value
+      include: <math/geometry/aabb.hpp>
+
+    - name: collision_id
+      type: uint64_t
+      return: value
+      include: <stdint.h>

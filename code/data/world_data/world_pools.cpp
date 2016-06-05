@@ -87,7 +87,7 @@ world_update_scene_graph_changes(World_data::World *world_data,
     entity_data_erase(world_data->entity, id);
     transform_data_erase(world_data->transform, id);
     renderer_mesh_data_erase(world_data->mesh_data, id);
-    physics_remove(world_data->physics_data, id);
+    physics_data_erase(world_data->physics_data, id);
   }
 }
 

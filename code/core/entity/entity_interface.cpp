@@ -13,6 +13,7 @@
 #include <math/transform/transform.hpp>
 #include <math/geometry/aabb.hpp>
 #include <utilities/logging.hpp>
+#include <utilities/bits.hpp>
 #include <data/world_data/transform_data.hpp>
 #include <data/world_data/entity_data.hpp>
 #include <data/world_data/pending_scene_graph_change_data.hpp>
@@ -308,12 +309,17 @@ set_transform(const util::generic_id this_id, World_data::World *world,const Tra
                                                this_id,
                                                &components);
       
+      // Update the physics stuff.
       if(components & World_data::Entity_component::has_physics)
       {
-        World_data::physics_update(world->physics_data,
-                                   this_id,
-                                   &data->property_aabb[index],
-                                   &data->property_transform[index]);
+        auto phys_data = world->physics_data;
+      
+        World_data::data_lock(phys_data);
+        
+        World_data::physics_data_set_property_transform(phys_data, this_id, data->property_transform[index]);
+        World_data::physics_data_set_property_aabb_collider(phys_data, this_id, data->property_aabb[index]);
+        
+        World_data::data_unlock(phys_data);
       }
     }
   }
@@ -520,7 +526,19 @@ set_collider(const util::generic_id this_id, World_data::World *world, const Cor
             comps = comps | World_data::Entity_component::has_physics;
             
             World_data::entity_data_set_property_components(entity_data, this_id, comps);
-            World_data::physics_add(phys_pool, this_id, &aabb, &transform);
+            
+            // Set physics
+            {
+              World_data::data_lock(phys_pool);
+              
+              if(World_data::physics_data_push_back(phys_pool, this_id))
+              {
+                World_data::physics_data_set_property_transform(phys_pool, this_id, transform);
+                World_data::physics_data_set_property_collision_id(phys_pool, this_id, 0);
+              }
+              
+              World_data::data_unlock(phys_pool);
+            }
           }
           break;
         }
@@ -559,7 +577,12 @@ set_rigidbody_properties(const util::generic_id this_id, World_data::World *worl
 
   if (phys_pool)
   {
-    World_data::physics_update_collision_mask(phys_pool, this_id, props.get_rb_id(), props.get_rb_mask());
+    World_data::data_lock(phys_pool);
+    
+    const uint64_t mask = util::bits_pack(props.get_rb_id(), props.get_rb_mask());
+    
+    World_data::physics_data_set_property_collision_id(phys_pool, this_id, mask);
+    World_data::data_unlock(phys_pool);
   }
 }
 

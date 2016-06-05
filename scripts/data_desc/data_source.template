@@ -36,7 +36,7 @@ void
 
   // Allocate some memory.
   util::memory_chunk *data_memory = const_cast<util::memory_chunk*>(&data->memory);
-  *data_memory = Memory::request_memory_chunk(bytes_to_alloc, \"entity_data\");
+  *data_memory = Memory::request_memory_chunk(bytes_to_alloc, \"{{data_name}}\");
 
   assert(data_memory->bytes_in_chunk == bytes_to_alloc);
 
@@ -139,6 +139,13 @@ bool
 
   data->{{key_name}}[index] = key;
 
+  // Memset the properties
+  {
+    % properties.each do |prop|
+    memset(&data->{{prop[:name]}}[index], 0, sizeof(*data->{{prop[:name]}}));
+    % end
+  }
+
   return true;
 }
 
@@ -171,10 +178,11 @@ bool
   }
   else
   {
+    % if key_missing_error
     LOG_ERROR(Error_string::entity_not_found());
-
     assert(false);
 
+    % end
     return false;
   }
 
@@ -186,6 +194,11 @@ bool
 {{data_name}}_exists(const {{data_type}} *data, const {{key_type}} key, size_t *out_index)
 {
   assert(data && key);
+
+  if(data->size == 0)
+  {
+    return false;
+  }
 
   bool found = false;
 
@@ -218,7 +231,11 @@ bool
   }
   else
   {
+    % if key_missing_error
     LOG_ERROR(Error_string::entity_not_found());
+    assert(false);
+
+    % end
     return false;
   }
 
@@ -244,7 +261,11 @@ bool
   }
   else
   {
+    % if key_missing_error
     LOG_ERROR(Error_string::entity_not_found());
+    assert(false);
+
+    % end
     return false;
   }
 

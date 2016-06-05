@@ -32,7 +32,7 @@ renderer_mesh_data_init(Renderer_mesh_data *data, const size_t size_hint)
 
   // Allocate some memory.
   util::memory_chunk *data_memory = const_cast<util::memory_chunk*>(&data->memory);
-  *data_memory = Memory::request_memory_chunk(bytes_to_alloc, "entity_data");
+  *data_memory = Memory::request_memory_chunk(bytes_to_alloc, "renderer_mesh_data");
 
   assert(data_memory->bytes_in_chunk == bytes_to_alloc);
 
@@ -144,6 +144,11 @@ renderer_mesh_data_push_back(Renderer_mesh_data *data, const util::generic_id ke
 
   data->data_key[index] = key;
 
+  // Memset the properties
+  {
+    memset(&data->property_draw_call[index], 0, sizeof(*data->property_draw_call));
+  }
+
   return true;
 }
 
@@ -172,7 +177,6 @@ renderer_mesh_data_erase(Renderer_mesh_data *data, const util::generic_id key)
   else
   {
     LOG_ERROR(Error_string::entity_not_found());
-
     assert(false);
 
     return false;
@@ -186,6 +190,11 @@ bool
 renderer_mesh_data_exists(const Renderer_mesh_data *data, const util::generic_id key, size_t *out_index)
 {
   assert(data && key);
+
+  if(data->size == 0)
+  {
+    return false;
+  }
 
   bool found = false;
 
@@ -210,6 +219,8 @@ renderer_mesh_data_get_property_draw_call(const Renderer_mesh_data *data, const 
   else
   {
     LOG_ERROR(Error_string::entity_not_found());
+    assert(false);
+
     return false;
   }
 
@@ -231,6 +242,8 @@ renderer_mesh_data_set_property_draw_call(Renderer_mesh_data *data,  const util:
   else
   {
     LOG_ERROR(Error_string::entity_not_found());
+    assert(false);
+
     return false;
   }
 

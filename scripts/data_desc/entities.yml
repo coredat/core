@@ -13,9 +13,6 @@ data:
         };
       } // ns
 
-  key:
-    name: data_key
-
   properties:
     - name: name
       type: char_32

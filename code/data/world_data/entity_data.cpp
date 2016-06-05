@@ -186,6 +186,14 @@ entity_data_push_back(Entity_data *data, const util::generic_id key, size_t *out
 
   data->data_key[index] = key;
 
+  // Memset the properties
+  {
+    memset(&data->property_name[index], 0, sizeof(*data->property_name));
+    memset(&data->property_tag[index], 0, sizeof(*data->property_tag));
+    memset(&data->property_components[index], 0, sizeof(*data->property_components));
+    memset(&data->property_user_data[index], 0, sizeof(*data->property_user_data));
+  }
+
   return true;
 }
 
@@ -217,7 +225,6 @@ entity_data_erase(Entity_data *data, const util::generic_id key)
   else
   {
     LOG_ERROR(Error_string::entity_not_found());
-
     assert(false);
 
     return false;
@@ -231,6 +238,11 @@ bool
 entity_data_exists(const Entity_data *data, const util::generic_id key, size_t *out_index)
 {
   assert(data && key);
+
+  if(data->size == 0)
+  {
+    return false;
+  }
 
   bool found = false;
 
@@ -255,6 +267,8 @@ entity_data_get_property_name(const Entity_data *data, const util::generic_id ke
   else
   {
     LOG_ERROR(Error_string::entity_not_found());
+    assert(false);
+
     return false;
   }
 
@@ -276,6 +290,8 @@ entity_data_set_property_name(Entity_data *data,  const util::generic_id key, co
   else
   {
     LOG_ERROR(Error_string::entity_not_found());
+    assert(false);
+
     return false;
   }
 
@@ -295,6 +311,8 @@ entity_data_get_property_tag(const Entity_data *data, const util::generic_id key
   else
   {
     LOG_ERROR(Error_string::entity_not_found());
+    assert(false);
+
     return false;
   }
 
@@ -316,6 +334,8 @@ entity_data_set_property_tag(Entity_data *data,  const util::generic_id key, con
   else
   {
     LOG_ERROR(Error_string::entity_not_found());
+    assert(false);
+
     return false;
   }
 
@@ -335,6 +355,8 @@ entity_data_get_property_components(const Entity_data *data, const util::generic
   else
   {
     LOG_ERROR(Error_string::entity_not_found());
+    assert(false);
+
     return false;
   }
 
@@ -356,6 +378,8 @@ entity_data_set_property_components(Entity_data *data,  const util::generic_id k
   else
   {
     LOG_ERROR(Error_string::entity_not_found());
+    assert(false);
+
     return false;
   }
 
@@ -375,6 +399,8 @@ entity_data_get_property_user_data(const Entity_data *data, const util::generic_
   else
   {
     LOG_ERROR(Error_string::entity_not_found());
+    assert(false);
+
     return false;
   }
 
@@ -396,6 +422,8 @@ entity_data_set_property_user_data(Entity_data *data,  const util::generic_id ke
   else
   {
     LOG_ERROR(Error_string::entity_not_found());
+    assert(false);
+
     return false;
   }
 

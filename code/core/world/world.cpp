@@ -102,7 +102,7 @@ World::World(const Context &ctx, const World_setup setup)
   World_data::camera_pool_init(&camera_pool);
     
   static World_data::Physics_data physics_data;
-  World_data::physics_init(&physics_data, entity_hint);
+  World_data::physics_data_init(&physics_data, entity_hint);
   
   static World_data::Renderer_mesh_data mesh_data;
   World_data::renderer_mesh_data_init(&mesh_data, entity_hint);
@@ -335,9 +335,9 @@ World::get_overlapping_aabbs(const std::function<void(const Core::Collision_pair
   
   for(uint32_t i = 0; i < data->size; ++i)
   {
-    math::aabb box_copy(data->aabb_collider[i]);
-    math::aabb_scale(box_copy, data->transform[i].scale);
-    math::aabb_set_origin(box_copy, data->transform[i].position);
+    math::aabb box_copy(data->property_aabb_collider[i]);
+    math::aabb_scale(box_copy, data->property_transform[i].scale);
+    math::aabb_set_origin(box_copy, data->property_transform[i].position);
     
     boundings.push_back(box_copy);
   }
@@ -370,12 +370,12 @@ World::get_overlapping_aabbs(const std::function<void(const Core::Collision_pair
       continue;
     }
     
-    id.push_back(data->entity_id[i]);
+    id.push_back(data->data_key[i]);
     
-    math::aabb box_copy(data->aabb_collider[i]);
-    uint64_t collision_mask(data->collision_id[i]);
-    math::aabb_scale(box_copy, data->transform[i].scale);
-    math::aabb_set_origin(box_copy, data->transform[i].position);
+    math::aabb box_copy(data->property_aabb_collider[i]);
+    uint64_t collision_mask(data->property_collision_id[i]);
+    math::aabb_scale(box_copy, data->property_transform[i].scale);
+    math::aabb_set_origin(box_copy, data->property_transform[i].position);
     
     boxes.push_back(Physics::Collision::Axis_collidable{collision_mask, box_copy});
   }
