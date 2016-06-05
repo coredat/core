@@ -48,8 +48,7 @@ def parse_desc(yml)
     return_data[:key_missing_error] = true
   end
 
-  return_data[:key_search_type] = data_key['search_type'] || "linear"
-
+  return_data[:key_search_type] = data_key['search_type'] || "linearly"
 
   # Properties
   properties = data['properties']
@@ -98,6 +97,8 @@ end
 
 
 # Processes a template string.
+# Mostly derived from this.
+# http://bits.citrusbyte.com/how-to-write-a-template-library/
 def parse_template(template, vars = {})
 
   lines = template.split("\n")

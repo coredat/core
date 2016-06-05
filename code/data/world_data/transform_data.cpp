@@ -217,7 +217,7 @@ transform_data_exists(const Transform_data *data, const util::generic_id key, si
   size_t no_index;
   if(!out_index) { out_index = &no_index; }
 
-  found = util::generic_id_search_binary(out_index, key, data->data_key, data->size);
+  found = util::generic_id_search_linearly(out_index, key, data->data_key, data->size);
 
   return found;
 }

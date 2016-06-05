@@ -230,7 +230,7 @@ physics_data_exists(const Physics_data *data, const util::generic_id key, size_t
   size_t no_index;
   if(!out_index) { out_index = &no_index; }
 
-  found = util::generic_id_search_binary(out_index, key, data->data_key, data->size);
+  found = util::generic_id_search_linearly(out_index, key, data->data_key, data->size);
 
   return found;
 }
