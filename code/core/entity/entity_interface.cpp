@@ -284,13 +284,13 @@ set_transform(const util::generic_id this_id, World_data::World *world,const Tra
     return;
   }
   
-  auto data = world->transform;
+  auto transform_data = world->transform;
 
   size_t index;
-  if(World_data::transform_data_exists(data, this_id, &index))
+  if(World_data::transform_data_exists(transform_data, this_id, &index))
   {
     const math::transform new_transform = math::transform_init(set_transform.get_position(), set_transform.get_scale(), set_transform.get_rotation());
-    data->property_transform[index] = new_transform;
+    transform_data->property_transform[index] = new_transform;
     
     // Update mesh renderer data
     {
@@ -320,8 +320,16 @@ set_transform(const util::generic_id this_id, World_data::World *world,const Tra
       
         World_data::data_lock(phys_data);
         
-        World_data::physics_data_set_property_transform(phys_data, this_id, data->property_transform[index]);
-        World_data::physics_data_set_property_aabb_collider(phys_data, this_id, data->property_aabb[index]);
+        math::aabb box = transform_data->property_aabb[index];
+        
+        World_data::physics_data_set_property_transform(phys_data, this_id, new_transform);
+        World_data::physics_data_set_property_aabb_collider(phys_data, this_id, box);
+        
+        // Transform box
+        math::aabb_set_origin(box, new_transform.position);
+        math::aabb_scale(box, new_transform.scale);
+        
+        World_data::physics_data_set_property_transformed_aabb_collider(phys_data, this_id, box);
         
         World_data::data_unlock(phys_data);
       }
@@ -423,7 +431,8 @@ get_material_id(const util::generic_id this_id, World_data::World *world)
 void
 set_material(const util::generic_id this_id, World_data::World *world, Core::Material &material)
 {
-
+  assert(false);
+  LOG_ERROR(Error_string::no_implimentation());
 }
 
 
@@ -538,6 +547,15 @@ set_collider(const util::generic_id this_id, World_data::World *world, const Cor
               if(World_data::physics_data_push_back(phys_pool, this_id))
               {
                 World_data::physics_data_set_property_transform(phys_pool, this_id, transform);
+                
+                math::aabb box;
+                World_data::physics_data_get_property_aabb_collider(phys_pool, this_id, &box);
+                
+                math::aabb_scale(box, transform.scale);
+                math::aabb_set_origin(box, transform.position);
+                
+                World_data::physics_data_set_property_transformed_aabb_collider(phys_pool, this_id, box);
+                
                 World_data::physics_data_set_property_collision_id(phys_pool, this_id, 0);
               }
               
@@ -569,6 +587,8 @@ set_collider(const util::generic_id this_id, World_data::World *world, const Cor
 Collider
 get_collider(const util::generic_id this_id, World_data::World *world)
 {
+  assert(false);
+  LOG_ERROR(Error_string::no_implimentation());
   return Collider();
 }
 
@@ -594,6 +614,8 @@ set_rigidbody_properties(const util::generic_id this_id, World_data::World *worl
 Core::Rigidbody_properties
 get_rigidbody_properties(const util::generic_id this_id, World_data::World *world)
 {
+  assert(false);
+  LOG_ERROR(Error_string::no_implimentation());
   return Rigidbody_properties();
 }
 

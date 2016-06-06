@@ -322,7 +322,9 @@ World::get_overlapping_aabbs(const std::function<void(const Core::Collision_pair
   
   Physics::Broadphase::Sweep sweep;
   Physics::Broadphase::sweep_init(&sweep, data->size);
-  Physics::Broadphase::sweep_calculate(&sweep, bounds, data->size);
+  
+//  assert(false); // Why does data->property_transformed_aabb_collider fail!
+  Physics::Broadphase::sweep_calculate(&sweep, data->property_transformed_aabb_collider, data->size);
   
   Physics::Broadphase::Prune prune;
   Physics::Broadphase::prune_init(&prune, &sweep);
