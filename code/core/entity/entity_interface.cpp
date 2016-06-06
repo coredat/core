@@ -587,6 +587,29 @@ get_model(const util::generic_id this_id, World_data::World *world)
 }
 
 
+namespace
+{
+
+inline void update_component(const util::generic_id this_id, World_data::World *data, const uint32_t component_id)
+{
+  auto entity_data = data->entity;
+  
+  World_data::data_lock(entity_data);
+
+  uint32_t comps;
+  World_data::entity_data_get_property_components(entity_data, this_id, &comps);
+
+  // Add new component_id
+  comps = comps | component_id;
+
+  World_data::entity_data_set_property_components(entity_data, this_id, comps);
+  
+  World_data::data_unlock(entity_data);
+}
+
+}
+
+
 void
 set_collider(const util::generic_id this_id, World_data::World *world, const Core::Collider &collider)
 {
@@ -595,10 +618,7 @@ set_collider(const util::generic_id this_id, World_data::World *world, const Cor
     LOG_ERROR(Error_string::entity_is_invalid());
     return;
   }
-
-  auto entity_data = world->entity;
-  assert(entity_data);
-
+  
   auto phys_pool = world->physics_data;
   assert(phys_pool);
   
@@ -610,52 +630,43 @@ set_collider(const util::generic_id this_id, World_data::World *world, const Cor
     size_t index;
     if(World_data::transform_data_exists(transform_data, this_id, &index))
     {
-      const math::transform transform = transform_data->property_transform[index];
-      math::aabb aabb = transform_data->property_aabb[index];
+      //TODO: This can be async
+      update_component(this_id, world, World_data::Entity_component::has_physics);
     
       switch(collider.get_type())
       {
         case(Core::Collider::Type::box):
         {
           const Box_collider box_collider = Collider_utis::cast_to_box_collider(collider);
-          const math::vec3 box_scale = math::vec3_init(box_collider.get_x_half_extent() * 2.f, box_collider.get_y_half_extent() * 2.f, box_collider.get_z_half_extent() * 2.f);
-          const math::vec3 final_box_scale = math::vec3_multiply(box_scale, transform.scale);
+          const math::vec3 box_scale = math::vec3_init(box_collider.get_x_half_extent() * 2.f,
+                                                       box_collider.get_y_half_extent() * 2.f,
+                                                       box_collider.get_z_half_extent() * 2.f);
           
-          math::aabb_scale(aabb, final_box_scale);
+          math::aabb collider_box;
+          math::aabb_scale(collider_box, box_scale);
           
           // Get the current components and add physics
           {
-            uint32_t comps;
-            World_data::entity_data_get_property_components(entity_data, this_id, &comps);
-            
-            // Add physics and set it.
-            comps = comps | World_data::Entity_component::has_physics;
-            
-            World_data::entity_data_set_property_components(entity_data, this_id, comps);
-            
             // Set physics
             {
               World_data::data_lock(phys_pool);
               
+              // Add the collider box
               if(World_data::physics_data_push_back(phys_pool, this_id))
               {
-              
-//                World_data::physics_data_set_property_transform(phys_pool, this_id, transform);
-//                
-                math::aabb box;
-                World_data::physics_data_get_property_aabb_collider(phys_pool, this_id, &box);
-                World_data::physics_data_set_property_aabb_collider(phys_pool, this_id, aabb);
-//
-
-                update_collider(this_id, world, &transform);
-//                math::aabb_scale(aabb, transform.scale);
-//                math::aabb_set_origin(aabb, transform.position);
-//                
-//                World_data::physics_data_set_property_transformed_aabb_collider(phys_pool, this_id, aabb);
-//                World_data::physics_data_set_property_collision_id(phys_pool, this_id, 0);
+                World_data::physics_data_set_property_aabb_collider(phys_pool, this_id, collider_box);
               }
               
               World_data::data_unlock(phys_pool);
+              
+              // Get current transform
+              math::transform curr_transform;
+              
+              World_data::data_lock(world->transform);
+              World_data::transform_data_get_property_transform(world->transform, this_id, &curr_transform);
+              World_data::data_unlock(world->transform);
+              
+              update_collider(this_id, world, &curr_transform);
             }
           }
           break;
