@@ -3,6 +3,7 @@
 
 
 #include <data/world_data/world.hpp>
+#include <core/world/world_fwd.hpp>
 
 
 namespace Debug_menu {

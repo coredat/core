@@ -34,6 +34,10 @@ unknown_type() { return "Unknown type."; }
 
 
 constexpr const char *
+no_implimentation() { return "Feature not implimented."; }
+
+
+constexpr const char *
 resource_not_found() { return "Resource not found."; }
 
 

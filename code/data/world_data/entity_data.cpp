@@ -188,7 +188,7 @@ entity_data_push_back(Entity_data *data, const util::generic_id key, size_t *out
 
   // Memset the properties
   {
-    memset(&data->property_name[index], 0, sizeof(*data->property_name));
+    memset(&data->property_name[index * 32], 0, sizeof(*data->property_name));
     memset(&data->property_tag[index], 0, sizeof(*data->property_tag));
     memset(&data->property_components[index], 0, sizeof(*data->property_components));
     memset(&data->property_user_data[index], 0, sizeof(*data->property_user_data));

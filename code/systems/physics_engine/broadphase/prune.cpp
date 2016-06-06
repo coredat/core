@@ -3,7 +3,7 @@
 #include <math/general/general.hpp>
 #include <assert.h>
 
-//#define CORE_USE_SCRATCH_ALLOC
+#define CORE_USE_SCRATCH_ALLOC
 
 #ifdef CORE_USE_SCRATCH_ALLOC
 #include <data/global_data/memory_data.hpp>
@@ -30,7 +30,7 @@ prune_init(Prune *prune, const Sweep *sweep)
   #ifdef CORE_USE_SCRATCH_ALLOC
   const size_t bytes = sizeof(uint32_t) * capacity;
    
-  prune->ids = new(memory::scratch_alloc(bytes)) uint32_t[capacity];
+  prune->ids = new(Memory::scratch_alloc(bytes)) uint32_t[capacity];
   #else
   prune->ids = new uint32_t[capacity];
   #endif

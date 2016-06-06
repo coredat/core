@@ -49,6 +49,8 @@ scratch_reset()
 void*
 scratch_alloc(const size_t bytes)
 {
+  assert(bytes);
+
   if((scratch_size + bytes) < scratch_capacity)
   {
     scratch_size += bytes;
@@ -68,13 +70,19 @@ scratch_alloc(const size_t bytes)
 void*
 scratch_alloc_aligned(const size_t bytes)
 {
-  return nullptr;
+  assert(bytes);
+  
+  void *ptr = scratch_alloc(bytes + 15);
+  
+  return util::mem_next_16byte_boundry(ptr);
 }
 
 
 util::memory_chunk
 request_memory_chunk(const size_t bytes, const char *name)
 {
+  assert(bytes);
+
   if(memory_pool.header)
   {
     return util::memory_pool_get_chunk(&memory_pool, bytes, name);

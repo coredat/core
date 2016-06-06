@@ -2,56 +2,18 @@
 #include <core/world/world_setup.hpp>
 #include <core/context/context.hpp>
 #include <core/memory/memory.hpp>
-
-#include <graphics_api/initialize.hpp>
-#include <graphics_api/clear.hpp>
-
 #include <core/physics/collision_pair.hpp>
 #include <core/entity/entity.hpp>
 #include <core/entity/entity_ref.hpp>
 #include <core/world/detail/world_detail.hpp>
-
-#include <renderer/renderer.hpp>
-#include <renderer/simple_renderer/simple_renderer.hpp>
-#include <renderer/debug_line_renderer/debug_line_renderer.hpp>
-#include <renderer/gui_renderer/gui_renderer.hpp>
-
-#include <data/world_data/physics_data.hpp>
-#include <utilities/timer.hpp>
-#include <utilities/logging.hpp>
-#include <utilities/generic_id.hpp>
-#include <math/math.hpp> // remove
-#include <vector> // remove
-
-#include <systems/physics_engine/broadphase/sweep.hpp>
-#include <systems/physics_engine/broadphase/prune.hpp>
-#include <systems/physics_engine/collision/aabb_overlap.hpp>
-#include <systems/physics_engine/collision/collision_pairs.hpp>
-#include <systems/physics_engine/physics_engine.hpp>
-#include <systems/physics_engine/collision/axis_collidable.hpp>
-
-#include <data/global_data/resource_data.hpp>
-
-#include <data/world_data/transform_data.hpp>
-#include <data/world_data/entity_data.hpp>
-
-#include <3rdparty/imgui/imgui.h>
-#include <3rdparty/imgui/imgui_impl_sdl_gl3.h>
-#include <string>
-
-#include <debug_gui/debug_menu.hpp>
-
-// Header dump start
 #include <core/renderer/material_renderer.hpp>
-#include <core/entity/entity.hpp>
-#include <core/entity/entity_ref.hpp>
 #include <core/color/color.hpp>
 #include <core/color/color_utils.hpp>
 #include <core/camera/camera_properties.hpp>
 #include <core/transform/transform.hpp>
 
-#include <graphics_api/clear.hpp>
 #include <graphics_api/initialize.hpp>
+#include <graphics_api/clear.hpp>
 #include <graphics_api/mesh.hpp>
 
 #include <renderer/simple_renderer/simple_renderer_node.hpp>
@@ -59,19 +21,40 @@
 #include <renderer/debug_line_renderer/debug_line_renderer_node.hpp>
 #include <renderer/debug_line_renderer/debug_line_renderer.hpp>
 #include <renderer/renderer.hpp>
-#include <renderer/simple_renderer/simple_renderer.hpp>
-
-#include <data/global_data/resource_data.hpp>
-
-#include <systems/transform/transformations.hpp>
-#include <data/world_data/world_data.hpp>
-#include <math/math.hpp>
-#include <vector>
-
-#include <utilities/conversion.hpp>
-// Header dump end
-#include <common/error_strings.hpp>
 #include <systems/renderer_material/material_renderer.hpp>
+
+#include <data/world_data/physics_data.hpp>
+#include <data/global_data/resource_data.hpp>
+#include <data/world_data/transform_data.hpp>
+#include <data/world_data/entity_data.hpp>
+#include <data/global_data/resource_data.hpp>
+#include <data/global_data/memory_data.hpp>
+#include <data/world_data/world_data.hpp>
+
+#include <common/error_strings.hpp>
+#include <debug_gui/debug_menu.hpp>
+
+#include <systems/physics_engine/broadphase/sweep.hpp>
+#include <systems/physics_engine/broadphase/prune.hpp>
+#include <systems/physics_engine/collision/aabb_overlap.hpp>
+#include <systems/physics_engine/collision/collision_pairs.hpp>
+#include <systems/physics_engine/physics_engine.hpp>
+#include <systems/physics_engine/collision/axis_collidable.hpp>
+#include <systems/transform/transformations.hpp>
+
+#include <3rdparty/imgui/imgui.h>
+#include <3rdparty/imgui/imgui_impl_sdl_gl3.h>
+
+#include <utilities/timer.hpp>
+#include <utilities/logging.hpp>
+#include <utilities/generic_id.hpp>
+#include <utilities/conversion.hpp>
+#include <math/math.hpp> // remove
+
+#include <vector> // remove
+#include <string>
+
+#include <transformations/physics/overlapping_aabb.hpp>
 
 
 namespace Core {
@@ -327,26 +310,19 @@ World::get_overlapping_aabbs(const std::function<void(const Core::Collision_pair
   // Check we have a callback.
   if(!callback) { return; }
 
-  const World_data::Entity_data  *entity_data = m_impl->world_data->data.entity;
+  const World_data::Entity_data *entity_data = m_impl->world_data->data.entity;
   const World_data::Physics_data *data = m_impl->world_data->data.physics_data;
   
-  static std::vector<math::aabb> boundings;
-  boundings.clear();
+  math::aabb *bounds = reinterpret_cast<math::aabb*>(::Memory::scratch_alloc_aligned(sizeof(math::aabb) * data->size));
   
-  for(uint32_t i = 0; i < data->size; ++i)
-  {
-    math::aabb box_copy(data->property_aabb_collider[i]);
-    math::aabb_scale(box_copy, data->property_transform[i].scale);
-    math::aabb_set_origin(box_copy, data->property_transform[i].position);
-    
-    boundings.push_back(box_copy);
-  }
+  Transformation::calculate_positional_aabb(data->property_aabb_collider,
+                                            data->property_transform,
+                                            bounds,
+                                            data->size);
   
   Physics::Broadphase::Sweep sweep;
   Physics::Broadphase::sweep_init(&sweep, data->size);
-  Physics::Broadphase::sweep_calculate(&sweep, boundings.data(), boundings.size());
-  
-  assert(sweep.size == boundings.size());
+  Physics::Broadphase::sweep_calculate(&sweep, bounds, data->size);
   
   Physics::Broadphase::Prune prune;
   Physics::Broadphase::prune_init(&prune, &sweep);
@@ -360,7 +336,7 @@ World::get_overlapping_aabbs(const std::function<void(const Core::Collision_pair
   boxes.clear();
   
   uint32_t prune_stack = 0;
-    
+  
   for(uint32_t i = 0; i < data->size; ++i)
   {
     if(prune_stack < prune.size && i == prune.ids[prune_stack])

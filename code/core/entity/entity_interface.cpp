@@ -231,7 +231,11 @@ set_name(const util::generic_id this_id, World_data::World *world, const char* s
   }
   
   // set string.
+  World_data::data_lock(world->entity);
+  
   World_data::entity_data_set_property_name(world->entity, this_id, set_name);
+  
+  World_data::data_unlock(world->entity);
 }
   
   

@@ -10,6 +10,7 @@
 #include <data/global_data/memory_data.hpp>
 #include <data/world_data/world_pools.hpp>
 #include <data/world_data/entity_data.hpp>
+#include <core/world/world.hpp>
 
 #include <string>
 

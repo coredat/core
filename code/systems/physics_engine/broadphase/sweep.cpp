@@ -2,7 +2,7 @@
 #include <math/geometry/aabb.hpp>
 #include <assert.h>
 
-//#define CORE_USE_SCRATCH_ALLOC
+#define CORE_USE_SCRATCH_ALLOC
 
 #ifdef CORE_USE_SCRATCH_ALLOC
 #include <data/global_data/memory_data.hpp>
@@ -24,9 +24,9 @@ sweep_init(Sweep *sweep,
   #ifdef CORE_USE_SCRATCH_ALLOC
   size_t bytes = sizeof(Sweep_axis) * number_of_aabbs;
 
-  sweep->x_axis = new(memory::scratch_alloc(bytes)) Sweep_axis[number_of_aabbs];
-  sweep->y_axis = new(memory::scratch_alloc(bytes)) Sweep_axis[number_of_aabbs];
-  sweep->z_axis = new(memory::scratch_alloc(bytes)) Sweep_axis[number_of_aabbs];
+  sweep->x_axis = new(Memory::scratch_alloc(bytes)) Sweep_axis[number_of_aabbs];
+  sweep->y_axis = new(Memory::scratch_alloc(bytes)) Sweep_axis[number_of_aabbs];
+  sweep->z_axis = new(Memory::scratch_alloc(bytes)) Sweep_axis[number_of_aabbs];
   #else
   sweep->x_axis = new Sweep_axis[number_of_aabbs];
   sweep->y_axis = new Sweep_axis[number_of_aabbs];
