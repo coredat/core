@@ -28,9 +28,10 @@ physics_data_init(Physics_data *data, const size_t size_hint)
   const size_t bytes_entity_id = sizeof(*data->entity_id) * size_hint + simd_buffer;
   const size_t bytes_property_transform = sizeof(*data->property_transform) * size_hint + simd_buffer;
   const size_t bytes_property_aabb_collider = sizeof(*data->property_aabb_collider) * size_hint + simd_buffer;
+  const size_t bytes_property_transformed_aabb_collider = sizeof(*data->property_transformed_aabb_collider) * size_hint + simd_buffer;
   const size_t bytes_property_collision_id = sizeof(*data->property_collision_id) * size_hint + simd_buffer;
 
-  const size_t bytes_to_alloc = bytes_entity_id + bytes_property_transform + bytes_property_aabb_collider + bytes_property_collision_id;
+  const size_t bytes_to_alloc = bytes_entity_id + bytes_property_transform + bytes_property_aabb_collider + bytes_property_transformed_aabb_collider + bytes_property_collision_id;
 
   // Allocate some memory.
   util::memory_chunk *data_memory = const_cast<util::memory_chunk*>(&data->memory);
@@ -82,6 +83,19 @@ physics_data_init(Physics_data *data, const size_t size_hint)
       #endif
 
       byte_counter += bytes_property_aabb_collider;
+      assert(byte_counter <= bytes_to_alloc);
+    }
+    // Assign property_transformed_aabb_collider memory
+    {
+      void *offset = util::mem_offset(alloc_start, byte_counter);
+      void *aligned = util::mem_next_16byte_boundry(offset);
+
+      data->property_transformed_aabb_collider = reinterpret_cast<math::aabb*>(aligned);
+      #ifndef NDEBUG
+      memset(offset, 0, bytes_property_transformed_aabb_collider);
+      #endif
+
+      byte_counter += bytes_property_transformed_aabb_collider;
       assert(byte_counter <= bytes_to_alloc);
     }
     // Assign property_collision_id memory
@@ -176,6 +190,7 @@ physics_data_push_back(Physics_data *data, const util::generic_id key, size_t *o
   {
     memset(&data->property_transform[index], 0, sizeof(*data->property_transform));
     memset(&data->property_aabb_collider[index], 0, sizeof(*data->property_aabb_collider));
+    memset(&data->property_transformed_aabb_collider[index], 0, sizeof(*data->property_transformed_aabb_collider));
     memset(&data->property_collision_id[index], 0, sizeof(*data->property_collision_id));
   }
 
@@ -204,6 +219,7 @@ physics_data_erase(Physics_data *data, const util::generic_id key)
     memmove(&data->entity_id[index_to_erase], &data->entity_id[start_index], size_to_end * sizeof(*data->entity_id));
     memmove(&data->property_transform[index_to_erase], &data->property_transform[start_index], size_to_end * sizeof(*data->property_transform));
     memmove(&data->property_aabb_collider[index_to_erase], &data->property_aabb_collider[start_index], size_to_end * sizeof(*data->property_aabb_collider));
+    memmove(&data->property_transformed_aabb_collider[index_to_erase], &data->property_transformed_aabb_collider[start_index], size_to_end * sizeof(*data->property_transformed_aabb_collider));
     memmove(&data->property_collision_id[index_to_erase], &data->property_collision_id[start_index], size_to_end * sizeof(*data->property_collision_id));
   }
   else
@@ -302,6 +318,44 @@ physics_data_set_property_aabb_collider(Physics_data *data,  const util::generic
   if(physics_data_exists(data, key, &index))
   {
     data->property_aabb_collider[index] = value;
+  }
+  else
+  {
+    return false;
+  }
+
+  return true;
+}
+
+
+bool
+physics_data_get_property_transformed_aabb_collider(const Physics_data *data, const util::generic_id key, math::aabb *out_value)
+{
+  size_t index;
+
+  if(physics_data_exists(data, key, &index))
+  {
+    *out_value = data->property_transformed_aabb_collider[index];
+  }
+  else
+  {
+    return false;
+  }
+
+  return true;
+}
+
+
+bool
+physics_data_set_property_transformed_aabb_collider(Physics_data *data,  const util::generic_id key, const math::aabb value)
+{
+  assert(data && key);
+
+  size_t index;
+
+  if(physics_data_exists(data, key, &index))
+  {
+    data->property_transformed_aabb_collider[index] = value;
   }
   else
   {

@@ -6,8 +6,8 @@
 */
 
 
-#ifndef PHYSICS_DATA_INCLUDED_A214A6F6_A73A_4EDC_950E_52D7AB62BF1D
-#define PHYSICS_DATA_INCLUDED_A214A6F6_A73A_4EDC_950E_52D7AB62BF1D
+#ifndef PHYSICS_DATA_INCLUDED_2A245A69_60C3_41FC_8463_8B7E0F0D7FD9
+#define PHYSICS_DATA_INCLUDED_2A245A69_60C3_41FC_8463_8B7E0F0D7FD9
 
 
 #include <utilities/generic_id.hpp>
@@ -33,6 +33,7 @@ struct Physics_data
   // Properties
   math::transform *property_transform = nullptr;
   math::aabb *property_aabb_collider = nullptr;
+  math::aabb *property_transformed_aabb_collider = nullptr;
   uint64_t *property_collision_id = nullptr;
 
   // Size information
@@ -168,6 +169,28 @@ physics_data_get_property_aabb_collider(const Physics_data *data, const util::ge
 */
 bool
 physics_data_set_property_aabb_collider(Physics_data *data,  const util::generic_id key, const math::aabb value);
+
+
+/*!
+  \brief Getter for property_transformed_aabb_collider.
+  \param data The container to get information from.
+  \param key The key to search for.
+  \param value The output value, which will be set if the key is found.
+  \return Returns true if the data was found.
+*/
+bool
+physics_data_get_property_transformed_aabb_collider(const Physics_data *data, const util::generic_id key, math::aabb *value);
+
+
+/*!
+  \brief Setter for property_transformed_aabb_collider.
+  \param data The container to update.
+  \param key The key to search for.
+  \param value The new value of the data.
+  \return Returns true if the data was set.
+*/
+bool
+physics_data_set_property_transformed_aabb_collider(Physics_data *data,  const util::generic_id key, const math::aabb value);
 
 
 /*!
