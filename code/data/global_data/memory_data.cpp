@@ -72,7 +72,7 @@ scratch_alloc_aligned(const size_t bytes)
 {
   assert(bytes);
   
-  void *ptr = scratch_alloc(bytes + 15);
+  void *ptr = scratch_alloc(bytes + 16);
   
   return util::mem_next_16byte_boundry(ptr);
 }

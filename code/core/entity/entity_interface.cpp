@@ -318,7 +318,10 @@ update_mesh_renderer(const util::generic_id this_id, World_data::World *world, c
 
 
 inline void
-update_collider(const util::generic_id this_id, World_data::World *world, const math::transform *transform)
+update_collider(const util::generic_id this_id,
+                World_data::World *world,
+                const math::transform *transform,
+                const math::aabb *model_aabb)
 {
   auto phys_data = world->physics_data;
   
@@ -338,14 +341,19 @@ update_collider(const util::generic_id this_id, World_data::World *world, const 
     {
       World_data::data_lock(phys_data);
       
-      math::aabb box;
-      World_data::physics_data_get_property_aabb_collider(phys_data, this_id, &box);
+      math::aabb collider_box;
+      World_data::physics_data_get_property_aabb_collider(phys_data, this_id, &collider_box);
       
-      math::aabb_set_origin(box, transform->position);
-      math::aabb_scale(box, transform->scale);
+      const math::vec3 collider_scale = math::aabb_get_extents(collider_box);
+      const math::vec3 transform_scale = transform->scale;
+      const math::vec3 total_scale = math::vec3_multiply(collider_scale, transform_scale);
+
+      // Order is important here! Scale then shift origin.
+      math::aabb_scale(collider_box, total_scale);
+      math::aabb_set_origin(collider_box, transform->position);      
       
       World_data::physics_data_set_property_transform(phys_data, this_id, *transform);
-      World_data::physics_data_set_property_transformed_aabb_collider(phys_data, this_id, box);
+      World_data::physics_data_set_property_transformed_aabb_collider(phys_data, this_id, collider_box);
       
       World_data::data_unlock(phys_data);
     }
@@ -367,13 +375,18 @@ set_transform(const util::generic_id this_id,
     return;
   }
   
+  math::aabb curr_aabb;
+  World_data::data_lock(world->transform);
+  World_data::transform_data_get_property_aabb(world->transform, this_id, &curr_aabb);
+  World_data::data_unlock(world->transform);
+  
   const math::transform new_transform = math::transform_init(set_transform.get_position(),
                                                            set_transform.get_scale(),
                                                            set_transform.get_rotation());
   
-  // TODO: This can be done via async.
+  // TODO: Some possible async ness here?
   update_transform(this_id, world, &new_transform);
-  update_collider(this_id, world, &new_transform);
+  update_collider(this_id, world, &new_transform, &curr_aabb);
   update_mesh_renderer(this_id, world, &new_transform);
 }
 
@@ -579,11 +592,20 @@ set_collider(const util::generic_id this_id, World_data::World *world, const Cor
                                                        box_collider.get_y_half_extent() * 2.f,
                                                        box_collider.get_z_half_extent() * 2.f);
           
-          math::aabb collider_box;
+          math::aabb collider_box = math::aabb_init(math::vec3_init(-0.5), math::vec3_init(+0.5));
           math::aabb_scale(collider_box, box_scale);
           
           // Get the current components and add physics
           {
+            math::aabb entity_aabb;
+            math::transform curr_transform;
+            {
+              World_data::data_lock(world->transform);
+              World_data::transform_data_get_property_aabb(world->transform, this_id, &entity_aabb);
+              World_data::transform_data_get_property_transform(world->transform, this_id, &curr_transform);
+              World_data::data_unlock(world->transform);
+            }
+          
             // Set physics
             {
               World_data::data_lock(phys_pool);
@@ -596,15 +618,7 @@ set_collider(const util::generic_id this_id, World_data::World *world, const Cor
               
               World_data::data_unlock(phys_pool);
               
-              // Get current transform
-              math::transform curr_transform;
-              
-              World_data::data_lock(world->transform);
-              World_data::transform_data_get_property_transform(world->transform, this_id, &curr_transform);
-              World_data::data_unlock(world->transform);
-              
-              assert(false); // need to pass aabb in here like this function used to do.
-              update_collider(this_id, world, &curr_transform);
+              update_collider(this_id, world, &curr_transform, &entity_aabb);
             }
           }
           break;
