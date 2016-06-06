@@ -326,8 +326,8 @@ set_transform(const util::generic_id this_id, World_data::World *world,const Tra
         World_data::physics_data_set_property_aabb_collider(phys_data, this_id, box);
         
         // Transform box
-        math::aabb_set_origin(box, new_transform.position);
-        math::aabb_scale(box, new_transform.scale);
+//        math::aabb_set_origin(box, new_transform.position);
+//        math::aabb_scale(box, new_transform.scale);
         
         World_data::physics_data_set_property_transformed_aabb_collider(phys_data, this_id, box);
         
@@ -548,14 +548,14 @@ set_collider(const util::generic_id this_id, World_data::World *world, const Cor
               {
                 World_data::physics_data_set_property_transform(phys_pool, this_id, transform);
                 
-                math::aabb box;
-                World_data::physics_data_get_property_aabb_collider(phys_pool, this_id, &box);
+//                math::aabb box;
+//                World_data::physics_data_get_property_aabb_collider(phys_pool, this_id, &box);
+                World_data::physics_data_set_property_aabb_collider(phys_pool, this_id, aabb);
                 
-                math::aabb_scale(box, transform.scale);
-                math::aabb_set_origin(box, transform.position);
+                math::aabb_scale(aabb, transform.scale);
+                math::aabb_set_origin(aabb, transform.position);
                 
-                World_data::physics_data_set_property_transformed_aabb_collider(phys_pool, this_id, box);
-                
+                World_data::physics_data_set_property_transformed_aabb_collider(phys_pool, this_id, aabb);
                 World_data::physics_data_set_property_collision_id(phys_pool, this_id, 0);
               }
               
