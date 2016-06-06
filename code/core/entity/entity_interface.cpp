@@ -375,63 +375,6 @@ set_transform(const util::generic_id this_id,
   update_transform(this_id, world, &new_transform);
   update_collider(this_id, world, &new_transform);
   update_mesh_renderer(this_id, world, &new_transform);
-
-//  size_t index;
-//  if(World_data::transform_data_exists(transform_data, this_id, &index))
-//  {
-//    const math::transform new_transform = math::transform_init(set_transform.get_position(),
-//                                                               set_transform.get_scale(),
-//                                                               set_transform.get_rotation());
-//    transform_data->property_transform[index] = new_transform;
-//    
-//    // Update mesh renderer data
-//    {
-//      World_data::data_lock(world->mesh_data);
-//    
-//      size_t mesh_index;
-//
-//      if(World_data::renderer_mesh_data_exists(world->mesh_data, this_id, &mesh_index))
-//      {
-//        const math::mat4 world_mat = math::transform_get_world_matrix(new_transform);
-//        memcpy(world->mesh_data->property_draw_call[mesh_index].world_matrix, &world_mat, sizeof(world_mat));
-//      }
-//      
-//      World_data::data_unlock(world->mesh_data);
-//    }
-//    
-//    // If this is a physics object then update it.
-//    {
-//      uint32_t components;
-//      World_data::entity_data_get_property_components(world->entity,
-//                                               this_id,
-//                                               &components);
-//      
-//      // Update the physics stuff.
-//      if(components & World_data::Entity_component::has_physics)
-//      {
-//        auto phys_data = world->physics_data;
-//      
-//        World_data::data_lock(phys_data);
-//        
-//        math::aabb box = transform_data->property_aabb[index];
-//        
-//        World_data::physics_data_set_property_transform(phys_data, this_id, new_transform);
-//        World_data::physics_data_set_property_aabb_collider(phys_data, this_id, box);
-//        
-//        // Transform box
-////        math::aabb_set_origin(box, new_transform.position);
-////        math::aabb_scale(box, new_transform.scale);
-//        
-//        World_data::physics_data_set_property_transformed_aabb_collider(phys_data, this_id, box);
-//        
-//        World_data::data_unlock(phys_data);
-//      }
-//    }
-//  }
-//  else
-//  {
-//    LOG_ERROR(Error_string::entity_not_found());
-//  }
 }
 
 
@@ -578,12 +521,6 @@ get_model(const util::generic_id this_id, World_data::World *world)
     LOG_ERROR(Error_string::entity_is_invalid());
     return Core::Model();
   }
-  
-//  auto ent_pool = world->entity_pool;
-//
-//  size_t index;
-//  assert(get_index(&index, this_id, ent_pool->entity_id, ent_pool->size));
-//  return Core::Model((uint32_t)ent_pool->model[index]);
 }
 
 
@@ -666,6 +603,7 @@ set_collider(const util::generic_id this_id, World_data::World *world, const Cor
               World_data::transform_data_get_property_transform(world->transform, this_id, &curr_transform);
               World_data::data_unlock(world->transform);
               
+              assert(false); // need to pass aabb in here like this function used to do.
               update_collider(this_id, world, &curr_transform);
             }
           }
