@@ -142,7 +142,11 @@ bool
   // Memset the properties
   {
     % properties.each do |prop|
+    % if prop[:multiple] != 1
+    memset(&data->{{prop[:name]}}[index * {{prop[:multiple]}}], 0, sizeof(*data->{{prop[:name]}}));
+    % else
     memset(&data->{{prop[:name]}}[index], 0, sizeof(*data->{{prop[:name]}}));
+    % end
     % end
   }
 
