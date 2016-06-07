@@ -37,8 +37,10 @@ public:
   
                                 Entity(Entity&&);
   Entity&                       operator=(Entity&&);
-  
+
                                 operator Entity_ref() const;
+  
+                                
   
   void                          destroy();
   
