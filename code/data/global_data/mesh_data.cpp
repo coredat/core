@@ -352,30 +352,6 @@ mesh_data_set_property_mesh(Mesh_data *data,  const util::generic_id key, const 
 
 
 bool
-mesh_data_search_property_name(const Mesh_data *data, const char *value, util::generic_id *out_key)
-{
-  bool found = false;
-
-  for(size_t i = 0; i < data->size; ++i)
-  {
-    if(!strcmp(value, &data->property_name[i * 32]))
-    {
-      found = true;
-
-      if(out_key)
-      {
-        *out_key = data->mesh_id[i];
-      }
-
-      break;
-    }
-  }
-
-  return found;
-}
-
-
-bool
 mesh_data_get_property_aabb(const Mesh_data *data, const util::generic_id key, math::aabb *out_value)
 {
   size_t index;
@@ -419,28 +395,6 @@ mesh_data_set_property_aabb(Mesh_data *data,  const util::generic_id key, const 
 }
 
 
-bool
-mesh_data_search_property_name(const Mesh_data *data, const char *value, util::generic_id *out_key)
-{
-  bool found = false;
-
-  for(size_t i = 0; i < data->size; ++i)
-  {
-    if(!strcmp(value, &data->property_name[i * 32]))
-    {
-      found = true;
-
-      if(out_key)
-      {
-        *out_key = data->mesh_id[i];
-      }
-
-      break;
-    }
-  }
-
-  return found;
-}
 
 
 } // ns

@@ -16,7 +16,7 @@ display_mesh_list(Resource_data::Mesh_data *data)
     
     ImGui::Text("ID"); ImGui::NextColumn();
     ImGui::Text("Name"); ImGui::NextColumn();
-    ImGui::Text("Number of Verts"); ImGui::NextColumn();
+    ImGui::Text("Number of Entries"); ImGui::NextColumn();
     
     ImGui::Separator();
     

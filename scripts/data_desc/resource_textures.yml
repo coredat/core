@@ -11,7 +11,8 @@ data:
   properties:
     - name: name
       type: char_32
-      return: value
+      return: pointer
+      searchable: true
 
     - name: texture
       type: Ogl::Texture

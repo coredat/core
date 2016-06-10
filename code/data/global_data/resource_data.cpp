@@ -22,9 +22,9 @@ resources_init()
   audio_pool_init(&audio);
   data->audio_pool = &audio;
   
-  static Texture_pool texture;
-  texture_pool_init(&texture);
-  data->texture_pool = &texture;
+  static Texture_data texture;
+  texture_data_init(&texture, 256);
+  data->texture_data = &texture;
   
   static Mesh_data model;
   mesh_data_init(&model, 256);

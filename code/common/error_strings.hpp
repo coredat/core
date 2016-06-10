@@ -2,6 +2,11 @@
 #define ERROR_STRINGS_INCLUDED_3EB9B8AB_CF95_442A_B5FA_D9D2E523B369
 
 
+#ifndef NDEBUG
+//#define LOG_DOUBLE_RESOURCE_INITIALIZE
+#endif
+
+
 namespace Error_string {
 
 
@@ -51,6 +56,10 @@ failed_to_create_resource() { return "Failed to create resource."; }
 
 constexpr const char *
 failed_to_find_resource() { return "Failed to find resource."; }
+
+
+constexpr const char *
+resource_already_exists() { return "Resource already exists."; }
 
 
 constexpr const char *

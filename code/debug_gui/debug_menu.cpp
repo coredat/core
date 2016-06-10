@@ -51,7 +51,7 @@ display_global_data_menu()
     ImGui::EndMainMenuBar();
   }
   
-  if(show_texture_list) { display_texture_list(global_data->texture_pool);  }
+  if(show_texture_list) { display_texture_list(global_data->texture_data);  }
   if(show_model_list)   { display_mesh_list(global_data->mesh_data);        }
   if(show_shader_list)  { display_shader_list(global_data->shader_data);    }
   if(show_memory_view)  { display_memory_useage(Memory::_get_pool());       }

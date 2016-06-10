@@ -277,8 +277,7 @@ bool
 }
 
 
-% properties.each do |prop|
-% if prop[:searchable]
+% if prop[:searchable] == true
 bool
 {{data_name}}_search_{{prop[:name]}}(const {{data_type}} *data, const {{prop[:type]}} {{prop[:set_indirection]}}value, {{key_type}} *out_key)
 {
@@ -307,7 +306,6 @@ bool
 
   return found;
 }
-% end
 % end
 
 

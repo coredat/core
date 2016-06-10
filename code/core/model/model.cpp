@@ -1,19 +1,21 @@
 #include <core/model/model.hpp>
 #include <core/model/mesh.hpp>
+#include <common/error_strings.hpp>
 #include <data/world_data/world.hpp>
 #include <data/world_data/world_pools.hpp>
-#include <data/global_data/mesh_pool.hpp>
 #include <data/global_data/resource_data.hpp>
 #include <math/geometry/aabb.hpp>
-#include <stddef.h>
-#include <assert.h>
 
 #include <utilities/obj_model_loader.hpp>
-#include <algorithm>
 #include <graphics_api/mesh.hpp>
-#include <stdint.h>
 #include <utilities/logging.hpp>
 #include <utilities/string_helpers.hpp>
+
+#include <stddef.h>
+#include <assert.h>
+#include <algorithm>
+#include <stdint.h>
+#include <string>
 
 
 namespace Core {
@@ -41,6 +43,9 @@ Model::Model(const uint32_t id)
 Model::Model(const char *filename)
 : m_impl(new Impl)
 {
+  const std::string file(filename);
+  const std::string name = util::get_filename_from_path(file);
+
   Resource_data::Resources *resources = Resource_data::get_resources();
   assert(resources);
   
@@ -48,9 +53,28 @@ Model::Model(const char *filename)
   assert(mesh_data);
 
   // Check if id already exists, avoid loading the mesh again.
+  {
+    Resource_data::data_lock(mesh_data);
+    
+    util::generic_id search_id = util::generic_id_invalid();
   
+    if(Resource_data::mesh_data_search_property_name(mesh_data, name.c_str(), &search_id))
+    {
+      #ifdef LOG_DOUBLE_RESOURCE_INITIALIZE
+      LOG_WARNING(Error_string::resource_already_exists());
+      #endif
+    
+      m_impl->mesh_id = search_id;
+    }
+    
+    Resource_data::data_unlock(mesh_data);
+    
+    if(search_id)
+    {
+      return;
+    }
+  }
   
-  const std::string file(filename);
   const util::obj_model model(util::load_obj(file));
   
   // No data.
@@ -80,8 +104,6 @@ Model::Model(const char *filename)
       
       const math::aabb model_aabb = math::aabb_init_from_xyz_data(model.meshes.at(0).positions.data(), model.meshes.at(0).positions.size());
       
-      const std::string name = util::get_filename_from_path(file);
-  
       Resource_data::data_lock(mesh_data);
       
       assert(Resource_data::mesh_data_push_back(mesh_data, mesh_data->size + 1));

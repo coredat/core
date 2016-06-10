@@ -1,7 +1,10 @@
 #include <core/resources/texture.hpp>
-#include <utilities/logging.hpp>
-#include <data/global_data/texture_pool.hpp>
 #include <data/global_data/resource_data.hpp>
+#include <common/error_strings.hpp>
+#include <utilities/logging.hpp>
+#include <utilities/string_helpers.hpp>
+#include <graphics_api/ogl/ogl_texture.hpp>
+#include <SOIL/SOIL.h>
 
 
 namespace Core {
@@ -9,7 +12,7 @@ namespace Core {
 
 struct Texture::Impl
 {
-  uint32_t texture_id;
+  util::generic_id texture_id = util::generic_id_invalid();
 };
 
 
@@ -29,8 +32,67 @@ Texture::Texture(const uint32_t id)
 Texture::Texture(const char *filepath)
 : m_impl(new Impl)
 {
-  auto tex_pool = Resource_data::get_resources()->texture_pool;
-  m_impl->texture_id = Resource_data::texture_pool_load(tex_pool, filepath);  
+  const std::string file(filepath);
+  const std::string name(util::get_filename_from_path(filepath));
+
+  auto tex_data = Resource_data::get_resources()->texture_data;
+  assert(tex_data);
+  
+  // Search to see if we have already loaded the texture.
+  {
+    Resource_data::data_lock(tex_data);
+    
+    util::generic_id search_id = util::generic_id_invalid();
+    
+    if(Resource_data::texture_data_search_property_name(tex_data, name.c_str(), &search_id))
+    {
+      m_impl->texture_id = search_id;
+    }
+    
+    Resource_data::data_unlock(tex_data);
+    
+    if(search_id)
+    {
+      #ifdef LOG_DOUBLE_RESOURCE_INITIALIZE
+      LOG_WARNING(Error_string::resource_already_exists());
+      #endif
+    
+      return;
+    }
+  }
+  
+  // Load up a new texture
+  {
+    // Create texture
+    int width, height;
+    
+    unsigned char *img = SOIL_load_image(filepath,
+                                         &width,
+                                         &height,
+                                         0,
+                                         SOIL_LOAD_RGBA);
+  
+    Ogl::Texture new_texture;
+    Ogl::texture_create_2d(&new_texture, width, height, GL_RGBA, img);
+  
+    // Add to pool
+    if(Ogl::texture_is_valid(&new_texture))
+    {
+      Resource_data::data_lock(tex_data);
+      
+      Resource_data::texture_data_push_back(tex_data, tex_data->size + 1);
+      Resource_data::texture_data_set_property_name(tex_data, tex_data->size, name.c_str());
+      Resource_data::texture_data_set_property_texture(tex_data, tex_data->size, new_texture);
+      
+      Resource_data::data_unlock(tex_data);
+    }
+    else
+    {
+      LOG_ERROR(Error_string::failed_to_create_resource());
+    }
+    
+    SOIL_free_image_data(img);
+  }
 }
 
 
@@ -94,4 +156,4 @@ Texture::get_id() const
 }
 
 
-} // ns
+  } // ns

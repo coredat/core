@@ -9,7 +9,7 @@ namespace Debug_menu {
 
 
 void
-display_texture_list(Resource_data::Texture_pool *data);
+display_texture_list(Resource_data::Texture_data *data);
 
 
 } // ns
