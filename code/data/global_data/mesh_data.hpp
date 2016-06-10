@@ -6,31 +6,39 @@
 */
 
 
-#ifndef TRANSFORM_DATA_INCLUDED_7041FE7E_49F1_4582_A59D_033C714CB885
-#define TRANSFORM_DATA_INCLUDED_7041FE7E_49F1_4582_A59D_033C714CB885
+#ifndef MESH_DATA_INCLUDED_AAFD60A6_C860_4CE7_B221_6ED9CDE21475
+#define MESH_DATA_INCLUDED_AAFD60A6_C860_4CE7_B221_6ED9CDE21475
 
 
 #include <utilities/generic_id.hpp>
 #include <utilities/memory_pool.hpp>
 #include <stddef.h>
-#include <math/transform/transform.hpp>
-#include <math/geometry/aabb.hpp>
+#include <graphics_api/mesh.hpp>
+#include <math/geometry/geometry_types.hpp>
 
 
-namespace World_data {
+namespace Resource_data {
+
+
+class Material_detail {
+  util::generic_id shader_id;
+  util::generic_id texture_map_01_id;
+}; // ns
+
 
 
 
 /*!
-  \brief Auto-generated structure for Transform_data
+  \brief Auto-generated structure for Mesh_data
 */
-struct Transform_data
+struct Mesh_data
 {
   // Data Key
-  util::generic_id *entity_id = nullptr;
+  util::generic_id *mesh_id = nullptr;
 
   // Properties
-  math::transform *property_transform = nullptr;
+  char *property_name = nullptr;
+  Graphics_api::Mesh *property_mesh = nullptr;
   math::aabb *property_aabb = nullptr;
 
   // Size information
@@ -44,12 +52,12 @@ struct Transform_data
 
 
 /*!
-  \brief Initialize the Transform_data structure, this is will allocate the memory for the keys and properties. Function will take a lock.
+  \brief Initialize the Mesh_data structure, this is will allocate the memory for the keys and properties. Function will take a lock.
   \param data This structure to initialize.
   \param size_hint This helps the init function allocate the correct memory.
 */
 void
-transform_data_init(Transform_data *data, const size_t size_hint);
+mesh_data_init(Mesh_data *data, const size_t size_hint);
 
 
 /*!
@@ -57,7 +65,7 @@ transform_data_init(Transform_data *data, const size_t size_hint);
   \param data The data to free.
 */
 void
-transform_data_free(Transform_data *data);
+mesh_data_free(Mesh_data *data);
 
 
 /*!
@@ -65,7 +73,7 @@ transform_data_free(Transform_data *data);
   \param data The structure which to find the size.
 */
 size_t
-transform_data_get_size(const Transform_data *data);
+mesh_data_get_size(const Mesh_data *data);
 
 
 /*!
@@ -73,7 +81,7 @@ transform_data_get_size(const Transform_data *data);
   \param data The structure which to find the capacity.
 */
 size_t
-transform_data_get_capacity(const Transform_data *data);
+mesh_data_get_capacity(const Mesh_data *data);
 
 
 /*!
@@ -81,7 +89,7 @@ transform_data_get_capacity(const Transform_data *data);
   \param data The container to lock.
 */
 void
-data_lock(Transform_data *data);
+data_lock(Mesh_data *data);
 
 
 /*!
@@ -89,7 +97,7 @@ data_lock(Transform_data *data);
   \param The container to unlock
 */
 void
-data_unlock(Transform_data *data);
+data_unlock(Mesh_data *data);
 
 
 /*!
@@ -100,7 +108,7 @@ data_unlock(Transform_data *data);
   \return Returns true if it was successful.
 */
 bool
-transform_data_push_back(Transform_data *data, const util::generic_id key, size_t *out_index = nullptr);
+mesh_data_push_back(Mesh_data *data, const util::generic_id key, size_t *out_index = nullptr);
 
 
 /*!
@@ -110,7 +118,7 @@ transform_data_push_back(Transform_data *data, const util::generic_id key, size_
   \return Returns true if it was successful.
 */
 bool
-transform_data_erase(Transform_data *data, const util::generic_id key);
+mesh_data_erase(Mesh_data *data, const util::generic_id key);
 
 
 /*!
@@ -121,29 +129,62 @@ transform_data_erase(Transform_data *data, const util::generic_id key);
   \return Returns true if a key was found.
 */
 bool
-transform_data_exists(const Transform_data *data, const util::generic_id key, size_t *out_index = nullptr);
+mesh_data_exists(const Mesh_data *data, const util::generic_id key, size_t *out_index = nullptr);
 
 
 /*!
-  \brief Getter for property_transform.
+  \brief Getter for property_name.
   \param data The container to get information from.
   \param key The key to search for.
   \param value The output value, which will be set if the key is found.
   \return Returns true if the data was found.
 */
 bool
-transform_data_get_property_transform(const Transform_data *data, const util::generic_id key, math::transform *value);
+mesh_data_get_property_name(const Mesh_data *data, const util::generic_id key, const char **value);
 
 
 /*!
-  \brief Setter for property_transform.
+  \brief Setter for property_name.
   \param data The container to update.
   \param key The key to search for.
   \param value The new value of the data.
   \return Returns true if the data was set.
 */
 bool
-transform_data_set_property_transform(Transform_data *data,  const util::generic_id key, const math::transform value);
+mesh_data_set_property_name(Mesh_data *data,  const util::generic_id key, const char *value);
+
+
+/*!
+  \brief Searches for a given value.
+  \param data The container to search.
+  \param value The value which to search for.
+  \param out_key Optional the key for that value.
+  \return Returns true if the data was found.
+*/
+bool
+mesh_data_search_property_name(const Mesh_data *data, const char *value, util::generic_id *out_key = nullptr);
+
+
+/*!
+  \brief Getter for property_mesh.
+  \param data The container to get information from.
+  \param key The key to search for.
+  \param value The output value, which will be set if the key is found.
+  \return Returns true if the data was found.
+*/
+bool
+mesh_data_get_property_mesh(const Mesh_data *data, const util::generic_id key, Graphics_api::Mesh *value);
+
+
+/*!
+  \brief Setter for property_mesh.
+  \param data The container to update.
+  \param key The key to search for.
+  \param value The new value of the data.
+  \return Returns true if the data was set.
+*/
+bool
+mesh_data_set_property_mesh(Mesh_data *data,  const util::generic_id key, const Graphics_api::Mesh value);
 
 
 /*!
@@ -154,7 +195,7 @@ transform_data_set_property_transform(Transform_data *data,  const util::generic
   \return Returns true if the data was found.
 */
 bool
-transform_data_get_property_aabb(const Transform_data *data, const util::generic_id key, math::aabb *value);
+mesh_data_get_property_aabb(const Mesh_data *data, const util::generic_id key, math::aabb *value);
 
 
 /*!
@@ -165,7 +206,7 @@ transform_data_get_property_aabb(const Transform_data *data, const util::generic
   \return Returns true if the data was set.
 */
 bool
-transform_data_set_property_aabb(Transform_data *data,  const util::generic_id key, const math::aabb value);
+mesh_data_set_property_aabb(Mesh_data *data,  const util::generic_id key, const math::aabb value);
 
 
 } // ns

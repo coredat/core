@@ -59,6 +59,7 @@ def parse_desc(yml)
     return_data[:properties][-1][:name] = "property_#{prop['name']}"
     return_data[:properties][-1][:type] = if prop['type'] == "char_32" then "char" else prop['type'] end
     return_data[:properties][-1][:multiple] = if prop['type'] == "char_32" then 32 else 1 end
+    return_data[:properties][-1][:searchable] = prop['searchable'] || false
 
     # What type of get set we have
     return_data[:properties][-1][:get_indirection] = if prop['return'].downcase == "pointer" then "**" else "*" end

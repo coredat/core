@@ -13,6 +13,7 @@
 #include <graphics_api/mesh.hpp>
 #include <stdint.h>
 #include <utilities/logging.hpp>
+#include <utilities/string_helpers.hpp>
 
 
 namespace Core {
@@ -42,13 +43,13 @@ Model::Model(const char *filename)
 {
   Resource_data::Resources *resources = Resource_data::get_resources();
   assert(resources);
+  
+  Resource_data::Mesh_data *mesh_data = resources->mesh_data;
+  assert(mesh_data);
 
   // Check if id already exists, avoid loading the mesh again.
-  if(Resource_data::mesh_pool_find_id_by_name(resources->mesh_pool, filename, &(m_impl->mesh_id)))
-  {
-    return;
-  }
-
+  
+  
   const std::string file(filename);
   const util::obj_model model(util::load_obj(file));
   
@@ -62,17 +63,37 @@ Model::Model(const char *filename)
   // Add mesh to mesh manager.
   if(!model.meshes.empty())
   {
-    m_impl->mesh_id = Resource_data::mesh_pool_push_new(resources->mesh_pool,
-                                                        filename,
-                                                        model.meshes.at(0).positions.data(),
-                                                        model.meshes.at(0).positions.size(),
-                                                        model.meshes.at(0).normals.data(),
-                                                        model.meshes.at(0).normals.size(),
-                                                        model.meshes.at(0).uvs.data(),
-                                                        model.meshes.at(0).uvs.size(),
-                                                        model.meshes.at(0).positions.size(),
-                                                        model.meshes.at(0).index.data(),
-                                                        model.meshes.at(0).index.size());
+    std::vector<float> pos(std::begin(model.meshes.at(0).positions), std::end(model.meshes.at(0).positions));
+    std::vector<float> norm(std::begin(model.meshes.at(0).normals), std::end(model.meshes.at(0).normals));
+    std::vector<float> tex_c(std::begin(model.meshes.at(0).uvs), std::end(model.meshes.at(0).uvs));
+    std::vector<uint32_t> ind(std::begin(model.meshes.at(0).index), std::end(model.meshes.at(0).index));
+    const util::gl_mesh imported_mesh = util::create_open_gl_mesh(pos, tex_c, norm, ind);
+
+    // Create graphics mesh and insert it.
+    {
+      Graphics_api::Mesh mesh;
+      Graphics_api::mesh_create_new(&mesh,
+                                    imported_mesh.mesh_data.data(),
+                                    imported_mesh.mesh_data.size(),
+                                    nullptr,
+                                    0);
+      
+      const math::aabb model_aabb = math::aabb_init_from_xyz_data(model.meshes.at(0).positions.data(), model.meshes.at(0).positions.size());
+      
+      const std::string name = util::get_filename_from_path(file);
+  
+      Resource_data::data_lock(mesh_data);
+      
+      assert(Resource_data::mesh_data_push_back(mesh_data, mesh_data->size + 1));
+      Resource_data::mesh_data_set_property_mesh(mesh_data, mesh_data->size, mesh);
+      Resource_data::mesh_data_set_property_aabb(mesh_data, mesh_data->size, model_aabb);
+      Resource_data::mesh_data_set_property_name(mesh_data, mesh_data->size, name.c_str());
+      
+      m_impl->mesh_id = mesh_data->size;
+
+      Resource_data::data_unlock(mesh_data);
+    }
+    
   }
 }
 
@@ -149,19 +170,13 @@ Model::get_model_aabb() const
 
   math::aabb return_aabb;
   
-  Resource_data::Mesh_pool *mesh_pool = Resource_data::get_resources()->mesh_pool;
-  assert(mesh_pool);
+  Resource_data::Mesh_data *mesh_data = Resource_data::get_resources()->mesh_data;
+  assert(mesh_data);
   
-  size_t id_index;
-  
-  if(math::index_linear_search(m_impl->mesh_id,
-                               mesh_pool->id,
-                               mesh_pool->capacity,
-                               &id_index))
-  {
-    return_aabb = mesh_pool->aabb[id_index];
-  }
-  
+  Resource_data::data_lock(mesh_data);
+  Resource_data::mesh_data_get_property_aabb(mesh_data, m_impl->mesh_id, &return_aabb);
+  Resource_data::data_unlock(mesh_data);
+    
   return return_aabb;
 }
 

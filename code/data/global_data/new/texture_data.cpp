@@ -4,7 +4,7 @@
   This file is auto_generated any changes here may be overwritten.
 */
 
-#include <data/world_data/transform_data.hpp>
+#include <data/global_data/texture_data.hpp>
 #include <data/global_data/memory_data.hpp>
 #include <common/error_strings.hpp>
 #include <utilities/logging.hpp>
@@ -12,11 +12,11 @@
 #include <assert.h>
 
 
-namespace World_data {
+namespace Resource_data {
 
 
 void
-transform_data_init(Transform_data *data, const size_t size_hint)
+texture_data_init(Texture_data *data, const size_t size_hint)
 {
   // Argument validation.
   assert(data && size_hint);
@@ -25,15 +25,15 @@ transform_data_init(Transform_data *data, const size_t size_hint)
   constexpr size_t simd_buffer = 16;
 
   // Calculate the various sizes of things.
-  const size_t bytes_entity_id = sizeof(*data->entity_id) * size_hint + simd_buffer;
-  const size_t bytes_property_transform = sizeof(*data->property_transform) * size_hint + simd_buffer;
-  const size_t bytes_property_aabb = sizeof(*data->property_aabb) * size_hint + simd_buffer;
+  const size_t bytes_texture_id = sizeof(*data->texture_id) * size_hint + simd_buffer;
+  const size_t bytes_property_name = sizeof(*data->property_name) * 32 * size_hint + simd_buffer;
+  const size_t bytes_property_texture = sizeof(*data->property_texture) * size_hint + simd_buffer;
 
-  const size_t bytes_to_alloc = bytes_entity_id + bytes_property_transform + bytes_property_aabb;
+  const size_t bytes_to_alloc = bytes_texture_id + bytes_property_name + bytes_property_texture;
 
   // Allocate some memory.
   util::memory_chunk *data_memory = const_cast<util::memory_chunk*>(&data->memory);
-  *data_memory = Memory::request_memory_chunk(bytes_to_alloc, "transform_data");
+  *data_memory = Memory::request_memory_chunk(bytes_to_alloc, "texture_data");
 
   assert(data_memory->bytes_in_chunk == bytes_to_alloc);
 
@@ -44,43 +44,43 @@ transform_data_init(Transform_data *data, const size_t size_hint)
     size_t byte_counter = 0;
     const void *alloc_start = data->memory.chunk_start;
 
-    // Assign entity_id memory
+    // Assign texture_id memory
     {
       void *offset = util::mem_offset(alloc_start, byte_counter);
       void *aligned = util::mem_next_16byte_boundry(offset);
 
-      data->entity_id = reinterpret_cast<util::generic_id*>(aligned);
+      data->texture_id = reinterpret_cast<util::generic_id*>(aligned);
       #ifndef NDEBUG
-      memset(offset, 0, bytes_entity_id);
+      memset(offset, 0, bytes_texture_id);
       #endif
 
-      byte_counter += bytes_entity_id;
+      byte_counter += bytes_texture_id;
       assert(byte_counter <= bytes_to_alloc);
     }
-    // Assign property_transform memory
+    // Assign property_name memory
     {
       void *offset = util::mem_offset(alloc_start, byte_counter);
       void *aligned = util::mem_next_16byte_boundry(offset);
 
-      data->property_transform = reinterpret_cast<math::transform*>(aligned);
+      data->property_name = reinterpret_cast<char*>(aligned);
       #ifndef NDEBUG
-      memset(offset, 0, bytes_property_transform);
+      memset(offset, 0, bytes_property_name);
       #endif
 
-      byte_counter += bytes_property_transform;
+      byte_counter += bytes_property_name;
       assert(byte_counter <= bytes_to_alloc);
     }
-    // Assign property_aabb memory
+    // Assign property_texture memory
     {
       void *offset = util::mem_offset(alloc_start, byte_counter);
       void *aligned = util::mem_next_16byte_boundry(offset);
 
-      data->property_aabb = reinterpret_cast<math::aabb*>(aligned);
+      data->property_texture = reinterpret_cast<Ogl::Texture*>(aligned);
       #ifndef NDEBUG
-      memset(offset, 0, bytes_property_aabb);
+      memset(offset, 0, bytes_property_texture);
       #endif
 
-      byte_counter += bytes_property_aabb;
+      byte_counter += bytes_property_texture;
       assert(byte_counter <= bytes_to_alloc);
     }
   }
@@ -98,14 +98,14 @@ transform_data_init(Transform_data *data, const size_t size_hint)
 
 
 void
-transform_data_free(Transform_data *data)
+texture_data_free(Texture_data *data)
 {
   assert(data);
 }
 
 
 size_t
-transform_data_get_size(const Transform_data *data)
+texture_data_get_size(const Texture_data *data)
 {
   assert(data);
   return data->size;
@@ -113,7 +113,7 @@ transform_data_get_size(const Transform_data *data)
 
 
 size_t
-transform_data_get_capacity(const Transform_data *data)
+texture_data_get_capacity(const Texture_data *data)
 {
   assert(data);
   return data->capacity;
@@ -121,21 +121,21 @@ transform_data_get_capacity(const Transform_data *data)
 
 
 void
-data_lock(Transform_data *data)
+data_lock(Texture_data *data)
 {
   assert(data);
 }
 
 
 void
-data_unlock(Transform_data *data)
+data_unlock(Texture_data *data)
 {
   assert(data);
 }
 
 
 bool
-transform_data_push_back(Transform_data *data, const util::generic_id key, size_t *out_index)
+texture_data_push_back(Texture_data *data, const util::generic_id key, size_t *out_index)
 {
   assert(data && key);
   assert(data->size < data->capacity);
@@ -156,12 +156,12 @@ transform_data_push_back(Transform_data *data, const util::generic_id key, size_
 
   ++(data->size);
 
-  data->entity_id[index] = key;
+  data->texture_id[index] = key;
 
   // Memset the properties
   {
-    memset(&data->property_transform[index], 0, sizeof(*data->property_transform));
-    memset(&data->property_aabb[index], 0, sizeof(*data->property_aabb));
+    memset(&data->property_name[index * 32], 0, sizeof(*data->property_name));
+    memset(&data->property_texture[index], 0, sizeof(*data->property_texture));
   }
 
   return true;
@@ -169,14 +169,14 @@ transform_data_push_back(Transform_data *data, const util::generic_id key, size_
 
 
 bool
-transform_data_erase(Transform_data *data, const util::generic_id key)
+texture_data_erase(Texture_data *data, const util::generic_id key)
 {
   // Param check
   assert(data && key);
 
   size_t index_to_erase;
 
-  if(transform_data_exists(data, key, &index_to_erase))
+  if(texture_data_exists(data, key, &index_to_erase))
   {
     assert(index_to_erase < data->size);
 
@@ -186,9 +186,9 @@ transform_data_erase(Transform_data *data, const util::generic_id key)
     --(data->size);
 
     // Shuffle the memory down.
-    memmove(&data->entity_id[index_to_erase], &data->entity_id[start_index], size_to_end * sizeof(*data->entity_id));
-    memmove(&data->property_transform[index_to_erase], &data->property_transform[start_index], size_to_end * sizeof(*data->property_transform));
-    memmove(&data->property_aabb[index_to_erase], &data->property_aabb[start_index], size_to_end * sizeof(*data->property_aabb));
+    memmove(&data->texture_id[index_to_erase], &data->texture_id[start_index], size_to_end * sizeof(*data->texture_id));
+    memmove(&data->property_name[index_to_erase * 32], &data->property_name[start_index * 32], (size_to_end * 32) * sizeof(*data->property_name));
+    memmove(&data->property_texture[index_to_erase], &data->property_texture[start_index], size_to_end * sizeof(*data->property_texture));
   }
   else
   {
@@ -203,7 +203,7 @@ transform_data_erase(Transform_data *data, const util::generic_id key)
 
 
 bool
-transform_data_exists(const Transform_data *data, const util::generic_id key, size_t *out_index)
+texture_data_exists(const Texture_data *data, const util::generic_id key, size_t *out_index)
 {
   assert(data && key);
 
@@ -217,20 +217,20 @@ transform_data_exists(const Transform_data *data, const util::generic_id key, si
   size_t no_index;
   if(!out_index) { out_index = &no_index; }
 
-  found = util::generic_id_search_linearly(out_index, key, data->entity_id, data->size);
+  found = util::generic_id_search_linearly(out_index, key, data->texture_id, data->size);
 
   return found;
 }
 
 
 bool
-transform_data_get_property_transform(const Transform_data *data, const util::generic_id key, math::transform *out_value)
+texture_data_get_property_name(const Texture_data *data, const util::generic_id key, char const *out_value)
 {
   size_t index;
 
-  if(transform_data_exists(data, key, &index))
+  if(texture_data_exists(data, key, &index))
   {
-    *out_value = data->property_transform[index];
+    *out_value = &data->property_name[index * 32];
   }
   else
   {
@@ -245,15 +245,15 @@ transform_data_get_property_transform(const Transform_data *data, const util::ge
 
 
 bool
-transform_data_set_property_transform(Transform_data *data,  const util::generic_id key, const math::transform value)
+texture_data_set_property_name(Texture_data *data,  const util::generic_id key, const char value)
 {
   assert(data && key);
 
   size_t index;
 
-  if(transform_data_exists(data, key, &index))
+  if(texture_data_exists(data, key, &index))
   {
-    data->property_transform[index] = value;
+    strlcpy(&data->property_name[index * 32], value, 32);
   }
   else
   {
@@ -270,13 +270,13 @@ transform_data_set_property_transform(Transform_data *data,  const util::generic
 
 
 bool
-transform_data_get_property_aabb(const Transform_data *data, const util::generic_id key, math::aabb *out_value)
+texture_data_get_property_texture(const Texture_data *data, const util::generic_id key, Ogl::Texture *out_value)
 {
   size_t index;
 
-  if(transform_data_exists(data, key, &index))
+  if(texture_data_exists(data, key, &index))
   {
-    *out_value = data->property_aabb[index];
+    *out_value = data->property_texture[index];
   }
   else
   {
@@ -291,15 +291,15 @@ transform_data_get_property_aabb(const Transform_data *data, const util::generic
 
 
 bool
-transform_data_set_property_aabb(Transform_data *data,  const util::generic_id key, const math::aabb value)
+texture_data_set_property_texture(Texture_data *data,  const util::generic_id key, const Ogl::Texture value)
 {
   assert(data && key);
 
   size_t index;
 
-  if(transform_data_exists(data, key, &index))
+  if(texture_data_exists(data, key, &index))
   {
-    data->property_aabb[index] = value;
+    data->property_texture[index] = value;
   }
   else
   {

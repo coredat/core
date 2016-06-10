@@ -29,9 +29,8 @@ shader_data_init(Shader_data *data, const size_t size_hint)
   const size_t bytes_property_name = sizeof(*data->property_name) * 32 * size_hint + simd_buffer;
   const size_t bytes_property_shader = sizeof(*data->property_shader) * size_hint + simd_buffer;
   const size_t bytes_property_uniforms = sizeof(*data->property_uniforms) * size_hint + simd_buffer;
-  const size_t bytes_property_is_valid = sizeof(*data->property_is_valid) * size_hint + simd_buffer;
 
-  const size_t bytes_to_alloc = bytes_shader_id + bytes_property_name + bytes_property_shader + bytes_property_uniforms + bytes_property_is_valid;
+  const size_t bytes_to_alloc = bytes_shader_id + bytes_property_name + bytes_property_shader + bytes_property_uniforms;
 
   // Allocate some memory.
   util::memory_chunk *data_memory = const_cast<util::memory_chunk*>(&data->memory);
@@ -96,19 +95,6 @@ shader_data_init(Shader_data *data, const size_t size_hint)
       #endif
 
       byte_counter += bytes_property_uniforms;
-      assert(byte_counter <= bytes_to_alloc);
-    }
-    // Assign property_is_valid memory
-    {
-      void *offset = util::mem_offset(alloc_start, byte_counter);
-      void *aligned = util::mem_next_16byte_boundry(offset);
-
-      data->property_is_valid = reinterpret_cast<bool*>(aligned);
-      #ifndef NDEBUG
-      memset(offset, 0, bytes_property_is_valid);
-      #endif
-
-      byte_counter += bytes_property_is_valid;
       assert(byte_counter <= bytes_to_alloc);
     }
   }
@@ -191,7 +177,6 @@ shader_data_push_back(Shader_data *data, const util::generic_id key, size_t *out
     memset(&data->property_name[index * 32], 0, sizeof(*data->property_name));
     memset(&data->property_shader[index], 0, sizeof(*data->property_shader));
     memset(&data->property_uniforms[index], 0, sizeof(*data->property_uniforms));
-    memset(&data->property_is_valid[index], 0, sizeof(*data->property_is_valid));
   }
 
   return true;
@@ -220,7 +205,6 @@ shader_data_erase(Shader_data *data, const util::generic_id key)
     memmove(&data->property_name[index_to_erase * 32], &data->property_name[start_index * 32], (size_to_end * 32) * sizeof(*data->property_name));
     memmove(&data->property_shader[index_to_erase], &data->property_shader[start_index], size_to_end * sizeof(*data->property_shader));
     memmove(&data->property_uniforms[index_to_erase], &data->property_uniforms[start_index], size_to_end * sizeof(*data->property_uniforms));
-    memmove(&data->property_is_valid[index_to_erase], &data->property_is_valid[start_index], size_to_end * sizeof(*data->property_is_valid));
   }
   else
   {
@@ -299,6 +283,8 @@ shader_data_set_property_name(Shader_data *data,  const util::generic_id key, co
 }
 
 
+
+
 bool
 shader_data_get_property_shader(const Shader_data *data, const util::generic_id key, Ogl::Shader *out_value)
 {
@@ -341,6 +327,8 @@ shader_data_set_property_shader(Shader_data *data,  const util::generic_id key, 
 
   return true;
 }
+
+
 
 
 bool
@@ -387,48 +375,6 @@ shader_data_set_property_uniforms(Shader_data *data,  const util::generic_id key
 }
 
 
-bool
-shader_data_get_property_is_valid(const Shader_data *data, const util::generic_id key, bool *out_value)
-{
-  size_t index;
-
-  if(shader_data_exists(data, key, &index))
-  {
-    *out_value = data->property_is_valid[index];
-  }
-  else
-  {
-    LOG_ERROR(Error_string::entity_not_found());
-    assert(false);
-
-    return false;
-  }
-
-  return true;
-}
-
-
-bool
-shader_data_set_property_is_valid(Shader_data *data,  const util::generic_id key, const bool value)
-{
-  assert(data && key);
-
-  size_t index;
-
-  if(shader_data_exists(data, key, &index))
-  {
-    data->property_is_valid[index] = value;
-  }
-  else
-  {
-    LOG_ERROR(Error_string::entity_not_found());
-    assert(false);
-
-    return false;
-  }
-
-  return true;
-}
 
 
 } // ns

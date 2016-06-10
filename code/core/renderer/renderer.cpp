@@ -18,4 +18,20 @@ Renderer::get_type() const
 }
 
 
+const char *
+Renderer::get_type_name() const
+{
+  switch(m_renderer_type)
+  {
+    case(Renderer_type::material):
+      return "material renderer";
+      
+    default:
+      break;
+  }
+
+  return "unknown renderer";
+}
+
+
 } // ns

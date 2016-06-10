@@ -5,8 +5,9 @@
 namespace Resource_data {
 
 
-class Texture_pool;
-class Shader_data;
+struct Texture_pool;
+struct Shader_data;
+struct Mesh_data;
 
 
 };

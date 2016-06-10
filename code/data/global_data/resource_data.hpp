@@ -7,6 +7,7 @@
 #include "texture_pool.hpp"
 #include "shader_data.hpp"
 #include "material_data.hpp"
+#include "mesh_data.hpp"
 
 
 namespace Resource_data {
@@ -16,10 +17,11 @@ struct Resources
 {
   Shader_data   *shader_data    = nullptr;
   Material_data *material_data  = nullptr;
+  Mesh_data     *mesh_data      = nullptr;  
 
   Texture_pool  *texture_pool   = nullptr;
   Audio_pool    *audio_pool     = nullptr;
-  Mesh_pool     *mesh_pool      = nullptr;
+  
 };
 
 

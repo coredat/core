@@ -277,5 +277,39 @@ bool
 }
 
 
+% properties.each do |prop|
+% if prop[:searchable]
+bool
+{{data_name}}_search_{{prop[:name]}}(const {{data_type}} *data, const {{prop[:type]}} {{prop[:set_indirection]}}value, {{key_type}} *out_key)
+{
+  bool found = false;
+
+  for(size_t i = 0; i < data->size; ++i)
+  {
+    % if prop[:type] == "char"
+    if(!strcmp(value, &data->{{prop[:name]}}[i * {{prop[:multiple]}}]))
+    % elsif prop[:multiple] != 1
+    if(value == data->{{prop[:name]}}[i * {{prop[:multiple]}}])
+    % else
+    if(value == data->{{prop[:name]}}[i])
+    % end
+    {
+      found = true;
+
+      if(out_key)
+      {
+        *out_key = data->{{key_name}}[i];
+      }
+
+      break;
+    }
+  }
+
+  return found;
+}
+% end
+% end
+
+
 % end
 } // ns

@@ -6,32 +6,32 @@
 */
 
 
-#ifndef TRANSFORM_DATA_INCLUDED_7041FE7E_49F1_4582_A59D_033C714CB885
-#define TRANSFORM_DATA_INCLUDED_7041FE7E_49F1_4582_A59D_033C714CB885
+#ifndef SHADER_DATA_INCLUDED_9EACF8B7_13FE_413B_BE6C_6A707E6E3F5F
+#define SHADER_DATA_INCLUDED_9EACF8B7_13FE_413B_BE6C_6A707E6E3F5F
 
 
 #include <utilities/generic_id.hpp>
 #include <utilities/memory_pool.hpp>
 #include <stddef.h>
-#include <math/transform/transform.hpp>
-#include <math/geometry/aabb.hpp>
+#include <graphics_api/ogl/ogl_shader.hpp>
 
 
-namespace World_data {
+namespace Resource_data {
 
 
 
 /*!
-  \brief Auto-generated structure for Transform_data
+  \brief Auto-generated structure for Shader_data
 */
-struct Transform_data
+struct Shader_data
 {
   // Data Key
-  util::generic_id *entity_id = nullptr;
+  util::generic_id *shader_id = nullptr;
 
   // Properties
-  math::transform *property_transform = nullptr;
-  math::aabb *property_aabb = nullptr;
+  char *property_name = nullptr;
+  Ogl::Shader *property_shader = nullptr;
+  Ogl::Shader *property_uniforms = nullptr;
 
   // Size information
   size_t size = 0;
@@ -44,12 +44,12 @@ struct Transform_data
 
 
 /*!
-  \brief Initialize the Transform_data structure, this is will allocate the memory for the keys and properties. Function will take a lock.
+  \brief Initialize the Shader_data structure, this is will allocate the memory for the keys and properties. Function will take a lock.
   \param data This structure to initialize.
   \param size_hint This helps the init function allocate the correct memory.
 */
 void
-transform_data_init(Transform_data *data, const size_t size_hint);
+shader_data_init(Shader_data *data, const size_t size_hint);
 
 
 /*!
@@ -57,7 +57,7 @@ transform_data_init(Transform_data *data, const size_t size_hint);
   \param data The data to free.
 */
 void
-transform_data_free(Transform_data *data);
+shader_data_free(Shader_data *data);
 
 
 /*!
@@ -65,7 +65,7 @@ transform_data_free(Transform_data *data);
   \param data The structure which to find the size.
 */
 size_t
-transform_data_get_size(const Transform_data *data);
+shader_data_get_size(const Shader_data *data);
 
 
 /*!
@@ -73,7 +73,7 @@ transform_data_get_size(const Transform_data *data);
   \param data The structure which to find the capacity.
 */
 size_t
-transform_data_get_capacity(const Transform_data *data);
+shader_data_get_capacity(const Shader_data *data);
 
 
 /*!
@@ -81,7 +81,7 @@ transform_data_get_capacity(const Transform_data *data);
   \param data The container to lock.
 */
 void
-data_lock(Transform_data *data);
+data_lock(Shader_data *data);
 
 
 /*!
@@ -89,7 +89,7 @@ data_lock(Transform_data *data);
   \param The container to unlock
 */
 void
-data_unlock(Transform_data *data);
+data_unlock(Shader_data *data);
 
 
 /*!
@@ -100,7 +100,7 @@ data_unlock(Transform_data *data);
   \return Returns true if it was successful.
 */
 bool
-transform_data_push_back(Transform_data *data, const util::generic_id key, size_t *out_index = nullptr);
+shader_data_push_back(Shader_data *data, const util::generic_id key, size_t *out_index = nullptr);
 
 
 /*!
@@ -110,7 +110,7 @@ transform_data_push_back(Transform_data *data, const util::generic_id key, size_
   \return Returns true if it was successful.
 */
 bool
-transform_data_erase(Transform_data *data, const util::generic_id key);
+shader_data_erase(Shader_data *data, const util::generic_id key);
 
 
 /*!
@@ -121,51 +121,73 @@ transform_data_erase(Transform_data *data, const util::generic_id key);
   \return Returns true if a key was found.
 */
 bool
-transform_data_exists(const Transform_data *data, const util::generic_id key, size_t *out_index = nullptr);
+shader_data_exists(const Shader_data *data, const util::generic_id key, size_t *out_index = nullptr);
 
 
 /*!
-  \brief Getter for property_transform.
+  \brief Getter for property_name.
   \param data The container to get information from.
   \param key The key to search for.
   \param value The output value, which will be set if the key is found.
   \return Returns true if the data was found.
 */
 bool
-transform_data_get_property_transform(const Transform_data *data, const util::generic_id key, math::transform *value);
+shader_data_get_property_name(const Shader_data *data, const util::generic_id key, const char **value);
 
 
 /*!
-  \brief Setter for property_transform.
+  \brief Setter for property_name.
   \param data The container to update.
   \param key The key to search for.
   \param value The new value of the data.
   \return Returns true if the data was set.
 */
 bool
-transform_data_set_property_transform(Transform_data *data,  const util::generic_id key, const math::transform value);
+shader_data_set_property_name(Shader_data *data,  const util::generic_id key, const char *value);
 
 
 /*!
-  \brief Getter for property_aabb.
+  \brief Getter for property_shader.
   \param data The container to get information from.
   \param key The key to search for.
   \param value The output value, which will be set if the key is found.
   \return Returns true if the data was found.
 */
 bool
-transform_data_get_property_aabb(const Transform_data *data, const util::generic_id key, math::aabb *value);
+shader_data_get_property_shader(const Shader_data *data, const util::generic_id key, Ogl::Shader *value);
 
 
 /*!
-  \brief Setter for property_aabb.
+  \brief Setter for property_shader.
   \param data The container to update.
   \param key The key to search for.
   \param value The new value of the data.
   \return Returns true if the data was set.
 */
 bool
-transform_data_set_property_aabb(Transform_data *data,  const util::generic_id key, const math::aabb value);
+shader_data_set_property_shader(Shader_data *data,  const util::generic_id key, const Ogl::Shader value);
+
+
+/*!
+  \brief Getter for property_uniforms.
+  \param data The container to get information from.
+  \param key The key to search for.
+  \param value The output value, which will be set if the key is found.
+  \return Returns true if the data was found.
+*/
+bool
+shader_data_get_property_uniforms(const Shader_data *data, const util::generic_id key, Ogl::Shader *value);
+
+
+/*!
+  \brief Setter for property_uniforms.
+  \param data The container to update.
+  \param key The key to search for.
+  \param value The new value of the data.
+  \return Returns true if the data was set.
+*/
+bool
+shader_data_set_property_uniforms(Shader_data *data,  const util::generic_id key, const Ogl::Shader value);
 
 
 } // ns

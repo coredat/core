@@ -6,8 +6,8 @@
 */
 
 
-#ifndef RENDERER_MESH_DATA_INCLUDED_A865B4EB_5687_4E9F_95A7_34D00B24470D
-#define RENDERER_MESH_DATA_INCLUDED_A865B4EB_5687_4E9F_95A7_34D00B24470D
+#ifndef MATERIAL_DATA_INCLUDED_7DC11D0C_D20B_4C75_B76F_E2B583868006
+#define MATERIAL_DATA_INCLUDED_7DC11D0C_D20B_4C75_B76F_E2B583868006
 
 
 #include <utilities/generic_id.hpp>
@@ -15,28 +15,28 @@
 #include <stddef.h>
 
 
-namespace World_data {
+namespace Resource_data {
 
 
-struct Mesh_renderer_draw_call {
-  uint32_t model;
-  uint32_t texture; // Move this to the material.
-  float    world_matrix[16];
-};
+class Material_detail {
+  util::generic_id shader_id;
+  util::generic_id texture_map_01_id;
+}; // ns
 
 
 
 
 /*!
-  \brief Auto-generated structure for Renderer_mesh_data
+  \brief Auto-generated structure for Material_data
 */
-struct Renderer_mesh_data
+struct Material_data
 {
   // Data Key
-  util::generic_id *entity_id = nullptr;
+  util::generic_id *material_id = nullptr;
 
   // Properties
-  Mesh_renderer_draw_call *property_draw_call = nullptr;
+  char *property_name = nullptr;
+  Material_id *property_material = nullptr;
 
   // Size information
   size_t size = 0;
@@ -49,12 +49,12 @@ struct Renderer_mesh_data
 
 
 /*!
-  \brief Initialize the Renderer_mesh_data structure, this is will allocate the memory for the keys and properties. Function will take a lock.
+  \brief Initialize the Material_data structure, this is will allocate the memory for the keys and properties. Function will take a lock.
   \param data This structure to initialize.
   \param size_hint This helps the init function allocate the correct memory.
 */
 void
-renderer_mesh_data_init(Renderer_mesh_data *data, const size_t size_hint);
+material_data_init(Material_data *data, const size_t size_hint);
 
 
 /*!
@@ -62,7 +62,7 @@ renderer_mesh_data_init(Renderer_mesh_data *data, const size_t size_hint);
   \param data The data to free.
 */
 void
-renderer_mesh_data_free(Renderer_mesh_data *data);
+material_data_free(Material_data *data);
 
 
 /*!
@@ -70,7 +70,7 @@ renderer_mesh_data_free(Renderer_mesh_data *data);
   \param data The structure which to find the size.
 */
 size_t
-renderer_mesh_data_get_size(const Renderer_mesh_data *data);
+material_data_get_size(const Material_data *data);
 
 
 /*!
@@ -78,7 +78,7 @@ renderer_mesh_data_get_size(const Renderer_mesh_data *data);
   \param data The structure which to find the capacity.
 */
 size_t
-renderer_mesh_data_get_capacity(const Renderer_mesh_data *data);
+material_data_get_capacity(const Material_data *data);
 
 
 /*!
@@ -86,7 +86,7 @@ renderer_mesh_data_get_capacity(const Renderer_mesh_data *data);
   \param data The container to lock.
 */
 void
-data_lock(Renderer_mesh_data *data);
+data_lock(Material_data *data);
 
 
 /*!
@@ -94,7 +94,7 @@ data_lock(Renderer_mesh_data *data);
   \param The container to unlock
 */
 void
-data_unlock(Renderer_mesh_data *data);
+data_unlock(Material_data *data);
 
 
 /*!
@@ -105,7 +105,7 @@ data_unlock(Renderer_mesh_data *data);
   \return Returns true if it was successful.
 */
 bool
-renderer_mesh_data_push_back(Renderer_mesh_data *data, const util::generic_id key, size_t *out_index = nullptr);
+material_data_push_back(Material_data *data, const util::generic_id key, size_t *out_index = nullptr);
 
 
 /*!
@@ -115,7 +115,7 @@ renderer_mesh_data_push_back(Renderer_mesh_data *data, const util::generic_id ke
   \return Returns true if it was successful.
 */
 bool
-renderer_mesh_data_erase(Renderer_mesh_data *data, const util::generic_id key);
+material_data_erase(Material_data *data, const util::generic_id key);
 
 
 /*!
@@ -126,29 +126,51 @@ renderer_mesh_data_erase(Renderer_mesh_data *data, const util::generic_id key);
   \return Returns true if a key was found.
 */
 bool
-renderer_mesh_data_exists(const Renderer_mesh_data *data, const util::generic_id key, size_t *out_index = nullptr);
+material_data_exists(const Material_data *data, const util::generic_id key, size_t *out_index = nullptr);
 
 
 /*!
-  \brief Getter for property_draw_call.
+  \brief Getter for property_name.
   \param data The container to get information from.
   \param key The key to search for.
   \param value The output value, which will be set if the key is found.
   \return Returns true if the data was found.
 */
 bool
-renderer_mesh_data_get_property_draw_call(const Renderer_mesh_data *data, const util::generic_id key, Mesh_renderer_draw_call **value);
+material_data_get_property_name(const Material_data *data, const util::generic_id key, const char *value);
 
 
 /*!
-  \brief Setter for property_draw_call.
+  \brief Setter for property_name.
   \param data The container to update.
   \param key The key to search for.
   \param value The new value of the data.
   \return Returns true if the data was set.
 */
 bool
-renderer_mesh_data_set_property_draw_call(Renderer_mesh_data *data,  const util::generic_id key, const Mesh_renderer_draw_call *value);
+material_data_set_property_name(Material_data *data,  const util::generic_id key, const char value);
+
+
+/*!
+  \brief Getter for property_material.
+  \param data The container to get information from.
+  \param key The key to search for.
+  \param value The output value, which will be set if the key is found.
+  \return Returns true if the data was found.
+*/
+bool
+material_data_get_property_material(const Material_data *data, const util::generic_id key, Material_id *value);
+
+
+/*!
+  \brief Setter for property_material.
+  \param data The container to update.
+  \param key The key to search for.
+  \param value The new value of the data.
+  \return Returns true if the data was set.
+*/
+bool
+material_data_set_property_material(Material_data *data,  const util::generic_id key, const Material_id value);
 
 
 } // ns

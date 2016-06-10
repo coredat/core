@@ -159,6 +159,19 @@ bool
 {{data_name}}_set_{{prop[:name]}}({{data_type}} *data,  const {{key_type}} key, const {{prop[:type]}} {{prop[:set_indirection]}}value);
 
 
+% if prop[:searchable]
+/*!
+  \\brief Searches for a given value.
+  \\param data The container to search.
+  \\param value The value which to search for.
+  \\param out_key Optional the key for that value.
+  \\return Returns true if the data was found.
+*/
+bool
+{{data_name}}_search_{{prop[:name]}}(const {{data_type}} *data, const {{prop[:type]}} {{prop[:set_indirection]}}value, {{key_type}} *out_key = nullptr);
+
+
+% end
 % end
 } // ns
 

@@ -267,6 +267,10 @@ World::think()
 //                                        sizeof(Simple_renderer::Node));
   
   // Texture/vbo info
+  Resource_data::Resources *resources = Resource_data::get_resources();
+  Resource_data::data_lock(resources->mesh_data);
+//  Resource_data::data_lock(resources->texture_data);
+  
   for (uint32_t i = 0; i < size_of_node_pool; ++i)
   {
     const uint32_t mesh_id    = world->mesh_data->property_draw_call[i].model;
@@ -274,9 +278,9 @@ World::think()
     
     if(mesh_id && texture_id)
     {
-      Resource_data::Resources *resources = Resource_data::get_resources();
+      Graphics_api::Mesh get_mesh;
+      Resource_data::mesh_data_get_property_mesh(resources->mesh_data, mesh_id, &get_mesh);
       
-      Graphics_api::Mesh get_mesh = Resource_data::mesh_pool_find(resources->mesh_pool, mesh_id);
       Ogl::Texture get_texture    = Resource_data::texture_pool_find(resources->texture_pool, texture_id);
       
       nodes[i].vbo     = get_mesh.vbo;
@@ -284,6 +288,9 @@ World::think()
       memcpy(nodes[i].world_mat, world->mesh_data->property_draw_call[i].world_matrix, sizeof(float) * 16);
     }
   }
+  
+  Resource_data::data_unlock(resources->mesh_data);
+//  Resource_data::data_unlock(resources->texture_data);
   
   Simple_renderer::render_nodes_fullbright(nodes.data(), size_of_node_pool);
   //Simple_renderer::render_nodes_directional_light(nodes, size_of_node_pool);

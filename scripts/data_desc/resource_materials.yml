@@ -1,0 +1,26 @@
+data:
+  type: Material_data
+  name: material_data
+  namespace: Resource_data
+  header_dir: data/global_data/
+  path: code/data/global_data/new/
+
+  key:
+    name: material_id
+
+  header:
+    additional_code: >
+      class Material_detail
+      {
+        util::generic_id shader_id;
+        util::generic_id texture_map_01_id;
+      }; // ns
+
+  properties:
+    - name: name
+      type: char_32
+      return: value
+
+    - name: material
+      type: Material_id
+      return: value

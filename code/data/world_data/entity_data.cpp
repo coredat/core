@@ -299,6 +299,8 @@ entity_data_set_property_name(Entity_data *data,  const util::generic_id key, co
 }
 
 
+
+
 bool
 entity_data_get_property_tag(const Entity_data *data, const util::generic_id key, uint32_t *out_value)
 {
@@ -341,6 +343,8 @@ entity_data_set_property_tag(Entity_data *data,  const util::generic_id key, con
 
   return true;
 }
+
+
 
 
 bool
@@ -387,6 +391,8 @@ entity_data_set_property_components(Entity_data *data,  const util::generic_id k
 }
 
 
+
+
 bool
 entity_data_get_property_user_data(const Entity_data *data, const util::generic_id key, uintptr_t *out_value)
 {
@@ -429,6 +435,8 @@ entity_data_set_property_user_data(Entity_data *data,  const util::generic_id ke
 
   return true;
 }
+
+
 
 
 } // ns

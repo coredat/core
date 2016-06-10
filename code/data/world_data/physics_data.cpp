@@ -290,6 +290,8 @@ physics_data_set_property_transform(Physics_data *data,  const util::generic_id 
 }
 
 
+
+
 bool
 physics_data_get_property_aabb_collider(const Physics_data *data, const util::generic_id key, math::aabb *out_value)
 {
@@ -326,6 +328,8 @@ physics_data_set_property_aabb_collider(Physics_data *data,  const util::generic
 
   return true;
 }
+
+
 
 
 bool
@@ -366,6 +370,8 @@ physics_data_set_property_transformed_aabb_collider(Physics_data *data,  const u
 }
 
 
+
+
 bool
 physics_data_get_property_collision_id(const Physics_data *data, const util::generic_id key, uint64_t *out_value)
 {
@@ -402,6 +408,8 @@ physics_data_set_property_collision_id(Physics_data *data,  const util::generic_
 
   return true;
 }
+
+
 
 
 } // ns

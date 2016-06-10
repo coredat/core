@@ -1,0 +1,24 @@
+data:
+  type: Shader_data
+  name: shader_data
+  namespace: Resource_data
+  header_dir: data/global_data/
+  path: code/data/global_data/new/
+
+  key:
+    name: shader_id
+
+  properties:
+    - name: name
+      type: char_32
+      return: pointer
+
+    - name: shader
+      type: Ogl::Shader
+      return: value
+      include: <graphics_api/ogl/ogl_shader.hpp>
+
+    - name: uniforms
+      type: Ogl::Shader
+      return: value
+      include: <graphics_api/ogl/ogl_shader.hpp>

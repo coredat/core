@@ -1,0 +1,19 @@
+data:
+  type: Texture_data
+  name: texture_data
+  namespace: Resource_data
+  header_dir: data/global_data/
+  path: code/data/global_data/new/
+
+  key:
+    name: texture_id
+
+  properties:
+    - name: name
+      type: char_32
+      return: value
+
+    - name: texture
+      type: Ogl::Texture
+      return: value
+      include: <graphics_api/ogl/ogl_texture.hpp>

@@ -3,18 +3,22 @@
 
 
 #include <memory>
+#include <stdint.h>
 
 
 namespace Core {
 
 
-class Shader
+class Shader final
 {
 public:
 
+  explicit                  Shader();
   explicit                  Shader(const char *filename);
-  
+  explicit                  Shader(const char *name, const char *vs, const char *gs, const char *ps);
                             ~Shader();
+  
+  uint32_t                  get_number_of_uniforms() const;
   
   bool                      is_valid() const;
   

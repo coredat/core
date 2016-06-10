@@ -26,12 +26,12 @@ resources_init()
   texture_pool_init(&texture);
   data->texture_pool = &texture;
   
-  static Mesh_pool model;
-  mesh_pool_init(&model);
-  data->mesh_pool = &model;
+  static Mesh_data model;
+  mesh_data_init(&model, 256);
+  data->mesh_data = &model;
   
   static Shader_data shaders;
-  shader_data_init(&shaders);
+  shader_data_init(&shaders, 16);
   data->shader_data = &shaders;
   
   static Material_data materials;

@@ -10,18 +10,19 @@
 namespace Core {
 
 
-class Renderer
+class Renderer final
 {
 public:
 
   explicit                Renderer(const Renderer_type renderer_type);
   
   Renderer_type           get_type() const;
+  const char *            get_type_name() const;
   
 private:
 
-  const Renderer_type     m_renderer_type = Renderer_type::mesh;
-  util::generic_id        m_entity_id = 0;
+  const Renderer_type     m_renderer_type = Renderer_type::material;
+  util::generic_id        m_entity_id = util::generic_id_invalid();
 
 };
 

@@ -18,6 +18,7 @@ class Material final
 {
 public:
 
+  explicit              Material();
   explicit              Material(const char *name);
                         ~Material();
   
