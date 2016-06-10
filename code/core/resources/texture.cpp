@@ -35,6 +35,9 @@ Texture::Texture(const char *filepath)
   const std::string file(filepath);
   const std::string name(util::get_filename_from_path(filepath));
 
+  Resource_data::Resources *resources = Resource_data::get_resources();
+  assert(resources);
+
   auto tex_data = Resource_data::get_resources()->texture_data;
   assert(tex_data);
   
@@ -46,6 +49,10 @@ Texture::Texture(const char *filepath)
     
     if(Resource_data::texture_data_search_property_name(tex_data, name.c_str(), &search_id))
     {
+      #ifdef LOG_DOUBLE_RESOURCE_INITIALIZE
+      LOG_WARNING(Error_string::resource_already_exists());
+      #endif
+      
       m_impl->texture_id = search_id;
     }
     
@@ -53,10 +60,6 @@ Texture::Texture(const char *filepath)
     
     if(search_id)
     {
-      #ifdef LOG_DOUBLE_RESOURCE_INITIALIZE
-      LOG_WARNING(Error_string::resource_already_exists());
-      #endif
-    
       return;
     }
   }
@@ -80,9 +83,11 @@ Texture::Texture(const char *filepath)
     {
       Resource_data::data_lock(tex_data);
       
-      Resource_data::texture_data_push_back(tex_data, tex_data->size + 1);
+      assert(Resource_data::texture_data_push_back(tex_data, tex_data->size + 1));
       Resource_data::texture_data_set_property_name(tex_data, tex_data->size, name.c_str());
       Resource_data::texture_data_set_property_texture(tex_data, tex_data->size, new_texture);
+      
+      m_impl->texture_id = tex_data->size;
       
       Resource_data::data_unlock(tex_data);
     }

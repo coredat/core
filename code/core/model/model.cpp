@@ -44,7 +44,7 @@ Model::Model(const char *filename)
 : m_impl(new Impl)
 {
   const std::string file(filename);
-  const std::string name = util::get_filename_from_path(file);
+  const std::string name(util::get_filename_from_path(file));
 
   Resource_data::Resources *resources = Resource_data::get_resources();
   assert(resources);
