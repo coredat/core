@@ -4,6 +4,7 @@
 #include <debug_gui/entity_list.hpp>
 #include <debug_gui/memory_view.hpp>
 #include <debug_gui/mesh_list.hpp>
+#include <debug_gui/material_list.hpp>
 
 #include <3rdparty/imgui/imgui.h>
 
@@ -24,6 +25,7 @@ namespace
   bool show_model_list = false;
   bool show_shader_list = false;
   bool show_memory_view = false;
+  bool show_material_list = false;
 }
 
 void
@@ -44,6 +46,7 @@ display_global_data_menu()
       ImGui::MenuItem("Model", nullptr, &show_model_list);
       ImGui::MenuItem("Shaders", nullptr, &show_shader_list);
       ImGui::MenuItem("Memory", nullptr, &show_memory_view);
+      ImGui::MenuItem("Material", nullptr, &show_material_list);
       
       ImGui::EndMenu();
     }
@@ -51,10 +54,11 @@ display_global_data_menu()
     ImGui::EndMainMenuBar();
   }
   
-  if(show_texture_list) { display_texture_list(global_data->texture_data);  }
-  if(show_model_list)   { display_mesh_list(global_data->mesh_data);        }
-  if(show_shader_list)  { display_shader_list(global_data->shader_data);    }
-  if(show_memory_view)  { display_memory_useage(Memory::_get_pool());       }
+  if(show_texture_list)  { display_texture_list(global_data->texture_data);   }
+  if(show_model_list)    { display_mesh_list(global_data->mesh_data);         }
+  if(show_shader_list)   { display_shader_list(global_data->shader_data);     }
+  if(show_memory_view)   { display_memory_useage(Memory::_get_pool());        }
+  if(show_material_list) { display_material_list(global_data->material_data); }
 }
 
 
