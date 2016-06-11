@@ -57,9 +57,6 @@ public:
   void                          set_transform(const Transform &transform);
   Transform                     get_transform() const;
 
-  void                          set_material_id(const uint32_t id);
-  uint32_t                      get_material_id() const;
-
   void                          set_material(const Material &mat);
   Core::Material                get_material() const;
   

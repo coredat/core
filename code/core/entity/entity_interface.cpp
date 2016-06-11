@@ -424,60 +424,6 @@ get_transform(const util::generic_id this_id, World_data::World *world)
 
 
 void
-set_material_id(const util::generic_id this_id, World_data::World *world, const uint32_t id)
-{
-  if(!is_valid(this_id, world))
-  {
-    LOG_ERROR(Error_string::entity_is_invalid());
-    return;
-  }
-  
-  // Update mesh renderer data
-  auto data = world->mesh_data;
-  {
-    World_data::data_lock(data);
-    
-    size_t index;
-    
-    if(World_data::renderer_mesh_data_exists(data, this_id, &index))
-    {
-//      data->property_draw_call[index].texture = id;
-    }
-    
-    World_data::data_unlock(data);
-  }
-}
-
-
-uint32_t
-get_material_id(const util::generic_id this_id, World_data::World *world)
-{
-  if(!is_valid(this_id, world))
-  {
-    LOG_ERROR(Error_string::entity_is_invalid());
-    return 0;
-  }
-
-  uint32_t return_id = 0;
-
-  auto data = world->mesh_data;
-  
-  World_data::data_lock(data);
-  
-  size_t index;
-  
-  if(World_data::renderer_mesh_data_exists(data, this_id, &index))
-  {
-//    return_id = data->property_draw_call[index].texture;
-  }
-  
-  World_data::data_unlock(data);
-  
-  return return_id;
-}
-
-
-void
 set_material(const util::generic_id this_id, World_data::World *world, const Core::Material &material)
 {
   assert(this_id && world && material.exists());
