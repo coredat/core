@@ -270,14 +270,15 @@ World::think()
   Resource_data::Resources *resources = Resource_data::get_resources();
   assert(resources);
   
+  math::max(0,1);
+  
   Resource_data::data_lock(resources->mesh_data);
   Resource_data::data_lock(resources->texture_data);
   
   for (uint32_t i = 0; i < size_of_node_pool; ++i)
   {
-    const uint32_t mesh_id    = world->mesh_data->property_draw_call[i].model_id;
-    const uint32_t material_id = 1;//world->mesh_data->property_draw_call[i].material_id;
-    
+    const uint32_t mesh_id     = world->mesh_data->property_draw_call[i].model_id;
+    const uint32_t material_id = world->mesh_data->property_draw_call[i].material_id;
     
     if(mesh_id && material_id)
     {
@@ -299,6 +300,7 @@ World::think()
   Resource_data::data_unlock(resources->mesh_data);
   Resource_data::data_unlock(resources->texture_data);
   
+  Simple_renderer::reset();
   Simple_renderer::render_nodes_fullbright(nodes.data(), size_of_node_pool);
   //Simple_renderer::render_nodes_directional_light(nodes, size_of_node_pool);
 

@@ -24,6 +24,14 @@ void
 initialize();
 
 
+
+/*!
+  Resets some internal cacheing.
+*/
+void
+reset();
+
+
 /*!
   Given a valid context this will render the given nodes to the screen.
   \param nodes[] The rendering nodes which to render.

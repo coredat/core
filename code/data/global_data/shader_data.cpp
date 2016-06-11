@@ -283,6 +283,28 @@ shader_data_set_property_name(Shader_data *data,  const util::generic_id key, co
 }
 
 
+bool
+shader_data_search_property_name(const Shader_data *data, const char *value, util::generic_id *out_key)
+{
+  bool found = false;
+
+  for(size_t i = 0; i < data->size; ++i)
+  {
+    if(!strcmp(value, &data->property_name[i * 32]))
+    {
+      found = true;
+
+      if(out_key)
+      {
+        *out_key = data->shader_id[i];
+      }
+
+      break;
+    }
+  }
+
+  return found;
+}
 
 
 bool

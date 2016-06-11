@@ -61,17 +61,21 @@ Material::~Material()
 
 
 Material::Material(const Material &mat)
+: m_impl(new Impl{mat.m_impl->material_id})
 {
 }
 
 
 Material::Material(Material &&mat)
+: m_impl(new Impl{mat.m_impl->material_id})
 {
 }
+
 
 Material&
 Material::operator=(const Material &mat)
 {
+  m_impl->material_id = mat.m_impl->material_id;
   return *this;
 }
 
@@ -79,6 +83,7 @@ Material::operator=(const Material &mat)
 Material&
 Material::operator=(Material &&mat)
 {
+  m_impl->material_id = mat.m_impl->material_id;
   return *this;
 }
 

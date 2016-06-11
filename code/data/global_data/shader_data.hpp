@@ -6,8 +6,8 @@
 */
 
 
-#ifndef SHADER_DATA_INCLUDED_0C374BF6_4C0D_48BD_9B21_B167E75AF16D
-#define SHADER_DATA_INCLUDED_0C374BF6_4C0D_48BD_9B21_B167E75AF16D
+#ifndef SHADER_DATA_INCLUDED_B965A2F6_27C2_4040_9313_052EECB5DA04
+#define SHADER_DATA_INCLUDED_B965A2F6_27C2_4040_9313_052EECB5DA04
 
 
 #include <utilities/generic_id.hpp>
@@ -144,6 +144,17 @@ shader_data_get_property_name(const Shader_data *data, const util::generic_id ke
 */
 bool
 shader_data_set_property_name(Shader_data *data,  const util::generic_id key, const char *value);
+
+
+/*!
+  \brief Searches for a given value.
+  \param data The container to search.
+  \param value The value which to search for.
+  \param out_key Optional the key for that value.
+  \return Returns true if the data was found.
+*/
+bool
+shader_data_search_property_name(const Shader_data *data, const char *value, util::generic_id *out_key = nullptr);
 
 
 /*!

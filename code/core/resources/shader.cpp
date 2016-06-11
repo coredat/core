@@ -37,10 +37,28 @@ namespace
                   const char *gs_code,
                   const char *ps_code)
   {
+    assert(vs_code && gs_code && shader_name);
+  
+    auto data = Resource_data::get_resources();
+    assert(data);
+  
     util::generic_id return_id = util::generic_id_invalid();
 
-    // Check if name already exists
-    LOG_TODO("Check shader name exists first.");
+    // Check if shader already exists.
+    {
+      Resource_data::data_lock(data->shader_data);
+      
+      util::generic_id search_id = util::generic_id_invalid();
+      Resource_data::shader_data_search_property_name(data->shader_data, shader_name, &search_id);
+      
+      Resource_data::data_unlock(data->shader_data);
+    
+      if(search_id)
+      {
+        return_id = search_id;
+        return return_id;
+      }
+    }
     
     Ogl::Shader shader;
     Ogl::shader_create(&shader,
@@ -49,9 +67,6 @@ namespace
                        ps_code);
     
     assert(Ogl::shader_is_valid(shader));
-    
-    auto data = Resource_data::get_resources();
-    assert(data);
     
     // Add the new shader
     if(Ogl::shader_is_valid(shader));

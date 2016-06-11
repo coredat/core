@@ -119,6 +119,22 @@ initialize()
 }
 
 
+namespace
+{
+  // Internal caching to try and reduce state changes.
+  GLuint tex_id = -1;
+  GLuint last_vbo = -1;
+}
+
+
+void
+reset()
+{
+  tex_id = -1;
+  last_vbo = -1;
+}
+
+
 void
 render_nodes_fullbright(const Node nodes[],
                         const uint32_t number_of_nodes)
@@ -141,8 +157,6 @@ render_nodes_fullbright(const Node nodes[],
       
       // Smplisit state change check.
       {
-        static GLuint tex_id = (-1);
-        
         if(tex_id != curr_node->diffuse.texture_id)
         {
           tex_id = curr_node->diffuse.texture_id;
@@ -152,8 +166,6 @@ render_nodes_fullbright(const Node nodes[],
       
       // Simplistic state change check.
       {
-        static GLuint last_vbo(-1);
-        
         if(last_vbo != curr_node->vbo.vertex_buffer_id)
         {
           last_vbo = curr_node->vbo.vertex_buffer_id;

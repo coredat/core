@@ -6,8 +6,8 @@
 */
 
 
-#ifndef RENDERER_MESH_DATA_INCLUDED_9421439D_19DC_4374_98DA_A03F61854ADD
-#define RENDERER_MESH_DATA_INCLUDED_9421439D_19DC_4374_98DA_A03F61854ADD
+#ifndef RENDERER_MESH_DATA_INCLUDED_BBAEFA55_8852_48B5_9D60_29618BBBBD0A
+#define RENDERER_MESH_DATA_INCLUDED_BBAEFA55_8852_48B5_9D60_29618BBBBD0A
 
 
 #include <utilities/generic_id.hpp>
@@ -19,7 +19,7 @@ namespace World_data {
 
 
 struct Mesh_renderer_draw_call {
-  util::generic_id material_id = 1;
+  util::generic_id material_id;
   util::generic_id model_id;
   float    world_matrix[16];
 };

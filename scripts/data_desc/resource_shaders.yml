@@ -12,6 +12,7 @@ data:
     - name: name
       type: char_32
       return: pointer
+      searchable: true
 
     - name: shader
       type: Ogl::Shader
