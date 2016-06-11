@@ -3,7 +3,7 @@ data:
   name: texture_data
   namespace: Resource_data
   header_dir: data/global_data/
-  path: code/data/global_data/new/
+  path: code/data/global_data/
 
   key:
     name: texture_id

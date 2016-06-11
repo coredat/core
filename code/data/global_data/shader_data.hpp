@@ -6,8 +6,8 @@
 */
 
 
-#ifndef SHADER_DATA_INCLUDED_19BB0260_DF97_4721_81B0_8025CA754CD4
-#define SHADER_DATA_INCLUDED_19BB0260_DF97_4721_81B0_8025CA754CD4
+#ifndef SHADER_DATA_INCLUDED_884198AC_D93B_4F4D_9681_1954C68E73C8
+#define SHADER_DATA_INCLUDED_884198AC_D93B_4F4D_9681_1954C68E73C8
 
 
 #include <utilities/generic_id.hpp>
@@ -32,7 +32,6 @@ struct Shader_data
   char *property_name = nullptr;
   Ogl::Shader *property_shader = nullptr;
   Ogl::Shader *property_uniforms = nullptr;
-  bool *property_is_valid = nullptr;
 
   // Size information
   size_t size = 0;
@@ -189,28 +188,6 @@ shader_data_get_property_uniforms(const Shader_data *data, const util::generic_i
 */
 bool
 shader_data_set_property_uniforms(Shader_data *data,  const util::generic_id key, const Ogl::Shader value);
-
-
-/*!
-  \brief Getter for property_is_valid.
-  \param data The container to get information from.
-  \param key The key to search for.
-  \param value The output value, which will be set if the key is found.
-  \return Returns true if the data was found.
-*/
-bool
-shader_data_get_property_is_valid(const Shader_data *data, const util::generic_id key, bool *value);
-
-
-/*!
-  \brief Setter for property_is_valid.
-  \param data The container to update.
-  \param key The key to search for.
-  \param value The new value of the data.
-  \return Returns true if the data was set.
-*/
-bool
-shader_data_set_property_is_valid(Shader_data *data,  const util::generic_id key, const bool value);
 
 
 } // ns

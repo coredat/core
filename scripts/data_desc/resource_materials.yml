@@ -3,14 +3,14 @@ data:
   name: material_data
   namespace: Resource_data
   header_dir: data/global_data/
-  path: code/data/global_data/new/
+  path: code/data/global_data/
 
   key:
     name: material_id
 
   header:
     additional_code: >
-      class Material_detail
+      struct Material_detail
       {
         util::generic_id shader_id;
         util::generic_id texture_map_01_id;
@@ -19,8 +19,9 @@ data:
   properties:
     - name: name
       type: char_32
-      return: value
+      return: pointer
+      searchable: true
 
     - name: material
-      type: Material_id
+      type: Material_detail
       return: value

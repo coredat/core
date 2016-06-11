@@ -6,8 +6,8 @@
 */
 
 
-#ifndef MESH_DATA_INCLUDED_A3389C91_B5C4_4D19_9437_E02EE622C783
-#define MESH_DATA_INCLUDED_A3389C91_B5C4_4D19_9437_E02EE622C783
+#ifndef MESH_DATA_INCLUDED_87DEEFE4_C1DE_4CCB_ADA9_03E4CBFF4A6F
+#define MESH_DATA_INCLUDED_87DEEFE4_C1DE_4CCB_ADA9_03E4CBFF4A6F
 
 
 #include <utilities/generic_id.hpp>
@@ -18,13 +18,6 @@
 
 
 namespace Resource_data {
-
-
-class Material_detail {
-  util::generic_id shader_id;
-  util::generic_id texture_map_01_id;
-}; // ns
-
 
 
 
