@@ -21,6 +21,9 @@ public:
   uint32_t                  get_number_of_uniforms() const;
   
   bool                      is_valid() const;
+                            operator bool() const; // Alias for is_valid().
+
+  uint32_t                  get_id() const;
   
 private:
 

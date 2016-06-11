@@ -12,11 +12,13 @@ display_material_list(Resource_data::Material_data *data)
 {
   ImGui::Begin("Material List");
   {
-    ImGui::Columns(2, "material_cols");
+    ImGui::Columns(4, "material_cols");
     ImGui::Separator();
     
     ImGui::Text("ID"); ImGui::NextColumn();
     ImGui::Text("Name"); ImGui::NextColumn();
+    ImGui::Text("Shader"); ImGui::NextColumn();
+    ImGui::Text("Map 01"); ImGui::NextColumn();
     
     ImGui::Separator();
     
@@ -28,11 +30,20 @@ display_material_list(Resource_data::Material_data *data)
       sprintf(id, "%02d", data->material_id[i]);
     
       ImGui::Selectable(id, selected == i, ImGuiSelectableFlags_SpanAllColumns);
+      
       ImGui::NextColumn();
       
       const char *name;
       Resource_data::material_data_get_property_name(data, data->material_id[i], &name);
-      ImGui::Text("%s", name); ImGui::NextColumn();
+      ImGui::Text("%s", name);
+      
+      ImGui::NextColumn();
+      
+      Resource_data::Material_detail material;
+      Resource_data::material_data_get_property_material(data, data->material_id[i], &material);
+      
+      ImGui::Text("%02d", material.shader_id); ImGui::NextColumn();
+      ImGui::Text("%02d", material.texture_map_01_id); ImGui::NextColumn();
     }
     
     ImGui::Columns(1);

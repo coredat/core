@@ -63,6 +63,10 @@ resource_already_exists() { return "Resource already exists."; }
 
 
 constexpr const char *
+resource_is_invalid() { return "Resource is invalid."; }
+
+
+constexpr const char *
 generic_sdl_fail() { return "SDL error."; }
 
 

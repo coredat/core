@@ -441,7 +441,7 @@ set_material_id(const util::generic_id this_id, World_data::World *world, const 
     
     if(World_data::renderer_mesh_data_exists(data, this_id, &index))
     {
-      data->property_draw_call[index].texture = id;
+//      data->property_draw_call[index].texture = id;
     }
     
     World_data::data_unlock(data);
@@ -468,7 +468,7 @@ get_material_id(const util::generic_id this_id, World_data::World *world)
   
   if(World_data::renderer_mesh_data_exists(data, this_id, &index))
   {
-    return_id = data->property_draw_call[index].texture;
+//    return_id = data->property_draw_call[index].texture;
   }
   
   World_data::data_unlock(data);
@@ -478,17 +478,39 @@ get_material_id(const util::generic_id this_id, World_data::World *world)
 
 
 void
-set_material(const util::generic_id this_id, World_data::World *world, Core::Material &material)
+set_material(const util::generic_id this_id, World_data::World *world, const Core::Material &material)
 {
-  assert(false);
-  LOG_ERROR(Error_string::no_implimentation());
+  assert(this_id && world && material.exists());
+
+  World_data::data_lock(world->mesh_data);
+  
+  World_data::Mesh_renderer_draw_call *draw;
+  World_data::renderer_mesh_data_get_property_draw_call(world->mesh_data, this_id, &draw);
+  
+  draw->material_id = material.get_id();
+  World_data::renderer_mesh_data_set_property_draw_call(world->mesh_data, this_id, draw);
+  
+  World_data::data_unlock(world->mesh_data);
 }
 
 
 Core::Material
 get_material(const util::generic_id this_id, World_data::World *world)
 {
-  return Core::Material("");
+  assert(this_id && world);
+  
+  uint32_t id = 0;
+  
+  World_data::data_lock(world->mesh_data);
+  
+  World_data::Mesh_renderer_draw_call *draw;
+  World_data::renderer_mesh_data_get_property_draw_call(world->mesh_data, this_id, &draw);
+  
+  id = draw->material_id;
+  
+  World_data::data_unlock(world->mesh_data);
+  
+  return Core::Material(id);
 }
 
 
@@ -510,7 +532,7 @@ set_model(const util::generic_id this_id, World_data::World *world, const Core::
     
     if(World_data::renderer_mesh_data_exists(mesh_data, this_id, &index))
     {
-      mesh_data->property_draw_call[index].model = model.get_id();
+      mesh_data->property_draw_call[index].model_id = model.get_id();
     }
     
     World_data::data_unlock(mesh_data);

@@ -19,6 +19,7 @@ class Material final
 public:
 
   explicit              Material();
+  explicit              Material(const uint32_t id);
   explicit              Material(const char *name);
                         ~Material();
   
@@ -30,10 +31,13 @@ public:
 
   void                  set_shader(const Shader &shader);
   void                  set_map_01(const Texture &texture);
-  void                  set_map_02(const Texture &texture);
-  void                  set_map_03(const Texture &texture);
   
   const char *          get_name() const;
+  
+  bool                  exists() const;
+                        operator bool() const;
+  
+  uint32_t              get_id() const;
   
 private:
 

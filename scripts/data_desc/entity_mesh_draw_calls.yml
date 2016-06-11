@@ -12,8 +12,8 @@ data:
     additional_code: >
       struct Mesh_renderer_draw_call
       {
-        uint32_t model;
-        uint32_t texture; // Move this to the material.
+        util::generic_id material_id;
+        util::generic_id model_id;
         float    world_matrix[16];
       };
 

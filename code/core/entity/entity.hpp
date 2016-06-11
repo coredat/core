@@ -7,6 +7,7 @@
 #include <core/transform/transform_fwd.hpp>
 #include <core/physics/physics_fwd.hpp>
 #include <core/model/model_fwd.hpp>
+#include <core/resources/resources_fwd.hpp>
 #include <core/world/world_fwd.hpp>
 #include <core/world/detail/world_detail_fwd.hpp>
 #include <core/renderer/renderer_fwd.hpp>
@@ -40,8 +41,6 @@ public:
 
                                 operator Entity_ref() const;
   
-                                
-  
   void                          destroy();
   
   // ** Common Entity Interface ** //
@@ -65,6 +64,9 @@ public:
 
   void                          set_material_id(const uint32_t id);
   uint32_t                      get_material_id() const;
+  
+  void                          set_material(const Material &mat);
+  Core::Material                get_material() const;
 
   void                          set_model(const Core::Model &model);
   Core::Model                   get_model() const;

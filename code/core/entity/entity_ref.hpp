@@ -2,13 +2,14 @@
 #define ENTITY_REF_INCLUDED_6EB9BAB7_7AB4_4092_9FBC_BD003D9C8F83
 
 
-#include <utilities/generic_id.hpp>
 #include <core/world/world.hpp>
+#include <core/resources/resources_fwd.hpp>
 #include <core/transform/transform_fwd.hpp>
 #include <core/physics/physics_fwd.hpp>
 #include <core/model/model_fwd.hpp>
 #include <core/world/world_fwd.hpp>
 #include <core/entity/entity_fwd.hpp>
+#include <utilities/generic_id.hpp>
 #include <stdint.h>
 #include <memory>
 
@@ -58,6 +59,9 @@ public:
 
   void                          set_material_id(const uint32_t id);
   uint32_t                      get_material_id() const;
+
+  void                          set_material(const Material &mat);
+  Core::Material                get_material() const;
   
   void                          set_model(const Core::Model &model);
   Core::Model                   get_model() const;

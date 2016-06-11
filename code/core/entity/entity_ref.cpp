@@ -7,6 +7,7 @@
 #include <core/entity/entity.hpp>
 #include <core/world/world.hpp>
 #include <core/world/detail/world_detail.hpp>
+#include <core/resources/material.hpp>
 
 
 namespace Core {
@@ -195,6 +196,20 @@ uint32_t
 Entity_ref::get_material_id() const
 {
   return Entity_detail::get_material_id(m_impl->id, &m_impl->world->data);
+}
+
+
+void
+Entity_ref::set_material(const Core::Material &mat)
+{
+  Entity_detail::set_material(m_impl->id, &m_impl->world->data, mat);
+}
+
+
+Core::Material
+Entity_ref::get_material() const
+{
+  return Entity_detail::get_material(m_impl->id, &m_impl->world->data);
 }
 
 

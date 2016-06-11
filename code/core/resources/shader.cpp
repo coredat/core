@@ -114,4 +114,17 @@ Shader::is_valid() const
 }
 
 
+Shader::operator bool() const
+{
+  return is_valid();
+}
+
+
+uint32_t
+Shader::get_id() const
+{
+  return m_impl->id;
+}
+
+
 } // ns

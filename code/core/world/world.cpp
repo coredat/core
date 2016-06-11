@@ -275,16 +275,20 @@ World::think()
   
   for (uint32_t i = 0; i < size_of_node_pool; ++i)
   {
-    const uint32_t mesh_id    = world->mesh_data->property_draw_call[i].model;
-    const uint32_t texture_id = world->mesh_data->property_draw_call[i].texture;
+    const uint32_t mesh_id    = world->mesh_data->property_draw_call[i].model_id;
+    const uint32_t material_id = 1;//world->mesh_data->property_draw_call[i].material_id;
     
-    if(mesh_id && texture_id)
+    
+    if(mesh_id && material_id)
     {
       Graphics_api::Mesh get_mesh;
       Resource_data::mesh_data_get_property_mesh(resources->mesh_data, mesh_id, &get_mesh);
 
+      Resource_data::Material_detail material;
+      Resource_data::material_data_get_property_material(resources->material_data, material_id, &material);
+
       Ogl::Texture get_texture;
-      Resource_data::texture_data_get_property_texture(resources->texture_data, texture_id, &get_texture);
+      Resource_data::texture_data_get_property_texture(resources->texture_data, material.texture_map_01_id, &get_texture);
       
       nodes[i].vbo     = get_mesh.vbo;
       nodes[i].diffuse = get_texture;
