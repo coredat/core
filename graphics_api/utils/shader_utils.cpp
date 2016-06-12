@@ -14,7 +14,7 @@ shader_code_from_tagged_file(const char *filename)
 {
   const std::string code(std::istreambuf_iterator<char>(std::ifstream(filename).rdbuf()), std::istreambuf_iterator<char>());
   
-  const std::string get_filepath = util::get_dir_from_filename(filename);
+  const std::string get_filepath = util::get_dir_from_filepath(filename);
   const std::string pre_processed = util::hash_include_string(code, {get_filepath});
   
   return shader_code_from_tagged_string(pre_processed.c_str());
