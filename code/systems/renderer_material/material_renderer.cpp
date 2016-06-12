@@ -11,9 +11,10 @@
 
 namespace
 {
-  int32_t mat_renderer_last_program = -1;
-  int32_t mat_renderer_last_ibo     = -1;
-  int32_t mat_renderer_last_vbo     = -1;
+  GLuint mat_renderer_last_program        = -1;
+  GLuint mat_renderer_last_ibo            = -1;
+  GLuint mat_renderer_last_vbo            = -1;
+  GLuint mat_renderer_last_map_01_texture = -1;
   
   Ogl::Vertex_format mat_renderer_vertex_format;
 }
@@ -45,9 +46,12 @@ initialize()
 void
 reset()
 {
-  mat_renderer_last_ibo     = -1;
-  mat_renderer_last_vbo     = -1;
-  mat_renderer_last_program = -1;
+  mat_renderer_last_ibo             = -1;
+  mat_renderer_last_vbo             = -1;
+  mat_renderer_last_program         = -1;
+  mat_renderer_last_map_01_texture  = -1;
+  
+  Ogl::default_state();
 }
 
 
@@ -57,9 +61,48 @@ render(const float view_proj_mat[16],
        const Draw_call calls[],
        const uint32_t number_of_calls)
 {
+  Ogl::error_clear();
+
   // Bind material.
+  {
+    // Program
+    if(material.shader.program_id != mat_renderer_last_program)
+    {
+      Ogl::shader_bind(&material.shader);
+      mat_renderer_last_program = material.shader.program_id;
+    }
+    
+    // Texture
+//    if(material.texture_map_01.texture_id != mat_renderer_last_map_01_texture)
+//    {
+//      // Move the filter selection into the material.
+//      static Graphics_api::Texture_filtering filter =
+//      {
+//        Graphics_api::Filtering_mode::anisotropic,
+//        Graphics_api::Wrap_mode::wrap,
+//        Graphics_api::Wrap_mode::wrap
+//      };
+//      
+//      Ogl::filtering_apply(filter);
+//    }
+    
+    //
+    {
+    }
+  }
   
   // For all draw calls
+  for(uint32_t i = 0; i < number_of_calls; ++i)
+  {
+    Draw_call call = calls[i];
+  
+    // Draw the mesh.
+    {
+      const GLsizei count = call.mesh.vbo.number_of_entries / mat_renderer_vertex_format.number_of_attributes;
+
+      glDrawArrays(GL_TRIANGLES, 0, count);
+    }
+  }
 }
 
 

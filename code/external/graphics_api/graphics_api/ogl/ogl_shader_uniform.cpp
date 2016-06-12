@@ -107,6 +107,11 @@ shader_uniforms_get_uniform_index(Uniform *out_index, const Shader_uniforms *uni
     }
   }
   
+  // Make it invalid
+  out_index->index = -1;
+  out_index->number_of_elements = 0;
+  out_index->type = 0;
+  
   return false;
 }
 

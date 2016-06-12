@@ -75,7 +75,7 @@ material_data_init(Material_data *data, const size_t size_hint)
       void *offset = util::mem_offset(alloc_start, byte_counter);
       void *aligned = util::mem_next_16byte_boundry(offset);
 
-      data->property_material = reinterpret_cast<Material_detail*>(aligned);
+      data->property_material = reinterpret_cast<Material_renderer::Material*>(aligned);
       #ifndef NDEBUG
       memset(offset, 0, bytes_property_material);
       #endif
@@ -292,13 +292,13 @@ material_data_search_property_name(const Material_data *data, const char *value,
 
 
 bool
-material_data_get_property_material(const Material_data *data, const util::generic_id key, Material_detail *out_value)
+material_data_get_property_material(const Material_data *data, const util::generic_id key, Material_renderer::Material **out_value)
 {
   size_t index;
 
   if(material_data_exists(data, key, &index))
   {
-    *out_value = data->property_material[index];
+    *out_value = &data->property_material[index];
   }
   else
   {
@@ -313,7 +313,7 @@ material_data_get_property_material(const Material_data *data, const util::gener
 
 
 bool
-material_data_set_property_material(Material_data *data,  const util::generic_id key, const Material_detail value)
+material_data_set_property_material(Material_data *data,  const util::generic_id key, const Material_renderer::Material *value)
 {
   assert(data && key);
 
@@ -321,7 +321,7 @@ material_data_set_property_material(Material_data *data,  const util::generic_id
 
   if(material_data_exists(data, key, &index))
   {
-    data->property_material[index] = value;
+    data->property_material[index] = *value;
   }
   else
   {

@@ -6,6 +6,7 @@
 #include <data/global_data/resource_data.hpp>
 #include <math/geometry/aabb.hpp>
 
+#include <utilities/file_helpers.hpp>
 #include <utilities/obj_model_loader.hpp>
 #include <graphics_api/mesh.hpp>
 #include <utilities/logging.hpp>
@@ -45,6 +46,12 @@ Model::Model(const char *filename)
 {
   const std::string file(filename);
   const std::string name(util::get_filename_from_path(file));
+  
+  if(!util::file::exists(filename))
+  {
+    LOG_ERROR(Error_string::file_not_found());
+    return;
+  }
 
   Resource_data::Resources *resources = Resource_data::get_resources();
   assert(resources);

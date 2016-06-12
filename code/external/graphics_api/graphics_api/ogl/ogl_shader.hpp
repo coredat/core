@@ -50,7 +50,7 @@ shader_destroy(Shader *shader_to_destroy,
   \param shader_to_bind is the shader to bind o_O.
 */
 void
-shader_bind(Shader *shader_to_bind);
+shader_bind(const Shader *shader_to_bind);
 
 
 /*!
@@ -59,9 +59,9 @@ shader_bind(Shader *shader_to_bind);
   \param shader_to_check This is the shader to test.
 */
 inline bool
-shader_is_valid(Shader shader_to_check)
+shader_is_valid(const Shader *shader_to_check)
 {
-  return shader_to_check.program_id != 0;
+  return shader_to_check->program_id != 0;
 }
 
 

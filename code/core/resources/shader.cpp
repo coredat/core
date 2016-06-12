@@ -1,8 +1,10 @@
 #include <core/resources/shader.hpp>
+#include <common/error_strings.hpp>
 #include <data/global_data/resource_data.hpp>
 #include <data/global_data/shader_data.hpp>
 #include <utilities/generic_id.hpp>
 #include <utilities/string_helpers.hpp>
+#include <utilities/file_helpers.hpp>
 #include <graphics_api/utils/shader_utils.hpp>
 #include <graphics_api/ogl/ogl_shader.hpp>
 #include <assert.h>
@@ -66,10 +68,10 @@ namespace
                        gs_code,
                        ps_code);
     
-    assert(Ogl::shader_is_valid(shader));
+    assert(Ogl::shader_is_valid(&shader));
     
     // Add the new shader
-    if(Ogl::shader_is_valid(shader));
+    if(Ogl::shader_is_valid(&shader));
     {
       Resource_data::data_lock(data->shader_data);
       
@@ -95,6 +97,13 @@ Shader::Shader(const char *filename)
   
   if(filename)
   {
+    // Check file exists first
+    if(!util::file::exists(filename))
+    {
+      LOG_ERROR(Error_string::file_not_found());
+      return;
+    }
+  
     const std::string name = util::get_filename_from_path(filename);
     
     Gfx_util::Shader_code code = Gfx_util::shader_code_from_tagged_file(filename);

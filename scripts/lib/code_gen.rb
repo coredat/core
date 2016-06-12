@@ -25,6 +25,12 @@ def parse_desc(yml)
   return_data[:header_includes] << "<stddef.h>"
 
   # Header aditional code
+  if data['header'] && data['header']['additional_headers']
+    data['header']['additional_headers'].each do |inc|
+      return_data[:header_includes] << inc['include']
+    end
+  end
+
   return_data[:header_add_code] = if data['header'] and data['header']['additional_code'] then data['header']['additional_code'] else "" end
 
   # Source Includes

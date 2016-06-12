@@ -48,11 +48,11 @@ initialize()
     
     Ogl::shader_create(&shader_gui, gui_code.vs_code.c_str(), gui_code.gs_code.c_str(), gui_code.ps_code.c_str());
     
-    assert(Ogl::shader_is_valid(shader_gui));
+    assert(Ogl::shader_is_valid(&shader_gui));
   }
   
   // Get the shader's uniforms
-  if(Ogl::shader_is_valid(shader_gui))
+  if(Ogl::shader_is_valid(&shader_gui))
   {
     Ogl::Shader_uniforms gui_uniforms;
     Ogl::shader_uniforms_retrive(&gui_uniforms, &shader_gui);

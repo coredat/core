@@ -3,6 +3,7 @@
 #include <core/resources/texture.hpp>
 #include <common/error_strings.hpp>
 #include <data/global_data/resource_data.hpp>
+#include <graphics_api/ogl/ogl_shader_uniform.hpp>
 #include <assert.h>
 
 
@@ -105,19 +106,38 @@ Material::set_shader(const Shader &shader)
     auto resource = Resource_data::get_resources();
     assert(resource);
   
-    auto data = resource->material_data;
-    assert(data);
+    auto mat_data = resource->material_data;
+    auto shd_data = resource->shader_data;
+    assert(mat_data);
+    assert(shd_data);
     
-    Resource_data::data_lock(data);
+    // Get shader data and the uniforms
+    Ogl::Shader_uniforms uniforms;
+    Ogl::Shader shd;
+    {
+      Resource_data::data_lock(shd_data);
+      
+      Resource_data::shader_data_get_property_shader(shd_data, shader.get_id(), &shd);
+      
+      Ogl::shader_uniforms_retrive(&uniforms, &shd);
+      
+      Resource_data::data_unlock(shd_data);
+    }
     
-    Resource_data::Material_detail material;
-    Resource_data::material_data_get_property_material(data, m_impl->material_id, &material);
-    
-    material.shader_id = shader.get_id();
-    
-    Resource_data::material_data_set_property_material(data, m_impl->material_id, material);
-    
-    Resource_data::data_unlock(data);
+    // Setup Material
+    {
+      Resource_data::data_lock(mat_data);
+      
+      Material_renderer::Material *material;
+      Resource_data::material_data_get_property_material(mat_data, m_impl->material_id, &material);
+      
+      Material_renderer::create_material(material, &shd);
+      
+      Resource_data::material_data_set_property_material(mat_data, m_impl->material_id, material);
+      
+      Resource_data::data_unlock(mat_data);
+    }
+
   }
   else
   {
@@ -150,10 +170,11 @@ Material::set_map_01(const Texture &texture)
     
     Resource_data::data_lock(data);
     
-    Resource_data::Material_detail material;
+    Material_renderer::Material *material;
     Resource_data::material_data_get_property_material(data, m_impl->material_id, &material);
     
-    material.texture_map_01_id = texture.get_id();
+//    material.map_01_id = texture.get_id();
+    assert(false);
     
     Resource_data::material_data_set_property_material(data, m_impl->material_id, material);
     

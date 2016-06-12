@@ -35,6 +35,12 @@ Texture::Texture(const char *filepath)
   const std::string file(filepath);
   const std::string name(util::get_filename_from_path(filepath));
 
+  if(!util::file::exists(filepath))
+  {
+    LOG_ERROR(Error_string::file_not_found());
+    return;
+  }
+
   Resource_data::Resources *resources = Resource_data::get_resources();
   assert(resources);
 

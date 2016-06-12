@@ -44,9 +44,9 @@ initialize()
   auto debug_code = Graphics_api::Util::shader_code_from_tagged_file(debug_lines.c_str());
   
   Ogl::shader_create(&debug_line_shader, debug_code.vs_code.c_str(), debug_code.gs_code.c_str(), debug_code.ps_code.c_str());
-  assert(Ogl::shader_is_valid(debug_line_shader));
+  assert(Ogl::shader_is_valid(&debug_line_shader));
 
-  if(Ogl::shader_is_valid(debug_line_shader))
+  if(Ogl::shader_is_valid(&debug_line_shader))
   {
     Ogl::Shader_uniforms uniforms;
     Ogl::shader_uniforms_retrive(&uniforms, &debug_line_shader);

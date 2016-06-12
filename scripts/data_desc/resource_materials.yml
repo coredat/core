@@ -8,14 +8,6 @@ data:
   key:
     name: material_id
 
-  header:
-    additional_code: >
-      struct Material_detail
-      {
-        util::generic_id shader_id;
-        util::generic_id texture_map_01_id;
-      }; // ns
-
   properties:
     - name: name
       type: char_32
@@ -23,5 +15,6 @@ data:
       searchable: true
 
     - name: material
-      type: Material_detail
-      return: value
+      type: Material_renderer::Material
+      include: <systems/renderer_material/material.hpp>
+      return: pointer

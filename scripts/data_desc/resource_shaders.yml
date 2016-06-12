@@ -18,8 +18,3 @@ data:
       type: Ogl::Shader
       return: value
       include: <graphics_api/ogl/ogl_shader.hpp>
-
-    - name: uniforms
-      type: Ogl::Shader
-      return: value
-      include: <graphics_api/ogl/ogl_shader.hpp>

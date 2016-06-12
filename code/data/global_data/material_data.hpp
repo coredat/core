@@ -6,23 +6,17 @@
 */
 
 
-#ifndef MATERIAL_DATA_INCLUDED_3FD5BF03_EDAF_4378_9C8F_3638334E777C
-#define MATERIAL_DATA_INCLUDED_3FD5BF03_EDAF_4378_9C8F_3638334E777C
+#ifndef MATERIAL_DATA_INCLUDED_7BA4686B_AAB9_4CF2_AEED_1645BD9D3794
+#define MATERIAL_DATA_INCLUDED_7BA4686B_AAB9_4CF2_AEED_1645BD9D3794
 
 
 #include <utilities/generic_id.hpp>
 #include <utilities/memory_pool.hpp>
 #include <stddef.h>
+#include <systems/renderer_material/material.hpp>
 
 
 namespace Resource_data {
-
-
-struct Material_detail {
-  util::generic_id shader_id;
-  util::generic_id texture_map_01_id;
-}; // ns
-
 
 
 
@@ -36,7 +30,7 @@ struct Material_data
 
   // Properties
   char *property_name = nullptr;
-  Material_detail *property_material = nullptr;
+  Material_renderer::Material *property_material = nullptr;
 
   // Size information
   size_t size = 0;
@@ -170,7 +164,7 @@ material_data_search_property_name(const Material_data *data, const char *value,
   \return Returns true if the data was found.
 */
 bool
-material_data_get_property_material(const Material_data *data, const util::generic_id key, Material_detail *value);
+material_data_get_property_material(const Material_data *data, const util::generic_id key, Material_renderer::Material **value);
 
 
 /*!
@@ -181,7 +175,7 @@ material_data_get_property_material(const Material_data *data, const util::gener
   \return Returns true if the data was set.
 */
 bool
-material_data_set_property_material(Material_data *data,  const util::generic_id key, const Material_detail value);
+material_data_set_property_material(Material_data *data,  const util::generic_id key, const Material_renderer::Material *value);
 
 
 } // ns

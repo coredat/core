@@ -2,6 +2,7 @@
 #define MATERIAL_RENDERER_INCLUDED_8DD3647B_EE2F_4233_95CC_3533DB86CC5E
 
 
+#include <systems/renderer_material/material.hpp> // Can be fwd declared
 #include <graphics_api/mesh.hpp>
 #include <graphics_api/ogl/ogl_shader.hpp>
 #include <graphics_api/ogl/ogl_texture.hpp>
@@ -10,14 +11,6 @@
 
 
 namespace Material_renderer {
-
-
-struct Material
-{
-  Ogl::Shader   shader;
-  Ogl::Texture  diffuse_texture;
-  int32_t       diffuse_texture_index = -1;
-};
 
 
 struct Draw_call
@@ -36,8 +29,8 @@ reset();
 
 
 void
-render(const math::mat4 view_proj_mat[16],
-       const Material material,
+render(const math::mat4 &view_proj_mat,
+       const Material *material,
        const Draw_call calls[],
        const uint32_t number_of_calls);
 

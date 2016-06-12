@@ -37,6 +37,8 @@
 #include <systems/physics_engine/broadphase/sweep.hpp>
 #include <systems/physics_engine/broadphase/prune.hpp>
 #include <systems/physics_engine/collision/aabb_overlap.hpp>
+#include <systems/renderer_material/material.hpp>
+#include <systems/renderer_material/material_renderer.hpp>
 #include <systems/physics_engine/collision/collision_pairs.hpp>
 #include <systems/physics_engine/physics_engine.hpp>
 #include <systems/physics_engine/collision/axis_collidable.hpp>
@@ -285,11 +287,11 @@ World::think()
       Graphics_api::Mesh get_mesh;
       Resource_data::mesh_data_get_property_mesh(resources->mesh_data, mesh_id, &get_mesh);
 
-      Resource_data::Material_detail material;
+      ::Material_renderer::Material *material;
       Resource_data::material_data_get_property_material(resources->material_data, material_id, &material);
 
       Ogl::Texture get_texture;
-      Resource_data::texture_data_get_property_texture(resources->texture_data, material.texture_map_01_id, &get_texture);
+      Resource_data::texture_data_get_property_texture(resources->texture_data, 1, &get_texture);
       
       nodes[i].vbo     = get_mesh.vbo;
       nodes[i].diffuse = get_texture;

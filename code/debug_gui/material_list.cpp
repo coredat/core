@@ -1,4 +1,5 @@
 #include <debug_gui/material_list.hpp>
+#include <systems/renderer_material/material.hpp>
 #include <data/global_data/material_data.hpp>
 #include <3rdparty/imgui/imgui.h>
 #include <stdio.h>
@@ -39,11 +40,11 @@ display_material_list(Resource_data::Material_data *data)
       
       ImGui::NextColumn();
       
-      Resource_data::Material_detail material;
+      ::Material_renderer::Material *material;
       Resource_data::material_data_get_property_material(data, data->material_id[i], &material);
       
-      ImGui::Text("%02d", material.shader_id); ImGui::NextColumn();
-      ImGui::Text("%02d", material.texture_map_01_id); ImGui::NextColumn();
+      ImGui::Text("%02d", material->shader.program_id); ImGui::NextColumn();
+      ImGui::Text("%02d", material->map_01_id.texture_id); ImGui::NextColumn();
     }
     
     ImGui::Columns(1);

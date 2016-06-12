@@ -113,7 +113,7 @@ shader_destroy(Shader *shader, std::ostream *log)
 
 
 void
-shader_bind(Shader *shader_to_bind)
+shader_bind(const Shader *shader_to_bind)
 {
   if(!shader_to_bind)
   {

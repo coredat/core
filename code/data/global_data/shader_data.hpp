@@ -6,8 +6,8 @@
 */
 
 
-#ifndef SHADER_DATA_INCLUDED_B965A2F6_27C2_4040_9313_052EECB5DA04
-#define SHADER_DATA_INCLUDED_B965A2F6_27C2_4040_9313_052EECB5DA04
+#ifndef SHADER_DATA_INCLUDED_A28FCC20_ACA3_465B_9FA2_12ADFC3D9AF3
+#define SHADER_DATA_INCLUDED_A28FCC20_ACA3_465B_9FA2_12ADFC3D9AF3
 
 
 #include <utilities/generic_id.hpp>
@@ -31,7 +31,6 @@ struct Shader_data
   // Properties
   char *property_name = nullptr;
   Ogl::Shader *property_shader = nullptr;
-  Ogl::Shader *property_uniforms = nullptr;
 
   // Size information
   size_t size = 0;
@@ -177,28 +176,6 @@ shader_data_get_property_shader(const Shader_data *data, const util::generic_id 
 */
 bool
 shader_data_set_property_shader(Shader_data *data,  const util::generic_id key, const Ogl::Shader value);
-
-
-/*!
-  \brief Getter for property_uniforms.
-  \param data The container to get information from.
-  \param key The key to search for.
-  \param value The output value, which will be set if the key is found.
-  \return Returns true if the data was found.
-*/
-bool
-shader_data_get_property_uniforms(const Shader_data *data, const util::generic_id key, Ogl::Shader *value);
-
-
-/*!
-  \brief Setter for property_uniforms.
-  \param data The container to update.
-  \param key The key to search for.
-  \param value The new value of the data.
-  \return Returns true if the data was set.
-*/
-bool
-shader_data_set_property_uniforms(Shader_data *data,  const util::generic_id key, const Ogl::Shader value);
 
 
 } // ns

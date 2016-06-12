@@ -10,17 +10,7 @@
 namespace Error_string {
 
 
-constexpr const char *
-entity_is_invalid() { return "Core::Entity is invalid."; }
-
-
-constexpr const char *
-entity_failed_to_construct() { return "Core::Entity failed in construction."; }
-
-
-constexpr const char *
-entity_not_found() { return "Core::Entity not found."; }
-
+// ** General ** //
 
 constexpr const char *
 object_has_no_valid_world() { return "Object has no valid Core::World."; }
@@ -31,15 +21,36 @@ invalid_arguments() { return "Invalid arguments."; }
 
 
 constexpr const char *
-data_not_found() { return "Data not found."; }
-
-
-constexpr const char *
 unknown_type() { return "Unknown type."; }
 
 
 constexpr const char *
 no_implimentation() { return "Feature not implimented."; }
+
+
+constexpr const char *
+file_not_found() { return "File not found."; }
+
+
+// ** Entity ** //
+
+
+constexpr const char *
+entity_is_invalid() { return "Core::Entity is invalid."; }
+
+
+constexpr const char *
+entity_failed_to_construct() { return "Core::Entity failed in construction."; }
+
+
+// ** Data and resources ** //
+
+constexpr const char *
+entity_not_found() { return "Core::Entity not found."; }
+
+
+constexpr const char *
+data_not_found() { return "Data not found."; }
 
 
 constexpr const char *
@@ -64,6 +75,9 @@ resource_already_exists() { return "Resource already exists."; }
 
 constexpr const char *
 resource_is_invalid() { return "Resource is invalid."; }
+
+
+// ** 3rd party ** //
 
 
 constexpr const char *
