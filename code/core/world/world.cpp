@@ -303,11 +303,51 @@ World::think()
   Resource_data::data_unlock(resources->texture_data);
   
   Simple_renderer::reset();
-  Simple_renderer::render_nodes_fullbright(nodes.data(), size_of_node_pool);
+//  Simple_renderer::render_nodes_fullbright(nodes.data(), size_of_node_pool);
   //Simple_renderer::render_nodes_directional_light(nodes, size_of_node_pool);
 
-  math::mat4 wvp = math::mat4_multiply(math::mat4_id(), view, proj);
-  Debug_line_renderer::render(math::mat4_get_data(wvp));
+//  math::mat4 wvp = math::mat4_multiply(math::mat4_id(), view, proj);
+//  Debug_line_renderer::render(math::mat4_get_data(wvp));
+
+  // Temp just dump draw call data into renderer draw calls
+
+  ::Material_renderer::Draw_call *draw_calls = reinterpret_cast<::Material_renderer::Draw_call*>(::Memory::scratch_alloc_aligned(sizeof(::Material_renderer::Draw_call) * 2048));
+
+  uint32_t number_of_draw_calls = 0;
+  
+  for(uint32_t i = 0; i < world->mesh_data->size; ++i)
+  {
+    const World_data::Mesh_renderer_draw_call *draw_call_data = &world->mesh_data->property_draw_call[i];
+
+    if(!draw_call_data->model_id)
+    {
+      continue;
+    }
+
+    Resource_data::mesh_data_get_property_mesh(resources->mesh_data, draw_call_data->model_id, &draw_calls[number_of_draw_calls].mesh);
+    
+    if(draw_calls[number_of_draw_calls].mesh.vbo.vertex_buffer_id > 1000)
+    {
+      volatile int j = 0;
+    }
+    
+    math::transform transform;
+    World_data::transform_data_get_property_transform(world->transform, world->mesh_data->entity_id[i], &transform);
+    
+    math::mat4 world = math::transform_get_world_matrix(transform);
+    memcpy(&draw_calls[number_of_draw_calls], &world, sizeof(float) * 16);
+    
+    if(draw_calls[number_of_draw_calls].mesh.vbo.vertex_buffer_id > 1000)
+    {
+      volatile int j = 0;
+    }    
+    
+    ++number_of_draw_calls;
+  }
+  
+  ::Material_renderer::reset();
+  ::Material_renderer::render(view_proj, &resources->material_data->property_material[1], draw_calls, number_of_draw_calls);
+  
 
   }
   
