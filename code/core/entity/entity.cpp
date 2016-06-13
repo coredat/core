@@ -104,7 +104,7 @@ Entity::Entity(Core::World &world)
       
       World_data::data_lock(mesh_data);
       
-      if(World_data::renderer_mesh_data_push_back(mesh_data, id) && success)
+      if(World_data::renderer_mesh_data_insert(mesh_data, id, 0) && success)
       {
       }
       
