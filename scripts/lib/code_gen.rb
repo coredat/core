@@ -54,7 +54,7 @@ def parse_desc(yml)
     return_data[:key_missing_error] = true
   end
 
-  return_data[:key_search_type] = data_key['search_type'] || "linearly"
+  return_data[:key_search_type] = data_key['search_type'] || "linear"
 
   # Properties
   properties = data['properties']
@@ -62,17 +62,20 @@ def parse_desc(yml)
 
   properties.each do |prop|
     return_data[:properties] << {}
+
+    return_data[:properties][-1][:return_type] = if prop['return'] then prop['return'].downcase else "value".downcase end
+
     return_data[:properties][-1][:name] = "property_#{prop['name']}"
     return_data[:properties][-1][:type] = if prop['type'] == "char_32" then "char" else prop['type'] end
     return_data[:properties][-1][:multiple] = if prop['type'] == "char_32" then 32 else 1 end
     return_data[:properties][-1][:searchable] = prop['searchable'] || false
 
     # What type of get set we have
-    return_data[:properties][-1][:get_indirection] = if prop['return'].downcase == "pointer" then "**" else "*" end
-    return_data[:properties][-1][:get_indirection_value] = if prop['return'].downcase == "pointer" then "&" else "" end
+    return_data[:properties][-1][:get_indirection]       = if return_data[:properties][-1][:return_type] == "pointer" then "**" else "*" end
+    return_data[:properties][-1][:get_indirection_value] = if return_data[:properties][-1][:return_type] == "pointer" then "&" else "" end
 
-    return_data[:properties][-1][:set_indirection] = if prop['return'].downcase == "pointer" then "*" else "" end
-    return_data[:properties][-1][:set_indirection_value] = if prop['return'].downcase == "pointer" then "*" else "" end
+    return_data[:properties][-1][:set_indirection]       = if return_data[:properties][-1][:return_type] == "pointer" then "*" else "" end
+    return_data[:properties][-1][:set_indirection_value] = if return_data[:properties][-1][:return_type] == "pointer" then "*" else "" end
 
     # Has a dependent include
     if(prop['include'])

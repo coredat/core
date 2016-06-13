@@ -6,8 +6,8 @@
 */
 
 
-#ifndef PHYSICS_DATA_INCLUDED_93923D47_AF51_49A4_8062_BD8F8C55B886
-#define PHYSICS_DATA_INCLUDED_93923D47_AF51_49A4_8062_BD8F8C55B886
+#ifndef PHYSICS_DATA_INCLUDED_DA387FD5_CF14_400F_8879_375211098973
+#define PHYSICS_DATA_INCLUDED_DA387FD5_CF14_400F_8879_375211098973
 
 
 #include <utilities/generic_id.hpp>
@@ -114,6 +114,17 @@ physics_data_push_back(Physics_data *data, const util::generic_id key, size_t *o
 */
 bool
 physics_data_erase(Physics_data *data, const util::generic_id key);
+
+
+/*!
+  \brief Inserts a new element shuffling down any data that exists in the array. (Does not take a lock).
+  \param data The container to insert into.
+  \param key The key which is used to remove the data.
+  \param insert_point Where to insert. If bigger then the size it will push back.
+  \return Returns true if it was successful.
+*/
+bool
+physics_data_insert(Physics_data *data, const util::generic_id key, const size_t insert_index);
 
 
 /*!

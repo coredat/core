@@ -57,7 +57,7 @@ camera_pool_remove_camera(Camera_pool *pool,
 {
   // Find index of camera pool
   size_t index(0);
-  if(util::generic_id_search_linearly(&index,
+  if(util::generic_id_search_linear(&index,
                                       id,
                                       pool->entity_id,
                                       pool->number_of_cameras))
@@ -79,7 +79,7 @@ camera_pool_set_priority(Camera_pool *pool,
 
 {
   size_t index(0);
-  if(util::generic_id_search_linearly(&index,
+  if(util::generic_id_search_linear(&index,
                                       id,
                                       pool->entity_id,
                                       pool->number_of_cameras))
@@ -101,7 +101,7 @@ camera_pool_get_priority(Camera_pool *pool,
                          const uint32_t peer)
 {
   size_t index(0);
-  if(util::generic_id_search_linearly(&index,
+  if(util::generic_id_search_linear(&index,
                                       id,
                                       pool->entity_id,
                                       pool->number_of_cameras))

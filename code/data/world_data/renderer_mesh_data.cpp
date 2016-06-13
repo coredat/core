@@ -26,9 +26,10 @@ renderer_mesh_data_init(Renderer_mesh_data *data, const size_t size_hint)
 
   // Calculate the various sizes of things.
   const size_t bytes_entity_id = sizeof(*data->entity_id) * size_hint + simd_buffer;
+  const size_t bytes_property_material_id = sizeof(*data->property_material_id) * size_hint + simd_buffer;
   const size_t bytes_property_draw_call = sizeof(*data->property_draw_call) * size_hint + simd_buffer;
 
-  const size_t bytes_to_alloc = bytes_entity_id + bytes_property_draw_call;
+  const size_t bytes_to_alloc = bytes_entity_id + bytes_property_material_id + bytes_property_draw_call;
 
   // Allocate some memory.
   util::memory_chunk *data_memory = const_cast<util::memory_chunk*>(&data->memory);
@@ -54,6 +55,19 @@ renderer_mesh_data_init(Renderer_mesh_data *data, const size_t size_hint)
       #endif
 
       byte_counter += bytes_entity_id;
+      assert(byte_counter <= bytes_to_alloc);
+    }
+    // Assign property_material_id memory
+    {
+      void *offset = util::mem_offset(alloc_start, byte_counter);
+      void *aligned = util::mem_next_16byte_boundry(offset);
+
+      data->property_material_id = reinterpret_cast<util::generic_id*>(aligned);
+      #ifndef NDEBUG
+      memset(offset, 0, bytes_property_material_id);
+      #endif
+
+      byte_counter += bytes_property_material_id;
       assert(byte_counter <= bytes_to_alloc);
     }
     // Assign property_draw_call memory
@@ -126,6 +140,8 @@ renderer_mesh_data_push_back(Renderer_mesh_data *data, const util::generic_id ke
   assert(data && key);
   assert(data->size < data->capacity);
 
+  // TODO: Duplicate key check
+
   if(data->size >= data->capacity)
   {
     LOG_ERROR(Error_string::no_free_space());
@@ -146,6 +162,7 @@ renderer_mesh_data_push_back(Renderer_mesh_data *data, const util::generic_id ke
 
   // Memset the properties
   {
+    memset(&data->property_material_id[index], 0, sizeof(*data->property_material_id));
     memset(&data->property_draw_call[index], 0, sizeof(*data->property_draw_call));
   }
 
@@ -172,6 +189,7 @@ renderer_mesh_data_erase(Renderer_mesh_data *data, const util::generic_id key)
 
     // Shuffle the memory down.
     memmove(&data->entity_id[index_to_erase], &data->entity_id[start_index], size_to_end * sizeof(*data->entity_id));
+    memmove(&data->property_material_id[index_to_erase], &data->property_material_id[start_index], size_to_end * sizeof(*data->property_material_id));
     memmove(&data->property_draw_call[index_to_erase], &data->property_draw_call[start_index], size_to_end * sizeof(*data->property_draw_call));
   }
   else
@@ -183,6 +201,48 @@ renderer_mesh_data_erase(Renderer_mesh_data *data, const util::generic_id key)
   }
 
   return true;
+}
+
+
+bool
+renderer_mesh_data_insert(Renderer_mesh_data *data, const util::generic_id key, const size_t insert_index)
+{
+  assert(data && key);
+
+  // If we are past the end of the size
+  // Use push back.
+  if(insert_index > data->size)
+  {
+    return renderer_mesh_data_push_back(data, key);
+  }
+
+  // Check that we have capacity
+  if(data->size >= data->capacity)
+  {
+    LOG_ERROR(Error_string::no_free_space())
+    return false;
+  }
+
+  // Check we are inserting in bounds, then insert
+  if(insert_index < data->capacity)
+  {
+    const size_t dest_index = insert_index + 1;
+    const size_t size_to_end = data->size - insert_index;
+
+    ++(data->size);
+
+    // Shuffle the memory up.
+    memmove(&data->entity_id[dest_index], &data->entity_id[insert_index], size_to_end * sizeof(*data->entity_id));
+    memmove(&data->property_material_id[dest_index], &data->property_material_id[insert_index], size_to_end * sizeof(*data->property_material_id));
+    memmove(&data->property_draw_call[dest_index], &data->property_draw_call[insert_index], size_to_end * sizeof(*data->property_draw_call));
+
+    // Add key to new entry.
+    data->entity_id[insert_index] = key;
+
+    return true;
+  }
+
+  return false;
 }
 
 
@@ -201,10 +261,56 @@ renderer_mesh_data_exists(const Renderer_mesh_data *data, const util::generic_id
   size_t no_index;
   if(!out_index) { out_index = &no_index; }
 
-  found = util::generic_id_search_linearly(out_index, key, data->entity_id, data->size);
+  found = util::generic_id_search_linear(out_index, key, data->entity_id, data->size);
 
   return found;
 }
+
+
+bool
+renderer_mesh_data_get_property_material_id(const Renderer_mesh_data *data, const util::generic_id key, util::generic_id *out_value)
+{
+  size_t index;
+
+  if(renderer_mesh_data_exists(data, key, &index))
+  {
+    *out_value = data->property_material_id[index];
+  }
+  else
+  {
+    LOG_ERROR(Error_string::entity_not_found());
+    assert(false);
+
+    return false;
+  }
+
+  return true;
+}
+
+
+bool
+renderer_mesh_data_set_property_material_id(Renderer_mesh_data *data,  const util::generic_id key, const util::generic_id value)
+{
+  assert(data && key);
+
+  size_t index;
+
+  if(renderer_mesh_data_exists(data, key, &index))
+  {
+    data->property_material_id[index] = value;
+  }
+  else
+  {
+    LOG_ERROR(Error_string::entity_not_found());
+    assert(false);
+
+    return false;
+  }
+
+  return true;
+}
+
+
 
 
 bool

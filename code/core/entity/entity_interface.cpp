@@ -433,8 +433,8 @@ set_material(const util::generic_id this_id, World_data::World *world, const Cor
   World_data::Mesh_renderer_draw_call *draw;
   World_data::renderer_mesh_data_get_property_draw_call(world->mesh_data, this_id, &draw);
   
-  draw->material_id = material.get_id();
   World_data::renderer_mesh_data_set_property_draw_call(world->mesh_data, this_id, draw);
+  World_data::renderer_mesh_data_set_property_material_id(world->mesh_data, this_id, material.get_id());
   
   World_data::data_unlock(world->mesh_data);
 }
@@ -445,14 +445,11 @@ get_material(const util::generic_id this_id, World_data::World *world)
 {
   assert(this_id && world);
   
-  uint32_t id = 0;
+  util::generic_id id = 0;
   
   World_data::data_lock(world->mesh_data);
   
-  World_data::Mesh_renderer_draw_call *draw;
-  World_data::renderer_mesh_data_get_property_draw_call(world->mesh_data, this_id, &draw);
-  
-  id = draw->material_id;
+  World_data::renderer_mesh_data_get_property_material_id(world->mesh_data, this_id, &id);
   
   World_data::data_unlock(world->mesh_data);
   

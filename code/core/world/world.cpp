@@ -280,7 +280,7 @@ World::think()
   for (uint32_t i = 0; i < size_of_node_pool; ++i)
   {
     const uint32_t mesh_id     = world->mesh_data->property_draw_call[i].model_id;
-    const uint32_t material_id = world->mesh_data->property_draw_call[i].material_id;
+    const uint32_t material_id = world->mesh_data->property_material_id[i];
     
     if(mesh_id && material_id)
     {
@@ -303,6 +303,7 @@ World::think()
   Resource_data::data_unlock(resources->texture_data);
   
   Simple_renderer::reset();
+  
 //  Simple_renderer::render_nodes_fullbright(nodes.data(), size_of_node_pool);
   //Simple_renderer::render_nodes_directional_light(nodes, size_of_node_pool);
 
@@ -311,7 +312,9 @@ World::think()
 
   // Temp just dump draw call data into renderer draw calls
 
-  ::Material_renderer::Draw_call *draw_calls = reinterpret_cast<::Material_renderer::Draw_call*>(::Memory::scratch_alloc_aligned(sizeof(::Material_renderer::Draw_call) * 2048));
+  
+  
+  ::Material_renderer::Draw_call *draw_calls = SCRATCH_ALIGNED_ALLOC(::Material_renderer::Draw_call, 2048);
 
   uint32_t number_of_draw_calls = 0;
   
@@ -348,7 +351,6 @@ World::think()
   ::Material_renderer::reset();
   ::Material_renderer::render(view_proj, &resources->material_data->property_material[1], draw_calls, number_of_draw_calls);
   
-
   }
   
   // Debug menu

@@ -121,6 +121,19 @@ bool
 {{data_name}}_erase({{data_type}} *data, const {{key_type}} key);
 
 
+% if key_search_type == 'linear'
+/*!
+  \\brief Inserts a new element shuffling down any data that exists in the array. (Does not take a lock).
+  \\param data The container to insert into.
+  \\param key The key which is used to remove the data.
+  \\param insert_point Where to insert. If bigger then the size it will push back.
+  \\return Returns true if it was successful.
+*/
+bool
+{{data_name}}_insert({{data_type}} *data, const {{key_type}} key, const size_t insert_index);
+
+
+% end
 /*!
   \\brief Checks to see if a key exists in the container.
   \\param data The container to search.

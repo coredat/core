@@ -5,6 +5,7 @@
 #include <debug_gui/memory_view.hpp>
 #include <debug_gui/mesh_list.hpp>
 #include <debug_gui/material_list.hpp>
+#include <debug_gui/mesh_draw_calls.hpp>
 
 #include <data/global_data/resource_data.hpp>
 #include <data/global_data/memory_data.hpp>
@@ -64,6 +65,7 @@ display_global_data_menu()
 namespace
 {
   bool show_entity_list = false;
+  bool show_mesh_draw_calls = false;
 }
 
 
@@ -80,13 +82,15 @@ display_world_data_menu(World_data::World *world_data)
     if (ImGui::BeginMenu("World Data"))
     {
       ImGui::MenuItem("Entities", nullptr, &show_entity_list);
+      ImGui::MenuItem("Mesh Draw Calls", nullptr, &show_mesh_draw_calls);
       ImGui::EndMenu();
     }
     
     ImGui::EndMainMenuBar();
   }
   
-  if(show_entity_list) { display_entity_list(world_data->entity); }
+  if(show_entity_list)     { display_entity_list(world_data->entity);         }
+  if(show_mesh_draw_calls) { display_mesh_draw_calls(world_data->mesh_data);  }
 }
 
 

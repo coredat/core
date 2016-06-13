@@ -121,6 +121,8 @@ bool
   assert(data && key);
   assert(data->size < data->capacity);
 
+  // TODO: Duplicate key check
+
   if(data->size >= data->capacity)
   {
     LOG_ERROR(Error_string::no_free_space());
@@ -194,6 +196,54 @@ bool
 }
 
 
+%if key_search_type == 'linear'
+bool
+{{data_name}}_insert({{data_type}} *data, const {{key_type}} key, const size_t insert_index)
+{
+  assert(data && key);
+
+  // If we are past the end of the size
+  // Use push back.
+  if(insert_index > data->size)
+  {
+    return {{data_name}}_push_back(data, key);
+  }
+
+  // Check that we have capacity
+  if(data->size >= data->capacity)
+  {
+    LOG_ERROR(Error_string::no_free_space())
+    return false;
+  }
+
+  // Check we are inserting in bounds, then insert
+  if(insert_index < data->capacity)
+  {
+    const size_t dest_index = insert_index + 1;
+    const size_t size_to_end = data->size - insert_index;
+
+    ++(data->size);
+
+    // Shuffle the memory up.
+    % allocs.each do |alloc|
+    % if alloc[:multiple] != 1
+    memmove(&data->{{alloc[:name]}}[dest_index * {{alloc[:multiple]}}], &data->{{alloc[:name]}}[insert_index * {{alloc[:multiple]}}], (size_to_end * {{alloc[:multiple]}}) * sizeof(*data->{{alloc[:name]}}));
+    % else
+    memmove(&data->{{alloc[:name]}}[dest_index], &data->{{alloc[:name]}}[insert_index], size_to_end * sizeof(*data->{{alloc[:name]}}));
+    % end
+    % end
+
+    // Add key to new entry.
+    data->{{key_name}}[insert_index] = key;
+
+    return true;
+  }
+
+  return false;
+}
+
+
+%end
 bool
 {{data_name}}_exists(const {{data_type}} *data, const {{key_type}} key, size_t *out_index)
 {

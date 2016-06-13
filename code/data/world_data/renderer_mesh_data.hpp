@@ -6,8 +6,8 @@
 */
 
 
-#ifndef RENDERER_MESH_DATA_INCLUDED_EC8ECEEE_B900_4BC3_A24D_5813B1DF2351
-#define RENDERER_MESH_DATA_INCLUDED_EC8ECEEE_B900_4BC3_A24D_5813B1DF2351
+#ifndef RENDERER_MESH_DATA_INCLUDED_02BCCEE9_9815_49F3_8068_0C6CB91A8EA9
+#define RENDERER_MESH_DATA_INCLUDED_02BCCEE9_9815_49F3_8068_0C6CB91A8EA9
 
 
 #include <utilities/generic_id.hpp>
@@ -19,9 +19,8 @@ namespace World_data {
 
 
 struct Mesh_renderer_draw_call {
-  util::generic_id material_id;
   util::generic_id model_id;
-  float    world_matrix[16];
+  float world_matrix[16];
 };
 
 
@@ -36,6 +35,7 @@ struct Renderer_mesh_data
   util::generic_id *entity_id = nullptr;
 
   // Properties
+  util::generic_id *property_material_id = nullptr;
   Mesh_renderer_draw_call *property_draw_call = nullptr;
 
   // Size information
@@ -119,6 +119,17 @@ renderer_mesh_data_erase(Renderer_mesh_data *data, const util::generic_id key);
 
 
 /*!
+  \brief Inserts a new element shuffling down any data that exists in the array. (Does not take a lock).
+  \param data The container to insert into.
+  \param key The key which is used to remove the data.
+  \param insert_point Where to insert. If bigger then the size it will push back.
+  \return Returns true if it was successful.
+*/
+bool
+renderer_mesh_data_insert(Renderer_mesh_data *data, const util::generic_id key, const size_t insert_index);
+
+
+/*!
   \brief Checks to see if a key exists in the container.
   \param data The container to search.
   \param key The key to search for.
@@ -127,6 +138,28 @@ renderer_mesh_data_erase(Renderer_mesh_data *data, const util::generic_id key);
 */
 bool
 renderer_mesh_data_exists(const Renderer_mesh_data *data, const util::generic_id key, size_t *out_index = nullptr);
+
+
+/*!
+  \brief Getter for property_material_id.
+  \param data The container to get information from.
+  \param key The key to search for.
+  \param value The output value, which will be set if the key is found.
+  \return Returns true if the data was found.
+*/
+bool
+renderer_mesh_data_get_property_material_id(const Renderer_mesh_data *data, const util::generic_id key, util::generic_id *value);
+
+
+/*!
+  \brief Setter for property_material_id.
+  \param data The container to update.
+  \param key The key to search for.
+  \param value The new value of the data.
+  \return Returns true if the data was set.
+*/
+bool
+renderer_mesh_data_set_property_material_id(Renderer_mesh_data *data,  const util::generic_id key, const util::generic_id value);
 
 
 /*!

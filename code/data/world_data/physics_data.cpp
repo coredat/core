@@ -168,6 +168,8 @@ physics_data_push_back(Physics_data *data, const util::generic_id key, size_t *o
   assert(data && key);
   assert(data->size < data->capacity);
 
+  // TODO: Duplicate key check
+
   if(data->size >= data->capacity)
   {
     LOG_ERROR(Error_string::no_free_space());
@@ -232,6 +234,50 @@ physics_data_erase(Physics_data *data, const util::generic_id key)
 
 
 bool
+physics_data_insert(Physics_data *data, const util::generic_id key, const size_t insert_index)
+{
+  assert(data && key);
+
+  // If we are past the end of the size
+  // Use push back.
+  if(insert_index > data->size)
+  {
+    return physics_data_push_back(data, key);
+  }
+
+  // Check that we have capacity
+  if(data->size >= data->capacity)
+  {
+    LOG_ERROR(Error_string::no_free_space())
+    return false;
+  }
+
+  // Check we are inserting in bounds, then insert
+  if(insert_index < data->capacity)
+  {
+    const size_t dest_index = insert_index + 1;
+    const size_t size_to_end = data->size - insert_index;
+
+    ++(data->size);
+
+    // Shuffle the memory up.
+    memmove(&data->entity_id[dest_index], &data->entity_id[insert_index], size_to_end * sizeof(*data->entity_id));
+    memmove(&data->property_transform[dest_index], &data->property_transform[insert_index], size_to_end * sizeof(*data->property_transform));
+    memmove(&data->property_aabb_collider[dest_index], &data->property_aabb_collider[insert_index], size_to_end * sizeof(*data->property_aabb_collider));
+    memmove(&data->property_transformed_aabb_collider[dest_index], &data->property_transformed_aabb_collider[insert_index], size_to_end * sizeof(*data->property_transformed_aabb_collider));
+    memmove(&data->property_collision_id[dest_index], &data->property_collision_id[insert_index], size_to_end * sizeof(*data->property_collision_id));
+
+    // Add key to new entry.
+    data->entity_id[insert_index] = key;
+
+    return true;
+  }
+
+  return false;
+}
+
+
+bool
 physics_data_exists(const Physics_data *data, const util::generic_id key, size_t *out_index)
 {
   assert(data && key);
@@ -246,7 +292,7 @@ physics_data_exists(const Physics_data *data, const util::generic_id key, size_t
   size_t no_index;
   if(!out_index) { out_index = &no_index; }
 
-  found = util::generic_id_search_linearly(out_index, key, data->entity_id, data->size);
+  found = util::generic_id_search_linear(out_index, key, data->entity_id, data->size);
 
   return found;
 }

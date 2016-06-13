@@ -7,7 +7,7 @@ data:
 
   key:
     error_on_missing_key: false
-    search_type: linearly
+    search_type: linear
     name: entity_id
 
   properties:

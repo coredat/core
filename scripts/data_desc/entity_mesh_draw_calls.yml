@@ -7,17 +7,22 @@ data:
 
   key:
     name: entity_id
+    search_type: linear
 
   header:
     additional_code: >
       struct Mesh_renderer_draw_call
       {
-        util::generic_id material_id;
         util::generic_id model_id;
-        float    world_matrix[16];
+        float world_matrix[16];
       };
 
   properties:
+    - name: material_id
+      type: util::generic_id
+      include: <utilities/generic_id.hpp>
+      return: value
+
     - name: draw_call
       type: Mesh_renderer_draw_call
       return: pointer

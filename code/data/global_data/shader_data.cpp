@@ -140,6 +140,8 @@ shader_data_push_back(Shader_data *data, const util::generic_id key, size_t *out
   assert(data && key);
   assert(data->size < data->capacity);
 
+  // TODO: Duplicate key check
+
   if(data->size >= data->capacity)
   {
     LOG_ERROR(Error_string::no_free_space());
@@ -217,7 +219,7 @@ shader_data_exists(const Shader_data *data, const util::generic_id key, size_t *
   size_t no_index;
   if(!out_index) { out_index = &no_index; }
 
-  found = util::generic_id_search_linearly(out_index, key, data->shader_id, data->size);
+  found = util::generic_id_search_binary(out_index, key, data->shader_id, data->size);
 
   return found;
 }

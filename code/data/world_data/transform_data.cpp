@@ -140,6 +140,8 @@ transform_data_push_back(Transform_data *data, const util::generic_id key, size_
   assert(data && key);
   assert(data->size < data->capacity);
 
+  // TODO: Duplicate key check
+
   if(data->size >= data->capacity)
   {
     LOG_ERROR(Error_string::no_free_space());
@@ -217,7 +219,7 @@ transform_data_exists(const Transform_data *data, const util::generic_id key, si
   size_t no_index;
   if(!out_index) { out_index = &no_index; }
 
-  found = util::generic_id_search_linearly(out_index, key, data->entity_id, data->size);
+  found = util::generic_id_search_binary(out_index, key, data->entity_id, data->size);
 
   return found;
 }
