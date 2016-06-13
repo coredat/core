@@ -427,19 +427,47 @@ void
 set_material(const util::generic_id this_id, World_data::World *world, const Core::Material &material)
 {
   assert(this_id && world && material.exists());
+  
+  auto mesh_data = world->mesh_data;
+  assert(mesh_data);
 
   // We need to find the material remove it.
   // Then insert it with draw calls with the same id.
-  World_data::data_lock(world->mesh_data);
+  World_data::data_lock(mesh_data);
   {
+    size_t find_index;
     World_data::Mesh_renderer_draw_call *draw;
-    World_data::renderer_mesh_data_get_property_draw_call(world->mesh_data, this_id, &draw);
+    World_data::Mesh_renderer_draw_call copy;    
+
+    // If it already exists. The data and erase the old info.
+    if(World_data::renderer_mesh_data_exists(mesh_data, this_id, &find_index))
+    {
+      World_data::renderer_mesh_data_get_property_draw_call(mesh_data, this_id, &draw);
+      copy = World_data::Mesh_renderer_draw_call(*draw);
+      World_data::renderer_mesh_data_erase(mesh_data, this_id);
+    }
     
-    World_data::renderer_mesh_data_set_property_draw_call(world->mesh_data, this_id, draw);
-    World_data::renderer_mesh_data_set_property_material_id(world->mesh_data, this_id, material.get_id());
+    // Insert new draw call in order of material_id
+    {
+      size_t insert_point = mesh_data->size;
+    
+      // Loop through and find insert point
+      for(size_t i = 0; i < mesh_data->size; ++i)
+      {
+        if(mesh_data->property_material_id[i] == material.get_id())
+        {
+          insert_point = i;
+          break;
+        }
+      }
+    
+      World_data::renderer_mesh_data_insert(mesh_data, this_id, insert_point);
+      World_data::renderer_mesh_data_set_property_material_id(mesh_data, this_id, material.get_id());
+      World_data::renderer_mesh_data_set_property_draw_call(mesh_data, this_id, &copy);
+    }
     
   }
-  World_data::data_unlock(world->mesh_data);
+  World_data::data_unlock(mesh_data);
 }
 
 
