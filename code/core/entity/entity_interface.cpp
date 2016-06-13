@@ -428,14 +428,17 @@ set_material(const util::generic_id this_id, World_data::World *world, const Cor
 {
   assert(this_id && world && material.exists());
 
+  // We need to find the material remove it.
+  // Then insert it with draw calls with the same id.
   World_data::data_lock(world->mesh_data);
-  
-  World_data::Mesh_renderer_draw_call *draw;
-  World_data::renderer_mesh_data_get_property_draw_call(world->mesh_data, this_id, &draw);
-  
-  World_data::renderer_mesh_data_set_property_draw_call(world->mesh_data, this_id, draw);
-  World_data::renderer_mesh_data_set_property_material_id(world->mesh_data, this_id, material.get_id());
-  
+  {
+    World_data::Mesh_renderer_draw_call *draw;
+    World_data::renderer_mesh_data_get_property_draw_call(world->mesh_data, this_id, &draw);
+    
+    World_data::renderer_mesh_data_set_property_draw_call(world->mesh_data, this_id, draw);
+    World_data::renderer_mesh_data_set_property_material_id(world->mesh_data, this_id, material.get_id());
+    
+  }
   World_data::data_unlock(world->mesh_data);
 }
 
