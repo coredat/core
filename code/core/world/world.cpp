@@ -347,10 +347,61 @@ World::think()
     
     ++number_of_draw_calls;
   }
+
+  auto mesh_data = world->mesh_data;
+
+  struct Draw_run
+  {
+    uint32_t material_id = 0;
+    uint32_t start_point = 0;
+    uint32_t size = 0;
+  };
+  
+  Draw_run runs[128];
+  uint32_t number_of_runs = 0;
+  
+  for(uint32_t i = 0; i < mesh_data->size; ++i)
+  {
+    if(mesh_data->property_material_id[i] == 0)
+    {
+      continue;
+    }
+    
+    // First run
+    if(!number_of_runs)
+    {
+      runs[0] = Draw_run{};
+      runs[0].material_id = mesh_data->property_material_id[i];
+      runs[0].start_point = i;
+      ++number_of_runs;
+      continue;
+    }
+    
+    if(mesh_data->property_material_id[i] != runs[number_of_runs - 1].material_id)
+    {
+      runs[number_of_runs - 1].size = (i - runs[number_of_runs - 1].start_point);
+      ++number_of_runs;
+      
+      // New run
+      runs[number_of_runs - 1].material_id = mesh_data->property_material_id[i];
+      runs[number_of_runs - 1].start_point = i;
+    }
+  }
+  
+  if(number_of_runs)
+  {
+    runs[number_of_runs - 1].size = (mesh_data->size - runs[number_of_runs - 1].start_point);
+  }
   
   ::Material_renderer::reset();
-  ::Material_renderer::render(view_proj, &resources->material_data->property_material[1], draw_calls, number_of_draw_calls);
-  
+  if(runs[0].size > 0 || number_of_runs > 0)
+  {
+    for(uint32_t r = 0; r < number_of_runs; ++r)
+    {
+      ::Material_renderer::render(view_proj, &resources->material_data->property_material[runs[r].material_id], &draw_calls[runs[r].start_point], runs[r].size);
+    }
+  }
+
   }
   
   // Debug menu
