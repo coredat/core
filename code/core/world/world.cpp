@@ -314,7 +314,7 @@ World::think()
 
   
   
-  ::Material_renderer::Draw_call *draw_calls = SCRATCH_ALIGNED_ALLOC(::Material_renderer::Draw_call, 2048);
+  ::Material_renderer::Draw_call *draw_calls = SCRATCH_ALIGNED_ALLOC(::Material_renderer::Draw_call, world->mesh_data->size);
 
   uint32_t number_of_draw_calls = 0;
   
@@ -324,6 +324,7 @@ World::think()
 
     if(!draw_call_data->model_id)
     {
+      ++number_of_draw_calls;
       continue;
     }
 
@@ -360,13 +361,14 @@ World::think()
   Draw_run runs[128];
   uint32_t number_of_runs = 0;
   
+  uint32_t count = 0;
   for(uint32_t i = 0; i < mesh_data->size; ++i)
   {
     if(mesh_data->property_material_id[i] == 0)
     {
       continue;
     }
-    
+    count++;
     // First run
     if(!number_of_runs)
     {
@@ -398,7 +400,13 @@ World::think()
   {
     for(uint32_t r = 0; r < number_of_runs; ++r)
     {
-      ::Material_renderer::render(view_proj, &resources->material_data->property_material[runs[r].material_id], &draw_calls[runs[r].start_point], runs[r].size);
+      ::Material_renderer::Material *mat;
+      Resource_data::material_data_get_property_material(resources->material_data, runs[r].material_id, &mat);
+      
+      const size_t start = runs[r].start_point;
+      const size_t count = runs[r].size;
+      
+      ::Material_renderer::render(view_proj, mat, &draw_calls[start], count);
     }
   }
 

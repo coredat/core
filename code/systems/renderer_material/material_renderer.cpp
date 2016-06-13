@@ -66,6 +66,12 @@ render(const math::mat4 &view_proj_mat,
   
   auto err = glGetError();
   
+  if(material->shader.program_id == 0)
+  {
+    LOG_WARNING("Rendering zero program?");
+    return;
+  }
+  
   if(err) {
     volatile int i = 0;
   }
@@ -109,18 +115,18 @@ render(const math::mat4 &view_proj_mat,
   // For all draw calls
   for(uint32_t i = 0; i < number_of_calls; ++i)
   {
-    Draw_call call = calls[i];
+    const Draw_call &call = calls[i];
    
     // Mats
     {
-      math::mat4 *world = reinterpret_cast<math::mat4*>(call.world_matrix);
+      const math::mat4 *world = reinterpret_cast<const math::mat4*>(&call.world_matrix[0]);
       math::mat4 wvp = math::mat4_multiply(*world, view_proj_mat);
       Ogl::shader_uniforms_apply(material->mat_world_view_proj, (void*)&wvp);
     }
     
     err = glGetError();
     if(err) {
-      volatile int i = 0;
+      volatile int j = 0;
     }
 
     
@@ -132,16 +138,16 @@ render(const math::mat4 &view_proj_mat,
     
     err = glGetError();
     if(err) {
-      volatile int i = 0;
+      volatile int j = 0;
     }
 
-    if(mat_renderer_last_vbo != call.mesh.vbo.vertex_buffer_id)
+    //if(mat_renderer_last_vbo != call.mesh.vbo.vertex_buffer_id)
     {
       mat_renderer_last_vbo = call.mesh.vbo.vertex_buffer_id;
       
-      if(call.mesh.vbo.vertex_buffer_id> 1000)
+      if(call.mesh.vbo.vertex_buffer_id > 1000)
       {
-        volatile int i = 0;
+        volatile int j = 0;
       }
       
       
