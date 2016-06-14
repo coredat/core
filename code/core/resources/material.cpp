@@ -47,6 +47,15 @@ Material::Material(const char *name)
     Resource_data::material_data_push_back(data, data->size + 1);
     Resource_data::material_data_set_property_name(data, data->size, name);
     
+    // Set instance id in the hash key
+    {
+      Material_renderer::Material_id priority_key;
+      Resource_data::material_data_get_property_material_hash_id(data, data->size, &priority_key);
+      
+      priority_key.material_instance = data->size;
+      Resource_data::material_data_set_property_material_hash_id(data, data->size, priority_key);
+    }
+    
     m_impl->material_id = data->size;
     
     Resource_data::data_unlock(data);
@@ -128,12 +137,21 @@ Material::set_shader(const Shader &shader)
     {
       Resource_data::data_lock(mat_data);
       
-      Material_renderer::Material *material;
-      Resource_data::material_data_get_property_material(mat_data, m_impl->material_id, &material);
+      // Create and add the shader part of the material
+      {
+        Material_renderer::Material *material;
+        Resource_data::material_data_get_property_material(mat_data, m_impl->material_id, &material);
+        Material_renderer::create_material(material, &shd);
+        Resource_data::material_data_set_property_material(mat_data, m_impl->material_id, material);
+      }
       
-      Material_renderer::create_material(material, &shd);
-      
-      Resource_data::material_data_set_property_material(mat_data, m_impl->material_id, material);
+      // Update the hash key
+      {
+        Material_renderer::Material_id material_hash;
+        Resource_data::material_data_get_property_material_hash_id(mat_data, m_impl->material_id, &material_hash);
+        material_hash.shader_id = shader.get_id();
+        Resource_data::material_data_set_property_material_hash_id(mat_data, m_impl->material_id, material_hash);
+      }
       
       Resource_data::data_unlock(mat_data);
     }
@@ -193,6 +211,14 @@ Material::set_map_01(const Texture &texture)
       Resource_data::material_data_set_property_material(mat_data, m_impl->material_id, out_material);
 
       Resource_data::data_unlock(mat_data);
+    }
+    
+    // Update the hash key
+    {
+      Material_renderer::Material_id material_hash;
+      Resource_data::material_data_get_property_material_hash_id(mat_data, m_impl->material_id, &material_hash);
+      material_hash.texture_map_01_id = texture.get_id();
+      Resource_data::material_data_set_property_material_hash_id(mat_data, m_impl->material_id, material_hash);
     }
   }
   else

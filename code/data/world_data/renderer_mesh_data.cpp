@@ -183,7 +183,7 @@ renderer_mesh_data_erase(Renderer_mesh_data *data, const util::generic_id key)
     assert(index_to_erase < data->size);
 
     const size_t start_index = index_to_erase + 1;
-    const size_t size_to_end = data->capacity - index_to_erase - 1;
+    const size_t size_to_end = data->size - index_to_erase - 1;
 
     --(data->size);
 
@@ -228,7 +228,7 @@ renderer_mesh_data_insert(Renderer_mesh_data *data, const util::generic_id key, 
   {
     const size_t dest_index = insert_index + 1;
     const size_t size_to_end = data->size - insert_index;
-  
+
     ++(data->size);
 
     // Shuffle the memory up.

@@ -13,10 +13,11 @@ display_material_list(Resource_data::Material_data *data)
 {
   ImGui::Begin("Material List");
   {
-    ImGui::Columns(4, "material_cols");
+    ImGui::Columns(5, "material_cols");
     ImGui::Separator();
     
     ImGui::Text("ID"); ImGui::NextColumn();
+    ImGui::Text("Priority Key"); ImGui::NextColumn();
     ImGui::Text("Name"); ImGui::NextColumn();
     ImGui::Text("Shader"); ImGui::NextColumn();
     ImGui::Text("Map 01"); ImGui::NextColumn();
@@ -32,6 +33,10 @@ display_material_list(Resource_data::Material_data *data)
     
       ImGui::Selectable(id, selected == i, ImGuiSelectableFlags_SpanAllColumns);
       
+      ImGui::NextColumn();
+      
+      ImGui::Text("%d", *reinterpret_cast<uint32_t*>(&data->property_material_hash_id[i]));
+
       ImGui::NextColumn();
       
       const char *name;

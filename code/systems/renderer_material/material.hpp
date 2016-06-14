@@ -34,6 +34,45 @@ struct Material
 }; // struct
 
 
+// Simple huristic to try and reduce state
+// changes in the material system.
+struct Material_id
+{
+  uint32_t material_instance : 8;
+  uint32_t texture_map_01_id : 16;
+  uint32_t shader_id : 8;
+};
+
+
+inline bool
+operator < (const Material_id left, const Material_id right)
+{
+  const uint32_t lhs = *reinterpret_cast<const uint32_t*>(&left);
+  const uint32_t rhs = *reinterpret_cast<const uint32_t*>(&right);
+  
+  return lhs < rhs;
+}
+
+
+inline bool
+operator > (const Material_id left, const Material_id right)
+{
+  const uint32_t lhs = *reinterpret_cast<const uint32_t*>(&left);
+  const uint32_t rhs = *reinterpret_cast<const uint32_t*>(&right);
+  
+  return lhs > rhs;
+}
+
+
+inline bool
+operator == (const Material_id left, const Material_id right)
+{
+  const uint32_t lhs = *reinterpret_cast<const uint32_t*>(&left);
+  const uint32_t rhs = *reinterpret_cast<const uint32_t*>(&right);
+  
+  return lhs == rhs;
+}
+
 /*
   Sets up a material with a valid shader input.
 */

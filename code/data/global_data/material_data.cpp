@@ -27,9 +27,10 @@ material_data_init(Material_data *data, const size_t size_hint)
   // Calculate the various sizes of things.
   const size_t bytes_material_id = sizeof(*data->material_id) * size_hint + simd_buffer;
   const size_t bytes_property_name = sizeof(*data->property_name) * 32 * size_hint + simd_buffer;
+  const size_t bytes_property_material_hash_id = sizeof(*data->property_material_hash_id) * size_hint + simd_buffer;
   const size_t bytes_property_material = sizeof(*data->property_material) * size_hint + simd_buffer;
 
-  const size_t bytes_to_alloc = bytes_material_id + bytes_property_name + bytes_property_material;
+  const size_t bytes_to_alloc = bytes_material_id + bytes_property_name + bytes_property_material_hash_id + bytes_property_material;
 
   // Allocate some memory.
   util::memory_chunk *data_memory = const_cast<util::memory_chunk*>(&data->memory);
@@ -68,6 +69,19 @@ material_data_init(Material_data *data, const size_t size_hint)
       #endif
 
       byte_counter += bytes_property_name;
+      assert(byte_counter <= bytes_to_alloc);
+    }
+    // Assign property_material_hash_id memory
+    {
+      void *offset = util::mem_offset(alloc_start, byte_counter);
+      void *aligned = util::mem_next_16byte_boundry(offset);
+
+      data->property_material_hash_id = reinterpret_cast<Material_renderer::Material_id*>(aligned);
+      #ifndef NDEBUG
+      memset(offset, 0, bytes_property_material_hash_id);
+      #endif
+
+      byte_counter += bytes_property_material_hash_id;
       assert(byte_counter <= bytes_to_alloc);
     }
     // Assign property_material memory
@@ -163,6 +177,7 @@ material_data_push_back(Material_data *data, const util::generic_id key, size_t 
   // Memset the properties
   {
     memset(&data->property_name[index * 32], 0, sizeof(*data->property_name));
+    memset(&data->property_material_hash_id[index], 0, sizeof(*data->property_material_hash_id));
     memset(&data->property_material[index], 0, sizeof(*data->property_material));
   }
 
@@ -190,6 +205,7 @@ material_data_erase(Material_data *data, const util::generic_id key)
     // Shuffle the memory down.
     memmove(&data->material_id[index_to_erase], &data->material_id[start_index], size_to_end * sizeof(*data->material_id));
     memmove(&data->property_name[index_to_erase * 32], &data->property_name[start_index * 32], (size_to_end * 32) * sizeof(*data->property_name));
+    memmove(&data->property_material_hash_id[index_to_erase], &data->property_material_hash_id[start_index], size_to_end * sizeof(*data->property_material_hash_id));
     memmove(&data->property_material[index_to_erase], &data->property_material[start_index], size_to_end * sizeof(*data->property_material));
   }
   else
@@ -277,6 +293,74 @@ material_data_search_property_name(const Material_data *data, const char *value,
   for(size_t i = 0; i < data->size; ++i)
   {
     if(!strcmp(value, &data->property_name[i * 32]))
+    {
+      found = true;
+
+      if(out_key)
+      {
+        *out_key = data->material_id[i];
+      }
+
+      break;
+    }
+  }
+
+  return found;
+}
+
+
+bool
+material_data_get_property_material_hash_id(const Material_data *data, const util::generic_id key, Material_renderer::Material_id *out_value)
+{
+  size_t index;
+
+  if(material_data_exists(data, key, &index))
+  {
+    *out_value = data->property_material_hash_id[index];
+  }
+  else
+  {
+    LOG_ERROR(Error_string::entity_not_found());
+    assert(false);
+
+    return false;
+  }
+
+  return true;
+}
+
+
+bool
+material_data_set_property_material_hash_id(Material_data *data,  const util::generic_id key, const Material_renderer::Material_id value)
+{
+  assert(data && key);
+
+  size_t index;
+
+  if(material_data_exists(data, key, &index))
+  {
+    data->property_material_hash_id[index] = value;
+  }
+  else
+  {
+    LOG_ERROR(Error_string::entity_not_found());
+    assert(false);
+
+    return false;
+  }
+
+  return true;
+}
+
+
+bool
+material_data_search_property_material_hash_id(const Material_data *data, const Material_renderer::Material_id value, util::generic_id *out_key)
+{
+  bool found = false;
+
+  for(size_t i = 0; i < data->size; ++i)
+  {
+    if(value == data->property_material_hash_id[i])
     {
       found = true;
 

@@ -15,6 +15,12 @@ data:
       return: pointer
       searchable: true
 
+    - name: material_hash_id
+      type: Material_renderer::Material_id
+      return: type
+      include: <systems/renderer_material/material.hpp>
+      searchable: true
+
     - name: material
       type: Material_renderer::Material
       include: <systems/renderer_material/material.hpp>

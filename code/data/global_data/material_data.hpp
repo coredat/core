@@ -6,8 +6,8 @@
 */
 
 
-#ifndef MATERIAL_DATA_INCLUDED_10DDBA34_F5CC_4330_830A_7C6328283E07
-#define MATERIAL_DATA_INCLUDED_10DDBA34_F5CC_4330_830A_7C6328283E07
+#ifndef MATERIAL_DATA_INCLUDED_E9236EDB_8E39_4C1A_9013_F96CECD25A3F
+#define MATERIAL_DATA_INCLUDED_E9236EDB_8E39_4C1A_9013_F96CECD25A3F
 
 
 #include <utilities/generic_id.hpp>
@@ -30,6 +30,7 @@ struct Material_data
 
   // Properties
   char *property_name = nullptr;
+  Material_renderer::Material_id *property_material_hash_id = nullptr;
   Material_renderer::Material *property_material = nullptr;
 
   // Size information
@@ -154,6 +155,39 @@ material_data_set_property_name(Material_data *data,  const util::generic_id key
 */
 bool
 material_data_search_property_name(const Material_data *data, const char *value, util::generic_id *out_key = nullptr);
+
+
+/*!
+  \brief Getter for property_material_hash_id.
+  \param data The container to get information from.
+  \param key The key to search for.
+  \param value The output value, which will be set if the key is found.
+  \return Returns true if the data was found.
+*/
+bool
+material_data_get_property_material_hash_id(const Material_data *data, const util::generic_id key, Material_renderer::Material_id *value);
+
+
+/*!
+  \brief Setter for property_material_hash_id.
+  \param data The container to update.
+  \param key The key to search for.
+  \param value The new value of the data.
+  \return Returns true if the data was set.
+*/
+bool
+material_data_set_property_material_hash_id(Material_data *data,  const util::generic_id key, const Material_renderer::Material_id value);
+
+
+/*!
+  \brief Searches for a given value.
+  \param data The container to search.
+  \param value The value which to search for.
+  \param out_key Optional the key for that value.
+  \return Returns true if the data was found.
+*/
+bool
+material_data_search_property_material_hash_id(const Material_data *data, const Material_renderer::Material_id value, util::generic_id *out_key = nullptr);
 
 
 /*!

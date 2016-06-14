@@ -451,15 +451,27 @@ set_material(const util::generic_id this_id, World_data::World *world, const Cor
     {
       size_t insert_point = mesh_data->size;
     
+      const auto mat_data = Resource_data::get_resources()->material_data;
+      
+      Resource_data::data_lock(mat_data);
+    
+      Material_renderer::Material_id this_key;
+      Resource_data::material_data_get_property_material_hash_id(mat_data, material.get_id(), &this_key);
+    
       // Loop through and find insert point
       for(size_t i = 0; i < mesh_data->size; ++i)
       {
-        if(mesh_data->property_material_id[i] == material.get_id())
+        Material_renderer::Material_id other_key;
+        Resource_data::material_data_get_property_material_hash_id(mat_data, mesh_data->property_material_id[i], &other_key);
+
+        if(this_key > other_key)
         {
           insert_point = i;
           break;
         }
       }
+      
+      Resource_data::data_unlock(mat_data);
     
       World_data::renderer_mesh_data_insert(mesh_data, this_id, insert_point);
       World_data::renderer_mesh_data_set_property_material_id(mesh_data, this_id, material.get_id());
@@ -534,8 +546,12 @@ get_model(const util::generic_id this_id, World_data::World *world)
   if(!is_valid(this_id, world))
   {
     LOG_ERROR(Error_string::entity_is_invalid());
-    return Core::Model();
   }
+  
+  LOG_ERROR(Error_string::no_implimentation());
+  
+  assert(false);
+  return Core::Model();
 }
 
 
