@@ -14,8 +14,7 @@ material_renderer(const math::mat4 &view_mat,
                   const math::mat4 &proj_mat,
                   const Resource_data::Material_data *material_data,
                   const Resource_data::Mesh_data *mesh_data,
-                  const World_data::Renderer_mesh_data *mesh_renderer_data,
-                  const World_data::Transform_data *transform_data)
+                  const World_data::Renderer_mesh_data *mesh_renderer_data)
 {
   /*
     Create draw calls the way the renderer wants them.
@@ -40,13 +39,6 @@ material_renderer(const math::mat4 &view_mat,
       // Possible extension. We could also process these based on how far away the camera is.
       Resource_data::mesh_data_get_property_mesh(mesh_data, draw_call_data->model_id, &draw_calls[i].mesh);
       
-      // TODO: This is costly also we have the world matrix
-      // Although it appears it might be a little wokey.
-//      math::transform transform;
-//      World_data::transform_data_get_property_transform(transform_data, mesh_renderer_data->entity_id[i], &transform);
-//      
-//      math::mat4 world = math::transform_get_world_matrix(transform);
-
       const float *world = draw_call_data->world_matrix;
 
       memcpy(&draw_calls[i], world, sizeof(float) * 16);
@@ -72,33 +64,43 @@ material_renderer(const math::mat4 &view_mat,
   uint32_t number_of_runs = 0;
   uint32_t number_of_draws = 0;
   {
+    Draw_run *curr_run = &runs[0];
+  
     // Push first material onto the list
     if(mesh_renderer_data->size)
     {
-      runs[0] = Draw_run{};
-      runs[0].material_id = mesh_renderer_data->property_material_id[0];
-      runs[0].start_point = 0;
+      *curr_run = Draw_run{};
+      curr_run->material_id = mesh_renderer_data->property_material_id[0];
+      curr_run->start_point = 0;
     }
   
     // Now calculate the runs
     // We start from one as we've already got that above.
     for(uint32_t i = 1; i < mesh_renderer_data->size; ++i)
     {
-      if(runs[number_of_runs].material_id != mesh_renderer_data->property_material_id[i])
+      if(curr_run->material_id != mesh_renderer_data->property_material_id[i])
       {
-        runs[number_of_runs].size = i - runs[number_of_runs].start_point;
+        curr_run->size = i - curr_run->start_point;
         ++number_of_runs;
         
-        runs[number_of_runs] = Draw_run{};
-        runs[number_of_runs].material_id = mesh_renderer_data->property_material_id[i];
-        runs[number_of_runs].start_point = i;
+        // Have we maxed out of runs?
+        if(number_of_runs >= runs_to_alloc_for)
+        {
+          break;
+        }
+        
+        curr_run = &runs[number_of_runs];
+        
+        *curr_run = Draw_run{};
+        curr_run->material_id = mesh_renderer_data->property_material_id[i];
+        curr_run->start_point = i;
       }
     }
     
     // Need to asign the size for the last run.
     if(number_of_runs)
     {
-      runs[number_of_runs].size = (mesh_renderer_data->size - runs[number_of_runs].start_point);
+      curr_run->size = (mesh_renderer_data->size - curr_run->start_point);
       ++number_of_runs;
     }
   }

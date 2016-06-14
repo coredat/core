@@ -64,25 +64,23 @@ render(const math::mat4 &view_proj_mat,
 {
   Ogl::error_clear();
   
-//  auto err = glGetError();
-  
-//  if(material->shader.program_id == 0)
-//  {
-//    LOG_WARNING("Rendering zero program?");
-//    return;
-//  }
+  if(material->shader.program_id == 0)
+  {
+    LOG_WARNING("Rendering zero program?");
+    return;
+  }
 
   // Bind material.
   {
-    // Program
-//    if(material->shader.program_id != mat_renderer_last_program)
+    // Bind the program unless it is already bound.
+    if(material->shader.program_id != mat_renderer_last_program)
     {
       Ogl::shader_bind(&material->shader);
-//      mat_renderer_last_program = material->shader.program_id;
+      mat_renderer_last_program = material->shader.program_id;
     }
     
     // Texture
-//    if(material->map_01_id.texture_id != mat_renderer_last_map_01_texture)
+    if(material->map_01_id.texture_id != mat_renderer_last_map_01_texture)
     {
       // Move the filter selection into the material.
       static Graphics_api::Texture_filtering filter =
@@ -94,39 +92,55 @@ render(const math::mat4 &view_proj_mat,
       
       Ogl::filtering_apply(filter);
       Ogl::shader_uniforms_apply(material->map_01, (void*)&material->map_01_id.texture_id);
+      
+      mat_renderer_last_map_01_texture = material->map_01_id.texture_id;
     }
   }
   
-  // For all draw calls
+  // Draw all the vbo's
   for(uint32_t i = 0; i < number_of_calls; ++i)
   {
     const Draw_call &call = calls[i];
-   
-    // Mats
-    {
-      const math::mat4 *world = reinterpret_cast<const math::mat4*>(&call.world_matrix[0]);
-      math::mat4 wvp = math::mat4_multiply(*world, view_proj_mat);
-      Ogl::shader_uniforms_apply(material->mat_world_view_proj, (void*)&wvp);
-    }
     
-    
-    // Mats
-    if(material->mat_world.index >= 0)
+    // Per Mesh Mats
     {
-      Ogl::shader_uniforms_apply(material->mat_world, (void*)&call.world_matrix);
+      // WVP
+      if(material->mat_world_view_proj.index >= 0)
+      {
+        const math::mat4 *world = reinterpret_cast<const math::mat4*>(&call.world_matrix[0]);
+        math::mat4 wvp = math::mat4_multiply(*world, view_proj_mat);
+        Ogl::shader_uniforms_apply(material->mat_world_view_proj, (void*)&wvp);
+      }
+      
+      // World
+      if(material->mat_world.index >= 0)
+      {
+        Ogl::shader_uniforms_apply(material->mat_world, (void*)&call.world_matrix);
+      }
     }
 
-    //if(mat_renderer_last_vbo != call.mesh.vbo.vertex_buffer_id)
+    // VBO.
+    if(mat_renderer_last_vbo != call.mesh.vbo.vertex_buffer_id)
     {
-      mat_renderer_last_vbo = call.mesh.vbo.vertex_buffer_id;
-      
       Ogl::vertex_buffer_bind(call.mesh.vbo, &mat_renderer_vertex_format, &material->shader);
+      mat_renderer_last_vbo = call.mesh.vbo.vertex_buffer_id;
     }
     
-    // Draw the mesh.
+    // IBO
+    if(mat_renderer_last_ibo != call.mesh.ibo.index_buffer_id)
+    {
+      Ogl::index_buffer_bind(call.mesh.ibo);
+    }
+    
+    // Draw the mesh with ibo if we have one.
+    if(call.mesh.ibo.index_buffer_id)
+    {
+      Ogl::index_buffer_draw(GL_TRIANGLES, call.mesh.ibo);
+    }
+    // Or vbo if we don't.
+    else
     {
       const GLsizei count = call.mesh.vbo.number_of_entries / mat_renderer_vertex_format.number_of_attributes;
-
       glDrawArrays(GL_TRIANGLES, 0, count);
     }
   }

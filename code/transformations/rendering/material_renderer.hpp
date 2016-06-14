@@ -28,8 +28,7 @@ material_renderer(const math::mat4 &view_mat,
                   const math::mat4 &proj_mat,
                   const Resource_data::Material_data *material_data,
                   const Resource_data::Mesh_data *mesh_data,
-                  const World_data::Renderer_mesh_data *render_mesh_data,
-                  const World_data::Transform_data *transforms);
+                  const World_data::Renderer_mesh_data *render_mesh_data);
 
 
 }

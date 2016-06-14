@@ -282,8 +282,7 @@ World::think()
                                  proj,
                                  Resource_data::get_resources()->material_data,
                                  Resource_data::get_resources()->mesh_data,
-                                 world->mesh_data,
-                                 world->transform);
+                                 world->mesh_data);
 
   }
  

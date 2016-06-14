@@ -473,6 +473,13 @@ set_material(const util::generic_id this_id, World_data::World *world, const Cor
       
       Resource_data::data_unlock(mat_data);
     
+      // Get the trasnform as we are insreting a new record.
+      math::transform trans;
+      World_data::transform_data_get_property_transform(world->transform, this_id, &trans);
+      
+      const math::mat4 world_mat = math::transform_get_world_matrix(trans);
+      memcpy(copy.world_matrix, &world_mat, sizeof(world_mat));
+    
       World_data::renderer_mesh_data_insert(mesh_data, this_id, insert_point);
       World_data::renderer_mesh_data_set_property_material_id(mesh_data, this_id, material.get_id());
       World_data::renderer_mesh_data_set_property_draw_call(mesh_data, this_id, &copy);

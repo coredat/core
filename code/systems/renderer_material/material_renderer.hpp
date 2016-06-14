@@ -20,14 +20,27 @@ struct Draw_call
 };
 
 
+/*
+  Initializes the material renderer.
+*/
 void
 initialize();
 
 
+/*
+  Resets the internal cache, which allows for some 
+  minor reduction in state changes.
+  
+  Best to call this once per frame, just before you are rendering
+  your materials.
+*/
 void
 reset();
 
 
+/*
+  Renders an array of meshes with a given material.
+*/
 void
 render(const math::mat4 &view_proj_mat,
        const Material *material,
