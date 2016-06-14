@@ -277,27 +277,27 @@ World::think()
   Resource_data::data_lock(resources->mesh_data);
   Resource_data::data_lock(resources->texture_data);
   
-  for (uint32_t i = 0; i < size_of_node_pool; ++i)
-  {
-    const uint32_t mesh_id     = world->mesh_data->property_draw_call[i].model_id;
-    const uint32_t material_id = world->mesh_data->property_material_id[i];
-    
-    if(mesh_id && material_id)
-    {
-      Graphics_api::Mesh get_mesh;
-      Resource_data::mesh_data_get_property_mesh(resources->mesh_data, mesh_id, &get_mesh);
-
-      ::Material_renderer::Material *material;
-      Resource_data::material_data_get_property_material(resources->material_data, material_id, &material);
-
-      Ogl::Texture get_texture;
-      Resource_data::texture_data_get_property_texture(resources->texture_data, 1, &get_texture);
-      
-      nodes[i].vbo     = get_mesh.vbo;
-      nodes[i].diffuse = get_texture;
-      memcpy(nodes[i].world_mat, world->mesh_data->property_draw_call[i].world_matrix, sizeof(float) * 16);
-    }
-  }
+//  for (uint32_t i = 0; i < size_of_node_pool; ++i)
+//  {
+//    const uint32_t mesh_id     = world->mesh_data->property_draw_call[i].model_id;
+//    const uint32_t material_id = world->mesh_data->property_material_id[i];
+//    
+//    if(mesh_id && material_id)
+//    {
+//      Graphics_api::Mesh get_mesh;
+//      Resource_data::mesh_data_get_property_mesh(resources->mesh_data, mesh_id, &get_mesh);
+//
+//      ::Material_renderer::Material *material;
+//      Resource_data::material_data_get_property_material(resources->material_data, material_id, &material);
+//
+//      Ogl::Texture get_texture;
+//      Resource_data::texture_data_get_property_texture(resources->texture_data, 1, &get_texture);
+//      
+//      nodes[i].vbo     = get_mesh.vbo;
+//      nodes[i].diffuse = get_texture;
+//      memcpy(nodes[i].world_mat, world->mesh_data->property_draw_call[i].world_matrix, sizeof(float) * 16);
+//    }
+//  }
   
   Resource_data::data_unlock(resources->mesh_data);
   Resource_data::data_unlock(resources->texture_data);

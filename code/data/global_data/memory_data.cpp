@@ -49,7 +49,10 @@ scratch_reset()
 void*
 scratch_alloc(const size_t bytes)
 {
-  assert(bytes);
+  if(bytes == 0)
+  {
+    return nullptr;
+  }
 
   if((scratch_size + bytes) < scratch_capacity)
   {
@@ -70,8 +73,6 @@ scratch_alloc(const size_t bytes)
 void*
 scratch_alloc_aligned(const size_t bytes)
 {
-  assert(bytes);
-  
   void *ptr = scratch_alloc(bytes + 16);
   
   return util::mem_next_16byte_boundry(ptr);

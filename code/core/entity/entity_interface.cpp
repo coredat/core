@@ -508,6 +508,12 @@ set_model(const util::generic_id this_id, World_data::World *world, const Core::
     {
       mesh_data->property_draw_call[index].model_id = model.get_id();
     }
+    else
+    {
+      // Has no material yet. Will insert one for the moment.
+      World_data::renderer_mesh_data_insert(mesh_data, this_id, 0);
+      mesh_data->property_draw_call[0].model_id = model.get_id();
+    }
     
     World_data::data_unlock(mesh_data);
   }
