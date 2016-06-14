@@ -98,7 +98,7 @@ material_renderer(const math::mat4 &view_mat,
     // Need to asign the size for the last run.
     if(number_of_runs)
     {
-      runs[number_of_runs - 1].size = (mesh_renderer_data->size - runs[number_of_runs - 1].start_point);
+      runs[number_of_runs].size = (mesh_renderer_data->size - runs[number_of_runs].start_point);
       ++number_of_runs;
     }
   }

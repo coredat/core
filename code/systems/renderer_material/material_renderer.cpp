@@ -64,30 +64,21 @@ render(const math::mat4 &view_proj_mat,
 {
   Ogl::error_clear();
   
-  auto err = glGetError();
+//  auto err = glGetError();
   
-  if(material->shader.program_id == 0)
-  {
-    LOG_WARNING("Rendering zero program?");
-    return;
-  }
-  
-  if(err) {
-    volatile int i = 0;
-  }
+//  if(material->shader.program_id == 0)
+//  {
+//    LOG_WARNING("Rendering zero program?");
+//    return;
+//  }
 
   // Bind material.
   {
     // Program
-    if(material->shader.program_id != mat_renderer_last_program)
+//    if(material->shader.program_id != mat_renderer_last_program)
     {
       Ogl::shader_bind(&material->shader);
-      mat_renderer_last_program = material->shader.program_id;
-    }
-    
-    err = glGetError();
-    if(err) {
-      volatile int i = 0;
+//      mat_renderer_last_program = material->shader.program_id;
     }
     
     // Texture
@@ -106,12 +97,6 @@ render(const math::mat4 &view_proj_mat,
     }
   }
   
-  err = glGetError();
-  if(err) {
-    volatile int i = 0;
-  }
-
-  
   // For all draw calls
   for(uint32_t i = 0; i < number_of_calls; ++i)
   {
@@ -124,37 +109,16 @@ render(const math::mat4 &view_proj_mat,
       Ogl::shader_uniforms_apply(material->mat_world_view_proj, (void*)&wvp);
     }
     
-    err = glGetError();
-    if(err) {
-      volatile int j = 0;
-    }
-
     
     // Mats
     if(material->mat_world.index >= 0)
     {
       Ogl::shader_uniforms_apply(material->mat_world, (void*)&call.world_matrix);
     }
-    
-    err = glGetError();
-    if(err) {
-      volatile int j = 0;
-    }
 
     //if(mat_renderer_last_vbo != call.mesh.vbo.vertex_buffer_id)
     {
       mat_renderer_last_vbo = call.mesh.vbo.vertex_buffer_id;
-      
-      if(call.mesh.vbo.vertex_buffer_id > 1000)
-      {
-        volatile int j = 0;
-      }
-      
-      
-      if(!call.mesh.vbo.vertex_buffer_id)
-      {
-        continue;
-      }
       
       Ogl::vertex_buffer_bind(call.mesh.vbo, &mat_renderer_vertex_format, &material->shader);
     }
