@@ -2,33 +2,23 @@
 #define MATERIAL_RENDERER_INCLUDED_40B58250_DD62_4792_9DE7_554E728832C5
 
 
-#include <stdint.h>
+#include <data/global_data/material_data.hpp>
+#include <data/global_data/mesh_data.hpp>
+#include <data/world_data/renderer_mesh_data.hpp>
+#include <data/world_data/transform_data.hpp>
+#include <math/mat/mat_types.hpp>
 
 
 namespace Rendering {
 
 
-/*
-  Takes an array of draw calls,
-  and processes them into an arranged list.
-*/
-struct Ordered_draw_calls
-{
-  uint32_t    *material_ids;
-  uint32_t    *size;
-};
-
-
 void
-material_draw_call_arrage_by_materials();
-
-
-/*!
-  Takes an array of materials.
-  and puts them into program_id order.
-*/
-void
-material_order_optimize();
+material_renderer(const math::mat4 &view_mat,
+                  const math::mat4 &proj_mat,
+                  const Resource_data::Material_data *material_data,
+                  const Resource_data::Mesh_data *mesh_data,
+                  const World_data::Renderer_mesh_data *render_mesh_data,
+                  const World_data::Transform_data *transforms);
 
 
 }

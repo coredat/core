@@ -57,6 +57,7 @@
 #include <string>
 
 #include <transformations/physics/overlapping_aabb.hpp>
+#include <transformations/rendering/material_renderer.hpp>
 
 
 namespace Core {
@@ -304,113 +305,16 @@ World::think()
   
   Simple_renderer::reset();
   
-//  Simple_renderer::render_nodes_fullbright(nodes.data(), size_of_node_pool);
-  //Simple_renderer::render_nodes_directional_light(nodes, size_of_node_pool);
-
-//  math::mat4 wvp = math::mat4_multiply(math::mat4_id(), view, proj);
-//  Debug_line_renderer::render(math::mat4_get_data(wvp));
-
-  // Temp just dump draw call data into renderer draw calls
-
-  
-  
-  ::Material_renderer::Draw_call *draw_calls = SCRATCH_ALIGNED_ALLOC(::Material_renderer::Draw_call, world->mesh_data->size);
-
-  uint32_t number_of_draw_calls = 0;
-  
-  for(uint32_t i = 0; i < world->mesh_data->size; ++i)
-  {
-    const World_data::Mesh_renderer_draw_call *draw_call_data = &world->mesh_data->property_draw_call[i];
-
-    if(!draw_call_data->model_id)
-    {
-      ++number_of_draw_calls;
-      continue;
-    }
-
-    Resource_data::mesh_data_get_property_mesh(resources->mesh_data, draw_call_data->model_id, &draw_calls[number_of_draw_calls].mesh);
     
-    if(draw_calls[number_of_draw_calls].mesh.vbo.vertex_buffer_id > 1000)
-    {
-      volatile int j = 0;
-    }
-    
-    math::transform transform;
-    World_data::transform_data_get_property_transform(world->transform, world->mesh_data->entity_id[i], &transform);
-    
-    math::mat4 world = math::transform_get_world_matrix(transform);
-    memcpy(&draw_calls[number_of_draw_calls], &world, sizeof(float) * 16);
-    
-    if(draw_calls[number_of_draw_calls].mesh.vbo.vertex_buffer_id > 1000)
-    {
-      volatile int j = 0;
-    }    
-    
-    ++number_of_draw_calls;
-  }
-
-  auto mesh_data = world->mesh_data;
-
-  struct Draw_run
-  {
-    uint32_t material_id = 0;
-    uint32_t start_point = 0;
-    uint32_t size = 0;
-  };
-  
-  Draw_run runs[128];
-  uint32_t number_of_runs = 0;
-  
-  uint32_t count = 0;
-  for(uint32_t i = 0; i < mesh_data->size; ++i)
-  {
-    if(mesh_data->property_material_id[i] == 0)
-    {
-      continue;
-    }
-    count++;
-    // First run
-    if(!number_of_runs)
-    {
-      runs[0] = Draw_run{};
-      runs[0].material_id = mesh_data->property_material_id[i];
-      runs[0].start_point = i;
-      ++number_of_runs;
-      continue;
-    }
-    
-    if(mesh_data->property_material_id[i] != runs[number_of_runs - 1].material_id)
-    {
-      runs[number_of_runs - 1].size = (i - runs[number_of_runs - 1].start_point);
-      ++number_of_runs;
-      
-      // New run
-      runs[number_of_runs - 1].material_id = mesh_data->property_material_id[i];
-      runs[number_of_runs - 1].start_point = i;
-    }
-  }
-  
-  if(number_of_runs)
-  {
-    runs[number_of_runs - 1].size = (mesh_data->size - runs[number_of_runs - 1].start_point);
-  }
-  
-  ::Material_renderer::reset();
-  if(runs[0].size > 0 || number_of_runs > 0)
-  {
-    for(uint32_t r = 0; r < number_of_runs; ++r)
-    {
-      ::Material_renderer::Material *mat;
-      Resource_data::material_data_get_property_material(resources->material_data, runs[r].material_id, &mat);
-      
-      const size_t start = runs[r].start_point;
-      const size_t count = runs[r].size;
-      
-      ::Material_renderer::render(view_proj, mat, &draw_calls[start], count);
-    }
-  }
+    Rendering::material_renderer(view,
+                                 proj,
+                                 Resource_data::get_resources()->material_data,
+                                 Resource_data::get_resources()->mesh_data,
+                                 world->mesh_data,
+                                 world->transform);
 
   }
+ 
   
   // Debug menu
   #ifndef NDEBUG
