@@ -12,7 +12,18 @@
 namespace Rendering {
 
 
-void
+/*
+  Renders the materials to the currently bound target.
+  This method will allocate data onto the scratch buffer.
+  \param view_mat The view matrix.
+  \param proj_mat The projection matrix.
+  \param material_data The global material data store.
+  \param mesh_data The global mesh data store.
+  \param render_mesh_data The draw calls information.
+  \param transforms The entity transforms.
+  \return Returns the number of draw calls it will execute.
+*/
+uint32_t
 material_renderer(const math::mat4 &view_mat,
                   const math::mat4 &proj_mat,
                   const Resource_data::Material_data *material_data,

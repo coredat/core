@@ -91,7 +91,7 @@ render(const math::mat4 &view_proj_mat,
     }
     
     // Texture
-    if(material->map_01_id.texture_id != mat_renderer_last_map_01_texture)
+//    if(material->map_01_id.texture_id != mat_renderer_last_map_01_texture)
     {
       // Move the filter selection into the material.
       static Graphics_api::Texture_filtering filter =
