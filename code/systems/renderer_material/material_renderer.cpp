@@ -95,6 +95,12 @@ render(const math::mat4 &view_proj_mat,
       
       mat_renderer_last_map_01_texture = material->map_01_id.texture_id;
     }
+    
+    // Color
+    if(material->color.index >= 0)
+    {
+      Ogl::shader_uniforms_apply(material->color, (void*)material->color_data);
+    }
   }
   
   // Draw all the vbo's

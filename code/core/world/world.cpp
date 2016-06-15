@@ -253,24 +253,6 @@ World::think()
       view = math::mat4_lookat(eye_pos, look_at, up);
     }
   }
-
-  const math::mat4 view_proj = math::mat4_multiply(view, proj);
-
-  ::Transform::transforms_to_wvp_mats(world->transform->property_transform,
-                                      world->transform->size,
-                                      view_proj,
-                                      nodes[0].wvp,
-                                      size_of_node_pool,
-                                      sizeof(Simple_renderer::Node));
-
-//  ::Transform::transforms_to_world_mats(world->transform->transform,
-//                                        world->transform->size,
-//                                        nodes[0].world_mat,
-//                                        size_of_node_pool,
-//                                        sizeof(Simple_renderer::Node));
-  
-    Resource_data::Resources *resources = Resource_data::get_resources();
-    assert(resources);
     
     /*
       Material Renderer
@@ -287,7 +269,11 @@ World::think()
   }
  
   
-  // Render the debug menus
+  /*
+    Debug Menu
+    --
+    Shows the debugging menu bar at the top of the screen.
+  */
   #ifndef NDEBUG
   {
     Debug_menu::display_global_data_menu();

@@ -23,13 +23,18 @@ create_material(Material *out_mat, const Ogl::Shader *shader)
     Ogl::shader_uniforms_get_uniform_index(&out_mat->map_03, &uniforms, "uni_map_03");
     Ogl::shader_uniforms_get_uniform_index(&out_mat->map_04, &uniforms, "uni_map_04");
   }
-
+  
   // Get mats
   {
     Ogl::shader_uniforms_get_uniform_index(&out_mat->mat_world,           &uniforms, "uni_world_mat");
     Ogl::shader_uniforms_get_uniform_index(&out_mat->mat_proj,            &uniforms, "uni_proj_mat");
     Ogl::shader_uniforms_get_uniform_index(&out_mat->mat_view_proj,       &uniforms, "uni_vp_mat");
     Ogl::shader_uniforms_get_uniform_index(&out_mat->mat_world_view_proj, &uniforms, "uni_wvp_mat");
+  }
+  
+  // Get the other uniforms
+  {
+    Ogl::shader_uniforms_get_uniform_index(&out_mat->color, &uniforms, "uni_color");
   }
   
 }

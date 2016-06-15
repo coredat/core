@@ -3,6 +3,7 @@
 
 
 #include <core/resources/resources_fwd.hpp>
+#include <math/vec/vec_types.hpp>
 #include <memory>
 #include <stdint.h>
 
@@ -31,6 +32,8 @@ public:
 
   void                  set_shader(const Shader &shader);
   void                  set_map_01(const Texture &texture);
+  
+  void                  set_color(const math::vec4 color);
   
   const char *          get_name() const;
   

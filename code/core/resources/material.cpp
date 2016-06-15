@@ -4,6 +4,7 @@
 #include <common/error_strings.hpp>
 #include <data/global_data/resource_data.hpp>
 #include <graphics_api/ogl/ogl_shader_uniform.hpp>
+#include <math/vec/vec4.hpp>
 #include <assert.h>
 
 
@@ -227,6 +228,41 @@ Material::set_map_01(const Texture &texture)
     LOG_ERROR(Error_string::resource_not_found());
     return;
   }
+}
+
+
+void
+Material::set_color(const math::vec4 color)
+{
+  assert(m_impl);
+
+  if(exists())
+  {
+    auto resource = Resource_data::get_resources();
+    assert(resource);
+  
+    auto mat_data = resource->material_data;
+    assert(mat_data);
+    
+    // Update material
+    {
+      Resource_data::data_lock(mat_data);
+      
+      Material_renderer::Material *out_material;
+      Resource_data::material_data_get_property_material(mat_data, m_impl->material_id, &out_material);
+      
+      math::vec4_to_array(color, out_material->color_data);
+      Resource_data::material_data_set_property_material(mat_data, m_impl->material_id, out_material);
+
+      Resource_data::data_unlock(mat_data);
+    }
+  }
+  else
+  {
+    assert(false);
+    LOG_ERROR(Error_string::resource_not_found());
+    return;
+  } 
 }
 
 

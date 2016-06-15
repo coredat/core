@@ -31,6 +31,9 @@ struct Material
   Ogl::Uniform mat_proj;
   Ogl::Uniform mat_view_proj;
   Ogl::Uniform mat_world_view_proj;
+  
+  Ogl::Uniform color;
+  float color_data[4] = {0.f, 0.f, 0.f, 0.f};
 }; // struct
 
 
