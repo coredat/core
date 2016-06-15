@@ -49,6 +49,16 @@ get_alpha_f(const Color color)
 }
 
 
+void
+to_float_array(const Color color, float *out_array)
+{
+  out_array[0] = get_red_f(color);
+  out_array[1] = get_green_f(color);
+  out_array[2] = get_blue_f(color);
+  out_array[3] = get_alpha_f(color);
+}
+
+
 uint8_t
 get_red_i(const Color color)
 {

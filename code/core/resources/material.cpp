@@ -1,10 +1,11 @@
 #include <core/resources/material.hpp>
 #include <core/resources/shader.hpp>
 #include <core/resources/texture.hpp>
+#include <core/color/color.hpp>
+#include <core/color/color_utils.hpp>
 #include <common/error_strings.hpp>
 #include <data/global_data/resource_data.hpp>
 #include <graphics_api/ogl/ogl_shader_uniform.hpp>
-#include <math/vec/vec4.hpp>
 #include <assert.h>
 
 
@@ -232,7 +233,7 @@ Material::set_map_01(const Texture &texture)
 
 
 void
-Material::set_color(const math::vec4 color)
+Material::set_color(const Color color)
 {
   assert(m_impl);
 
@@ -251,7 +252,7 @@ Material::set_color(const math::vec4 color)
       Material_renderer::Material *out_material;
       Resource_data::material_data_get_property_material(mat_data, m_impl->material_id, &out_material);
       
-      math::vec4_to_array(color, out_material->color_data);
+      Core::Color_utils::to_float_array(color, out_material->color_data);
       Resource_data::material_data_set_property_material(mat_data, m_impl->material_id, out_material);
 
       Resource_data::data_unlock(mat_data);

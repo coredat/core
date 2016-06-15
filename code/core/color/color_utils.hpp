@@ -10,12 +10,24 @@ namespace Core {
 namespace Color_utils {
 
 
+/*
+  Get a component as a float.
+*/
 float       get_red_f(const Color color);
 float       get_green_f(const Color color);
 float       get_blue_f(const Color color);
 float       get_alpha_f(const Color color);
 
 
+/*
+  Get the components as an array.
+*/
+void        to_float_array(const Color color, float *out_array);
+
+
+/*
+  Get a component as a int8
+*/
 uint8_t     get_red_i(const Color color);
 uint8_t     get_green_i(const Color color);
 uint8_t     get_blue_i(const Color color);
