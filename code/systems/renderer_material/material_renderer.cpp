@@ -64,6 +64,10 @@ render(const math::mat4 &view_proj_mat,
 {
   Ogl::error_clear();
   
+  // TODO: This is a hack!
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  
   if(material->shader.program_id == 0)
   {
     LOG_WARNING("Rendering zero program?");
