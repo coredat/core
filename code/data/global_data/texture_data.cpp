@@ -28,8 +28,9 @@ texture_data_init(Texture_data *data, const size_t size_hint)
   const size_t bytes_texture_id = sizeof(*data->texture_id) * size_hint + simd_buffer;
   const size_t bytes_property_name = sizeof(*data->property_name) * 32 * size_hint + simd_buffer;
   const size_t bytes_property_texture = sizeof(*data->property_texture) * size_hint + simd_buffer;
+  const size_t bytes_property_render_target = sizeof(*data->property_render_target) * size_hint + simd_buffer;
 
-  const size_t bytes_to_alloc = bytes_texture_id + bytes_property_name + bytes_property_texture;
+  const size_t bytes_to_alloc = bytes_texture_id + bytes_property_name + bytes_property_texture + bytes_property_render_target;
 
   // Allocate some memory.
   util::memory_chunk *data_memory = const_cast<util::memory_chunk*>(&data->memory);
@@ -81,6 +82,19 @@ texture_data_init(Texture_data *data, const size_t size_hint)
       #endif
 
       byte_counter += bytes_property_texture;
+      assert(byte_counter <= bytes_to_alloc);
+    }
+    // Assign property_render_target memory
+    {
+      void *offset = util::mem_offset(alloc_start, byte_counter);
+      void *aligned = util::mem_next_16byte_boundry(offset);
+
+      data->property_render_target = reinterpret_cast<Ogl::Frame_buffer*>(aligned);
+      #ifndef NDEBUG
+      memset(offset, 0, bytes_property_render_target);
+      #endif
+
+      byte_counter += bytes_property_render_target;
       assert(byte_counter <= bytes_to_alloc);
     }
   }
@@ -164,6 +178,7 @@ texture_data_push_back(Texture_data *data, const util::generic_id key, size_t *o
   {
     memset(&data->property_name[index * 32], 0, sizeof(*data->property_name));
     memset(&data->property_texture[index], 0, sizeof(*data->property_texture));
+    memset(&data->property_render_target[index], 0, sizeof(*data->property_render_target));
   }
 
   return true;
@@ -191,6 +206,7 @@ texture_data_erase(Texture_data *data, const util::generic_id key)
     memmove(&data->texture_id[index_to_erase], &data->texture_id[start_index], size_to_end * sizeof(*data->texture_id));
     memmove(&data->property_name[index_to_erase * 32], &data->property_name[start_index * 32], (size_to_end * 32) * sizeof(*data->property_name));
     memmove(&data->property_texture[index_to_erase], &data->property_texture[start_index], size_to_end * sizeof(*data->property_texture));
+    memmove(&data->property_render_target[index_to_erase], &data->property_render_target[start_index], size_to_end * sizeof(*data->property_render_target));
   }
   else
   {
@@ -324,6 +340,52 @@ texture_data_set_property_texture(Texture_data *data,  const util::generic_id ke
   if(texture_data_exists(data, key, &index))
   {
     data->property_texture[index] = value;
+  }
+  else
+  {
+    LOG_ERROR(Error_string::entity_not_found());
+    assert(false);
+
+    return false;
+  }
+
+  return true;
+}
+
+
+
+
+bool
+texture_data_get_property_render_target(const Texture_data *data, const util::generic_id key, Ogl::Frame_buffer *out_value)
+{
+  size_t index;
+
+  if(texture_data_exists(data, key, &index))
+  {
+    *out_value = data->property_render_target[index];
+  }
+  else
+  {
+    LOG_ERROR(Error_string::entity_not_found());
+    assert(false);
+
+    return false;
+  }
+
+  return true;
+}
+
+
+bool
+texture_data_set_property_render_target(Texture_data *data,  const util::generic_id key, const Ogl::Frame_buffer value)
+{
+  assert(data && key);
+
+  size_t index;
+
+  if(texture_data_exists(data, key, &index))
+  {
+    data->property_render_target[index] = value;
   }
   else
   {

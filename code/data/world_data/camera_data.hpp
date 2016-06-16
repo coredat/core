@@ -6,8 +6,8 @@
 */
 
 
-#ifndef CAMERA_DATA_INCLUDED_3F8E6912_5FCB_4564_BC20_B09AA770C295
-#define CAMERA_DATA_INCLUDED_3F8E6912_5FCB_4564_BC20_B09AA770C295
+#ifndef CAMERA_DATA_INCLUDED_FD80B963_605C_46DF_BF0E_B5BB2627CFBB
+#define CAMERA_DATA_INCLUDED_FD80B963_605C_46DF_BF0E_B5BB2627CFBB
 
 
 #include <utilities/generic_id.hpp>
@@ -32,6 +32,7 @@ struct Camera_data
   // Properties
   util::generic_id *property_entity_id = nullptr;
   uint32_t *property_priority = nullptr;
+  util::generic_id *property_texture_id = nullptr;
   Camera::Camera_properties *property_camera = nullptr;
 
   // Size information
@@ -178,6 +179,28 @@ camera_data_get_property_priority(const Camera_data *data, const util::generic_i
 */
 bool
 camera_data_set_property_priority(Camera_data *data,  const util::generic_id key, const uint32_t value);
+
+
+/*!
+  \brief Getter for property_texture_id.
+  \param data The container to get information from.
+  \param key The key to search for.
+  \param value The output value, which will be set if the key is found.
+  \return Returns true if the data was found.
+*/
+bool
+camera_data_get_property_texture_id(const Camera_data *data, const util::generic_id key, util::generic_id *value);
+
+
+/*!
+  \brief Setter for property_texture_id.
+  \param data The container to update.
+  \param key The key to search for.
+  \param value The new value of the data.
+  \return Returns true if the data was set.
+*/
+bool
+camera_data_set_property_texture_id(Camera_data *data,  const util::generic_id key, const util::generic_id value);
 
 
 /*!

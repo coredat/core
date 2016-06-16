@@ -21,6 +21,12 @@ data:
       include: <stdint.h>
       return: value
 
+    - name: texture_id
+      generate_relationship: resources_textures
+      type: util::generic_id
+      include: <utilities/generic_id.hpp>
+      return: value
+
     - name: camera
       type: Camera::Camera_properties
       return: value

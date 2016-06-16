@@ -22,7 +22,7 @@ set_world_data(World *set_world) {
 World*
 get_world()
 {
-//  LOG_TODO("Needs to go!")
+  LOG_TODO_ONCE("This getter needs to go.")
   return curr_world;
 }
 

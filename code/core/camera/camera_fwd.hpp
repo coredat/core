@@ -8,6 +8,7 @@
 namespace Core {
 
 
+class Post_process;
 class Camera;
 enum class Camera_type : uint32_t;
 

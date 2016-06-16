@@ -78,7 +78,7 @@ World::World(const Context &ctx, const World_setup setup)
 {
   Core::Memory::initialize(util::convert_mb_to_bytes(128));
 
-  LOG_TODO_ONCE("Remove static data stores");
+  LOG_TODO("Remove static data stores");
   
   const uint32_t entity_hint = setup.entity_pool_size;
   
@@ -131,6 +131,7 @@ World::get_delta_time() const
   return m_impl->dt * m_impl->dt_mul;
 }
 
+
 void
 World::set_delta_time_multiplier(const float multiplier)
 {
@@ -147,7 +148,6 @@ World::get_delta_time_multiplier() const
   
   return m_impl->dt_mul;
 }
-
 
 
 void
@@ -188,13 +188,18 @@ World::think()
   
   World_data::data_unlock(cam_data);
   
-  
   /*
-    Render with the cameras.
+    Render all the data with the cameras.
   */
   for(uint32_t c = 0; c < number_of_cam_runs; ++c)
   {
     const Camera_utils::Cam_run *cam = &cam_runs[c];
+  
+    // Set the viewport
+    {
+      LOG_TODO_ONCE("Move this to graphcis api somewhere.");
+      glViewport(0, 0, cam->width, cam->height);
+    }
   
     // Clear the target
     {

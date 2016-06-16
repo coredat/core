@@ -4,6 +4,7 @@
 #include <core/color/color.hpp>
 #include <core/entity/entity.hpp>
 #include <core/entity/entity_ref.hpp>
+#include <core/resources/render_target.hpp>
 #include <core/camera/camera_properties.hpp>
 #include <transformations/camera/cam_priorities.hpp>
 #include <data/world_data/world.hpp>
@@ -92,6 +93,19 @@ Camera::operator=(Camera &&other)
   other.m_impl->properties = ::Camera::Camera_properties();
 
   return *this;
+}
+
+
+void
+Camera::set_target(const Render_target &target)
+{
+}
+
+
+Render_target
+Camera::get_target() const
+{
+  return Render_target();
 }
 
 

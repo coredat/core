@@ -2,13 +2,8 @@
 #define CAMERA_INCLUDED_054F2215_600C_4CD3_9A40_DEC0DE5ACE0D
 
 
-#include <core/camera/camera_fwd.hpp>
-#include <core/world/world_fwd.hpp>
-#include <core/entity/entity_fwd.hpp>
-#include <core/color/color_fwd.hpp>
-#include <math/mat/mat_types.hpp>
-#include <stdint.h>
-#include <memory>
+#include <core/common/core_fwd.hpp>
+#include <core/common/core_types.hpp>
 
 
 namespace Core {
@@ -28,6 +23,9 @@ public:
   
                         Camera(Camera &&);
   Camera&               operator=(Camera&&);
+  
+  void                  set_target(const Render_target &target);
+  Render_target         get_target() const;
   
   void                  set_attached_entity(Entity_ref entity);
   Entity_ref            get_attached_entity() const;

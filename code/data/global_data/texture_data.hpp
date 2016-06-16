@@ -6,14 +6,15 @@
 */
 
 
-#ifndef TEXTURE_DATA_INCLUDED_1377E96D_E091_4F50_A4AA_39E8BCA16E2D
-#define TEXTURE_DATA_INCLUDED_1377E96D_E091_4F50_A4AA_39E8BCA16E2D
+#ifndef TEXTURE_DATA_INCLUDED_2DC34B18_4ACE_4997_9887_736033B1803C
+#define TEXTURE_DATA_INCLUDED_2DC34B18_4ACE_4997_9887_736033B1803C
 
 
 #include <utilities/generic_id.hpp>
 #include <utilities/memory_pool.hpp>
 #include <stddef.h>
 #include <graphics_api/ogl/ogl_texture.hpp>
+#include <graphics_api/ogl/ogl_frame_buffer.hpp>
 
 
 namespace Resource_data {
@@ -31,6 +32,7 @@ struct Texture_data
   // Properties
   char *property_name = nullptr;
   Ogl::Texture *property_texture = nullptr;
+  Ogl::Frame_buffer *property_render_target = nullptr;
 
   // Size information
   size_t size = 0;
@@ -176,6 +178,28 @@ texture_data_get_property_texture(const Texture_data *data, const util::generic_
 */
 bool
 texture_data_set_property_texture(Texture_data *data,  const util::generic_id key, const Ogl::Texture value);
+
+
+/*!
+  \brief Getter for property_render_target.
+  \param data The container to get information from.
+  \param key The key to search for.
+  \param value The output value, which will be set if the key is found.
+  \return Returns true if the data was found.
+*/
+bool
+texture_data_get_property_render_target(const Texture_data *data, const util::generic_id key, Ogl::Frame_buffer *value);
+
+
+/*!
+  \brief Setter for property_render_target.
+  \param data The container to update.
+  \param key The key to search for.
+  \param value The new value of the data.
+  \return Returns true if the data was set.
+*/
+bool
+texture_data_set_property_render_target(Texture_data *data,  const util::generic_id key, const Ogl::Frame_buffer value);
 
 
 } // ns
