@@ -10,42 +10,7 @@
 #include <atomic>
 
 
-namespace
-{
-  // Instance id is incremented each time
-  // a new entity is added to the world.
-  std::atomic<uint32_t> instance(0);
-}
-
-
 namespace World_data {
-
-
-//bool
-//world_create_new_entity(World *world_data,
-//                        util::generic_id id)
-//{
-//  // Param check.
-//  assert(world_data);
-//  
-//  LOG_INFO_ONCE("Does this get used at all?");
-//  
-//  auto entity_data = world_data->entity;
-//  
-//  {
-//    const auto id = World_data::entity_data_push_back(entity_data);
-//    if(id)
-//    {
-//      World_data::transform_data_push_back(world_data->transform, id);
-//      World_data::renderer_mesh_data_push_back(world_data->mesh_data, id);
-//    }
-//    
-//    return true;
-//  }
-//  
-//  // Didn't find an index. Entity data is full.
-//  return false;
-//}
 
 
 void

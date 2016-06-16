@@ -23,18 +23,6 @@ struct World
 }; // struct
 
 
-/*!
- Create a new entity. This abstraction will insert the correct
- data elements into to the world.
- \param world_data Is the world in which we are entering data.
- \param out_entity is the result of the find.
- \param type_id The id of the element we are inserting into the world.
- \return returns true if we created the entity.
-*/
-bool
-world_create_new_entity(World *world_data,
-                        util::generic_id id);
-
 
 /*!
   Search for an entity that has a corrisponding tag.

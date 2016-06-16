@@ -18,6 +18,11 @@ data:
         };
       } // ns
 
+
+  relationships:
+    - type: has_one
+      name: transform
+
   properties:
     - name: name
       type: char_32

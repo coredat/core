@@ -9,6 +9,10 @@ data:
     name: entity_id
     search_type: binary
 
+  relationships:
+    type: belongs_to
+    name: entity
+
   properties:
     - name: transform
       type: math::transform
