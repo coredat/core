@@ -31,6 +31,8 @@ struct Cam_run
   math::mat4 proj;
   float near_plane;
   float far_plane;
+  uint32_t clear_color;
+  uint32_t clear_flags;
 };
 
 /*

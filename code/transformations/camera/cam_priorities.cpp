@@ -69,8 +69,10 @@ calculate_camera_runs(const Camera::Camera_properties props[],
     }
     
     
-    out_runs[i].near_plane = props->near_plane;
-    out_runs[i].far_plane  = props->far_plane;
+    out_runs[i].near_plane  = props->near_plane;
+    out_runs[i].far_plane   = props->far_plane;
+    out_runs[i].clear_color = props->clear_color;
+    out_runs[i].clear_flags = props->clear_flags;
   }
   
   // View matrix
