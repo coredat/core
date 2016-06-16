@@ -78,7 +78,7 @@ World::World(const Context &ctx, const World_setup setup)
 {
   Core::Memory::initialize(util::convert_mb_to_bytes(128));
 
-  LOG_TODO("Remove static data stores");
+  LOG_TODO_ONCE("Remove static data stores");
   
   const uint32_t entity_hint = setup.entity_pool_size;
   
