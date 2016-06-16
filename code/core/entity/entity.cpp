@@ -27,7 +27,7 @@ using std::atomic_uint_least32_t;
 namespace
 {
   // Each new entity will get a new instance id.
-  atomic_uint_least32_t instance_id(0);
+//  atomic_uint_least32_t instance_id(0);
 }
 
 
@@ -48,10 +48,9 @@ Entity::Entity()
 
 
 Entity::Entity(Core::World &world)
-: m_impl(new Impl{util::generic_id{++instance_id}, nullptr})
+: m_impl(new Impl{util::generic_id_invalid(), nullptr})
 {
   m_impl->world = world.get_world_data();
-  util::generic_id id = get_id();
   
   bool success = true;
  
@@ -63,7 +62,12 @@ Entity::Entity(Core::World &world)
       
       World_data::data_lock(entity_data);
       
-      if(World_data::entity_data_push_back(entity_data, id) && success)
+      const util::generic_id id = World_data::entity_data_push_back(entity_data);
+//      util::generic_id id = entity_data->size + 1;
+//      World_data::entity_data_push_back(entity_data, id);
+      m_impl->id = id;
+      
+      if(id && success)
       {
         const uint32_t zero(0);
         World_data::entity_data_set_property_components(entity_data, id, zero);
@@ -85,6 +89,8 @@ Entity::Entity(Core::World &world)
       auto transform_data = m_impl->world->data.transform;
       
       World_data::data_lock(transform_data);
+      
+      const util::generic_id id = m_impl->id;
     
       if(World_data::transform_data_push_back(transform_data, id) && success)
       {

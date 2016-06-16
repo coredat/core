@@ -45,6 +45,10 @@ struct {{data_type}}
   size_t size = 0;
   const size_t capacity = 0;
 
+  % if key_auto_inc then
+  {{key_type}} key_count = 0;
+  % end
+
   // Memory chunk
   const util::memory_chunk memory = util::memory_chunk();
 
@@ -99,7 +103,16 @@ data_lock(const {{data_type}} *data);
 void
 data_unlock(const {{data_type}} *data);
 
-
+% if key_auto_inc then
+/*!
+  \\brief Push back a new element, increases the size by 1. (Does not take a lock).
+  \\param data The container which to push back.
+  \\param out_index Optional - this will return the inserted location in the container.
+  \\return Returns the id of the data.
+*/
+{{key_type}}
+{{data_name}}_push_back({{data_type}} *data, size_t *out_index = nullptr);
+% else
 /*!
   \\brief Push back a new element, increases the size by 1. (Does not take a lock).
   \\param data The container which to push back.
@@ -109,6 +122,7 @@ data_unlock(const {{data_type}} *data);
 */
 bool
 {{data_name}}_push_back({{data_type}} *data, const {{key_type}} key, size_t *out_index = nullptr);
+% end
 
 
 /*!

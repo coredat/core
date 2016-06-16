@@ -6,8 +6,8 @@
 */
 
 
-#ifndef ENTITY_DATA_INCLUDED_4173444D_9FDA_41AD_8722_9E5DAF106E0D
-#define ENTITY_DATA_INCLUDED_4173444D_9FDA_41AD_8722_9E5DAF106E0D
+#ifndef ENTITY_DATA_INCLUDED_59056CAB_E157_4CF7_A29D_DA2449744751
+#define ENTITY_DATA_INCLUDED_59056CAB_E157_4CF7_A29D_DA2449744751
 
 
 #include <utilities/generic_id.hpp>
@@ -45,6 +45,8 @@ struct Entity_data
   // Size information
   size_t size = 0;
   const size_t capacity = 0;
+
+  util::generic_id key_count = 0;
 
   // Memory chunk
   const util::memory_chunk memory = util::memory_chunk();
@@ -100,16 +102,14 @@ data_lock(const Entity_data *data);
 void
 data_unlock(const Entity_data *data);
 
-
 /*!
   \brief Push back a new element, increases the size by 1. (Does not take a lock).
   \param data The container which to push back.
-  \param key The id to use as a key.
   \param out_index Optional - this will return the inserted location in the container.
-  \return Returns true if it was successful.
+  \return Returns the id of the data.
 */
-bool
-entity_data_push_back(Entity_data *data, const util::generic_id key, size_t *out_index = nullptr);
+util::generic_id
+entity_data_push_back(Entity_data *data, size_t *out_index = nullptr);
 
 
 /*!

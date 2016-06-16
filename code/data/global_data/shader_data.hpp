@@ -6,8 +6,8 @@
 */
 
 
-#ifndef SHADER_DATA_INCLUDED_A898D3B8_5C6E_48C7_8D66_3963CC7910E0
-#define SHADER_DATA_INCLUDED_A898D3B8_5C6E_48C7_8D66_3963CC7910E0
+#ifndef SHADER_DATA_INCLUDED_1D982C8B_6223_42F2_9D45_3375B8C41264
+#define SHADER_DATA_INCLUDED_1D982C8B_6223_42F2_9D45_3375B8C41264
 
 
 #include <utilities/generic_id.hpp>
@@ -35,6 +35,7 @@ struct Shader_data
   // Size information
   size_t size = 0;
   const size_t capacity = 0;
+
 
   // Memory chunk
   const util::memory_chunk memory = util::memory_chunk();
@@ -89,7 +90,6 @@ data_lock(const Shader_data *data);
 */
 void
 data_unlock(const Shader_data *data);
-
 
 /*!
   \brief Push back a new element, increases the size by 1. (Does not take a lock).

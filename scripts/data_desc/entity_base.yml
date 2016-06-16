@@ -8,6 +8,7 @@ data:
   key:
     name: entity_id
     search_type: binary
+    auto_increment: true
 
   header:
     additional_code: >

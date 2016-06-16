@@ -6,8 +6,8 @@
 */
 
 
-#ifndef MATERIAL_DATA_INCLUDED_00B73253_CA19_4340_8155_82BB0ABE8E9E
-#define MATERIAL_DATA_INCLUDED_00B73253_CA19_4340_8155_82BB0ABE8E9E
+#ifndef MATERIAL_DATA_INCLUDED_608AF23C_DBBB_431C_8FEC_C0086D711854
+#define MATERIAL_DATA_INCLUDED_608AF23C_DBBB_431C_8FEC_C0086D711854
 
 
 #include <utilities/generic_id.hpp>
@@ -36,6 +36,7 @@ struct Material_data
   // Size information
   size_t size = 0;
   const size_t capacity = 0;
+
 
   // Memory chunk
   const util::memory_chunk memory = util::memory_chunk();
@@ -90,7 +91,6 @@ data_lock(const Material_data *data);
 */
 void
 data_unlock(const Material_data *data);
-
 
 /*!
   \brief Push back a new element, increases the size by 1. (Does not take a lock).

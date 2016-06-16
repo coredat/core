@@ -6,8 +6,8 @@
 */
 
 
-#ifndef TEXTURE_DATA_INCLUDED_2DC34B18_4ACE_4997_9887_736033B1803C
-#define TEXTURE_DATA_INCLUDED_2DC34B18_4ACE_4997_9887_736033B1803C
+#ifndef TEXTURE_DATA_INCLUDED_E8356B19_D990_450E_B6F8_945932A35014
+#define TEXTURE_DATA_INCLUDED_E8356B19_D990_450E_B6F8_945932A35014
 
 
 #include <utilities/generic_id.hpp>
@@ -37,6 +37,7 @@ struct Texture_data
   // Size information
   size_t size = 0;
   const size_t capacity = 0;
+
 
   // Memory chunk
   const util::memory_chunk memory = util::memory_chunk();
@@ -91,7 +92,6 @@ data_lock(const Texture_data *data);
 */
 void
 data_unlock(const Texture_data *data);
-
 
 /*!
   \brief Push back a new element, increases the size by 1. (Does not take a lock).

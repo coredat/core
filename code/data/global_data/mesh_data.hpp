@@ -6,8 +6,8 @@
 */
 
 
-#ifndef MESH_DATA_INCLUDED_02B66C50_59CB_41E4_88A0_3434ACCE94B5
-#define MESH_DATA_INCLUDED_02B66C50_59CB_41E4_88A0_3434ACCE94B5
+#ifndef MESH_DATA_INCLUDED_4638EE10_A5AA_414A_804C_A49B5FE549D7
+#define MESH_DATA_INCLUDED_4638EE10_A5AA_414A_804C_A49B5FE549D7
 
 
 #include <utilities/generic_id.hpp>
@@ -37,6 +37,7 @@ struct Mesh_data
   // Size information
   size_t size = 0;
   const size_t capacity = 0;
+
 
   // Memory chunk
   const util::memory_chunk memory = util::memory_chunk();
@@ -91,7 +92,6 @@ data_lock(const Mesh_data *data);
 */
 void
 data_unlock(const Mesh_data *data);
-
 
 /*!
   \brief Push back a new element, increases the size by 1. (Does not take a lock).

@@ -6,8 +6,8 @@
 */
 
 
-#ifndef TRANSFORM_DATA_INCLUDED_9F4B61DE_B2AB_4787_9F85_C6AA9586961D
-#define TRANSFORM_DATA_INCLUDED_9F4B61DE_B2AB_4787_9F85_C6AA9586961D
+#ifndef TRANSFORM_DATA_INCLUDED_54B04E26_6AF8_4C51_B87B_1B46E0C21E36
+#define TRANSFORM_DATA_INCLUDED_54B04E26_6AF8_4C51_B87B_1B46E0C21E36
 
 
 #include <utilities/generic_id.hpp>
@@ -36,6 +36,7 @@ struct Transform_data
   // Size information
   size_t size = 0;
   const size_t capacity = 0;
+
 
   // Memory chunk
   const util::memory_chunk memory = util::memory_chunk();
@@ -90,7 +91,6 @@ data_lock(const Transform_data *data);
 */
 void
 data_unlock(const Transform_data *data);
-
 
 /*!
   \brief Push back a new element, increases the size by 1. (Does not take a lock).

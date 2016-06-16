@@ -6,8 +6,8 @@
 */
 
 
-#ifndef RENDERER_MESH_DATA_INCLUDED_2A27C523_AFEC_4612_8213_4B50F57A51AD
-#define RENDERER_MESH_DATA_INCLUDED_2A27C523_AFEC_4612_8213_4B50F57A51AD
+#ifndef RENDERER_MESH_DATA_INCLUDED_F4DD21C6_52BF_403E_BC42_5396678F89F3
+#define RENDERER_MESH_DATA_INCLUDED_F4DD21C6_52BF_403E_BC42_5396678F89F3
 
 
 #include <utilities/generic_id.hpp>
@@ -41,6 +41,7 @@ struct Renderer_mesh_data
   // Size information
   size_t size = 0;
   const size_t capacity = 0;
+
 
   // Memory chunk
   const util::memory_chunk memory = util::memory_chunk();
@@ -95,7 +96,6 @@ data_lock(const Renderer_mesh_data *data);
 */
 void
 data_unlock(const Renderer_mesh_data *data);
-
 
 /*!
   \brief Push back a new element, increases the size by 1. (Does not take a lock).

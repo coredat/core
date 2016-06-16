@@ -6,8 +6,8 @@
 */
 
 
-#ifndef CAMERA_DATA_INCLUDED_FD80B963_605C_46DF_BF0E_B5BB2627CFBB
-#define CAMERA_DATA_INCLUDED_FD80B963_605C_46DF_BF0E_B5BB2627CFBB
+#ifndef CAMERA_DATA_INCLUDED_2ED876C4_999D_4003_96EE_AE110B4FD53F
+#define CAMERA_DATA_INCLUDED_2ED876C4_999D_4003_96EE_AE110B4FD53F
 
 
 #include <utilities/generic_id.hpp>
@@ -38,6 +38,7 @@ struct Camera_data
   // Size information
   size_t size = 0;
   const size_t capacity = 0;
+
 
   // Memory chunk
   const util::memory_chunk memory = util::memory_chunk();
@@ -92,7 +93,6 @@ data_lock(const Camera_data *data);
 */
 void
 data_unlock(const Camera_data *data);
-
 
 /*!
   \brief Push back a new element, increases the size by 1. (Does not take a lock).

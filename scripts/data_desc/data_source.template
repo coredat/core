@@ -115,6 +115,48 @@ data_unlock(const {{data_type}} *data)
 }
 
 
+% if key_auto_inc then
+{{key_type}}
+{{data_name}}_push_back({{data_type}} *data, size_t *out_index)
+{
+  assert(data);
+  assert(data->size < data->capacity);
+
+  // TODO: Duplicate key check
+
+  if(data->size >= data->capacity)
+  {
+    LOG_ERROR(Error_string::no_free_space());
+
+    return 0;
+  }
+
+  const uint32_t index = data->size;
+  const {{key_type}} key = ++data->key_count;
+
+  if(out_index)
+  {
+    *out_index = index;
+  }
+
+  ++(data->size);
+
+  data->{{key_name}}[index] = key;
+
+  // Memset the properties
+  {
+    % properties.each do |prop|
+    % if prop[:multiple] != 1
+    memset(&data->{{prop[:name]}}[index * {{prop[:multiple]}}], 0, sizeof(*data->{{prop[:name]}}));
+    % else
+    memset(&data->{{prop[:name]}}[index], 0, sizeof(*data->{{prop[:name]}}));
+    % end
+    % end
+  }
+
+  return key;
+}
+% else
 bool
 {{data_name}}_push_back({{data_type}} *data, const {{key_type}} key, size_t *out_index)
 {
@@ -154,6 +196,7 @@ bool
 
   return true;
 }
+% end
 
 
 bool

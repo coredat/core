@@ -47,6 +47,7 @@ def parse_desc(yml)
 
   return_data[:key_type] = "util::generic_id"
   return_data[:key_name] = data_key['name'] || "data_key"
+  return_data[:key_auto_inc] = data_key['auto_increment'] || false
 
   if data_key.has_key?('error_on_missing_key')
     return_data[:key_missing_error] = data_key['error_on_missing_key']
