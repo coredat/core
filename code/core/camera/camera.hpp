@@ -40,8 +40,6 @@ public:
   
   void                  set_clear_flags(const uint32_t flags);
   uint32_t              get_clear_flags() const;
-  bool                  will_clear_color() const;
-  bool                  will_clear_depth() const;
   
   void                  set_width(const uint32_t width);
   uint32_t              get_width() const;

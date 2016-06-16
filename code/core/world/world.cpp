@@ -58,6 +58,7 @@
 
 #include <transformations/physics/overlapping_aabb.hpp>
 #include <transformations/rendering/material_renderer.hpp>
+#include <transformations/camera/cam_priorities.hpp>
 
 
 namespace Core {
@@ -168,38 +169,52 @@ World::think()
   // Reset the entity pool for new changes.
   World_data::pending_scene_graph_change_reset(graph_changes);
   
-  // Render world
+  // ** Generate Camera Runs ** //
+
+  World_data::World *world = World_data::get_world();
+  
+  auto cam_data = data->camera_data;
+  World_data::data_lock(cam_data);
+  
+  Camera_utils::Cam_run *cam_runs = SCRATCH_ALIGNED_ALLOC(Camera_utils::Cam_run, cam_data->size);
+  const uint32_t number_of_cam_runs = cam_data->size;
+  
+  // Generate cam_run data
   {
-    const uint32_t peer = 0;
-    World_data::World *world = World_data::get_world();
-
-    static std::vector<Simple_renderer::Node> nodes;
-    nodes.resize(world->entity->size);
-    const uint32_t size_of_node_pool = nodes.size();
-
-    // Get active camera and generate a projection matrix.
-    // TODO: Need to pass in the environment height and width into this function.
-    const auto cam = World_data::camera_pool_get_properties_for_priority(world->camera_pool, peer, 0);
-    
-    math::mat4 proj;
-    
-    if(cam.type == Core::Camera_type::orthographic)
-    {
-      proj = math::mat4_orthographic(cam.viewport_width,
-                                     cam.viewport_height,
-                                     cam.near_plane,
-                                     cam.far_plane);
-    }
-    else
-    {
-      proj = math::mat4_projection(cam.viewport_width,
-                                   cam.viewport_height,
-                                   cam.near_plane,
-                                   cam.far_plane,
-                                   cam.fov);
+    Core::Transform *cam_transforms = SCRATCH_ALIGNED_ALLOC(Core::Transform, cam_data->size);
+    Camera_utils::get_camera_transforms(data->transform, cam_data->property_entity_id, cam_transforms, cam_data->size);
+    Camera_utils::calculate_camera_runs(cam_data->property_camera, cam_transforms, cam_runs, cam_data->size);
   }
   
-  const Core::Color clear_color(cam.clear_color);
+  World_data::data_unlock(cam_data);
+  
+  
+//  // Render world
+//  {
+//
+//    // Get active camera and generate a projection matrix.
+//    // TODO: Need to pass in the environment height and width into this function.
+//    const auto cam = World_data::camera_pool_get_properties_for_priority(world->camera_pool, peer, 0);
+//    
+//    math::mat4 proj;
+//    
+//    if(cam.type == Core::Camera_type::orthographic)
+//    {
+//      proj = math::mat4_orthographic(cam.viewport_width,
+//                                     cam.viewport_height,
+//                                     cam.near_plane,
+//                                     cam.far_plane);
+//    }
+//    else
+//    {
+//      proj = math::mat4_projection(cam.viewport_width,
+//                                   cam.viewport_height,
+//                                   cam.near_plane,
+//                                   cam.far_plane,
+//                                   cam.fov);
+//  }
+  
+  const Core::Color clear_color(0xFFFFFFFF);
   const float red = Core::Color_utils::get_red_f(clear_color);
   const float green = Core::Color_utils::get_green_f(clear_color);
   const float blue = Core::Color_utils::get_blue_f(clear_color);
@@ -209,64 +224,69 @@ World::think()
   const uint32_t flags = Graphics_api::Clear_flag::color | Graphics_api::Clear_flag::depth;
   Graphics_api::clear(flags);
   
-  // Get entity's transform so we can generate a view.
-  math::mat4 view = math::mat4_zero();
-  {
-    const auto id = World_data::camera_pool_get_entity_id_for_priority(world->camera_pool,
-                                                                       peer,
-                                                                       0);
-    
-    // If we cant find the camera we'll just make a dummy orbit one for the time.
-    // This is good for debugging.
-    if (id != util::generic_id_invalid())
-    //if(false) // debug cam route
-    {
-      size_t ent_index;
-//      World_data::entity_pool_find_index(world->entity_pool, id, &ent_index);
-      if(World_data::transform_data_exists(world->transform, id, &ent_index))
-      {
-        const math::transform trans = world->transform->property_transform[ent_index];
-        const Core::Transform cam_transform(trans.position, trans.scale, trans.rotation);
-        
-        view = math::mat4_lookat(cam_transform.get_position(),
-                                 math::vec3_add(cam_transform.get_position(), cam_transform.get_forward()),
-                                 cam_transform.get_up());
-      }
-      else
-      {
-        assert(false);
-        LOG_FATAL(Error_string::entity_not_found());
-      }
-    }
-    else
-    {
-      static float time = 4;
-      time += 0.005f;
-
-      const float x = math::sin(time) * 9;
-      const float z = math::cos(time) * 9;
-
-      const math::vec3 eye_pos = math::vec3_init(x, 5.f, z);
-      const math::vec3 look_at = math::vec3_zero();
-      const math::vec3 up      = math::vec3_init(0.f, 1.f, 0.f);
-      
-      view = math::mat4_lookat(eye_pos, look_at, up);
-    }
-  }
-    
+//  // Get entity's transform so we can generate a view.
+//  math::mat4 view = math::mat4_zero();
+//  {
+//    const auto id = World_data::camera_pool_get_entity_id_for_priority(world->camera_pool,
+//                                                                       peer,
+//                                                                       0);
+//    
+//    // If we cant find the camera we'll just make a dummy orbit one for the time.
+//    // This is good for debugging.
+//    if (id != util::generic_id_invalid())
+//    //if(false) // debug cam route
+//    {
+//      size_t ent_index;
+////      World_data::entity_pool_find_index(world->entity_pool, id, &ent_index);
+//      if(World_data::transform_data_exists(world->transform, id, &ent_index))
+//      {
+//        const math::transform trans = world->transform->property_transform[ent_index];
+//        const Core::Transform cam_transform(trans.position, trans.scale, trans.rotation);
+//        
+//        view = math::mat4_lookat(cam_transform.get_position(),
+//                                 math::vec3_add(cam_transform.get_position(), cam_transform.get_forward()),
+//                                 cam_transform.get_up());
+//      }
+//      else
+//      {
+//        assert(false);
+//        LOG_FATAL(Error_string::entity_not_found());
+//      }
+//    }
+//    else
+//    {
+//      static float time = 4;
+//      time += 0.005f;
+//
+//      const float x = math::sin(time) * 9;
+//      const float z = math::cos(time) * 9;
+//
+//      const math::vec3 eye_pos = math::vec3_init(x, 5.f, z);
+//      const math::vec3 look_at = math::vec3_zero();
+//      const math::vec3 up      = math::vec3_init(0.f, 1.f, 0.f);
+//      
+//      view = math::mat4_lookat(eye_pos, look_at, up);
+//    }
+//  }
+  
     /*
       Material Renderer
       --
       This is the main call for all the material rendering.
       We should have this inside a loop of camera matrix's or somesuch.
     */
-    Rendering::material_renderer(view,
-                                 proj,
+  
+  for(uint32_t c = 0; c < number_of_cam_runs; ++c)
+  {
+  
+    Rendering::material_renderer(cam_runs[c].view,
+                                 cam_runs[c].proj,
                                  Resource_data::get_resources()->material_data,
                                  Resource_data::get_resources()->mesh_data,
                                  world->mesh_data);
-
+    
   }
+
  
   
   /*

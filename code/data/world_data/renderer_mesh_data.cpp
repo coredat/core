@@ -121,14 +121,14 @@ renderer_mesh_data_get_capacity(const Renderer_mesh_data *data)
 
 
 void
-data_lock(Renderer_mesh_data *data)
+data_lock(const Renderer_mesh_data *data)
 {
   assert(data);
 }
 
 
 void
-data_unlock(Renderer_mesh_data *data)
+data_unlock(const Renderer_mesh_data *data)
 {
   assert(data);
 }

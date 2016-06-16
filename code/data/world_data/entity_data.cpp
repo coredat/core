@@ -149,14 +149,14 @@ entity_data_get_capacity(const Entity_data *data)
 
 
 void
-data_lock(Entity_data *data)
+data_lock(const Entity_data *data)
 {
   assert(data);
 }
 
 
 void
-data_unlock(Entity_data *data)
+data_unlock(const Entity_data *data)
 {
   assert(data);
 }

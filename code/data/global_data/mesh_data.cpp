@@ -135,14 +135,14 @@ mesh_data_get_capacity(const Mesh_data *data)
 
 
 void
-data_lock(Mesh_data *data)
+data_lock(const Mesh_data *data)
 {
   assert(data);
 }
 
 
 void
-data_unlock(Mesh_data *data)
+data_unlock(const Mesh_data *data)
 {
   assert(data);
 }

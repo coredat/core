@@ -6,8 +6,8 @@
 */
 
 
-#ifndef MESH_DATA_INCLUDED_E24C4253_2C7F_49EF_B52D_BC22BDA282F8
-#define MESH_DATA_INCLUDED_E24C4253_2C7F_49EF_B52D_BC22BDA282F8
+#ifndef MESH_DATA_INCLUDED_A9F1DD73_4047_4507_9A66_D639C716D8D3
+#define MESH_DATA_INCLUDED_A9F1DD73_4047_4507_9A66_D639C716D8D3
 
 
 #include <utilities/generic_id.hpp>
@@ -82,7 +82,7 @@ mesh_data_get_capacity(const Mesh_data *data);
   \param data The container to lock.
 */
 void
-data_lock(Mesh_data *data);
+data_lock(const Mesh_data *data);
 
 
 /*!
@@ -90,7 +90,7 @@ data_lock(Mesh_data *data);
   \param The container to unlock
 */
 void
-data_unlock(Mesh_data *data);
+data_unlock(const Mesh_data *data);
 
 
 /*!

@@ -6,8 +6,8 @@
 */
 
 
-#ifndef SHADER_DATA_INCLUDED_67422306_F925_416D_8E15_ABA2931F26F1
-#define SHADER_DATA_INCLUDED_67422306_F925_416D_8E15_ABA2931F26F1
+#ifndef SHADER_DATA_INCLUDED_136294A3_8B21_4DFA_BC8D_679BDEADA316
+#define SHADER_DATA_INCLUDED_136294A3_8B21_4DFA_BC8D_679BDEADA316
 
 
 #include <utilities/generic_id.hpp>
@@ -80,7 +80,7 @@ shader_data_get_capacity(const Shader_data *data);
   \param data The container to lock.
 */
 void
-data_lock(Shader_data *data);
+data_lock(const Shader_data *data);
 
 
 /*!
@@ -88,7 +88,7 @@ data_lock(Shader_data *data);
   \param The container to unlock
 */
 void
-data_unlock(Shader_data *data);
+data_unlock(const Shader_data *data);
 
 
 /*!

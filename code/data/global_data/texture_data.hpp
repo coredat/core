@@ -6,8 +6,8 @@
 */
 
 
-#ifndef TEXTURE_DATA_INCLUDED_66F473EF_E5CA_446E_B696_EDA0B4371258
-#define TEXTURE_DATA_INCLUDED_66F473EF_E5CA_446E_B696_EDA0B4371258
+#ifndef TEXTURE_DATA_INCLUDED_1377E96D_E091_4F50_A4AA_39E8BCA16E2D
+#define TEXTURE_DATA_INCLUDED_1377E96D_E091_4F50_A4AA_39E8BCA16E2D
 
 
 #include <utilities/generic_id.hpp>
@@ -80,7 +80,7 @@ texture_data_get_capacity(const Texture_data *data);
   \param data The container to lock.
 */
 void
-data_lock(Texture_data *data);
+data_lock(const Texture_data *data);
 
 
 /*!
@@ -88,7 +88,7 @@ data_lock(Texture_data *data);
   \param The container to unlock
 */
 void
-data_unlock(Texture_data *data);
+data_unlock(const Texture_data *data);
 
 
 /*!

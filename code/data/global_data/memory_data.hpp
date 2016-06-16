@@ -6,7 +6,7 @@
 #include <stddef.h>
 
 
-#define SCRATCH_ALIGNED_ALLOC(type, size) reinterpret_cast<type*>(::Memory::scratch_alloc_aligned(sizeof(::Material_renderer::Draw_call) * size));
+#define SCRATCH_ALIGNED_ALLOC(type, size) reinterpret_cast<type*>(::Memory::scratch_alloc_aligned(sizeof(type) * size));
 
 
 namespace Memory {

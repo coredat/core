@@ -6,8 +6,8 @@
 */
 
 
-#ifndef MATERIAL_DATA_INCLUDED_C9012CE3_A2D9_4210_B9F7_7387F9C9F9FF
-#define MATERIAL_DATA_INCLUDED_C9012CE3_A2D9_4210_B9F7_7387F9C9F9FF
+#ifndef MATERIAL_DATA_INCLUDED_042BBD82_D20D_4ACC_B123_AC04C40F549D
+#define MATERIAL_DATA_INCLUDED_042BBD82_D20D_4ACC_B123_AC04C40F549D
 
 
 #include <utilities/generic_id.hpp>
@@ -81,7 +81,7 @@ material_data_get_capacity(const Material_data *data);
   \param data The container to lock.
 */
 void
-data_lock(Material_data *data);
+data_lock(const Material_data *data);
 
 
 /*!
@@ -89,7 +89,7 @@ data_lock(Material_data *data);
   \param The container to unlock
 */
 void
-data_unlock(Material_data *data);
+data_unlock(const Material_data *data);
 
 
 /*!

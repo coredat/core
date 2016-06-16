@@ -121,14 +121,14 @@ shader_data_get_capacity(const Shader_data *data)
 
 
 void
-data_lock(Shader_data *data)
+data_lock(const Shader_data *data)
 {
   assert(data);
 }
 
 
 void
-data_unlock(Shader_data *data)
+data_unlock(const Shader_data *data)
 {
   assert(data);
 }

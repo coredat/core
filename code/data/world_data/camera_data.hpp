@@ -6,8 +6,8 @@
 */
 
 
-#ifndef CAMERA_DATA_INCLUDED_C0523E06_41E5_4DAA_8648_85DE0060E660
-#define CAMERA_DATA_INCLUDED_C0523E06_41E5_4DAA_8648_85DE0060E660
+#ifndef CAMERA_DATA_INCLUDED_3F8E6912_5FCB_4564_BC20_B09AA770C295
+#define CAMERA_DATA_INCLUDED_3F8E6912_5FCB_4564_BC20_B09AA770C295
 
 
 #include <utilities/generic_id.hpp>
@@ -82,7 +82,7 @@ camera_data_get_capacity(const Camera_data *data);
   \param data The container to lock.
 */
 void
-data_lock(Camera_data *data);
+data_lock(const Camera_data *data);
 
 
 /*!
@@ -90,7 +90,7 @@ data_lock(Camera_data *data);
   \param The container to unlock
 */
 void
-data_unlock(Camera_data *data);
+data_unlock(const Camera_data *data);
 
 
 /*!

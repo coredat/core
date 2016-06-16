@@ -121,14 +121,14 @@ transform_data_get_capacity(const Transform_data *data)
 
 
 void
-data_lock(Transform_data *data)
+data_lock(const Transform_data *data)
 {
   assert(data);
 }
 
 
 void
-data_unlock(Transform_data *data)
+data_unlock(const Transform_data *data)
 {
   assert(data);
 }

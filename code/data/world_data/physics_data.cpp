@@ -149,14 +149,14 @@ physics_data_get_capacity(const Physics_data *data)
 
 
 void
-data_lock(Physics_data *data)
+data_lock(const Physics_data *data)
 {
   assert(data);
 }
 
 
 void
-data_unlock(Physics_data *data)
+data_unlock(const Physics_data *data)
 {
   assert(data);
 }

@@ -208,6 +208,27 @@ Camera::get_priority() const
 }
 
 
+namespace
+{
+
+inline ::Camera::Camera_properties
+get_properties(World_data::Camera_data *cam_data, util::generic_id cam_id)
+{
+  ::Camera::Camera_properties props;
+
+  World_data::data_lock(cam_data);
+
+  World_data::camera_data_get_property_camera(cam_data, cam_id, &props);
+
+  World_data::data_unlock(cam_data);
+  
+  return props;
+}
+
+
+}
+
+
 void
 Camera::set_type(const Core::Camera_type cam_type)
 {
@@ -217,7 +238,7 @@ Camera::set_type(const Core::Camera_type cam_type)
     return;
   }
 
-  // Set the attached entity.
+  // Set the type
   {
     auto cam_data = m_impl->world->data.camera_data;
     const auto cam_id = m_impl->camera_id;
@@ -244,22 +265,7 @@ Camera::get_type() const
     return Camera_type::perspective;
   }
   
-  ::Camera::Camera_properties props;
-
-  // Set the attached entity.
-  {
-    auto cam_data = m_impl->world->data.camera_data;
-    const auto cam_id = m_impl->camera_id;
-    
-    World_data::data_lock(cam_data);
-    
-    ::Camera::Camera_properties props;
-    World_data::camera_data_get_property_camera(cam_data, cam_id, &props);
-    
-    World_data::data_unlock(cam_data);
-  }
-  
-  return props.type;
+  return get_properties(m_impl->world->data.camera_data, m_impl->camera_id).type;
 }
 
 
@@ -272,7 +278,7 @@ Camera::set_clear_flags(const uint32_t flags)
     return;
   }
 
-  // Set the attached entity.
+  // Set the flags
   {
     auto cam_data = m_impl->world->data.camera_data;
     const auto cam_id = m_impl->camera_id;
@@ -290,24 +296,16 @@ Camera::set_clear_flags(const uint32_t flags)
 }
 
 
-bool
-Camera::will_clear_color() const
-{
-  return m_impl->properties.clear_flags & Camera_clear::color;
-}
-
-
-bool
-Camera::will_clear_depth() const
-{
-  return m_impl->properties.clear_flags & Camera_clear::depth;
-}
-
-
 uint32_t
 Camera::get_clear_flags() const
 {
-  return m_impl->properties.clear_flags;
+  if(!m_impl || !m_impl->camera_id)
+  {
+    LOG_ERROR(Error_string::object_has_no_valid_world());
+    return 0;
+  }
+
+  return get_properties(m_impl->world->data.camera_data, m_impl->camera_id).clear_flags;
 }
 
 
@@ -320,7 +318,7 @@ Camera::set_width(const uint32_t width)
     return;
   }
 
-  // Set the attached entity.
+  // Set the viewport width
   {
     auto cam_data = m_impl->world->data.camera_data;
     const auto cam_id = m_impl->camera_id;
@@ -341,7 +339,13 @@ Camera::set_width(const uint32_t width)
 uint32_t
 Camera::get_width() const
 {
-  return m_impl->properties.viewport_width;
+  if(!m_impl || !m_impl->camera_id)
+  {
+    LOG_ERROR(Error_string::object_has_no_valid_world());
+    return 0;
+  }
+
+  return get_properties(m_impl->world->data.camera_data, m_impl->camera_id).viewport_width;
 }
 
 
@@ -354,7 +358,7 @@ Camera::set_height(const uint32_t height)
     return;
   }
 
-  // Set the attached entity.
+  // Set the viewport height
   {
     auto cam_data = m_impl->world->data.camera_data;
     const auto cam_id = m_impl->camera_id;
@@ -375,18 +379,39 @@ Camera::set_height(const uint32_t height)
 uint32_t
 Camera::get_height() const
 {
-  return m_impl->properties.viewport_height;
+  if(!m_impl || !m_impl->camera_id)
+  {
+    LOG_ERROR(Error_string::object_has_no_valid_world());
+    return 0;
+  }
+
+  return get_properties(m_impl->world->data.camera_data, m_impl->camera_id).viewport_height;
 }
 
 
 void
 Camera::set_feild_of_view(const float fov_radians)
 {
-  m_impl->properties.fov = fov_radians;
-
-  if(m_impl->attached_entity != util::generic_id_invalid())
+  if(!m_impl || !m_impl->camera_id)
   {
-    update_properties(m_impl->properties, m_impl->attached_entity);
+    LOG_ERROR(Error_string::object_has_no_valid_world());
+    return;
+  }
+
+  // Set fov
+  {
+    auto cam_data = m_impl->world->data.camera_data;
+    const auto cam_id = m_impl->camera_id;
+    
+    World_data::data_lock(cam_data);
+    
+    ::Camera::Camera_properties props;
+    World_data::camera_data_get_property_camera(cam_data, cam_id, &props);
+    
+    props.fov = fov_radians;
+    World_data::camera_data_set_property_camera(cam_data, cam_id, props);
+    
+    World_data::data_unlock(cam_data);
   }
 }
 
@@ -394,18 +419,39 @@ Camera::set_feild_of_view(const float fov_radians)
 float
 Camera::get_field_of_view() const
 {
-  return m_impl->properties.fov;
+  if(!m_impl || !m_impl->camera_id)
+  {
+    LOG_ERROR(Error_string::object_has_no_valid_world());
+    return 0;
+  }
+
+  return get_properties(m_impl->world->data.camera_data, m_impl->camera_id).fov;
 }
 
 
 void
 Camera::set_near_plane(const float near_plane)
 {
-  m_impl->properties.near_plane = near_plane;
-
-  if(m_impl->attached_entity != util::generic_id_invalid())
+  if(!m_impl || !m_impl->camera_id)
   {
-    update_properties(m_impl->properties, m_impl->attached_entity);
+    LOG_ERROR(Error_string::object_has_no_valid_world());
+    return;
+  }
+
+  // Set the near plane
+  {
+    auto cam_data = m_impl->world->data.camera_data;
+    const auto cam_id = m_impl->camera_id;
+    
+    World_data::data_lock(cam_data);
+    
+    ::Camera::Camera_properties props;
+    World_data::camera_data_get_property_camera(cam_data, cam_id, &props);
+    
+    props.near_plane = near_plane;
+    World_data::camera_data_set_property_camera(cam_data, cam_id, props);
+    
+    World_data::data_unlock(cam_data);
   }
 }
 
@@ -413,18 +459,39 @@ Camera::set_near_plane(const float near_plane)
 float
 Camera::get_near_plane() const
 {
-  return m_impl->properties.near_plane;
+  if(!m_impl || !m_impl->camera_id)
+  {
+    LOG_ERROR(Error_string::object_has_no_valid_world());
+    return 0;
+  }
+
+  return get_properties(m_impl->world->data.camera_data, m_impl->camera_id).near_plane;
 }
 
 
 void
 Camera::set_far_plane(const float far_plane)
 {
-  m_impl->properties.far_plane = far_plane;
-
-  if(m_impl->attached_entity != util::generic_id_invalid())
+  if(!m_impl || !m_impl->camera_id)
   {
-    update_properties(m_impl->properties, m_impl->attached_entity);
+    LOG_ERROR(Error_string::object_has_no_valid_world());
+    return;
+  }
+
+  // Set the far plane
+  {
+    auto cam_data = m_impl->world->data.camera_data;
+    const auto cam_id = m_impl->camera_id;
+    
+    World_data::data_lock(cam_data);
+    
+    ::Camera::Camera_properties props;
+    World_data::camera_data_get_property_camera(cam_data, cam_id, &props);
+    
+    props.far_plane = far_plane;
+    World_data::camera_data_set_property_camera(cam_data, cam_id, props);
+    
+    World_data::data_unlock(cam_data);
   }
 }
 
@@ -432,18 +499,39 @@ Camera::set_far_plane(const float far_plane)
 float
 Camera::get_far_plane() const
 {
-  return m_impl->properties.far_plane;
+  if(!m_impl || !m_impl->camera_id)
+  {
+    LOG_ERROR(Error_string::object_has_no_valid_world());
+    return 0;
+  }
+
+  return get_properties(m_impl->world->data.camera_data, m_impl->camera_id).far_plane;
 }
 
 
 void
 Camera::set_clear_color(const Core::Color color)
 {
-  m_impl->properties.clear_color = color.get_color();
-
-  if(m_impl->attached_entity != util::generic_id_invalid())
+  if(!m_impl || !m_impl->camera_id)
   {
-    update_properties(m_impl->properties, m_impl->attached_entity);
+    LOG_ERROR(Error_string::object_has_no_valid_world());
+    return;
+  }
+
+  // Set the clear color
+  {
+    auto cam_data = m_impl->world->data.camera_data;
+    const auto cam_id = m_impl->camera_id;
+    
+    World_data::data_lock(cam_data);
+    
+    ::Camera::Camera_properties props;
+    World_data::camera_data_get_property_camera(cam_data, cam_id, &props);
+    
+    props.clear_color = color.get_color();
+    World_data::camera_data_set_property_camera(cam_data, cam_id, props);
+    
+    World_data::data_unlock(cam_data);
   }
 }
 
@@ -451,7 +539,13 @@ Camera::set_clear_color(const Core::Color color)
 Color
 Camera::get_clear_color() const
 {
-  return Color(m_impl->properties.clear_color);
+  if(!m_impl || !m_impl->camera_id)
+  {
+    LOG_ERROR(Error_string::object_has_no_valid_world());
+    return Core::Color(0xFFFFFFFF);
+  }
+
+  return Core::Color(get_properties(m_impl->world->data.camera_data, m_impl->camera_id).clear_color);
 }
 
 

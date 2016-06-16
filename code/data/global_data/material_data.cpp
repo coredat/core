@@ -135,14 +135,14 @@ material_data_get_capacity(const Material_data *data)
 
 
 void
-data_lock(Material_data *data)
+data_lock(const Material_data *data)
 {
   assert(data);
 }
 
 
 void
-data_unlock(Material_data *data)
+data_unlock(const Material_data *data)
 {
   assert(data);
 }

@@ -6,8 +6,8 @@
 */
 
 
-#ifndef RENDERER_MESH_DATA_INCLUDED_BD98EF3B_1A8E_4952_8FE9_808315B96DD3
-#define RENDERER_MESH_DATA_INCLUDED_BD98EF3B_1A8E_4952_8FE9_808315B96DD3
+#ifndef RENDERER_MESH_DATA_INCLUDED_4E8E49D1_B748_4199_980D_10574956CDDB
+#define RENDERER_MESH_DATA_INCLUDED_4E8E49D1_B748_4199_980D_10574956CDDB
 
 
 #include <utilities/generic_id.hpp>
@@ -86,7 +86,7 @@ renderer_mesh_data_get_capacity(const Renderer_mesh_data *data);
   \param data The container to lock.
 */
 void
-data_lock(Renderer_mesh_data *data);
+data_lock(const Renderer_mesh_data *data);
 
 
 /*!
@@ -94,7 +94,7 @@ data_lock(Renderer_mesh_data *data);
   \param The container to unlock
 */
 void
-data_unlock(Renderer_mesh_data *data);
+data_unlock(const Renderer_mesh_data *data);
 
 
 /*!

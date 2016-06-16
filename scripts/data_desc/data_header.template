@@ -89,7 +89,7 @@ size_t
   \\param data The container to lock.
 */
 void
-data_lock({{data_type}} *data);
+data_lock(const {{data_type}} *data);
 
 
 /*!
@@ -97,7 +97,7 @@ data_lock({{data_type}} *data);
   \\param The container to unlock
 */
 void
-data_unlock({{data_type}} *data);
+data_unlock(const {{data_type}} *data);
 
 
 /*!

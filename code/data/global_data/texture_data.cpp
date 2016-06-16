@@ -121,14 +121,14 @@ texture_data_get_capacity(const Texture_data *data)
 
 
 void
-data_lock(Texture_data *data)
+data_lock(const Texture_data *data)
 {
   assert(data);
 }
 
 
 void
-data_unlock(Texture_data *data)
+data_unlock(const Texture_data *data)
 {
   assert(data);
 }

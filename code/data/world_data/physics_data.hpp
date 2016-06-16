@@ -6,8 +6,8 @@
 */
 
 
-#ifndef PHYSICS_DATA_INCLUDED_98FC7B6E_4A0C_499A_912F_CFDBF3C5E58E
-#define PHYSICS_DATA_INCLUDED_98FC7B6E_4A0C_499A_912F_CFDBF3C5E58E
+#ifndef PHYSICS_DATA_INCLUDED_D0DCBCCA_0343_42B4_A5AC_A340031379AE
+#define PHYSICS_DATA_INCLUDED_D0DCBCCA_0343_42B4_A5AC_A340031379AE
 
 
 #include <utilities/generic_id.hpp>
@@ -84,7 +84,7 @@ physics_data_get_capacity(const Physics_data *data);
   \param data The container to lock.
 */
 void
-data_lock(Physics_data *data);
+data_lock(const Physics_data *data);
 
 
 /*!
@@ -92,7 +92,7 @@ data_lock(Physics_data *data);
   \param The container to unlock
 */
 void
-data_unlock(Physics_data *data);
+data_unlock(const Physics_data *data);
 
 
 /*!

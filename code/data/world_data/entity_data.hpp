@@ -6,8 +6,8 @@
 */
 
 
-#ifndef ENTITY_DATA_INCLUDED_2FBA7BD8_346D_4D6A_831D_FBF44ECCD8BD
-#define ENTITY_DATA_INCLUDED_2FBA7BD8_346D_4D6A_831D_FBF44ECCD8BD
+#ifndef ENTITY_DATA_INCLUDED_832587B3_21B9_483E_8058_766738748681
+#define ENTITY_DATA_INCLUDED_832587B3_21B9_483E_8058_766738748681
 
 
 #include <utilities/generic_id.hpp>
@@ -90,7 +90,7 @@ entity_data_get_capacity(const Entity_data *data);
   \param data The container to lock.
 */
 void
-data_lock(Entity_data *data);
+data_lock(const Entity_data *data);
 
 
 /*!
@@ -98,7 +98,7 @@ data_lock(Entity_data *data);
   \param The container to unlock
 */
 void
-data_unlock(Entity_data *data);
+data_unlock(const Entity_data *data);
 
 
 /*!

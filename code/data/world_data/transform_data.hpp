@@ -6,8 +6,8 @@
 */
 
 
-#ifndef TRANSFORM_DATA_INCLUDED_FCE1F2A1_D497_408B_9D3C_61775BAE2354
-#define TRANSFORM_DATA_INCLUDED_FCE1F2A1_D497_408B_9D3C_61775BAE2354
+#ifndef TRANSFORM_DATA_INCLUDED_E9845994_DE47_4B41_97CB_A2D28B2872A9
+#define TRANSFORM_DATA_INCLUDED_E9845994_DE47_4B41_97CB_A2D28B2872A9
 
 
 #include <utilities/generic_id.hpp>
@@ -81,7 +81,7 @@ transform_data_get_capacity(const Transform_data *data);
   \param data The container to lock.
 */
 void
-data_lock(Transform_data *data);
+data_lock(const Transform_data *data);
 
 
 /*!
@@ -89,7 +89,7 @@ data_lock(Transform_data *data);
   \param The container to unlock
 */
 void
-data_unlock(Transform_data *data);
+data_unlock(const Transform_data *data);
 
 
 /*!

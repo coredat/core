@@ -135,14 +135,14 @@ camera_data_get_capacity(const Camera_data *data)
 
 
 void
-data_lock(Camera_data *data)
+data_lock(const Camera_data *data)
 {
   assert(data);
 }
 
 
 void
-data_unlock(Camera_data *data)
+data_unlock(const Camera_data *data)
 {
   assert(data);
 }
