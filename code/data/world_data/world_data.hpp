@@ -2,7 +2,7 @@
 #define WORLD_DATA_INCLUDED_4FAE9F04_0E15_4C3B_816B_F5C1FEA9EADA
 
 
-#include "camera_pool.hpp"
+#include "camera_data.hpp"
 #include "pending_scene_graph_change_data.hpp"
 #include "world.hpp"
 #include "world_pools.hpp"

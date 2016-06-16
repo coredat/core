@@ -282,5 +282,9 @@ Entity_ref::operator !=(const Entity_ref &other) const
   return this->get_id() != other.get_id();
 }
 
+Entity_ref::operator util::generic_id() const
+{
+  return get_id();
+}
 
 } // ns

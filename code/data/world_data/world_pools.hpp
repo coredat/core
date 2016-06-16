@@ -16,7 +16,7 @@ struct World
   Transform_data                    *transform            = nullptr;
   Entity_data                       *entity               = nullptr;
   Pending_scene_graph_change_data   *entity_graph_changes = nullptr;
-  Camera_pool                       *camera_pool          = nullptr;
+  Camera_data                       *camera_data          = nullptr;
   Physics_data                      *physics_data         = nullptr;
   Renderer_mesh_data                *mesh_data            = nullptr;
   Text_renderer_data                *text_data            = nullptr;

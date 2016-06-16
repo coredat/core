@@ -9,7 +9,7 @@ namespace World_data {
 
 
 struct World;
-struct Camera_pool;
+struct Camera_data;
 struct Physics_data;
 struct Renderer_mesh_data;
 struct Text_renderer_data;

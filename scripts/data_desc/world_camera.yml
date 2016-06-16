@@ -1,0 +1,27 @@
+data:
+  type: Camera_data
+  name: camera_data
+  namespace: World_data
+  header_dir: data/world_data/
+  path: code/data/world_data/
+
+  key:
+    name: camera_id
+    search_type: linear
+
+  properties:
+
+    - name: entity_id
+      type: util::generic_id
+      include: <utilities/generic_id.hpp>
+      return: value
+
+    - name: priority
+      type: uint32_t
+      include: <stdint.h>
+      return: value
+
+    - name: camera
+      type: Camera::Camera_properties
+      return: value
+      include: <systems/camera/camera_properties.hpp>

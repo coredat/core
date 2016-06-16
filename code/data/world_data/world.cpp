@@ -1,5 +1,6 @@
 #include "world.hpp"
 #include "world_pools.hpp"
+#include <utilities/logging.hpp>
 
 
 namespace
@@ -19,7 +20,9 @@ set_world_data(World *set_world) {
 
 
 World*
-get_world() {
+get_world()
+{
+  LOG_TODO("Needs to go!")
   return curr_world;
 }
 

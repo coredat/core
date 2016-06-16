@@ -35,9 +35,6 @@ public:
   void                  set_priority(const uint32_t priority);
   uint32_t              get_priority() const;
   
-  void                  set_peer_priority(const uint32_t peer, const uint32_t priority);
-  uint32_t              get_peer_priority(const uint32_t peer) const;
-  
   void                  set_type(const Camera_type cam_type);
   Camera_type           get_type() const;
   

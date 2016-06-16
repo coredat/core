@@ -84,8 +84,8 @@ World::World(const Context &ctx, const World_setup setup)
   static World_data::Pending_scene_graph_change_data graph_changes;
   World_data::pending_scene_graph_change_init(&graph_changes, entity_hint);
   
-  static World_data::Camera_pool camera_pool;
-  World_data::camera_pool_init(&camera_pool);
+  static World_data::Camera_data camera_data;
+  World_data::camera_data_init(&camera_data, 32);
     
   static World_data::Physics_data physics_data;
   World_data::physics_data_init(&physics_data, entity_hint);
@@ -100,10 +100,10 @@ World::World(const Context &ctx, const World_setup setup)
   World_data::entity_data_init(&entity_data, entity_hint);
   
   m_impl->world_data->data.entity_graph_changes = &graph_changes;
-  m_impl->world_data->data.camera_pool          = &camera_pool;
   m_impl->world_data->data.physics_data         = &physics_data;
   m_impl->world_data->data.mesh_data            = &mesh_data;
   
+  m_impl->world_data->data.camera_data          = &camera_data;  
   m_impl->world_data->data.transform            = &transform_data;
   m_impl->world_data->data.entity               = &entity_data;
   

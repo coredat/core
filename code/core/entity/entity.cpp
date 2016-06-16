@@ -408,4 +408,10 @@ Entity::operator !=(const Entity_ref &other) const
 }
 
 
+Entity::operator util::generic_id() const
+{
+  return get_id();
+}
+
+
 } // ns

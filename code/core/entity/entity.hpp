@@ -91,6 +91,8 @@ private:
   friend class Entity_ref;
   friend class Camera;
   
+                                operator util::generic_id() const;
+  
   util::generic_id                           get_id() const; // todo make private friend
   std::shared_ptr<const World_detail::Data>  get_world_data() const;
   std::shared_ptr<World_detail::Data>        get_world_data();
