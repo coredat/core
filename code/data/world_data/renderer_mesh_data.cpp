@@ -25,11 +25,11 @@ renderer_mesh_data_init(Renderer_mesh_data *data, const size_t size_hint)
   constexpr size_t simd_buffer = 16;
 
   // Calculate the various sizes of things.
-  const size_t bytes_entity_id = sizeof(*data->entity_id) * size_hint + simd_buffer;
+  const size_t bytes_renderer_mesh_id = sizeof(*data->renderer_mesh_id) * size_hint + simd_buffer;
   const size_t bytes_property_material_id = sizeof(*data->property_material_id) * size_hint + simd_buffer;
   const size_t bytes_property_draw_call = sizeof(*data->property_draw_call) * size_hint + simd_buffer;
 
-  const size_t bytes_to_alloc = bytes_entity_id + bytes_property_material_id + bytes_property_draw_call;
+  const size_t bytes_to_alloc = bytes_renderer_mesh_id + bytes_property_material_id + bytes_property_draw_call;
 
   // Allocate some memory.
   util::memory_chunk *data_memory = const_cast<util::memory_chunk*>(&data->memory);
@@ -44,17 +44,17 @@ renderer_mesh_data_init(Renderer_mesh_data *data, const size_t size_hint)
     size_t byte_counter = 0;
     const void *alloc_start = data->memory.chunk_start;
 
-    // Assign entity_id memory
+    // Assign renderer_mesh_id memory
     {
       void *offset = util::mem_offset(alloc_start, byte_counter);
       void *aligned = util::mem_next_16byte_boundry(offset);
 
-      data->entity_id = reinterpret_cast<util::generic_id*>(aligned);
+      data->renderer_mesh_id = reinterpret_cast<util::generic_id*>(aligned);
       #ifndef NDEBUG
-      memset(offset, 0, bytes_entity_id);
+      memset(offset, 0, bytes_renderer_mesh_id);
       #endif
 
-      byte_counter += bytes_entity_id;
+      byte_counter += bytes_renderer_mesh_id;
       assert(byte_counter <= bytes_to_alloc);
     }
     // Assign property_material_id memory
@@ -158,7 +158,7 @@ renderer_mesh_data_push_back(Renderer_mesh_data *data, const util::generic_id ke
 
   ++(data->size);
 
-  data->entity_id[index] = key;
+  data->renderer_mesh_id[index] = key;
 
   // Memset the properties
   {
@@ -188,7 +188,7 @@ renderer_mesh_data_erase(Renderer_mesh_data *data, const util::generic_id key)
     --(data->size);
 
     // Shuffle the memory down.
-    memmove(&data->entity_id[index_to_erase], &data->entity_id[start_index], size_to_end * sizeof(*data->entity_id));
+    memmove(&data->renderer_mesh_id[index_to_erase], &data->renderer_mesh_id[start_index], size_to_end * sizeof(*data->renderer_mesh_id));
     memmove(&data->property_material_id[index_to_erase], &data->property_material_id[start_index], size_to_end * sizeof(*data->property_material_id));
     memmove(&data->property_draw_call[index_to_erase], &data->property_draw_call[start_index], size_to_end * sizeof(*data->property_draw_call));
   }
@@ -232,12 +232,12 @@ renderer_mesh_data_insert(Renderer_mesh_data *data, const util::generic_id key, 
     ++(data->size);
 
     // Shuffle the memory up.
-    memmove(&data->entity_id[dest_index], &data->entity_id[insert_index], size_to_end * sizeof(*data->entity_id));
+    memmove(&data->renderer_mesh_id[dest_index], &data->renderer_mesh_id[insert_index], size_to_end * sizeof(*data->renderer_mesh_id));
     memmove(&data->property_material_id[dest_index], &data->property_material_id[insert_index], size_to_end * sizeof(*data->property_material_id));
     memmove(&data->property_draw_call[dest_index], &data->property_draw_call[insert_index], size_to_end * sizeof(*data->property_draw_call));
 
     // Add key to new entry.
-    data->entity_id[insert_index] = key;
+    data->renderer_mesh_id[insert_index] = key;
 
     return true;
   }
@@ -261,7 +261,7 @@ renderer_mesh_data_exists(const Renderer_mesh_data *data, const util::generic_id
   size_t no_index;
   if(!out_index) { out_index = &no_index; }
 
-  found = util::generic_id_search_linear(out_index, key, data->entity_id, data->size);
+  found = util::generic_id_search_linear(out_index, key, data->renderer_mesh_id, data->size);
 
   return found;
 }

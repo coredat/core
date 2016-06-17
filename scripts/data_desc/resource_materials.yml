@@ -1,6 +1,5 @@
 data:
-  type: Material_data
-  name: material_data
+  name: material
   namespace: Resource_data
   header_dir: data/global_data/
   path: code/data/global_data/

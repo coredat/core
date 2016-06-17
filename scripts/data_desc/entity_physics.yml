@@ -1,6 +1,5 @@
 data:
-  type: Physics_data
-  name: physics_data
+  name: physics
   namespace: World_data
   header_dir: data/world_data/
   path: code/data/world_data/

@@ -1,6 +1,5 @@
 data:
-  type: Shader_data
-  name: shader_data
+  name: shader
   namespace: Resource_data
   header_dir: data/global_data/
   path: code/data/global_data/

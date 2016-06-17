@@ -1,6 +1,5 @@
 data:
-  type: Mesh_data
-  name: mesh_data
+  name: mesh
   namespace: Resource_data
   header_dir: data/global_data/
   path: code/data/global_data/

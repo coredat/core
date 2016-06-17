@@ -284,7 +284,7 @@ World::get_overlapping_aabbs(const std::function<void(const Core::Collision_pair
       continue;
     }
     
-    id.push_back(data->entity_id[i]);
+    id.push_back(data->physics_id[i]);
     
     math::aabb box_copy(data->property_aabb_collider[i]);
     uint64_t collision_mask(data->property_collision_id[i]);

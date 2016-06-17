@@ -21,7 +21,7 @@ display_mesh_draw_calls(World_data::Renderer_mesh_data *data)
         
     for(uint32_t i = 0; i < data->size; ++i)
     {
-      ImGui::Text("%u", data->entity_id[i]); ImGui::NextColumn();
+      ImGui::Text("%u", data->renderer_mesh_id[i]); ImGui::NextColumn();
       ImGui::Text("%u", data->property_material_id[i]); ImGui::NextColumn();
     }
     

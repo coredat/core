@@ -1,6 +1,5 @@
 data:
-  type: Renderer_mesh_data
-  name: renderer_mesh_data
+  name: renderer_mesh
   namespace: World_data
   header_dir: data/world_data/
   path: code/data/world_data/

@@ -1,6 +1,5 @@
 data:
-  type: Texture_data
-  name: texture_data
+  name: texture
   namespace: Resource_data
   header_dir: data/global_data/
   path: code/data/global_data/

@@ -1,6 +1,5 @@
 data:
-  type: Camera_data
-  name: camera_data
+  name: camera
   namespace: World_data
   header_dir: data/world_data/
   path: code/data/world_data/

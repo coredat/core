@@ -12,11 +12,12 @@ def parse_desc(yml)
   return_data = {}
 
   # General information"
-  return_data[:data_type]  = data['type'] || "Data"
-  return_data[:data_name]  = data['name'] || "data"
-  return_data[:guid]       = SecureRandom.uuid.upcase.gsub("-", "_")
-  return_data[:namespace]  = data['namespace'] || "Data"
-  return_data[:path]       = data['path']
+  return_data[:data_type]         = data['name'].capitalize + "_data"
+  return_data[:data_name]         = data['name'] + "_data"
+  return_data[:data_display_name] = data['name']
+  return_data[:guid]              = SecureRandom.uuid.upcase.gsub("-", "_")
+  return_data[:namespace]         = data['namespace'] || "Data"
+  return_data[:path]              = data['path']
 
   # Header Includes
   return_data[:header_includes] = []
@@ -46,7 +47,7 @@ def parse_desc(yml)
   data_key = data['key'] || {}
 
   return_data[:key_type] = "util::generic_id"
-  return_data[:key_name] = data_key['name'] || "data_key"
+  return_data[:key_name] = data['name'] + "_id"
   return_data[:key_auto_inc] = data_key['auto_increment'] || false
 
   if data_key.has_key?('error_on_missing_key')

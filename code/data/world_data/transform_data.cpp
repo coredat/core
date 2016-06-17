@@ -25,11 +25,11 @@ transform_data_init(Transform_data *data, const size_t size_hint)
   constexpr size_t simd_buffer = 16;
 
   // Calculate the various sizes of things.
-  const size_t bytes_entity_id = sizeof(*data->entity_id) * size_hint + simd_buffer;
+  const size_t bytes_transform_id = sizeof(*data->transform_id) * size_hint + simd_buffer;
   const size_t bytes_property_transform = sizeof(*data->property_transform) * size_hint + simd_buffer;
   const size_t bytes_property_aabb = sizeof(*data->property_aabb) * size_hint + simd_buffer;
 
-  const size_t bytes_to_alloc = bytes_entity_id + bytes_property_transform + bytes_property_aabb;
+  const size_t bytes_to_alloc = bytes_transform_id + bytes_property_transform + bytes_property_aabb;
 
   // Allocate some memory.
   util::memory_chunk *data_memory = const_cast<util::memory_chunk*>(&data->memory);
@@ -44,17 +44,17 @@ transform_data_init(Transform_data *data, const size_t size_hint)
     size_t byte_counter = 0;
     const void *alloc_start = data->memory.chunk_start;
 
-    // Assign entity_id memory
+    // Assign transform_id memory
     {
       void *offset = util::mem_offset(alloc_start, byte_counter);
       void *aligned = util::mem_next_16byte_boundry(offset);
 
-      data->entity_id = reinterpret_cast<util::generic_id*>(aligned);
+      data->transform_id = reinterpret_cast<util::generic_id*>(aligned);
       #ifndef NDEBUG
-      memset(offset, 0, bytes_entity_id);
+      memset(offset, 0, bytes_transform_id);
       #endif
 
-      byte_counter += bytes_entity_id;
+      byte_counter += bytes_transform_id;
       assert(byte_counter <= bytes_to_alloc);
     }
     // Assign property_transform memory
@@ -158,7 +158,7 @@ transform_data_push_back(Transform_data *data, const util::generic_id key, size_
 
   ++(data->size);
 
-  data->entity_id[index] = key;
+  data->transform_id[index] = key;
 
   // Memset the properties
   {
@@ -188,7 +188,7 @@ transform_data_erase(Transform_data *data, const util::generic_id key)
     --(data->size);
 
     // Shuffle the memory down.
-    memmove(&data->entity_id[index_to_erase], &data->entity_id[start_index], size_to_end * sizeof(*data->entity_id));
+    memmove(&data->transform_id[index_to_erase], &data->transform_id[start_index], size_to_end * sizeof(*data->transform_id));
     memmove(&data->property_transform[index_to_erase], &data->property_transform[start_index], size_to_end * sizeof(*data->property_transform));
     memmove(&data->property_aabb[index_to_erase], &data->property_aabb[start_index], size_to_end * sizeof(*data->property_aabb));
   }
@@ -219,7 +219,7 @@ transform_data_exists(const Transform_data *data, const util::generic_id key, si
   size_t no_index;
   if(!out_index) { out_index = &no_index; }
 
-  found = util::generic_id_search_binary(out_index, key, data->entity_id, data->size);
+  found = util::generic_id_search_binary(out_index, key, data->transform_id, data->size);
 
   return found;
 }

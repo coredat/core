@@ -6,8 +6,8 @@
 */
 
 
-#ifndef PHYSICS_DATA_INCLUDED_DAACF4E0_1DE5_430C_994A_36BA8DA235EA
-#define PHYSICS_DATA_INCLUDED_DAACF4E0_1DE5_430C_994A_36BA8DA235EA
+#ifndef PHYSICS_DATA_INCLUDED_46D1770C_5D79_4293_A80E_0927D6611079
+#define PHYSICS_DATA_INCLUDED_46D1770C_5D79_4293_A80E_0927D6611079
 
 
 #include <utilities/generic_id.hpp>
@@ -28,7 +28,7 @@ namespace World_data {
 struct Physics_data
 {
   // Data Key
-  util::generic_id *entity_id = nullptr;
+  util::generic_id *physics_id = nullptr;
 
   // Properties
   math::transform *property_transform = nullptr;

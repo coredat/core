@@ -63,8 +63,6 @@ Entity::Entity(Core::World &world)
       World_data::data_lock(entity_data);
       
       const util::generic_id id = World_data::entity_data_push_back(entity_data);
-//      util::generic_id id = entity_data->size + 1;
-//      World_data::entity_data_push_back(entity_data, id);
       m_impl->id = id;
       
       if(id && success)
@@ -90,15 +88,15 @@ Entity::Entity(Core::World &world)
       
       World_data::data_lock(transform_data);
       
-      const util::generic_id id = m_impl->id;
+      const util::generic_id entity_id = m_impl->id;
     
-      if(World_data::transform_data_push_back(transform_data, id) && success)
+      if(World_data::transform_data_push_back(transform_data, entity_id) && success)
       {
         const math::transform trans{};
-        World_data::transform_data_set_property_transform(transform_data, id, trans);
+        World_data::transform_data_set_property_transform(transform_data, entity_id, trans);
         
         const math::aabb bounding_box{};
-        World_data::transform_data_set_property_aabb(transform_data, id, bounding_box);
+        World_data::transform_data_set_property_aabb(transform_data, entity_id, bounding_box);
       }
       
       World_data::data_unlock(transform_data);

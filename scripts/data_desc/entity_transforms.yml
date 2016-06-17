@@ -1,17 +1,16 @@
 data:
-  type: Transform_data
-  name: transform_data
+  name: transform
   namespace: World_data
   header_dir: data/world_data/
   path: code/data/world_data/
 
   key:
-    name: entity_id
     search_type: binary
 
   relationships:
-    type: belongs_to
-    name: entity
+    - type: belongs_to
+      name: entity
+      desc: entity_base
 
   properties:
     - name: transform
