@@ -224,9 +224,7 @@ World::think()
     
   }
 
- 
-  
-  /*
+ /*
     Debug Menu
     --
     Shows the debugging menu bar at the top of the screen.

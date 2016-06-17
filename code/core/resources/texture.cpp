@@ -3,8 +3,7 @@
 #include <common/error_strings.hpp>
 #include <utilities/logging.hpp>
 #include <utilities/string_helpers.hpp>
-#include <graphics_api/ogl/ogl_texture.hpp>
-#include <SOIL/SOIL.h>
+#include <transformations/texture/create_texture.hpp>
 
 
 namespace Core {
@@ -72,18 +71,9 @@ Texture::Texture(const char *filepath)
   
   // Load up a new texture
   {
-    // Create texture
-    int width, height;
-    
-    unsigned char *img = SOIL_load_image(filepath,
-                                         &width,
-                                         &height,
-                                         0,
-                                         SOIL_LOAD_RGBA);
-  
     Ogl::Texture new_texture;
-    Ogl::texture_create_2d(&new_texture, width, height, GL_RGBA, img);
-  
+    Texture_utils::create_texture_from_file(filepath, &new_texture);
+   
     // Add to pool
     if(Ogl::texture_is_valid(&new_texture))
     {
@@ -101,8 +91,6 @@ Texture::Texture(const char *filepath)
     {
       LOG_ERROR(Error_string::failed_to_create_resource());
     }
-    
-    SOIL_free_image_data(img);
   }
 }
 

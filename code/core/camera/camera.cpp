@@ -6,6 +6,7 @@
 #include <core/entity/entity_ref.hpp>
 #include <core/resources/render_target.hpp>
 #include <core/camera/camera_properties.hpp>
+#include <core/camera/post_process.hpp>
 #include <transformations/camera/cam_priorities.hpp>
 #include <data/world_data/world.hpp>
 #include <data/world_data/world_pools.hpp>
@@ -14,6 +15,21 @@
 #include <common/error_strings.hpp>
 #include <math/mat/mat4.hpp>
 #include <utilities/logging.hpp>
+
+
+
+/*
+  <TODO>
+    Splitting out the type of rendering would be good.
+    like attaching a renderer to an entity. You could attach a 
+    renderer to a camera. my_camera.set_renderer(post_process_renderer);
+    This would elinate settings that only happen in certain modes.
+    ie. only_render_tags() would only work for mesh_rendering.
+    We can also use it to enable debug rendinering.
+    my_camera.set_renderer(collider_renderer).
+    my_camera.set_renderer(overdraw_renderer).
+  </TODO>
+*/
 
 
 namespace Core {
@@ -65,6 +81,7 @@ Camera::Camera(Core::World &world)
 Camera::~Camera()
 {
   set_attached_entity(Entity_ref()); // Passing an invalid entity will unload the current entity.
+  LOG_TODO_ONCE("Actually delete the camera from the data");
 }
 
 
@@ -97,15 +114,58 @@ Camera::operator=(Camera &&other)
 
 
 void
-Camera::set_target(const Render_target &target)
+Camera::set_tags_to_render(const uint32_t tags)
+{
+  if(!m_impl || !m_impl->camera_id)
+  {
+    LOG_ERROR(Error_string::object_has_no_valid_world());
+    return;
+  }
+  
+  // Update data
+  {
+    auto cam_data = m_impl->world->data.camera_data;
+    
+    World_data::data_lock(cam_data);
+    World_data::camera_data_set_property_tag(cam_data, m_impl->camera_id, tags);
+    World_data::data_unlock(cam_data);
+  }
+}
+
+
+uint32_t
+Camera::get_tags_to_render() const
+{
+  uint32_t tags = 0;
+
+  if(!m_impl || !m_impl->camera_id)
+  {
+    LOG_ERROR(Error_string::object_has_no_valid_world());
+    return tags;
+  }
+  
+  // Get data
+  {
+    auto cam_data = m_impl->world->data.camera_data;
+    
+    World_data::data_lock(cam_data);
+    World_data::camera_data_get_property_tag(cam_data, m_impl->camera_id, &tags);
+    World_data::data_unlock(cam_data);
+  }
+  
+  return tags;
+}
+
+
+void
+Camera::set_post_process(const Core::Post_process &post)
 {
 }
 
 
-Render_target
-Camera::get_target() const
+Post_process
+Camera::get_post_process() const
 {
-  return Render_target();
 }
 
 

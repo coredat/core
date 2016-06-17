@@ -23,9 +23,12 @@ public:
   
                         Camera(Camera &&);
   Camera&               operator=(Camera&&);
+
+  void                  set_tags_to_render(const uint32_t);
+  uint32_t              get_tags_to_render() const;
   
-  void                  set_target(const Render_target &target);
-  Render_target         get_target() const;
+  void                  set_post_process(const Post_process &post);
+  Post_process          get_post_process() const;
   
   void                  set_attached_entity(Entity_ref entity);
   Entity_ref            get_attached_entity() const;
