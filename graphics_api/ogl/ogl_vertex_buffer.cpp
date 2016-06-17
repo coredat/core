@@ -16,7 +16,7 @@ vertex_buffer_load(Vertex_buffer *out_vbo,
                    const bool is_dynamic)
 {
   assert(out_vbo);
-
+  
   glGenBuffers(1, &out_vbo->vertex_buffer_id);
   glBindBuffer(GL_ARRAY_BUFFER, out_vbo->vertex_buffer_id);
   glBufferData(GL_ARRAY_BUFFER, byte_size_of_vbo, vbo_buffer, is_dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
