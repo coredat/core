@@ -14,55 +14,19 @@ material_renderer(const math::mat4 &view_mat,
                   const math::mat4 &proj_mat,
                   const Resource_data::Material_data *material_data,
                   const uint32_t camera_cull_mask,                  
-                  const Resource_data::Mesh_data *mesh_data,
-                  const World_data::Entity_data *entity_data,
-                  const World_data::Renderer_mesh_data *mesh_renderer_data)
+                  const World_data::Renderer_mesh_data *mesh_renderer_data,
+                  const Material_renderer::Draw_call *draw_calls,
+                  const uint32_t number_of_draw_calls)
 {
-  LOG_TODO_ONCE("We are generating the draw calls for every camera! - Don't!")
-
-  /*
-    Create draw calls the way the renderer wants them.
-    The draw calls should already be in an optimised order, from here on in
-    the only optimisation you can expect is the rendering remember the last thing bound,
-    until its reset has been called.
-  */
-  Material_renderer::Draw_call *draw_calls = SCRATCH_ALIGNED_ALLOC(Material_renderer::Draw_call, mesh_renderer_data->size);
-  {
-    for(uint32_t i = 0; i < mesh_renderer_data->size; ++i)
-    {
-      // Draw call from the data.
-      const World_data::Mesh_renderer_draw_call *draw_call_data = &mesh_renderer_data->property_draw_call[i];
-
-      // No model? keep moving.
-      if(!draw_call_data->model_id)
-      {
-        continue;
-      }
-      
-      // Get the hardware mesh.
-      // Possible extension. We could also process these based on how far away the camera is.
-      Resource_data::mesh_data_get_property_mesh(mesh_data, draw_call_data->model_id, &draw_calls[i].mesh);
-      
-      const float *world = draw_call_data->world_matrix;
-
-      memcpy(&draw_calls[i], world, sizeof(float) * 16);
-      
-      // Get cull mask.
-      // This isn't particularly nice. We should already have this data to save us looking for it.
-      const util::generic_id entity_id = mesh_renderer_data->renderer_mesh_id[i];
-      World_data::entity_data_get_property_tag(entity_data, entity_id, &draw_calls[i].cull_mask);
-    }
-  }
-
   /*
     Sort the draw calls into runs.
     This is so we can bind a material, then batch render a collection of draw calls.
   */
   struct Draw_run
   {
-    util::generic_id material_id = 0;
-    uint32_t start_point = 0;
-    uint32_t size = 0;
+    util::generic_id  material_id = 0;
+    uint32_t          start_point = 0;
+    uint32_t          size = 0;
   };
   
   // Its unlikely we will ever have more than 128 runs.
@@ -143,11 +107,11 @@ material_renderer(const math::mat4 &view_mat,
       const size_t start = runs[r].start_point;
       const size_t count = runs[r].size;
       
-      Material_renderer::render(view_proj_mat,
-                                material_to_render,
-                                camera_cull_mask,
-                                &draw_calls[start],
-                                count);
+      number_of_draws += Material_renderer::render(view_proj_mat,
+                                                   material_to_render,
+                                                   camera_cull_mask,
+                                                   &draw_calls[start],
+                                                   count);
     }
   }
   

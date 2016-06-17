@@ -41,8 +41,9 @@ reset();
 
 /*
   Renders an array of meshes with a given material.
+  \returns The number of draw calls that happend.
 */
-void
+uint32_t
 render(const math::mat4 &view_proj_mat,
        const Material *material,
        const uint32_t cull_mask,

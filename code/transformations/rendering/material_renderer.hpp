@@ -7,6 +7,11 @@
 #include <data/world_data/renderer_mesh_data.hpp>
 #include <data/world_data/transform_data.hpp>
 #include <data/world_data/entity_data.hpp>
+#include <systems/renderer_material/material.hpp>
+#include <systems/renderer_material/material_renderer.hpp>
+#include <data/global_data/memory_data.hpp>
+#include <math/transform/transform.hpp>
+#include <utilities/generic_id.hpp>
 #include <math/mat/mat_types.hpp>
 
 
@@ -30,9 +35,9 @@ material_renderer(const math::mat4 &view_mat,
                   const math::mat4 &proj_mat,
                   const Resource_data::Material_data *material_data,
                   const uint32_t camera_cull_mask,
-                  const Resource_data::Mesh_data *mesh_data,
-                  const World_data::Entity_data *entity_data,
-                  const World_data::Renderer_mesh_data *render_mesh_data);
+                  const World_data::Renderer_mesh_data *mesh_renderer_data,
+                  const ::Material_renderer::Draw_call *draw_calls,
+                  const uint32_t number_of_draw_calls);
 
 
 }

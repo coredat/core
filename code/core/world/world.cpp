@@ -191,6 +191,47 @@ World::think()
   /*
     Render all the data with the cameras.
   */
+  /*
+    Create draw calls the way the renderer wants them.
+    The draw calls should already be in an optimised order, from here on in
+    the only optimisation you can expect is the rendering remember the last thing bound,
+    until its reset has been called.
+  */
+  
+  
+  auto mesh_renderer_data = world->mesh_data;
+  auto entity_data = world->entity;
+  auto mesh_data = Resource_data::get_resources()->mesh_data;
+  
+  ::Material_renderer::Draw_call *draw_calls = SCRATCH_ALIGNED_ALLOC(::Material_renderer::Draw_call, mesh_renderer_data->size);
+  {
+    for(uint32_t i = 0; i < mesh_renderer_data->size; ++i)
+    {
+      // Draw call from the data.
+      const World_data::Mesh_renderer_draw_call *draw_call_data = &mesh_renderer_data->property_draw_call[i];
+
+      // No model? keep moving.
+      if(!draw_call_data->model_id)
+      {
+        continue;
+      }
+      
+      // Get the hardware mesh.
+      // Possible extension. We could also process these based on how far away the camera is.
+      Resource_data::mesh_data_get_property_mesh(mesh_data, draw_call_data->model_id, &draw_calls[i].mesh);
+      
+      const float *world = draw_call_data->world_matrix;
+
+      memcpy(&draw_calls[i], world, sizeof(float) * 16);
+      
+      // Get cull mask.
+      // This isn't particularly nice. We should already have this data to save us looking for it.
+      const util::generic_id entity_id = mesh_renderer_data->renderer_mesh_id[i];
+      World_data::entity_data_get_property_tag(entity_data, entity_id, &draw_calls[i].cull_mask);
+    }
+  }
+  
+  
   for(uint32_t c = 0; c < number_of_cam_runs; ++c)
   {
     const Camera_utils::Cam_run *cam = &cam_runs[c];
@@ -219,9 +260,9 @@ World::think()
                                    cam->proj,
                                    Resource_data::get_resources()->material_data,
                                    cam->cull_mask,
-                                   Resource_data::get_resources()->mesh_data,
-                                   world->entity,
-                                   world->mesh_data);
+                                   world->mesh_data,
+                                   draw_calls,
+                                   mesh_renderer_data->size);
     }
     
   }

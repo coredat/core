@@ -56,13 +56,15 @@ reset()
 }
 
 
-void
+uint32_t
 render(const math::mat4 &view_proj_mat,
        const Material *material,
        const uint32_t cull_mask,
        const Draw_call calls[],
        const uint32_t number_of_calls)
 {
+  uint32_t draw_calls_count = 0;
+
   Ogl::error_clear();
   
   // TODO: This is a hack!
@@ -72,7 +74,7 @@ render(const math::mat4 &view_proj_mat,
   if(material->shader.program_id == 0)
   {
     LOG_WARNING("Rendering zero program?");
-    return;
+    return draw_calls_count;
   }
 
   // Bind material.
@@ -146,6 +148,7 @@ render(const math::mat4 &view_proj_mat,
     if(mat_renderer_last_ibo != call.mesh.ibo.index_buffer_id)
     {
       Ogl::index_buffer_bind(call.mesh.ibo);
+      ++draw_calls_count;
     }
     
     // Draw the mesh with ibo if we have one.
@@ -158,10 +161,13 @@ render(const math::mat4 &view_proj_mat,
     {
       const GLsizei count = call.mesh.vbo.number_of_entries / mat_renderer_vertex_format.number_of_attributes;
       glDrawArrays(GL_TRIANGLES, 0, count);
+      ++draw_calls_count;
     }
   }
   
   Ogl::error_check("Material Renderer", &std::cout);
+  
+  return draw_calls_count;
 }
 
 
