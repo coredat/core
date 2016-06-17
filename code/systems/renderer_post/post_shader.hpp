@@ -16,6 +16,8 @@ struct Post_shader
   
   Ogl::Texture map_01_id;
   Ogl::Uniform map_01;
+  
+  
 };
 
 

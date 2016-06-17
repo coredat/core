@@ -12,7 +12,7 @@ namespace Core {
 
 struct Render_target::Impl
 {
-  int i = 0;
+  util::generic_id texture_id = 0;
 };
 
 
@@ -48,6 +48,8 @@ Render_target::Render_target(const uint32_t width,
     Resource_data::texture_data_set_property_name(texture_data, texture_data->size, "Render Target");
     Resource_data::texture_data_set_property_render_target(texture_data, texture_data->size, fbo);
     Resource_data::texture_data_set_property_texture(texture_data, texture_data->size, texture);
+    
+    m_impl->texture_id = texture_data->size;
     
     Resource_data::data_unlock(texture_data);
   }
@@ -89,6 +91,13 @@ Texture
 Render_target::get_texture() const
 {
   return Texture();
+}
+
+
+uint32_t
+Render_target::get_id() const
+{
+  return m_impl->texture_id;
 }
 
 

@@ -35,6 +35,8 @@ public:
                   operator bool() const; // alias for is_valid();
   
   
+  uint32_t        get_id() const;
+  
   
 private:
 

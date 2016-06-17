@@ -380,6 +380,28 @@ Camera::get_clear_flags() const
 
 
 void
+Camera::set_render_target(const Render_target target)
+{
+  auto cam_data = m_impl->world->data.camera_data;
+  
+  World_data::data_lock(cam_data);
+  
+  World_data::camera_data_set_property_texture_id(cam_data, m_impl->camera_id, target.get_id());
+  
+  World_data::data_unlock(cam_data);
+}
+
+
+Render_target
+Camera::get_render_target() const
+{
+  assert(false);
+  return Render_target();
+}
+
+
+
+void
 Camera::set_width(const uint32_t width)
 {
   if(!m_impl || !m_impl->camera_id)

@@ -33,6 +33,9 @@ public:
   void                  set_attached_entity(Entity_ref entity);
   Entity_ref            get_attached_entity() const;
   
+  void                  set_render_target(const Render_target target);
+  Render_target         get_render_target() const;
+  
   void                  set_priority(const uint32_t priority);
   uint32_t              get_priority() const;
   

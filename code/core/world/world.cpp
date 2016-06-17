@@ -39,6 +39,7 @@
 #include <systems/physics_engine/collision/aabb_overlap.hpp>
 #include <systems/renderer_material/material.hpp>
 #include <systems/renderer_material/material_renderer.hpp>
+#include <systems/renderer_post/post_process.hpp>
 #include <systems/physics_engine/collision/collision_pairs.hpp>
 #include <systems/physics_engine/physics_engine.hpp>
 #include <systems/physics_engine/collision/axis_collidable.hpp>
@@ -115,6 +116,7 @@ World::World(const Context &ctx, const World_setup setup)
   Debug_line_renderer::initialize();
   
   ::Material_renderer::initialize();
+  ::Post_renderer::initialize();
   
   m_impl->dt_timer.start();
 }
