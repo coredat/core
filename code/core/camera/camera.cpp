@@ -125,35 +125,52 @@ Camera::set_tags_to_render(const uint32_t tags)
   // Update data
   {
     auto cam_data = m_impl->world->data.camera_data;
+    const auto cam_id = m_impl->camera_id;
     
     World_data::data_lock(cam_data);
-    World_data::camera_data_set_property_tag(cam_data, m_impl->camera_id, tags);
+    
+    ::Camera::Camera_properties props;
+    World_data::camera_data_get_property_camera(cam_data, cam_id, &props);
+    
+    props.cull_mask = tags;
+    World_data::camera_data_set_property_camera(cam_data, cam_id, props);
+    
     World_data::data_unlock(cam_data);
   }
+}
+
+
+namespace
+{
+
+inline ::Camera::Camera_properties
+get_properties(World_data::Camera_data *cam_data, util::generic_id cam_id)
+{
+  ::Camera::Camera_properties props;
+
+  World_data::data_lock(cam_data);
+
+  World_data::camera_data_get_property_camera(cam_data, cam_id, &props);
+
+  World_data::data_unlock(cam_data);
+  
+  return props;
+}
+
+
 }
 
 
 uint32_t
 Camera::get_tags_to_render() const
 {
-  uint32_t tags = 0;
-
   if(!m_impl || !m_impl->camera_id)
   {
     LOG_ERROR(Error_string::object_has_no_valid_world());
-    return tags;
+    return 0;
   }
   
-  // Get data
-  {
-    auto cam_data = m_impl->world->data.camera_data;
-    
-    World_data::data_lock(cam_data);
-    World_data::camera_data_get_property_tag(cam_data, m_impl->camera_id, &tags);
-    World_data::data_unlock(cam_data);
-  }
-  
-  return tags;
+  return get_properties(m_impl->world->data.camera_data, m_impl->camera_id).cull_mask;
 }
 
 
@@ -279,27 +296,6 @@ Camera::get_priority() const
   }
   
   return priority;
-}
-
-
-namespace
-{
-
-inline ::Camera::Camera_properties
-get_properties(World_data::Camera_data *cam_data, util::generic_id cam_id)
-{
-  ::Camera::Camera_properties props;
-
-  World_data::data_lock(cam_data);
-
-  World_data::camera_data_get_property_camera(cam_data, cam_id, &props);
-
-  World_data::data_unlock(cam_data);
-  
-  return props;
-}
-
-
 }
 
 

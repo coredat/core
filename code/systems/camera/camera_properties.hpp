@@ -23,6 +23,8 @@ struct Camera_properties
   
   uint16_t  clear_flags       = Core::Camera_clear::color | Core::Camera_clear::depth;
   uint32_t  clear_color       = 0;
+  
+  uint32_t  cull_mask         = -1;
 }; // struct
 
 

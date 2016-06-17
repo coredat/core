@@ -19,12 +19,7 @@ data:
       type: uint32_t
       include: <stdint.h>
       return: value
-
-    - name: tag
-      type: uint32_t
-      return: value
-      include: <stdint.h>      
-
+      
     - name: texture_id
       generate_relationship: resources_textures
       type: util::generic_id

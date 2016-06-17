@@ -13,9 +13,12 @@ uint32_t
 material_renderer(const math::mat4 &view_mat,
                   const math::mat4 &proj_mat,
                   const Resource_data::Material_data *material_data,
+                  const uint32_t camera_cull_mask,                  
                   const Resource_data::Mesh_data *mesh_data,
                   const World_data::Renderer_mesh_data *mesh_renderer_data)
 {
+  LOG_TODO_ONCE("We are generating the draw calls for every camera! - Don't!")
+
   /*
     Create draw calls the way the renderer wants them.
     The draw calls should already be in an optimised order, from here on in
@@ -136,6 +139,7 @@ material_renderer(const math::mat4 &view_mat,
       
       Material_renderer::render(view_proj_mat,
                                 material_to_render,
+                                camera_cull_mask,
                                 &draw_calls[start],
                                 count);
     }

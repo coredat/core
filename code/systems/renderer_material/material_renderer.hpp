@@ -17,6 +17,7 @@ struct Draw_call
 {
   float               world_matrix[16];
   Graphics_api::Mesh  mesh;
+  uint32_t            cull_mask;
 };
 
 
@@ -44,6 +45,7 @@ reset();
 void
 render(const math::mat4 &view_proj_mat,
        const Material *material,
+       const uint32_t cull_mask,
        const Draw_call calls[],
        const uint32_t number_of_calls);
 

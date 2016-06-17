@@ -28,11 +28,10 @@ camera_data_init(Camera_data *data, const size_t size_hint)
   const size_t bytes_camera_id = sizeof(*data->camera_id) * size_hint + simd_buffer;
   const size_t bytes_property_entity_id = sizeof(*data->property_entity_id) * size_hint + simd_buffer;
   const size_t bytes_property_priority = sizeof(*data->property_priority) * size_hint + simd_buffer;
-  const size_t bytes_property_tag = sizeof(*data->property_tag) * size_hint + simd_buffer;
   const size_t bytes_property_texture_id = sizeof(*data->property_texture_id) * size_hint + simd_buffer;
   const size_t bytes_property_camera = sizeof(*data->property_camera) * size_hint + simd_buffer;
 
-  const size_t bytes_to_alloc = bytes_camera_id + bytes_property_entity_id + bytes_property_priority + bytes_property_tag + bytes_property_texture_id + bytes_property_camera;
+  const size_t bytes_to_alloc = bytes_camera_id + bytes_property_entity_id + bytes_property_priority + bytes_property_texture_id + bytes_property_camera;
 
   // Allocate some memory.
   util::memory_chunk *data_memory = const_cast<util::memory_chunk*>(&data->memory);
@@ -84,19 +83,6 @@ camera_data_init(Camera_data *data, const size_t size_hint)
       #endif
 
       byte_counter += bytes_property_priority;
-      assert(byte_counter <= bytes_to_alloc);
-    }
-    // Assign property_tag memory
-    {
-      void *offset = util::mem_offset(alloc_start, byte_counter);
-      void *aligned = util::mem_next_16byte_boundry(offset);
-
-      data->property_tag = reinterpret_cast<uint32_t*>(aligned);
-      #ifndef NDEBUG
-      memset(offset, 0, bytes_property_tag);
-      #endif
-
-      byte_counter += bytes_property_tag;
       assert(byte_counter <= bytes_to_alloc);
     }
     // Assign property_texture_id memory
@@ -206,7 +192,6 @@ camera_data_push_back(Camera_data *data, const util::generic_id key, size_t *out
   {
     memset(&data->property_entity_id[index], 0, sizeof(*data->property_entity_id));
     memset(&data->property_priority[index], 0, sizeof(*data->property_priority));
-    memset(&data->property_tag[index], 0, sizeof(*data->property_tag));
     memset(&data->property_texture_id[index], 0, sizeof(*data->property_texture_id));
     memset(&data->property_camera[index], 0, sizeof(*data->property_camera));
   }
@@ -236,7 +221,6 @@ camera_data_erase(Camera_data *data, const util::generic_id key)
     memmove(&data->camera_id[index_to_erase], &data->camera_id[start_index], size_to_end * sizeof(*data->camera_id));
     memmove(&data->property_entity_id[index_to_erase], &data->property_entity_id[start_index], size_to_end * sizeof(*data->property_entity_id));
     memmove(&data->property_priority[index_to_erase], &data->property_priority[start_index], size_to_end * sizeof(*data->property_priority));
-    memmove(&data->property_tag[index_to_erase], &data->property_tag[start_index], size_to_end * sizeof(*data->property_tag));
     memmove(&data->property_texture_id[index_to_erase], &data->property_texture_id[start_index], size_to_end * sizeof(*data->property_texture_id));
     memmove(&data->property_camera[index_to_erase], &data->property_camera[start_index], size_to_end * sizeof(*data->property_camera));
   }
@@ -283,7 +267,6 @@ camera_data_insert(Camera_data *data, const util::generic_id key, const size_t i
     memmove(&data->camera_id[dest_index], &data->camera_id[insert_index], size_to_end * sizeof(*data->camera_id));
     memmove(&data->property_entity_id[dest_index], &data->property_entity_id[insert_index], size_to_end * sizeof(*data->property_entity_id));
     memmove(&data->property_priority[dest_index], &data->property_priority[insert_index], size_to_end * sizeof(*data->property_priority));
-    memmove(&data->property_tag[dest_index], &data->property_tag[insert_index], size_to_end * sizeof(*data->property_tag));
     memmove(&data->property_texture_id[dest_index], &data->property_texture_id[insert_index], size_to_end * sizeof(*data->property_texture_id));
     memmove(&data->property_camera[dest_index], &data->property_camera[insert_index], size_to_end * sizeof(*data->property_camera));
 
@@ -395,52 +378,6 @@ camera_data_set_property_priority(Camera_data *data,  const util::generic_id key
   if(camera_data_exists(data, key, &index))
   {
     data->property_priority[index] = value;
-  }
-  else
-  {
-    LOG_ERROR(Error_string::entity_not_found());
-    assert(false);
-
-    return false;
-  }
-
-  return true;
-}
-
-
-
-
-bool
-camera_data_get_property_tag(const Camera_data *data, const util::generic_id key, uint32_t *out_value)
-{
-  size_t index;
-
-  if(camera_data_exists(data, key, &index))
-  {
-    *out_value = data->property_tag[index];
-  }
-  else
-  {
-    LOG_ERROR(Error_string::entity_not_found());
-    assert(false);
-
-    return false;
-  }
-
-  return true;
-}
-
-
-bool
-camera_data_set_property_tag(Camera_data *data,  const util::generic_id key, const uint32_t value)
-{
-  assert(data && key);
-
-  size_t index;
-
-  if(camera_data_exists(data, key, &index))
-  {
-    data->property_tag[index] = value;
   }
   else
   {

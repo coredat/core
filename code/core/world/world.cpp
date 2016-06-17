@@ -218,6 +218,7 @@ World::think()
       Rendering::material_renderer(cam->view,
                                    cam->proj,
                                    Resource_data::get_resources()->material_data,
+                                   0,
                                    Resource_data::get_resources()->mesh_data,
                                    world->mesh_data);
     }

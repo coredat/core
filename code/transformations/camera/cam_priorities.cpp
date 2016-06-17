@@ -73,6 +73,7 @@ calculate_camera_runs(const Camera::Camera_properties props[],
     out_runs[i].height      = props->viewport_height;
     out_runs[i].clear_color = props->clear_color;
     out_runs[i].clear_flags = props->clear_flags;
+    out_runs[i].cull_mask   = props->cull_mask;
   }
   
   // View matrix

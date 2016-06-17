@@ -59,6 +59,7 @@ reset()
 void
 render(const math::mat4 &view_proj_mat,
        const Material *material,
+       const uint32_t cull_mask,
        const Draw_call calls[],
        const uint32_t number_of_calls)
 {
@@ -111,6 +112,11 @@ render(const math::mat4 &view_proj_mat,
   for(uint32_t i = 0; i < number_of_calls; ++i)
   {
     const Draw_call &call = calls[i];
+    
+    if(!!(call.cull_mask & cull_mask))
+    {
+      continue;
+    }
     
     // Per Mesh Mats
     {
