@@ -15,6 +15,7 @@ material_renderer(const math::mat4 &view_mat,
                   const Resource_data::Material_data *material_data,
                   const uint32_t camera_cull_mask,                  
                   const Resource_data::Mesh_data *mesh_data,
+                  const World_data::Entity_data *entity_data,
                   const World_data::Renderer_mesh_data *mesh_renderer_data)
 {
   LOG_TODO_ONCE("We are generating the draw calls for every camera! - Don't!")
@@ -45,6 +46,11 @@ material_renderer(const math::mat4 &view_mat,
       const float *world = draw_call_data->world_matrix;
 
       memcpy(&draw_calls[i], world, sizeof(float) * 16);
+      
+      // Get cull mask.
+      // This isn't particularly nice. We should already have this data to save us looking for it.
+      const util::generic_id entity_id = mesh_renderer_data->renderer_mesh_id[i];
+      World_data::entity_data_get_property_tag(entity_data, entity_id, &draw_calls[i].cull_mask);
     }
   }
 

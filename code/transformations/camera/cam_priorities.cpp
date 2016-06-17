@@ -69,11 +69,11 @@ calculate_camera_runs(const Camera::Camera_properties props[],
     }
     
     
-    out_runs[i].width       = props->viewport_width;
-    out_runs[i].height      = props->viewport_height;
-    out_runs[i].clear_color = props->clear_color;
-    out_runs[i].clear_flags = props->clear_flags;
-    out_runs[i].cull_mask   = props->cull_mask;
+    out_runs[i].width       = prop->viewport_width;
+    out_runs[i].height      = prop->viewport_height;
+    out_runs[i].clear_color = prop->clear_color;
+    out_runs[i].clear_flags = prop->clear_flags;
+    out_runs[i].cull_mask   = prop->cull_mask;
   }
   
   // View matrix

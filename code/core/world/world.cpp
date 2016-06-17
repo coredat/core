@@ -218,8 +218,9 @@ World::think()
       Rendering::material_renderer(cam->view,
                                    cam->proj,
                                    Resource_data::get_resources()->material_data,
-                                   0,
+                                   cam->cull_mask,
                                    Resource_data::get_resources()->mesh_data,
+                                   world->entity,
                                    world->mesh_data);
     }
     

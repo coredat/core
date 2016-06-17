@@ -6,6 +6,7 @@
 #include <data/global_data/mesh_data.hpp>
 #include <data/world_data/renderer_mesh_data.hpp>
 #include <data/world_data/transform_data.hpp>
+#include <data/world_data/entity_data.hpp>
 #include <math/mat/mat_types.hpp>
 
 
@@ -30,6 +31,7 @@ material_renderer(const math::mat4 &view_mat,
                   const Resource_data::Material_data *material_data,
                   const uint32_t camera_cull_mask,
                   const Resource_data::Mesh_data *mesh_data,
+                  const World_data::Entity_data *entity_data,
                   const World_data::Renderer_mesh_data *render_mesh_data);
 
 

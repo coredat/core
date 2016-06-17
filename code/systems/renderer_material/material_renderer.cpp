@@ -113,7 +113,7 @@ render(const math::mat4 &view_proj_mat,
   {
     const Draw_call &call = calls[i];
     
-    if(!!(call.cull_mask & cull_mask))
+    if((cull_mask & call.cull_mask) == 0)
     {
       continue;
     }
