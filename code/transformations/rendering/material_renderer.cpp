@@ -1,9 +1,7 @@
 #include <transformations/rendering/material_renderer.hpp>
-#include <systems/renderer_material/material.hpp>
 #include <systems/renderer_material/material_renderer.hpp>
+#include <data/world_data/transform_data.hpp>
 #include <data/global_data/memory_data.hpp>
-#include <math/transform/transform.hpp>
-#include <utilities/generic_id.hpp>
 
 
 namespace Rendering {
@@ -81,6 +79,7 @@ material_renderer(const math::mat4 &view_mat,
   // Do we need to increase the number of runs?
   if(number_of_runs >= runs_to_alloc_for)
   {
+    LOG_INFO("Increasing memory for material runs.");
     runs_to_alloc_for = runs_to_alloc_for << 1;
   }
   

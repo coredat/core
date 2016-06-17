@@ -198,7 +198,6 @@ World::think()
     until its reset has been called.
   */
   
-  
   auto mesh_renderer_data = world->mesh_data;
   auto entity_data = world->entity;
   auto mesh_data = Resource_data::get_resources()->mesh_data;
@@ -230,7 +229,6 @@ World::think()
       World_data::entity_data_get_property_tag(entity_data, entity_id, &draw_calls[i].cull_mask);
     }
   }
-  
   
   for(uint32_t c = 0; c < number_of_cam_runs; ++c)
   {
@@ -264,8 +262,9 @@ World::think()
                                    draw_calls,
                                    mesh_renderer_data->size);
     }
-    
+   
   }
+
 
  /*
     Debug Menu

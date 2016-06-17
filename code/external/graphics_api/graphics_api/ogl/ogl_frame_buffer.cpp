@@ -45,7 +45,7 @@ frame_buffer_create(Frame_buffer *out_frame_buffer,
   const GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
   if (status != GL_FRAMEBUFFER_COMPLETE)
   {
-    assert(false); // this shoudl be logging of some sort.
+    assert(false); // this should be logging of some sort.
   }
 
   glBindFramebuffer(GL_FRAMEBUFFER, 0);

@@ -3,15 +3,9 @@
 
 
 #include <data/global_data/material_data.hpp>
-#include <data/global_data/mesh_data.hpp>
 #include <data/world_data/renderer_mesh_data.hpp>
-#include <data/world_data/transform_data.hpp>
-#include <data/world_data/entity_data.hpp>
 #include <systems/renderer_material/material.hpp>
 #include <systems/renderer_material/material_renderer.hpp>
-#include <data/global_data/memory_data.hpp>
-#include <math/transform/transform.hpp>
-#include <utilities/generic_id.hpp>
 #include <math/mat/mat_types.hpp>
 
 
@@ -25,9 +19,9 @@ namespace Rendering {
   \param proj_mat The projection matrix.
   \param material_data The global material data store.
   \param camera_cull_mask Is so certain meshes can be drawn by certain cameras.
-  \param mesh_data The global mesh data store.
   \param render_mesh_data The draw calls information.
-  \param transforms The entity transforms.
+  \param draw_calls The draws calls in material order
+  \param number_of_draw_calls The number of draw calls.
   \return Returns the number of draw calls it will execute.
 */
 uint32_t
