@@ -47,7 +47,7 @@ pixel_format_get_format(const GLenum format)
     return GL_RED;
   
   case(GL_RGB):
-    return GL_RGB:
+    return GL_RGB;
   
   case(GL_RGBA):
   case(GL_RGBA32F):
