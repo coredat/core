@@ -43,15 +43,27 @@ find_insert_point_based_on_priority(const uint32_t priority,
 
 
 void
-calculate_camera_runs(const Camera::Camera_properties props[],
+calculate_camera_runs(const World_data::Camera_data *cam_data,
+                      const Resource_data::Texture_data *tex_data,
                       const Core::Transform transforms[],
                       Cam_run out_runs[],
                       const uint32_t count)
 {
-  // For props
+  // Get the camera targets.
   for(uint32_t i = 0; i < count; ++i)
   {
-    const Camera::Camera_properties *prop = &props[i];
+    const auto tex_id = cam_data->property_texture_id[i];
+    
+    if(tex_id)
+    {
+      Resource_data::texture_data_get_property_render_target(tex_data, tex_id, &out_runs[i].fbo);
+    }
+  }
+
+  // Get the properties.
+  for(uint32_t i = 0; i < count; ++i)
+  {
+    const Camera::Camera_properties *prop = &cam_data->property_camera[i];
   
     if(prop->type == Core::Camera_type::perspective)
     {

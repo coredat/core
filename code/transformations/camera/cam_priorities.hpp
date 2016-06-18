@@ -3,8 +3,11 @@
 
 
 #include <systems/camera/camera_properties.hpp>
-#include <data/world_data/transform_data.hpp> // fwd dec
 #include <core/transform/transform_fwd.hpp>
+#include <data/world_data/transform_data.hpp> // fwd dec
+#include <data/world_data/camera_data.hpp> /// fwd dec
+#include <data/global_data/texture_data.hpp> // fwd dec
+#include <graphics_api/ogl/ogl_frame_buffer.hpp>
 #include <math/mat/mat4.hpp>
 #include <utilities/generic_id.hpp>
 #include <stdint.h>
@@ -27,6 +30,7 @@ find_insert_point_based_on_priority(const uint32_t priority,
 
 struct Cam_run
 {
+  Ogl::Frame_buffer fbo;
   math::mat4 view;
   math::mat4 proj;
   uint32_t width;
@@ -41,7 +45,8 @@ struct Cam_run
   All arrays must be at least the size of count.
 */
 void
-calculate_camera_runs(const Camera::Camera_properties props[],
+calculate_camera_runs(const World_data::Camera_data *cam_data,
+                      const Resource_data::Texture_data *texture_data,
                       const Core::Transform transforms[],
                       Cam_run out_runs[],
                       const uint32_t count);

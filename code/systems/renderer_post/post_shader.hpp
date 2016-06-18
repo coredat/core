@@ -3,7 +3,7 @@
 
 
 #include <graphics_api/ogl/ogl_shader.hpp>
-#include <graphics_api/ogl/ogl_shader_uniforms.hpp>
+#include <graphics_api/ogl/ogl_shader_uniform.hpp>
 #include <graphics_api/ogl/ogl_texture.hpp>
 
 
@@ -16,8 +16,6 @@ struct Post_shader
   
   Ogl::Texture map_01_id;
   Ogl::Uniform map_01;
-  
-  
 };
 
 

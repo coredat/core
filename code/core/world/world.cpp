@@ -185,7 +185,11 @@ World::think()
   {
     Core::Transform *cam_transforms = SCRATCH_ALIGNED_ALLOC(Core::Transform, cam_data->size);
     Camera_utils::get_camera_transforms(data->transform, cam_data->property_entity_id, cam_transforms, cam_data->size);
-    Camera_utils::calculate_camera_runs(cam_data->property_camera, cam_transforms, cam_runs, cam_data->size);
+    Camera_utils::calculate_camera_runs(cam_data,
+                                        Resource_data::get_resources()->texture_data,
+                                        cam_transforms,
+                                        cam_runs,
+                                        cam_data->size);
   }
   
   World_data::data_unlock(cam_data);
@@ -235,6 +239,16 @@ World::think()
   for(uint32_t c = 0; c < number_of_cam_runs; ++c)
   {
     const Camera_utils::Cam_run *cam = &cam_runs[c];
+    
+    // Set the target if we have one.
+    if(Ogl::frame_buffer_is_valid(&cam->fbo))
+    {
+      Ogl::frame_buffer_bind(&cam->fbo);
+    }
+    else
+    {
+      Ogl::frame_buffer_unbind();
+    }
   
     // Set the viewport
     {
