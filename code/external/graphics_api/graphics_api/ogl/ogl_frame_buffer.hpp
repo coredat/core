@@ -38,7 +38,7 @@ frame_buffer_create(Frame_buffer *out_frame_buffer,
   Bind a framebuffer.
 */
 void
-frame_buffer_bind(Frame_buffer *fbo);
+frame_buffer_bind(const Frame_buffer *fbo);
 
 
 /*
@@ -52,7 +52,7 @@ frame_buffer_unbind();
   Checks if the framebuffer is valid
 */
 bool
-frame_buffer_is_valid(Frame_buffer *fbo);
+frame_buffer_is_valid(const Frame_buffer *fbo);
 
 } // ns
 

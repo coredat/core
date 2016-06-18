@@ -54,7 +54,7 @@ frame_buffer_create(Frame_buffer *out_frame_buffer,
 
 
 void
-frame_buffer_bind(Frame_buffer *fbo)
+frame_buffer_bind(const Frame_buffer *fbo)
 {
   glBindFramebuffer(GL_FRAMEBUFFER, fbo->fbo_id);
 }
@@ -68,7 +68,7 @@ frame_buffer_unbind()
 
 
 bool
-frame_buffer_is_valid(Frame_buffer *fbo)
+frame_buffer_is_valid(const Frame_buffer *fbo)
 {
   glBindFramebuffer(GL_FRAMEBUFFER, fbo->fbo_id);
   const GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
