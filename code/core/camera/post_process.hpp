@@ -13,12 +13,16 @@ class Post_process
 {
 public:
 
-  explicit      Post_process();
+  explicit      Post_process(const char *name);
                 ~Post_process();
   
   void          set_shader(const Shader &shader);
+  Shader        get_shader() const;
   
   void          set_input_01(const Texture &texture);
+  Texture       get_input_01() const;
+  
+  uint32_t      get_id() const;
   
 private:
 

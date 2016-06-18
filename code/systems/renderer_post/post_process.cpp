@@ -1,6 +1,7 @@
 #include <systems/renderer_post/post_process.hpp>
 #include <graphics_api/mesh.hpp>
 #include <graphics_api/ogl/ogl_vertex_format.hpp>
+#include <graphics_api/ogl/ogl_texture_filtering.hpp>
 
 
 namespace
@@ -35,10 +36,15 @@ initialize()
   // Fullscreen quad.
   if(!Ogl::vertex_buffer_is_valid(post_vbo))
   {
-    constexpr float data[] = {
-      -1.f, +1.f, 0.f, 1.f,
-      +2.f, +1.f, 1.f, 0.f,
-      -1.f, -2.f, 0.f, 1.f,
+    constexpr float data[] =
+    {
+      -0.5f, +0.5f, 0.f, 1.f,
+      +0.5f, +0.5f, 1.f, 1.f,
+      -0.5f, -0.5f, 0.f, 0.f,
+      
+      -0.5f, -0.5f, 0.f, 0.f,
+      +0.5f, +0.5f, 1.f, 1.f,
+      +0.5f, -0.5f, 1.f, 0.f,
     };
     
     Ogl::vertex_buffer_load(&post_vbo, data, sizeof(data), 5 * 3, false);
@@ -48,8 +54,27 @@ initialize()
 
 
 void
-render()
+render(Post_renderer::Post_shader *shd)
 {
+  glDisable(GL_CULL_FACE);
+  // Bind the shader
+  Ogl::shader_bind(&shd->shader);
+  Ogl::vertex_buffer_bind(post_vbo, &post_vertex_format, &shd->shader);
+
+  {
+    // Move the filter selection into the material.
+    static Graphics_api::Texture_filtering filter =
+    {
+      Graphics_api::Filtering_mode::anisotropic,
+      Graphics_api::Wrap_mode::wrap,
+      Graphics_api::Wrap_mode::wrap
+    };
+    
+    Ogl::filtering_apply(filter);
+    Ogl::shader_uniforms_apply(shd->map_01, (void*)&shd->map_01_id.texture_id);
+  }
+  
+  glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
 

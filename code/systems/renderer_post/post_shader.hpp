@@ -20,7 +20,7 @@ struct Post_shader
 
 
 bool
-create_post_shader();
+create_post_shader(Post_shader *out_shader, const Ogl::Shader *shader);
 
 
 } // ns

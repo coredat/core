@@ -53,7 +53,6 @@ clear(const bool color, const bool depth)
 }
 
 
-
 /*!
   Checks glGetError, if an error is found it will push it out
   in the stream that was provided.

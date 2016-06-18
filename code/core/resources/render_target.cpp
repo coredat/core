@@ -90,7 +90,7 @@ Render_target::operator=(Render_target &&render_target)
 Texture
 Render_target::get_texture() const
 {
-  return Texture();
+  return Texture(m_impl->texture_id);
 }
 
 

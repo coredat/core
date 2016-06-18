@@ -6,14 +6,14 @@
 */
 
 
-#ifndef MATERIAL_DATA_INCLUDED_379B7833_302D_4FEA_8579_76CA1201B6D1
-#define MATERIAL_DATA_INCLUDED_379B7833_302D_4FEA_8579_76CA1201B6D1
+#ifndef POST_PROCESS_DATA_INCLUDED_52C164AB_94BD_4618_9B0B_49D5705E35BB
+#define POST_PROCESS_DATA_INCLUDED_52C164AB_94BD_4618_9B0B_49D5705E35BB
 
 
 #include <utilities/generic_id.hpp>
 #include <utilities/memory_pool.hpp>
 #include <stddef.h>
-#include <systems/renderer_material/material.hpp>
+#include <systems/renderer_post/post_shader.hpp>
 
 
 namespace Resource_data {
@@ -21,17 +21,16 @@ namespace Resource_data {
 
 
 /*!
-  \brief Auto-generated structure for Material_data
+  \brief Auto-generated structure for Post_process_data
 */
-struct Material_data
+struct Post_process_data
 {
   // Data Key
-  util::generic_id *material_id = nullptr;
+  util::generic_id *post_process_id = nullptr;
 
   // Properties
   char *property_name = nullptr;
-  Material_renderer::Material_id *property_material_hash_id = nullptr;
-  Material_renderer::Material *property_material = nullptr;
+  Post_renderer::Post_shader *property_post_shader = nullptr;
 
   // Size information
   size_t size = 0;
@@ -45,12 +44,12 @@ struct Material_data
 
 
 /*!
-  \brief Initialize the Material_data structure, this is will allocate the memory for the keys and properties. Function will take a lock.
+  \brief Initialize the Post_process_data structure, this is will allocate the memory for the keys and properties. Function will take a lock.
   \param data This structure to initialize.
   \param size_hint This helps the init function allocate the correct memory.
 */
 void
-material_data_init(Material_data *data, const size_t size_hint);
+post_process_data_init(Post_process_data *data, const size_t size_hint);
 
 
 /*!
@@ -58,7 +57,7 @@ material_data_init(Material_data *data, const size_t size_hint);
   \param data The data to free.
 */
 void
-material_data_free(Material_data *data);
+post_process_data_free(Post_process_data *data);
 
 
 /*!
@@ -66,7 +65,7 @@ material_data_free(Material_data *data);
   \param data The structure which to find the size.
 */
 size_t
-material_data_get_size(const Material_data *data);
+post_process_data_get_size(const Post_process_data *data);
 
 
 /*!
@@ -74,7 +73,7 @@ material_data_get_size(const Material_data *data);
   \param data The structure which to find the capacity.
 */
 size_t
-material_data_get_capacity(const Material_data *data);
+post_process_data_get_capacity(const Post_process_data *data);
 
 
 /*!
@@ -82,7 +81,7 @@ material_data_get_capacity(const Material_data *data);
   \param data The container to lock.
 */
 void
-data_lock(const Material_data *data);
+data_lock(const Post_process_data *data);
 
 
 /*!
@@ -90,7 +89,7 @@ data_lock(const Material_data *data);
   \param The container to unlock
 */
 void
-data_unlock(const Material_data *data);
+data_unlock(const Post_process_data *data);
 
 /*!
   \brief Push back a new element, increases the size by 1. (Does not take a lock).
@@ -100,7 +99,7 @@ data_unlock(const Material_data *data);
   \return Returns true if it was successful.
 */
 bool
-material_data_push_back(Material_data *data, const util::generic_id key, size_t *out_index = nullptr);
+post_process_data_push_back(Post_process_data *data, const util::generic_id key, size_t *out_index = nullptr);
 
 
 /*!
@@ -110,7 +109,7 @@ material_data_push_back(Material_data *data, const util::generic_id key, size_t 
   \return Returns true if it was successful.
 */
 bool
-material_data_erase(Material_data *data, const util::generic_id key);
+post_process_data_erase(Post_process_data *data, const util::generic_id key);
 
 
 /*!
@@ -121,7 +120,7 @@ material_data_erase(Material_data *data, const util::generic_id key);
   \return Returns true if a key was found.
 */
 bool
-material_data_exists(const Material_data *data, const util::generic_id key, size_t *out_index = nullptr);
+post_process_data_exists(const Post_process_data *data, const util::generic_id key, size_t *out_index = nullptr);
 
 
 /*!
@@ -132,7 +131,7 @@ material_data_exists(const Material_data *data, const util::generic_id key, size
   \return Returns true if the data was found.
 */
 bool
-material_data_get_property_name(const Material_data *data, const util::generic_id key, const char **value);
+post_process_data_get_property_name(const Post_process_data *data, const util::generic_id key, const char **value);
 
 
 /*!
@@ -143,7 +142,7 @@ material_data_get_property_name(const Material_data *data, const util::generic_i
   \return Returns true if the data was set.
 */
 bool
-material_data_set_property_name(Material_data *data,  const util::generic_id key, const char *value);
+post_process_data_set_property_name(Post_process_data *data,  const util::generic_id key, const char *value);
 
 
 /*!
@@ -154,62 +153,29 @@ material_data_set_property_name(Material_data *data,  const util::generic_id key
   \return Returns true if the data was found.
 */
 bool
-material_data_search_property_name(const Material_data *data, const char *value, util::generic_id *out_key = nullptr);
+post_process_data_search_property_name(const Post_process_data *data, const char *value, util::generic_id *out_key = nullptr);
 
 
 /*!
-  \brief Getter for property_material_hash_id.
+  \brief Getter for property_post_shader.
   \param data The container to get information from.
   \param key The key to search for.
   \param value The output value, which will be set if the key is found.
   \return Returns true if the data was found.
 */
 bool
-material_data_get_property_material_hash_id(const Material_data *data, const util::generic_id key, Material_renderer::Material_id *value);
+post_process_data_get_property_post_shader(const Post_process_data *data, const util::generic_id key, Post_renderer::Post_shader **value);
 
 
 /*!
-  \brief Setter for property_material_hash_id.
+  \brief Setter for property_post_shader.
   \param data The container to update.
   \param key The key to search for.
   \param value The new value of the data.
   \return Returns true if the data was set.
 */
 bool
-material_data_set_property_material_hash_id(Material_data *data,  const util::generic_id key, const Material_renderer::Material_id value);
-
-
-/*!
-  \brief Searches for a given value.
-  \param data The container to search.
-  \param value The value which to search for.
-  \param out_key Optional the key for that value.
-  \return Returns true if the data was found.
-*/
-bool
-material_data_search_property_material_hash_id(const Material_data *data, const Material_renderer::Material_id value, util::generic_id *out_key = nullptr);
-
-
-/*!
-  \brief Getter for property_material.
-  \param data The container to get information from.
-  \param key The key to search for.
-  \param value The output value, which will be set if the key is found.
-  \return Returns true if the data was found.
-*/
-bool
-material_data_get_property_material(const Material_data *data, const util::generic_id key, Material_renderer::Material **value);
-
-
-/*!
-  \brief Setter for property_material.
-  \param data The container to update.
-  \param key The key to search for.
-  \param value The new value of the data.
-  \return Returns true if the data was set.
-*/
-bool
-material_data_set_property_material(Material_data *data,  const util::generic_id key, const Material_renderer::Material *value);
+post_process_data_set_property_post_shader(Post_process_data *data,  const util::generic_id key, const Post_renderer::Post_shader *value);
 
 
 } // ns

@@ -70,6 +70,11 @@ frame_buffer_unbind()
 bool
 frame_buffer_is_valid(const Frame_buffer *fbo)
 {
+  if(fbo->fbo_id == 0)
+  {
+    return false;
+  }
+
   glBindFramebuffer(GL_FRAMEBUFFER, fbo->fbo_id);
   const GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
   glBindFramebuffer(GL_FRAMEBUFFER, 0);

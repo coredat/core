@@ -7,6 +7,7 @@ namespace Resource_data {
 
 struct Texture_data;
 struct Shader_data;
+struct Post_process_data;
 struct Mesh_data;
 struct Material_data;
 

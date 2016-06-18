@@ -244,18 +244,27 @@ World::think()
     if(Ogl::frame_buffer_is_valid(&cam->fbo))
     {
       Ogl::frame_buffer_bind(&cam->fbo);
+      
+      LOG_TODO_ONCE("Move this to graphcis api somewhere.");
+      
+      const GLsizei width = cam->fbo.color_buffer[0].width;
+      const GLsizei height = cam->fbo.color_buffer[0].height;
+      
+      glViewport(0, 0, width, height);
     }
     else
     {
       Ogl::frame_buffer_unbind();
-    }
-  
-    // Set the viewport
-    {
+      
       LOG_TODO_ONCE("Move this to graphcis api somewhere.");
-      glViewport(0, 0, cam->width, cam->height);
+      
+      const GLsizei width = cam->width;
+      const GLsizei height = cam->height;
+      
+      glViewport(0, 0, width, height);
+      
     }
-  
+    
     // Clear the target
     {
       const Core::Color clear_color(cam->clear_color);
@@ -269,6 +278,7 @@ World::think()
     }
     
     // Material Renderer
+    if(!cam->post_process_id)
     {
       Rendering::material_renderer(cam->view,
                                    cam->proj,
@@ -277,6 +287,15 @@ World::think()
                                    world->mesh_data,
                                    draw_calls,
                                    mesh_renderer_data->size);
+    }
+    else
+    // Post process rendering
+    {
+      // Get post process details
+      Post_renderer::Post_shader *post_shd;
+      Resource_data::post_process_data_get_property_post_shader(Resource_data::get_resources()->post_data, cam->post_process_id, &post_shd);
+      
+      Post_renderer::render(post_shd);
     }
    
   }

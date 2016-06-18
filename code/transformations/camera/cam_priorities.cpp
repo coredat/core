@@ -98,6 +98,12 @@ calculate_camera_runs(const World_data::Camera_data *cam_data,
                                          math::vec3_add(trans->get_position(), trans->get_forward()),
                                          trans->get_up());
   }
+  
+  // Post process id
+  for(uint32_t i = 0; i < count; ++i)
+  {
+    out_runs[i].post_process_id = cam_data->property_post_process_id[i];
+  }
 }
 
 

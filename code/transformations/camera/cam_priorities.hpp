@@ -38,6 +38,7 @@ struct Cam_run
   uint32_t clear_color;
   uint32_t clear_flags;
   uint32_t cull_mask;
+  uint32_t post_process_id;
 };
 
 /*

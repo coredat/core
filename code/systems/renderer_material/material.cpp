@@ -36,7 +36,6 @@ create_material(Material *out_mat, const Ogl::Shader *shader)
   {
     Ogl::shader_uniforms_get_uniform_index(&out_mat->color, &uniforms, "uni_color");
   }
-  
 }
 
 

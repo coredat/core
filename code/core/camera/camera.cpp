@@ -12,6 +12,7 @@
 #include <data/world_data/world_pools.hpp>
 #include <data/world_data/camera_data.hpp>
 #include <systems/camera/camera_properties.hpp>
+#include <systems/renderer_post/post_shader.hpp>
 #include <common/error_strings.hpp>
 #include <math/mat/mat4.hpp>
 #include <utilities/logging.hpp>
@@ -177,6 +178,26 @@ Camera::get_tags_to_render() const
 void
 Camera::set_post_process(const Core::Post_process &post)
 {
+  if(!m_impl || !m_impl->camera_id)
+  {
+    LOG_ERROR(Error_string::object_has_no_valid_world());
+    return;
+  }
+  
+  // Get
+  {
+    auto cam_data = m_impl->world->data.camera_data;
+    
+    World_data::data_lock(cam_data);
+    
+    Post_renderer::Post_shader post_shader;
+//    Post_renderer::create_post_shader();
+    
+    World_data::camera_data_set_property_post_process_id(cam_data, m_impl->camera_id, post.get_id());
+    
+    
+    World_data::data_unlock(cam_data);
+  }
 }
 
 
@@ -259,6 +280,12 @@ Camera::set_priority(const uint32_t priority)
     util::generic_id attached_entity;
     World_data::camera_data_get_property_entity_id(cam_data, cam_id, &attached_entity);
     
+    util::generic_id texture_id;
+    World_data::camera_data_get_property_texture_id(cam_data, cam_id, &texture_id);
+    
+    util::generic_id post_id;
+    World_data::camera_data_get_property_post_process_id(cam_data, cam_id, &post_id);
+    
     // Remove old data.
     World_data::camera_data_erase(cam_data, cam_id);
   
@@ -269,6 +296,8 @@ Camera::set_priority(const uint32_t priority)
       World_data::camera_data_set_property_camera(cam_data, cam_id, props);
       World_data::camera_data_set_property_entity_id(cam_data, cam_id, attached_entity);
       World_data::camera_data_set_property_priority(cam_data, cam_id, priority);
+      World_data::camera_data_set_property_post_process_id(cam_data, cam_id, post_id);
+      World_data::camera_data_set_property_texture_id(cam_data, cam_id, texture_id);
     }
     else
     {
@@ -380,7 +409,7 @@ Camera::get_clear_flags() const
 
 
 void
-Camera::set_render_target(const Render_target target)
+Camera::set_render_target(const Render_target &target)
 {
   auto cam_data = m_impl->world->data.camera_data;
   

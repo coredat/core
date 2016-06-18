@@ -7,6 +7,7 @@
 #include "material_data.hpp"
 #include "mesh_data.hpp"
 #include "texture_data.hpp"
+#include "post_process_data.hpp"
 
 
 namespace Resource_data {
@@ -18,6 +19,7 @@ struct Resources
   Material_data *material_data  = nullptr;
   Mesh_data     *mesh_data      = nullptr;
   Texture_data  *texture_data   = nullptr;
+  Post_process_data *post_data  = nullptr;
 
   Audio_pool    *audio_pool     = nullptr;
   

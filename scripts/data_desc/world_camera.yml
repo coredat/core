@@ -25,10 +25,10 @@ data:
       include: <utilities/generic_id.hpp>
       return: value
 
-    - name: post_shader
-      type: Post_renderer::Post_shader
-      include: <systems/renderer_post/post_shader.hpp>
-      return: pointer
+    - name: post_process_id
+      type: util::generic_id
+      include: <utilities/generic_id.hpp>
+      return: value
 
     - name: camera
       type: Camera::Camera_properties

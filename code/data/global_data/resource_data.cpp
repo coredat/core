@@ -37,6 +37,10 @@ resources_init()
   static Material_data materials;
   material_data_init(&materials, 2048);
   data->material_data = &materials;
+  
+  static Post_process_data post_data;
+  post_process_data_init(&post_data, 16);
+  data->post_data = &post_data;
 }
 
 

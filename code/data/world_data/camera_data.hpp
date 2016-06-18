@@ -6,15 +6,14 @@
 */
 
 
-#ifndef CAMERA_DATA_INCLUDED_168F84EA_7C82_4790_8744_2726DAEA7101
-#define CAMERA_DATA_INCLUDED_168F84EA_7C82_4790_8744_2726DAEA7101
+#ifndef CAMERA_DATA_INCLUDED_4F44E231_791A_4752_BD5C_8927519F2DE7
+#define CAMERA_DATA_INCLUDED_4F44E231_791A_4752_BD5C_8927519F2DE7
 
 
 #include <utilities/generic_id.hpp>
 #include <utilities/memory_pool.hpp>
 #include <stddef.h>
 #include <stdint.h>
-#include <systems/renderer_post/post_shader.hpp>
 #include <systems/camera/camera_properties.hpp>
 
 
@@ -34,7 +33,7 @@ struct Camera_data
   util::generic_id *property_entity_id = nullptr;
   uint32_t *property_priority = nullptr;
   util::generic_id *property_texture_id = nullptr;
-  Post_renderer::Post_shader *property_post_shader = nullptr;
+  util::generic_id *property_post_process_id = nullptr;
   Camera::Camera_properties *property_camera = nullptr;
 
   // Size information
@@ -206,25 +205,25 @@ camera_data_set_property_texture_id(Camera_data *data,  const util::generic_id k
 
 
 /*!
-  \brief Getter for property_post_shader.
+  \brief Getter for property_post_process_id.
   \param data The container to get information from.
   \param key The key to search for.
   \param value The output value, which will be set if the key is found.
   \return Returns true if the data was found.
 */
 bool
-camera_data_get_property_post_shader(const Camera_data *data, const util::generic_id key, Post_renderer::Post_shader **value);
+camera_data_get_property_post_process_id(const Camera_data *data, const util::generic_id key, util::generic_id *value);
 
 
 /*!
-  \brief Setter for property_post_shader.
+  \brief Setter for property_post_process_id.
   \param data The container to update.
   \param key The key to search for.
   \param value The new value of the data.
   \return Returns true if the data was set.
 */
 bool
-camera_data_set_property_post_shader(Camera_data *data,  const util::generic_id key, const Post_renderer::Post_shader *value);
+camera_data_set_property_post_process_id(Camera_data *data,  const util::generic_id key, const util::generic_id value);
 
 
 /*!

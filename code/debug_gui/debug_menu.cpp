@@ -6,6 +6,7 @@
 #include <debug_gui/mesh_list.hpp>
 #include <debug_gui/material_list.hpp>
 #include <debug_gui/mesh_draw_calls.hpp>
+#include <debug_gui/post_process_list.hpp>
 
 #include <data/global_data/resource_data.hpp>
 #include <data/global_data/memory_data.hpp>
@@ -26,6 +27,7 @@ namespace
   bool show_shader_list   = false;
   bool show_memory_view   = false;
   bool show_material_list = false;
+  bool show_post_list     = false;
 }
 
 void
@@ -47,6 +49,7 @@ display_global_data_menu()
       ImGui::MenuItem("Shaders",  nullptr, &show_shader_list);
       ImGui::MenuItem("Memory",   nullptr, &show_memory_view);
       ImGui::MenuItem("Material", nullptr, &show_material_list);
+      ImGui::MenuItem("Post",     nullptr, &show_post_list);
       
       ImGui::EndMenu();
     }
@@ -59,6 +62,7 @@ display_global_data_menu()
   if(show_shader_list)   { display_shader_list(global_data->shader_data);     }
   if(show_memory_view)   { display_memory_useage(Memory::_get_pool());        }
   if(show_material_list) { display_material_list(global_data->material_data); }
+  if(show_post_list)     { display_post_process_list(global_data->post_data); }
 }
 
 
