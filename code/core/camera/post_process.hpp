@@ -21,6 +21,9 @@ public:
   
   void          set_input_01(const Texture &texture);
   Texture       get_input_01() const;
+
+  void          set_input_02(const Texture &texture);
+  Texture       get_input_02() const;
   
   uint32_t      get_id() const;
   

@@ -253,12 +253,6 @@ World::think()
       const GLsizei height = cam->fbo.color_buffer[0].height;
       
       glViewport(0, 0, width, height);
-      
-      auto err = glGetError();
-      if(err)
-      {
-        int j = 0;
-      }
     }
     else
     {
@@ -270,13 +264,6 @@ World::think()
       const GLsizei height = cam->height;
       
       glViewport(0, 0, width, height);
-      
-        auto err = glGetError();
-      if(err)
-      {
-        int j = 0;
-      }
-      
     }
     
     // Clear the target
@@ -291,12 +278,6 @@ World::think()
         
         Graphics_api::clear_color_set(red, green, blue);
         Graphics_api::clear(cam->clear_flags);
-        
-        auto err = glGetError();
-        if(err)
-        {
-          int j = 0;
-        }
       }
     }
     
