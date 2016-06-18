@@ -38,13 +38,13 @@ initialize()
   {
     constexpr float data[] =
     {
-      -0.5f, +0.5f, 0.f, 1.f,
-      +0.5f, +0.5f, 1.f, 1.f,
-      -0.5f, -0.5f, 0.f, 0.f,
+      -1.f, +1.f, 0.f, 1.f,
+      -1.f, -1.f, 0.f, 0.f,
+      +1.f, +1.f, 1.f, 1.f,
       
-      -0.5f, -0.5f, 0.f, 0.f,
-      +0.5f, +0.5f, 1.f, 1.f,
-      +0.5f, -0.5f, 1.f, 0.f,
+      -1.f, -1.f, 0.f, 0.f,
+      +1.f, -1.f, 1.f, 0.f,
+      +1.f, +1.f, 1.f, 1.f,
     };
     
     Ogl::vertex_buffer_load(&post_vbo, data, sizeof(data), 5 * 3, false);
@@ -56,7 +56,7 @@ initialize()
 void
 render(Post_renderer::Post_shader *shd)
 {
-  glDisable(GL_CULL_FACE);
+//  glDisable(GL_CULL_FACE);
   // Bind the shader
   Ogl::shader_bind(&shd->shader);
   Ogl::vertex_buffer_bind(post_vbo, &post_vertex_format, &shd->shader);

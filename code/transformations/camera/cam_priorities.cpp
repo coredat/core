@@ -58,8 +58,12 @@ calculate_camera_runs(const World_data::Camera_data *cam_data,
     {
       Resource_data::texture_data_get_property_render_target(tex_data, tex_id, &out_runs[i].fbo);
     }
+    else
+    {
+      out_runs[i].fbo = Ogl::Frame_buffer{};
+    }
   }
-
+  
   // Get the properties.
   for(uint32_t i = 0; i < count; ++i)
   {

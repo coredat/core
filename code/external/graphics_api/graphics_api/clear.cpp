@@ -8,7 +8,7 @@ namespace Graphics_api {
 void
 clear(const uint32_t flags)
 {
-  Ogl::clear(flags & Clear_flag::color, flags & Clear_flag::depth);
+  Ogl::clear(!!(flags & Clear_flag::color), !!(flags & Clear_flag::depth));
 }
 
 

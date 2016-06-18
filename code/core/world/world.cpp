@@ -203,10 +203,11 @@ World::think()
     the only optimisation you can expect is the rendering remember the last thing bound,
     until its reset has been called.
   */
+
   
   auto mesh_renderer_data = world->mesh_data;
-  auto entity_data = world->entity;
-  auto mesh_data = Resource_data::get_resources()->mesh_data;
+  auto entity_data        = world->entity;
+  auto mesh_data          = Resource_data::get_resources()->mesh_data;
   
   ::Material_renderer::Draw_call *draw_calls = SCRATCH_ALIGNED_ALLOC(::Material_renderer::Draw_call, mesh_renderer_data->size);
   {
@@ -244,6 +245,7 @@ World::think()
     if(Ogl::frame_buffer_is_valid(&cam->fbo))
     {
       Ogl::frame_buffer_bind(&cam->fbo);
+  
       
       LOG_TODO_ONCE("Move this to graphcis api somewhere.");
       
@@ -251,6 +253,12 @@ World::think()
       const GLsizei height = cam->fbo.color_buffer[0].height;
       
       glViewport(0, 0, width, height);
+      
+      auto err = glGetError();
+      if(err)
+      {
+        int j = 0;
+      }
     }
     else
     {
@@ -263,19 +271,35 @@ World::think()
       
       glViewport(0, 0, width, height);
       
+        auto err = glGetError();
+      if(err)
+      {
+        int j = 0;
+      }
+      
     }
     
     // Clear the target
     {
-      const Core::Color clear_color(cam->clear_color);
-      
-      const float red   = Core::Color_utils::get_red_f(clear_color);
-      const float green = Core::Color_utils::get_green_f(clear_color);
-      const float blue  = Core::Color_utils::get_blue_f(clear_color);
-      
-      Graphics_api::clear_color_set(red, green, blue);
-      Graphics_api::clear(cam->clear_flags);
+      if(cam->clear_flags)
+      {    
+        const Core::Color clear_color(cam->clear_color);
+        
+        const float red   = Core::Color_utils::get_red_f(clear_color);
+        const float green = Core::Color_utils::get_green_f(clear_color);
+        const float blue  = Core::Color_utils::get_blue_f(clear_color);
+        
+        Graphics_api::clear_color_set(red, green, blue);
+        Graphics_api::clear(cam->clear_flags);
+        
+        auto err = glGetError();
+        if(err)
+        {
+          int j = 0;
+        }
+      }
     }
+    
     
     // Material Renderer
     if(!cam->post_process_id)
@@ -293,11 +317,11 @@ World::think()
     {
       // Get post process details
       Post_renderer::Post_shader *post_shd;
-      Resource_data::post_process_data_get_property_post_shader(Resource_data::get_resources()->post_data, cam->post_process_id, &post_shd);
-      
+      Resource_data::post_process_data_get_property_post_shader(Resource_data::get_resources()->post_data,
+                                                                cam->post_process_id,
+                                                                &post_shd);
       Post_renderer::render(post_shd);
     }
-   
   }
 
 

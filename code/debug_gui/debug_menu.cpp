@@ -7,6 +7,7 @@
 #include <debug_gui/material_list.hpp>
 #include <debug_gui/mesh_draw_calls.hpp>
 #include <debug_gui/post_process_list.hpp>
+#include <debug_gui/camera_list.hpp>
 
 #include <data/global_data/resource_data.hpp>
 #include <data/global_data/memory_data.hpp>
@@ -68,8 +69,9 @@ display_global_data_menu()
 
 namespace
 {
-  bool show_entity_list = false;
+  bool show_entity_list     = false;
   bool show_mesh_draw_calls = false;
+  bool show_camera_list     = false;
 }
 
 
@@ -85,8 +87,9 @@ display_world_data_menu(World_data::World *world_data)
   {
     if (ImGui::BeginMenu("World Data"))
     {
-      ImGui::MenuItem("Entities", nullptr, &show_entity_list);
-      ImGui::MenuItem("Mesh Draw Calls", nullptr, &show_mesh_draw_calls);
+      ImGui::MenuItem("Entities",         nullptr, &show_entity_list);
+      ImGui::MenuItem("Mesh Draw Calls",  nullptr, &show_mesh_draw_calls);
+      ImGui::MenuItem("Cameras",          nullptr, &show_camera_list);
       ImGui::EndMenu();
     }
     
@@ -95,6 +98,7 @@ display_world_data_menu(World_data::World *world_data)
   
   if(show_entity_list)     { display_entity_list(world_data->entity);         }
   if(show_mesh_draw_calls) { display_mesh_draw_calls(world_data->mesh_data);  }
+  if(show_camera_list)     { display_camera_data(world_data->camera_data);    }
 }
 
 
