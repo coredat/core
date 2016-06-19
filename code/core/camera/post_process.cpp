@@ -121,6 +121,28 @@ Post_process::set_input_02(const Texture &core_texture)
 }
 
 
+void
+Post_process::set_input_03(const Texture &core_texture)
+{
+  auto post_data = Resource_data::get_resources()->post_data;
+  auto tex_data = Resource_data::get_resources()->texture_data;
+  
+  {
+    Resource_data::data_lock(post_data);
+    Resource_data::data_lock(tex_data);
+    
+    Post_renderer::Post_shader *post_shd;
+    Resource_data::post_process_data_get_property_post_shader(post_data, m_impl->id, &post_shd);
+    
+    Ogl::Texture texture;
+    Resource_data::texture_data_get_property_texture(tex_data, core_texture.get_id(), &texture);
+    post_shd->map_03_id = texture;
+    
+    Resource_data::data_unlock(tex_data);
+    Resource_data::data_unlock(post_data);
+  }
+}
+
 
 uint32_t
 Post_process::get_id() const

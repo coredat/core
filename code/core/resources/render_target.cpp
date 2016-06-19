@@ -47,7 +47,7 @@ Render_target::Render_target(const uint32_t width,
     Resource_data::texture_data_push_back(texture_data, texture_data->size + 1);
     Resource_data::texture_data_set_property_name(texture_data, texture_data->size, "Render Target");
     Resource_data::texture_data_set_property_render_target(texture_data, texture_data->size, fbo);
-    Resource_data::texture_data_set_property_texture(texture_data, texture_data->size, texture);
+    Resource_data::texture_data_set_property_texture(texture_data, texture_data->size, fbo.color_buffer[0]);
     
     m_impl->texture_id = texture_data->size;
     

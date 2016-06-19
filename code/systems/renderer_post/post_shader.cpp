@@ -20,6 +20,8 @@ create_post_shader(Post_shader *out_shader, const Ogl::Shader *shader)
     Ogl::shader_uniforms_get_uniform_index(&out_shader->map_01, &uniforms, "uni_map_01");
     
     Ogl::shader_uniforms_get_uniform_index(&out_shader->map_02, &uniforms, "uni_map_02");
+    
+    Ogl::shader_uniforms_get_uniform_index(&out_shader->map_03, &uniforms, "uni_map_03");
   }
 }
 
