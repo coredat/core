@@ -8,6 +8,7 @@
 #include <debug_gui/mesh_draw_calls.hpp>
 #include <debug_gui/post_process_list.hpp>
 #include <debug_gui/camera_list.hpp>
+#include <debug_gui/stats_overlay.hpp>
 
 #include <data/global_data/resource_data.hpp>
 #include <data/global_data/memory_data.hpp>
@@ -72,11 +73,15 @@ namespace
   bool show_entity_list     = false;
   bool show_mesh_draw_calls = false;
   bool show_camera_list     = false;
+  bool show_world_stats     = false;
 }
 
 
 void
-display_world_data_menu(World_data::World *world_data)
+display_world_data_menu(World_data::World *world_data,
+                        const float dt,
+                        const uint32_t draw_calls,
+                        const uint32_t render_passes)
 {
   if(!world_data)
   {
@@ -90,15 +95,17 @@ display_world_data_menu(World_data::World *world_data)
       ImGui::MenuItem("Entities",         nullptr, &show_entity_list);
       ImGui::MenuItem("Mesh Draw Calls",  nullptr, &show_mesh_draw_calls);
       ImGui::MenuItem("Cameras",          nullptr, &show_camera_list);
+      ImGui::MenuItem("Stats",            nullptr, &show_world_stats);
       ImGui::EndMenu();
     }
     
     ImGui::EndMainMenuBar();
   }
   
-  if(show_entity_list)     { display_entity_list(world_data->entity);         }
-  if(show_mesh_draw_calls) { display_mesh_draw_calls(world_data->mesh_data);  }
-  if(show_camera_list)     { display_camera_data(world_data->camera_data);    }
+  if(show_entity_list)     { display_entity_list(world_data->entity);             }
+  if(show_mesh_draw_calls) { display_mesh_draw_calls(world_data->mesh_data);      }
+  if(show_camera_list)     { display_camera_data(world_data->camera_data);        }
+  if(show_world_stats)     { display_world_stats(dt, draw_calls, render_passes);  }
 }
 
 

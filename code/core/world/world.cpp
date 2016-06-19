@@ -237,6 +237,8 @@ World::think()
     }
   }
   
+  uint32_t number_of_draw_calls = 0; // For debugging.
+  
   for(uint32_t c = 0; c < number_of_cam_runs; ++c)
   {
     const Camera_utils::Cam_run *cam = &cam_runs[c];
@@ -285,13 +287,13 @@ World::think()
     // Material Renderer
     if(!cam->post_process_id)
     {
-      Rendering::material_renderer(cam->view,
-                                   cam->proj,
-                                   Resource_data::get_resources()->material_data,
-                                   cam->cull_mask,
-                                   world->mesh_data,
-                                   draw_calls,
-                                   mesh_renderer_data->size);
+      number_of_draw_calls += Rendering::material_renderer(cam->view,
+                                                           cam->proj,
+                                                           Resource_data::get_resources()->material_data,
+                                                           cam->cull_mask,
+                                                           world->mesh_data,
+                                                           draw_calls,
+                                                           mesh_renderer_data->size);
     }
     else
     // Post process rendering
@@ -302,6 +304,8 @@ World::think()
                                                                 cam->post_process_id,
                                                                 &post_shd);
       Post_renderer::render(post_shd);
+      
+      ++number_of_draw_calls;
     }
   }
 
@@ -314,7 +318,7 @@ World::think()
   #ifndef NDEBUG
   {
     Debug_menu::display_global_data_menu();
-    Debug_menu::display_world_data_menu(&m_impl->world_data->data);
+    Debug_menu::display_world_data_menu(&m_impl->world_data->data, m_impl->dt, number_of_draw_calls, number_of_cam_runs);
   }
   #endif
 }

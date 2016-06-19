@@ -4,6 +4,7 @@
 
 #include <data/world_data/world.hpp>
 #include <core/world/world_fwd.hpp>
+#include <stdint.h>
 
 
 namespace Debug_menu {
@@ -14,7 +15,10 @@ display_global_data_menu();
 
 
 void
-display_world_data_menu(World_data::World *world_data);
+display_world_data_menu(World_data::World *world_data,
+                        const float dt,
+                        const uint32_t draw_calls,
+                        const uint32_t render_passes);
 
 
 } // ns
