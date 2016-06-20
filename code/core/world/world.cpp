@@ -1,66 +1,46 @@
 #include <core/world/world.hpp>
-#include <core/world/world_setup.hpp>
 #include <core/context/context.hpp>
-#include <core/memory/memory.hpp>
 #include <core/physics/collision_pair.hpp>
-#include <core/entity/entity.hpp>
-#include <core/entity/entity_ref.hpp>
 #include <core/world/detail/world_detail.hpp>
-#include <core/renderer/material_renderer.hpp>
-#include <core/color/color.hpp>
-#include <core/color/color_utils.hpp>
-#include <core/camera/camera_properties.hpp>
 #include <core/transform/transform.hpp>
 
-#include <graphics_api/initialize.hpp>
-#include <graphics_api/clear.hpp>
-#include <graphics_api/mesh.hpp>
+#include <debug_gui/debug_menu.hpp>
 
 #include <renderer/simple_renderer/simple_renderer_node.hpp>
 #include <renderer/simple_renderer/simple_renderer.hpp>
 #include <renderer/debug_line_renderer/debug_line_renderer_node.hpp>
 #include <renderer/debug_line_renderer/debug_line_renderer.hpp>
-#include <renderer/renderer.hpp>
-#include <systems/renderer_material/material_renderer.hpp>
 
 #include <data/world_data/physics_data.hpp>
-#include <data/global_data/resource_data.hpp>
 #include <data/world_data/transform_data.hpp>
 #include <data/world_data/entity_data.hpp>
+#include <data/world_data/world_data.hpp>
 #include <data/global_data/resource_data.hpp>
 #include <data/global_data/memory_data.hpp>
-#include <data/world_data/world_data.hpp>
-
-#include <common/error_strings.hpp>
-#include <debug_gui/debug_menu.hpp>
 
 #include <systems/physics_engine/broadphase/sweep.hpp>
 #include <systems/physics_engine/broadphase/prune.hpp>
 #include <systems/physics_engine/collision/aabb_overlap.hpp>
+#include <systems/physics_engine/collision/collision_pairs.hpp>
+#include <systems/physics_engine/collision/axis_collidable.hpp>
+
 #include <systems/renderer_material/material.hpp>
 #include <systems/renderer_material/material_renderer.hpp>
 #include <systems/renderer_post/post_process.hpp>
-#include <systems/physics_engine/collision/collision_pairs.hpp>
-#include <systems/physics_engine/physics_engine.hpp>
-#include <systems/physics_engine/collision/axis_collidable.hpp>
-#include <systems/transform/transformations.hpp>
-
-#include <3rdparty/imgui/imgui.h>
-#include <3rdparty/imgui/imgui_impl_sdl_gl3.h>
-
-#include <utilities/timer.hpp>
-#include <utilities/logging.hpp>
-#include <utilities/generic_id.hpp>
-#include <utilities/conversion.hpp>
-#include <math/math.hpp> // remove
-
-#include <vector> // remove
-#include <string>
+#include <systems/renderer_material/material_renderer.hpp>
 
 #include <transformations/physics/overlapping_aabb.hpp>
 #include <transformations/rendering/material_renderer.hpp>
 #include <transformations/camera/cam_priorities.hpp>
 #include <transformations/rendering/render_scene.hpp>
+
+#include <utilities/timer.hpp>
+#include <utilities/logging.hpp>
+#include <utilities/generic_id.hpp>
+#include <utilities/conversion.hpp>
+
+#include <graphics_api/initialize.hpp>
+#include <graphics_api/clear.hpp>
 
 
 namespace Core {
@@ -78,8 +58,6 @@ struct World::Impl
 World::World(const Context &ctx, const World_setup setup)
 : m_impl(new World::Impl)
 {
-  Core::Memory::initialize(util::convert_mb_to_bytes(128));
-
   LOG_TODO("Remove static data stores");
   
   const uint32_t entity_hint = setup.entity_pool_size;
@@ -182,6 +160,10 @@ World::think()
     --
     For each camera we need a to create a camera run.
     Will will render all the things it is interested in.
+    
+    TODO
+    --
+    Can we async this?
   */
   auto cam_data = world.camera_data;
 
@@ -211,6 +193,10 @@ World::think()
     Generate the Draw call list
     --
     This list is every draw call that needs to be rendered.
+    
+    TODO
+    --
+    Can we async this?
   */
   ::Material_renderer::Draw_call *draw_calls = SCRATCH_ALIGNED_ALLOC(::Material_renderer::Draw_call, world.mesh_data->size);
   {
@@ -280,6 +266,8 @@ World::get_overlapping_aabbs(const std::function<void(const Core::Collision_pair
 {
   // Check we have a callback.
   if(!callback) { return; }
+  
+  LOG_TODO_ONCE("This can move out into a transform, or done on a thread during think.");
 
   const World_data::Entity_data *entity_data = m_impl->world_data->data.entity;
   const World_data::Physics_data *data = m_impl->world_data->data.physics_data;

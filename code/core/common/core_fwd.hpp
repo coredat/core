@@ -6,6 +6,15 @@
   Single include for core fwd decs.
 */
 
+/*
+  Usage Guidlines
+  --
+  This file is for fwd declerations of public types.
+  Don't include fwd decleration of types that should have
+  no public interface, like types inside 'detail' deirectories or namespaces.
+*/
+
+
 #include <core/camera/camera_fwd.hpp>
 #include <core/color/color_fwd.hpp>
 #include <core/common/common_fwd.hpp>

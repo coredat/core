@@ -6,6 +6,14 @@
   Single include for common includes.
 */
 
+
+/*
+  Useage Guidelines
+  --
+  Only include commonily used STL and other util/math types etc.
+  This is NOT! a dumping ground for lazy includes.
+*/
+
 #include <utilities/generic_id.hpp>
 
 #include <math/mat/mat_types.hpp>
