@@ -1,23 +1,9 @@
-#ifndef RENDER_CAMERAS_INCLUDED_3E7A0E7E_BC80_47F5_9A8F_2F35E0FE88AB
-#define RENDER_CAMERAS_INCLUDED_3E7A0E7E_BC80_47F5_9A8F_2F35E0FE88AB
-
-
-#include <stdint.h>
-
-#include <data/global_data/mesh_data.hpp>
-#include <data/global_data/texture_data.hpp>
-#include <data/global_data/material_data.hpp>
-#include <data/global_data/post_process_data.hpp>
-#include <data/world_data/entity_data.hpp>
-#include <data/world_data/renderer_mesh_data.hpp>
-
-// For source file.
+#include <transformations/rendering/render_scene.hpp>
 #include <data/global_data/memory_data.hpp>
 #include <systems/renderer_material/material.hpp>
-#include <systems/renderer_material/material_renderer.hpp>
 #include <systems/renderer_post/post_process.hpp>
 #include <systems/renderer_post/post_shader.hpp>
-#include <transformations/camera/cam_priorities.hpp>
+
 #include <transformations/rendering/material_renderer.hpp>
 #include <core/transform/transform.hpp>
 #include <core/color/color.hpp>
@@ -33,9 +19,6 @@ namespace Rendering {
 */
 void
 render_main_scene(const World_data::Renderer_mesh_data   *mesh_renderer_data,
-                  const World_data::Entity_data          *entity_data,
-                  const Resource_data::Mesh_data         *mesh_data,
-                  const Resource_data::Texture_data      *texture_data,
                   const Resource_data::Material_data     *material_data,
                   const Resource_data::Post_process_data *post_data,
                   const Camera_utils::Cam_run            cam_runs[],
@@ -124,6 +107,3 @@ render_main_scene(const World_data::Renderer_mesh_data   *mesh_renderer_data,
 
 
 } // ns
-
-
-#endif // inc guard

@@ -60,7 +60,7 @@
 #include <transformations/physics/overlapping_aabb.hpp>
 #include <transformations/rendering/material_renderer.hpp>
 #include <transformations/camera/cam_priorities.hpp>
-#include <transformations/rendering/render_cameras.hpp>
+#include <transformations/rendering/render_scene.hpp>
 
 
 namespace Core {
@@ -248,9 +248,6 @@ World::think()
   */
   uint32_t number_of_draw_calls = 0;
   Rendering::render_main_scene(world.mesh_data,
-                               world.entity,
-                               resources->mesh_data,
-                               resources->texture_data,
                                resources->material_data,
                                resources->post_data,
                                cam_runs,
