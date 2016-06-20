@@ -80,6 +80,7 @@ namespace
 void
 display_world_data_menu(World_data::World *world_data,
                         const float dt,
+                        const float dt_mul,
                         const uint32_t draw_calls,
                         const uint32_t render_passes)
 {
@@ -105,7 +106,7 @@ display_world_data_menu(World_data::World *world_data,
   if(show_entity_list)     { display_entity_list(world_data->entity);             }
   if(show_mesh_draw_calls) { display_mesh_draw_calls(world_data->mesh_data);      }
   if(show_camera_list)     { display_camera_data(world_data->camera_data);        }
-  if(show_world_stats)     { display_world_stats(dt, draw_calls, render_passes);  }
+  if(show_world_stats)     { display_world_stats(dt, dt_mul, draw_calls, render_passes);  }
 }
 
 

@@ -10,6 +10,7 @@ namespace Debug_menu {
 
 void
 display_world_stats(const float dt,
+                    const float dt_mul,
                     const uint32_t draw_calls,
                     const uint32_t render_passes);
 

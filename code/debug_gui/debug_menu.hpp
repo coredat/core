@@ -17,6 +17,7 @@ display_global_data_menu();
 void
 display_world_data_menu(World_data::World *world_data,
                         const float dt,
+                        const float dt_mul,
                         const uint32_t draw_calls,
                         const uint32_t render_passes);
 

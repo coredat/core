@@ -60,6 +60,7 @@
 #include <transformations/physics/overlapping_aabb.hpp>
 #include <transformations/rendering/material_renderer.hpp>
 #include <transformations/camera/cam_priorities.hpp>
+#include <transformations/rendering/render_cameras.hpp>
 
 
 namespace Core {
@@ -171,50 +172,52 @@ World::think()
   // Reset the entity pool for new changes.
   World_data::pending_scene_graph_change_reset(graph_changes);
   
-  // ** Generate Camera Runs ** //
-
-  World_data::World *world = World_data::get_world();
   
-  auto cam_data = data->camera_data;
+  auto resources = Resource_data::get_resources();
+  auto world = m_impl->world_data->data;
+
+  
+  /*
+    Camera Runs
+    --
+    For each camera we need a to create a camera run.
+    Will will render all the things it is interested in.
+  */
+  auto cam_data = world.camera_data;
+
   World_data::data_lock(cam_data);
+  uint32_t number_of_cam_runs = 0;
   
   Camera_utils::Cam_run *cam_runs = SCRATCH_ALIGNED_ALLOC(Camera_utils::Cam_run, cam_data->size);
-  const uint32_t number_of_cam_runs = cam_data->size;
-  
-  // Generate cam_run data
   {
-    Core::Transform *cam_transforms = SCRATCH_ALIGNED_ALLOC(Core::Transform, cam_data->size);
-    Camera_utils::get_camera_transforms(data->transform, cam_data->property_entity_id, cam_transforms, cam_data->size);
-    Camera_utils::calculate_camera_runs(cam_data,
-                                        Resource_data::get_resources()->texture_data,
-                                        cam_transforms,
-                                        cam_runs,
-                                        cam_data->size);
+    number_of_cam_runs = cam_data->size;
+    
+    // Generate cam_run data
+    {
+      Core::Transform *cam_transforms = SCRATCH_ALIGNED_ALLOC(Core::Transform, cam_data->size);
+      Camera_utils::get_camera_transforms(world.transform, cam_data->property_entity_id, cam_transforms, cam_data->size);
+      Camera_utils::calculate_camera_runs(cam_data,
+                                          Resource_data::get_resources()->texture_data,
+                                          cam_transforms,
+                                          cam_runs,
+                                          cam_data->size);
+    }
   }
   
   World_data::data_unlock(cam_data);
   
-  /*
-    Render all the data with the cameras.
-  */
-  /*
-    Create draw calls the way the renderer wants them.
-    The draw calls should already be in an optimised order, from here on in
-    the only optimisation you can expect is the rendering remember the last thing bound,
-    until its reset has been called.
-  */
-
   
-  auto mesh_renderer_data = world->mesh_data;
-  auto entity_data        = world->entity;
-  auto mesh_data          = Resource_data::get_resources()->mesh_data;
-  
-  ::Material_renderer::Draw_call *draw_calls = SCRATCH_ALIGNED_ALLOC(::Material_renderer::Draw_call, mesh_renderer_data->size);
+  /*
+    Generate the Draw call list
+    --
+    This list is every draw call that needs to be rendered.
+  */
+  ::Material_renderer::Draw_call *draw_calls = SCRATCH_ALIGNED_ALLOC(::Material_renderer::Draw_call, world.mesh_data->size);
   {
-    for(uint32_t i = 0; i < mesh_renderer_data->size; ++i)
+    for(uint32_t i = 0; i < world.mesh_data->size; ++i)
     {
       // Draw call from the data.
-      const World_data::Mesh_renderer_draw_call *draw_call_data = &mesh_renderer_data->property_draw_call[i];
+      const World_data::Mesh_renderer_draw_call *draw_call_data = &world.mesh_data->property_draw_call[i];
 
       // No model? keep moving.
       if(!draw_call_data->model_id)
@@ -224,93 +227,39 @@ World::think()
       
       // Get the hardware mesh.
       // Possible extension. We could also process these based on how far away the camera is.
-      Resource_data::mesh_data_get_property_mesh(mesh_data, draw_call_data->model_id, &draw_calls[i].mesh);
+      Resource_data::mesh_data_get_property_mesh(resources->mesh_data, draw_call_data->model_id, &draw_calls[i].mesh);
       
-      const float *world = draw_call_data->world_matrix;
+      const float *world_mat = draw_call_data->world_matrix;
 
-      memcpy(&draw_calls[i], world, sizeof(float) * 16);
+      memcpy(&draw_calls[i], world_mat, sizeof(float) * 16);
       
       // Get cull mask.
       // This isn't particularly nice. We should already have this data to save us looking for it.
-      const util::generic_id entity_id = mesh_renderer_data->renderer_mesh_id[i];
-      World_data::entity_data_get_property_tag(entity_data, entity_id, &draw_calls[i].cull_mask);
+      const util::generic_id entity_id = world.mesh_data->renderer_mesh_id[i];
+      World_data::entity_data_get_property_tag(world.entity, entity_id, &draw_calls[i].cull_mask);
     }
   }
   
-  uint32_t number_of_draw_calls = 0; // For debugging.
   
-  for(uint32_t c = 0; c < number_of_cam_runs; ++c)
-  {
-    const Camera_utils::Cam_run *cam = &cam_runs[c];
-    
-    // Set the target if we have one.
-    if(Ogl::frame_buffer_is_valid(&cam->fbo))
-    {
-      Ogl::frame_buffer_bind(&cam->fbo);
-  
-      
-      LOG_TODO_ONCE("Move this to graphcis api somewhere.");
-      
-      const GLsizei width = cam->fbo.color_buffer[0].width;
-      const GLsizei height = cam->fbo.color_buffer[0].height;
-      
-      glViewport(0, 0, width, height);
-    }
-    else
-    {
-      Ogl::frame_buffer_unbind();
-      
-      LOG_TODO_ONCE("Move this to graphcis api somewhere.");
-      
-      const GLsizei width = cam->width;
-      const GLsizei height = cam->height;
-      
-      glViewport(0, 0, width, height);
-    }
-    
-    // Clear the target
-    {
-      if(cam->clear_flags)
-      {    
-        const Core::Color clear_color(cam->clear_color);
-        
-        const float red   = Core::Color_utils::get_red_f(clear_color);
-        const float green = Core::Color_utils::get_green_f(clear_color);
-        const float blue  = Core::Color_utils::get_blue_f(clear_color);
-        
-        Graphics_api::clear_color_set(red, green, blue);
-        Graphics_api::clear(cam->clear_flags);
-      }
-    }
-    
-    
-    // Material Renderer
-    if(!cam->post_process_id)
-    {
-      number_of_draw_calls += Rendering::material_renderer(cam->view,
-                                                           cam->proj,
-                                                           Resource_data::get_resources()->material_data,
-                                                           cam->cull_mask,
-                                                           world->mesh_data,
-                                                           draw_calls,
-                                                           mesh_renderer_data->size);
-    }
-    else
-    // Post process rendering
-    {
-      // Get post process details
-      Post_renderer::Post_shader *post_shd;
-      Resource_data::post_process_data_get_property_post_shader(Resource_data::get_resources()->post_data,
-                                                                cam->post_process_id,
-                                                                &post_shd);
-      Post_renderer::render(post_shd);
-      
-      ++number_of_draw_calls;
-    }
-  }
+  /*
+    Render the world
+    --
+    Takes the camera, and draw calls and renders the world accordingly.
+  */
+  uint32_t number_of_draw_calls = 0;
+  Rendering::render_main_scene(world.mesh_data,
+                               world.entity,
+                               resources->mesh_data,
+                               resources->texture_data,
+                               resources->material_data,
+                               resources->post_data,
+                               cam_runs,
+                               number_of_cam_runs,
+                               draw_calls,
+                               world.mesh_data->size,
+                               &number_of_draw_calls);
 
-
- /*
+  /*
     Debug Menu
     --
     Shows the debugging menu bar at the top of the screen.
@@ -318,7 +267,11 @@ World::think()
   #ifndef NDEBUG
   {
     Debug_menu::display_global_data_menu();
-    Debug_menu::display_world_data_menu(&m_impl->world_data->data, m_impl->dt, number_of_draw_calls, number_of_cam_runs);
+    Debug_menu::display_world_data_menu(&m_impl->world_data->data,
+                                        m_impl->dt,
+                                        m_impl->dt_mul,
+                                        number_of_draw_calls,
+                                        number_of_cam_runs);
   }
   #endif
 }
