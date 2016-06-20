@@ -5,8 +5,6 @@
 #include <systems/renderer_post/post_shader.hpp>
 
 #include <transformations/rendering/material_renderer.hpp>
-#include <core/transform/transform.hpp>
-#include <core/color/color.hpp>
 #include <core/color/color_utils.hpp>
 #include <graphics_api/clear.hpp>
 

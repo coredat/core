@@ -2,11 +2,8 @@
 #define RENDER_SCENE_INCLUDED_3E7A0E7E_BC80_47F5_9A8F_2F35E0FE88AB
 
 
-#include <data/global_data/mesh_data.hpp>
-#include <data/global_data/texture_data.hpp>
 #include <data/global_data/material_data.hpp>
 #include <data/global_data/post_process_data.hpp>
-#include <data/world_data/entity_data.hpp>
 #include <data/world_data/renderer_mesh_data.hpp>
 #include <transformations/camera/cam_priorities.hpp>
 #include <systems/renderer_material/material_renderer.hpp>
