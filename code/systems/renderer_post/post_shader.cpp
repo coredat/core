@@ -23,6 +23,12 @@ create_post_shader(Post_shader *out_shader, const Ogl::Shader *shader)
     
     Ogl::shader_uniforms_get_uniform_index(&out_shader->map_03, &uniforms, "uni_map_03");
   }
+  
+  // Other inputs
+  {
+    Ogl::shader_uniforms_get_uniform_index(&out_shader->delta_time_uni, &uniforms, "uni_delta_time");
+    Ogl::shader_uniforms_get_uniform_index(&out_shader->current_time_uni, &uniforms, "uni_current_time");
+  }
 }
 
 

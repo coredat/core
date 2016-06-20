@@ -45,6 +45,8 @@ reset();
 */
 uint32_t
 render(const math::mat4 &view_proj_mat,
+       const float delta_time,
+       const float total_time,
        const Material *material,
        const uint32_t cull_mask,
        const Draw_call calls[],

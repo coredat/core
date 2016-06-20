@@ -10,6 +10,8 @@ namespace Rendering {
 uint32_t
 material_renderer(const math::mat4 &view_mat,
                   const math::mat4 &proj_mat,
+                  const float delta_time,
+                  const float total_time,
                   const Resource_data::Material_data *material_data,
                   const uint32_t camera_cull_mask,                  
                   const World_data::Renderer_mesh_data *mesh_renderer_data,
@@ -106,7 +108,11 @@ material_renderer(const math::mat4 &view_mat,
       const size_t start = runs[r].start_point;
       const size_t count = runs[r].size;
       
+      Ogl::error_clear();
+      
       number_of_draws += Material_renderer::render(view_proj_mat,
+                                                   delta_time,
+                                                   total_time,
                                                    material_to_render,
                                                    camera_cull_mask,
                                                    &draw_calls[start],

@@ -22,6 +22,12 @@ struct Post_shader
   
   Ogl::Texture map_03_id;
   Ogl::Uniform map_03;
+  
+  float delta_time = 0.f;
+  Ogl::Uniform delta_time_uni;
+  
+  float current_time = 0.f;
+  Ogl::Uniform current_time_uni;
 };
 
 

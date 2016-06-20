@@ -17,7 +17,9 @@ namespace Rendering {
   This will call the various renderers.
 */
 void
-render_main_scene(const World_data::Renderer_mesh_data   *mesh_renderer_data,
+render_main_scene(const float delta_time,
+                  const float total_time,
+                  const World_data::Renderer_mesh_data   *mesh_renderer_data,
                   const Resource_data::Material_data     *material_data,
                   const Resource_data::Post_process_data *post_data,
                   const Camera_utils::Cam_run            cam_runs[],

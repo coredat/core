@@ -27,6 +27,8 @@ namespace Rendering {
 uint32_t
 material_renderer(const math::mat4 &view_mat,
                   const math::mat4 &proj_mat,
+                  const float delta_time,
+                  const float total_time,
                   const Resource_data::Material_data *material_data,
                   const uint32_t camera_cull_mask,
                   const World_data::Renderer_mesh_data *mesh_renderer_data,

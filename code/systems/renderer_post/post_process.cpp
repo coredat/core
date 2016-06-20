@@ -71,9 +71,24 @@ render(Post_renderer::Post_shader *shd)
     };
     
     Ogl::filtering_apply(filter);
-    Ogl::shader_uniforms_apply(shd->map_01, (void*)&shd->map_01_id.texture_id);
-    Ogl::shader_uniforms_apply(shd->map_02, (void*)&shd->map_02_id.texture_id);
-    Ogl::shader_uniforms_apply(shd->map_03, (void*)&shd->map_03_id.texture_id);
+    if(shd->map_01_id.texture_id)
+      Ogl::shader_uniforms_apply(shd->map_01, (void*)&shd->map_01_id.texture_id);
+    
+    if(shd->map_02_id.texture_id)
+      Ogl::shader_uniforms_apply(shd->map_02, (void*)&shd->map_02_id.texture_id);
+    
+    if(shd->map_03_id.texture_id)
+      Ogl::shader_uniforms_apply(shd->map_03, (void*)&shd->map_03_id.texture_id);
+    
+    if(shd->current_time_uni.index > -1)
+    {
+      Ogl::shader_uniforms_apply(shd->current_time_uni, (void*)&shd->current_time_uni);
+    }
+    
+    if(shd->delta_time_uni.index > -1)
+    {
+      Ogl::shader_uniforms_apply(shd->delta_time_uni, (void*)&shd->delta_time);
+    }
   }
   
   glDrawArrays(GL_TRIANGLES, 0, 6);

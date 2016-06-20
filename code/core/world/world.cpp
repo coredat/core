@@ -52,6 +52,7 @@ struct World::Impl
   util::timer dt_timer;
   float       dt      = 0.f;
   float       dt_mul  = 1.f;
+  float       running_time = 0.f;
 };
 
 
@@ -138,6 +139,8 @@ World::think()
   {
     const util::milliseconds frame_time = m_impl->dt_timer.split();
     m_impl->dt = static_cast<float>(frame_time) / 1000.f;
+    
+    m_impl->running_time += m_impl->dt;
   }
   
   // Update world
@@ -233,7 +236,9 @@ World::think()
     Takes the camera, and draw calls and renders the world accordingly.
   */
   uint32_t number_of_draw_calls = 0;
-  Rendering::render_main_scene(world.mesh_data,
+  Rendering::render_main_scene(m_impl->dt,
+                               m_impl->running_time,
+                               world.mesh_data,
                                resources->material_data,
                                resources->post_data,
                                cam_runs,

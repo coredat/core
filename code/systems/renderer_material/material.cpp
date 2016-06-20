@@ -34,7 +34,9 @@ create_material(Material *out_mat, const Ogl::Shader *shader)
   
   // Get the other uniforms
   {
-    Ogl::shader_uniforms_get_uniform_index(&out_mat->color, &uniforms, "uni_color");
+    Ogl::shader_uniforms_get_uniform_index(&out_mat->color, &uniforms,          "uni_color");
+    Ogl::shader_uniforms_get_uniform_index(&out_mat->uni_dt, &uniforms,         "uni_delta_time");
+    Ogl::shader_uniforms_get_uniform_index(&out_mat->uni_total_time, &uniforms, "uni_current_time");
   }
 }
 

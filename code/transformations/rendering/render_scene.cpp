@@ -16,7 +16,9 @@ namespace Rendering {
   This will call the various renderers.
 */
 void
-render_main_scene(const World_data::Renderer_mesh_data   *mesh_renderer_data,
+render_main_scene(const float delta_time,
+                  const float total_time,
+                  const World_data::Renderer_mesh_data   *mesh_renderer_data,
                   const Resource_data::Material_data     *material_data,
                   const Resource_data::Post_process_data *post_data,
                   const Camera_utils::Cam_run            cam_runs[],
@@ -79,6 +81,8 @@ render_main_scene(const World_data::Renderer_mesh_data   *mesh_renderer_data,
     {
       number_of_draw_calls += Rendering::material_renderer(cam->view,
                                                            cam->proj,
+                                                           delta_time,
+                                                           total_time,
                                                            material_data,
                                                            cam->cull_mask,
                                                            mesh_renderer_data,
@@ -93,6 +97,12 @@ render_main_scene(const World_data::Renderer_mesh_data   *mesh_renderer_data,
       Resource_data::post_process_data_get_property_post_shader(post_data,
                                                                 cam->post_process_id,
                                                                 &post_shd);
+      
+      // Add some extra param to the shd.
+      post_shd->delta_time = delta_time;
+      post_shd->current_time = total_time;
+      
+      // Render
       Post_renderer::render(post_shd);
       
       ++number_of_draw_calls;

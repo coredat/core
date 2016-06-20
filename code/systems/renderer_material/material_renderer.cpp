@@ -58,6 +58,8 @@ reset()
 
 uint32_t
 render(const math::mat4 &view_proj_mat,
+       const float delta_time,
+       const float total_time,
        const Material *material,
        const uint32_t cull_mask,
        const Draw_call calls[],
@@ -84,31 +86,52 @@ render(const math::mat4 &view_proj_mat,
     {
       Ogl::shader_bind(&material->shader);
       mat_renderer_last_program = material->shader.program_id;
+      Ogl::error_check("Setting up program id", &std::cout);
     }
     
     // Texture
     if(material->map_01_id.texture_id != mat_renderer_last_map_01_texture)
     {
-      // Move the filter selection into the material.
-      static Graphics_api::Texture_filtering filter =
+      if(material->map_01.index != -1)
       {
-        Graphics_api::Filtering_mode::anisotropic,
-        Graphics_api::Wrap_mode::wrap,
-        Graphics_api::Wrap_mode::wrap
-      };
-      
-      Ogl::filtering_apply(filter);
-      Ogl::shader_uniforms_apply(material->map_01, (void*)&material->map_01_id.texture_id);
+        // Move the filter selection into the material.
+        static Graphics_api::Texture_filtering filter =
+        {
+          Graphics_api::Filtering_mode::anisotropic,
+          Graphics_api::Wrap_mode::wrap,
+          Graphics_api::Wrap_mode::wrap
+        };
+        
+        Ogl::filtering_apply(filter);
+        Ogl::shader_uniforms_apply(material->map_01, (void*)&material->map_01_id.texture_id);
+      }
       
       mat_renderer_last_map_01_texture = material->map_01_id.texture_id;
+      Ogl::error_check("Setting up texture", &std::cout);
     }
     
     // Color
     if(material->color.index >= 0)
     {
       Ogl::shader_uniforms_apply(material->color, (void*)material->color_data);
+      Ogl::error_check("Color", &std::cout);
+    }
+    
+    // Other stuff
+    {
+      if(material->uni_dt.index >= 0)
+      {
+        Ogl::shader_uniforms_apply(material->uni_dt, (void*)&delta_time);
+      }
+      
+      if(material->uni_total_time.index >= 0)
+      {
+        Ogl::shader_uniforms_apply(material->uni_total_time, (void*)&total_time);
+      }
     }
   }
+  
+    Ogl::error_check("Setting up Material", &std::cout);
   
   // Draw all the vbo's
   for(uint32_t i = 0; i < number_of_calls; ++i)
