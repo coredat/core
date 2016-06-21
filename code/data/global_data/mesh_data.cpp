@@ -51,9 +51,9 @@ mesh_data_init(Mesh_data *data, const size_t size_hint)
       void *aligned = util::mem_next_16byte_boundry(offset);
 
       data->mesh_id = reinterpret_cast<util::generic_id*>(aligned);
-      #ifndef NDEBUG
+//      #ifndef NDEBUG
       memset(offset, 0, bytes_mesh_id);
-      #endif
+//      #endif
 
       byte_counter += bytes_mesh_id;
       assert(byte_counter <= bytes_to_alloc);
@@ -64,9 +64,9 @@ mesh_data_init(Mesh_data *data, const size_t size_hint)
       void *aligned = util::mem_next_16byte_boundry(offset);
 
       data->property_name = reinterpret_cast<char*>(aligned);
-      #ifndef NDEBUG
+//      #ifndef NDEBUG
       memset(offset, 0, bytes_property_name);
-      #endif
+//      #endif
 
       byte_counter += bytes_property_name;
       assert(byte_counter <= bytes_to_alloc);
@@ -77,9 +77,9 @@ mesh_data_init(Mesh_data *data, const size_t size_hint)
       void *aligned = util::mem_next_16byte_boundry(offset);
 
       data->property_mesh = reinterpret_cast<Graphics_api::Mesh*>(aligned);
-      #ifndef NDEBUG
+//      #ifndef NDEBUG
       memset(offset, 0, bytes_property_mesh);
-      #endif
+//      #endif
 
       byte_counter += bytes_property_mesh;
       assert(byte_counter <= bytes_to_alloc);
@@ -90,9 +90,9 @@ mesh_data_init(Mesh_data *data, const size_t size_hint)
       void *aligned = util::mem_next_16byte_boundry(offset);
 
       data->property_aabb = reinterpret_cast<math::aabb*>(aligned);
-      #ifndef NDEBUG
+//      #ifndef NDEBUG
       memset(offset, 0, bytes_property_aabb);
-      #endif
+//      #endif
 
       byte_counter += bytes_property_aabb;
       assert(byte_counter <= bytes_to_alloc);

@@ -113,7 +113,7 @@ Model::Model(const char *filename)
       
       Resource_data::data_lock(mesh_data);
       
-      assert(Resource_data::mesh_data_push_back(mesh_data, mesh_data->size + 1));
+      Resource_data::mesh_data_push_back(mesh_data, mesh_data->size + 1);
       Resource_data::mesh_data_set_property_mesh(mesh_data, mesh_data->size, mesh);
       Resource_data::mesh_data_set_property_aabb(mesh_data, mesh_data->size, model_aabb);
       Resource_data::mesh_data_set_property_name(mesh_data, mesh_data->size, name.c_str());
