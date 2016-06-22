@@ -132,6 +132,15 @@ World::get_delta_time_multiplier() const
 }
 
 
+uint32_t
+World::get_time_running() const
+{
+  assert(m_impl);
+  
+  return static_cast<uint32_t>(m_impl->running_time * 1000);
+}
+
+
 void
 World::think()
 {
