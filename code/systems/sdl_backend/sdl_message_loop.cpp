@@ -45,10 +45,12 @@ event_process()
   {
     for(uint32_t cb = 0; cb < number_of_callbacks; ++cb)
     {
+      #ifdef CORE_DEBUG_MENU
       if(ImGui_ImplSdlGL3_ProcessEvent(&evt))
       {
         continue;
       }
+      #endif
     
       void *self = (void*)user_data[cb];
       callbacks[cb](&evt, self);

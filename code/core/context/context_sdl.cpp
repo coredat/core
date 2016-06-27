@@ -158,8 +158,10 @@ Context::Context(const uint32_t width,
   
 //  SDL_StartTextInput();
   
+  #ifdef CORE_DEBUG_MENU
   ImGui_ImplSdlGL3_Init(m_impl->window);
   ImGui_ImplSdlGL3_NewFrame(m_impl->window);
+  #endif
 
   // Window callback
   Sdl::event_add_callback([](const SDL_Event *evt, void *self)
@@ -195,6 +197,10 @@ Context::Context(const uint32_t width,
 Context::~Context()
 {
   LOG_TODO("Need to deal with core data here");
+  
+  #ifdef CORE_DEBUG_MENU
+  ImGui_ImplSdlGL3_Shutdown();
+  #endif
 }
 
 
@@ -347,7 +353,9 @@ bool
 Context::is_open() const
 {
   assert(m_impl);
+  #ifdef CORE_DEBUG_MENU
   ImGui::Render();
+  #endif
   
   // Reset the memory pool.
   Memory::scratch_reset();

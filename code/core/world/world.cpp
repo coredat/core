@@ -261,7 +261,7 @@ World::think()
     --
     Shows the debugging menu bar at the top of the screen.
   */
-  #ifndef NDEBUG
+  #ifdef CORE_DEBUG_MENU
   {
     Debug_menu::display_global_data_menu();
     Debug_menu::display_world_data_menu(&m_impl->world_data->data,

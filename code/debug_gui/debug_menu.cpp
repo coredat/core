@@ -35,6 +35,7 @@ namespace
 void
 display_global_data_menu()
 {
+  #ifndef NDEBUG
   auto global_data = Resource_data::get_resources();
 
   if(!global_data)
@@ -65,6 +66,7 @@ display_global_data_menu()
   if(show_memory_view)   { display_memory_useage(Memory::_get_pool());        }
   if(show_material_list) { display_material_list(global_data->material_data); }
   if(show_post_list)     { display_post_process_list(global_data->post_data); }
+  #endif
 }
 
 
@@ -84,6 +86,7 @@ display_world_data_menu(World_data::World *world_data,
                         const uint32_t draw_calls,
                         const uint32_t render_passes)
 {
+  #ifndef NEDEBUG
   if(!world_data)
   {
     return;
@@ -107,6 +110,7 @@ display_world_data_menu(World_data::World *world_data,
   if(show_mesh_draw_calls) { display_mesh_draw_calls(world_data->mesh_data);      }
   if(show_camera_list)     { display_camera_data(world_data->camera_data);        }
   if(show_world_stats)     { display_world_stats(dt, dt_mul, draw_calls, render_passes);  }
+  #endif
 }
 
 
