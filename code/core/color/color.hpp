@@ -20,7 +20,7 @@ class Color final
 public:
 
 
-  explicit constexpr
+  constexpr // implicit ctor!
   Color(const uint32_t hex_value = 0xFFFFFFFF)
   : m_color(hex_value)
   {
