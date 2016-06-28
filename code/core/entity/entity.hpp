@@ -62,21 +62,15 @@ public:
   void                          set_transform(const Transform &transform);
   Transform                     get_transform() const;
   
-  void                          set_material(const Material &mat);
-  Core::Material                get_material() const;
-
-  void                          set_model(const Core::Model &model);
-  Core::Model                   get_model() const;
-  
+  void                          set_renderer(const Renderer &renderer);
+  Renderer                      get_renderer() const;
+    
   void                          set_collider(const Core::Collider &collider);
   Core::Collider                get_collider() const;
 
   void                          set_rigidbody_properties(const Core::Rigidbody_properties rb_props);
   Core::Rigidbody_properties    set_rigidbody_properties() const;
-  
-  void                          set_renderer(const Core::Renderer &renderer);
-  Core::Renderer                get_renderer() const;
-  
+    
                                 operator bool() const;
 
   // ** Equality ** //

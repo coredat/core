@@ -23,7 +23,7 @@ class Renderer final
 {
 public:
 
-  explicit                Renderer(const Renderer_type renderer_type,
+  explicit                Renderer(const Renderer_type renderer_type = Renderer_type::unknown,
                                    const util::generic_id arg_01 = util::generic_id_invalid(),
                                    const util::generic_id arg_02 = util::generic_id_invalid(),
                                    const util::generic_id arg_03 = util::generic_id_invalid(),
@@ -32,10 +32,11 @@ public:
   Renderer_type           get_type() const;
   const char *            get_type_name() const;
   
-private:
-
-  friend Material_renderer Renderer_utils::cast_to_material_renderer(const Renderer&);
-  friend Text_renderer     Renderer_utils::cast_to_text_renderer(const Renderer&);
+//private:
+//
+//  friend Material_renderer Renderer_utils::cast_to_material_renderer(const Renderer&);
+//  friend Text_renderer     Renderer_utils::cast_to_text_renderer(const Renderer&);
+  
   
   util::generic_id        get_arg_01() const;
   util::generic_id        get_arg_02() const;

@@ -3,6 +3,7 @@
 #include <core/entity/entity_interface.hpp>
 #include <core/transform/transform.hpp>
 #include <core/model/model.hpp>
+#include <core/renderer/renderer.hpp>
 #include <core/resources/material.hpp>
 #include <core/physics/collider.hpp>
 #include <core/physics/rigidbody_properties.hpp>
@@ -294,37 +295,25 @@ Entity::get_transform() const
 
 
 void
-Entity::set_material(const Core::Material &mat)
+Entity::set_renderer(const Core::Renderer &renderer)
 {
-
-  Entity_detail::set_material(m_impl->id,
-                              &m_impl->world->data,
-                              mat);
+  switch(renderer.get_type())
+  {
+    case(Renderer_type::material):
+      Entity_detail::set_renderer_material(m_impl->id, &m_impl->world->data, renderer.get_arg_01(), renderer.get_arg_02());
+      break;
+      
+    default:
+      assert(false);
+  }
 }
 
 
-Core::Material
-Entity::get_material() const
+Renderer
+Entity::get_renderer() const
 {
-  return Entity_detail::get_material(m_impl->id,
-                                     &m_impl->world->data);
-}
-
-
-void
-Entity::set_model(const Core::Model &model)
-{
-  Entity_detail::set_model(m_impl->id,
-                           &m_impl->world->data,
-                           model);
-}
-
-
-Core::Model
-Entity::get_model() const
-{
-  return Entity_detail::get_model(m_impl->id,
-                                  &m_impl->world->data);
+  assert(false);
+  return Renderer();
 }
 
 

@@ -7,6 +7,8 @@
 #include <core/entity/entity.hpp>
 #include <core/world/world.hpp>
 #include <core/world/detail/world_detail.hpp>
+#include <core/renderer/renderer.hpp>
+#include <core/renderer/material_renderer.hpp>
 #include <core/resources/material.hpp>
 
 
@@ -178,38 +180,33 @@ Entity_ref::set_transform(const Transform &transform)
 }
 
 
+void
+Entity_ref::set_renderer(const Core::Renderer &renderer)
+{
+  switch(renderer.get_type())
+  {
+    case(Renderer_type::material):
+      Entity_detail::set_renderer_material(m_impl->id, &m_impl->world->data, renderer.get_arg_01(), renderer.get_arg_02());
+      break;
+      
+    default:
+      assert(false);
+  }
+}
+
+
+Renderer
+Entity_ref::get_renderer() const
+{
+  assert(false);
+  return Renderer();
+}
+
+
 Transform
 Entity_ref::get_transform() const
 {
   return Entity_detail::get_transform(m_impl->id, &m_impl->world->data);
-}
-
-
-void
-Entity_ref::set_material(const Core::Material &mat)
-{
-  Entity_detail::set_material(m_impl->id, &m_impl->world->data, mat);
-}
-
-
-Core::Material
-Entity_ref::get_material() const
-{
-  return Entity_detail::get_material(m_impl->id, &m_impl->world->data);
-}
-
-
-void
-Entity_ref::set_model(const Core::Model &model)
-{
-  Entity_detail::set_model(m_impl->id, &m_impl->world->data, model);
-}
-
-
-Core::Model
-Entity_ref::get_model() const
-{
-  return Entity_detail::get_model(m_impl->id, &m_impl->world->data);
 }
 
 
@@ -282,9 +279,11 @@ Entity_ref::operator !=(const Entity_ref &other) const
   return this->get_id() != other.get_id();
 }
 
+
 Entity_ref::operator util::generic_id() const
 {
   return get_id();
 }
+
 
 } // ns

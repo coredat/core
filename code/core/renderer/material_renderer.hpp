@@ -13,7 +13,8 @@ class Material_renderer final
 {
 public:
 
-  explicit                Material_renderer(const util::generic_id mat_id, const util::generic_id model_id); // make private or something like that.
+  explicit                Material_renderer(const util::generic_id mat_id,
+                                            const util::generic_id model_id); // make private or something like that.
   explicit                Material_renderer();
                           ~Material_renderer();
   

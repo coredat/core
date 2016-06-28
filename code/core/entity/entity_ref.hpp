@@ -57,11 +57,8 @@ public:
   void                          set_transform(const Transform &transform);
   Transform                     get_transform() const;
 
-  void                          set_material(const Material &mat);
-  Core::Material                get_material() const;
-  
-  void                          set_model(const Core::Model &model);
-  Core::Model                   get_model() const;
+  void                          set_renderer(const Renderer &renderer);
+  Renderer                      get_renderer() const;
   
   void                          set_collider(const Core::Collider &collider);
   Core::Collider                get_collider() const;

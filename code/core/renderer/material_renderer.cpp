@@ -1,6 +1,7 @@
 #include <core/renderer/material_renderer.hpp>
 #include <core/renderer/renderer.hpp>
 #include <core/resources/material.hpp>
+#include <core/model/model.hpp>
 #include <utilities/generic_id.hpp>
 
 
@@ -30,13 +31,28 @@ Material_renderer::~Material_renderer()
 void
 Material_renderer::set_material(const Core::Material &material)
 {
+  m_material_id = material.get_id();
 }
 
 
 Material
 Material_renderer::get_material() const
 {
-  return Material();
+  return Material(m_material_id);
+}
+
+
+void
+Material_renderer::set_model(const Core::Model &model)
+{
+  m_model_id = model.get_id();
+}
+
+
+Model
+Material_renderer::get_model() const
+{
+  return Model(m_model_id);
 }
 
 
