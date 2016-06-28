@@ -10,7 +10,7 @@ namespace Core {
 
 class Renderer;
 class Text_renderer;
-class Mesh_renderer;
+class Material_renderer;
 
 enum class Renderer_type : uint32_t;
 

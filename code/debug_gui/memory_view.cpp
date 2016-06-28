@@ -36,7 +36,7 @@ display_memory_useage(util::memory_pool *data)
       ImGui::Button(chunk.name, ImVec2(final_width, 0.0f));
       if (ImGui::IsItemHovered())
       {
-        ImGui::SetTooltip("%s - bytes %d", chunk.name, chunk.bytes_in_chunk);
+        ImGui::SetTooltip("%s - bytes %zu", chunk.name, chunk.bytes_in_chunk);
       }
       ImGui::PopStyleColor(3);
       ImGui::PopID();
@@ -46,10 +46,12 @@ display_memory_useage(util::memory_pool *data)
     
     ImGui::TextWrapped("Max use of the scratch memory.");
     {
-      float progress = static_cast<float>(Memory::_get_scratch_max_used()) / static_cast<float>(Memory::_get_scratch_bytes_total());
-      float progress_saturated = (progress < 0.0f) ? 0.0f : (progress > 1.0f) ? 1.0f : progress;
+      const float progress = static_cast<float>(Memory::_get_scratch_max_used()) / static_cast<float>(Memory::_get_scratch_bytes_total());
+      const float progress_saturated = (progress < 0.0f) ? 0.0f : (progress > 1.0f) ? 1.0f : progress;
+
       char buf[32];
-      sprintf(buf, "%d/%d", (int)(progress_saturated*1753), 1753);
+      sprintf(buf, "%zu/%zu", (size_t)(Memory::_get_scratch_max_used()), Memory::_get_scratch_bytes_total());
+      
       ImGui::ProgressBar(progress, ImVec2(-1.f,0.f), buf);
     }
     

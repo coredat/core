@@ -10,6 +10,7 @@ namespace Core {
 
 enum class Renderer_type : uint32_t
 {
+  unknown,
   material,
   text,
 };

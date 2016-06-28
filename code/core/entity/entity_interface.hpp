@@ -37,6 +37,9 @@ const char*                   get_name(const util::generic_id this_id, World_dat
 void                          set_transform(const util::generic_id this_id, World_data::World *world, const Transform &transform);
 Transform                     get_transform(const util::generic_id this_id, World_data::World *world);
 
+void                          set_renderer_material(const util::generic_id this_id, World_data::World *world, const util::generic_id material_id, const util::generic_id model_id);
+
+
 void                          set_material(const util::generic_id this_id, World_data::World *world, const Core::Material &material);
 Core::Material                get_material(const util::generic_id this_id, World_data::World *world);
 

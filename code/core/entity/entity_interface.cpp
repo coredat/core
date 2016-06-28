@@ -490,6 +490,22 @@ set_material(const util::generic_id this_id, World_data::World *world, const Cor
 }
 
 
+void
+set_renderer_material(const util::generic_id this_id,
+                      World_data::World *world,
+                      const util::generic_id material_id,
+                      const util::generic_id model_id)
+{
+  assert(this_id && world);
+  
+  World_data::data_lock(world->mesh_data);
+  
+  
+  
+  World_data::data_unlock(world->mesh_data);
+}
+
+
 Core::Material
 get_material(const util::generic_id this_id, World_data::World *world)
 {
