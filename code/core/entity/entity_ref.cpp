@@ -198,7 +198,7 @@ Entity_ref::set_renderer(const Core::Renderer &renderer)
 Renderer
 Entity_ref::get_renderer() const
 {
-  assert(false);
+  assert(false); // We need to first set a flag in entity data to say what type of renderer we are.
   return Renderer();
 }
 
