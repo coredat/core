@@ -1,4 +1,7 @@
 #include <core/renderer/renderer.hpp>
+#include <core/renderer/material_renderer.hpp>
+#include <common/error_strings.hpp>
+#include <utilities/logging.hpp>
 #include <utilities/optimizations.hpp>
 
 
@@ -70,6 +73,17 @@ util::generic_id
 Renderer::get_arg_04() const
 {
   return m_arg_04;
+}
+
+
+Renderer::operator Material_renderer() const
+{
+  if(m_renderer_type != Renderer_type::material)
+  {
+    LOG_ERROR(Error_string::invalid_cast());
+  }
+  
+  return Renderer_utils::cast_to_material_renderer(*this);
 }
 
 

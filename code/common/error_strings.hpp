@@ -77,6 +77,10 @@ constexpr const char *
 resource_is_invalid() { return "Resource is invalid."; }
 
 
+constexpr const char *
+invalid_cast() { return "Invalid cast."; }
+
+
 // ** 3rd party ** //
 
 

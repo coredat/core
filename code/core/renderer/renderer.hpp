@@ -11,32 +11,41 @@
 /*
   TODO
   --
-  - Make main ctor private, want to enforce that this isn't a type you should be using.
-  - Add operator cast methods here.
+  - Do i need the cctor asignment etc.
 */
 
 
 namespace Core {
 
 
+/*
+  This is an interchange class.
+  You should use the specific renderer types.
+*/
 class Renderer final
 {
-public:
+  friend class Material_renderer;
+  friend class Text_renderer;
 
   explicit                Renderer(const Renderer_type renderer_type = Renderer_type::unknown,
                                    const util::generic_id arg_01 = util::generic_id_invalid(),
                                    const util::generic_id arg_02 = util::generic_id_invalid(),
                                    const util::generic_id arg_03 = util::generic_id_invalid(),
                                    const util::generic_id arg_04 = util::generic_id_invalid());
+public:
   
   Renderer_type           get_type() const;
   const char *            get_type_name() const;
   
-//private:
-//
-//  friend Material_renderer Renderer_utils::cast_to_material_renderer(const Renderer&);
-//  friend Text_renderer     Renderer_utils::cast_to_text_renderer(const Renderer&);
+                          operator Material_renderer() const;
   
+private:
+
+  friend class Entity;
+  friend class Entity_ref;
+
+  friend Material_renderer Renderer_utils::cast_to_material_renderer(const Renderer&);
+  friend Text_renderer     Renderer_utils::cast_to_text_renderer(const Renderer&);
   
   util::generic_id        get_arg_01() const;
   util::generic_id        get_arg_02() const;
