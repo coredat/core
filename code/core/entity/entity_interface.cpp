@@ -537,7 +537,26 @@ get_renderer_material(const util::generic_id this_id,
                       util::generic_id *out_material_id,
                       util::generic_id *out_model_id)
 {
-  
+  auto mesh_data = world->mesh_data;
+
+  // Material and Mesh
+  {
+    World_data::data_lock(mesh_data);
+    
+    size_t index;
+    
+    if(World_data::renderer_mesh_data_exists(mesh_data, this_id, &index))
+    {
+      *out_material_id = mesh_data->property_material_id[index];
+    }
+    
+    if(World_data::renderer_mesh_data_exists(mesh_data, this_id, &index))
+    {
+      *out_model_id = mesh_data->property_draw_call[index].model_id;
+    }
+    
+    World_data::data_unlock(mesh_data);
+  }
 }
 
 

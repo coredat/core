@@ -4,6 +4,7 @@
 #include <core/transform/transform.hpp>
 #include <core/model/model.hpp>
 #include <core/renderer/renderer.hpp>
+#include <core/renderer/material_renderer.hpp>
 #include <core/resources/material.hpp>
 #include <core/physics/collider.hpp>
 #include <core/physics/rigidbody_properties.hpp>
@@ -312,9 +313,14 @@ Entity::set_renderer(const Core::Renderer &renderer)
 Renderer
 Entity::get_renderer() const
 {
-  LOG_TODO_ONCE("Need to actually check what renderer is attached to this entity");
-
-  return Renderer();
+  LOG_TODO_ONCE("get renderer");
+  
+  util::generic_id mat_id = util::generic_id_invalid();
+  util::generic_id model_id = util::generic_id_invalid();
+  
+  Entity_detail::get_renderer_material(m_impl->id, &m_impl->world->data, &mat_id, &model_id);
+  
+  return Material_renderer(mat_id, model_id);
 }
 
 
