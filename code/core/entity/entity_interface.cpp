@@ -531,6 +531,16 @@ set_renderer_material(const util::generic_id this_id,
 }
 
 
+void
+get_renderer_material(const util::generic_id this_id,
+                      World_data::World *world,
+                      util::generic_id *out_material_id,
+                      util::generic_id *out_model_id)
+{
+  
+}
+
+
 namespace
 {
 

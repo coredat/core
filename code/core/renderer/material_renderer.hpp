@@ -15,6 +15,9 @@ public:
 
   explicit                Material_renderer(const util::generic_id mat_id,
                                             const util::generic_id model_id); // make private or something like that.
+  
+  explicit                Material_renderer(const Material &material, const Model &model);
+  
   explicit                Material_renderer();
                           ~Material_renderer();
   

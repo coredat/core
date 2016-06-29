@@ -312,7 +312,8 @@ Entity::set_renderer(const Core::Renderer &renderer)
 Renderer
 Entity::get_renderer() const
 {
-  assert(false);
+  LOG_TODO_ONCE("Need to actually check what renderer is attached to this entity");
+
   return Renderer();
 }
 

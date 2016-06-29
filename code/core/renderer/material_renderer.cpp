@@ -13,7 +13,13 @@ Material_renderer::Material_renderer(const util::generic_id mat_id,
 : m_material_id(mat_id)
 , m_model_id(model_id)
 {
-  
+}
+
+
+Material_renderer::Material_renderer(const Material &material,
+                                     const Model &model)
+: Material_renderer(material.get_id(), model.get_id())
+{
 }
 
 
