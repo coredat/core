@@ -76,6 +76,13 @@ material_renderer(const math::mat4 &view_mat,
       curr_run->size = (mesh_renderer_data->size - curr_run->start_point);
       ++number_of_runs;
     }
+    
+    if(mesh_renderer_data->size && !number_of_runs)
+    {
+      LOG_TODO_ONCE("This is a hack to incase there is only 1 draw call.")
+      number_of_runs = 1;
+      runs[0].size = 1;
+    }
   }
   
   // Do we need to increase the number of runs?
