@@ -79,9 +79,9 @@ material_renderer(const math::mat4 &view_mat,
     
     if(mesh_renderer_data->size && !number_of_runs)
     {
-      LOG_TODO_ONCE("This is a hack to incase there is only 1 draw call.")
+      LOG_TODO_ONCE("This is a hack to incase there is only 1 draw call, or 1 material")
       number_of_runs = 1;
-      runs[0].size = 1;
+      runs[0].size = mesh_renderer_data->size;
     }
   }
   
