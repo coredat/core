@@ -1,8 +1,0 @@
-#ifndef RENDERER_INCLDUED_442949AC_FBAD_43E7_B220_EFCC867CBF9B
-#define RENDERER_INCLDUED_442949AC_FBAD_43E7_B220_EFCC867CBF9B
-
-
-#include "debug_line.hpp"
-
-
-#endif // inc guard
