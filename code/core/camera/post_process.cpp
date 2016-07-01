@@ -12,7 +12,7 @@ namespace Core {
 
 struct Post_process::Impl
 {
-  uint32_t id = 0;
+  uint32_t id;
 };
 
 
@@ -41,6 +41,12 @@ Post_process::Post_process(const char *name)
     
     Resource_data::data_unlock(post_data);
   }
+}
+
+
+Post_process::Post_process(Post_process &&other)
+: m_impl(new Impl(*other.m_impl.get()))
+{
 }
 
 

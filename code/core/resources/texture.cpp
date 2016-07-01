@@ -11,7 +11,7 @@ namespace Core {
 
 struct Texture::Impl
 {
-  util::generic_id texture_id = util::generic_id_invalid();
+  util::generic_id texture_id;
 };
 
 

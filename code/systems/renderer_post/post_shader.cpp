@@ -1,4 +1,5 @@
 #include <systems/renderer_post/post_shader.hpp>
+#include <common/error_strings.hpp>
 
 
 namespace Post_renderer {
@@ -9,6 +10,12 @@ create_post_shader(Post_shader *out_shader, const Ogl::Shader *shader)
 {
   assert(out_shader && shader);
   assert(Ogl::shader_is_valid(shader));
+
+  if(Ogl::shader_is_valid(shader) || !out_shader || !shader)
+  {
+    LOG_ERROR(Error_string::failed_to_create_resource());
+    return false;
+  }
   
   out_shader->shader = *shader;
 
@@ -29,6 +36,8 @@ create_post_shader(Post_shader *out_shader, const Ogl::Shader *shader)
     Ogl::shader_uniforms_get_uniform_index(&out_shader->delta_time_uni, &uniforms, "uni_delta_time");
     Ogl::shader_uniforms_get_uniform_index(&out_shader->current_time_uni, &uniforms, "uni_current_time");
   }
+
+  return true;
 }
 
 

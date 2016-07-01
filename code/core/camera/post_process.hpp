@@ -15,6 +15,8 @@ public:
 
   explicit      Post_process(const char *name);
                 ~Post_process();
+
+                Post_process(Post_process &&post);
   
   void          set_shader(const Shader &shader);
   Shader        get_shader() const;

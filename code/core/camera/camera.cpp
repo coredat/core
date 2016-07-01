@@ -38,7 +38,7 @@ namespace Core {
 
 struct Camera::Impl
 {
-  util::generic_id camera_id = util::generic_id_invalid();
+  util::generic_id camera_id;
   ::Camera::Camera_properties properties;
   std::shared_ptr<World_detail::Data> world;
 };
@@ -204,6 +204,8 @@ Camera::set_post_process(const Core::Post_process &post)
 Post_process
 Camera::get_post_process() const
 {
+  assert(false);
+  return Post_process("");
 }
 
 

@@ -9,6 +9,7 @@
 #include <common/error_strings.hpp>
 #include <utilities/logging.hpp>
 #include <utilities/memory.hpp>
+#include <utilities/string_helpers.hpp>
 #include <assert.h>
 
 

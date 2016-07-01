@@ -4,7 +4,9 @@
 namespace Core {
 
 
-
+Text_renderer::Text_renderer()
+{
+}
 
 
 } // ns

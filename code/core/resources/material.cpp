@@ -14,7 +14,7 @@ namespace Core {
 
 struct Material::Impl
 {
-  util::generic_id material_id = util::generic_id_invalid();
+  util::generic_id material_id;
 };
 
 
