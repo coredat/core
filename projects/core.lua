@@ -59,6 +59,7 @@ core_project_data = {
     "SDL2.lib",
     "SOIL.lib",
     "opengl32.lib",
+    "shlwapi.lib",
   },
 
   linkoption_dependencies_macosx = {
