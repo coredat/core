@@ -18,6 +18,8 @@ namespace Post_renderer {
 void
 initialize()
 {
+  Ogl::error_clear();
+
   // Vertex attr
   if(!Ogl::vertex_format_is_valid(&post_vertex_format))
   {
@@ -49,6 +51,8 @@ initialize()
     
     Ogl::vertex_buffer_load(&post_vbo, data, sizeof(data), 5 * 3, false);
   }
+
+  Ogl::error_check("Err", &std::cout);
 }
 
 

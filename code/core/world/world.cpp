@@ -92,8 +92,8 @@ World::World(const Context &ctx, const World_setup setup)
   LOG_TODO("We can store the data directly and get rid of ::World_data::World")
   World_data::set_world_data(&m_impl->world_data->data);
   
-  Simple_renderer::initialize();
-  Debug_line_renderer::initialize();
+  //Simple_renderer::initialize();
+  //Debug_line_renderer::initialize();
   
   ::Material_renderer::initialize();
   ::Post_renderer::initialize();

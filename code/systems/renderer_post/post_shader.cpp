@@ -11,7 +11,7 @@ create_post_shader(Post_shader *out_shader, const Ogl::Shader *shader)
   assert(out_shader && shader);
   assert(Ogl::shader_is_valid(shader));
 
-  if(Ogl::shader_is_valid(shader) || !out_shader || !shader)
+  if(!Ogl::shader_is_valid(shader))
   {
     LOG_ERROR(Error_string::failed_to_create_resource());
     return false;

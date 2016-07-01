@@ -121,21 +121,21 @@ shader_uniforms_apply(const Uniform uniform_to_apply, void *data)
 {
   switch(uniform_to_apply.type)
   {
-    case(GL_FLOAT):       glUniform1fv(uniform_to_apply.index, uniform_to_apply.number_of_elements, (GLfloat*)data);  break;
-    case(GL_FLOAT_VEC2):  glUniform2fv(uniform_to_apply.index, uniform_to_apply.number_of_elements, (GLfloat*)data);  break;
-    case(GL_FLOAT_VEC3):  glUniform3fv(uniform_to_apply.index, uniform_to_apply.number_of_elements, (GLfloat*)data);  break;
-    case(GL_FLOAT_VEC4):  glUniform4fv(uniform_to_apply.index, uniform_to_apply.number_of_elements, (GLfloat*)data);  break;
-    case(GL_INT):         glUniform1iv(uniform_to_apply.index, uniform_to_apply.number_of_elements, (GLint*)data);    break;
-    case(GL_INT_VEC2):    glUniform2iv(uniform_to_apply.index, uniform_to_apply.number_of_elements, (GLint*)data);    break;
-    case(GL_INT_VEC3):    glUniform3iv(uniform_to_apply.index, uniform_to_apply.number_of_elements, (GLint*)data);    break;
-    case(GL_INT_VEC4):    glUniform4iv(uniform_to_apply.index, uniform_to_apply.number_of_elements, (GLint*)data);    break;
-    case(GL_BOOL):        glUniform1iv(uniform_to_apply.index, uniform_to_apply.number_of_elements, (GLint*)data);    break;
-    case(GL_BOOL_VEC2):   glUniform2iv(uniform_to_apply.index, uniform_to_apply.number_of_elements, (GLint*)data);    break;
-    case(GL_BOOL_VEC3):   glUniform3iv(uniform_to_apply.index, uniform_to_apply.number_of_elements, (GLint*)data);    break;
-    case(GL_BOOL_VEC4):   glUniform4iv(uniform_to_apply.index, uniform_to_apply.number_of_elements, (GLint*)data);    break;
-    case(GL_FLOAT_MAT2):  glUniformMatrix2fv(uniform_to_apply.index, uniform_to_apply.number_of_elements, GL_FALSE, (GLfloat*)data); break;
-    case(GL_FLOAT_MAT3):  glUniformMatrix3fv(uniform_to_apply.index, uniform_to_apply.number_of_elements, GL_FALSE, (GLfloat*)data); break;
-    case(GL_FLOAT_MAT4):  glUniformMatrix4fv(uniform_to_apply.index, uniform_to_apply.number_of_elements, GL_FALSE, (GLfloat*)data); break;
+    case(GL_FLOAT):       glUniform1fv(uniform_to_apply.index, uniform_to_apply.number_of_elements, (GLfloat*)data);  return;
+    case(GL_FLOAT_VEC2):  glUniform2fv(uniform_to_apply.index, uniform_to_apply.number_of_elements, (GLfloat*)data);  return;
+    case(GL_FLOAT_VEC3):  glUniform3fv(uniform_to_apply.index, uniform_to_apply.number_of_elements, (GLfloat*)data);  return;
+    case(GL_FLOAT_VEC4):  glUniform4fv(uniform_to_apply.index, uniform_to_apply.number_of_elements, (GLfloat*)data);  return;
+    case(GL_INT):         glUniform1iv(uniform_to_apply.index, uniform_to_apply.number_of_elements, (GLint*)data);    return;
+    case(GL_INT_VEC2):    glUniform2iv(uniform_to_apply.index, uniform_to_apply.number_of_elements, (GLint*)data);    return;
+    case(GL_INT_VEC3):    glUniform3iv(uniform_to_apply.index, uniform_to_apply.number_of_elements, (GLint*)data);    return;
+    case(GL_INT_VEC4):    glUniform4iv(uniform_to_apply.index, uniform_to_apply.number_of_elements, (GLint*)data);    return;
+    case(GL_BOOL):        glUniform1iv(uniform_to_apply.index, uniform_to_apply.number_of_elements, (GLint*)data);    return;
+    case(GL_BOOL_VEC2):   glUniform2iv(uniform_to_apply.index, uniform_to_apply.number_of_elements, (GLint*)data);    return;
+    case(GL_BOOL_VEC3):   glUniform3iv(uniform_to_apply.index, uniform_to_apply.number_of_elements, (GLint*)data);    return;
+    case(GL_BOOL_VEC4):   glUniform4iv(uniform_to_apply.index, uniform_to_apply.number_of_elements, (GLint*)data);    return;
+    case(GL_FLOAT_MAT2):  glUniformMatrix2fv(uniform_to_apply.index, uniform_to_apply.number_of_elements, GL_FALSE, (GLfloat*)data); return;
+    case(GL_FLOAT_MAT3):  glUniformMatrix3fv(uniform_to_apply.index, uniform_to_apply.number_of_elements, GL_FALSE, (GLfloat*)data); return;
+    case(GL_FLOAT_MAT4):  glUniformMatrix4fv(uniform_to_apply.index, uniform_to_apply.number_of_elements, GL_FALSE, (GLfloat*)data); return;
     case(GL_SAMPLER_1D):
     case(GL_SAMPLER_1D_ARRAY):
     case(GL_SAMPLER_1D_ARRAY_SHADOW):
@@ -155,13 +155,14 @@ shader_uniforms_apply(const Uniform uniform_to_apply, void *data)
       
       glActiveTexture(GL_TEXTURE0 + uniform_to_apply.index);
       glBindTexture(GL_TEXTURE_2D, tex_id);
-      break;
+      return;
     }
 
     default:
-      UNREACHABLE;
-      assert(false); // Why did you get here?
-  };  
+      return;
+  };
+
+  UNREACHABLE;
 }
 
 
