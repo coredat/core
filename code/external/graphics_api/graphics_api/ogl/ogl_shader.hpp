@@ -41,8 +41,7 @@ shader_create(Shader *out_shader,
   \param log Optional logging stream.
 */
 void
-shader_destroy(Shader *shader_to_destroy,
-               std::ostream *log = nullptr);
+shader_destroy(Shader *shader_to_destroy);
 
 
 /*!

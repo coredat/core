@@ -90,17 +90,14 @@ shader_create(Shader *out_shader,
 
 
 void
-shader_destroy(Shader *shader, std::ostream *log)
+shader_destroy(Shader *shader)
 {
   // Param check
   if(!shader)
   {
     assert(false);
     
-    if(log)
-    {
-      (*log) << "'shader' is not a valid paramater in 'shader_destroy'";
-    }
+    LOG_ERROR("'shader' is not a valid paramater in 'shader_destroy'");
     
     return;
   }
