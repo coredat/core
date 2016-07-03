@@ -8,6 +8,7 @@
 #include <graphics_api/ogl/ogl_vertex_format.hpp>
 #include <graphics_api/utils/shader_utils.hpp>
 #include <utilities/directory.hpp>
+#include <utilities/file_helpers.hpp>
 #include <string>
 #include <assert.h>
 #include <iostream>
@@ -44,12 +45,21 @@ initialize()
 
   // Load shaders
   {
-    const std::string asset_path  = util::get_resource_path() + "assets/";
-    const std::string fullbright  = asset_path + "shaders/basic_fullbright.ogl";
-    const std::string directional = asset_path + "shaders/basic_dir_light.ogl";
-   
-    const auto full_code = Graphics_api::Util::shader_code_from_tagged_file(fullbright.c_str());
-    const auto dir_code  = Graphics_api::Util::shader_code_from_tagged_file(directional.c_str());
+    char full_shader_path[MAX_FILE_PATH_SIZE];
+    char dir_shader_path[MAX_FILE_PATH_SIZE];
+    {
+      memset(full_shader_path, 0, sizeof(full_shader_path));
+      memset(dir_shader_path, 0, sizeof(dir_shader_path));
+      
+      strcat(full_shader_path, util::dir::resource_path());
+      strcat(full_shader_path, "assets/shaders/basic_fullbright.ogl");
+      
+      strcat(dir_shader_path, util::dir::resource_path());
+      strcat(dir_shader_path, "assets/shaders/basic_dir_light.ogl");
+    }
+    
+    const auto full_code = Graphics_api::Util::shader_code_from_tagged_file(full_shader_path);
+    const auto dir_code  = Graphics_api::Util::shader_code_from_tagged_file(dir_shader_path);
 
     Ogl::shader_create(&shader_fullbright, full_code.vs_code.c_str(), full_code.gs_code.c_str(), full_code.ps_code.c_str());
     Ogl::shader_create(&shader_dir_light, dir_code.vs_code.c_str(), dir_code.gs_code.c_str(), dir_code.ps_code.c_str());

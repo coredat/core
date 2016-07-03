@@ -11,6 +11,7 @@
 #include <graphics_api/utils/shader_utils.hpp>
 #include <graphics_api/ogl/ogl_blend.hpp>
 #include <utilities/directory.hpp>
+#include <utilities/file_helpers.hpp>
 #include <string>
 #include <assert.h>
 #include <iostream>
@@ -41,10 +42,15 @@ initialize()
 
   // Load shader
   {
-    const std::string asset_path  = util::get_resource_path() + "assets/";
-    const std::string gui_shader  = asset_path + "shaders/gui.ogl";
+    char shader_path[MAX_FILE_PATH_SIZE];
+    {
+      memset(shader_path, 0, sizeof(shader_path));
+      
+      strcat(shader_path, util::dir::resource_path());
+      strcat(shader_path, "assets/shaders/gui.ogl");
+    }
     
-    const auto gui_code = Graphics_api::Util::shader_code_from_tagged_file(gui_shader.c_str());
+    const auto gui_code = Graphics_api::Util::shader_code_from_tagged_file(shader_path);
     
     Ogl::shader_create(&shader_gui, gui_code.vs_code.c_str(), gui_code.gs_code.c_str(), gui_code.ps_code.c_str());
     

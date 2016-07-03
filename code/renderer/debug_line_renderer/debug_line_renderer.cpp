@@ -8,6 +8,7 @@
 #include <graphics_api/ogl/ogl_texture_filtering.hpp>
 #include <graphics_api/utils/shader_utils.hpp>
 #include <utilities/directory.hpp>
+#include <utilities/file_helpers.hpp>
 #include <algorithm>
 #include <assert.h>
 #include <iostream>
@@ -39,9 +40,14 @@ void
 initialize()
 {
   Ogl::error_clear();
+
+  char debug_lines_shd_path[MAX_FILE_PATH_SIZE];
+  memset(debug_lines_shd_path, 0, sizeof(debug_lines_shd_path));
   
-  const std::string debug_lines = util::get_resource_path() + "assets/" + "shaders/debug_line.ogl";
-  auto debug_code = Graphics_api::Util::shader_code_from_tagged_file(debug_lines.c_str());
+  strcat(debug_lines_shd_path, util::dir::resource_path());
+  strcat(debug_lines_shd_path, "assets/shaders/debug_line.ogl");
+
+  auto debug_code = Graphics_api::Util::shader_code_from_tagged_file(debug_lines_shd_path);
   
   Ogl::shader_create(&debug_line_shader, debug_code.vs_code.c_str(), debug_code.gs_code.c_str(), debug_code.ps_code.c_str());
   assert(Ogl::shader_is_valid(&debug_line_shader));
