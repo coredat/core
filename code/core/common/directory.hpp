@@ -6,8 +6,14 @@ namespace Core {
 namespace Directory {
 
 
+/*!
+  Returns a string with the full filepath and the resource
+  appended to the end. This return value is only valid for one frame.
+  \param resource file or path to be appended to the resource directory.
+  \return returns a path that is valid for one frame.
+*/
 const char*
-resource_path(const char *url);
+resource_path(const char *resource);
 
 
 } // ns
