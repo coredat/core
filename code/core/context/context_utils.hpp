@@ -2,8 +2,8 @@
 #define CONTEXT_UTIL_INCLUDED_B76CA6DE_381A_4F68_8D36_4CCC0675AD01
 
 
-#include <core/context/context_fwd.hpp>
-#include <stdint.h>
+#include <core/common/core_fwd.hpp>
+#include <core/common/core_types.hpp>
 #include <string>
 
 

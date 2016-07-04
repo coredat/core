@@ -10,7 +10,7 @@
 /*
   Useage Guidelines
   --
-  Only include commonily used STL and other util/math types etc.
+  Only include *common* STL and other util/math types etc.
   This is NOT! a dumping ground for lazy includes.
 */
 
