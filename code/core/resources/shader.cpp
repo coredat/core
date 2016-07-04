@@ -4,7 +4,6 @@
 #include <data/global_data/shader_data.hpp>
 #include <utilities/generic_id.hpp>
 #include <utilities/string_helpers.hpp>
-#include <utilities/file_helpers.hpp>
 #include <graphics_api/utils/shader_utils.hpp>
 #include <graphics_api/ogl/ogl_shader.hpp>
 #include <assert.h>

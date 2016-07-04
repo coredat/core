@@ -8,7 +8,7 @@
 #include <graphics_api/ogl/ogl_texture_filtering.hpp>
 #include <graphics_api/utils/shader_utils.hpp>
 #include <utilities/directory.hpp>
-#include <utilities/file_helpers.hpp>
+#include <utilities/file.hpp>
 #include <algorithm>
 #include <assert.h>
 #include <vector>
