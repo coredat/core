@@ -11,7 +11,7 @@
   --
   This file is for fwd declerations of public types.
   Don't include fwd decleration of types that should have
-  no public interface, like types inside 'detail' deirectories or namespaces.
+  no public interface, like types inside 'detail' directories or namespaces.
 */
 
 
