@@ -12,6 +12,7 @@
 
 #include <utilities/generic_id.hpp>
 #include <utilities/memory_pool.hpp>
+#include <utilities/bits.hpp>
 #include <stddef.h>
 #include <stdint.h>
 
@@ -21,7 +22,7 @@ namespace World_data {
 
 namespace Entity_component {
   enum ENUM {
-    has_physics = 1 << 0,
+    has_physics = BIT(0),
   };
 } // ns
 

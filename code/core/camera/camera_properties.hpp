@@ -3,6 +3,7 @@
 
 
 #include <stdint.h>
+#include <utilities/bits.hpp>
 
 
 namespace Core {
@@ -18,8 +19,8 @@ enum class Camera_type : uint32_t
 namespace Camera_clear {
 enum ENUM : uint32_t
 {
-  color = 1 << 0,
-  depth = 1 << 1,
+  color = BIT(0),
+  depth = BIT(1),
 };
 } // ns
 

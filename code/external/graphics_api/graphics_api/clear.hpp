@@ -3,6 +3,7 @@
 
 
 #include <stdint.h>
+#include <utilities/bits.hpp>
 
 
 namespace Graphics_api {
@@ -11,8 +12,8 @@ namespace Graphics_api {
 namespace Clear_flag {
 enum ENUM : uint32_t {
   
-  color    = 1 << 0,
-  depth    = 1 << 1,
+  color    = BIT(0),
+  depth    = BIT(1),
   
 };
 } // ns
