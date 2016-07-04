@@ -1,5 +1,4 @@
 #include "physics_engine.hpp"
-#include <iostream>
 
 
 namespace Physics_engine {

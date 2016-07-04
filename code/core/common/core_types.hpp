@@ -20,6 +20,7 @@
 #include <math/vec/vec_types.hpp>
 #include <math/quat/quat_types.hpp>
 #include <math/transform/transform_types.hpp>
+#include <math/geometry/geometry_types.hpp>
 
 #include <stddef.h>
 #include <stdint.h>

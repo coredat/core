@@ -9,9 +9,7 @@
 #include <graphics_api/utils/shader_utils.hpp>
 #include <utilities/directory.hpp>
 #include <utilities/file_helpers.hpp>
-#include <string>
 #include <assert.h>
-#include <iostream>
 
 
 namespace

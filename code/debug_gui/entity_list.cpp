@@ -1,7 +1,6 @@
 #include <debug_gui/entity_list.hpp>
 #include <data/world_data/entity_data.hpp>
 #include <3rdparty/imgui/imgui.h>
-#include <string>
 
 
 namespace Debug_menu {

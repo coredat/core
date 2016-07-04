@@ -1,9 +1,6 @@
 #include "ogl_shader.hpp"
-#include <assert.h>
-#include <string> // remove?
-#include <iostream> // remove
-#include <vector> // remove
 #include <utilities/logging.hpp>
+#include <assert.h>
 
 
 namespace Ogl {

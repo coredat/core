@@ -12,9 +12,7 @@
 #include <graphics_api/ogl/ogl_blend.hpp>
 #include <utilities/directory.hpp>
 #include <utilities/file_helpers.hpp>
-#include <string>
 #include <assert.h>
-#include <iostream>
 
 
 namespace

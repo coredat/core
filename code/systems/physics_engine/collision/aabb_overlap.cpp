@@ -2,7 +2,7 @@
 #include "collision_pairs.hpp"
 #include "axis_collidable.hpp"
 #include <math/geometry/aabb.hpp>
-#include <iostream>
+
 
 namespace Physics {
 namespace Collision {

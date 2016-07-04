@@ -2,10 +2,8 @@
 #define MODEL_INCLUDED_292C333A_8EB1_40B3_A4AA_19E7E9D0447A
 
 
-#include <core/model/model_fwd.hpp>
-#include <math/geometry/geometry_fwd.hpp>
-#include <memory>
-#include <stdint.h>
+#include <core/common/core_fwd.hpp>
+#include <core/common/core_types.hpp>
 
 
 namespace Core {

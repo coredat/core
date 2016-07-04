@@ -2,8 +2,8 @@
 #define MESH_INCLUDED_3B02E00E_C938_4A7E_93EE_52E659913C99
 
 
-#include <math/geometry/geometry_fwd.hpp>
-#include <memory>
+#include <core/common/core_fwd.hpp>
+#include <core/common/core_types.hpp>
 
 
 namespace Core {

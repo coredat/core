@@ -3,6 +3,7 @@
 #include <core/resources/texture.hpp>
 #include <core/color/color.hpp>
 #include <core/color/color_utils.hpp>
+#include <systems/renderer_material/material.hpp>
 #include <common/error_strings.hpp>
 #include <data/global_data/resource_data.hpp>
 #include <graphics_api/ogl/ogl_shader_uniform.hpp>
@@ -24,7 +25,7 @@ Material::Material()
 }
 
 
-Material::Material(const uint32_t id)
+Material::Material(const util::generic_id id)
 : m_impl(new Impl{id})
 {
 }
@@ -51,7 +52,7 @@ Material::Material(const char *name)
     
     // Set instance id in the hash key
     {
-      Material_renderer::Material_id priority_key;
+      ::Material_renderer::Material_id priority_key;
       Resource_data::material_data_get_property_material_hash_id(data, data->size, &priority_key);
       
       priority_key.material_instance = data->size;
@@ -141,15 +142,15 @@ Material::set_shader(const Shader &shader)
       
       // Create and add the shader part of the material
       {
-        Material_renderer::Material *material;
+        ::Material_renderer::Material *material;
         Resource_data::material_data_get_property_material(mat_data, m_impl->material_id, &material);
-        Material_renderer::create_material(material, &shd);
+        ::Material_renderer::create_material(material, &shd);
         Resource_data::material_data_set_property_material(mat_data, m_impl->material_id, material);
       }
       
       // Update the hash key
       {
-        Material_renderer::Material_id material_hash;
+        ::Material_renderer::Material_id material_hash;
         Resource_data::material_data_get_property_material_hash_id(mat_data, m_impl->material_id, &material_hash);
         material_hash.shader_id = shader.get_id();
         Resource_data::material_data_set_property_material_hash_id(mat_data, m_impl->material_id, material_hash);
@@ -206,7 +207,7 @@ Material::set_map_01(const Texture &texture)
     {
       Resource_data::data_lock(mat_data);
       
-      Material_renderer::Material *out_material;
+      ::Material_renderer::Material *out_material;
       Resource_data::material_data_get_property_material(mat_data, m_impl->material_id, &out_material);
       
       out_material->map_01_id = out_texture;
@@ -217,7 +218,7 @@ Material::set_map_01(const Texture &texture)
     
     // Update the hash key
     {
-      Material_renderer::Material_id material_hash;
+      ::Material_renderer::Material_id material_hash;
       Resource_data::material_data_get_property_material_hash_id(mat_data, m_impl->material_id, &material_hash);
       material_hash.texture_map_01_id = texture.get_id();
       Resource_data::material_data_set_property_material_hash_id(mat_data, m_impl->material_id, material_hash);
@@ -249,7 +250,7 @@ Material::set_color(const Color color)
     {
       Resource_data::data_lock(mat_data);
       
-      Material_renderer::Material *out_material;
+      ::Material_renderer::Material *out_material;
       Resource_data::material_data_get_property_material(mat_data, m_impl->material_id, &out_material);
       
       Core::Color_utils::to_float_array(color, out_material->color_data);

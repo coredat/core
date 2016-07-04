@@ -5,18 +5,11 @@
 #include <data/world_data/world_pools.hpp>
 #include <data/global_data/resource_data.hpp>
 #include <math/geometry/aabb.hpp>
-
 #include <utilities/file_helpers.hpp>
 #include <utilities/obj_model_loader.hpp>
-#include <graphics_api/mesh.hpp>
 #include <utilities/logging.hpp>
 #include <utilities/string_helpers.hpp>
-
-#include <stddef.h>
-#include <assert.h>
-#include <algorithm>
-#include <stdint.h>
-#include <string>
+#include <graphics_api/mesh.hpp>
 
 
 namespace Core {

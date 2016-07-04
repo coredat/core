@@ -1,4 +1,4 @@
-#include "entity_interface.hpp"
+#include <core/entity/entity_interface.hpp>
 #include <core/model/model.hpp>
 #include <core/model/mesh.hpp>
 #include <core/physics/collider.hpp>
@@ -6,17 +6,18 @@
 #include <core/physics/box_collider.hpp>
 #include <core/physics/rigidbody_properties.hpp>
 #include <core/resources/material.hpp>
-#include <data/world_data/world_data.hpp>
-#include <data/global_data/resource_data.hpp>
 #include <core/transform/transform.hpp>
 #include <common/error_strings.hpp>
+#include <systems/renderer_material/material.hpp>
+#include <data/world_data/world_data.hpp>
+#include <data/global_data/resource_data.hpp>
+#include <data/world_data/transform_data.hpp>
+#include <data/world_data/entity_data.hpp>
+#include <data/world_data/pending_scene_graph_change_data.hpp>
 #include <math/transform/transform.hpp>
 #include <math/geometry/aabb.hpp>
 #include <utilities/logging.hpp>
 #include <utilities/bits.hpp>
-#include <data/world_data/transform_data.hpp>
-#include <data/world_data/entity_data.hpp>
-#include <data/world_data/pending_scene_graph_change_data.hpp>
 
 
 namespace Core {
@@ -257,26 +258,6 @@ get_name(const util::generic_id this_id, World_data::World *world)
 
 namespace
 {
-  inline bool
-  get_index(size_t *index, const util::generic_id id, const util::generic_id ents[], const uint32_t size)
-  {
-    if(!ents)
-    {
-      return false;
-    }
-    
-    if(util::generic_id_search_binary(index, id, ents, size))
-    {
-      return true;
-    }
-    
-    return false;
-  }
-}
-
-
-namespace
-{
 
 inline void
 update_transform(const util::generic_id this_id, World_data::World *world, const math::transform *transform)
@@ -344,9 +325,9 @@ update_collider(const util::generic_id this_id,
       math::aabb collider_box;
       World_data::physics_data_get_property_aabb_collider(phys_data, this_id, &collider_box);
       
-      const math::vec3 collider_scale = math::aabb_get_extents(collider_box);
+      const math::vec3 collider_scale  = math::aabb_get_extents(collider_box);
       const math::vec3 transform_scale = transform->scale;
-      const math::vec3 total_scale = math::vec3_multiply(collider_scale, transform_scale);
+      const math::vec3 total_scale     = math::vec3_multiply(collider_scale, transform_scale);
 
       // Order is important here! Scale then shift origin.
       math::aabb_scale(collider_box, total_scale);
@@ -458,13 +439,13 @@ set_renderer_material(const util::generic_id this_id,
       
       Resource_data::data_lock(mat_data);
     
-      Material_renderer::Material_id this_key;
+      ::Material_renderer::Material_id this_key;
       Resource_data::material_data_get_property_material_hash_id(mat_data, material_id, &this_key);
     
       // Loop through and find insert point
       for(size_t i = 0; i < mesh_data->size; ++i)
       {
-        Material_renderer::Material_id other_key;
+        ::Material_renderer::Material_id other_key;
         Resource_data::material_data_get_property_material_hash_id(mat_data, mesh_data->property_material_id[i], &other_key);
 
         if(this_key > other_key)

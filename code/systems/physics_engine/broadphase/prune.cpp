@@ -11,9 +11,6 @@
 #endif
 
 
-#include <iostream> // die
-
-
 namespace Physics {
 namespace Broadphase {
 
