@@ -26,8 +26,52 @@ Transform::Transform(const math::vec3 pos,
 
 
 Transform::Transform()
-: Transform(math::vec3_zero(), math::vec3_one(), math::quat_init())
+: Transform(math::vec3_zero(),
+            math::vec3_one(),
+            math::quat_init())
 {
+}
+
+
+math::vec3
+Transform::get_position() const
+{
+  return m_position;
+}
+
+
+void
+Transform::set_position(const math::vec3 pos)
+{
+  m_position = pos;
+}
+
+
+math::quat
+Transform::get_rotation() const
+{
+  return m_rotation;
+}
+
+
+void
+Transform::set_rotation(const math::quat rot)
+{
+  m_rotation = rot;
+}
+
+
+math::vec3
+Transform::get_scale() const
+{
+  return m_scale;
+}
+
+
+void
+Transform::set_scale(const math::vec3 scale)
+{
+  m_scale = scale;
 }
 
 
@@ -49,6 +93,27 @@ math::vec3
 Transform::get_left() const
 {
   return math::quat_rotate_point(m_rotation, world_left);
+}
+
+
+math::vec3
+Transform::get_world_forward()
+{
+  return world_forward;
+}
+  
+
+math::vec3
+Transform::get_world_up()
+{
+  return world_up;
+}
+
+
+math::vec3
+Transform::get_world_left()
+{
+  return world_left;
 }
 
 

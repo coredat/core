@@ -131,14 +131,14 @@ render(const math::mat4 &view_proj_mat,
     }
   }
   
-    Ogl::error_check("Setting up Material", &std::cout);
+  Ogl::error_check("Setting up Material", &std::cout);
   
   // Draw all the vbo's
   for(uint32_t i = 0; i < number_of_calls; ++i)
   {
     const Draw_call &call = calls[i];
     
-    if((cull_mask & call.cull_mask) == 0)
+    if(cull_mask != UINT32_MAX && (cull_mask & call.cull_mask) == 0)
     {
       continue;
     }
