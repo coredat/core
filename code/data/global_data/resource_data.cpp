@@ -31,15 +31,15 @@ resources_init()
   data->mesh_data = &model;
   
   static Shader_data shaders;
-  shader_data_init(&shaders, 16);
+  shader_data_init(&shaders, 128);
   data->shader_data = &shaders;
   
   static Material_data materials;
-  material_data_init(&materials, 2048);
+  material_data_init(&materials, 256);
   data->material_data = &materials;
   
   static Post_process_data post_data;
-  post_process_data_init(&post_data, 16);
+  post_process_data_init(&post_data, 32);
   data->post_data = &post_data;
 }
 
