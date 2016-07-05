@@ -313,7 +313,7 @@ Entity::set_renderer(const Core::Renderer &renderer)
 Renderer
 Entity::get_renderer() const
 {
-  LOG_TODO_ONCE("get renderer");
+  LOG_TODO_ONCE("get renderer type");
   
   util::generic_id mat_id = util::generic_id_invalid();
   util::generic_id model_id = util::generic_id_invalid();
