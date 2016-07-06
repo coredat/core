@@ -9,7 +9,7 @@ class Font
 {
 public:
 
-  explicit          Font();
+  explicit          Font(const char *filename);
 
 };
 

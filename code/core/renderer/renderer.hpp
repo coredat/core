@@ -30,8 +30,7 @@ class Renderer final
   explicit                  Renderer(const Renderer_type renderer_type = Renderer_type::unknown,
                                      const util::generic_id arg_01 = util::generic_id_invalid(),
                                      const util::generic_id arg_02 = util::generic_id_invalid(),
-                                     const util::generic_id arg_03 = util::generic_id_invalid(),
-                                     const util::generic_id arg_04 = util::generic_id_invalid());
+                                     const util::generic_id arg_03 = util::generic_id_invalid());
 public:
   
   Renderer_type             get_type() const;
@@ -50,7 +49,6 @@ private:
   util::generic_id          get_arg_01() const;
   util::generic_id          get_arg_02() const;
   util::generic_id          get_arg_03() const;
-  util::generic_id          get_arg_04() const;
   
 private:
 
@@ -58,7 +56,6 @@ private:
   const util::generic_id  m_arg_01        = util::generic_id_invalid();
   const util::generic_id  m_arg_02        = util::generic_id_invalid();
   const util::generic_id  m_arg_03        = util::generic_id_invalid();
-  const util::generic_id  m_arg_04        = util::generic_id_invalid();
 
 };
 

@@ -3,6 +3,7 @@
 
 
 #include <core/common/core_fwd.hpp>
+#include <core/common/core_types.hpp>
 
 
 namespace Core {
@@ -13,17 +14,23 @@ class Text_renderer final
 public:
 
   explicit            Text_renderer();
-  
-  void                set_font(class Font &font);
-  Font                get_font();
-  
+
+  void                set_font(const Font &font);
+  Font                get_font() const;
+
   void                set_text(const char *str);
   const char *        get_text() const;
-  uint32_t            size_of_text() const;
+
+                      operator Renderer() const;
   
 private:
 
   
+  
+private:
+
+  util::generic_id m_font_id = util::generic_id_invalid();
+  util::generic_id m_text_id = util::generic_id_invalid();
   
 };
 
