@@ -11,7 +11,7 @@ display_camera_data(World_data::Camera_data *data)
 {
   ImGui::Begin("Camera List");
   {
-    ImGui::Columns(10, "material_cols");
+    ImGui::Columns(11, "material_cols");
     ImGui::Separator();
     
     ImGui::Text("ID");            ImGui::NextColumn();
@@ -20,6 +20,7 @@ display_camera_data(World_data::Camera_data *data)
     ImGui::Text("Texture_id");    ImGui::NextColumn();
     ImGui::Text("Priority");      ImGui::NextColumn();
     ImGui::Text("Clear Flags");   ImGui::NextColumn();
+    ImGui::Text("Type");          ImGui::NextColumn();
     ImGui::Text("FOV");           ImGui::NextColumn();
     ImGui::Text("Mask");          ImGui::NextColumn();
     ImGui::Text("Dimention");     ImGui::NextColumn();
@@ -47,11 +48,12 @@ display_camera_data(World_data::Camera_data *data)
       ::Camera::Camera_properties props;
       World_data::camera_data_get_property_camera(data, data->camera_id[i], &props);
 
-      ImGui::Text("%d",           props.clear_flags);                             ImGui::NextColumn();
-      ImGui::Text("%.2f",         props.fov);                                     ImGui::NextColumn();
-      ImGui::Text("%d",           props.cull_mask);                               ImGui::NextColumn();
-      ImGui::Text("%d x %d",      props.viewport_width, props.viewport_height);   ImGui::NextColumn();
-      ImGui::Text("%.2f - %.2f",  props.near_plane, props.far_plane);             ImGui::NextColumn();
+      ImGui::Text("%d",           props.clear_flags);                                                                 ImGui::NextColumn();
+      ImGui::Text("%s",           (props.type == Core::Camera_type::orthographic ? "Orthographic" : "Perspective"));  ImGui::NextColumn();
+      ImGui::Text("%.2f",         props.fov);                                                                         ImGui::NextColumn();
+      ImGui::Text("%d",           props.cull_mask);                                                                   ImGui::NextColumn();
+      ImGui::Text("%d x %d",      props.viewport_width, props.viewport_height);                                       ImGui::NextColumn();
+      ImGui::Text("%.2f - %.2f",  props.near_plane, props.far_plane);                                                 ImGui::NextColumn();
   
       
     }
