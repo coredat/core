@@ -353,6 +353,7 @@ set_transform(const util::generic_id this_id,
   if(!is_valid(this_id, world))
   {
     LOG_ERROR(Error_string::entity_is_invalid());
+    assert(false);
     return;
   }
   
