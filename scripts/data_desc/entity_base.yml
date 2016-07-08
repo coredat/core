@@ -16,13 +16,6 @@ data:
         };
       } // ns
 
-      namespace Renderer_type {
-        enum ENUM {
-          material_renderer = 1 << 0,
-          text_renderer = 1 << 1,
-        };
-      } // ns
-
 
   relationships:
     - type: has_one

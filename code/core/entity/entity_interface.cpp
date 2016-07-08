@@ -569,14 +569,14 @@ set_renderer_material(const util::generic_id this_id,
     uint32_t renderer_type(0);
     World_data::entity_data_get_property_renderer(entity_data, this_id, &renderer_type);
     
-    if(renderer_type != 0 && renderer_type != World_data::Renderer_type::material_renderer)
+    if(renderer_type != 0 && (Core::Renderer_type)renderer_type != Core::Renderer_type::material)
     {
       LOG_ERROR(Error_string::no_implimentation()); // Currently no mechanism to change a renderer type.
       return;
     }
     else
     {
-      World_data::entity_data_set_property_renderer(entity_data, this_id, World_data::Renderer_type::material_renderer);
+      World_data::entity_data_set_property_renderer(entity_data, this_id, (uint32_t)Core::Renderer_type::material);
     }
     
     World_data::data_unlock(entity_data);

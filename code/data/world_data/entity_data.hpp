@@ -6,8 +6,8 @@
 */
 
 
-#ifndef ENTITY_DATA_INCLUDED_AA90BE96_82B9_4001_92BD_101D5BDDACA5
-#define ENTITY_DATA_INCLUDED_AA90BE96_82B9_4001_92BD_101D5BDDACA5
+#ifndef ENTITY_DATA_INCLUDED_E9435758_47A6_41CC_BE76_3E635A6D134D
+#define ENTITY_DATA_INCLUDED_E9435758_47A6_41CC_BE76_3E635A6D134D
 
 
 #include <utilities/generic_id.hpp>
@@ -22,12 +22,6 @@ namespace World_data {
 namespace Entity_component {
   enum ENUM {
     has_physics = 1 << 0,
-  };
-} // ns
-namespace Renderer_type {
-  enum ENUM {
-    material_renderer = 1 << 0,
-    text_renderer = 1 << 1,
   };
 } // ns
 
