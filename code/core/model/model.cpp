@@ -30,7 +30,29 @@ Model::Model()
 Model::Model(const uint32_t id)
 : m_impl(new Impl{id})
 {
-  LOG_TODO("Check this id is valid");
+  if(!id)
+  {
+    return;
+  }
+
+  // Check id is valid, if not null it
+  {
+    Resource_data::Resources *resources = Resource_data::get_resources();
+    assert(resources);
+    
+    Resource_data::Mesh_data *mesh_data = resources->mesh_data;
+    assert(mesh_data);
+
+    Resource_data::data_lock(mesh_data);
+    
+    if(!Resource_data::mesh_data_exists(mesh_data, id))
+    {
+      LOG_WARNING(Error_string::resource_is_invalid());
+      m_impl->mesh_id = util::generic_id_invalid();
+    }
+
+    Resource_data::data_unlock(mesh_data);
+  }
 }
 
 

@@ -24,7 +24,29 @@ Texture::Texture()
 Texture::Texture(const uint32_t id)
 : m_impl(new Impl{id})
 {
-  LOG_TODO("Check this id is valid");
+  if(!id)
+  {
+    return;
+  }
+
+  // Check the id is valid, null it if it isn't
+  {
+    Resource_data::Resources *resources = Resource_data::get_resources();
+    assert(resources);
+    
+    Resource_data::Texture_data *texture_data = resources->texture_data;
+    assert(texture_data);
+
+    Resource_data::data_lock(texture_data);
+    
+    if(!Resource_data::texture_data_exists(texture_data, id))
+    {
+      LOG_WARNING(Error_string::resource_is_invalid());
+      m_impl->texture_id = util::generic_id_invalid();
+    }
+
+    Resource_data::data_unlock(texture_data);
+  }
 }
 
 
