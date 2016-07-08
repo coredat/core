@@ -16,6 +16,13 @@ data:
         };
       } // ns
 
+      namespace Renderer_type {
+        enum ENUM {
+          material_renderer = 1 << 0,
+          text_renderer = 1 << 1,
+        };
+      } // ns
+
 
   relationships:
     - type: has_one
@@ -38,5 +45,10 @@ data:
 
     - name: user_data
       type: uintptr_t
+      return: value
+      include: <stdint.h>
+
+    - name: renderer
+      type: uint32_t
       return: value
       include: <stdint.h>

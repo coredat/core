@@ -7,6 +7,8 @@
 #include <core/physics/rigidbody_properties.hpp>
 #include <core/resources/material.hpp>
 #include <core/transform/transform.hpp>
+#include <core/renderer/renderer.hpp>
+#include <core/renderer/material_renderer.hpp>
 #include <common/error_strings.hpp>
 #include <systems/renderer_material/material.hpp>
 #include <data/world_data/world_data.hpp>
@@ -406,12 +408,179 @@ get_transform(const util::generic_id this_id, World_data::World *world)
 
 
 void
+set_renderer(const util::generic_id this_id,
+             World_data::World *world,
+             const Core::Renderer &renderer)
+{
+  assert(this_id && world);
+
+  if(!is_valid(this_id, world))
+  {
+    LOG_ERROR(Error_string::entity_is_invalid());
+    return;
+  }
+  
+  if(!renderer)
+  {
+    LOG_ERROR(Error_string::resource_is_invalid());
+    return;
+  }
+
+  // Check to see if renderer has been set.
+  {
+    auto entity_data = world->entity;
+    assert(entity_data);
+    
+    auto renderer_material = world->mesh_data;
+    
+    World_data::data_lock(entity_data);
+    
+    uint32_t renderer_type(0);
+    World_data::entity_data_get_property_renderer(entity_data, this_id, &renderer_type);
+    
+    // If exists destroy old renderer
+    if(renderer_type != 0)
+    {
+      switch((Renderer_type)renderer_type)
+      {
+        case(Renderer_type::material):
+          World_data::data_lock(renderer_material);
+          World_data::renderer_mesh_data_erase(renderer_material, this_id);
+          World_data::data_unlock(renderer_material);
+          break;
+        
+        case(Renderer_type::text):
+          assert(false);
+          break;
+          
+        default:
+          break;
+      }
+    }
+    
+    World_data::data_unlock(entity_data);
+  }
+  
+  // Set or update renderer
+  switch(renderer.get_type())
+  {
+    case(Renderer_type::material):
+    {
+      const Material_renderer mat_renderer(renderer);
+      set_renderer_material(this_id,
+                            world,
+                            mat_renderer.get_material().get_id(),
+                            mat_renderer.get_model().get_id());
+      break;
+    }
+    
+    case(Renderer_type::text):
+      assert(false);
+      break;
+      
+    default:
+      break;
+  }
+
+}
+
+
+Core::Renderer
+get_renderer(const util::generic_id this_id,
+             World_data::World *world)
+{
+  assert(this_id && world);
+
+  Core::Renderer return_renderer;
+
+  if(!is_valid(this_id, world))
+  {
+    LOG_ERROR(Error_string::entity_is_invalid());
+    return return_renderer;
+  }
+
+  // Check to see if renderer has been set.
+  {
+    auto entity_data = world->entity;
+    assert(entity_data);
+
+    World_data::data_lock(entity_data);
+    
+    uint32_t renderer_type(0);
+    World_data::entity_data_get_property_renderer(entity_data, this_id, &renderer_type);
+    
+    // What type of renderer?
+    if(renderer_type != 0)
+    {
+      switch((Renderer_type)renderer_type)
+      {
+        case(Renderer_type::material):
+        {
+          auto renderer_material = world->mesh_data;
+          assert(renderer_material);
+          
+          World_data::data_lock(renderer_material);
+          
+          util::generic_id mat_id = util::generic_id_invalid();
+          World_data::renderer_mesh_data_get_property_material_id(renderer_material, this_id, &mat_id);
+          
+          World_data::Mesh_renderer_draw_call *draw_call = nullptr;
+          World_data::renderer_mesh_data_get_property_draw_call(renderer_material, this_id, &draw_call);
+          
+          return_renderer = Core::Material_renderer(mat_id, draw_call->model_id);
+          
+          World_data::data_unlock(renderer_material);
+          
+          break;
+        }
+        
+        case(Renderer_type::text):
+          assert(false);
+          break;
+          
+        default:
+          break;
+      }
+    }
+    
+    World_data::data_unlock(entity_data);
+  }
+  
+  return return_renderer;
+}
+
+
+void
 set_renderer_material(const util::generic_id this_id,
                       World_data::World *world,
                       const util::generic_id material_id,
                       const util::generic_id model_id)
 {
   assert(this_id && world);
+  
+  // Check to see entity has a renderer.
+  // If not then set it.
+  {
+    auto entity_data = world->entity;
+    assert(entity_data);
+    
+    World_data::data_lock(entity_data);
+    
+    uint32_t renderer_type(0);
+    World_data::entity_data_get_property_renderer(entity_data, this_id, &renderer_type);
+    
+    if(renderer_type != 0 && renderer_type != World_data::Renderer_type::material_renderer)
+    {
+      LOG_ERROR(Error_string::no_implimentation()); // Currently no mechanism to change a renderer type.
+      return;
+    }
+    else
+    {
+      World_data::entity_data_set_property_renderer(entity_data, this_id, World_data::Renderer_type::material_renderer);
+    }
+    
+    World_data::data_unlock(entity_data);
+  }
   
   auto mesh_data = world->mesh_data;
   assert(mesh_data);
@@ -422,7 +591,7 @@ set_renderer_material(const util::generic_id this_id,
   {
     size_t find_index;
     World_data::Mesh_renderer_draw_call *draw;
-    World_data::Mesh_renderer_draw_call copy;    
+    World_data::Mesh_renderer_draw_call copy;
 
     // If it already exists. The data and erase the old info.
     if(World_data::renderer_mesh_data_exists(mesh_data, this_id, &find_index))

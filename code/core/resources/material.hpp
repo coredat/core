@@ -45,7 +45,7 @@ public:
   bool                  exists() const;
                         operator bool() const;
   
-private:
+//private:
   
   uint32_t              get_id() const;
   

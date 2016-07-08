@@ -39,7 +39,6 @@ render_main_scene(const float delta_time,
     if(Ogl::frame_buffer_is_valid(&cam->fbo))
     {
       Ogl::frame_buffer_bind(&cam->fbo);
-  
       
       LOG_TODO_ONCE("Move this to graphcis api somewhere.");
       

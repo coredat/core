@@ -1,9 +1,0 @@
-data:
-  name: text_draw_calls
-  namespace: World_data
-  header_dir: data/world_data/
-  path: code/data/world_data/
-
-  key:
-    name: entity_id
-    search_type: linear

@@ -9,7 +9,6 @@
 #include <common/error_strings.hpp>
 #include <utilities/logging.hpp>
 #include <utilities/memory.hpp>
-#include <utilities/string_helpers.hpp>
 #include <assert.h>
 
 
@@ -31,8 +30,9 @@ entity_data_init(Entity_data *data, const size_t size_hint)
   const size_t bytes_property_tag = sizeof(*data->property_tag) * size_hint + simd_buffer;
   const size_t bytes_property_components = sizeof(*data->property_components) * size_hint + simd_buffer;
   const size_t bytes_property_user_data = sizeof(*data->property_user_data) * size_hint + simd_buffer;
+  const size_t bytes_property_renderer = sizeof(*data->property_renderer) * size_hint + simd_buffer;
 
-  const size_t bytes_to_alloc = bytes_entity_id + bytes_property_name + bytes_property_tag + bytes_property_components + bytes_property_user_data;
+  const size_t bytes_to_alloc = bytes_entity_id + bytes_property_name + bytes_property_tag + bytes_property_components + bytes_property_user_data + bytes_property_renderer;
 
   // Allocate some memory.
   util::memory_chunk *data_memory = const_cast<util::memory_chunk*>(&data->memory);
@@ -110,6 +110,19 @@ entity_data_init(Entity_data *data, const size_t size_hint)
       #endif
 
       byte_counter += bytes_property_user_data;
+      assert(byte_counter <= bytes_to_alloc);
+    }
+    // Assign property_renderer memory
+    {
+      void *offset = util::mem_offset(alloc_start, byte_counter);
+      void *aligned = util::mem_next_16byte_boundry(offset);
+
+      data->property_renderer = reinterpret_cast<uint32_t*>(aligned);
+      #ifndef NDEBUG
+      memset(offset, 0, bytes_property_renderer);
+      #endif
+
+      byte_counter += bytes_property_renderer;
       assert(byte_counter <= bytes_to_alloc);
     }
   }
@@ -196,6 +209,7 @@ entity_data_push_back(Entity_data *data, size_t *out_index)
     memset(&data->property_tag[index], 0, sizeof(*data->property_tag));
     memset(&data->property_components[index], 0, sizeof(*data->property_components));
     memset(&data->property_user_data[index], 0, sizeof(*data->property_user_data));
+    memset(&data->property_renderer[index], 0, sizeof(*data->property_renderer));
   }
 
   return key;
@@ -225,6 +239,7 @@ entity_data_erase(Entity_data *data, const util::generic_id key)
     memmove(&data->property_tag[index_to_erase], &data->property_tag[start_index], size_to_end * sizeof(*data->property_tag));
     memmove(&data->property_components[index_to_erase], &data->property_components[start_index], size_to_end * sizeof(*data->property_components));
     memmove(&data->property_user_data[index_to_erase], &data->property_user_data[start_index], size_to_end * sizeof(*data->property_user_data));
+    memmove(&data->property_renderer[index_to_erase], &data->property_renderer[start_index], size_to_end * sizeof(*data->property_renderer));
   }
   else
   {
@@ -428,6 +443,52 @@ entity_data_set_property_user_data(Entity_data *data,  const util::generic_id ke
   if(entity_data_exists(data, key, &index))
   {
     data->property_user_data[index] = value;
+  }
+  else
+  {
+    LOG_ERROR(Error_string::entity_not_found());
+    assert(false);
+
+    return false;
+  }
+
+  return true;
+}
+
+
+
+
+bool
+entity_data_get_property_renderer(const Entity_data *data, const util::generic_id key, uint32_t *out_value)
+{
+  size_t index;
+
+  if(entity_data_exists(data, key, &index))
+  {
+    *out_value = data->property_renderer[index];
+  }
+  else
+  {
+    LOG_ERROR(Error_string::entity_not_found());
+    assert(false);
+
+    return false;
+  }
+
+  return true;
+}
+
+
+bool
+entity_data_set_property_renderer(Entity_data *data,  const util::generic_id key, const uint32_t value)
+{
+  assert(data && key);
+
+  size_t index;
+
+  if(entity_data_exists(data, key, &index))
+  {
+    data->property_renderer[index] = value;
   }
   else
   {

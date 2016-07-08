@@ -3,10 +3,7 @@
 
 
 #include <utilities/generic_id.hpp>
-#include <core/transform/transform_fwd.hpp>
-#include <core/physics/physics_fwd.hpp>
-#include <core/resources/resources_fwd.hpp>
-#include <core/model/model_fwd.hpp>
+#include <core/common/core_fwd.hpp>
 #include <data/world_data/world_data_fwd.hpp>
 #include <stdint.h>
 #include <memory>
@@ -36,6 +33,9 @@ const char*                   get_name(const util::generic_id this_id, World_dat
 
 void                          set_transform(const util::generic_id this_id, World_data::World *world, const Transform &transform);
 Transform                     get_transform(const util::generic_id this_id, World_data::World *world);
+
+void                          set_renderer(const util::generic_id this_id, World_data::World *world, const Core::Renderer &renderer);
+Core::Renderer                get_renderer(const util::generic_id this_id, World_data::World *world);
 
 void                          set_renderer_material(const util::generic_id this_id, World_data::World *world, const util::generic_id material_id, const util::generic_id model_id);
 void                          get_renderer_material(const util::generic_id this_id, World_data::World *world, util::generic_id *out_material_id, util::generic_id *out_model_id);

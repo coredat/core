@@ -27,6 +27,18 @@ Renderer::get_type() const
 }
 
 
+Renderer&
+Renderer::operator=(const Renderer &other)
+{
+  m_renderer_type = other.m_renderer_type;
+  m_arg_01        = other.m_arg_01;
+  m_arg_02        = other.m_arg_02;
+  m_arg_03        = other.m_arg_03;
+  
+  return *this;
+}
+
+
 const char *
 Renderer::get_type_name() const
 {
@@ -64,6 +76,12 @@ util::generic_id
 Renderer::get_arg_03() const
 {
   return m_arg_03;
+}
+
+
+Renderer::operator bool() const
+{
+  return !(m_renderer_type == Renderer_type::unknown);
 }
 
 

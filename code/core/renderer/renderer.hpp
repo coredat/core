@@ -6,6 +6,7 @@
 #include <core/common/core_fwd.hpp>
 #include <core/renderer/renderer_type.hpp>
 #include <core/renderer/renderer_utils.hpp>
+#include <core/entity/entity_interface.hpp>
 
 
 /*
@@ -26,16 +27,20 @@ class Renderer final
 {
   friend class Material_renderer;
   friend class Text_renderer;
+  friend Core::Renderer Core::Entity_detail::get_renderer(const util::generic_id this_id, World_data::World *world);
 
   explicit                  Renderer(const Renderer_type renderer_type = Renderer_type::unknown,
                                      const util::generic_id arg_01 = util::generic_id_invalid(),
                                      const util::generic_id arg_02 = util::generic_id_invalid(),
                                      const util::generic_id arg_03 = util::generic_id_invalid());
 public:
+
+  Renderer&                 operator=(const Renderer &other);
   
   Renderer_type             get_type() const;
-  const char *              get_type_name() const;
+  const char *              get_type_name() const; // free function
   
+                            operator bool() const;
                             operator Material_renderer() const;
   
 private:
@@ -52,10 +57,10 @@ private:
   
 private:
 
-  const Renderer_type     m_renderer_type = Renderer_type::unknown;
-  const util::generic_id  m_arg_01        = util::generic_id_invalid();
-  const util::generic_id  m_arg_02        = util::generic_id_invalid();
-  const util::generic_id  m_arg_03        = util::generic_id_invalid();
+  Renderer_type     m_renderer_type = Renderer_type::unknown;
+  util::generic_id  m_arg_01        = util::generic_id_invalid();
+  util::generic_id  m_arg_02        = util::generic_id_invalid();
+  util::generic_id  m_arg_03        = util::generic_id_invalid();
 
 };
 

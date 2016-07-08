@@ -6,13 +6,12 @@
 */
 
 
-#ifndef ENTITY_DATA_INCLUDED_621269C5_F83B_4E25_B41F_E3F2BC15C964
-#define ENTITY_DATA_INCLUDED_621269C5_F83B_4E25_B41F_E3F2BC15C964
+#ifndef ENTITY_DATA_INCLUDED_AA90BE96_82B9_4001_92BD_101D5BDDACA5
+#define ENTITY_DATA_INCLUDED_AA90BE96_82B9_4001_92BD_101D5BDDACA5
 
 
 #include <utilities/generic_id.hpp>
 #include <utilities/memory_pool.hpp>
-#include <utilities/bits.hpp>
 #include <stddef.h>
 #include <stdint.h>
 
@@ -22,7 +21,13 @@ namespace World_data {
 
 namespace Entity_component {
   enum ENUM {
-    has_physics = BIT(0),
+    has_physics = 1 << 0,
+  };
+} // ns
+namespace Renderer_type {
+  enum ENUM {
+    material_renderer = 1 << 0,
+    text_renderer = 1 << 1,
   };
 } // ns
 
@@ -42,6 +47,7 @@ struct Entity_data
   uint32_t *property_tag = nullptr;
   uint32_t *property_components = nullptr;
   uintptr_t *property_user_data = nullptr;
+  uint32_t *property_renderer = nullptr;
 
   // Size information
   size_t size = 0;
@@ -220,6 +226,28 @@ entity_data_get_property_user_data(const Entity_data *data, const util::generic_
 */
 bool
 entity_data_set_property_user_data(Entity_data *data,  const util::generic_id key, const uintptr_t value);
+
+
+/*!
+  \brief Getter for property_renderer.
+  \param data The container to get information from.
+  \param key The key to search for.
+  \param value The output value, which will be set if the key is found.
+  \return Returns true if the data was found.
+*/
+bool
+entity_data_get_property_renderer(const Entity_data *data, const util::generic_id key, uint32_t *value);
+
+
+/*!
+  \brief Setter for property_renderer.
+  \param data The container to update.
+  \param key The key to search for.
+  \param value The new value of the data.
+  \return Returns true if the data was set.
+*/
+bool
+entity_data_set_property_renderer(Entity_data *data,  const util::generic_id key, const uint32_t value);
 
 
 } // ns

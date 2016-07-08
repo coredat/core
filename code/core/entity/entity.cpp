@@ -69,12 +69,15 @@ Entity::Entity(Core::World &world)
       
       if(id && success)
       {
+        // Zero the data.
         const uint32_t zero(0);
         World_data::entity_data_set_property_components(entity_data, id, zero);
         World_data::entity_data_set_property_tag(entity_data, id, zero);
+        World_data::entity_data_set_property_renderer(entity_data, id, zero);
         
         const char *nilstr = "";
-        World_data::entity_data_set_property_name(m_impl->world->data.entity, id, nilstr);
+        World_data::entity_data_set_property_name(entity_data, id, nilstr);
+        
       }
       else
       {
@@ -298,29 +301,14 @@ Entity::get_transform() const
 void
 Entity::set_renderer(const Core::Renderer &renderer)
 {
-  switch(renderer.get_type())
-  {
-    case(Renderer_type::material):
-      Entity_detail::set_renderer_material(m_impl->id, &m_impl->world->data, renderer.get_arg_01(), renderer.get_arg_02());
-      break;
-      
-    default:
-      assert(false);
-  }
+  Entity_detail::set_renderer(m_impl->id, &m_impl->world->data, renderer);
 }
 
 
 Renderer
 Entity::get_renderer() const
 {
-  LOG_TODO_ONCE("get renderer type");
-  
-  util::generic_id mat_id = util::generic_id_invalid();
-  util::generic_id model_id = util::generic_id_invalid();
-  
-  Entity_detail::get_renderer_material(m_impl->id, &m_impl->world->data, &mat_id, &model_id);
-  
-  return Material_renderer(mat_id, model_id);
+  return Entity_detail::get_renderer(m_impl->id, &m_impl->world->data);
 }
 
 
