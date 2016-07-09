@@ -22,10 +22,14 @@ public:
   const char *        get_text() const;
 
                       operator Renderer() const;
-  
-private:
 
+private:
   
+  friend class Entity;
+  friend class Entity_ref;
+
+  util::generic_id        get_font_id() const;
+  util::generic_id        get_text_id() const;
   
 private:
 

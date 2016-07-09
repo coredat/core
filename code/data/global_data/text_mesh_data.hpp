@@ -6,37 +6,37 @@
 */
 
 
-#ifndef TRANSFORM_DATA_INCLUDED_CB833C27_7955_455D_8640_C09098BE6F08
-#define TRANSFORM_DATA_INCLUDED_CB833C27_7955_455D_8640_C09098BE6F08
+#ifndef TEXT_MESH_DATA_INCLUDED_B2CBEE85_E499_4E64_92AE_5DF922CD46E4
+#define TEXT_MESH_DATA_INCLUDED_B2CBEE85_E499_4E64_92AE_5DF922CD46E4
 
 
 #include <utilities/generic_id.hpp>
 #include <utilities/memory_pool.hpp>
 #include <stddef.h>
-#include <math/transform/transform.hpp>
-#include <math/geometry/aabb.hpp>
+#include <graphics_api/mesh.hpp>
 
 
-namespace World_data {
+namespace Resource_data {
 
 
 
 /*!
-  \brief Auto-generated structure for Transform_data
+  \brief Auto-generated structure for Text_mesh_data
 */
-struct Transform_data
+struct Text_mesh_data
 {
   // Data Key
-  util::generic_id *transform_id = nullptr;
+  util::generic_id *text_mesh_id = nullptr;
 
   // Properties
-  math::transform *property_transform = nullptr;
-  math::aabb *property_aabb = nullptr;
+  char *property_text = nullptr;
+  Graphics_api::Mesh *property_mesh = nullptr;
 
   // Size information
   size_t size = 0;
   const size_t capacity = 0;
 
+  util::generic_id key_count = 0;
 
   // Memory chunk
   const util::memory_chunk memory = util::memory_chunk();
@@ -45,12 +45,12 @@ struct Transform_data
 
 
 /*!
-  \brief initialise the Transform_data structure, this is will allocate the memory for the keys and properties. Function will take a lock.
+  \brief initialise the Text_mesh_data structure, this is will allocate the memory for the keys and properties. Function will take a lock.
   \param data This structure to initialise.
   \param size_hint This helps the init function allocate the correct memory.
 */
 void
-transform_data_init(Transform_data *data, const size_t size_hint);
+text_mesh_data_init(Text_mesh_data *data, const size_t size_hint);
 
 
 /*!
@@ -58,7 +58,7 @@ transform_data_init(Transform_data *data, const size_t size_hint);
   \param data The data to free.
 */
 void
-transform_data_free(Transform_data *data);
+text_mesh_data_free(Text_mesh_data *data);
 
 
 /*!
@@ -66,7 +66,7 @@ transform_data_free(Transform_data *data);
   \param data The structure which to find the size.
 */
 size_t
-transform_data_get_size(const Transform_data *data);
+text_mesh_data_get_size(const Text_mesh_data *data);
 
 
 /*!
@@ -74,7 +74,7 @@ transform_data_get_size(const Transform_data *data);
   \param data The structure which to find the capacity.
 */
 size_t
-transform_data_get_capacity(const Transform_data *data);
+text_mesh_data_get_capacity(const Text_mesh_data *data);
 
 
 /*!
@@ -82,7 +82,7 @@ transform_data_get_capacity(const Transform_data *data);
   \param data The container to lock.
 */
 void
-data_lock(const Transform_data *data);
+data_lock(const Text_mesh_data *data);
 
 
 /*!
@@ -90,17 +90,16 @@ data_lock(const Transform_data *data);
   \param The container to unlock
 */
 void
-data_unlock(const Transform_data *data);
+data_unlock(const Text_mesh_data *data);
 
 /*!
   \brief Push back a new element, increases the size by 1. (Does not take a lock).
   \param data The container which to push back.
-  \param key The id to use as a key.
   \param out_index Optional - this will return the inserted location in the container.
-  \return Returns true if it was successful.
+  \return Returns the id of the data.
 */
-bool
-transform_data_push_back(Transform_data *data, const util::generic_id key, size_t *out_index = nullptr);
+util::generic_id
+text_mesh_data_push_back(Text_mesh_data *data, size_t *out_index = nullptr);
 
 
 /*!
@@ -110,7 +109,7 @@ transform_data_push_back(Transform_data *data, const util::generic_id key, size_
   \return Returns true if it was successful.
 */
 bool
-transform_data_erase(Transform_data *data, const util::generic_id key);
+text_mesh_data_erase(Text_mesh_data *data, const util::generic_id key);
 
 
 /*!
@@ -121,51 +120,62 @@ transform_data_erase(Transform_data *data, const util::generic_id key);
   \return Returns true if a key was found.
 */
 bool
-transform_data_exists(const Transform_data *data, const util::generic_id key, size_t *out_index = nullptr);
+text_mesh_data_exists(const Text_mesh_data *data, const util::generic_id key, size_t *out_index = nullptr);
 
 
 /*!
-  \brief Getter for property_transform.
+  \brief Getter for property_text.
   \param data The container to get information from.
   \param key The key to search for.
   \param value The output value, which will be set if the key is found.
   \return Returns true if the data was found.
 */
 bool
-transform_data_get_property_transform(const Transform_data *data, const util::generic_id key, math::transform *value);
+text_mesh_data_get_property_text(const Text_mesh_data *data, const util::generic_id key, const char **value);
 
 
 /*!
-  \brief Setter for property_transform.
+  \brief Setter for property_text.
   \param data The container to update.
   \param key The key to search for.
   \param value The new value of the data.
   \return Returns true if the data was set.
 */
 bool
-transform_data_set_property_transform(Transform_data *data,  const util::generic_id key, const math::transform value);
+text_mesh_data_set_property_text(Text_mesh_data *data,  const util::generic_id key, const char *value);
 
 
 /*!
-  \brief Getter for property_aabb.
+  \brief Searches for a given value.
+  \param data The container to search.
+  \param value The value which to search for.
+  \param out_key Optional the key for that value.
+  \return Returns true if the data was found.
+*/
+bool
+text_mesh_data_search_property_text(const Text_mesh_data *data, const char *value, util::generic_id *out_key = nullptr);
+
+
+/*!
+  \brief Getter for property_mesh.
   \param data The container to get information from.
   \param key The key to search for.
   \param value The output value, which will be set if the key is found.
   \return Returns true if the data was found.
 */
 bool
-transform_data_get_property_aabb(const Transform_data *data, const util::generic_id key, math::aabb *value);
+text_mesh_data_get_property_mesh(const Text_mesh_data *data, const util::generic_id key, Graphics_api::Mesh *value);
 
 
 /*!
-  \brief Setter for property_aabb.
+  \brief Setter for property_mesh.
   \param data The container to update.
   \param key The key to search for.
   \param value The new value of the data.
   \return Returns true if the data was set.
 */
 bool
-transform_data_set_property_aabb(Transform_data *data,  const util::generic_id key, const math::aabb value);
+text_mesh_data_set_property_mesh(Text_mesh_data *data,  const util::generic_id key, const Graphics_api::Mesh value);
 
 
 } // ns

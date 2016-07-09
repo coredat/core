@@ -6,15 +6,13 @@
 */
 
 
-#ifndef TRANSFORM_DATA_INCLUDED_CB833C27_7955_455D_8640_C09098BE6F08
-#define TRANSFORM_DATA_INCLUDED_CB833C27_7955_455D_8640_C09098BE6F08
+#ifndef RENDERER_TEXT_DRAW_CALLS_DATA_INCLUDED_290F1BA9_F29E_4304_B074_F61EE57307D4
+#define RENDERER_TEXT_DRAW_CALLS_DATA_INCLUDED_290F1BA9_F29E_4304_B074_F61EE57307D4
 
 
 #include <utilities/generic_id.hpp>
 #include <utilities/memory_pool.hpp>
 #include <stddef.h>
-#include <math/transform/transform.hpp>
-#include <math/geometry/aabb.hpp>
 
 
 namespace World_data {
@@ -22,16 +20,16 @@ namespace World_data {
 
 
 /*!
-  \brief Auto-generated structure for Transform_data
+  \brief Auto-generated structure for Renderer_text_draw_calls_data
 */
-struct Transform_data
+struct Renderer_text_draw_calls_data
 {
   // Data Key
-  util::generic_id *transform_id = nullptr;
+  util::generic_id *renderer_text_draw_calls_id = nullptr;
 
   // Properties
-  math::transform *property_transform = nullptr;
-  math::aabb *property_aabb = nullptr;
+  char *property_text = nullptr;
+  util::generic_id *property_model_id = nullptr;
 
   // Size information
   size_t size = 0;
@@ -45,12 +43,12 @@ struct Transform_data
 
 
 /*!
-  \brief initialise the Transform_data structure, this is will allocate the memory for the keys and properties. Function will take a lock.
+  \brief initialise the Renderer_text_draw_calls_data structure, this is will allocate the memory for the keys and properties. Function will take a lock.
   \param data This structure to initialise.
   \param size_hint This helps the init function allocate the correct memory.
 */
 void
-transform_data_init(Transform_data *data, const size_t size_hint);
+renderer_text_draw_calls_data_init(Renderer_text_draw_calls_data *data, const size_t size_hint);
 
 
 /*!
@@ -58,7 +56,7 @@ transform_data_init(Transform_data *data, const size_t size_hint);
   \param data The data to free.
 */
 void
-transform_data_free(Transform_data *data);
+renderer_text_draw_calls_data_free(Renderer_text_draw_calls_data *data);
 
 
 /*!
@@ -66,7 +64,7 @@ transform_data_free(Transform_data *data);
   \param data The structure which to find the size.
 */
 size_t
-transform_data_get_size(const Transform_data *data);
+renderer_text_draw_calls_data_get_size(const Renderer_text_draw_calls_data *data);
 
 
 /*!
@@ -74,7 +72,7 @@ transform_data_get_size(const Transform_data *data);
   \param data The structure which to find the capacity.
 */
 size_t
-transform_data_get_capacity(const Transform_data *data);
+renderer_text_draw_calls_data_get_capacity(const Renderer_text_draw_calls_data *data);
 
 
 /*!
@@ -82,7 +80,7 @@ transform_data_get_capacity(const Transform_data *data);
   \param data The container to lock.
 */
 void
-data_lock(const Transform_data *data);
+data_lock(const Renderer_text_draw_calls_data *data);
 
 
 /*!
@@ -90,7 +88,7 @@ data_lock(const Transform_data *data);
   \param The container to unlock
 */
 void
-data_unlock(const Transform_data *data);
+data_unlock(const Renderer_text_draw_calls_data *data);
 
 /*!
   \brief Push back a new element, increases the size by 1. (Does not take a lock).
@@ -100,7 +98,7 @@ data_unlock(const Transform_data *data);
   \return Returns true if it was successful.
 */
 bool
-transform_data_push_back(Transform_data *data, const util::generic_id key, size_t *out_index = nullptr);
+renderer_text_draw_calls_data_push_back(Renderer_text_draw_calls_data *data, const util::generic_id key, size_t *out_index = nullptr);
 
 
 /*!
@@ -110,7 +108,18 @@ transform_data_push_back(Transform_data *data, const util::generic_id key, size_
   \return Returns true if it was successful.
 */
 bool
-transform_data_erase(Transform_data *data, const util::generic_id key);
+renderer_text_draw_calls_data_erase(Renderer_text_draw_calls_data *data, const util::generic_id key);
+
+
+/*!
+  \brief Inserts a new element shuffling down any data that exists in the array. (Does not take a lock).
+  \param data The container to insert into.
+  \param key The key which is used to remove the data.
+  \param insert_point Where to insert. If bigger then the size it will push back.
+  \return Returns true if it was successful.
+*/
+bool
+renderer_text_draw_calls_data_insert(Renderer_text_draw_calls_data *data, const util::generic_id key, const size_t insert_index);
 
 
 /*!
@@ -121,51 +130,51 @@ transform_data_erase(Transform_data *data, const util::generic_id key);
   \return Returns true if a key was found.
 */
 bool
-transform_data_exists(const Transform_data *data, const util::generic_id key, size_t *out_index = nullptr);
+renderer_text_draw_calls_data_exists(const Renderer_text_draw_calls_data *data, const util::generic_id key, size_t *out_index = nullptr);
 
 
 /*!
-  \brief Getter for property_transform.
+  \brief Getter for property_text.
   \param data The container to get information from.
   \param key The key to search for.
   \param value The output value, which will be set if the key is found.
   \return Returns true if the data was found.
 */
 bool
-transform_data_get_property_transform(const Transform_data *data, const util::generic_id key, math::transform *value);
+renderer_text_draw_calls_data_get_property_text(const Renderer_text_draw_calls_data *data, const util::generic_id key, const char **value);
 
 
 /*!
-  \brief Setter for property_transform.
+  \brief Setter for property_text.
   \param data The container to update.
   \param key The key to search for.
   \param value The new value of the data.
   \return Returns true if the data was set.
 */
 bool
-transform_data_set_property_transform(Transform_data *data,  const util::generic_id key, const math::transform value);
+renderer_text_draw_calls_data_set_property_text(Renderer_text_draw_calls_data *data,  const util::generic_id key, const char *value);
 
 
 /*!
-  \brief Getter for property_aabb.
+  \brief Getter for property_model_id.
   \param data The container to get information from.
   \param key The key to search for.
   \param value The output value, which will be set if the key is found.
   \return Returns true if the data was found.
 */
 bool
-transform_data_get_property_aabb(const Transform_data *data, const util::generic_id key, math::aabb *value);
+renderer_text_draw_calls_data_get_property_model_id(const Renderer_text_draw_calls_data *data, const util::generic_id key, util::generic_id *value);
 
 
 /*!
-  \brief Setter for property_aabb.
+  \brief Setter for property_model_id.
   \param data The container to update.
   \param key The key to search for.
   \param value The new value of the data.
   \return Returns true if the data was set.
 */
 bool
-transform_data_set_property_aabb(Transform_data *data,  const util::generic_id key, const math::aabb value);
+renderer_text_draw_calls_data_set_property_model_id(Renderer_text_draw_calls_data *data,  const util::generic_id key, const util::generic_id value);
 
 
 } // ns

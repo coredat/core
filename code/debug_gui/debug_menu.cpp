@@ -9,6 +9,7 @@
 #include <debug_gui/post_process_list.hpp>
 #include <debug_gui/camera_list.hpp>
 #include <debug_gui/stats_overlay.hpp>
+#include <debug_gui/text_mesh.hpp>
 
 #include <data/global_data/resource_data.hpp>
 #include <data/global_data/memory_data.hpp>
@@ -19,20 +20,23 @@
 
 namespace Debug_menu {
 
+#ifdef CORE_DEBUG_MENU
 namespace
 {
-  bool show_texture_list  = false;
-  bool show_model_list    = false;
-  bool show_shader_list   = false;
-  bool show_memory_view   = false;
-  bool show_material_list = false;
-  bool show_post_list     = false;
+  bool show_texture_list   = false;
+  bool show_model_list     = false;
+  bool show_shader_list    = false;
+  bool show_memory_view    = false;
+  bool show_material_list  = false;
+  bool show_post_list      = false;
+  bool show_text_mesh_list = false;
 }
+#endif
 
 void
 display_global_data_menu()
 {
-  #ifndef NDEBUG
+  #ifdef CORE_DEBUG_MENU
   auto global_data = Resource_data::get_resources();
 
   if(!global_data)
@@ -44,12 +48,13 @@ display_global_data_menu()
   {
     if (ImGui::BeginMenu("Global Data"))
     {
-      ImGui::MenuItem("Texture",  nullptr, &show_texture_list);
-      ImGui::MenuItem("Model",    nullptr, &show_model_list);
-      ImGui::MenuItem("Shaders",  nullptr, &show_shader_list);
-      ImGui::MenuItem("Memory",   nullptr, &show_memory_view);
-      ImGui::MenuItem("Material", nullptr, &show_material_list);
-      ImGui::MenuItem("Post",     nullptr, &show_post_list);
+      ImGui::MenuItem("Texture",   nullptr, &show_texture_list);
+      ImGui::MenuItem("Model",     nullptr, &show_model_list);
+      ImGui::MenuItem("Shaders",   nullptr, &show_shader_list);
+      ImGui::MenuItem("Memory",    nullptr, &show_memory_view);
+      ImGui::MenuItem("Material",  nullptr, &show_material_list);
+      ImGui::MenuItem("Post",      nullptr, &show_post_list);
+      ImGui::MenuItem("Text Mesh", nullptr, &show_text_mesh_list);
       
       ImGui::EndMenu();
     }
@@ -57,16 +62,18 @@ display_global_data_menu()
     ImGui::EndMainMenuBar();
   }
   
-  if(show_texture_list)  { display_texture_list(global_data->texture_data);   }
-  if(show_model_list)    { display_mesh_list(global_data->mesh_data);         }
-  if(show_shader_list)   { display_shader_list(global_data->shader_data);     }
-  if(show_memory_view)   { display_memory_useage(Memory::_get_pool());        }
-  if(show_material_list) { display_material_list(global_data->material_data); }
-  if(show_post_list)     { display_post_process_list(global_data->post_data); }
+  if(show_texture_list)   { display_texture_list(global_data->texture_data);        }
+  if(show_model_list)     { display_mesh_list(global_data->mesh_data);              }
+  if(show_shader_list)    { display_shader_list(global_data->shader_data);          }
+  if(show_memory_view)    { display_memory_useage(Memory::_get_pool());             }
+  if(show_material_list)  { display_material_list(global_data->material_data);      }
+  if(show_post_list)      { display_post_process_list(global_data->post_data);      }
+  if(show_text_mesh_list) { display_text_mesh_list((global_data->text_mesh_data));  }
   #endif
 }
 
 
+#ifdef CORE_DEBUG_MENU
 namespace
 {
   bool show_entity_list     = false;
@@ -74,6 +81,7 @@ namespace
   bool show_camera_list     = false;
   bool show_world_stats     = false;
 }
+#endif
 
 
 void
@@ -83,7 +91,7 @@ display_world_data_menu(World_data::World *world_data,
                         const uint32_t draw_calls,
                         const uint32_t render_passes)
 {
-  #ifndef NEDEBUG
+  #ifdef CORE_DEBUG_MENU
   if(!world_data)
   {
     return;

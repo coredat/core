@@ -81,6 +81,9 @@ World::World(const Context &ctx, const World_setup setup)
   static World_data::Entity_data entity_data;
   World_data::entity_data_init(&entity_data, entity_hint);
   
+  static World_data::Renderer_text_draw_calls_data text_draw_calls;
+  World_data::renderer_text_draw_calls_data_init(&text_draw_calls, entity_hint);
+  
   m_impl->world_data->data.entity_graph_changes = &graph_changes;
   m_impl->world_data->data.physics_data         = &physics_data;
   m_impl->world_data->data.mesh_data            = &mesh_data;
@@ -88,6 +91,7 @@ World::World(const Context &ctx, const World_setup setup)
   m_impl->world_data->data.camera_data          = &camera_data;  
   m_impl->world_data->data.transform            = &transform_data;
   m_impl->world_data->data.entity               = &entity_data;
+  m_impl->world_data->data.text_data            = &text_draw_calls;
   
   LOG_TODO("We can store the data directly and get rid of ::World_data::World")
   World_data::set_world_data(&m_impl->world_data->data);

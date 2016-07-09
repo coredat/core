@@ -475,7 +475,8 @@ set_renderer(const util::generic_id this_id,
     }
     
     case(Renderer_type::text):
-      assert(false);
+      LOG_TODO_ONCE("You have text trying to render");
+      
       break;
       
     default:

@@ -1,0 +1,19 @@
+data:
+  name: renderer_text_draw_calls
+  namespace: World_data
+  header_dir: data/world_data/
+  path: code/data/world_data/
+
+  key:
+    name: entity_id
+    search_type: linear
+
+  properties:
+    - name: text
+      type: char_32
+      return: pointer
+
+    - name: model_id
+      type: util::generic_id
+      include: <utilities/generic_id.hpp>
+      return: value

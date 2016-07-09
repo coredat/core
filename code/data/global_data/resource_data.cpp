@@ -41,6 +41,10 @@ resources_init()
   static Post_process_data post_data;
   post_process_data_init(&post_data, 32);
   data->post_data = &post_data;
+  
+  static Text_mesh_data text_mesh_data;
+  text_mesh_data_init(&text_mesh_data, 1024);
+  data->text_mesh_data = &text_mesh_data;
 }
 
 

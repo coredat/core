@@ -19,7 +19,7 @@ struct World
   Camera_data                       *camera_data          = nullptr;
   Physics_data                      *physics_data         = nullptr;
   Renderer_mesh_data                *mesh_data            = nullptr;
-  Text_renderer_data                *text_data            = nullptr;
+  Renderer_text_draw_calls_data     *text_data            = nullptr;
 }; // struct
 
 

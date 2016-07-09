@@ -1,0 +1,21 @@
+data:
+  name: text_mesh
+  namespace: Resource_data
+  header_dir: data/global_data/
+  path: code/data/global_data/
+
+  key:
+    name: mesh_id
+    search_type: binary
+    auto_increment: true
+
+  properties:
+    - name: text
+      type: char_32
+      return: pointer
+      searchable: true
+
+    - name: mesh
+      type: Graphics_api::Mesh
+      return: value
+      include: <graphics_api/mesh.hpp>

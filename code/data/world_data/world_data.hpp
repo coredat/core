@@ -9,7 +9,7 @@
 #include "world_data_fwd.hpp"
 #include "physics_data.hpp"
 #include "renderer_mesh_data.hpp"
-#include "renderer_text_data.hpp"
+#include "renderer_text_draw_calls_data.hpp"
 
 
 #endif // inc guard

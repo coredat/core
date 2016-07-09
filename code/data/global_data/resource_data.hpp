@@ -8,6 +8,7 @@
 #include "mesh_data.hpp"
 #include "texture_data.hpp"
 #include "post_process_data.hpp"
+#include "text_mesh_data.hpp"
 
 
 namespace Resource_data {
@@ -15,13 +16,13 @@ namespace Resource_data {
 
 struct Resources
 {
-  Shader_data   *shader_data    = nullptr;
-  Material_data *material_data  = nullptr;
-  Mesh_data     *mesh_data      = nullptr;
-  Texture_data  *texture_data   = nullptr;
-  Post_process_data *post_data  = nullptr;
-
-  Audio_pool    *audio_pool     = nullptr;
+  Shader_data   *shader_data     = nullptr;
+  Material_data *material_data   = nullptr;
+  Mesh_data     *mesh_data       = nullptr;
+  Texture_data  *texture_data    = nullptr;
+  Post_process_data *post_data   = nullptr;
+  Text_mesh_data *text_mesh_data = nullptr;
+  Audio_pool    *audio_pool      = nullptr;
   
 };
 
