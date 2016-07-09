@@ -8,9 +8,7 @@ data:
     search_type: binary
 
   relationships:
-    - type: belongs_to
-      name: entity
-      desc: entity_base
+    - belongs_to: entity
 
   properties:
     - name: transform

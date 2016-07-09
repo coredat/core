@@ -56,8 +56,8 @@ struct {{data_type}}
 
 
 /*!
-  \\brief Initialize the {{data_type}} structure, this is will allocate the memory for the keys and properties. Function will take a lock.
-  \\param data This structure to initialize.
+  \\brief initialise the {{data_type}} structure, this is will allocate the memory for the keys and properties. Function will take a lock.
+  \\param data This structure to initialise.
   \\param size_hint This helps the init function allocate the correct memory.
 */
 void
@@ -65,7 +65,7 @@ void
 
 
 /*!
-  \\brief Not currently implimented, but will return the memory. Function will take a lock.
+  \\brief Not currently implemented, but will return the memory. Function will take a lock.
   \\param data The data to free.
 */
 void
@@ -89,7 +89,7 @@ size_t
 
 
 /*!
-  \\brief Locks the data, any thing else requiring a lock will have to wait (not implimented).
+  \\brief Locks the data, any thing else requiring a lock will have to wait (not implemented).
   \\param data The container to lock.
 */
 void
@@ -97,7 +97,7 @@ data_lock(const {{data_type}} *data);
 
 
 /*!
-  \\brief Unlocks the data, any pending locks can now proceed (not implimented).
+  \\brief Unlocks the data, any pending locks can now proceed (not implemented).
   \\param The container to unlock
 */
 void

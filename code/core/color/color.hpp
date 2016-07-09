@@ -31,7 +31,7 @@ public:
   Color(const float r, const float g, const float b, const float a = 1.f)
   : m_color((uint32_t)((static_cast<uint32_t>(r * 255) << 24) |
                        (static_cast<uint32_t>(g * 255) << 16) |
-                       (static_cast<uint32_t>(b * 255) << 8) |
+                       (static_cast<uint32_t>(b * 255) << 8)  |
                        (static_cast<uint32_t>(a * 255) << 0)))
   {
   }
