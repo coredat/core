@@ -16,12 +16,12 @@ struct Texture::Impl
 
 
 Texture::Texture()
-: Texture((uint32_t) 0)
+: Texture(util::generic_id_invalid())
 {
 }
 
 
-Texture::Texture(const uint32_t id)
+Texture::Texture(const util::generic_id id)
 : m_impl(new Impl{id})
 {
   if(!id)
@@ -165,7 +165,7 @@ Texture::operator bool() const
 }
 
 
-uint32_t
+util::generic_id
 Texture::get_id() const
 {
   if(m_impl)
