@@ -134,10 +134,10 @@ data_unlock(const Shader_data *data)
 }
 
 
-bool
-shader_data_push_back(Shader_data *data, const util::generic_id key, size_t *out_index)
+util::generic_id
+shader_data_push_back(Shader_data *data, size_t *out_index)
 {
-  assert(data && key);
+  assert(data);
   assert(data->size < data->capacity);
 
   // TODO: Duplicate key check
@@ -146,10 +146,11 @@ shader_data_push_back(Shader_data *data, const util::generic_id key, size_t *out
   {
     LOG_ERROR(Error_string::no_free_space());
 
-    return false;
+    return 0;
   }
 
   const uint32_t index = data->size;
+  const util::generic_id key = ++data->key_count;
 
   if(out_index)
   {
@@ -166,7 +167,7 @@ shader_data_push_back(Shader_data *data, const util::generic_id key, size_t *out
     memset(&data->property_shader[index], 0, sizeof(*data->property_shader));
   }
 
-  return true;
+  return key;
 }
 
 

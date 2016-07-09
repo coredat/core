@@ -47,19 +47,19 @@ Material::Material(const char *name)
     
     Resource_data::data_lock(data);
     
-    Resource_data::material_data_push_back(data, data->size + 1);
-    Resource_data::material_data_set_property_name(data, data->size, name);
+    const util::generic_id id = Resource_data::material_data_push_back(data);
+    Resource_data::material_data_set_property_name(data, id, name);
     
     // Set instance id in the hash key
     {
       ::Material_renderer::Material_id priority_key;
-      Resource_data::material_data_get_property_material_hash_id(data, data->size, &priority_key);
+      Resource_data::material_data_get_property_material_hash_id(data, id, &priority_key);
       
       priority_key.material_instance = data->size;
-      Resource_data::material_data_set_property_material_hash_id(data, data->size, priority_key);
+      Resource_data::material_data_set_property_material_hash_id(data, id, priority_key);
     }
     
-    m_impl->material_id = data->size;
+    m_impl->material_id = id;
     
     Resource_data::data_unlock(data);
     

@@ -148,10 +148,10 @@ data_unlock(const Material_data *data)
 }
 
 
-bool
-material_data_push_back(Material_data *data, const util::generic_id key, size_t *out_index)
+util::generic_id
+material_data_push_back(Material_data *data, size_t *out_index)
 {
-  assert(data && key);
+  assert(data);
   assert(data->size < data->capacity);
 
   // TODO: Duplicate key check
@@ -160,10 +160,11 @@ material_data_push_back(Material_data *data, const util::generic_id key, size_t 
   {
     LOG_ERROR(Error_string::no_free_space());
 
-    return false;
+    return 0;
   }
 
   const uint32_t index = data->size;
+  const util::generic_id key = ++data->key_count;
 
   if(out_index)
   {
@@ -181,7 +182,7 @@ material_data_push_back(Material_data *data, const util::generic_id key, size_t 
     memset(&data->property_material[index], 0, sizeof(*data->property_material));
   }
 
-  return true;
+  return key;
 }
 
 

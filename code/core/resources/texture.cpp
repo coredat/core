@@ -101,11 +101,11 @@ Texture::Texture(const char *filepath)
     {
       Resource_data::data_lock(tex_data);
       
-      assert(Resource_data::texture_data_push_back(tex_data, tex_data->size + 1));
-      Resource_data::texture_data_set_property_name(tex_data, tex_data->size, name.c_str());
-      Resource_data::texture_data_set_property_texture(tex_data, tex_data->size, new_texture);
+      const util::generic_id id = Resource_data::texture_data_push_back(tex_data);
+      Resource_data::texture_data_set_property_name(tex_data, id, name.c_str());
+      Resource_data::texture_data_set_property_texture(tex_data, id, new_texture);
       
-      m_impl->texture_id = tex_data->size;
+      m_impl->texture_id = id;
       
       Resource_data::data_unlock(tex_data);
     }

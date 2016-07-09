@@ -6,8 +6,8 @@
 */
 
 
-#ifndef ENTITY_DATA_INCLUDED_E9435758_47A6_41CC_BE76_3E635A6D134D
-#define ENTITY_DATA_INCLUDED_E9435758_47A6_41CC_BE76_3E635A6D134D
+#ifndef ENTITY_DATA_INCLUDED_B7510CA8_D72B_46AB_91C0_DD740CE0004E
+#define ENTITY_DATA_INCLUDED_B7510CA8_D72B_46AB_91C0_DD740CE0004E
 
 
 #include <utilities/generic_id.hpp>
@@ -56,8 +56,8 @@ struct Entity_data
 
 
 /*!
-  \brief Initialize the Entity_data structure, this is will allocate the memory for the keys and properties. Function will take a lock.
-  \param data This structure to initialize.
+  \brief initialise the Entity_data structure, this is will allocate the memory for the keys and properties. Function will take a lock.
+  \param data This structure to initialise.
   \param size_hint This helps the init function allocate the correct memory.
 */
 void
@@ -65,7 +65,7 @@ entity_data_init(Entity_data *data, const size_t size_hint);
 
 
 /*!
-  \brief Not currently implimented, but will return the memory. Function will take a lock.
+  \brief Not currently implemented, but will return the memory. Function will take a lock.
   \param data The data to free.
 */
 void
@@ -89,7 +89,7 @@ entity_data_get_capacity(const Entity_data *data);
 
 
 /*!
-  \brief Locks the data, any thing else requiring a lock will have to wait (not implimented).
+  \brief Locks the data, any thing else requiring a lock will have to wait (not implemented).
   \param data The container to lock.
 */
 void
@@ -97,7 +97,7 @@ data_lock(const Entity_data *data);
 
 
 /*!
-  \brief Unlocks the data, any pending locks can now proceed (not implimented).
+  \brief Unlocks the data, any pending locks can now proceed (not implemented).
   \param The container to unlock
 */
 void

@@ -74,11 +74,11 @@ namespace
     {
       Resource_data::data_lock(data->shader_data);
       
-      Resource_data::shader_data_push_back(data->shader_data, data->shader_data->size + 1);
-      Resource_data::shader_data_set_property_name(data->shader_data, data->shader_data->size, shader_name);
-      Resource_data::shader_data_set_property_shader(data->shader_data, data->shader_data->size, shader);
+      const util::generic_id id = Resource_data::shader_data_push_back(data->shader_data);
+      Resource_data::shader_data_set_property_name(data->shader_data, id, shader_name);
+      Resource_data::shader_data_set_property_shader(data->shader_data, id, shader);
       
-      return_id = data->shader_data->size;
+      return_id = id;
       
       Resource_data::data_unlock(data->shader_data);
     }

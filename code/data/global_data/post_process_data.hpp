@@ -6,8 +6,8 @@
 */
 
 
-#ifndef POST_PROCESS_DATA_INCLUDED_325E6B91_35CA_4AC0_BE46_EFC08ABE18FD
-#define POST_PROCESS_DATA_INCLUDED_325E6B91_35CA_4AC0_BE46_EFC08ABE18FD
+#ifndef POST_PROCESS_DATA_INCLUDED_4CC212D1_C4F1_4B37_9AB1_28C08584CF06
+#define POST_PROCESS_DATA_INCLUDED_4CC212D1_C4F1_4B37_9AB1_28C08584CF06
 
 
 #include <utilities/generic_id.hpp>
@@ -44,8 +44,8 @@ struct Post_process_data
 
 
 /*!
-  \brief Initialize the Post_process_data structure, this is will allocate the memory for the keys and properties. Function will take a lock.
-  \param data This structure to initialize.
+  \brief initialise the Post_process_data structure, this is will allocate the memory for the keys and properties. Function will take a lock.
+  \param data This structure to initialise.
   \param size_hint This helps the init function allocate the correct memory.
 */
 void
@@ -53,7 +53,7 @@ post_process_data_init(Post_process_data *data, const size_t size_hint);
 
 
 /*!
-  \brief Not currently implimented, but will return the memory. Function will take a lock.
+  \brief Not currently implemented, but will return the memory. Function will take a lock.
   \param data The data to free.
 */
 void
@@ -77,7 +77,7 @@ post_process_data_get_capacity(const Post_process_data *data);
 
 
 /*!
-  \brief Locks the data, any thing else requiring a lock will have to wait (not implimented).
+  \brief Locks the data, any thing else requiring a lock will have to wait (not implemented).
   \param data The container to lock.
 */
 void
@@ -85,7 +85,7 @@ data_lock(const Post_process_data *data);
 
 
 /*!
-  \brief Unlocks the data, any pending locks can now proceed (not implimented).
+  \brief Unlocks the data, any pending locks can now proceed (not implemented).
   \param The container to unlock
 */
 void

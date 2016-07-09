@@ -7,7 +7,7 @@ data:
   key:
     name: mesh_id
     search_type: binary
-
+    auto_increment: true
 
   properties:
     - name: name

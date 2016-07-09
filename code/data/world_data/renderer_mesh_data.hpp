@@ -6,8 +6,8 @@
 */
 
 
-#ifndef RENDERER_MESH_DATA_INCLUDED_EF488127_169F_460F_813C_CCC1A1B91057
-#define RENDERER_MESH_DATA_INCLUDED_EF488127_169F_460F_813C_CCC1A1B91057
+#ifndef RENDERER_MESH_DATA_INCLUDED_24D47B50_710E_4279_8FDA_C2606CB31E0A
+#define RENDERER_MESH_DATA_INCLUDED_24D47B50_710E_4279_8FDA_C2606CB31E0A
 
 
 #include <utilities/generic_id.hpp>
@@ -50,8 +50,8 @@ struct Renderer_mesh_data
 
 
 /*!
-  \brief Initialize the Renderer_mesh_data structure, this is will allocate the memory for the keys and properties. Function will take a lock.
-  \param data This structure to initialize.
+  \brief initialise the Renderer_mesh_data structure, this is will allocate the memory for the keys and properties. Function will take a lock.
+  \param data This structure to initialise.
   \param size_hint This helps the init function allocate the correct memory.
 */
 void
@@ -59,7 +59,7 @@ renderer_mesh_data_init(Renderer_mesh_data *data, const size_t size_hint);
 
 
 /*!
-  \brief Not currently implimented, but will return the memory. Function will take a lock.
+  \brief Not currently implemented, but will return the memory. Function will take a lock.
   \param data The data to free.
 */
 void
@@ -83,7 +83,7 @@ renderer_mesh_data_get_capacity(const Renderer_mesh_data *data);
 
 
 /*!
-  \brief Locks the data, any thing else requiring a lock will have to wait (not implimented).
+  \brief Locks the data, any thing else requiring a lock will have to wait (not implemented).
   \param data The container to lock.
 */
 void
@@ -91,7 +91,7 @@ data_lock(const Renderer_mesh_data *data);
 
 
 /*!
-  \brief Unlocks the data, any pending locks can now proceed (not implimented).
+  \brief Unlocks the data, any pending locks can now proceed (not implemented).
   \param The container to unlock
 */
 void

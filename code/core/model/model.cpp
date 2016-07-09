@@ -128,12 +128,12 @@ Model::Model(const char *filename)
       
       Resource_data::data_lock(mesh_data);
       
-      Resource_data::mesh_data_push_back(mesh_data, mesh_data->size + 1);
-      Resource_data::mesh_data_set_property_mesh(mesh_data, mesh_data->size, mesh);
-      Resource_data::mesh_data_set_property_aabb(mesh_data, mesh_data->size, model_aabb);
-      Resource_data::mesh_data_set_property_name(mesh_data, mesh_data->size, name.c_str());
+      const util::generic_id id = Resource_data::mesh_data_push_back(mesh_data);
+      Resource_data::mesh_data_set_property_mesh(mesh_data, id, mesh);
+      Resource_data::mesh_data_set_property_aabb(mesh_data, id, model_aabb);
+      Resource_data::mesh_data_set_property_name(mesh_data, id, name.c_str());
       
-      m_impl->mesh_id = mesh_data->size;
+      m_impl->mesh_id = id;
 
       Resource_data::data_unlock(mesh_data);
     }

@@ -148,10 +148,10 @@ data_unlock(const Mesh_data *data)
 }
 
 
-bool
-mesh_data_push_back(Mesh_data *data, const util::generic_id key, size_t *out_index)
+util::generic_id
+mesh_data_push_back(Mesh_data *data, size_t *out_index)
 {
-  assert(data && key);
+  assert(data);
   assert(data->size < data->capacity);
 
   // TODO: Duplicate key check
@@ -160,10 +160,11 @@ mesh_data_push_back(Mesh_data *data, const util::generic_id key, size_t *out_ind
   {
     LOG_ERROR(Error_string::no_free_space());
 
-    return false;
+    return 0;
   }
 
   const uint32_t index = data->size;
+  const util::generic_id key = ++data->key_count;
 
   if(out_index)
   {
@@ -181,7 +182,7 @@ mesh_data_push_back(Mesh_data *data, const util::generic_id key, size_t *out_ind
     memset(&data->property_aabb[index], 0, sizeof(*data->property_aabb));
   }
 
-  return true;
+  return key;
 }
 
 

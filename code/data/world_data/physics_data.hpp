@@ -6,8 +6,8 @@
 */
 
 
-#ifndef PHYSICS_DATA_INCLUDED_43C00F96_254C_472A_9BB6_7019C6142FD7
-#define PHYSICS_DATA_INCLUDED_43C00F96_254C_472A_9BB6_7019C6142FD7
+#ifndef PHYSICS_DATA_INCLUDED_6FE153ED_1A75_4732_BC19_66707D72541A
+#define PHYSICS_DATA_INCLUDED_6FE153ED_1A75_4732_BC19_66707D72541A
 
 
 #include <utilities/generic_id.hpp>
@@ -48,8 +48,8 @@ struct Physics_data
 
 
 /*!
-  \brief Initialize the Physics_data structure, this is will allocate the memory for the keys and properties. Function will take a lock.
-  \param data This structure to initialize.
+  \brief initialise the Physics_data structure, this is will allocate the memory for the keys and properties. Function will take a lock.
+  \param data This structure to initialise.
   \param size_hint This helps the init function allocate the correct memory.
 */
 void
@@ -57,7 +57,7 @@ physics_data_init(Physics_data *data, const size_t size_hint);
 
 
 /*!
-  \brief Not currently implimented, but will return the memory. Function will take a lock.
+  \brief Not currently implemented, but will return the memory. Function will take a lock.
   \param data The data to free.
 */
 void
@@ -81,7 +81,7 @@ physics_data_get_capacity(const Physics_data *data);
 
 
 /*!
-  \brief Locks the data, any thing else requiring a lock will have to wait (not implimented).
+  \brief Locks the data, any thing else requiring a lock will have to wait (not implemented).
   \param data The container to lock.
 */
 void
@@ -89,7 +89,7 @@ data_lock(const Physics_data *data);
 
 
 /*!
-  \brief Unlocks the data, any pending locks can now proceed (not implimented).
+  \brief Unlocks the data, any pending locks can now proceed (not implemented).
   \param The container to unlock
 */
 void

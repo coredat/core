@@ -6,8 +6,8 @@
 */
 
 
-#ifndef MATERIAL_DATA_INCLUDED_7197875B_A389_4329_9D52_521F28133BF5
-#define MATERIAL_DATA_INCLUDED_7197875B_A389_4329_9D52_521F28133BF5
+#ifndef MATERIAL_DATA_INCLUDED_BA977A0E_72E8_4AB0_8F1C_0D20D21A017E
+#define MATERIAL_DATA_INCLUDED_BA977A0E_72E8_4AB0_8F1C_0D20D21A017E
 
 
 #include <utilities/generic_id.hpp>
@@ -37,6 +37,7 @@ struct Material_data
   size_t size = 0;
   const size_t capacity = 0;
 
+  util::generic_id key_count = 0;
 
   // Memory chunk
   const util::memory_chunk memory = util::memory_chunk();
@@ -45,8 +46,8 @@ struct Material_data
 
 
 /*!
-  \brief Initialize the Material_data structure, this is will allocate the memory for the keys and properties. Function will take a lock.
-  \param data This structure to initialize.
+  \brief initialise the Material_data structure, this is will allocate the memory for the keys and properties. Function will take a lock.
+  \param data This structure to initialise.
   \param size_hint This helps the init function allocate the correct memory.
 */
 void
@@ -54,7 +55,7 @@ material_data_init(Material_data *data, const size_t size_hint);
 
 
 /*!
-  \brief Not currently implimented, but will return the memory. Function will take a lock.
+  \brief Not currently implemented, but will return the memory. Function will take a lock.
   \param data The data to free.
 */
 void
@@ -78,7 +79,7 @@ material_data_get_capacity(const Material_data *data);
 
 
 /*!
-  \brief Locks the data, any thing else requiring a lock will have to wait (not implimented).
+  \brief Locks the data, any thing else requiring a lock will have to wait (not implemented).
   \param data The container to lock.
 */
 void
@@ -86,7 +87,7 @@ data_lock(const Material_data *data);
 
 
 /*!
-  \brief Unlocks the data, any pending locks can now proceed (not implimented).
+  \brief Unlocks the data, any pending locks can now proceed (not implemented).
   \param The container to unlock
 */
 void
@@ -95,12 +96,11 @@ data_unlock(const Material_data *data);
 /*!
   \brief Push back a new element, increases the size by 1. (Does not take a lock).
   \param data The container which to push back.
-  \param key The id to use as a key.
   \param out_index Optional - this will return the inserted location in the container.
-  \return Returns true if it was successful.
+  \return Returns the id of the data.
 */
-bool
-material_data_push_back(Material_data *data, const util::generic_id key, size_t *out_index = nullptr);
+util::generic_id
+material_data_push_back(Material_data *data, size_t *out_index = nullptr);
 
 
 /*!

@@ -63,14 +63,16 @@ Camera::Camera(Core::World &world)
     World_data::data_lock(cam_data);
     
     // Push and set the defaults.
-    if(World_data::camera_data_push_back(cam_data, cam_data->size + 1))
+    util::generic_id id = cam_data->size + 1;
+    World_data::camera_data_push_back(cam_data, id);
+    if(id)
     {
-      m_impl->camera_id = cam_data->size;
-      World_data::camera_data_set_property_entity_id(cam_data, m_impl->camera_id, util::generic_id_invalid());
-      World_data::camera_data_set_property_camera(cam_data, m_impl->camera_id, ::Camera::Camera_properties{});
+      m_impl->camera_id = id;
+      World_data::camera_data_set_property_entity_id(cam_data, id, util::generic_id_invalid());
+      World_data::camera_data_set_property_camera(cam_data, id, ::Camera::Camera_properties{});
       
       const uint32_t priority = Camera_utils::find_highest_priority(cam_data->property_priority, cam_data->size);
-      World_data::camera_data_set_property_priority(cam_data, m_impl->camera_id, priority + 1);
+      World_data::camera_data_set_property_priority(cam_data, id, priority + 1);
     }
     
     World_data::data_unlock(cam_data);

@@ -148,10 +148,10 @@ data_unlock(const Texture_data *data)
 }
 
 
-bool
-texture_data_push_back(Texture_data *data, const util::generic_id key, size_t *out_index)
+util::generic_id
+texture_data_push_back(Texture_data *data, size_t *out_index)
 {
-  assert(data && key);
+  assert(data);
   assert(data->size < data->capacity);
 
   // TODO: Duplicate key check
@@ -160,10 +160,11 @@ texture_data_push_back(Texture_data *data, const util::generic_id key, size_t *o
   {
     LOG_ERROR(Error_string::no_free_space());
 
-    return false;
+    return 0;
   }
 
   const uint32_t index = data->size;
+  const util::generic_id key = ++data->key_count;
 
   if(out_index)
   {
@@ -181,7 +182,7 @@ texture_data_push_back(Texture_data *data, const util::generic_id key, size_t *o
     memset(&data->property_render_target[index], 0, sizeof(*data->property_render_target));
   }
 
-  return true;
+  return key;
 }
 
 
