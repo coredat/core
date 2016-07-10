@@ -287,7 +287,6 @@ World::get_overlapping_aabbs(const std::function<void(const Core::Collision_pair
   
   LOG_TODO_ONCE("This can move out into a transform, or done on a thread during think.");
 
-  const World_data::Entity_data *entity_data = m_impl->world_data->data.entity;
   const World_data::Physics_data *data = m_impl->world_data->data.physics_data;
   
   math::aabb *bounds = reinterpret_cast<math::aabb*>(::Memory::scratch_alloc_aligned(sizeof(math::aabb) * data->size));
@@ -331,7 +330,7 @@ World::get_overlapping_aabbs(const std::function<void(const Core::Collision_pair
     math::aabb_scale(box_copy, data->property_transform[i].scale);
     math::aabb_set_origin(box_copy, data->property_transform[i].position);
     
-    boxes.push_back(Physics::Collision::Axis_collidable{collision_mask, box_copy});
+    boxes.push_back(Physics::Collision::Axis_collidable{{collision_mask}, box_copy});
   }
   
   assert(prune_stack == prune.size);
