@@ -1,6 +1,5 @@
 #include <core/camera/camera.hpp>
 #include <core/world/world.hpp>
-#include <core/world/detail/world_detail.hpp>
 #include <core/color/color.hpp>
 #include <core/entity/entity.hpp>
 #include <core/entity/entity_ref.hpp>
@@ -40,7 +39,7 @@ struct Camera::Impl
 {
   util::generic_id camera_id;
   ::Camera::Camera_properties properties;
-  std::shared_ptr<World_detail::Data> world;
+  std::shared_ptr<World_data::World> world;
 };
 
 
@@ -58,7 +57,7 @@ Camera::Camera(Core::World &world)
   
   // Creaet a new camera.
   {
-    auto cam_data = m_impl->world->data.camera_data;
+    auto cam_data = m_impl->world->camera_data;
     
     World_data::data_lock(cam_data);
     
@@ -127,7 +126,7 @@ Camera::set_tags_to_render(const uint32_t tags)
   
   // Update data
   {
-    auto cam_data = m_impl->world->data.camera_data;
+    auto cam_data = m_impl->world->camera_data;
     const auto cam_id = m_impl->camera_id;
     
     World_data::data_lock(cam_data);
@@ -173,7 +172,7 @@ Camera::get_tags_to_render() const
     return 0;
   }
   
-  return get_properties(m_impl->world->data.camera_data, m_impl->camera_id).cull_mask;
+  return get_properties(m_impl->world->camera_data, m_impl->camera_id).cull_mask;
 }
 
 
@@ -188,7 +187,7 @@ Camera::set_post_process(const Core::Post_process &post)
   
   // Get
   {
-    auto cam_data = m_impl->world->data.camera_data;
+    auto cam_data = m_impl->world->camera_data;
     
     World_data::data_lock(cam_data);
     
@@ -222,7 +221,7 @@ Camera::set_attached_entity(Entity_ref entity)
 
   // Set the attached entity.
   {
-    auto cam_data = m_impl->world->data.camera_data;
+    auto cam_data = m_impl->world->camera_data;
     
     World_data::data_lock(cam_data);
     
@@ -244,7 +243,7 @@ Camera::get_attached_entity() const
   
   util::generic_id entity_id = util::generic_id_invalid();
   {
-    auto cam_data = m_impl->world->data.camera_data;
+    auto cam_data = m_impl->world->camera_data;
     
     World_data::data_lock(cam_data);
     World_data::camera_data_get_property_entity_id(cam_data, m_impl->camera_id, &entity_id);
@@ -266,7 +265,7 @@ Camera::set_priority(const uint32_t priority)
     return;
   }
   
-  auto cam_data = m_impl->world->data.camera_data;
+  auto cam_data = m_impl->world->camera_data;
   const auto cam_id = m_impl->camera_id;
   
   World_data::data_lock(cam_data);
@@ -318,7 +317,7 @@ Camera::get_priority() const
 {
   uint32_t priority = 0;
   {
-    auto cam_data = m_impl->world->data.camera_data;
+    auto cam_data = m_impl->world->camera_data;
     
     World_data::data_lock(cam_data);
     if(!World_data::camera_data_get_property_priority(cam_data, m_impl->camera_id, &priority))
@@ -343,7 +342,7 @@ Camera::set_type(const Core::Camera_type cam_type)
 
   // Set the type
   {
-    auto cam_data = m_impl->world->data.camera_data;
+    auto cam_data = m_impl->world->camera_data;
     const auto cam_id = m_impl->camera_id;
     
     World_data::data_lock(cam_data);
@@ -368,7 +367,7 @@ Camera::get_type() const
     return Camera_type::perspective;
   }
   
-  return get_properties(m_impl->world->data.camera_data, m_impl->camera_id).type;
+  return get_properties(m_impl->world->camera_data, m_impl->camera_id).type;
 }
 
 
@@ -383,7 +382,7 @@ Camera::set_clear_flags(const uint32_t flags)
 
   // Set the flags
   {
-    auto cam_data = m_impl->world->data.camera_data;
+    auto cam_data = m_impl->world->camera_data;
     const auto cam_id = m_impl->camera_id;
     
     World_data::data_lock(cam_data);
@@ -408,14 +407,14 @@ Camera::get_clear_flags() const
     return 0;
   }
 
-  return get_properties(m_impl->world->data.camera_data, m_impl->camera_id).clear_flags;
+  return get_properties(m_impl->world->camera_data, m_impl->camera_id).clear_flags;
 }
 
 
 void
 Camera::set_render_target(const Render_target &target)
 {
-  auto cam_data = m_impl->world->data.camera_data;
+  auto cam_data = m_impl->world->camera_data;
   
   World_data::data_lock(cam_data);
   
@@ -445,7 +444,7 @@ Camera::set_width(const uint32_t width)
 
   // Set the viewport width
   {
-    auto cam_data = m_impl->world->data.camera_data;
+    auto cam_data = m_impl->world->camera_data;
     const auto cam_id = m_impl->camera_id;
     
     World_data::data_lock(cam_data);
@@ -470,7 +469,7 @@ Camera::get_width() const
     return 0;
   }
 
-  return get_properties(m_impl->world->data.camera_data, m_impl->camera_id).viewport_width;
+  return get_properties(m_impl->world->camera_data, m_impl->camera_id).viewport_width;
 }
 
 
@@ -485,7 +484,7 @@ Camera::set_height(const uint32_t height)
 
   // Set the viewport height
   {
-    auto cam_data = m_impl->world->data.camera_data;
+    auto cam_data = m_impl->world->camera_data;
     const auto cam_id = m_impl->camera_id;
     
     World_data::data_lock(cam_data);
@@ -510,7 +509,7 @@ Camera::get_height() const
     return 0;
   }
 
-  return get_properties(m_impl->world->data.camera_data, m_impl->camera_id).viewport_height;
+  return get_properties(m_impl->world->camera_data, m_impl->camera_id).viewport_height;
 }
 
 
@@ -525,7 +524,7 @@ Camera::set_feild_of_view(const float fov_radians)
 
   // Set fov
   {
-    auto cam_data = m_impl->world->data.camera_data;
+    auto cam_data = m_impl->world->camera_data;
     const auto cam_id = m_impl->camera_id;
     
     World_data::data_lock(cam_data);
@@ -550,7 +549,7 @@ Camera::get_field_of_view() const
     return 0;
   }
 
-  return get_properties(m_impl->world->data.camera_data, m_impl->camera_id).fov;
+  return get_properties(m_impl->world->camera_data, m_impl->camera_id).fov;
 }
 
 
@@ -565,7 +564,7 @@ Camera::set_near_plane(const float near_plane)
 
   // Set the near plane
   {
-    auto cam_data = m_impl->world->data.camera_data;
+    auto cam_data = m_impl->world->camera_data;
     const auto cam_id = m_impl->camera_id;
     
     World_data::data_lock(cam_data);
@@ -590,7 +589,7 @@ Camera::get_near_plane() const
     return 0;
   }
 
-  return get_properties(m_impl->world->data.camera_data, m_impl->camera_id).near_plane;
+  return get_properties(m_impl->world->camera_data, m_impl->camera_id).near_plane;
 }
 
 
@@ -605,7 +604,7 @@ Camera::set_far_plane(const float far_plane)
 
   // Set the far plane
   {
-    auto cam_data = m_impl->world->data.camera_data;
+    auto cam_data = m_impl->world->camera_data;
     const auto cam_id = m_impl->camera_id;
     
     World_data::data_lock(cam_data);
@@ -630,7 +629,7 @@ Camera::get_far_plane() const
     return 0;
   }
 
-  return get_properties(m_impl->world->data.camera_data, m_impl->camera_id).far_plane;
+  return get_properties(m_impl->world->camera_data, m_impl->camera_id).far_plane;
 }
 
 
@@ -645,7 +644,7 @@ Camera::set_clear_color(const Core::Color color)
 
   // Set the clear color
   {
-    auto cam_data = m_impl->world->data.camera_data;
+    auto cam_data = m_impl->world->camera_data;
     const auto cam_id = m_impl->camera_id;
     
     World_data::data_lock(cam_data);
@@ -670,7 +669,7 @@ Camera::get_clear_color() const
     return Core::Color(0xFFFFFFFF);
   }
 
-  return Core::Color(get_properties(m_impl->world->data.camera_data, m_impl->camera_id).clear_color);
+  return Core::Color(get_properties(m_impl->world->camera_data, m_impl->camera_id).clear_color);
 }
 
 

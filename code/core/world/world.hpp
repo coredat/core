@@ -4,10 +4,9 @@
 
 #include <core/common/core_fwd.hpp>
 #include <core/common/core_types.hpp>
-#include <core/world/detail/world_detail_fwd.hpp>
+#include <data/world_data/world_data_fwd.hpp>
 #include <core/world/world_setup.hpp>
 #include <functional>
-#include <memory>
 
 
 namespace Core {
@@ -48,8 +47,8 @@ private:
   friend class Core::Entity_ref;
   friend class Core::Camera;
 
-  std::shared_ptr<const World_detail::Data>  get_world_data() const;
-  std::shared_ptr<World_detail::Data>        get_world_data();
+  std::shared_ptr<const World_data::World> get_world_data() const;
+  std::shared_ptr<World_data::World>       get_world_data();
 
 private:
 

@@ -1,7 +1,6 @@
 #include <core/world/world.hpp>
 #include <core/context/context.hpp>
 #include <core/physics/collision_pair.hpp>
-#include <core/world/detail/world_detail.hpp>
 #include <core/transform/transform.hpp>
 
 #include <debug_gui/debug_menu.hpp>
@@ -48,10 +47,10 @@ namespace Core {
 
 struct World::Impl
 {
-  std::shared_ptr<World_detail::Data> world_data = std::make_shared<World_detail::Data>();
+  std::shared_ptr<World_data::World> world_data;
   util::timer dt_timer;
-  float       dt      = 0.f;
-  float       dt_mul  = 1.f;
+  float       dt           = 0.f;
+  float       dt_mul       = 1.f;
   float       running_time = 0.f;
 };
 
@@ -59,45 +58,10 @@ struct World::Impl
 World::World(const Context &ctx, const World_setup setup)
 : m_impl(new World::Impl)
 {
-  LOG_TODO("Remove static data stores");
+  m_impl->world_data = std::make_shared<World_data::World>(setup.entity_pool_size);
   
-  const uint32_t entity_hint = setup.entity_pool_size;
-  
-  static World_data::Pending_scene_graph_change_data graph_changes;
-  World_data::pending_scene_graph_change_init(&graph_changes, entity_hint);
-  
-  static World_data::Camera_data camera_data;
-  World_data::camera_data_init(&camera_data, 32);
-    
-  static World_data::Physics_data physics_data;
-  World_data::physics_data_init(&physics_data, entity_hint);
-  
-  static World_data::Renderer_mesh_data mesh_data;
-  World_data::renderer_mesh_data_init(&mesh_data, entity_hint);
-  
-  static World_data::Transform_data transform_data;
-  World_data::transform_data_init(&transform_data, entity_hint);
-  
-  static World_data::Entity_data entity_data;
-  World_data::entity_data_init(&entity_data, entity_hint);
-  
-  static World_data::Renderer_text_draw_calls_data text_draw_calls;
-  World_data::renderer_text_draw_calls_data_init(&text_draw_calls, entity_hint);
-  
-  m_impl->world_data->data.entity_graph_changes = &graph_changes;
-  m_impl->world_data->data.physics_data         = &physics_data;
-  m_impl->world_data->data.mesh_data            = &mesh_data;
-  
-  m_impl->world_data->data.camera_data          = &camera_data;  
-  m_impl->world_data->data.transform            = &transform_data;
-  m_impl->world_data->data.entity               = &entity_data;
-  m_impl->world_data->data.text_data            = &text_draw_calls;
-  
-  LOG_TODO("We can store the data directly and get rid of ::World_data::World")
-  World_data::set_world_data(&m_impl->world_data->data);
-  
-  //Simple_renderer::initialize();
-  //Debug_line_renderer::initialize();
+  Simple_renderer::initialize();
+  Debug_line_renderer::initialize();
   
   ::Material_renderer::initialize();
   ::Post_renderer::initialize();
@@ -157,18 +121,18 @@ World::think()
   }
   
   // Update world
-  auto data = &m_impl->world_data->data;
-  auto graph_changes = m_impl->world_data->data.entity_graph_changes;
+  auto data = m_impl->world_data;
+  auto graph_changes = m_impl->world_data->entity_graph_changes;
 
   // Push in new phy entities.
-  World_data::world_update_scene_graph_changes(data, graph_changes);
+  World_data::world_update_scene_graph_changes(data.get(), graph_changes);
   
   // Reset the entity pool for new changes.
   World_data::pending_scene_graph_change_reset(graph_changes);
   
   
   auto resources = Resource_data::get_resources();
-  auto world = m_impl->world_data->data;
+  auto world = m_impl->world_data.get();
 
   
   /*
@@ -181,7 +145,7 @@ World::think()
     --
     Can we async this?
   */
-  auto cam_data = world.camera_data;
+  auto cam_data = world->camera_data;
 
   World_data::data_lock(cam_data);
   uint32_t number_of_cam_runs = 0;
@@ -193,7 +157,7 @@ World::think()
     // Generate cam_run data
     {
       Core::Transform *cam_transforms = SCRATCH_ALIGNED_ALLOC(Core::Transform, cam_data->size);
-      Camera_utils::get_camera_transforms(world.transform, cam_data->property_entity_id, cam_transforms, cam_data->size);
+      Camera_utils::get_camera_transforms(world->transform, cam_data->property_entity_id, cam_transforms, cam_data->size);
       Camera_utils::calculate_camera_runs(cam_data,
                                           Resource_data::get_resources()->texture_data,
                                           cam_transforms,
@@ -214,12 +178,12 @@ World::think()
     --
     Can we async this?
   */
-  ::Material_renderer::Draw_call *draw_calls = SCRATCH_ALIGNED_ALLOC(::Material_renderer::Draw_call, world.mesh_data->size);
+  ::Material_renderer::Draw_call *draw_calls = SCRATCH_ALIGNED_ALLOC(::Material_renderer::Draw_call, world->mesh_data->size);
   {
-    for(uint32_t i = 0; i < world.mesh_data->size; ++i)
+    for(uint32_t i = 0; i < world->mesh_data->size; ++i)
     {
       // Draw call from the data.
-      const World_data::Mesh_renderer_draw_call *draw_call_data = &world.mesh_data->property_draw_call[i];
+      const World_data::Mesh_renderer_draw_call *draw_call_data = &world->mesh_data->property_draw_call[i];
 
       // No model? keep moving.
       if(!draw_call_data->model_id)
@@ -237,8 +201,8 @@ World::think()
       
       // Get cull mask.
       // This isn't particularly nice. We should already have this data to save us looking for it.
-      const util::generic_id entity_id = world.mesh_data->renderer_mesh_id[i];
-      World_data::entity_data_get_property_tag(world.entity, entity_id, &draw_calls[i].cull_mask);
+      const util::generic_id entity_id = world->mesh_data->renderer_mesh_id[i];
+      World_data::entity_data_get_property_tag(world->entity, entity_id, &draw_calls[i].cull_mask);
     }
   }
   
@@ -251,13 +215,13 @@ World::think()
   uint32_t number_of_draw_calls = 0;
   Rendering::render_main_scene(m_impl->dt,
                                m_impl->running_time,
-                               world.mesh_data,
+                               world->mesh_data,
                                resources->material_data,
                                resources->post_data,
                                cam_runs,
                                number_of_cam_runs,
                                draw_calls,
-                               world.mesh_data->size,
+                               world->mesh_data->size,
                                &number_of_draw_calls);
 
   /*
@@ -268,7 +232,7 @@ World::think()
   #ifdef CORE_DEBUG_MENU
   {
     Debug_menu::display_global_data_menu();
-    Debug_menu::display_world_data_menu(&m_impl->world_data->data,
+    Debug_menu::display_world_data_menu(m_impl->world_data.get(),
                                         m_impl->dt,
                                         m_impl->dt_mul,
                                         number_of_draw_calls,
@@ -287,7 +251,7 @@ World::get_overlapping_aabbs(const std::function<void(const Core::Collision_pair
   
   LOG_TODO_ONCE("This can move out into a transform, or done on a thread during think.");
 
-  const World_data::Physics_data *data = m_impl->world_data->data.physics_data;
+  const World_data::Physics_data *data = m_impl->world_data->physics_data;
   
   math::aabb *bounds = reinterpret_cast<math::aabb*>(::Memory::scratch_alloc_aligned(sizeof(math::aabb) * data->size));
   
@@ -389,7 +353,7 @@ World::find_entities_by_tag(const uint32_t tag_id,
   count = 0;
   
   // Loop through entity data and find entities.
-  auto data = m_impl->world_data->data.entity;
+  auto data = m_impl->world_data->entity;
   
   data_lock(data);
   
@@ -409,7 +373,7 @@ World::find_entities_by_tag(const uint32_t tag_id,
 }
 
 
-std::shared_ptr<const World_detail::Data>
+std::shared_ptr<const World_data::World>
 World::get_world_data() const
 {
   assert(m_impl);
@@ -417,7 +381,7 @@ World::get_world_data() const
 }
 
 
-std::shared_ptr<World_detail::Data>
+std::shared_ptr<World_data::World>
 World::get_world_data()
 {
   assert(m_impl);

@@ -9,8 +9,8 @@
 #include <core/model/model_fwd.hpp>
 #include <core/resources/resources_fwd.hpp>
 #include <core/world/world_fwd.hpp>
-#include <core/world/detail/world_detail_fwd.hpp>
 #include <core/renderer/renderer_fwd.hpp>
+#include <data/world_data/world_data_fwd.hpp>
 #include <stdint.h>
 #include <memory>
 
@@ -88,8 +88,8 @@ private:
                                 operator util::generic_id() const;
   
   util::generic_id                           get_id() const;
-  std::shared_ptr<const World_detail::Data>  get_world_data() const;
-  std::shared_ptr<World_detail::Data>        get_world_data();
+  std::shared_ptr<const World_data::World>  get_world_data() const;
+  std::shared_ptr<World_data::World>        get_world_data();
 
 private:
 

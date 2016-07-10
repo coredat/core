@@ -9,6 +9,7 @@
 #include <core/model/model_fwd.hpp>
 #include <core/world/world_fwd.hpp>
 #include <core/entity/entity_fwd.hpp>
+#include <data/world_data/world_data_fwd.hpp>
 #include <utilities/generic_id.hpp>
 #include <stdint.h>
 #include <memory>
@@ -27,7 +28,7 @@ public:
   explicit                      Entity_ref();
   explicit                      Entity_ref(Entity &entity);
   explicit                      Entity_ref(const util::generic_id id, World &world);
-  explicit                      Entity_ref(const util::generic_id id, std::shared_ptr<World_detail::Data> world_data);
+  explicit                      Entity_ref(const util::generic_id id, std::shared_ptr<World_data::World> world_data);
                                 ~Entity_ref();
   
                                 Entity_ref(const Entity_ref&);
@@ -81,8 +82,8 @@ private:
                                 operator util::generic_id() const;
   
   util::generic_id                            get_id() const;
-  std::shared_ptr<const World_detail::Data>   get_world_data() const;
-  std::shared_ptr<World_detail::Data>         get_world_data();
+  std::shared_ptr<const World_data::World>    get_world_data() const;
+  std::shared_ptr<World_data::World>          get_world_data();
   
 
 private:

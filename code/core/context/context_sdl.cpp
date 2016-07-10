@@ -201,6 +201,8 @@ Context::~Context()
   #ifdef CORE_DEBUG_MENU
   ImGui_ImplSdlGL3_Shutdown();
   #endif
+  
+  instance_created = false;
 }
 
 

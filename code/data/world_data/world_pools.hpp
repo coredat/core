@@ -20,6 +20,10 @@ struct World
   Physics_data                      *physics_data         = nullptr;
   Renderer_mesh_data                *mesh_data            = nullptr;
   Renderer_text_draw_calls_data     *text_data            = nullptr;
+  
+  explicit World(const uint32_t size_hint);
+  ~World();
+  
 }; // struct
 
 
