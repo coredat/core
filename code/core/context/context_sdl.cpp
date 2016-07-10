@@ -11,6 +11,7 @@
 #include <core/context/context.hpp>
 #include <core/context/detail/context_detail.hpp>
 #include <graphics_api/initialize.hpp>
+#include <graphics_api/clear.hpp>
 #include <graphics_api/ogl/ogl_common.hpp>
 #include <systems/sdl_backend/sdl_message_loop.hpp>
 #include <systems/sdl_backend/sdl_input.hpp>
@@ -157,6 +158,8 @@ Context::Context(const uint32_t width,
   
   // Initialize the graphics api
   Graphics_api::initialize();
+  // Clear is important, some platforms will render junk for a frame.
+  Graphics_api::clear(Graphics_api::Clear_flag::color | Graphics_api::Clear_flag::depth);
   
 //  SDL_StartTextInput();
   
