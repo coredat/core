@@ -253,7 +253,7 @@ World::get_overlapping_aabbs(const std::function<void(const Core::Collision_pair
 
   const World_data::Physics_data *data = m_impl->world_data->physics_data;
   
-  math::aabb *bounds = reinterpret_cast<math::aabb*>(::Memory::scratch_alloc_aligned(sizeof(math::aabb) * data->size));
+  math::aabb *bounds = SCRATCH_ALIGNED_ALLOC(math::aabb, data->size);
   
   Transformation::calculate_positional_aabb(data->property_aabb_collider,
                                             data->property_transform,
