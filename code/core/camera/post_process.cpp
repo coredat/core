@@ -4,6 +4,7 @@
 #include <core/resources/render_target.hpp>
 #include <data/global_data/post_process_data.hpp>
 #include <data/global_data/resource_data.hpp>
+#include <common/error_strings.hpp>
 #include <utilities/logging.hpp>
 
 
@@ -19,9 +20,24 @@ struct Post_process::Impl
 Post_process::Post_process(const char *name)
 : m_impl(new Impl{})
 {
-  LOG_TODO_ONCE("Check for existing post process")
-  
   auto post_data = Resource_data::get_resources()->post_data;
+  
+  // Search to see if it exists
+  {
+    util::generic_id id = util::generic_id_invalid();
+  
+    Resource_data::data_lock(post_data);
+    if(Resource_data::post_process_data_search_property_name(post_data, name))
+    {
+      m_impl->id = id;
+    }
+    Resource_data::data_lock(post_data);
+    
+    if(id)
+    {
+      return;
+    }
+  }
   
   // Insert a new
   {
@@ -36,7 +52,7 @@ Post_process::Post_process(const char *name)
     else
     {
       assert(false);
-      LOG_ERROR("Woops");
+      LOG_ERROR(Error_string::no_free_space());
     }
     
     Resource_data::data_unlock(post_data);
