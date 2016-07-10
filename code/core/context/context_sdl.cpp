@@ -39,6 +39,8 @@ namespace
   // only one instance allowed in an application lifetime.
   // This could change, just right now no need.
   atomic_bool instance_created(false);
+  
+  Context_data::Input_pool core_input;
 }
 
 
@@ -186,18 +188,13 @@ Context::Context(const uint32_t width,
   m_impl.get());
 
   // Core data
-  LOG_TODO("Remove static data stores")
-  static Context_data::Input_pool core_input;
   Context_data::input_data_init(&core_input);
-  
   m_impl->context_data->input_pool = &core_input;
 }
 
 
 Context::~Context()
 {
-  LOG_TODO("Need to deal with core data here");
-  
   #ifdef CORE_DEBUG_MENU
   ImGui_ImplSdlGL3_Shutdown();
   #endif
@@ -209,15 +206,35 @@ Context::~Context()
 Context::Context(Context &&other)
 : m_impl(std::move(other.m_impl))
 {
-  LOG_TODO("Need to explicitly clear other")
+  m_impl->context = other.m_impl->context;
+  other.m_impl->context = nullptr;
+  
+  m_impl->context_data = other.m_impl->context_data;
+  other.m_impl->context_data = nullptr;
+  
+  m_impl->is_open = other.m_impl->is_open;
+  other.m_impl->is_open = false;
+  
+  m_impl->window = other.m_impl->window;
+  other.m_impl->window = nullptr;
 }
 
 
 Context&
 Context::operator=(Context &&other)
 {
-  LOG_TODO("Need to explicitly clear other")
-  this->m_impl = std::move(other.m_impl);
+  m_impl->context = other.m_impl->context;
+  other.m_impl->context = nullptr;
+  
+  m_impl->context_data = other.m_impl->context_data;
+  other.m_impl->context_data = nullptr;
+  
+  m_impl->is_open = other.m_impl->is_open;
+  other.m_impl->is_open = false;
+  
+  m_impl->window = other.m_impl->window;
+  other.m_impl->window = nullptr;
+  
   return *this;
 }
 
