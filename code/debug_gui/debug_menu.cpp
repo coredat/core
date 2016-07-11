@@ -10,6 +10,7 @@
 #include <debug_gui/camera_list.hpp>
 #include <debug_gui/stats_overlay.hpp>
 #include <debug_gui/text_mesh.hpp>
+#include <debug_gui/data_capacities.hpp>
 
 #include <data/global_data/resource_data.hpp>
 #include <data/global_data/memory_data.hpp>
@@ -80,6 +81,7 @@ namespace
   bool show_mesh_draw_calls = false;
   bool show_camera_list     = false;
   bool show_world_stats     = false;
+  bool show_capacities      = false;
 }
 #endif
 
@@ -105,16 +107,40 @@ display_world_data_menu(World_data::World *world_data,
       ImGui::MenuItem("Mesh Draw Calls",  nullptr, &show_mesh_draw_calls);
       ImGui::MenuItem("Cameras",          nullptr, &show_camera_list);
       ImGui::MenuItem("Stats",            nullptr, &show_world_stats);
+      ImGui::MenuItem("Capacities",       nullptr, &show_capacities);
       ImGui::EndMenu();
     }
     
     ImGui::EndMainMenuBar();
   }
   
-  if(show_entity_list)     { display_entity_list(world_data->entity);             }
-  if(show_mesh_draw_calls) { display_mesh_draw_calls(world_data->mesh_data);      }
-  if(show_camera_list)     { display_camera_data(world_data->camera_data);        }
+  if(show_entity_list)     { display_entity_list(world_data->entity);                     }
+  if(show_mesh_draw_calls) { display_mesh_draw_calls(world_data->mesh_data);              }
+  if(show_camera_list)     { display_camera_data(world_data->camera_data);                }
   if(show_world_stats)     { display_world_stats(dt, dt_mul, draw_calls, render_passes);  }
+  
+  auto global_data = Resource_data::get_resources();
+
+  if(!global_data)
+  {
+    return;
+  }
+  
+  if(show_capacities)
+  {
+    display_capacities(global_data->text_mesh_data,
+                       global_data->material_data,
+                       global_data->mesh_data,
+                       global_data->post_data,
+                       global_data->shader_data,
+                       global_data->texture_data,
+                       
+                       world_data->camera_data,
+                       world_data->entity,
+                       world_data->mesh_data,
+                       world_data->text_data,
+                       world_data->transform);
+  }
   #endif
 }
 

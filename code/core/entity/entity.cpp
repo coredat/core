@@ -77,7 +77,6 @@ Entity::Entity(Core::World &world)
         
         const char *nilstr = "";
         World_data::entity_data_set_property_name(entity_data, id, nilstr);
-        
       }
       else
       {
@@ -88,6 +87,7 @@ Entity::Entity(Core::World &world)
     }
     
     // Create Transform record
+    if(success)
     {
       auto transform_data = m_impl->world->transform;
       
@@ -95,13 +95,17 @@ Entity::Entity(Core::World &world)
       
       const util::generic_id entity_id = m_impl->id;
     
-      if(World_data::transform_data_push_back(transform_data, entity_id) && success)
+      if(World_data::transform_data_push_back(transform_data, entity_id))
       {
         const math::transform trans{};
         World_data::transform_data_set_property_transform(transform_data, entity_id, trans);
         
         const math::aabb bounding_box{};
         World_data::transform_data_set_property_aabb(transform_data, entity_id, bounding_box);
+      }
+      else
+      {
+        success = false;
       }
       
       World_data::data_unlock(transform_data);
@@ -124,6 +128,7 @@ Entity::Entity(Core::World &world)
     if(!success)
     {
       LOG_ERROR(Error_string::entity_failed_to_construct());
+      m_impl->id = util::generic_id_invalid();
       destroy();
     }
   }
