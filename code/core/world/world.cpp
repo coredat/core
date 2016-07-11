@@ -27,6 +27,7 @@
 #include <systems/renderer_material/material_renderer.hpp>
 #include <systems/renderer_post/post_process.hpp>
 #include <systems/renderer_material/material_renderer.hpp>
+#include <systems/renderer_aabb/renderer_aabb.hpp>
 
 #include <transformations/physics/overlapping_aabb.hpp>
 #include <transformations/rendering/material_renderer.hpp>
@@ -60,8 +61,9 @@ World::World(const Context &ctx, const World_setup setup)
 {
   m_impl->world_data = std::make_shared<World_data::World>(setup.entity_pool_size);
   
-  Simple_renderer::initialize();
+  Simple_renderer::initialize(); // TODO: This can be removed I think, largely superceded by mat renderer
   Debug_line_renderer::initialize();
+  Aabb_renderer::initialize();
   
   ::Material_renderer::initialize();
   ::Post_renderer::initialize();
