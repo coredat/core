@@ -46,6 +46,7 @@ public:
   // ** Common Entity Interface ** //
 
   bool                          is_valid() const;
+                                operator bool() const;
   
   void                          set_user_data(const uintptr_t user_data);
   uintptr_t                     get_user_data() const;
@@ -70,8 +71,6 @@ public:
 
   void                          set_rigidbody_properties(const Core::Rigidbody_properties rb_props);
   Core::Rigidbody_properties    set_rigidbody_properties() const;
-    
-                                operator bool() const;
 
   // ** Equality ** //
   

@@ -110,6 +110,12 @@ Entity_ref::is_valid() const
 }
 
 
+Entity_ref::operator bool() const
+{
+  return is_valid();
+}
+
+
 void
 Entity_ref::set_user_data(const uintptr_t user_data)
 {

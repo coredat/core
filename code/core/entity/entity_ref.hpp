@@ -40,6 +40,7 @@ public:
   // ** Common Entity Interface ** //
   
   bool                          is_valid() const;
+                                operator bool() const;
   
   void                          destroy();
 

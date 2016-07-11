@@ -191,12 +191,6 @@ Entity::destroy()
   m_impl->id = util::generic_id_invalid();
 }
 
-
-Entity::operator bool() const
-{
-  return m_impl->id != util::generic_id_invalid();
-}
-
 // ** Common Entity Interface ** //
 
 
@@ -205,6 +199,12 @@ Entity::is_valid() const
 {
   return Entity_detail::is_valid(m_impl->id,
                                  m_impl->world.get());
+}
+
+
+Entity::operator bool() const
+{
+  return is_valid();
 }
 
 
