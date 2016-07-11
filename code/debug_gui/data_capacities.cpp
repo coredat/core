@@ -21,17 +21,19 @@ display_capacities(Resource_data::Text_mesh_data *text_mesh_data,
 {
   ImGui::Begin("Data Capacities");
   {
-    auto display_capacity = [](auto name, auto data)
+    auto display_capacity = [](const char *name, const auto data)
     {
       char buf[32];
     
-      ImGui::TextWrapped(name);
+      ImGui::TextWrapped("%s", name);
       {
         const float progress = static_cast<float>(data->size) / static_cast<float>(data->capacity);
         sprintf(buf, "%zu/%zu", data->size, data->capacity);
         ImGui::ProgressBar(progress, ImVec2(-1.f,0.f), buf);
       }
     };
+    
+    ImGui::TextWrapped("World data\n");
     
     display_capacity("Entities", entity_data);
     display_capacity("Transforms", transforms);
@@ -40,6 +42,8 @@ display_capacities(Resource_data::Text_mesh_data *text_mesh_data,
     display_capacity("Cameras", camera_data);
     
     ImGui::Separator();
+    
+    ImGui::TextWrapped("Global data\n");
     
     display_capacity("Materials", material_data);
     display_capacity("Meshes", mesh_data);
