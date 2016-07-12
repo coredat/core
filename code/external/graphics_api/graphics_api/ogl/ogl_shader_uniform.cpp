@@ -8,7 +8,8 @@ namespace Ogl {
 
 
 void
-shader_uniforms_retrive(Shader_uniforms *out_uniforms, const Shader *shader)
+shader_uniforms_retrive(Shader_uniforms *out_uniforms,
+                        const Shader *shader)
 {
   if(!shader)
   {
@@ -21,66 +22,79 @@ shader_uniforms_retrive(Shader_uniforms *out_uniforms, const Shader *shader)
   // Get uniforms.
   GLint uniform_count, uniform_length;
   glGetProgramiv(shader->program_id, GL_ACTIVE_UNIFORMS, &uniform_count);
-  glGetProgramiv(shader->program_id, GL_ACTIVE_UNIFORM_MAX_LENGTH, &uniform_length);
+  glGetProgramiv(shader->program_id, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &uniform_length);
 
-  std::vector<std::string>  sampler_names;
-  std::vector<Uniform>      samplers;
-  samplers.reserve(uniform_count);
-  sampler_names.reserve(uniform_count);
+  // Allocate space for uniforms.
+  Uniform *unis = new Uniform[uniform_count];
   
-  std::vector<std::string>  constant_names;
-  std::vector<Uniform>      constants;
-  constants.reserve(uniform_count);
-  constant_names.reserve(uniform_count);
+  // Allocate space for array of names.
+  const uint32_t number_of_chars = (uniform_count * uniform_length) + uniform_count;
+  char *names = new char[number_of_chars];
+  memset(names, 0, sizeof(char) * number_of_chars);
+  
+  // Counters
+  uint32_t  name_count         = 0;
+  uint32_t  uni_count          = 0;
+  GLint     number_of_samplers = 0;
+  
+  out_uniforms->uniform_count = uniform_count;
+
+  GLchar curr_uni_name[512];
 
   for(GLint i = 0; i < uniform_count; ++i)
   {
+    // Reset the buffer.
+    memset(curr_uni_name, 0, sizeof(curr_uni_name));
+  
     GLenum gl_type = 0;
     GLint length   = 0;
     GLint size     = 0;
 
-    std::vector<GLchar> uni_name;
-    uni_name.reserve(uniform_length);
-
-    glGetActiveUniform(shader->program_id, i, uniform_length, &length, &size, &gl_type, uni_name.data());
-    const std::string uniform_name(uni_name.data());
+    glGetActiveUniform(shader->program_id,
+                       i,
+                       uniform_length,
+                       &length,
+                       &size,
+                       &gl_type,
+                       curr_uni_name);
+    
+    strcat(&names[name_count], curr_uni_name);
+    name_count += strlen(&names[name_count]);
+    name_count += 1; // We want to skip over the null terminator
+    
+    // Make sure we are not overflowing.
+    assert(name_count < number_of_chars);
 
     // Is sampler?
     if((gl_type >= GL_SAMPLER_1D) && (gl_type <= GL_SAMPLER_2D_RECT_SHADOW))
     {
-      const GLint location = glGetUniformLocation(shader->program_id, uniform_name.c_str());
+      const GLint location = glGetUniformLocation(shader->program_id, curr_uni_name);
 
-      glUniform1i(location, static_cast<GLint>(samplers.size()));
-
-      sampler_names.emplace_back(uniform_name);
-      samplers.emplace_back(Uniform{static_cast<GLint>(samplers.size()), gl_type, 0});
+      glUniform1i(location, number_of_samplers);
+      
+      unis[uni_count++] = Uniform{number_of_samplers, gl_type, 0};
+      
+      ++number_of_samplers;
     }
-    // Then uniform
     else
     {
-      const std::string prefix = "gl_";
+      constexpr char gl_prefix[] = "gl_";
 
-      if(uniform_name.compare(0, prefix.length(), prefix) != 0)
+      if(strcmp(static_cast<char*>(curr_uni_name), gl_prefix) != 0)
       {
-        const GLint index = glGetUniformLocation(shader->program_id, uniform_name.c_str());
-
-        constant_names.emplace_back(uniform_name);
-        constants.emplace_back(Uniform{index, gl_type, static_cast<int32_t>(size)});
+        const GLint index = glGetUniformLocation(shader->program_id, curr_uni_name);
+        
+        unis[uni_count++] = Uniform{index, gl_type, static_cast<int32_t>(size)};
       }
     }
   }
   
-  glUseProgram(0);
-
-  sampler_names.shrink_to_fit();
-  constant_names.shrink_to_fit();
-  samplers.shrink_to_fit();
-  constants.shrink_to_fit();
+  // Assign the data to the object.
+  out_uniforms->uniform_count    = uniform_count;
+  out_uniforms->uniform_arr      = unis;
+  out_uniforms->uniform_name_arr = names;
   
-  out_uniforms->sampler_names = std::move(sampler_names);
-  out_uniforms->samplers = std::move(samplers);
-  out_uniforms->uniform_names = std::move(constant_names);
-  out_uniforms->uniforms = std::move(constants);
+  glUseProgram(0);
 }
 
 
@@ -89,22 +103,20 @@ shader_uniforms_get_uniform_index(Uniform *out_index, const Shader_uniforms *uni
 {
   assert(out_index && unis);
   
-  for(std::uint32_t i = 0; i < unis->uniform_names.size(); ++i)
-  {
-    if(unis->uniform_names[i] == name)
-    {
-      (*out_index) = unis->uniforms[i];
-      return true;
-    }
-  }
+  // Search names
+  uint32_t index = 0;
+  uint32_t name_offset = 0;
   
-  for(std::uint32_t i = 0; i < unis->sampler_names.size(); ++i)
+  for(uint32_t i = 0; i < unis->uniform_count; ++i)
   {
-    if(unis->sampler_names[i] == name)
+    if(strcmp(name.c_str(), &unis->uniform_name_arr[name_offset]) == 0)
     {
-      (*out_index) = unis->samplers[i];
+      (*out_index) = unis->uniform_arr[i];
       return true;
     }
+    
+    ++index;
+    name_offset += strlen(&unis->uniform_name_arr[name_offset]) + 1;
   }
   
   // Make it invalid

@@ -5,8 +5,6 @@
 #include "ogl_fwd.hpp"
 #include "ogl_common.hpp"
 #include <stdint.h>
-#include <string>
-#include <vector>
 
 
 namespace Ogl {
@@ -28,11 +26,30 @@ struct Uniform
 */
 struct Shader_uniforms
 {
-  std::vector<std::string>  uniform_names;
-  std::vector<Uniform>      uniforms;
+  Shader_uniforms() = default;
+  Shader_uniforms(const Shader_uniforms &) = delete;
+  Shader_uniforms(Shader_uniforms &&) = delete;
   
-  std::vector<std::string>  sampler_names;
-  std::vector<Uniform>      samplers;
+  ~Shader_uniforms()
+  {
+    if(uniform_arr)
+    {
+      delete[] uniform_arr;
+      uniform_arr = nullptr;
+    }
+    
+    if(uniform_name_arr)
+    {
+      delete[] uniform_name_arr;
+      uniform_name_arr = nullptr;
+    }
+    
+    uniform_count = 0;
+  }
+
+  char      *uniform_name_arr = nullptr;
+  Uniform   *uniform_arr      = nullptr;
+  uint32_t  uniform_count     = 0;
 };
 
 
