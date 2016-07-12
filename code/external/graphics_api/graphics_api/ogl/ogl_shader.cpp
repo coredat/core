@@ -14,11 +14,16 @@ shader_create(Shader *out_shader,
 {
   assert(out_shader);
   
+  auto geo_exists = [](const char *geo_shader_code)
+  {
+    return (geo_shader_code && strlen(geo_shader_code));
+  };
+  
   const auto vert_shader_id = Detail::compile_shader(GL_VERTEX_SHADER, vert_shader_code);
   LOG_GL_ERROR("creating vert shader");
   
   GLuint geo_shader_id(0);
-  if(strlen(geo_shader_code))
+  if(geo_exists(geo_shader_code))
   {
     geo_shader_id = Detail::compile_shader(GL_GEOMETRY_SHADER, geo_shader_code);
     LOG_GL_ERROR("creating geo shader");
@@ -33,7 +38,7 @@ shader_create(Shader *out_shader,
   glAttachShader(program_id, vert_shader_id);
   LOG_GL_ERROR("attach shader to program");
   
-  if(strlen(geo_shader_code))
+  if(geo_exists(geo_shader_code))
   {
     glAttachShader(program_id, geo_shader_id);
     LOG_GL_ERROR("attach shader to program");

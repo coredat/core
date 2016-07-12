@@ -1,7 +1,6 @@
 #include <core/model/model.hpp>
 #include <core/model/mesh.hpp>
 #include <common/error_strings.hpp>
-#include <data/world_data/world.hpp>
 #include <data/world_data/world_pools.hpp>
 #include <data/global_data/resource_data.hpp>
 #include <math/geometry/aabb.hpp>

@@ -10,6 +10,7 @@
 #include <utilities/logging.hpp>
 #include <utilities/memory.hpp>
 #include <assert.h>
+#include <cstring>
 
 
 namespace World_data {
@@ -180,8 +181,9 @@ util::generic_id
 entity_data_push_back(Entity_data *data, size_t *out_index)
 {
   assert(data);
-  
-  // TODO: Duplicate key check    
+  assert(data->size < data->capacity);
+
+  // TODO: Duplicate key check
 
   if(data->size >= data->capacity)
   {

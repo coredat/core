@@ -6,6 +6,10 @@
 #include <stdint.h>
 
 
+/*!
+  Renders a box.
+  Mainly good for debugging.
+*/
 namespace Aabb_renderer {
 
 

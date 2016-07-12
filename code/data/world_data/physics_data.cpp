@@ -10,6 +10,7 @@
 #include <utilities/logging.hpp>
 #include <utilities/memory.hpp>
 #include <assert.h>
+#include <cstring>
 
 
 namespace World_data {

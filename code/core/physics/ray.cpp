@@ -1,5 +1,4 @@
 #include "ray.hpp"
-#include <data/world_data/world.hpp>
 
 
 namespace Core {

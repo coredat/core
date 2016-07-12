@@ -5,7 +5,7 @@
 namespace Core {
 
 
-class World;
+struct World;
 struct World_setup;
 
 

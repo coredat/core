@@ -7,7 +7,6 @@
 #include <core/camera/camera_properties.hpp>
 #include <core/camera/post_process.hpp>
 #include <transformations/camera/cam_priorities.hpp>
-#include <data/world_data/world.hpp>
 #include <data/world_data/world_pools.hpp>
 #include <data/world_data/camera_data.hpp>
 #include <systems/camera/camera_properties.hpp>
