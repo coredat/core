@@ -34,6 +34,9 @@ public:
   void                  think();
   void                  get_overlapping_aabbs(const std::function<void(const Core::Collision_pair pairs[],
                                                                        const uint32_t number_of_pairs)> &callback);
+  
+  
+  size_t                get_entity_count_in_world() const;
 
   Entity_ref            find_entity_by_id(const util::generic_id id) const;
   

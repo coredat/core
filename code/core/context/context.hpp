@@ -53,7 +53,7 @@ public:
 private:
 
   friend class Core::Controller;
-  friend struct Core::World;
+  friend class Core::World;
   
   explicit            Context(std::shared_ptr<Context_detail::Data> data);
 

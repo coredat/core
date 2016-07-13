@@ -337,6 +337,15 @@ World::get_overlapping_aabbs(const std::function<void(const Core::Collision_pair
 }
 
 
+size_t
+World::get_entity_count_in_world() const
+{
+  assert(m_impl && m_impl->world_data && m_impl->world_data->entity);
+
+  return m_impl->world_data->entity->size;
+}
+
+
 Entity_ref
 World::find_entity_by_id(const util::generic_id id) const
 {
