@@ -2,17 +2,9 @@
 #define ENTITY_REF_INCLUDED_6EB9BAB7_7AB4_4092_9FBC_BD003D9C8F83
 
 
-#include <core/world/world.hpp>
-#include <core/resources/resources_fwd.hpp>
-#include <core/transform/transform_fwd.hpp>
-#include <core/physics/physics_fwd.hpp>
-#include <core/model/model_fwd.hpp>
-#include <core/world/world_fwd.hpp>
-#include <core/entity/entity_fwd.hpp>
+#include <core/common/core_fwd.hpp>
+#include <core/common/core_types.hpp>
 #include <data/world_data/world_data_fwd.hpp>
-#include <utilities/generic_id.hpp>
-#include <stdint.h>
-#include <memory>
 
 
 namespace Core {

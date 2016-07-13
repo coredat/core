@@ -2,17 +2,9 @@
 #define ENTITY_INCLUDED_EF96529C_E89E_4D4E_9DC2_9988B4774899
 
 
-#include <utilities/generic_id.hpp>
-#include <core/entity/entity_fwd.hpp>
-#include <core/transform/transform_fwd.hpp>
-#include <core/physics/physics_fwd.hpp>
-#include <core/model/model_fwd.hpp>
-#include <core/resources/resources_fwd.hpp>
-#include <core/world/world_fwd.hpp>
-#include <core/renderer/renderer_fwd.hpp>
+#include <core/common/core_fwd.hpp>
+#include <core/common/core_types.hpp>
 #include <data/world_data/world_data_fwd.hpp>
-#include <stdint.h>
-#include <memory>
 
 
 namespace Core {
@@ -86,7 +78,7 @@ private:
   
                                 operator util::generic_id() const;
   
-  util::generic_id                           get_id() const;
+  util::generic_id                          get_id() const;
   std::shared_ptr<const World_data::World>  get_world_data() const;
   std::shared_ptr<World_data::World>        get_world_data();
 

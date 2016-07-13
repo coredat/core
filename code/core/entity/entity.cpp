@@ -16,7 +16,7 @@
 #include <data/world_data/renderer_mesh_data.hpp>
 #include <common/error_strings.hpp>
 #include <utilities/logging.hpp>
-#include <assert.h>
+
 
 #ifdef _WIN32
 #include <atomic>
