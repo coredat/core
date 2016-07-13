@@ -3,7 +3,6 @@
 
 
 namespace Core {
-namespace Input {
 
 
 struct Axis
@@ -13,7 +12,6 @@ struct Axis
 };
 
 
-} // ns
 } // ns
 
 

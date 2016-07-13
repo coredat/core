@@ -9,7 +9,6 @@
 
 
 namespace Core {
-namespace Input {
 
 
 class Controller final
@@ -42,7 +41,6 @@ private:
 }; // classs
 
 
-} // ns
 } // ns
 
 

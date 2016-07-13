@@ -11,7 +11,6 @@
 #include <utilities/file.hpp>
 #include <algorithm>
 #include <assert.h>
-#include <vector>
 #include <stddef.h>
 
 

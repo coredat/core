@@ -7,8 +7,8 @@
 
 
 #define INPUT_CONTROLLER_MEMBERS              \
-  ::Core::Input::Axis m_axis[2];              \
-  ::Core::Input::Button_state m_buttons[16];  \
+  ::Core::Axis m_axis[2];              \
+  ::Core::Button_state m_buttons[16];  \
 
 
 #endif // inc guard

@@ -3,12 +3,9 @@
 
 
 #include <core/context/context_setup.hpp>
-#include <core/context/context_fwd.hpp>
-#include <core/world/world_fwd.hpp>
 #include <core/context/detail/context_detail_fwd.hpp>
-#include <core/input/input_fwd.hpp>
-#include <stdint.h>
-#include <memory>
+#include <core/common/core_fwd.hpp>
+#include <core/common/core_types.hpp>
 
 
 namespace Core {
@@ -55,8 +52,8 @@ public:
   
 private:
 
-  friend class Core::Input::Controller;
-  friend class Core::World;
+  friend class Core::Controller;
+  friend struct Core::World;
   
   explicit            Context(std::shared_ptr<Context_detail::Data> data);
 

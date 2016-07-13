@@ -3,7 +3,6 @@
 
 
 namespace Core {
-namespace Input {
 
 
 namespace Button {
@@ -34,7 +33,6 @@ enum class Button_state {
 }; // enum
 
 
-} // ns
 } // ns
 
 

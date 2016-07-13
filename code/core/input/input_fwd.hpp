@@ -3,13 +3,11 @@
 
 
 namespace Core {
-namespace Input {
 
 
 class Controller;
 
 
-} // ns
 } // ns
 
 
