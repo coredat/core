@@ -183,7 +183,7 @@ camera_data_push_back(Camera_data *data, const util::generic_id key, size_t *out
   assert(data && key);
   assert(data->size < data->capacity);
 
-  // TODO: Duplicate key check
+  // Check that the key exists already.
 
   if(data->size >= data->capacity)
   {

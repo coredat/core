@@ -2,7 +2,7 @@
 #define CREATE_TEXTURE_INCLUDED_76C7B3D6_2F23_4426_8FE6_580AFB4777DF
 
 
-#include <graphics_api/texture.hpp> // TODO: Fwd dec
+#include <graphics_api/ogl/ogl_fwd.hpp>
 
 
 namespace Texture_utils {

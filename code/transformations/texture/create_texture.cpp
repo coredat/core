@@ -1,7 +1,5 @@
 #include <transformations/texture/create_texture.hpp>
-#include <common/error_strings.hpp>
-#include <utilities/logging.hpp>
-#include <utilities/string_helpers.hpp>
+#include <graphics_api/ogl/ogl_texture.hpp>
 #include <SOIL/SOIL.h>
 
 
