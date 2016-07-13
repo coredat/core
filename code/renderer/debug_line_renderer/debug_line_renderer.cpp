@@ -56,7 +56,6 @@ initialize()
     Ogl::Shader_uniforms uniforms;
     Ogl::shader_uniforms_retrive(&uniforms, &debug_line_shader);
     Ogl::shader_uniforms_get_uniform_index(&uni_wvp, &uniforms, "uni_wvp_mat");
-    Ogl::error_check("Getting uniforms from debug shader", &std::cout);
   
     for(uint32_t i = 0; i < line_uniform_max; ++i)
     {
@@ -65,8 +64,11 @@ initialize()
     }
   }
   
-  Ogl::error_check("Debug Renderer Setup.", &std::cout);
-}
+  const GLenum err_code = glGetError();
+  if(err_code != GL_NO_ERROR)
+  {
+    LOG_GL_ERROR(err_code, "Setting up debug line renderer");
+  }}
 
 
 void
@@ -108,10 +110,8 @@ render(const float wvp_mat[16])
   
   //glUseProgram(debug_line_shader.program_id);
   Ogl::shader_bind(&debug_line_shader);
-  Ogl::error_check("Use program", &std::cout);
   
   Ogl::shader_uniforms_apply(uni_wvp, (void*)wvp_mat);
-  Ogl::error_check("set wvp.", &std::cout);
   
   for(uint32_t b = 0; b < number_to_batch; ++b)
   {
@@ -128,15 +128,17 @@ render(const float wvp_mat[16])
       data_ptr -= (number_of_components * 3);
     }
     
-    Ogl::error_check("Uploading debug line uniforms", &std::cout);
     
     glDrawArrays(GL_POINTS, 0, static_cast<GLsizei>(line_uniform_max));
   }
   
   assert(data_ptr == 0); // We need to have drawn all the lines, if not somethings out of sync.
 
-  Ogl::error_check("Debug line renderer.", &std::cout);
-}
+  const GLenum err_code = glGetError();
+  if(err_code != GL_NO_ERROR)
+  {
+    LOG_GL_ERROR(err_code, "Rendering debug lines");
+  }}
 
 
 } // ns

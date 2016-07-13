@@ -10,34 +10,29 @@ texture_create_2d(Texture *out_texture,
                   const uint32_t width,
                   const uint32_t height,
                   const GLenum format,
-                  const void *data,
-                  std::ostream *log)
+                  const void *data)
 {
   // Param check
   if(!out_texture || !width || !height)
   {
     assert(false); // Param fail
-    
-    if(log)
+
+    #ifdef OGL_EXTRA_PARAM_CHECKS
+    if(!width || !height)
     {
-      if(!width || !height)
-      {
-        (*log) << "Incorrect paramaters given to 'Ogl::texture_create_2d': ";
-        (*log) << "'width' or 'height' are not valid.\n";
-      }
-      
-      if(!out_texture)
-      {
-        (*log) << "Incorrect paramaters given to 'Ogl::texture_create_2d': ";
-        (*log) << "'out_texture' may not be null.\n";
-      }
-      
-      if(!data)
-      {
-        (*log) << "Incorrect paramaters given to 'Ogl::texture_create_2d': ";
-        (*log) << "'data' may not be null.\n";
-      }
+      LOG_GL_PARAM_ERROR("Width and Height need to be greater than zero.");
     }
+    
+    if(!out_texture)
+    {
+      LOG_GL_PARAM_ERROR("Output texture cannot be null.");
+    }
+    
+    if(!data)
+    {
+      LOG_GL_PARAM_ERROR("'data' may not be null.");
+    }
+    #endif
   
     return;
   }
@@ -75,34 +70,29 @@ texture_update_texture_2d(Texture *update_texture,
                           const uint32_t offset_y,
                           const uint32_t width,
                           const uint32_t height,
-                          const void *data,
-                          std::ostream *log)
+                          const void *data)
 {
   // Param check
   if(!update_texture || !data || (width + offset_x) > update_texture->width || (height + offset_y) > update_texture->height)
   {
     assert(false); // Param fail
     
-    if(log)
+    #ifdef OGL_EXTRA_PARAM_CHECKS
+    if(!update_texture)
     {
-      if(!update_texture)
-      {
-        (*log) << "Incorrect paramaters given to Ogl::texture_update_texture_2d: ";
-        (*log) << "'update_texture' may not be null.\n";
-      }
-      
-      if(!data)
-      {
-        (*log) << "Incorrect paramaters given to Ogl::texture_update_texture_2d: ";
-        (*log) << "'data' may not be null.\n";
-      }
-      
-      if((width + offset_x) > update_texture->width || (height + offset_y) > update_texture->height)
-      {
-        (*log) << "Incorrect paramaters given to Ogl::texture_update_texture_2d: ";
-        (*log) << "Can't update an area larger than the target texture.\n";
-      }
+      LOG_GL_PARAM_ERROR("'update_texture' may not be null.");
     }
+    
+    if(!data)
+    {
+      LOG_GL_PARAM_ERROR("'data' may not be null.");
+    }
+    
+    if((width + offset_x) > update_texture->width || (height + offset_y) > update_texture->height)
+    {
+      LOG_GL_PARAM_ERROR("Can't update an area larger than the target texture.\n");
+    }
+    #endif
     
     return;
   }

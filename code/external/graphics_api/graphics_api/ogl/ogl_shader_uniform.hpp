@@ -4,7 +4,6 @@
 
 #include "ogl_fwd.hpp"
 #include "ogl_common.hpp"
-#include <stdint.h>
 
 
 namespace Ogl {
@@ -70,7 +69,7 @@ shader_uniforms_retrive(Shader_uniforms *out_uniforms, const Shader *shader);
   \return true or false depending of if it was found.
 */
 bool
-shader_uniforms_get_uniform_index(Uniform *out_uniform, const Shader_uniforms *unis, const std::string &name);
+shader_uniforms_get_uniform_index(Uniform *out_uniform, const Shader_uniforms *unis, const char *name);
 
 
 /*!

@@ -42,7 +42,7 @@ struct Attribute
   char          name[32];
   GLenum        type    = GL_NONE;
   uint32_t      size    = 0;
-  uint32_t      pointer = 0;
+  uintptr_t     pointer = 0;
 };
 
 

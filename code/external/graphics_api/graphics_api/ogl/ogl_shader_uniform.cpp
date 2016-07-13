@@ -2,6 +2,7 @@
 #include "ogl_shader.hpp"
 #include <utilities/optimizations.hpp>
 #include <assert.h>
+#include <cstring>
 
 
 namespace Ogl {
@@ -99,7 +100,7 @@ shader_uniforms_retrive(Shader_uniforms *out_uniforms,
 
 
 bool
-shader_uniforms_get_uniform_index(Uniform *out_index, const Shader_uniforms *unis, const std::string &name)
+shader_uniforms_get_uniform_index(Uniform *out_index, const Shader_uniforms *unis, const char *name)
 {
   assert(out_index && unis);
   
@@ -109,7 +110,7 @@ shader_uniforms_get_uniform_index(Uniform *out_index, const Shader_uniforms *uni
   
   for(uint32_t i = 0; i < unis->uniform_count; ++i)
   {
-    if(strcmp(name.c_str(), &unis->uniform_name_arr[name_offset]) == 0)
+    if(strcmp(name, &unis->uniform_name_arr[name_offset]) == 0)
     {
       (*out_index) = unis->uniform_arr[i];
       return true;

@@ -1,4 +1,5 @@
 #include "ogl_index_buffer.hpp"
+#include <cstring>
 
 
 namespace Ogl {
@@ -18,7 +19,13 @@ index_buffer_load(Index_buffer *out_ibo,
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint32_t) * index_count, index, GL_STATIC_DRAW);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
   
-  error_check("Creating Index buffer", &std::cout);
+  #ifdef OGL_EXTRA_ERROR_CHECKS
+  const GLenum err_code = glGetError();
+  if(err_code != GL_NO_ERROR)
+  {
+    LOG_GL_ERROR(err_code, "Creating index buffer");
+  }
+  #endif
 }
   
   
@@ -29,7 +36,14 @@ index_buffer_bind(const Index_buffer ibo)
   if(index_buffer_is_valid(ibo))
   {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo.index_buffer_id);
-    error_check("Binding Index buffer", &std::cout);
+
+    #ifdef OGL_EXTRA_ERROR_CHECKS
+    const GLenum err_code = glGetError();
+    if(err_code != GL_NO_ERROR)
+    {
+      LOG_GL_ERROR(err_code, "Binding index buffer");
+    }
+    #endif
   }
 }
 

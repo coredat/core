@@ -52,8 +52,11 @@ initialize()
     Ogl::vertex_buffer_load(&post_vbo, data, sizeof(data), 5 * 3, false);
   }
 
-  Ogl::error_check("Err", &std::cout);
-}
+  const GLenum err_code = glGetError();
+  if(err_code != GL_NO_ERROR)
+  {
+    LOG_GL_ERROR(err_code, "Initialize post renderer");
+  }}
 
 
 

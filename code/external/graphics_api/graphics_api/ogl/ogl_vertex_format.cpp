@@ -1,6 +1,5 @@
 #include "ogl_vertex_format.hpp"
 #include <assert.h>
-#include <string.h>
 
 
 namespace

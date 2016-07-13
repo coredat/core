@@ -1,6 +1,7 @@
 #include <debug_gui/post_process_list.hpp>
 #include <data/global_data/post_process_data.hpp>
 #include <3rdparty/imgui/imgui.h>
+#include <stdio.h>
 
 
 namespace Debug_menu {

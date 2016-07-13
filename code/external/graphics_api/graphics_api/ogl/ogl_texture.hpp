@@ -39,8 +39,7 @@ texture_create_2d(Texture *out_texture,
                   const uint32_t width,
                   const uint32_t height,
                   const GLenum format,
-                  const void *data,
-                  std::ostream *log = nullptr);
+                  const void *data);
 
 
 
@@ -60,8 +59,7 @@ texture_update_texture_2d(Texture *update_texture,
                           const uint32_t offset_y,
                           const uint32_t width,
                           const uint32_t height,
-                          const void *data,
-                          std::ostream *log = nullptr);
+                          const void *data);
 
 /*!
   Simplisitc sugar method that just checks it has a

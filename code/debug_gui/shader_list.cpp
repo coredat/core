@@ -1,6 +1,7 @@
 #include <debug_gui/shader_list.hpp>
 #include <data/global_data/shader_data.hpp>
 #include <3rdparty/imgui/imgui.h>
+#include <stdio.h>
 
 
 namespace Debug_menu {

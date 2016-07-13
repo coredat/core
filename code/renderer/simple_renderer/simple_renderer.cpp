@@ -123,8 +123,11 @@ initialize()
     filtering.filtering   = Graphics_api::Filtering_mode::anisotropic;
   }
   
-  Ogl::error_check("Setting up simple renderers", &std::cout);
-}
+  const GLenum err_code = glGetError();
+  if(err_code != GL_NO_ERROR)
+  {
+    LOG_GL_ERROR(err_code, "Setting up simple renderer");
+  }}
 
 
 namespace
@@ -187,8 +190,11 @@ render_nodes_fullbright(const Node nodes[],
     }
   }
   
-  Ogl::error_check("Drawing fullbright nodes", &std::cout);
-}
+  const GLenum err_code = glGetError();
+  if(err_code != GL_NO_ERROR)
+  {
+    LOG_GL_ERROR(err_code, "Rendering fullbright nodes");
+  }}
 
 
 void
@@ -206,7 +212,6 @@ render_nodes_directional_light(const Node nodes[],
     
     Ogl::shader_uniforms_apply(uni_dir_wvp, (void*)&curr_node->wvp);
     Ogl::shader_uniforms_apply(uni_dir_world, (void*)&curr_node->world_mat);
-    Ogl::error_check("Setting directional light uniforms", &std::cout);
     Ogl::shader_uniforms_apply(uni_dir_diffuse_map, (void*)&curr_node->diffuse.texture_id);
     Ogl::filtering_apply(filtering);
     Ogl::vertex_buffer_bind(curr_node->vbo, &vertex_format, &shader_dir_light);
@@ -216,8 +221,11 @@ render_nodes_directional_light(const Node nodes[],
     glDrawArrays(GL_TRIANGLES, 0, count);
   }
   
-  Ogl::error_check("Drawing dir light nodes", &std::cout);  
-}
+  const GLenum err_code = glGetError();
+  if(err_code != GL_NO_ERROR)
+  {
+    LOG_GL_ERROR(err_code, "Drawing dir light renderer");
+  }}
 
 
 } // ns

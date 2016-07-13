@@ -86,7 +86,6 @@ render(const math::mat4 &view_proj_mat,
     {
       Ogl::shader_bind(&material->shader);
       mat_renderer_last_program = material->shader.program_id;
-      Ogl::error_check("Setting up program id", &std::cout);
     }
     
     // Texture
@@ -107,14 +106,12 @@ render(const math::mat4 &view_proj_mat,
       }
       
       mat_renderer_last_map_01_texture = material->map_01_id.texture_id;
-      Ogl::error_check("Setting up texture", &std::cout);
     }
     
     // Color
     if(material->color.index >= 0)
     {
       Ogl::shader_uniforms_apply(material->color, (void*)material->color_data);
-      Ogl::error_check("Color", &std::cout);
     }
     
     // Other stuff
@@ -129,9 +126,13 @@ render(const math::mat4 &view_proj_mat,
         Ogl::shader_uniforms_apply(material->uni_total_time, (void*)&total_time);
       }
     }
+    
+    const GLenum err_code = glGetError();
+    if(err_code != GL_NO_ERROR)
+    {
+      LOG_GL_ERROR(err_code, "Setting up material for run");
+    }
   }
-  
-  Ogl::error_check("Setting up Material", &std::cout);
   
   // Draw all the vbo's
   for(uint32_t i = 0; i < number_of_calls; ++i)
@@ -188,8 +189,11 @@ render(const math::mat4 &view_proj_mat,
     }
   }
   
-  Ogl::error_check("Material Renderer", &std::cout);
-  
+  const GLenum err_code = glGetError();
+  if(err_code != GL_NO_ERROR)
+  {
+    LOG_GL_ERROR(err_code, "Rendering material");
+  }
   return draw_calls_count;
 }
 

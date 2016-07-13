@@ -113,7 +113,11 @@ initialize()
     texture_filtering.filtering   = Graphics_api::Filtering_mode::bilinear;
   }
   
-  Ogl::error_check("Setting up simple renderers", &std::cout);
+  const GLenum setup_err = glGetError();
+  if(setup_err != GL_NO_ERROR)
+  {
+    LOG_GL_ERROR(setup_err, "Setting up simple renderer");
+  }
 }
 
 
@@ -150,7 +154,11 @@ render_gui_nodes(const Node nodes[],
     Ogl::index_buffer_draw(GL_TRIANGLES, quad_ibo);
   }
   
-  Ogl::error_check("Drawing the gui", &std::cout);
+  const GLenum err_code = glGetError();
+  if(err_code != GL_NO_ERROR)
+  {
+    LOG_GL_ERROR(err_code, "Drawing gui");
+  }
 }
 
 
