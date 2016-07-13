@@ -35,20 +35,20 @@ public:
                       Context(Context &&);
   Context&            operator=(Context&&);
   
-  const char *        get_title() const;
-  void                set_title(const char * title);
+  const char *        get_title() const;                        //!< Returns the title of the context.
+  void                set_title(const char * title);            //!< Sets the title, if platform supports it, it will be displayed in the window.
   
-  uint32_t            get_width() const;
-  void                set_width(const uint32_t width);
+  uint32_t            get_width() const;                        //!< Gets the current width of the graphics context.
+  void                set_width(const uint32_t width);          //!< Sets the width of the graphics context. Some platforms this could be fixed.
   
-  uint32_t            get_height() const;
-  void                set_height(const uint32_t height);
+  uint32_t            get_height() const;                       //!< Gets the height of the graphics context.
+  void                set_height(const uint32_t height);        //!< Sets the height of the graphics context. Some platforms this could be fixed.
   
-  bool                is_fullscreen() const;
-  void                set_fullscreen(const bool fullscreen);
+  bool                is_fullscreen() const;                    //!< Returns true if the context is fullscreen.
+  void                set_fullscreen(const bool fullscreen);    //!< Sets the context fullscreen or not if the platform supports windowing.
   
-  bool                is_open() const;
-                      operator bool() const; // Alias for is_open().
+  bool                is_open() const;                          //!< Returns true if the context is open.
+                      operator bool() const;                    //!< Shorthand for is_open().
   
 private:
 

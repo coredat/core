@@ -1,8 +1,5 @@
-#include "input.hpp"
-#include "detail/controller_members.hpp"
+#include <core/input/input.hpp>
 #include <systems/sdl_backend/sdl_input.hpp>
-#include <stddef.h>
-#include <string.h>
 
 
 namespace Core {

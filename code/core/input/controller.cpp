@@ -4,7 +4,6 @@
 #include <data/context_data/input_pool.hpp>
 #include <utilities/logging.hpp>
 #include <assert.h>
-#include <cstring>
 
 
 namespace Core {
@@ -35,24 +34,9 @@ Controller::Controller(const Controller &other)
 {
 }
 
-
-Controller::Controller(Controller &&other)
-: m_impl(new Impl(*other.m_impl))
-{
-}
-
   
 Controller&
 Controller::operator=(const Controller &other)
-{
-  *m_impl = *other.m_impl;
-
-  return *this;
-}
-
-
-Controller&
-Controller::operator=(Controller &&other)
 {
   *m_impl = *other.m_impl;
 
