@@ -2,11 +2,14 @@
 #define BUTTONS_INCLUDED_E3F986FC_EBB0_4FDC_A26E_553D31961A93
 
 
+#include <core/common/core_types.hpp>
+
+
 namespace Core {
 
 
 namespace Button {
-enum ENUM {
+enum ENUM : uint32_t {
 
   button_0 = 0,
   button_1,

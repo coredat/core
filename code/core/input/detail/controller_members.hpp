@@ -6,9 +6,9 @@
 #include "../axis.hpp"
 
 
-#define INPUT_CONTROLLER_MEMBERS              \
-  ::Core::Axis m_axis[2];              \
-  ::Core::Button_state m_buttons[16];  \
+#define INPUT_CONTROLLER_MEMBERS        \
+  ::Core::Axis m_axis[2];               \
+  ::Core::Button_state m_buttons[16];   \
 
 
 #endif // inc guard

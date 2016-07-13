@@ -2,10 +2,8 @@
 #define CONTROLLER_INCLUDED_19652084_EF01_45A5_B098_E66B2AB39399
 
 
-#include "detail/controller_members.hpp"
-#include <core/context/context_fwd.hpp>
-#include <memory>
-#include <stdint.h>
+#include <core/common/core_fwd.hpp>
+#include <core/common/core_types.hpp>
 
 
 namespace Core {

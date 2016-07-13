@@ -6,6 +6,14 @@ namespace Core {
 
 
 class Controller;
+struct Axis;
+
+namespace Button {
+
+enum ENUM : uint32_t;
+
+}
+
 
 
 } // ns
