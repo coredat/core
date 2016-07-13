@@ -1,5 +1,4 @@
 #include "ogl_index_buffer.hpp"
-#include <cstring>
 
 
 namespace Ogl {

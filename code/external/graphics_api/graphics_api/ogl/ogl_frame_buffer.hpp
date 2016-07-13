@@ -4,8 +4,6 @@
 
 #include "ogl_common.hpp"
 #include "ogl_texture.hpp"
-#include <stdint.h>
-#include <assert.h>
 
 
 #define GFX_API_GL_MAX_NUMBER_OF_OUTPUTS 4

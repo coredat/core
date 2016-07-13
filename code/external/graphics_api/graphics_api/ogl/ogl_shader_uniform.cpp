@@ -1,8 +1,6 @@
 #include "ogl_shader_uniform.hpp"
 #include "ogl_shader.hpp"
 #include <utilities/optimizations.hpp>
-#include <assert.h>
-#include <cstring>
 
 
 namespace Ogl {

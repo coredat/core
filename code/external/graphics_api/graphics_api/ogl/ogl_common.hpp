@@ -2,8 +2,13 @@
 #define COMMON_INCLUDED_57928899_C288_49E0_8694_6E85E36592EA
 
 
+// Use these alot so to keep includes down
+// I've included very comment headers here.
 #include <stdint.h>
 #include <stddef.h>
+#include <assert.h>
+#include <cstring>
+
 
 #ifdef _WIN32
 #include <GL/glew.h>
@@ -21,8 +26,10 @@ LOG_ERROR(msg) \
 #define LOG_GL_WARNING(msg) LOG_WARNING(msg)
 #define LOG_GL_PARAM_ERROR(msg) LOG_ERROR(msg)
 
+#ifndef NDEBUG
 #define OGL_EXTRA_ERROR_CHECKS
 #define OGL_EXTRA_PARAM_CHECKS
+#endif
 
 namespace Ogl {
 

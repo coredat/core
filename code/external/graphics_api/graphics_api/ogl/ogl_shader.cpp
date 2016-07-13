@@ -1,7 +1,4 @@
 #include "ogl_shader.hpp"
-#include <utilities/logging.hpp>
-#include <assert.h>
-#include <cstring>
 
 
 namespace Ogl {

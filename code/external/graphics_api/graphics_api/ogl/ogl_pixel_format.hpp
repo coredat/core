@@ -5,7 +5,6 @@
 #include "ogl_common.hpp"
 #include "../pixel_format.hpp"
 #include <utilities/optimizations.hpp>
-#include <assert.h>
 
 
 namespace Ogl {

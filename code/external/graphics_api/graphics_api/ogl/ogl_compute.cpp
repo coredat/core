@@ -2,7 +2,6 @@
 #ifdef GL_HAS_COMPUTE
 
 #include "ogl_compute.hpp"
-#include <assert.h>
 
 
 namespace Ogl {

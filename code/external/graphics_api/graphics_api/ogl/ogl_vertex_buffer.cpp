@@ -1,7 +1,6 @@
 #include "ogl_vertex_buffer.hpp"
 #include "ogl_vertex_format.hpp"
 #include "ogl_shader.hpp"
-#include <assert.h>
 
 
 namespace Ogl {
