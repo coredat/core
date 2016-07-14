@@ -15,6 +15,7 @@
 */
 
 
+#include <core/audio/audio_fwd.hpp>
 #include <core/camera/camera_fwd.hpp>
 #include <core/color/color_fwd.hpp>
 #include <core/common/common_fwd.hpp>

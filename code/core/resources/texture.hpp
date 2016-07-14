@@ -24,6 +24,9 @@ public:
   Texture&            operator=(const Texture&);
   Texture&            operator=(Texture&&);
   
+  uint32_t            get_width() const;
+  uint32_t            get_height() const;
+  
   bool                exists() const;
                       operator bool() const; // Alias for exists().
   

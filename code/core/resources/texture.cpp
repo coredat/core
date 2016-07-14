@@ -152,6 +152,48 @@ Texture::operator=(Texture &&other)
 }
 
 
+namespace
+{
+  Ogl::Texture
+  get_texture_data(const util::generic_id id)
+  {
+    Resource_data::Resources *resources = Resource_data::get_resources();
+    assert(resources);
+
+    auto tex_data = Resource_data::get_resources()->texture_data;
+    assert(tex_data);
+
+    Ogl::Texture tex;
+
+    Resource_data::data_lock(tex_data);
+
+    Resource_data::texture_data_get_property_texture(tex_data, id, &tex);
+
+    Resource_data::data_unlock(tex_data);
+    
+    return tex;
+  }
+}
+
+
+uint32_t
+Texture::get_width() const
+{
+  assert(m_impl);
+  
+  return get_texture_data(m_impl->texture_id).width;
+}
+
+
+uint32_t
+Texture::get_height() const
+{
+  assert(m_impl);
+  
+  return get_texture_data(m_impl->texture_id).height;
+}
+
+
 bool
 Texture::exists() const
 {

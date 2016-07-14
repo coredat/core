@@ -2,8 +2,7 @@
 #define SAMPLE_INCLUDED_2EE1288C_F206_4EBA_9808_69B3456E0B13
 
 
-#include <math/vec/vec_types.hpp>
-#include <memory>
+#include <core/common/core_types.hpp>
 
 
 namespace Core {
