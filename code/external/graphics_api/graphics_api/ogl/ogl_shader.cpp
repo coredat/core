@@ -94,19 +94,17 @@ shader_create(Shader *out_shader,
       
       glGetProgramInfoLog(program_id, log_length, 0, output_log);
       
-      GLint is_linked = false;
-      glGetShaderiv(program_id, GL_LINK_STATUS, &is_linked);
-      
-      if(is_linked)
-      {
-        LOG_WARNING(output_log);
-      }
-      else
-      {
-        LOG_ERROR(output_log);
-      }
+      LOG_WARNING(output_log);
     }
   }
+  
+  #ifdef OGL_EXTRA_ERROR_CHECKS
+  const GLenum err = glGetError();
+  if(err != GL_NO_ERROR)
+  {
+    LOG_GL_ERROR(err, "Creating Program");
+  }
+  #endif
   
   // Did it link
   GLint is_linked;
@@ -126,6 +124,14 @@ shader_create(Shader *out_shader,
     
     return;
   }
+  
+  #ifdef OGL_EXTRA_ERROR_CHECKS
+  const GLenum shader_complete_err = glGetError();
+  if(shader_complete_err != GL_NO_ERROR)
+  {
+    LOG_GL_ERROR(shader_complete_err, "Creating Program");
+  }
+  #endif
   
   // Success
   out_shader->vert_shader_id  = vert_shader_id;

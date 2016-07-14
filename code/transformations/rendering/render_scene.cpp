@@ -29,7 +29,7 @@ render_main_scene(const float delta_time,
 {
   // Stats to gather
   uint32_t number_of_draw_calls = 0;
-
+  
   
   for(uint32_t c = 0; c < number_of_cam_runs; ++c)
   {
@@ -73,8 +73,7 @@ render_main_scene(const float delta_time,
         Graphics_api::clear(cam->clear_flags);
       }
     }
-    
-    
+
     // Material Renderer
     if(!cam->post_process_id)
     {
@@ -90,7 +89,7 @@ render_main_scene(const float delta_time,
     }
     else
     // Post process rendering
-    {
+    {    
       // Get post process details
       Post_renderer::Post_shader *post_shd;
       Resource_data::post_process_data_get_property_post_shader(post_data,
@@ -100,6 +99,7 @@ render_main_scene(const float delta_time,
       // Add some extra param to the shd.
       post_shd->delta_time = delta_time;
       post_shd->current_time = total_time;
+      
       
       // Render
       Post_renderer::render(post_shd);

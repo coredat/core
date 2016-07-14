@@ -213,7 +213,7 @@ World::think()
     Render the world
     --
     Takes the camera, and draw calls and renders the world accordingly.
-  */
+  */  
   uint32_t number_of_draw_calls = 0;
   Rendering::render_main_scene(m_impl->dt,
                                m_impl->running_time,

@@ -194,6 +194,7 @@ render(const math::mat4 &view_proj_mat,
   {
     LOG_GL_ERROR(err_code, "Rendering material");
   }
+  
   return draw_calls_count;
 }
 
