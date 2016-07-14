@@ -3,6 +3,8 @@
 #include <Graphics_api/ogl/ogl_shader_uniform.hpp>
 #include <Graphics_api/ogl/ogl_vertex_buffer.hpp>
 #include <Graphics_api/ogl/ogl_vertex_format.hpp>
+#include <utils/obj_model_loader.hpp>
+#include <utils/directory.hpp>
 #include <assert.h>
 
 
@@ -26,6 +28,9 @@ initialize()
       #version 150 core
     
       in vec3 vs_in_position;
+      in vec3 vs_not_used_norm;
+      in vec2 vs_not_used_uv;
+    
       uniform mat4 uni_wvp_mat;
     
       void
@@ -50,6 +55,18 @@ initialize()
     
     Ogl::shader_create(&aabb_shader, vs_shader, nullptr, ps_shader);
     assert(Ogl::shader_is_valid(&aabb_shader));
+  }
+  
+  if(!Ogl::vertex_buffer_is_valid(vertex_buffer))
+  {
+//    char filepath[2048];
+//    memset(filepath, 0, sizeof(filepath));
+//    
+//    strcat(filepath, util::get_resource_path().c_str());
+//    strcat(filepath, "assets/models/unit_cube.obj");
+//    
+//    util::obj_model model = util::load_obj(filepath);
+    
   }
 
   if(!Ogl::vertex_format_is_valid(&vertex_format))

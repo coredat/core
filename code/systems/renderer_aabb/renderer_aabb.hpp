@@ -8,7 +8,7 @@
 
 /*!
   Renders a box.
-  Mainly good for debugging.
+  Good for debugging.
 */
 namespace Aabb_renderer {
 

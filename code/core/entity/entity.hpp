@@ -38,7 +38,7 @@ public:
   bool                          is_valid() const;                             //!< Returns true if then entity is valid.
                                 operator bool() const;                        //!< Shorthand for is_valid()
   
-  void                          destroy();                                    //!< Marks the entity for destruction, this wont happen till then end of the frame.                                
+  void                          destroy();                                    //!< Marks the entity for destruction, this wont happen till then end of the frame.
   
   void                          set_user_data(const uintptr_t user_data);     //!< Set user_data for the entity, can be a pointer, core doesn't callback on this.
   uintptr_t                     get_user_data() const;                        //!< Get the current user_data.
