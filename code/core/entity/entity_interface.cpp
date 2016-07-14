@@ -250,7 +250,7 @@ get_name(const util::generic_id this_id, World_data::World *world)
     LOG_ERROR(Error_string::entity_is_invalid());
     return nullptr;
   }
-  assert(false);
+
   const char *name;
   World_data::entity_data_get_property_name(world->entity, this_id, &name);
   
