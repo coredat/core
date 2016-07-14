@@ -236,7 +236,7 @@ Entity_ref::set_rigidbody_properties(const Core::Rigidbody_properties rb_props)
 
 
 Core::Rigidbody_properties
-Entity_ref::set_rigidbody_properties() const
+Entity_ref::get_rigidbody_properties() const
 {
   return Entity_detail::get_rigidbody_properties(m_impl->id, m_impl->world.get());
 }

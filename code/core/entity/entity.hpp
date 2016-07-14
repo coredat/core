@@ -32,37 +32,37 @@ public:
   Entity&                       operator=(Entity&&);
 
                                 operator Entity_ref() const;
-  
-  void                          destroy();
-  
+    
   // ** Common Entity Interface ** //
 
-  bool                          is_valid() const;
-                                operator bool() const;
+  bool                          is_valid() const;                             //!< Returns true if then entity is valid.
+                                operator bool() const;                        //!< Shorthand for is_valid()
   
-  void                          set_user_data(const uintptr_t user_data);
-  uintptr_t                     get_user_data() const;
+  void                          destroy();                                    //!< Marks the entity for destruction, this wont happen till then end of the frame.                                
   
-  uint32_t                      get_tags() const;
-  bool                          has_tag(const uint32_t tag_id) const;
-  void                          set_tags(const uint32_t set_tags);
-  void                          add_tag(const uint32_t add_tag);
-  void                          remove_tag(const uint32_t tag);
+  void                          set_user_data(const uintptr_t user_data);     //!< Set user_data for the entity, can be a pointer, core doesn't callback on this.
+  uintptr_t                     get_user_data() const;                        //!< Get the current user_data.
   
-  void                          set_name(const char* set_name);
-  const char*                   get_name() const;
+  uint32_t                      get_tags() const;                             //!< Get the current bitfeld tags for this object.
+  bool                          has_tag(const uint32_t tag_id) const;         //!< Check to see if the object has a bit set in the tags.
+  void                          set_tags(const uint32_t set_tags);            //!< Set the tag bitfield.
+  void                          add_tag(const uint32_t add_tag);              //!< Add a bit to the bitfield.
+  void                          remove_tag(const uint32_t tag);               //!< Remove a bit from the bitfield.
+  
+  void                          set_name(const char* set_name);               //!< Set the name of object.
+  const char*                   get_name() const;                             //!< Returns a volatile pointer to the name. This is considered for debugging only.
 
-  void                          set_transform(const Transform &transform);
-  Transform                     get_transform() const;
+  void                          set_transform(const Transform &transform);    //!< Set the transform for the entity.
+  Transform                     get_transform() const;                        //!< Gets a copy of the current transform.
   
-  void                          set_renderer(const Renderer &renderer);
-  Renderer                      get_renderer() const;
+  void                          set_renderer(const Renderer &renderer);       //!< Set the entities renderer, an entity may only have one renderer.
+  Renderer                      get_renderer() const;                         //!< Get the entities renderer.
     
-  void                          set_collider(const Core::Collider &collider);
-  Core::Collider                get_collider() const;
+  void                          set_collider(const Core::Collider &collider); //! Set the collider of the entity.
+  Core::Collider                get_collider() const;                         //! Gets the collider of the entity.
 
-  void                          set_rigidbody_properties(const Core::Rigidbody_properties rb_props);
-  Core::Rigidbody_properties    set_rigidbody_properties() const;
+  void                          set_rigidbody_properties(const Core::Rigidbody_properties rb_props);  //!< Sets the Rigidbody properties.
+  Core::Rigidbody_properties    get_rigidbody_properties() const;                                     //!< Returns the rigidbody properties.
 
   // ** Equality ** //
   
