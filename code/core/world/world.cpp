@@ -17,11 +17,8 @@
 #include <data/global_data/resource_data.hpp>
 #include <data/global_data/memory_data.hpp>
 
-#include <systems/physics_engine/broadphase/sweep.hpp>
-#include <systems/physics_engine/broadphase/prune.hpp>
 #include <systems/physics_engine/collision/aabb_overlap.hpp>
 #include <systems/physics_engine/collision/collision_pairs.hpp>
-#include <systems/physics_engine/collision/axis_collidable.hpp>
 
 #include <systems/renderer_material/material.hpp>
 #include <systems/renderer_material/material_renderer.hpp>
@@ -251,61 +248,29 @@ World::get_overlapping_aabbs(const std::function<void(const Core::Collision_pair
   // Check we have a callback.
   if(!callback) { return; }
   
-  LOG_TODO_ONCE("This can move out into a transform, or done on a thread during think.");
-
+  util::generic_id *out_ids = nullptr;
+  Physics::Collision::Axis_collidable *out_axis_array = nullptr;
+  size_t number_of_collidables = 0;
+ 
   const World_data::Physics_data *data = m_impl->world_data->physics_data;
-  
-  math::aabb *bounds = SCRATCH_ALIGNED_ALLOC(math::aabb, data->size);
-  
-  Transformation::calculate_positional_aabb(data->property_aabb_collider,
-                                            data->property_transform,
-                                            bounds,
-                                            data->size);
-  
-  Physics::Broadphase::Sweep sweep;
-  Physics::Broadphase::sweep_init(&sweep, data->size);
-  
-  Physics::Broadphase::sweep_calculate(&sweep, data->property_transformed_aabb_collider, data->size);
-  
-  Physics::Broadphase::Prune prune;
-  Physics::Broadphase::prune_init(&prune, &sweep);
-  Physics::Broadphase::prune_calculate(&prune, &sweep);
+  Transformation::get_overlapping(data->physics_id,
+                                 data->property_collision_id,
+                                 data->property_aabb_collider,
+                                 data->property_transform,
+                                 data->size,
+                                 &out_axis_array,
+                                 &out_ids,
+                                 &number_of_collidables);
 
-  // Prune out
-  static std::vector<util::generic_id> id;
-  static std::vector<Physics::Collision::Axis_collidable> boxes;
-  
-  id.clear();
-  boxes.clear();
-  
-  uint32_t prune_stack = 0;
-  
-  for(uint32_t i = 0; i < data->size; ++i)
-  {
-    if(prune_stack < prune.size && i == prune.ids[prune_stack])
-    {
-      ++prune_stack;
-            
-      continue;
-    }
-    
-    id.push_back(data->physics_id[i]);
-    
-    math::aabb box_copy(data->property_aabb_collider[i]);
-    uint64_t collision_mask(data->property_collision_id[i]);
-    math::aabb_scale(box_copy, data->property_transform[i].scale);
-    math::aabb_set_origin(box_copy, data->property_transform[i].position);
-    
-    boxes.push_back(Physics::Collision::Axis_collidable{{collision_mask}, box_copy});
-  }
-  
-  assert(prune_stack == prune.size);
-  
+  //  
   // Calculate collisions
   Physics::Collision::Pairs out_pairs;
   Physics::Collision::pairs_init(&out_pairs, 2048 * 10);
+
+  Physics::Collision::aabb_calculate_overlaps_pairs(&out_pairs,
+                                                    out_axis_array,
+                                                    number_of_collidables);
   
-  Physics::Collision::aabb_calculate_overlaps_pairs(&out_pairs, boxes.data(), boxes.size());
   
   static Core::Collision_pair *pairs = nullptr;
   if(!pairs)
@@ -324,15 +289,16 @@ World::get_overlapping_aabbs(const std::function<void(const Core::Collision_pair
       const uint32_t index_a = out_pairs.pair_arr[i].a;
       const uint32_t index_b = out_pairs.pair_arr[i].b;
 
-      pairs[number_of_pairs++] = Core::Collision_pair{find_entity_by_id(id[index_a]), find_entity_by_id(id[index_b])};
+      pairs[number_of_pairs++] = Core::Collision_pair
+      {
+        find_entity_by_id(out_ids[index_a]),
+        find_entity_by_id(out_ids[index_b])
+      };
     }
   
     callback(pairs, number_of_pairs);
   }
   
-  
-  Physics::Broadphase::sweep_free(&sweep);
-  Physics::Broadphase::prune_free(&prune);
   Physics::Collision::pairs_free(&out_pairs);
 }
 
