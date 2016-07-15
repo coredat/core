@@ -30,9 +30,9 @@ display_texture_list(Resource_data::Texture_data *data)
       count++;
       
       Ogl::Texture tex = data->property_texture[i];
-      
+
       ImGui::PushID(count);
-      ImGui::Image((void*)tex.texture_id,
+      ImGui::Image((void*)(uintptr_t)tex.texture_id, // casting :/
                    ImVec2(64, 64),
                    ImVec2(0,0),
                    ImVec2(1,1),
