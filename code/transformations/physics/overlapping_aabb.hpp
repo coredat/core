@@ -13,7 +13,7 @@ namespace Transformation {
 
 
 /*
-
+  Returns a list of ids that whoes aabbs are overlapping.
 */
 void
 get_overlapping(const util::generic_id ids[],

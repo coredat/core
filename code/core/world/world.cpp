@@ -255,7 +255,7 @@ World::get_overlapping_aabbs(const std::function<void(const Core::Collision_pair
   const World_data::Physics_data *data = m_impl->world_data->physics_data;
   Transformation::get_overlapping(data->physics_id,
                                  data->property_collision_id,
-                                 data->property_aabb_collider,
+                                 data->property_transformed_aabb_collider,
                                  data->property_transform,
                                  data->size,
                                  &out_axis_array,
