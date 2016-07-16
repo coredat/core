@@ -12,9 +12,9 @@ class Texture final
 {
 public:
 
-  explicit            Texture();
-  explicit            Texture(const util::generic_id id);
-  explicit            Texture(const char * filepath);
+  explicit            Texture();                              //!< Creates an invalid texture
+  explicit            Texture(const util::generic_id id);     //!< Creates a texture from an existing id. Internal use only, this will be removed from public interface.
+  explicit            Texture(const char * filepath);         //!< Loads a texture from a file name. Check exists() for the result.
   
                       ~Texture();
   
@@ -24,11 +24,11 @@ public:
   Texture&            operator=(const Texture&);
   Texture&            operator=(Texture&&);
   
-  uint32_t            get_width() const;
-  uint32_t            get_height() const;
+  uint32_t            get_width() const;                      //!< Get the width of the loaded texture.
+  uint32_t            get_height() const;                     //!< Get the height of the loaded texture.
   
-  bool                exists() const;
-                      operator bool() const; // Alias for exists().
+  bool                exists() const;                         //!< Returns true if the texture loaded successfully.
+                      operator bool() const;                  //!< Alias for exists().
   
   util::generic_id    get_id() const;
   
