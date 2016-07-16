@@ -5,8 +5,8 @@
 #include <core/common/core_types.hpp>
 #include <core/common/core_fwd.hpp>
 #include <core/renderer/renderer_type.hpp>
-#include <core/renderer/renderer_utils.hpp>
-#include <core/entity/entity_interface.hpp>
+#include <core/renderer/detail/renderer_detail_fwd.hpp>
+#include <core/entity/detail/entity_detail_fwd.hpp>
 
 
 /*

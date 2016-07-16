@@ -1,6 +1,6 @@
 #include <core/entity/entity.hpp>
 #include <core/entity/entity_ref.hpp>
-#include <core/entity/entity_interface.hpp>
+#include <core/entity/detail/entity_interface.hpp>
 #include <core/transform/transform.hpp>
 #include <core/model/model.hpp>
 #include <core/renderer/renderer.hpp>
@@ -16,21 +16,6 @@
 #include <data/world_data/renderer_mesh_data.hpp>
 #include <common/error_strings.hpp>
 #include <utilities/logging.hpp>
-
-
-#ifdef _WIN32
-#include <atomic>
-using std::atomic_uint_least32_t;
-#else
-#include <stdatomic.h>
-#endif
-
-
-namespace
-{
-  // Each new entity will get a new instance id.
-//  atomic_uint_least32_t instance_id(0);
-}
 
 
 namespace Core {

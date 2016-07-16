@@ -56,6 +56,8 @@ struct World::Impl
 World::World(const Context &ctx, const World_setup setup)
 : m_impl(new World::Impl)
 {
+  LOG_TODO_ONCE("World should be 'moveable'");
+  
   m_impl->world_data = std::make_shared<World_data::World>(setup.entity_pool_size);
   
   Simple_renderer::initialize(); // TODO: This can be removed I think, largely superceded by mat renderer
@@ -245,6 +247,8 @@ void
 World::get_overlapping_aabbs(const std::function<void(const Core::Collision_pair pairs[],
                                                       const uint32_t number_of_pairs)> &callback)
 {
+  LOG_TODO_ONCE("There is no need for this to be a callback like this.");
+
   // Check we have a callback.
   if(!callback) { return; }
   

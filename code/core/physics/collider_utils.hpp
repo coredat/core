@@ -3,7 +3,6 @@
 
 
 #include <core/physics/physics_fwd.hpp>
-#include <math/vec/vec_types.hpp>
 
 
 namespace Core {

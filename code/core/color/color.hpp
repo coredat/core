@@ -20,7 +20,7 @@ class Color final
 public:
 
 
-  constexpr // implicit ctor!
+  constexpr // implicit ctor as Hex representation for color is unlikley to get confused with anything else.
   Color(const uint32_t hex_value = 0xFFFFFFFF)
   : m_color(hex_value)
   {

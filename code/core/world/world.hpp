@@ -6,12 +6,17 @@
 #include <core/common/core_types.hpp>
 #include <data/world_data/world_data_fwd.hpp>
 #include <core/world/world_setup.hpp>
-#include <functional>
+#include <functional> // kill
 
 
 namespace Core {
 
 
+/*!
+  World
+  --
+  The world is a collection of entities in the world.
+*/
 class World final
 {
 
@@ -22,6 +27,7 @@ public:
 
   explicit              World(const Context &ctx,
                               const World_setup setup = World_setup{});
+  
                         ~World();
 
   float                 get_delta_time() const;
