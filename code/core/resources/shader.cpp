@@ -61,6 +61,14 @@ namespace
       }
     }
     
+  const auto errd = glGetError();
+  
+  if(errd)
+  {
+    int i = 0;
+  }
+    
+    
     Ogl::Shader shader;
     Ogl::shader_create(&shader,
                        vs_code,

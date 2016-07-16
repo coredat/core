@@ -14,6 +14,7 @@ namespace Transformation {
 
 /*
   Returns a list of ids that whoes aabbs are overlapping.
+  the results are only valid for one frame.
 */
 void
 get_overlapping(const util::generic_id ids[],
@@ -21,9 +22,9 @@ get_overlapping(const util::generic_id ids[],
                 const math::aabb colliders[],
                 const math::transform transforms[],
                 const size_t number_of_bounds,
-                Physics::Collision::Axis_collidable *out_axis_collidables[],
-                util::generic_id *out_ids[],
-                size_t *out_size);
+                Physics::Collision::Axis_collidable *volatile_out_axis_collidables[],
+                util::generic_id *volatile_out_ids[],
+                size_t *volatile_out_size);
 
 
 /*

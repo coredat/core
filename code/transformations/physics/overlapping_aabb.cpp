@@ -20,9 +20,9 @@ get_overlapping(const util::generic_id ids[],
                 const math::aabb colliders[],
                 const math::transform transforms[],
                 const size_t number_of_bounds,
-                Physics::Collision::Axis_collidable *out_axis_collidables[],
-                util::generic_id * out_ids[],
-                size_t *out_size)
+                Physics::Collision::Axis_collidable *volatile_out_axis_collidables[],
+                util::generic_id * volatile_out_ids[],
+                size_t *volatile_out_size)
 {
   // Do the sweep and prune stages.
   // This will give us the indexes of the colliding objects.
@@ -57,7 +57,7 @@ get_overlapping(const util::generic_id ids[],
     
     ++count;
   }
-  
+
   // Huristic to make sure we allocate
   // enough space in the next frame
   LOG_TODO_ONCE("Don't like this huristic - could we have a open scratch alloc, where we can keep writting till we signal close?")
@@ -67,9 +67,9 @@ get_overlapping(const util::generic_id ids[],
   }
 
   // Results.
-  *out_axis_collidables = result_collidable;
-  *out_ids = result_id;
-  *out_size = count;
+  *volatile_out_axis_collidables = result_collidable;
+  *volatile_out_ids = result_id;
+  *volatile_out_size = count;
   
   // Free these things, incase they are not
   // using scratch allocations.

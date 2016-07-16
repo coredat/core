@@ -38,8 +38,11 @@ Render_target::Render_target(const uint32_t width,
     Ogl::texture_create_2d(&texture, width, height, Ogl::pixel_format_get_gl_internal_format(fmt), nullptr);
     Ogl::texture_create_2d(&depth_buffer, width, height, GL_DEPTH24_STENCIL8, nullptr); // This isn't working.
     Ogl::frame_buffer_create(&fbo, &texture, 1, &depth_buffer, &stencil_buffer);
+    
+    LOG_TODO_ONCE("Get rid of this error clear");
+    Ogl::error_clear(); // need this because this is broken.
   }
-  
+
   // Add them to the pool
   {
     Resource_data::data_lock(texture_data);
