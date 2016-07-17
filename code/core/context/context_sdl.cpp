@@ -18,18 +18,12 @@
 #include <data/global_data/memory_data.hpp>
 #include <utilities/logging.hpp>
 #include <utilities/conversion.hpp>
+#include <utilities/threading.hpp>
 #include <common/error_strings.hpp>
 #include <assert.h>
 
 #include <3rdparty/imgui/imgui.h>
 #include <3rdparty/imgui/imgui_impl_sdl_gl3.h>
-
-#ifdef _WIN32
-#include <atomic>
-using std::atomic_bool;
-#else
-#include <stdatomic.h>
-#endif
 
 
 namespace
