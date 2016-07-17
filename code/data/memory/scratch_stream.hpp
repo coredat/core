@@ -2,36 +2,33 @@
 #define SCRATCH_STREAM_INCLUDED_5C875010_0E64_4B7F_A9A5_0CAE7B77A5E6
 
 
-namespace Data {
+#include <stddef.h>
+
+
 namespace Memory {
 namespace Scratch_stream {
 
 
-class Stream_lock
-{
-public:
-};
+void
+initialize(void *start_of_data, const size_t size_of_pool);
 
 
 void
-initialize(const size_t bytes_to_reserve);
+reset();
 
 
-void
-free();
-
-
-Stream_lock
-open_stream();
+void*
+open();
 
 
 bool
-add_data(const Stream_lock *lock, const void *data, const size_t size_of_data);
+add(const void *data, const size_t bytes_of_data);
 
 
+void
+close();
 
 
-} // ns
 } // ns
 } // ns
 
