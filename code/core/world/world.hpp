@@ -25,7 +25,7 @@ class World final
 
 public:
 
-  explicit              World(const Context &ctx,
+  explicit              World(Context &ctx,
                               const World_setup setup = World_setup{});
   
                         ~World();

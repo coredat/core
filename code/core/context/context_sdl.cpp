@@ -96,7 +96,7 @@ Context::Context(const uint32_t width,
       LOG_FATAL(Error_string::generic_sdl_fail());
     }
 
-    const Uint32 default_window_flags = SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_OPENGL;
+    const Uint32 default_window_flags = /*SDL_WINDOW_ALLOW_HIGHDPI |*/ SDL_WINDOW_OPENGL;
     const Uint32 window_flags = is_fullscreen ? default_window_flags | fullscreen_mode : default_window_flags;
 
     m_impl->window = SDL_CreateWindow(title,
@@ -244,7 +244,8 @@ Context::get_width() const
 	int w = 0;
   int h = 0;
 	
-	SDL_GetWindowSize(m_impl->window, &w, &h);
+//	SDL_GetWindowSize(m_impl->window, &w, &h);
+  SDL_GL_GetDrawableSize(m_impl->window, &w, &h);
   
   return static_cast<uint32_t>(w);
 }
@@ -275,7 +276,8 @@ Context::get_height() const
 	int w = 0;
   int h = 0;
 	
-	SDL_GetWindowSize(m_impl->window, &w, &h);
+//	SDL_GetWindowSize(m_impl->window, &w, &h);
+  SDL_GL_GetDrawableSize(m_impl->window, &w, &h);
   
   return static_cast<uint32_t>(h);
 }

@@ -19,6 +19,8 @@ namespace Rendering {
 void
 render_main_scene(const float delta_time,
                   const float total_time,
+                  const uint32_t viewport_x,
+                  const uint32_t viewport_y,
                   const World_data::Renderer_mesh_data   *mesh_renderer_data,
                   const Resource_data::Material_data     *material_data,
                   const Resource_data::Post_process_data *post_data,

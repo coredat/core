@@ -46,6 +46,7 @@ namespace Core {
 struct World::Impl
 {
   std::shared_ptr<World_data::World> world_data;
+  Core::Context *context = nullptr;
   util::timer dt_timer;
   float       dt           = 0.f;
   float       dt_mul       = 1.f;
@@ -53,12 +54,13 @@ struct World::Impl
 };
 
 
-World::World(const Context &ctx, const World_setup setup)
+World::World(Context &ctx, const World_setup setup)
 : m_impl(new World::Impl)
 {
   LOG_TODO_ONCE("World should be 'moveable'");
   
   m_impl->world_data = std::make_shared<World_data::World>(setup.entity_pool_size);
+  m_impl->context = &ctx;
   
   Simple_renderer::initialize(); // TODO: This can be removed I think, largely superceded by mat renderer
   Debug_line_renderer::initialize();
@@ -216,6 +218,8 @@ World::think()
   uint32_t number_of_draw_calls = 0;
   Rendering::render_main_scene(m_impl->dt,
                                m_impl->running_time,
+                               m_impl->context->get_width(),
+                               m_impl->context->get_height(),
                                world->mesh_data,
                                resources->material_data,
                                resources->post_data,
