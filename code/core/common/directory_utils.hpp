@@ -14,7 +14,7 @@ namespace Directory_utils {
   this backs onto the functions inside directory.hpp.
 */
 std::string
-resource_path(const std::string &to_append);
+resource_path(const std::string &to_append = "");
 
 
 } // ns
