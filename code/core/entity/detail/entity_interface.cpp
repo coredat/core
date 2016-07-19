@@ -852,6 +852,46 @@ set_rigidbody(const util::generic_id this_id, World_data::World *world, const Co
     
     World_data::data_unlock(phys_pool);
   }
+  
+  LOG_TODO_ONCE("This is scratch code to get rbs working")
+  {
+    World_data::data_lock(phys_pool);
+    
+    auto trans = get_transform(this_id, world);
+    
+    q3BodyDef bodyDef;
+    bodyDef.allowSleep = false;
+    bodyDef.position.Set(math::get_x(trans.get_position()), math::get_y(trans.get_position()), math::get_z(trans.get_position()));
+    
+    if(rigidbody.get_mass() != 0)
+    {
+      bodyDef.bodyType = eDynamicBody;
+    }
+    
+    q3Body *body = world->scene.CreateBody(bodyDef);
+    
+    q3BoxDef boxDef;
+    
+    q3Transform localSpace;
+    q3Identity(localSpace);
+    boxDef.Set(localSpace, q3Vec3(math::get_x(trans.get_scale()), math::get_y(trans.get_scale()), math::get_z(trans.get_scale())));
+
+    if(rigidbody.get_mass() == 0)
+    {
+      boxDef.SetRestitution(0);
+    }
+    else
+    {
+      boxDef.SetDensity(0.5f);
+    }
+    
+    body->AddBox(boxDef);
+
+    
+    World_data::physics_data_set_property_rigidbody(phys_pool, this_id, body);
+    
+    World_data::data_unlock(phys_pool);
+  }
 }
 
 

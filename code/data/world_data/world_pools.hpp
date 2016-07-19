@@ -5,6 +5,7 @@
 #include "world_data_fwd.hpp"
 #include <utilities/generic_id.hpp>
 #include <core/entity/entity_fwd.hpp>
+#include <3rdparty/qu3e/q3.h>
 #include <stdint.h>
 
 
@@ -20,6 +21,9 @@ struct World
   Physics_data                      *physics_data         = nullptr;
   Renderer_mesh_data                *mesh_data            = nullptr;
   Renderer_text_draw_calls_data     *text_data            = nullptr;
+  
+  // RB
+  q3Scene scene = q3Scene(1.f/60.f); // Should this be here?
   
   explicit World(const uint32_t size_hint);
   ~World();

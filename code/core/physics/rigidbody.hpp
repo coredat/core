@@ -25,6 +25,9 @@ public:
   Collider      get_collider() const;
   void          set_collider(const Collider &collider);
   
+  float         get_mass() const;
+  void          set_mass(const float mass);
+  
 private:
 
   struct Impl;

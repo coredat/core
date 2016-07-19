@@ -31,6 +31,6 @@ data:
       include: <stdint.h>
 
     - name: rigidbody
-      type: q3Body
-      return: pointer
+      type: q3Body*
+      return: value
       include: <3rdparty/qu3e/q3.h>

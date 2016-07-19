@@ -37,6 +37,8 @@ Entity::Entity()
 Entity::Entity(Core::World &world)
 : m_impl(new Impl{util::generic_id_invalid(), nullptr})
 {
+  LOG_TODO_ONCE("Make entity interface auto generated.");
+
   m_impl->world = world.get_world_data();
   
   bool success = true;

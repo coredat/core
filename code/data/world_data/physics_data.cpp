@@ -118,7 +118,7 @@ physics_data_init(Physics_data *data, const size_t size_hint)
       void *offset = util::mem_offset(alloc_start, byte_counter);
       void *aligned = util::mem_next_16byte_boundry(offset);
 
-      data->property_rigidbody = reinterpret_cast<q3Body*>(aligned);
+      data->property_rigidbody = reinterpret_cast<q3Body**>(aligned);
       #ifndef NDEBUG
       memset(offset, 0, bytes_property_rigidbody);
       #endif
@@ -477,13 +477,13 @@ physics_data_set_property_collision_id(Physics_data *data,  const util::generic_
 
 
 bool
-physics_data_get_property_rigidbody(const Physics_data *data, const util::generic_id key, q3Body **out_value)
+physics_data_get_property_rigidbody(const Physics_data *data, const util::generic_id key, q3Body* out_value)
 {
   size_t index;
 
   if(physics_data_exists(data, key, &index))
   {
-    *out_value = &data->property_rigidbody[index];
+    *out_value = *data->property_rigidbody[index];
   }
   else
   {
@@ -495,7 +495,7 @@ physics_data_get_property_rigidbody(const Physics_data *data, const util::generi
 
 
 bool
-physics_data_set_property_rigidbody(Physics_data *data,  const util::generic_id key, const q3Body *value)
+physics_data_set_property_rigidbody(Physics_data *data,  const util::generic_id key,  q3Body* value)
 {
   assert(data && key);
 
@@ -503,7 +503,7 @@ physics_data_set_property_rigidbody(Physics_data *data,  const util::generic_id 
 
   if(physics_data_exists(data, key, &index))
   {
-    data->property_rigidbody[index] = *value;
+    data->property_rigidbody[index] = value;
   }
   else
   {

@@ -6,8 +6,8 @@
 */
 
 
-#ifndef PHYSICS_DATA_INCLUDED_E34B524E_D189_43D7_81D4_5C9E7A2FCF70
-#define PHYSICS_DATA_INCLUDED_E34B524E_D189_43D7_81D4_5C9E7A2FCF70
+#ifndef PHYSICS_DATA_INCLUDED_DD3AF454_4414_4153_A618_0C101A474A84
+#define PHYSICS_DATA_INCLUDED_DD3AF454_4414_4153_A618_0C101A474A84
 
 
 #include <utilities/generic_id.hpp>
@@ -36,7 +36,7 @@ struct Physics_data
   math::aabb *property_aabb_collider = nullptr;
   math::aabb *property_transformed_aabb_collider = nullptr;
   uint64_t *property_collision_id = nullptr;
-  q3Body *property_rigidbody = nullptr;
+  q3Body* *property_rigidbody = nullptr;
 
   // Size information
   size_t size = 0;
@@ -236,7 +236,7 @@ physics_data_set_property_collision_id(Physics_data *data,  const util::generic_
   \return Returns true if the data was found.
 */
 bool
-physics_data_get_property_rigidbody(const Physics_data *data, const util::generic_id key, q3Body **value);
+physics_data_get_property_rigidbody(const Physics_data *data, const util::generic_id key, q3Body* value);
 
 
 /*!
@@ -247,7 +247,7 @@ physics_data_get_property_rigidbody(const Physics_data *data, const util::generi
   \return Returns true if the data was set.
 */
 bool
-physics_data_set_property_rigidbody(Physics_data *data,  const util::generic_id key, const q3Body *value);
+physics_data_set_property_rigidbody(Physics_data *data,  const util::generic_id key,  q3Body* value);
 
 
 } // ns

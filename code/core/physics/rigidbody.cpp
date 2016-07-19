@@ -12,6 +12,8 @@ struct Rigidbody::Impl
   
   uint32_t collision_id = -1;
   uint32_t mask_id = -1; // combine these two please
+  
+  float mass = 1;
 };
 
 
@@ -71,6 +73,22 @@ Rigidbody::set_collider(const Core::Collider &collider)
 {
   assert(m_impl);
   m_impl->collider = collider;
+}
+
+
+float
+Rigidbody::get_mass() const
+{
+  assert(m_impl);
+  return m_impl->mass;
+}
+
+
+void
+Rigidbody::set_mass(const float mass)
+{
+  assert(m_impl);
+  m_impl->mass = mass;
 }
 
 

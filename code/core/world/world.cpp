@@ -39,6 +39,8 @@
 #include <graphics_api/initialize.hpp>
 #include <graphics_api/clear.hpp>
 
+#include <3rdparty/qu3e/q3.h>
+
 
 namespace Core {
 
@@ -115,6 +117,48 @@ World::get_time_running() const
 void
 World::think()
 {
+  LOG_TODO_ONCE("scratch code to get rb transforms");
+  {
+    m_impl->world_data->scene.Step();
+    m_impl->world_data->scene.SetIterations(60);
+    m_impl->world_data->scene.SetAllowSleep(false);
+    
+    auto to_core_trans = [](const q3Transform &other)
+    {
+      Core::Transform trans;
+      trans.set_position(math::vec3_init(other.position.x, other.position.y, other.position.z));
+      
+      const float arr_mat[] = {
+        other.rotation.ex.x, other.rotation.ex.y, other.rotation.ex.z,
+        other.rotation.ey.x, other.rotation.ey.y, other.rotation.ey.z,
+        other.rotation.ez.x, other.rotation.ez.y, other.rotation.ez.z,
+      };
+      
+      math::mat3 rot = math::mat3_init_with_array(arr_mat);
+      
+      trans.set_rotation(math::quat_init_with_mat3(rot));
+      
+      return trans;
+    };
+  
+    for(size_t i = 0; i < m_impl->world_data->physics_data->size; ++i)
+    {
+      if(m_impl->world_data->physics_data->property_rigidbody[i])
+      {
+        auto trans = m_impl->world_data->physics_data->property_rigidbody[i]->GetTransform();
+        
+        Core::Entity_ref ref(m_impl->world_data->physics_data->physics_id[i], m_impl->world_data);
+        
+        auto old_tran = ref.get_transform();
+        
+        auto core_trans = to_core_trans(trans);
+        core_trans.set_scale(old_tran.get_scale());
+        
+        ref.set_transform(core_trans);
+      }
+    }
+  }
+
   // Calculate delta_time
   {
     const util::milliseconds frame_time = m_impl->dt_timer.split();
