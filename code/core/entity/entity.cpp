@@ -7,7 +7,7 @@
 #include <core/renderer/material_renderer.hpp>
 #include <core/resources/material.hpp>
 #include <core/physics/collider.hpp>
-#include <core/physics/rigidbody_properties.hpp>
+#include <core/physics/rigidbody.hpp>
 #include <core/world/world.hpp>
 #include <data/world_data/pending_scene_graph_change_data.hpp>
 #include <data/world_data/world_pools.hpp>
@@ -303,40 +303,6 @@ Entity::get_renderer() const
 
 
 void
-Entity::set_collider(const Core::Collider &collider)
-{
-  Entity_detail::set_collider(m_impl->id,
-                              m_impl->world.get(),
-                              collider);
-}
-
-
-Core::Collider
-Entity::get_collider() const
-{
-  return Entity_detail::get_collider(m_impl->id,
-                                     m_impl->world.get());
-}
-
-
-void
-Entity::set_rigidbody_properties(const Core::Rigidbody_properties rb_props)
-{
-  Entity_detail::set_rigidbody_properties(m_impl->id,
-                                          m_impl->world.get(),
-                                          rb_props);
-}
-
-
-Core::Rigidbody_properties
-Entity::get_rigidbody_properties() const
-{
-  return Entity_detail::get_rigidbody_properties(m_impl->id,
-                                                 m_impl->world.get());
-}
-
-
-void
 Entity::set_rigidbody(const Rigidbody &rigidbody)
 {
   Entity_detail::set_rigidbody(m_impl->id, m_impl->world.get(), rigidbody);
@@ -346,7 +312,7 @@ Entity::set_rigidbody(const Rigidbody &rigidbody)
 Rigidbody
 Entity::get_rigidbody() const
 {
-  
+  return Entity_detail::get_rigidbody(m_impl->id, m_impl->world.get());
 }
 
 

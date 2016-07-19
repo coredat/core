@@ -61,12 +61,6 @@ public:
   void                          set_rigidbody(const Rigidbody &rigidbody);    //!< Set the rigidbody for the entity.
   Rigidbody                     get_rigidbody() const;                        //!< Get the rigidbody for the entity. Returns by type.
   
-  void                          set_collider(const Core::Collider &collider); //! Set the collider of the entity.
-  Core::Collider                get_collider() const;                         //! Gets the collider of the entity.
-
-  void                          set_rigidbody_properties(const Core::Rigidbody_properties rb_props);  //!< Sets the Rigidbody properties.
-  Core::Rigidbody_properties    get_rigidbody_properties() const;                                     //!< Returns the rigidbody properties.
-
   // ** Equality ** //
   
   bool                          operator ==(const Entity &other) const;

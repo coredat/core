@@ -3,7 +3,7 @@
 #include <core/transform/transform.hpp>
 #include <core/model/model.hpp>
 #include <core/physics/collider.hpp>
-#include <core/physics/rigidbody_properties.hpp>
+#include <core/physics/rigidbody.hpp>
 #include <core/entity/entity.hpp>
 #include <core/world/world.hpp>
 #include <core/renderer/renderer.hpp>
@@ -207,38 +207,10 @@ Entity_ref::get_transform() const
 }
 
 
-void
-Entity_ref::set_collider(const Core::Collider &collider)
-{
-  Entity_detail::set_collider(m_impl->id, m_impl->world.get(), collider);
-}
-
-
-Core::Collider
-Entity_ref::get_collider() const
-{
-  return Entity_detail::get_collider(m_impl->id, m_impl->world.get());
-}
-
-
 bool
 Entity_ref::operator==(const Entity &other) const
 {
   return this->get_id() == other.get_id();
-}
-
-
-void
-Entity_ref::set_rigidbody_properties(const Core::Rigidbody_properties rb_props)
-{
-  Entity_detail::set_rigidbody_properties(m_impl->id, m_impl->world.get(), rb_props);
-}
-
-
-Core::Rigidbody_properties
-Entity_ref::get_rigidbody_properties() const
-{
-  return Entity_detail::get_rigidbody_properties(m_impl->id, m_impl->world.get());
 }
 
 
@@ -253,6 +225,20 @@ std::shared_ptr<World_data::World>
 Entity_ref::get_world_data()
 {
   return m_impl->world;
+}
+
+
+void
+Entity_ref::set_rigidbody(const Rigidbody &rigidbody)
+{
+  Entity_detail::set_rigidbody(m_impl->id, m_impl->world.get(), rigidbody);
+}
+
+
+Rigidbody
+Entity_ref::get_rigidbody() const
+{
+  return Entity_detail::get_rigidbody(m_impl->id, m_impl->world.get());
 }
 
 

@@ -5,7 +5,6 @@
 #include <core/physics/collider_utils.hpp>
 #include <core/physics/box_collider.hpp>
 #include <core/physics/rigidbody.hpp>
-#include <core/physics/rigidbody_properties.hpp>
 #include <core/resources/material.hpp>
 #include <core/transform/transform.hpp>
 #include <core/renderer/renderer.hpp>
@@ -834,49 +833,25 @@ get_collider(const util::generic_id this_id, World_data::World *world)
 
 
 void
-set_rigidbody_properties(const util::generic_id this_id, World_data::World *world, const Core::Rigidbody_properties props)
+set_rigidbody(const util::generic_id this_id, World_data::World *world, const Core::Rigidbody &rigidbody)
 {
-  LOG_DEPRECATED_ONCE("set rb should do this now.");
+  LOG_TODO_ONCE("Do set collider here not in other method.")
+  set_collider(this_id, world, rigidbody.get_collider());
 
   auto phys_pool = world->physics_data;
   assert(phys_pool);
 
   if (phys_pool)
   {
+    // Set rb masking
     World_data::data_lock(phys_pool);
     
-    const uint64_t mask = util::bits_pack(props.get_rb_id(), props.get_rb_mask());
+    const uint64_t mask = util::bits_pack(rigidbody.get_rb_id(), rigidbody.get_rb_mask());
     
     World_data::physics_data_set_property_collision_id(phys_pool, this_id, mask);
     
-    LOG_TODO_ONCE("Working on rbs - this will need some refactor");
-    
-    
-    
     World_data::data_unlock(phys_pool);
   }
-}
-
-
-Core::Rigidbody_properties
-get_rigidbody_properties(const util::generic_id this_id, World_data::World *world)
-{
-  LOG_DEPRECATED_ONCE("get rb should do this now.");
-  
-  assert(false);
-  LOG_ERROR(Error_string::no_implimentation());
-  return Rigidbody_properties();
-}
-
-
-void
-set_rigidbody(const util::generic_id this_id, World_data::World *world, const Core::Rigidbody &rigidbody)
-{
-  Rigidbody_properties props;
-  props.set_collision_mask(rigidbody.get_rb_id(), rigidbody.get_rb_mask());
-  set_rigidbody_properties(this_id, world, props);
-  
-  set_collider(this_id, world, rigidbody.get_collider());
 }
 
 
