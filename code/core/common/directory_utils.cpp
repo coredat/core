@@ -7,7 +7,7 @@ namespace Directory_utils {
 
 
 std::string
-resource_path(const std::string &to_append)
+resource_path_as_std_string(const std::string &to_append)
 {
   return std::string(Directory::volatile_resource_path(to_append.c_str()));
 }
