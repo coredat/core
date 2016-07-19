@@ -6,8 +6,8 @@
 */
 
 
-#ifndef PHYSICS_DATA_INCLUDED_90586EA3_B5D6_4614_85C5_44B65D2CD51E
-#define PHYSICS_DATA_INCLUDED_90586EA3_B5D6_4614_85C5_44B65D2CD51E
+#ifndef PHYSICS_DATA_INCLUDED_E34B524E_D189_43D7_81D4_5C9E7A2FCF70
+#define PHYSICS_DATA_INCLUDED_E34B524E_D189_43D7_81D4_5C9E7A2FCF70
 
 
 #include <utilities/generic_id.hpp>
@@ -16,6 +16,7 @@
 #include <math/transform/transform.hpp>
 #include <math/geometry/aabb.hpp>
 #include <stdint.h>
+#include <3rdparty/qu3e/q3.h>
 
 
 namespace World_data {
@@ -35,6 +36,7 @@ struct Physics_data
   math::aabb *property_aabb_collider = nullptr;
   math::aabb *property_transformed_aabb_collider = nullptr;
   uint64_t *property_collision_id = nullptr;
+  q3Body *property_rigidbody = nullptr;
 
   // Size information
   size_t size = 0;
@@ -224,6 +226,28 @@ physics_data_get_property_collision_id(const Physics_data *data, const util::gen
 */
 bool
 physics_data_set_property_collision_id(Physics_data *data,  const util::generic_id key, const uint64_t value);
+
+
+/*!
+  \brief Getter for property_rigidbody.
+  \param data The container to get information from.
+  \param key The key to search for.
+  \param value The output value, which will be set if the key is found.
+  \return Returns true if the data was found.
+*/
+bool
+physics_data_get_property_rigidbody(const Physics_data *data, const util::generic_id key, q3Body **value);
+
+
+/*!
+  \brief Setter for property_rigidbody.
+  \param data The container to update.
+  \param key The key to search for.
+  \param value The new value of the data.
+  \return Returns true if the data was set.
+*/
+bool
+physics_data_set_property_rigidbody(Physics_data *data,  const util::generic_id key, const q3Body *value);
 
 
 } // ns

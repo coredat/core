@@ -35,10 +35,10 @@ public:
   
 private:
 
-  const Type            m_type = Type::unknown;
-  const float           m_arg_01;
-  const float           m_arg_02;
-  const float           m_arg_03;
+  Type            m_type = Type::unknown;
+  float           m_arg_01;
+  float           m_arg_02;
+  float           m_arg_03;
   
 }; // class
 

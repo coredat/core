@@ -42,6 +42,9 @@ void                          get_renderer_material(const util::generic_id this_
 
 void                          set_collider(const util::generic_id this_id, World_data::World *world, const Core::Collider &collider);
 Core::Collider                get_collider(const util::generic_id this_id, World_data::World *world);
+
+void                          set_rigidbody(const util::generic_id this_id, World_data::World *world, const Core::Rigidbody &rigidbody);
+Core::Rigidbody               get_rigidbody(const util::generic_id this_id, World_data::World *world);
  
 void                          set_rigidbody_properties(const util::generic_id this_id, World_data::World *world, const Core::Rigidbody_properties props);
 Core::Rigidbody_properties    get_rigidbody_properties(const util::generic_id this_id, World_data::World *world);

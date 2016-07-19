@@ -4,6 +4,7 @@
 #include <core/physics/collider.hpp>
 #include <core/physics/collider_utils.hpp>
 #include <core/physics/box_collider.hpp>
+#include <core/physics/rigidbody.hpp>
 #include <core/physics/rigidbody_properties.hpp>
 #include <core/resources/material.hpp>
 #include <core/transform/transform.hpp>
@@ -20,6 +21,7 @@
 #include <math/geometry/aabb.hpp>
 #include <utilities/logging.hpp>
 #include <utilities/bits.hpp>
+#include <3rdparty/qu3e/q3.h>
 
 
 namespace Core {
@@ -738,6 +740,8 @@ inline void update_component(const util::generic_id this_id, World_data::World *
 void
 set_collider(const util::generic_id this_id, World_data::World *world, const Core::Collider &collider)
 {
+  LOG_DEPRECATED_ONCE("set rb should do this now.");
+
   if(!is_valid(this_id, world))
   {
     LOG_ERROR(Error_string::entity_is_invalid());
@@ -821,6 +825,8 @@ set_collider(const util::generic_id this_id, World_data::World *world, const Cor
 Collider
 get_collider(const util::generic_id this_id, World_data::World *world)
 {
+  LOG_DEPRECATED_ONCE("get rb should do this now.");
+  
   assert(false);
   LOG_ERROR(Error_string::no_implimentation());
   return Collider();
@@ -830,6 +836,8 @@ get_collider(const util::generic_id this_id, World_data::World *world)
 void
 set_rigidbody_properties(const util::generic_id this_id, World_data::World *world, const Core::Rigidbody_properties props)
 {
+  LOG_DEPRECATED_ONCE("set rb should do this now.");
+
   auto phys_pool = world->physics_data;
   assert(phys_pool);
 
@@ -840,6 +848,11 @@ set_rigidbody_properties(const util::generic_id this_id, World_data::World *worl
     const uint64_t mask = util::bits_pack(props.get_rb_id(), props.get_rb_mask());
     
     World_data::physics_data_set_property_collision_id(phys_pool, this_id, mask);
+    
+    LOG_TODO_ONCE("Working on rbs - this will need some refactor");
+    
+    
+    
     World_data::data_unlock(phys_pool);
   }
 }
@@ -848,9 +861,31 @@ set_rigidbody_properties(const util::generic_id this_id, World_data::World *worl
 Core::Rigidbody_properties
 get_rigidbody_properties(const util::generic_id this_id, World_data::World *world)
 {
+  LOG_DEPRECATED_ONCE("get rb should do this now.");
+  
   assert(false);
   LOG_ERROR(Error_string::no_implimentation());
   return Rigidbody_properties();
+}
+
+
+void
+set_rigidbody(const util::generic_id this_id, World_data::World *world, const Core::Rigidbody &rigidbody)
+{
+  Rigidbody_properties props;
+  props.set_collision_mask(rigidbody.get_rb_id(), rigidbody.get_rb_mask());
+  set_rigidbody_properties(this_id, world, props);
+  
+  set_collider(this_id, world, rigidbody.get_collider());
+}
+
+
+Core::Rigidbody
+get_rigidbody(const util::generic_id this_id, World_data::World *world)
+{
+  LOG_TODO_ONCE("Get rb doesn't build the rb");
+
+  return Rigidbody();
 }
 
 

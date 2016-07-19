@@ -31,8 +31,9 @@ physics_data_init(Physics_data *data, const size_t size_hint)
   const size_t bytes_property_aabb_collider = sizeof(*data->property_aabb_collider) * size_hint + simd_buffer;
   const size_t bytes_property_transformed_aabb_collider = sizeof(*data->property_transformed_aabb_collider) * size_hint + simd_buffer;
   const size_t bytes_property_collision_id = sizeof(*data->property_collision_id) * size_hint + simd_buffer;
+  const size_t bytes_property_rigidbody = sizeof(*data->property_rigidbody) * size_hint + simd_buffer;
 
-  const size_t bytes_to_alloc = bytes_physics_id + bytes_property_transform + bytes_property_aabb_collider + bytes_property_transformed_aabb_collider + bytes_property_collision_id;
+  const size_t bytes_to_alloc = bytes_physics_id + bytes_property_transform + bytes_property_aabb_collider + bytes_property_transformed_aabb_collider + bytes_property_collision_id + bytes_property_rigidbody;
 
   // Allocate some memory.
   util::memory_chunk *data_memory = const_cast<util::memory_chunk*>(&data->memory);
@@ -110,6 +111,19 @@ physics_data_init(Physics_data *data, const size_t size_hint)
       #endif
 
       byte_counter += bytes_property_collision_id;
+      assert(byte_counter <= bytes_to_alloc);
+    }
+    // Assign property_rigidbody memory
+    {
+      void *offset = util::mem_offset(alloc_start, byte_counter);
+      void *aligned = util::mem_next_16byte_boundry(offset);
+
+      data->property_rigidbody = reinterpret_cast<q3Body*>(aligned);
+      #ifndef NDEBUG
+      memset(offset, 0, bytes_property_rigidbody);
+      #endif
+
+      byte_counter += bytes_property_rigidbody;
       assert(byte_counter <= bytes_to_alloc);
     }
   }
@@ -195,6 +209,7 @@ physics_data_push_back(Physics_data *data, const util::generic_id key, size_t *o
     memset(&data->property_aabb_collider[index], 0, sizeof(*data->property_aabb_collider));
     memset(&data->property_transformed_aabb_collider[index], 0, sizeof(*data->property_transformed_aabb_collider));
     memset(&data->property_collision_id[index], 0, sizeof(*data->property_collision_id));
+    memset(&data->property_rigidbody[index], 0, sizeof(*data->property_rigidbody));
   }
 
   return true;
@@ -224,6 +239,7 @@ physics_data_erase(Physics_data *data, const util::generic_id key)
     memmove(&data->property_aabb_collider[index_to_erase], &data->property_aabb_collider[start_index], size_to_end * sizeof(*data->property_aabb_collider));
     memmove(&data->property_transformed_aabb_collider[index_to_erase], &data->property_transformed_aabb_collider[start_index], size_to_end * sizeof(*data->property_transformed_aabb_collider));
     memmove(&data->property_collision_id[index_to_erase], &data->property_collision_id[start_index], size_to_end * sizeof(*data->property_collision_id));
+    memmove(&data->property_rigidbody[index_to_erase], &data->property_rigidbody[start_index], size_to_end * sizeof(*data->property_rigidbody));
   }
   else
   {
@@ -267,6 +283,7 @@ physics_data_insert(Physics_data *data, const util::generic_id key, const size_t
     memmove(&data->property_aabb_collider[dest_index], &data->property_aabb_collider[insert_index], size_to_end * sizeof(*data->property_aabb_collider));
     memmove(&data->property_transformed_aabb_collider[dest_index], &data->property_transformed_aabb_collider[insert_index], size_to_end * sizeof(*data->property_transformed_aabb_collider));
     memmove(&data->property_collision_id[dest_index], &data->property_collision_id[insert_index], size_to_end * sizeof(*data->property_collision_id));
+    memmove(&data->property_rigidbody[dest_index], &data->property_rigidbody[insert_index], size_to_end * sizeof(*data->property_rigidbody));
 
     // Add key to new entry.
     data->physics_id[insert_index] = key;
@@ -447,6 +464,46 @@ physics_data_set_property_collision_id(Physics_data *data,  const util::generic_
   if(physics_data_exists(data, key, &index))
   {
     data->property_collision_id[index] = value;
+  }
+  else
+  {
+    return false;
+  }
+
+  return true;
+}
+
+
+
+
+bool
+physics_data_get_property_rigidbody(const Physics_data *data, const util::generic_id key, q3Body **out_value)
+{
+  size_t index;
+
+  if(physics_data_exists(data, key, &index))
+  {
+    *out_value = &data->property_rigidbody[index];
+  }
+  else
+  {
+    return false;
+  }
+
+  return true;
+}
+
+
+bool
+physics_data_set_property_rigidbody(Physics_data *data,  const util::generic_id key, const q3Body *value)
+{
+  assert(data && key);
+
+  size_t index;
+
+  if(physics_data_exists(data, key, &index))
+  {
+    data->property_rigidbody[index] = *value;
   }
   else
   {

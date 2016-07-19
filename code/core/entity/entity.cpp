@@ -336,6 +336,20 @@ Entity::get_rigidbody_properties() const
 }
 
 
+void
+Entity::set_rigidbody(const Rigidbody &rigidbody)
+{
+  Entity_detail::set_rigidbody(m_impl->id, m_impl->world.get(), rigidbody);
+}
+
+
+Rigidbody
+Entity::get_rigidbody() const
+{
+  
+}
+
+
 util::generic_id
 Entity::get_id() const
 {

@@ -8,7 +8,8 @@ namespace Core {
 class Ray;
 class Collider;
 class Box_collider;
-class Rigidbody_properties;
+class Rigidbody_properties; // kill
+class Rigidbody;
 struct Collision_pair;
 
 

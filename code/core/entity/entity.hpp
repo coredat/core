@@ -57,7 +57,10 @@ public:
   
   void                          set_renderer(const Renderer &renderer);       //!< Set the entities renderer, an entity may only have one renderer.
   Renderer                      get_renderer() const;                         //!< Get the entities renderer.
-    
+  
+  void                          set_rigidbody(const Rigidbody &rigidbody);    //!< Set the rigidbody for the entity.
+  Rigidbody                     get_rigidbody() const;                        //!< Get the rigidbody for the entity. Returns by type.
+  
   void                          set_collider(const Core::Collider &collider); //! Set the collider of the entity.
   Core::Collider                get_collider() const;                         //! Gets the collider of the entity.
 
