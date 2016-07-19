@@ -54,8 +54,6 @@ display_camera_data(World_data::Camera_data *data)
       ImGui::Text("%d",           props.cull_mask);                                                    ImGui::NextColumn();
       ImGui::Text("%d x %d",      props.viewport_width, props.viewport_height);                        ImGui::NextColumn();
       ImGui::Text("%.1f - %.1f",  props.near_plane, props.far_plane);                                  ImGui::NextColumn();
-  
-      
     }
     
     ImGui::Columns(1);
