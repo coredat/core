@@ -11,6 +11,7 @@ struct Rigidbody::Impl
   Collider collider;
   
   bool is_dynamic = true;
+  bool is_trigger = false;
   
   uint32_t collision_id = -1;
   uint32_t mask_id = -1; // combine these two please
@@ -107,6 +108,22 @@ Rigidbody::set_is_dynamic(const bool set)
 {
   assert(m_impl);
   m_impl->is_dynamic = set;
+}
+
+
+bool
+Rigidbody::is_trigger() const
+{
+  assert(m_impl);
+  return m_impl->is_trigger;
+}
+
+
+void
+Rigidbody::set_is_trigger(const bool set)
+{
+  assert(m_impl);
+  m_impl->is_trigger = set;
 }
 
 

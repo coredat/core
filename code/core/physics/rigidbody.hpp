@@ -25,6 +25,9 @@ public:
   bool          is_dynamic() const;
   void          set_is_dynamic(const bool set);
   
+  bool          is_trigger() const;
+  void          set_is_trigger(const bool set);
+  
   Collider      get_collider() const;
   void          set_collider(const Collider &collider);
   

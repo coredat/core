@@ -6,6 +6,7 @@
 #include <core/physics/collider_utils.hpp>
 #include <core/transform/transform.hpp>
 #include <data/global_data/memory_data.hpp>
+#include <utilities/logging.hpp>
 
 
 namespace Physics_transform {
@@ -22,6 +23,7 @@ convert_core_rb_to_qu3e(const Core::Rigidbody core_rb[],
     Need to benchmark this at some point,
     niggling feeling this can be vastly improved.
   */
+  LOG_TODO_ONCE("bench mark this.");
   
   // Build the body defs
   q3BodyDef *body_def = SCRATCH_ALIGNED_ALLOC(q3BodyDef, rb_count);
@@ -30,12 +32,14 @@ convert_core_rb_to_qu3e(const Core::Rigidbody core_rb[],
   {
     const Core::Rigidbody &rigidbody = core_rb[i];
     const Core::Transform &transform = core_transform[i];
+    
+    body_def[i] = q3BodyDef();
   
     body_def[i].allowSleep = false;
     body_def[i].position.Set(math::get_x(transform.get_position()),
                              math::get_y(transform.get_position()),
                              math::get_z(transform.get_position()));
-        
+    
     if(rigidbody.is_dynamic())
     {
       body_def[i].bodyType = eDynamicBody;
@@ -54,27 +58,39 @@ convert_core_rb_to_qu3e(const Core::Rigidbody core_rb[],
     const Core::Rigidbody &rigidbody = core_rb[i];
     const Core::Transform &transform = core_transform[i];
     
-    q3Transform localSpace;
-    q3Identity(localSpace);
+    box_def[i] = q3BoxDef();
     
-    box_def[i].Set(localSpace, q3Vec3(math::get_x(transform.get_scale()),
-                                      math::get_y(transform.get_scale()),
-                                      math::get_z(transform.get_scale())));
+    q3Transform local_space;
+    q3Identity(local_space);
     
-    // Mass = density * volume
-    // Density = Mass / volume
+    box_def[i].Set(local_space, q3Vec3(math::get_x(transform.get_scale()),
+                                       math::get_y(transform.get_scale()),
+                                       math::get_z(transform.get_scale())));
+    
+    // Set trigger or not
     {
-      if(rigidbody.get_mass())
+      if(!rigidbody.is_trigger())
       {
-        const float volume = Core::Box_collider_utils::get_volume(Core::Collider_utis::cast_to_box_collider(rigidbody.get_collider()));
+        if(rigidbody.get_mass())
+        {
+          // Calculate the density.
+          // Mass = density * volume
+          // Density = Mass / volume
+          const float volume = Core::Box_collider_utils::get_volume(Core::Collider_utis::cast_to_box_collider(rigidbody.get_collider()));
 
-        const float density = rigidbody.get_mass() / volume;
-        box_def[i].SetDensity(density);
+          const float density = rigidbody.get_mass() / volume;
+          box_def[i].SetDensity(density);
+        }
+        else
+        {
+          box_def[i].SetRestitution(0.f);
+        }
       }
       else
       {
-        box_def[i].SetDensity(0);
-        box_def[i].SetRestitution(1.f);
+        box_def[i].SetSensor(true);
+        box_def[i].SetDensity(0.f);
+        box_def[i].SetRestitution(0.f);
       }
     }
   }
@@ -82,8 +98,10 @@ convert_core_rb_to_qu3e(const Core::Rigidbody core_rb[],
   // Generate bodies
   for(uint32_t i = 0; i < rb_count; ++i)
   {
-    out_rbs[i] = scene->CreateBody(body_def[i]);
-    out_rbs[i]->AddBox(box_def[i]);
+    q3Body *body = scene->CreateBody(body_def[i]);
+    body->AddBox(box_def[i]);
+    
+    out_rbs[i] = body;
   }
 }
 

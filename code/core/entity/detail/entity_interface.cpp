@@ -860,7 +860,7 @@ set_rigidbody(const util::generic_id this_id, World_data::World *world, const Co
     
     const Core::Transform transform = get_transform(this_id, world);
     
-    q3Body *body;
+    q3Body *body = nullptr;
     Physics_transform::convert_core_rb_to_qu3e(&rigidbody,
                                                &transform,
                                                &body,
