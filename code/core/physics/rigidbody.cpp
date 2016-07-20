@@ -10,6 +10,8 @@ struct Rigidbody::Impl
 {
   Collider collider;
   
+  bool is_dynamic = true;
+  
   uint32_t collision_id = -1;
   uint32_t mask_id = -1; // combine these two please
   
@@ -89,6 +91,22 @@ Rigidbody::set_mass(const float mass)
 {
   assert(m_impl);
   m_impl->mass = mass;
+}
+
+
+bool
+Rigidbody::is_dynamic() const
+{
+  assert(m_impl);
+  return m_impl->is_dynamic;
+}
+
+
+void
+Rigidbody::set_is_dynamic(const bool set)
+{
+  assert(m_impl);
+  m_impl->is_dynamic = set;
 }
 
 

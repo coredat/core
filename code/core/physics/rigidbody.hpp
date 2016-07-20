@@ -22,6 +22,9 @@ public:
   uint32_t      get_rb_mask() const;
   void          set_collision_mask(const uint32_t rb_id, const uint32_t rb_collides_with_ids);
   
+  bool          is_dynamic() const;
+  void          set_is_dynamic(const bool set);
+  
   Collider      get_collider() const;
   void          set_collider(const Collider &collider);
   

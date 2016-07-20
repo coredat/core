@@ -54,5 +54,12 @@ create_with_half_extents(const math::vec3 half_extents)
 }
 
 
+float
+get_volume(const Box_collider collider)
+{
+  return (collider.get_x_half_extent() * 2.f) * (collider.get_y_half_extent() * 2.f) * (collider.get_z_half_extent() * 2.f);
+}
+
+
 } // ns
 } // ns

@@ -45,6 +45,13 @@ Box_collider
 create_with_half_extents(const math::vec3 half_extents);
 
 
+/*!
+  Returns the volume of the collider
+*/
+float
+get_volume(const Box_collider collider);
+
+
 } // ns
 } // ns
 
