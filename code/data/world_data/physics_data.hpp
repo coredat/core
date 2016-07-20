@@ -236,7 +236,7 @@ physics_data_set_property_collision_id(Physics_data *data,  const util::generic_
   \return Returns true if the data was found.
 */
 bool
-physics_data_get_property_rigidbody(const Physics_data *data, const util::generic_id key, q3Body* value);
+physics_data_get_property_rigidbody(const Physics_data *data, const util::generic_id key, q3Body** value);
 
 
 /*!

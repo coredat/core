@@ -340,6 +340,14 @@ update_collider(const util::generic_id this_id,
       World_data::physics_data_set_property_transform(phys_data, this_id, *transform);
       World_data::physics_data_set_property_transformed_aabb_collider(phys_data, this_id, collider_box);
       
+      q3Body *body = nullptr;
+      World_data::physics_data_get_property_rigidbody(phys_data, this_id, &body);
+      
+      if(body)
+      {
+        body->SetTransform(q3Vec3(math::get_x(transform->position), math::get_y(transform->position), math::get_z(transform->position)));
+      }
+      
       World_data::data_unlock(phys_data);
     }
   }
@@ -860,16 +868,17 @@ set_rigidbody(const util::generic_id this_id, World_data::World *world, const Co
     
     struct callback : public q3ContactListener
     {
-      void BeginContact( const q3ContactConstraint *contact )
+      void BeginContact(const q3ContactConstraint *contact)
       {
         int i = 0;
       }
       
-      void EndContact( const q3ContactConstraint *contact )
+      void EndContact(const q3ContactConstraint *contact)
       {
         int i = 0;
       }
     };
+    
     
     static callback cb;
     world->scene.SetContactListener(&cb);

@@ -477,13 +477,13 @@ physics_data_set_property_collision_id(Physics_data *data,  const util::generic_
 
 
 bool
-physics_data_get_property_rigidbody(const Physics_data *data, const util::generic_id key, q3Body* out_value)
+physics_data_get_property_rigidbody(const Physics_data *data, const util::generic_id key, q3Body** out_value)
 {
   size_t index;
 
   if(physics_data_exists(data, key, &index))
   {
-    *out_value = *data->property_rigidbody[index];
+    *out_value = data->property_rigidbody[index];
   }
   else
   {
