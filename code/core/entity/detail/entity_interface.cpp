@@ -858,6 +858,23 @@ set_rigidbody(const util::generic_id this_id, World_data::World *world, const Co
   {
     World_data::data_lock(phys_pool);
     
+    struct callback : public q3ContactListener
+    {
+      void BeginContact( const q3ContactConstraint *contact )
+      {
+        int i = 0;
+      }
+      
+      void EndContact( const q3ContactConstraint *contact )
+      {
+        int i = 0;
+      }
+    };
+    
+    static callback cb;
+    world->scene.SetContactListener(&cb);
+    world->scene.SetIterations(100);
+    
     const Core::Transform transform = get_transform(this_id, world);
     
     q3Body *body = nullptr;
