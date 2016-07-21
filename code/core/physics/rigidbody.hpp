@@ -6,9 +6,6 @@
 #include <core/common/core_types.hpp>
 
 
-typedef void (*Collision_callback)(Core::Entity_ref entity_a, Core::Entity_ref entity_b);
-
-
 namespace Core {
 
 
@@ -37,9 +34,7 @@ public:
   float         get_mass() const;
   void          set_mass(const float mass);
   
-  void          set_on_collision_start_callback(Collision_callback cb);
-  void          set_on_collision_end_callback(Collision_callback cb);
-  
+      
 private:
 
   struct Impl;

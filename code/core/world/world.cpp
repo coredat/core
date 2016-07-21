@@ -27,6 +27,7 @@
 #include <systems/renderer_aabb/renderer_aabb.hpp>
 
 #include <transformations/physics/overlapping_aabb.hpp>
+#include <transformations/physics/update_world.hpp>
 #include <transformations/rendering/material_renderer.hpp>
 #include <transformations/camera/cam_priorities.hpp>
 #include <transformations/rendering/render_scene.hpp>
@@ -53,6 +54,7 @@ struct World::Impl
   float       dt           = 0.f;
   float       dt_mul       = 1.f;
   float       running_time = 0.f;
+  Collision_callback collision_callback = nullptr;
 };
 
 
@@ -119,9 +121,7 @@ World::think()
 {
   LOG_TODO_ONCE("scratch code to get rb transforms");
   {
-    m_impl->world_data->scene.Step();
-    m_impl->world_data->scene.SetIterations(60);
-    m_impl->world_data->scene.SetAllowSleep(false);
+    Physics_transform::update_world(&m_impl->world_data->scene);
     
     auto to_core_trans = [](const q3Transform &other)
     {
@@ -181,7 +181,6 @@ World::think()
   auto resources = Resource_data::get_resources();
   auto world = m_impl->world_data.get();
 
-  
   /*
     Camera Runs
     --
@@ -352,6 +351,14 @@ World::get_overlapping_aabbs(const std::function<void(const Core::Collision_pair
   }
   
   Physics::Collision::pairs_free(&out_pairs);
+}
+
+
+void
+World::set_collision_callback(Collision_callback callback)
+{
+  assert(m_impl);
+  m_impl->collision_callback = callback;
 }
 
 

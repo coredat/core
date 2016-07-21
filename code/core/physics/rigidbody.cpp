@@ -17,9 +17,6 @@ struct Rigidbody::Impl
   uint32_t mask_id = -1; // combine these two please
   
   float mass = 1;
-  
-  Collision_callback on_collide_start_cb = nullptr;
-  Collision_callback on_collide_end_cb = nullptr;
 };
 
 
@@ -127,22 +124,6 @@ Rigidbody::set_is_trigger(const bool set)
 {
   assert(m_impl);
   m_impl->is_trigger = set;
-}
-
-
-void
-Rigidbody::set_on_collision_start_callback(Collision_callback cb)
-{
-  assert(m_impl);
-  m_impl->on_collide_start_cb = cb;
-}
-
-
-void
-Rigidbody::set_on_collision_end_callback(Collision_callback cb)
-{
-  assert(m_impl);
-  m_impl->on_collide_end_cb = cb;
 }
 
 

@@ -12,6 +12,16 @@
 namespace Core {
 
 
+enum class Collision_type
+{
+  enter,
+  exit,
+};
+
+
+typedef void (*Collision_callback)(Collision_type type, Core::Entity_ref entity_a, Core::Entity_ref entity_b);
+
+
 /*!
   World
   --
@@ -41,8 +51,9 @@ public:
   void                  get_overlapping_aabbs(const std::function<void(const Core::Collision_pair pairs[],
                                                                        const uint32_t number_of_pairs)> &callback);
   
-  
   size_t                get_entity_count_in_world() const;
+  
+  void                  set_collision_callback(Collision_callback callback);
 
   Entity_ref            find_entity_by_id(const util::generic_id id) const;
   

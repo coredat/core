@@ -335,7 +335,7 @@ update_collider(const util::generic_id this_id,
 
       // Order is important here! Scale then shift origin.
       math::aabb_scale(collider_box, total_scale);
-      math::aabb_set_origin(collider_box, transform->position);      
+      math::aabb_set_origin(collider_box, transform->position);
       
       World_data::physics_data_set_property_transform(phys_data, this_id, *transform);
       World_data::physics_data_set_property_transformed_aabb_collider(phys_data, this_id, collider_box);
@@ -865,24 +865,6 @@ set_rigidbody(const util::generic_id this_id, World_data::World *world, const Co
   LOG_TODO_ONCE("This is scratch code to get rbs working")
   {
     World_data::data_lock(phys_pool);
-    
-    struct callback : public q3ContactListener
-    {
-      void BeginContact(const q3ContactConstraint *contact)
-      {
-        int i = 0;
-      }
-      
-      void EndContact(const q3ContactConstraint *contact)
-      {
-        int i = 0;
-      }
-    };
-    
-    
-    static callback cb;
-    world->scene.SetContactListener(&cb);
-    world->scene.SetIterations(100);
     
     const Core::Transform transform = get_transform(this_id, world);
     
