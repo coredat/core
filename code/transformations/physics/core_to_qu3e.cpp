@@ -13,7 +13,8 @@ namespace Physics_transform {
 
 
 void
-convert_core_rb_to_qu3e(const Core::Rigidbody core_rb[],
+convert_core_rb_to_qu3e(const util::generic_id user_data[],
+                        const Core::Rigidbody core_rb[],
                         const Core::Transform core_transform[],
                         q3Body *out_rbs[],
                         q3Scene *scene,
@@ -23,7 +24,7 @@ convert_core_rb_to_qu3e(const Core::Rigidbody core_rb[],
     Need to benchmark this at some point,
     niggling feeling this can be vastly improved.
   */
-  LOG_TODO_ONCE("bench mark this.");
+  LOG_TODO_ONCE("benchmark this.");
   
   // Build the body defs
   q3BodyDef *body_def = SCRATCH_ALIGNED_ALLOC(q3BodyDef, rb_count);
@@ -34,7 +35,7 @@ convert_core_rb_to_qu3e(const Core::Rigidbody core_rb[],
     const Core::Transform &transform = core_transform[i];
     
     body_def[i] = q3BodyDef();
-  
+    
     body_def[i].allowSleep = false;
     body_def[i].position.Set(math::get_x(transform.get_position()),
                              math::get_y(transform.get_position()),
@@ -48,6 +49,8 @@ convert_core_rb_to_qu3e(const Core::Rigidbody core_rb[],
     {
       body_def[i].bodyType = eStaticBody;
     }
+    
+    body_def[i].userData = util::generic_id_to_ptr(user_data[i]);
   }
   
   // Build the box defs

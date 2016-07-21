@@ -9,6 +9,7 @@ class Ray;
 class Collider;
 class Box_collider;
 class Rigidbody;
+class Collision;
 struct Collision_pair;
 
 

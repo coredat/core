@@ -3,6 +3,7 @@
 
 
 #include <core/common/core_fwd.hpp>
+#include <utilities/generic_id.hpp>
 #include <3rdparty/qu3e/q3.h>
 #include <stdint.h>
 
@@ -14,7 +15,8 @@ namespace Physics_transform {
   Converts a Core::Rigidbody description to a qu3e one.
 */
 void
-convert_core_rb_to_qu3e(const Core::Rigidbody core_rb[],
+convert_core_rb_to_qu3e(const util::generic_id user_data[],
+                        const Core::Rigidbody core_rb[],
                         const Core::Transform core_transform[],
                         q3Body *out_rbs[],
                         q3Scene *scene,
