@@ -19,7 +19,7 @@ enum class Collision_type
 };
 
 
-typedef void (*Collision_callback)(Collision_type type, Core::Entity_ref entity_a, Core::Entity_ref entity_b);
+typedef void (*Collision_callback)(const Collision_type type, const Core::Collision &collision);
 
 
 /*!

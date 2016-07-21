@@ -12,7 +12,7 @@ namespace Physics_transform {
 
 void
 update_world(q3Scene *scene,
-             Core::Collision *out_collisions[],
+             Core::Collision *out_collisions[] = nullptr,
              uint32_t *out_number_of_collisions = nullptr);
 
 

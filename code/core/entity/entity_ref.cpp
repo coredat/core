@@ -17,7 +17,7 @@ namespace Core {
 
 struct Entity_ref::Impl
 {
-  const util::generic_id id;
+  util::generic_id id;
   std::shared_ptr<World_data::World> world;
 };
 
@@ -67,7 +67,12 @@ Entity_ref::Entity_ref(Entity_ref &&other)
 Entity_ref&
 Entity_ref::operator=(const Entity_ref &other)
 {
-  const_cast<util::generic_id&>(m_impl->id) = other.m_impl->id;
+  if(!m_impl)
+  {
+    m_impl.reset(new Impl);
+  }
+
+  m_impl->id = other.m_impl->id;
   m_impl->world = other.m_impl->world;
   
   return *this;
@@ -77,7 +82,12 @@ Entity_ref::operator=(const Entity_ref &other)
 Entity_ref&
 Entity_ref::operator=(Entity_ref &&other)
 {
-  const_cast<util::generic_id&>(m_impl->id) = other.m_impl->id;
+  if(!m_impl)
+  {
+    m_impl.reset(new Impl);
+  }
+
+  m_impl->id = other.m_impl->id;
   m_impl->world = other.m_impl->world;
   
   return *this;
