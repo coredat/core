@@ -125,7 +125,7 @@ World::think()
     Core::Collision *collisions_arr;
     uint32_t number_of_collisions = 0;
     
-    Physics_transform::update_world(&m_impl->world_data->scene,
+    Physics_transform::update_world(m_impl->world_data,
                                   &collisions_arr,
                                   &number_of_collisions);
     

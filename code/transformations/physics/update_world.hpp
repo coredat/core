@@ -3,7 +3,7 @@
 
 
 #include <core/physics/physics_fwd.hpp>
-#include <3rdparty/qu3e/q3.h>
+#include <data/world_data/world_pools.hpp>
 #include <stdint.h>
 
 
@@ -11,7 +11,7 @@ namespace Physics_transform {
 
 
 void
-update_world(q3Scene *scene,
+update_world(std::shared_ptr<World_data::World> world,
              Core::Collision *out_collisions[] = nullptr,
              uint32_t *out_number_of_collisions = nullptr);
 

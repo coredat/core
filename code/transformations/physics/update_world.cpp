@@ -4,6 +4,7 @@
 #include <utilities/logging.hpp>
 #include <utilities/threading.hpp>
 #include <3rdparty/qu3e/dynamics/q3Contact.h>
+#include <3rdparty/qu3e/dynamics/q3Body.h>
 
 
 namespace
@@ -11,6 +12,7 @@ namespace
   uint32_t number_of_callbacks = 0;
   atomic_bool is_listening(false);
   Core::Collision *collisions = nullptr;
+  std::shared_ptr<World_data::World> world; // this is a bad bad hack to smuggle world into the callback.
 }
 
 
@@ -30,12 +32,13 @@ namespace Physics_transform {
 
 
 void
-update_world(q3Scene *scene,
+update_world(std::shared_ptr<World_data::World> curr_world,
              Core::Collision *out_collisions[],
              uint32_t *out_number_of_collisions)
 {
   number_of_callbacks = 0;
   is_listening = true;
+  world = curr_world;
   
   LOG_TODO_ONCE("Use Scratch stream");
   
@@ -59,11 +62,16 @@ update_world(q3Scene *scene,
         return;
       }
       
-      collisions[number_of_callbacks] = Core::Collision(Core::Entity_ref(),
-                                                        Core::Entity_ref(),
-                                                        math::vec3_from_qu3e(contact->manifold.normal),
-                                                        0);
-      ++number_of_callbacks;
+      // Make two collisions for each entity.
+      collisions[number_of_callbacks++] = Core::Collision(Core::Entity_ref(util::generic_id_from_ptr(contact->bodyA->GetUserData()), world),
+                                                          Core::Entity_ref(util::generic_id_from_ptr(contact->bodyB->GetUserData()), world),
+                                                          math::vec3_from_qu3e(contact->manifold.normal),
+                                                          0);
+      
+      collisions[number_of_callbacks++] = Core::Collision(Core::Entity_ref(util::generic_id_from_ptr(contact->bodyB->GetUserData()), world),
+                                                          Core::Entity_ref(util::generic_id_from_ptr(contact->bodyA->GetUserData()), world),
+                                                          math::vec3_scale(math::vec3_from_qu3e(contact->manifold.normal), -1.f),
+                                                          0);
     }
     
     /*
@@ -74,10 +82,10 @@ update_world(q3Scene *scene,
   };
   
   static callback cb;
-  scene->SetContactListener(&cb);
-  scene->SetIterations(100);
+  world->scene.SetContactListener(&cb);
+  world->scene.SetIterations(100);
   
-  scene->Step();
+  world->scene.Step();
   
   if(out_number_of_collisions)
   {
@@ -90,6 +98,7 @@ update_world(q3Scene *scene,
   }
   
   is_listening = false;
+  world.reset();
 }
 
 
