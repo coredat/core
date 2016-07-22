@@ -120,6 +120,26 @@ World::get_time_running() const
 void
 World::think()
 {
+  // DONT MOVE.
+  // These are handy for debugging, lldb sometimes has hard time with unique_ptr.
+  auto resources = Resource_data::get_resources();
+  auto world = m_impl->world_data.get();
+
+
+  // THIS MUST BE FIRST STATE CHANGES!
+  // Otherwise we might process things that the calling code as already removed.
+  {
+    // Update world
+    auto data = m_impl->world_data;
+    auto graph_changes = m_impl->world_data->entity_graph_changes;
+
+    // Push in new phy entities.
+    World_data::world_update_scene_graph_changes(data.get(), graph_changes);
+    
+    // Reset the entity pool for new chandges.
+    World_data::pending_scene_graph_change_reset(graph_changes);
+  }
+
   LOG_TODO_ONCE("scratch code to get rb transforms");
   {
     Core::Collision *collisions_arr;
@@ -159,7 +179,7 @@ World::think()
     {
       if(m_impl->world_data->physics_data->property_rigidbody[i])
       {
-        auto trans = m_impl->world_data->physics_data->property_rigidbody[i]->GetTransform();
+        auto trans = reinterpret_cast<q3Body*>(m_impl->world_data->physics_data->property_rigidbody[i])->GetTransform();
         
         Core::Entity_ref ref(m_impl->world_data->physics_data->physics_id[i], m_impl->world_data);
         
@@ -181,19 +201,6 @@ World::think()
     m_impl->running_time += m_impl->dt;
   }
   
-  // Update world
-  auto data = m_impl->world_data;
-  auto graph_changes = m_impl->world_data->entity_graph_changes;
-
-  // Push in new phy entities.
-  World_data::world_update_scene_graph_changes(data.get(), graph_changes);
-  
-  // Reset the entity pool for new changes.
-  World_data::pending_scene_graph_change_reset(graph_changes);
-  
-  
-  auto resources = Resource_data::get_resources();
-  auto world = m_impl->world_data.get();
 
   /*
     Camera Runs

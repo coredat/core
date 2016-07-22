@@ -118,7 +118,7 @@ physics_data_init(Physics_data *data, const size_t size_hint)
       void *offset = util::mem_offset(alloc_start, byte_counter);
       void *aligned = util::mem_next_16byte_boundry(offset);
 
-      data->property_rigidbody = reinterpret_cast<q3Body**>(aligned);
+      data->property_rigidbody = reinterpret_cast<uintptr_t*>(aligned);
       #ifndef NDEBUG
       memset(offset, 0, bytes_property_rigidbody);
       #endif
@@ -232,7 +232,7 @@ physics_data_erase(Physics_data *data, const util::generic_id key)
     const size_t size_to_end = data->size - index_to_erase - 1;
 
     --(data->size);
-
+    
     // Shuffle the memory down.
     memmove(&data->physics_id[index_to_erase], &data->physics_id[start_index], size_to_end * sizeof(*data->physics_id));
     memmove(&data->property_transform[index_to_erase], &data->property_transform[start_index], size_to_end * sizeof(*data->property_transform));
@@ -477,7 +477,7 @@ physics_data_set_property_collision_id(Physics_data *data,  const util::generic_
 
 
 bool
-physics_data_get_property_rigidbody(const Physics_data *data, const util::generic_id key, q3Body** out_value)
+physics_data_get_property_rigidbody(const Physics_data *data, const util::generic_id key, uintptr_t *out_value)
 {
   size_t index;
 
@@ -495,7 +495,7 @@ physics_data_get_property_rigidbody(const Physics_data *data, const util::generi
 
 
 bool
-physics_data_set_property_rigidbody(Physics_data *data,  const util::generic_id key,  q3Body* value)
+physics_data_set_property_rigidbody(Physics_data *data,  const util::generic_id key, uintptr_t value)
 {
   assert(data && key);
 

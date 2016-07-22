@@ -340,7 +340,7 @@ update_collider(const util::generic_id this_id,
       World_data::physics_data_set_property_transform(phys_data, this_id, *transform);
       World_data::physics_data_set_property_transformed_aabb_collider(phys_data, this_id, collider_box);
       
-      q3Body *body = nullptr;
+      uintptr_t body = 0;
       World_data::physics_data_get_property_rigidbody(phys_data, this_id, &body);
       
       if(body)
@@ -356,7 +356,7 @@ update_collider(const util::generic_id this_id,
 //        axis.y *= -1;
 //        axis.x *= -1;
       
-        body->SetTransform(q3Vec3(math::get_x(transform->position), math::get_y(transform->position), math::get_z(transform->position)), axis, angle);
+        reinterpret_cast<q3Body*>(body)->SetTransform(q3Vec3(math::get_x(transform->position), math::get_y(transform->position), math::get_z(transform->position)), axis, angle);
       }
       
       World_data::data_unlock(phys_data);
@@ -887,7 +887,9 @@ set_rigidbody(const util::generic_id this_id, World_data::World *world, const Co
                                                &world->scene,
                                                1);
     
-    World_data::physics_data_set_property_rigidbody(phys_pool, this_id, body);
+    World_data::physics_data_set_property_rigidbody(phys_pool, this_id, (uintptr_t
+    
+    )body);
     
     World_data::data_unlock(phys_pool);
   }
