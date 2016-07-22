@@ -41,6 +41,10 @@ convert_core_rb_to_qu3e(const util::generic_id user_data[],
                              math::get_y(transform.get_position()),
                              math::get_z(transform.get_position()));
     
+    // Testing this isn't angle axis.
+    body_def[i].angle = math::quat_get_w(transform.get_rotation());
+    body_def[i].axis = q3Vec3(math::quat_get_x(transform.get_rotation()), math::quat_get_y(transform.get_rotation()), math::quat_get_z(transform.get_rotation()));
+    
     if(rigidbody.is_dynamic())
     {
       body_def[i].bodyType = eDynamicBody;

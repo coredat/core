@@ -375,8 +375,8 @@ set_transform(const util::generic_id this_id,
   World_data::data_unlock(world->transform);
   
   const math::transform new_transform = math::transform_init(set_transform.get_position(),
-                                                           set_transform.get_scale(),
-                                                           set_transform.get_rotation());
+                                                             set_transform.get_scale(),
+                                                             set_transform.get_rotation());
   
   // TODO: Some possible async ness here?
   update_transform(this_id, world, &new_transform);
