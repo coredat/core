@@ -82,10 +82,12 @@ update_world(std::shared_ptr<World_data::World> curr_world,
   };
   
   static callback cb;
-  world->scene.SetContactListener(&cb);
-  world->scene.SetIterations(100);
   
-  world->scene.Step();
+  auto &phys_scene = world->scene;
+  
+  phys_scene.SetContactListener(&cb);
+  phys_scene.SetIterations(100);
+  phys_scene.Step();
   
   if(out_number_of_collisions)
   {
