@@ -304,6 +304,7 @@ World::think()
     Debug_menu::display_world_data_menu(m_impl->world_data.get(),
                                         m_impl->dt,
                                         m_impl->dt_mul,
+                                        world->scene.GetBodyCount(),
                                         number_of_draw_calls,
                                         number_of_cam_runs);
   }

@@ -90,6 +90,7 @@ void
 display_world_data_menu(World_data::World *world_data,
                         const float dt,
                         const float dt_mul,
+                        const uint32_t number_of_rbs,
                         const uint32_t draw_calls,
                         const uint32_t render_passes)
 {
@@ -114,10 +115,10 @@ display_world_data_menu(World_data::World *world_data,
     ImGui::EndMainMenuBar();
   }
   
-  if(show_entity_list)     { display_entity_list(world_data->entity);                     }
-  if(show_mesh_draw_calls) { display_mesh_draw_calls(world_data->mesh_data);              }
-  if(show_camera_list)     { display_camera_data(world_data->camera_data);                }
-  if(show_world_stats)     { display_world_stats(dt, dt_mul, draw_calls, render_passes);  }
+  if(show_entity_list)     { display_entity_list(world_data->entity);                                   }
+  if(show_mesh_draw_calls) { display_mesh_draw_calls(world_data->mesh_data);                            }
+  if(show_camera_list)     { display_camera_data(world_data->camera_data);                              }
+  if(show_world_stats)     { display_world_stats(dt, dt_mul, draw_calls, render_passes, number_of_rbs); }
   
   auto global_data = Resource_data::get_resources();
 
@@ -139,7 +140,8 @@ display_world_data_menu(World_data::World *world_data,
                        world_data->entity,
                        world_data->mesh_data,
                        world_data->text_data,
-                       world_data->transform);
+                       world_data->transform,
+                       world_data->physics_data);
   }
   #endif
 }

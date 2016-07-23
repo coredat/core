@@ -4,6 +4,7 @@
 
 #include <core/physics/physics_fwd.hpp>
 #include <data/world_data/world_pools.hpp>
+#include <memory>
 #include <stdint.h>
 
 

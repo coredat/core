@@ -17,7 +17,8 @@ display_capacities(Resource_data::Text_mesh_data *text_mesh_data,
                    World_data::Entity_data *entity_data,
                    World_data::Renderer_mesh_data *renderer_mesh_data,
                    World_data::Renderer_text_draw_calls_data *renderer_text_draw_calls,
-                   World_data::Transform_data *transforms)
+                   World_data::Transform_data *transforms,
+                   World_data::Physics_data *phs_data)
 {
   ImGui::Begin("Data Capacities");
   {
@@ -51,6 +52,7 @@ display_capacities(Resource_data::Text_mesh_data *text_mesh_data,
     display_capacity("Post", post_process_data);
     display_capacity("Shaders", shader_data);
     display_capacity("Texture", texture_data);
+    display_capacity("Physics", phs_data);
   }
   ImGui::End();
 }

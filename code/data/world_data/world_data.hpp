@@ -4,7 +4,6 @@
 
 #include "camera_data.hpp"
 #include "pending_scene_graph_change_data.hpp"
-#include "world.hpp"
 #include "world_pools.hpp"
 #include "world_data_fwd.hpp"
 #include "physics_data.hpp"

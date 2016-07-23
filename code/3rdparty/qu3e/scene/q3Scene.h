@@ -146,6 +146,8 @@ public:
 	// simulation.
 	void Dump( FILE* file ) const;
 
+  i32 GetBodyCount() const { return m_bodyCount; }
+
 private:
 	q3ContactManager m_contactManager;
 	q3PagedAllocator m_boxAllocator;

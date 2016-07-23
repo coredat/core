@@ -18,7 +18,6 @@
 namespace World_data {
 
 
-
 /*!
   \brief Auto-generated structure for Renderer_text_draw_calls_data
 */

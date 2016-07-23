@@ -3,8 +3,8 @@
 #include <Graphics_api/ogl/ogl_shader_uniform.hpp>
 #include <Graphics_api/ogl/ogl_vertex_buffer.hpp>
 #include <Graphics_api/ogl/ogl_vertex_format.hpp>
-#include <utils/obj_model_loader.hpp>
-#include <utils/directory.hpp>
+#include <utilities/obj_model_loader.hpp>
+#include <utilities/directory.hpp>
 #include <assert.h>
 
 

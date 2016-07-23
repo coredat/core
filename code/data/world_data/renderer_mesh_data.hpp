@@ -24,8 +24,6 @@ struct Mesh_renderer_draw_call {
 };
 
 
-
-
 /*!
   \brief Auto-generated structure for Renderer_mesh_data
 */
