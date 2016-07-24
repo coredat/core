@@ -351,6 +351,8 @@ update_collider(const util::generic_id this_id,
         r32 angle = 0;
         q3Vec3 axis;
         
+        // Convert transform to q3
+
         quat.ToAxisAngle(&axis, &angle);
 //        axis.z *= -1;
 //        axis.y *= -1;

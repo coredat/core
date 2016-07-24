@@ -168,9 +168,11 @@ World::think()
         other.rotation.ez.x, other.rotation.ez.y, other.rotation.ez.z,
       };
       
-      math::mat3 rot = math::mat3_init_with_array(arr_mat);
+      const math::mat3 q3_rot_mat = math::mat3_init_with_array(arr_mat);
+      const math::mat3 q3_rot_mat_tr = math::mat3_get_transpose(q3_rot_mat);
+      const math::quat fianl_rot = math::quat_init_with_mat3(q3_rot_mat_tr);
       
-      trans.set_rotation(math::quat_init_with_mat3(rot));
+      trans.set_rotation(fianl_rot);
       
       return trans;
     };

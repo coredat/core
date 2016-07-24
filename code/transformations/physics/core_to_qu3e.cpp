@@ -69,10 +69,13 @@ convert_core_rb_to_qu3e(const util::generic_id user_data[],
     
     q3Transform local_space;
     q3Identity(local_space);
-    
-    box_def[i].Set(local_space, q3Vec3(math::get_x(transform.get_scale()),
-                                       math::get_y(transform.get_scale()),
-                                       math::get_z(transform.get_scale())));
+
+    const Core::Box_collider box_collider = Core::Collider_utis::cast_to_box_collider(rigidbody.get_collider());
+    const math::vec3 collider_scale = math::vec3_init(box_collider.get_x_half_extent() * 2.f, box_collider.get_y_half_extent() * 2.f, box_collider.get_z_half_extent() * 2.f);
+
+    box_def[i].Set(local_space, q3Vec3(math::get_x(transform.get_scale()) * math::get_x(collider_scale),
+                                       math::get_y(transform.get_scale()) * math::get_y(collider_scale),
+                                       math::get_z(transform.get_scale()) * math::get_z(collider_scale)));
     
     // Set trigger or not
     {
