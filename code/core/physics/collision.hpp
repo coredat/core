@@ -14,8 +14,8 @@ class Collision
 {
 public:
 
-  explicit    Collision(const Core::Entity_ref ent_a,
-                        const Core::Entity_ref ent_b,
+  explicit    Collision(const Core::Entity_ref &ent_a,
+                        const Core::Entity_ref &ent_b,
                         const math::vec3 collision_norm,
                         const float pen_depth);
   

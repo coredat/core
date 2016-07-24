@@ -34,6 +34,8 @@ material_renderer(const math::mat4 &view_mat,
   static uint32_t runs_to_alloc_for = 128;
   
   Draw_run *runs = SCRATCH_ALIGNED_ALLOC(Draw_run, runs_to_alloc_for);
+  memset(runs, 0, sizeof(Draw_run) * runs_to_alloc_for);
+  
   uint32_t number_of_runs = 0;
   uint32_t number_of_draws = 0;
   {

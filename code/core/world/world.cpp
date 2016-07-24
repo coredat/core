@@ -220,6 +220,7 @@ World::think()
   uint32_t number_of_cam_runs = 0;
   
   Camera_utils::Cam_run *cam_runs = SCRATCH_ALIGNED_ALLOC(Camera_utils::Cam_run, cam_data->size);
+  memset(cam_runs, 0, sizeof(Camera_utils::Cam_run) * cam_data->size);
   {
     number_of_cam_runs = cam_data->size;
     
@@ -247,7 +248,9 @@ World::think()
     --
     Can we async this?
   */
-  ::Material_renderer::Draw_call *draw_calls = SCRATCH_ALIGNED_ALLOC(::Material_renderer::Draw_call, world->mesh_data->size);
+  const size_t draw_call_count = world->mesh_data->size;
+  ::Material_renderer::Draw_call *draw_calls = SCRATCH_ALIGNED_ALLOC(::Material_renderer::Draw_call, draw_call_count);
+  memset(draw_calls, 0, sizeof(::Material_renderer::Draw_call) * draw_call_count);
   {
     for(uint32_t i = 0; i < world->mesh_data->size; ++i)
     {

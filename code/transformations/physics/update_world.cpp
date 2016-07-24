@@ -62,6 +62,11 @@ update_world(std::shared_ptr<World_data::World> curr_world,
         return;
       }
       
+      if(number_of_callbacks >= 2048)
+      {
+        LOG_ERROR("too many collisions");
+      }
+      
       Core::Entity_ref coll_ent_a(util::generic_id_from_ptr(contact->bodyA->GetUserData()), world);
       Core::Entity_ref coll_ent_b(util::generic_id_from_ptr(contact->bodyB->GetUserData()), world);
       
@@ -71,16 +76,16 @@ update_world(std::shared_ptr<World_data::World> curr_world,
       assert(coll_ent_b.get_user_data());
       
       // Make two collisions for each entity.
-      collisions[number_of_callbacks++] = Core::Collision(coll_ent_a,
-                                                          coll_ent_b,
-                                                          math::vec3_from_qu3e(contact->manifold.normal),
-                                                          0);
+      new(&collisions[number_of_callbacks++]) Core::Collision(coll_ent_a,
+                                                              coll_ent_b,
+                                                              math::vec3_from_qu3e(contact->manifold.normal),
+                                                              0);
       
-      collisions[number_of_callbacks++] = Core::Collision(coll_ent_b,
-                                                          coll_ent_a,
-                                                          math::vec3_scale(math::vec3_from_qu3e(contact->manifold.normal), -1.f),
-                                                          0);
-      
+      new(&collisions[number_of_callbacks++]) Core::Collision(coll_ent_b,
+                                                              coll_ent_a,
+                                                              math::vec3_scale(math::vec3_from_qu3e(contact->manifold.normal), -1.f),
+                                                              0);
+          
     }
     
     /*

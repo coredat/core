@@ -5,8 +5,8 @@
 namespace Core {
 
 
-Collision::Collision(const Core::Entity_ref ent_a,
-                     const Core::Entity_ref ent_b,
+Collision::Collision(const Core::Entity_ref &ent_a,
+                     const Core::Entity_ref &ent_b,
                      const math::vec3 collision_norm,
                      const float pen_depth)
 : m_entity_a(ent_a)
