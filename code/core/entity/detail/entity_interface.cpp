@@ -351,12 +351,7 @@ update_collider(const util::generic_id this_id,
         r32 angle = 0;
         q3Vec3 axis;
         
-        // Convert transform to q3
-
         quat.ToAxisAngle(&axis, &angle);
-//        axis.z *= -1;
-//        axis.y *= -1;
-//        axis.x *= -1;
       
         reinterpret_cast<q3Body*>(body)->SetTransform(q3Vec3(math::get_x(transform->position), math::get_y(transform->position), math::get_z(transform->position)), axis, angle);
       }
