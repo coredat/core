@@ -2,10 +2,8 @@
 #define RAY_INCLUDED_0CE26212_29A8_4A9C_BC17_51438D62F208
 
 
-#include <core/entity/entity.hpp>
-#include <math/vec/vec3.hpp>
-#include <stddef.h>
-#include <vector> // Kill!
+#include <core/common/core_fwd.hpp>
+#include <core/common/core_types.hpp>
 
 
 /*
@@ -30,25 +28,22 @@ public:
   }; // enum
 
 
-  explicit              Ray(const math::vec3 from, const math::vec3 to, const Search search);
+  explicit              Ray(Core::World &world, // TODO: Const
+                            const math::vec3 from,
+                            const math::vec3 to,
+                            const Search search = Search::first);
   
-  bool                  has_hit() const                             { return m_results.size();          }
-  uint32_t                number_of_hits() const                    { return (uint32_t)m_results.size();  }
+                        ~Ray();
+  
+  bool                  has_hit() const;
+  uint32_t              number_of_hits() const;
 
-  Entity                get_entity(const uint32_t i) const;
-  math::vec3            get_position_of_hit(const uint32_t i) const   { return m_results.at(i).hit;       }
-  math::vec3            get_normal_of_hit(const uint32_t i) const     { return m_results.at(i).normal;    }
+  Entity_ref            get_entity(const uint32_t i) const;
   
 private:
   
-  struct Ray_result
-  {
-    util::generic_id id;
-    math::vec3 hit;
-    math::vec3 normal;
-  };
-  
-  std::vector<Ray_result> m_results;
+  struct Impl;
+  std::unique_ptr<Impl>   m_impl;
 
 }; // class
 

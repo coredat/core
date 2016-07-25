@@ -127,7 +127,6 @@ World::think()
   auto resources = Resource_data::get_resources();
   auto world = m_impl->world_data.get();
 
-
   // THIS MUST BE FIRST STATE CHANGES!
   // Otherwise we might process things that the calling code as already removed.
   {
@@ -141,8 +140,32 @@ World::think()
     // Reset the entity pool for new chandges.
     World_data::pending_scene_graph_change_reset(graph_changes);
   }
-
+  
   LOG_TODO_ONCE("scratch code to get rb transforms");
+  // Raycast test
+  {
+    class Raycast : public q3QueryCallback
+    {
+      bool ReportShape(q3Box *shape)
+      {
+        auto parent = shape->body;
+        auto user_data = util::generic_id_from_ptr(parent->GetUserData());
+        
+        return user_data != util::generic_id_invalid();
+      };
+      
+    } ray;
+    
+    q3RaycastData ray_data;
+    ray_data.start = q3Vec3(0,-10,0);
+    ray_data.dir = q3Vec3(0, 1, 0);
+    ray_data.t = r32(100000.0);
+    ray_data.toi = ray_data.t;
+    
+    world->scene.RayCast(&ray, ray_data);
+  }
+  
+  // Collisions
   {
     Core::Collision *collisions_arr;
     uint32_t number_of_collisions = 0;

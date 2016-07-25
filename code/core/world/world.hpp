@@ -66,6 +66,7 @@ private:
   friend class Core::Entity;
   friend class Core::Entity_ref;
   friend class Core::Camera;
+  friend class Core::Ray;
 
   std::shared_ptr<const World_data::World> get_world_data() const;
   std::shared_ptr<World_data::World>       get_world_data();
