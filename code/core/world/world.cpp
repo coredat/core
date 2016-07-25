@@ -3,6 +3,7 @@
 #include <core/physics/collision_pair.hpp>
 #include <core/physics/collision.hpp>
 #include <core/transform/transform.hpp>
+#include <core/entity/detail/entity_interface.hpp>
 
 #include <debug_gui/debug_menu.hpp>
 
@@ -147,8 +148,8 @@ World::think()
     uint32_t number_of_collisions = 0;
     
     Physics_transform::update_world(m_impl->world_data,
-                                  &collisions_arr,
-                                  &number_of_collisions);
+                                    &collisions_arr,
+                                    &number_of_collisions);
     
     if(number_of_collisions && m_impl->collision_callback)
     {
@@ -178,7 +179,12 @@ World::think()
         auto core_trans = to_core_trans(trans);
         core_trans.set_scale(old_tran.get_scale());
         
-        ref.set_transform(core_trans);
+//        ref.set_transform(core_trans);
+        
+        Core::Entity_detail::set_transform(m_impl->world_data->physics_data->physics_id[i],
+                                           m_impl->world_data.get(),
+                                           core_trans,
+                                           false);
       }
     }
   }

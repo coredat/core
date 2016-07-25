@@ -31,7 +31,7 @@ void                          remove_tag(const util::generic_id this_id, World_d
 void                          set_name(const util::generic_id this_id, World_data::World *world, const char* set_name);
 const char*                   get_name(const util::generic_id this_id, World_data::World *world);
 
-void                          set_transform(const util::generic_id this_id, World_data::World *world, const Transform &transform);
+void                          set_transform(const util::generic_id this_id, World_data::World *world, const Transform &transform, bool inform_phys_engine = true);
 Transform                     get_transform(const util::generic_id this_id, World_data::World *world);
 
 void                          set_renderer(const util::generic_id this_id, World_data::World *world, const Core::Renderer &renderer);

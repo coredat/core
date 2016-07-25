@@ -22,6 +22,7 @@
 #include <utilities/logging.hpp>
 #include <utilities/bits.hpp>
 #include <transformations/physics/core_to_qu3e.hpp>
+#include <transformations/physics/q3_math_extensions.hpp>
 
 
 namespace Core {
@@ -306,7 +307,8 @@ inline void
 update_collider(const util::generic_id this_id,
                 World_data::World *world,
                 const math::transform *transform,
-                const math::aabb *model_aabb)
+                const math::aabb *model_aabb,
+                const bool inform_phys_engine = true)
 {
   auto phys_data = world->physics_data;
   
@@ -340,27 +342,21 @@ update_collider(const util::generic_id this_id,
       World_data::physics_data_set_property_transform(phys_data, this_id, *transform);
       World_data::physics_data_set_property_transformed_aabb_collider(phys_data, this_id, collider_box);
       
-      uintptr_t body = 0;
-      World_data::physics_data_get_property_rigidbody(phys_data, this_id, &body);
-      
-      if(body)
+      if(inform_phys_engine)
       {
-        // This seems to be pointing in the wrong direction.
-        q3Quaternion quat(math::quat_get_x(transform->rotation),
-                          math::quat_get_y(transform->rotation),
-                          math::quat_get_z(transform->rotation),
-                          math::quat_get_w(transform->rotation));
+        uintptr_t body = 0;
+        World_data::physics_data_get_property_rigidbody(phys_data, this_id, &body);
         
-        r32 angle = 0;
-        q3Vec3 axis;
-        
-        quat.ToAxisAngle(&axis, &angle);
-      
-//        reinterpret_cast<q3Body*>(body)->SetTransform(q3Vec3(math::get_x(transform->position),
-//                                                             math::get_y(transform->position),
-//                                                             math::get_z(transform->position)),
-//                                                             axis,
-//                                                             angle);
+        if(body)
+        {
+          q3Vec3 pos;
+          q3Vec3 axis;
+          f32 angle;
+          
+          math::transform_to_q3(transform, &angle, &axis, &pos);
+          
+          reinterpret_cast<q3Body*>(body)->SetTransform(pos, axis, angle);
+        }
       }
       
       World_data::data_unlock(phys_data);
@@ -375,7 +371,8 @@ update_collider(const util::generic_id this_id,
 void
 set_transform(const util::generic_id this_id,
               World_data::World *world,
-              const Transform &set_transform)
+              const Transform &set_transform,
+              bool inform_phys_engine)
 {
   if(!is_valid(this_id, world))
   {
@@ -395,7 +392,7 @@ set_transform(const util::generic_id this_id,
   
   // TODO: Some possible async ness here?
   update_transform(this_id, world, &new_transform);
-  update_collider(this_id, world, &new_transform, &curr_aabb);
+  update_collider(this_id, world, &new_transform, &curr_aabb, inform_phys_engine);
   update_mesh_renderer(this_id, world, &new_transform);
 }
 
