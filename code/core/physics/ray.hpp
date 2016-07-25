@@ -30,7 +30,7 @@ public:
 
   explicit              Ray(Core::World &world, // TODO: Const
                             const math::vec3 from,
-                            const math::vec3 to,
+                            const math::vec3 dir,
                             const Search search = Search::first);
   
                         ~Ray();
@@ -38,7 +38,10 @@ public:
   bool                  has_hit() const;
   uint32_t              number_of_hits() const;
 
-  Entity_ref            get_entity(const uint32_t i) const;
+  Entity_ref            get_entity(const uint32_t i = 0) const;
+  math::vec3            get_hit_position(const uint32_t i = 0) const;
+  math::vec3            get_hit_normal(const uint32_t i = 0) const;
+  float                 get_distance(const uint32_t i = 0) const;
   
 private:
   
