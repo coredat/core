@@ -346,14 +346,21 @@ update_collider(const util::generic_id this_id,
       if(body)
       {
         // This seems to be pointing in the wrong direction.
-        q3Quaternion quat(math::quat_get_x(transform->rotation), math::quat_get_y(transform->rotation), math::quat_get_z(transform->rotation), math::quat_get_w(transform->rotation));
+        q3Quaternion quat(math::quat_get_x(transform->rotation),
+                          math::quat_get_y(transform->rotation),
+                          math::quat_get_z(transform->rotation),
+                          math::quat_get_w(transform->rotation));
         
         r32 angle = 0;
         q3Vec3 axis;
         
         quat.ToAxisAngle(&axis, &angle);
       
-        reinterpret_cast<q3Body*>(body)->SetTransform(q3Vec3(math::get_x(transform->position), math::get_y(transform->position), math::get_z(transform->position)), axis, angle);
+//        reinterpret_cast<q3Body*>(body)->SetTransform(q3Vec3(math::get_x(transform->position),
+//                                                             math::get_y(transform->position),
+//                                                             math::get_z(transform->position)),
+//                                                             axis,
+//                                                             angle);
       }
       
       World_data::data_unlock(phys_data);

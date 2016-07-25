@@ -72,8 +72,6 @@ update_world(std::shared_ptr<World_data::World> curr_world,
       
       assert(coll_ent_a.is_valid());
       assert(coll_ent_b.is_valid());
-      assert(coll_ent_a.get_user_data());
-      assert(coll_ent_b.get_user_data());
       
       // Make two collisions for each entity.
       new(&collisions[number_of_callbacks++]) Core::Collision(coll_ent_a,

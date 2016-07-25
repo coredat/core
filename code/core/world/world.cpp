@@ -42,6 +42,7 @@
 #include <graphics_api/clear.hpp>
 
 #include <3rdparty/qu3e/q3.h>
+#include <transformations/physics/q3_math_extensions.hpp>
 
 
 namespace Core {
@@ -159,22 +160,8 @@ World::think()
     
     auto to_core_trans = [](const q3Transform &other)
     {
-      Core::Transform trans;
-      trans.set_position(math::vec3_init(other.position.x, other.position.y, other.position.z));
-      
-      const float arr_mat[] = {
-        other.rotation.ex.x, other.rotation.ex.y, other.rotation.ex.z,
-        other.rotation.ey.x, other.rotation.ey.y, other.rotation.ey.z,
-        other.rotation.ez.x, other.rotation.ez.y, other.rotation.ez.z,
-      };
-      
-      const math::mat3 q3_rot_mat = math::mat3_init_with_array(arr_mat);
-      const math::mat3 q3_rot_mat_tr = math::mat3_get_transpose(q3_rot_mat);
-      const math::quat fianl_rot = math::quat_init_with_mat3(q3_rot_mat_tr);
-      
-      trans.set_rotation(fianl_rot);
-      
-      return trans;
+      math::transform trans = math::transform_init_from_q3(other);
+      return Core::Transform(trans.position, trans.scale, trans.rotation);
     };
   
     for(size_t i = 0; i < m_impl->world_data->physics_data->size; ++i)
@@ -183,7 +170,8 @@ World::think()
       {
         auto trans = reinterpret_cast<q3Body*>(m_impl->world_data->physics_data->property_rigidbody[i])->GetTransform();
         
-        Core::Entity_ref ref(m_impl->world_data->physics_data->physics_id[i], m_impl->world_data);
+        Core::Entity_ref ref(m_impl->world_data->physics_data->physics_id[i],
+                             m_impl->world_data);
         
         auto old_tran = ref.get_transform();
         
