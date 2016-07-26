@@ -20,6 +20,7 @@ struct Texture
   uint32_t        width       = 0;
   uint32_t        height      = 0;
   uint32_t        depth       = 0;
+  bool            has_mips    = false;
 }; // struct
 
 
@@ -37,6 +38,7 @@ texture_create_2d(Texture *out_texture,
                   const uint32_t width,
                   const uint32_t height,
                   const GLenum format,
+                  const bool has_mips,
                   const void *data);
 
 

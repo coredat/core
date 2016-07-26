@@ -10,6 +10,7 @@ texture_create_2d(Texture *out_texture,
                   const uint32_t width,
                   const uint32_t height,
                   const GLenum format,
+                  const bool create_mips,
                   const void *data)
 {
   // Param check
@@ -42,6 +43,7 @@ texture_create_2d(Texture *out_texture,
   out_texture->width     = width;
   out_texture->height    = height;
   out_texture->dimention = GL_TEXTURE_2D;
+  out_texture->has_mips  = create_mips;
   
   const auto pixel_format      = pixel_format_get_format(format);
   const auto pixel_format_type = pixel_format_get_type(format);
@@ -59,7 +61,10 @@ texture_create_2d(Texture *out_texture,
                pixel_format_type,
                data);
   
-  glGenerateMipmap(GL_TEXTURE_2D);
+  if(create_mips)
+  {
+    glGenerateMipmap(GL_TEXTURE_2D);
+  }
 }
 
 
@@ -107,6 +112,11 @@ texture_update_texture_2d(Texture *update_texture,
                   pixel_format_get_format(update_texture->format),
                   pixel_format_get_type(update_texture->format),
                   data);
+  
+//  if(update_texture->has_mips)
+  {
+    glGenerateMipmap(GL_TEXTURE_2D);
+  }
   
   // Calling code checks for error.
 }

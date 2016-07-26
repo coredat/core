@@ -47,6 +47,10 @@ uint32_t
 pixel_format_alpha_bits(const Pixel_format fmt);
 
 
+const char*
+pixel_format_component_name(const Pixel_format fmt);
+
+
 } // ns
 
 
