@@ -18,7 +18,7 @@ create_texture_from_file(const char *filepath, Ogl::Texture *texture)
                                        0,
                                        SOIL_LOAD_RGBA);
 
-  Ogl::texture_create_2d(texture, width, height, GL_RGBA, img);
+  Ogl::texture_create_2d(texture, width, height, GL_RGBA, true, img);
   
   SOIL_free_image_data(img);
 }

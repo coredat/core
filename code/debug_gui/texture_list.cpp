@@ -1,6 +1,7 @@
 #include <debug_gui/texture_list.hpp>
 #include <data/global_data/texture_data.hpp>
 #include <3rdparty/imgui/imgui.h>
+#include <graphics_api/ogl/ogl_pixel_format.hpp>
 
 
 namespace Debug_menu {
@@ -33,7 +34,7 @@ display_texture_list(Resource_data::Texture_data *data)
 
       ImGui::PushID(count);
       ImGui::Image((void*)(uintptr_t)tex.texture_id, // casting :/
-                   ImVec2(64, 64),
+                   ImVec2(128, 128),
                    ImVec2(0,0),
                    ImVec2(1,1),
                    ImColor(255,255,255,255),
@@ -43,7 +44,7 @@ display_texture_list(Resource_data::Texture_data *data)
       Resource_data::texture_data_get_property_name(data, data->texture_id[i], &name);
       if (ImGui::IsItemHovered())
       {
-        ImGui::SetTooltip("Name: %s, Width: %d, Height: %d", name, tex.width, tex.height);
+        ImGui::SetTooltip("Name: %s, Width: %d, Height: %d, Format: %s", name, tex.width, tex.height, Ogl::pixel_format_get_name(tex.format));
       }
 
 

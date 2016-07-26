@@ -10,6 +10,10 @@ class Font
 public:
 
   explicit          Font(const char *filename);
+  
+private:
+
+  struct Impl;
 
 };
 

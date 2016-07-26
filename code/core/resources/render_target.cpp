@@ -35,8 +35,8 @@ Render_target::Render_target(const uint32_t width,
   Ogl::Texture depth_buffer;
   Ogl::Texture stencil_buffer;
   {
-    Ogl::texture_create_2d(&texture, width, height, Ogl::pixel_format_get_gl_internal_format(fmt), nullptr);
-    Ogl::texture_create_2d(&depth_buffer, width, height, GL_DEPTH24_STENCIL8, nullptr); // This isn't working.
+    Ogl::texture_create_2d(&texture, width, height, Ogl::pixel_format_get_gl_internal_format(fmt), false, nullptr);
+    Ogl::texture_create_2d(&depth_buffer, width, height, GL_DEPTH24_STENCIL8, false, nullptr); // This isn't working.
     Ogl::frame_buffer_create(&fbo, &texture, 1, &depth_buffer, &stencil_buffer);
     
     LOG_TODO_ONCE("Get rid of this error clear");

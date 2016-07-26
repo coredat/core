@@ -15,6 +15,9 @@ public:
   explicit            Texture();                              //!< Creates an invalid texture
   explicit            Texture(const util::generic_id id);     //!< Creates a texture from an existing id. Internal use only, this will be removed from public interface.
   explicit            Texture(const char * filepath);         //!< Loads a texture from a file name. Check exists() for the result.
+  explicit            Texture(const uint32_t width,
+                              const uint32_t height,
+                              const void *data = nullptr);
   
                       ~Texture();
   
@@ -23,6 +26,14 @@ public:
   
   Texture&            operator=(const Texture&);
   Texture&            operator=(Texture&&);
+  
+  
+  void                update_sub_texture(const uint32_t x_offset,
+                                         const uint32_t y_offset,
+                                         const uint32_t width,
+                                         const uint32_t height,
+                                         const void *data);
+  
   
   uint32_t            get_width() const;                      //!< Get the width of the loaded texture.
   uint32_t            get_height() const;                     //!< Get the height of the loaded texture.

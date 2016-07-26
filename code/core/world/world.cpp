@@ -244,7 +244,12 @@ World::think()
     // Generate cam_run data
     {
       Core::Transform *cam_transforms = SCRATCH_ALIGNED_ALLOC(Core::Transform, cam_data->size);
-      Camera_utils::get_camera_transforms(world->transform, cam_data->property_entity_id, cam_transforms, cam_data->size);
+      
+      Camera_utils::get_camera_transforms(world->transform,
+                                          cam_data->property_entity_id,
+                                          cam_transforms,
+                                          cam_data->size);
+      
       Camera_utils::calculate_camera_runs(cam_data,
                                           Resource_data::get_resources()->texture_data,
                                           cam_transforms,
@@ -300,7 +305,7 @@ World::think()
     Render the world
     --
     Takes the camera, and draw calls and renders the world accordingly.
-  */  
+  */
   uint32_t number_of_draw_calls = 0;
   Rendering::render_main_scene(m_impl->dt,
                                m_impl->running_time,
