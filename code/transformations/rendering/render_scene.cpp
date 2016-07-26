@@ -3,7 +3,7 @@
 #include <systems/renderer_material/material.hpp>
 #include <systems/renderer_post/post_process.hpp>
 #include <systems/renderer_post/post_shader.hpp>
-
+#include <renderer/debug_line_renderer/debug_line_renderer.hpp>
 #include <transformations/rendering/material_renderer.hpp>
 #include <core/color/color_utils.hpp>
 #include <graphics_api/clear.hpp>
@@ -88,6 +88,9 @@ render_main_scene(const float delta_time,
                                                            mesh_renderer_data,
                                                            draw_calls,
                                                            mesh_renderer_data->size);
+      
+      math::mat4 wvp = math::mat4_multiply(cam->view, cam->proj);
+      ::Debug_line_renderer::render(math::mat4_get_data(wvp));
     }
     else
     // Post process rendering

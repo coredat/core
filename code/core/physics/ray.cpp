@@ -4,6 +4,7 @@
 #include <3rdparty/qu3e/q3.h>
 #include <data/world_data/world_pools.hpp>
 #include <transformations/physics/q3_math_extensions.hpp>
+#include <utilities/logging.hpp>
 
 
 namespace Core {
@@ -15,19 +16,23 @@ struct Ray::Impl
   {
     bool ReportShape(q3Box *shape)
     {
-      auto parent = shape->body;
-      auto user_data = util::generic_id_from_ptr(parent->GetUserData());
+      if(distance > ray_data.toi)
+      {
+        distance = ray_data.toi;
+        auto parent = shape->body;
+        auto user_data = util::generic_id_from_ptr(parent->GetUserData());
+        
+        hit = Entity_ref(user_data, data);
+      }
       
-      hit = Entity_ref(user_data, data);
-      
-      
-      return user_data != util::generic_id_invalid();
+      return hit;
     }
     
     std::shared_ptr<World_data::World> data;
     Entity_ref hit;
     math::vec3 hit_pos = math::vec3_zero();
     q3RaycastData ray_data;
+    float distance = FLT_MAX;
   };
   
   Ray_cast ray;
@@ -78,11 +83,13 @@ Ray::get_entity(const uint32_t i) const
 math::vec3
 Ray::get_hit_position(const uint32_t i) const
 {
+  LOG_TODO_ONCE("Need to store the vectors, as the callback might get used multiple times.");
+
   if(i == 0)
   {
     const math::vec3 start = math::vec3_from_q3vec(m_impl->ray.ray_data.start);
     const math::vec3 dir = math::vec3_from_q3vec(m_impl->ray.ray_data.dir);
-    const math::vec3 scaled_dir = math::vec3_scale(dir, m_impl->ray.ray_data.toi);
+    const math::vec3 scaled_dir = math::vec3_scale(dir, m_impl->ray.distance);
     
     return math::vec3_add(start, scaled_dir);
   }
@@ -108,7 +115,7 @@ Ray::get_distance(const uint32_t i) const
 {
   if(i == 0)
   {
-    return m_impl->ray.ray_data.toi;
+    return m_impl->ray.distance;
   }
   
   return FLT_MAX;
