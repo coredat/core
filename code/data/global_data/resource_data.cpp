@@ -45,6 +45,10 @@ resources_init()
   static Text_mesh_data text_mesh_data;
   text_mesh_data_init(&text_mesh_data, 1024);
   data->text_mesh_data = &text_mesh_data;
+  
+  static Font_data font_data;
+  font_data_init(&font_data, 32);
+  data->font_data = &font_data;
 }
 
 

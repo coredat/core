@@ -9,6 +9,7 @@
 #include "texture_data.hpp"
 #include "post_process_data.hpp"
 #include "text_mesh_data.hpp"
+#include "font_data.hpp"
 
 
 namespace Resource_data {
@@ -23,7 +24,7 @@ struct Resources
   Post_process_data *post_data   = nullptr;
   Text_mesh_data *text_mesh_data = nullptr;
   Audio_pool    *audio_pool      = nullptr;
-  
+  Font_data     *font_data       = nullptr;
 };
 
 

@@ -14,3 +14,8 @@ data:
       type: FT_Face
       return: value
       include: <ft2build.h>
+
+    - name: texture_id
+      type: util::generic_id
+      return: value
+      include: <utilities/generic_id.hpp>

@@ -6,8 +6,8 @@
 */
 
 
-#ifndef FONT_DATA_INCLUDED_43B0BA8E_35C1_4846_8E9A_FE25AAB0E245
-#define FONT_DATA_INCLUDED_43B0BA8E_35C1_4846_8E9A_FE25AAB0E245
+#ifndef FONT_DATA_INCLUDED_E046CB13_32D0_46C8_B682_24C36475750B
+#define FONT_DATA_INCLUDED_E046CB13_32D0_46C8_B682_24C36475750B
 
 
 #include <utilities/generic_id.hpp>
@@ -31,6 +31,7 @@ struct Font_data
 
   // Properties
   FT_Face *property_font_face = nullptr;
+  util::generic_id *property_texture_id = nullptr;
 
   // Size information
   size_t size = 0;
@@ -143,6 +144,28 @@ font_data_get_property_font_face(const Font_data *data, const util::generic_id k
 */
 bool
 font_data_set_property_font_face(Font_data *data,  const util::generic_id key, const FT_Face value);
+
+
+/*!
+  \brief Getter for property_texture_id.
+  \param data The container to get information from.
+  \param key The key to search for.
+  \param value The output value, which will be set if the key is found.
+  \return Returns true if the data was found.
+*/
+bool
+font_data_get_property_texture_id(const Font_data *data, const util::generic_id key, util::generic_id *value);
+
+
+/*!
+  \brief Setter for property_texture_id.
+  \param data The container to update.
+  \param key The key to search for.
+  \param value The new value of the data.
+  \return Returns true if the data was set.
+*/
+bool
+font_data_set_property_texture_id(Font_data *data,  const util::generic_id key, const util::generic_id value);
 
 
 } // ns

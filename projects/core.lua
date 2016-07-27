@@ -67,5 +67,6 @@ core_project_data = {
     "-lsdl2",
     "-lsdl2_mixer",
     "-lSOIL",
+    "-lfreetype",
   },
 }

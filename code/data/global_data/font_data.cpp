@@ -28,8 +28,9 @@ font_data_init(Font_data *data, const size_t size_hint)
   // Calculate the various sizes of things.
   const size_t bytes_font_id = sizeof(*data->font_id) * size_hint + simd_buffer;
   const size_t bytes_property_font_face = sizeof(*data->property_font_face) * size_hint + simd_buffer;
+  const size_t bytes_property_texture_id = sizeof(*data->property_texture_id) * size_hint + simd_buffer;
 
-  const size_t bytes_to_alloc = bytes_font_id + bytes_property_font_face;
+  const size_t bytes_to_alloc = bytes_font_id + bytes_property_font_face + bytes_property_texture_id;
 
   // Allocate some memory.
   util::memory_chunk *data_memory = const_cast<util::memory_chunk*>(&data->memory);
@@ -68,6 +69,19 @@ font_data_init(Font_data *data, const size_t size_hint)
       #endif
 
       byte_counter += bytes_property_font_face;
+      assert(byte_counter <= bytes_to_alloc);
+    }
+    // Assign property_texture_id memory
+    {
+      void *offset = util::mem_offset(alloc_start, byte_counter);
+      void *aligned = util::mem_next_16byte_boundry(offset);
+
+      data->property_texture_id = reinterpret_cast<util::generic_id*>(aligned);
+      #ifndef NDEBUG
+      memset(offset, 0, bytes_property_texture_id);
+      #endif
+
+      byte_counter += bytes_property_texture_id;
       assert(byte_counter <= bytes_to_alloc);
     }
   }
@@ -150,6 +164,7 @@ font_data_push_back(Font_data *data, const util::generic_id key, size_t *out_ind
   // Memset the properties
   {
     memset(&data->property_font_face[index], 0, sizeof(*data->property_font_face));
+    memset(&data->property_texture_id[index], 0, sizeof(*data->property_texture_id));
   }
 
   return true;
@@ -176,6 +191,7 @@ font_data_erase(Font_data *data, const util::generic_id key)
     // Shuffle the memory down.
     memmove(&data->font_id[index_to_erase], &data->font_id[start_index], size_to_end * sizeof(*data->font_id));
     memmove(&data->property_font_face[index_to_erase], &data->property_font_face[start_index], size_to_end * sizeof(*data->property_font_face));
+    memmove(&data->property_texture_id[index_to_erase], &data->property_texture_id[start_index], size_to_end * sizeof(*data->property_texture_id));
   }
   else
   {
@@ -241,6 +257,52 @@ font_data_set_property_font_face(Font_data *data,  const util::generic_id key, c
   if(font_data_exists(data, key, &index))
   {
     data->property_font_face[index] = value;
+  }
+  else
+  {
+    LOG_ERROR(Error_string::entity_not_found());
+    assert(false);
+
+    return false;
+  }
+
+  return true;
+}
+
+
+
+
+bool
+font_data_get_property_texture_id(const Font_data *data, const util::generic_id key, util::generic_id *out_value)
+{
+  size_t index;
+
+  if(font_data_exists(data, key, &index))
+  {
+    *out_value = data->property_texture_id[index];
+  }
+  else
+  {
+    LOG_ERROR(Error_string::entity_not_found());
+    assert(false);
+
+    return false;
+  }
+
+  return true;
+}
+
+
+bool
+font_data_set_property_texture_id(Font_data *data,  const util::generic_id key, const util::generic_id value)
+{
+  assert(data && key);
+
+  size_t index;
+
+  if(font_data_exists(data, key, &index))
+  {
+    data->property_texture_id[index] = value;
   }
   else
   {
