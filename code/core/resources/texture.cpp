@@ -125,7 +125,7 @@ Texture::Texture(const uint32_t width,
   // Load up a new texture
   {
     Ogl::Texture new_texture;
-    Ogl::texture_create_2d(&new_texture, width, height, GL_RED, false, data);
+    Ogl::texture_create_2d(&new_texture, width, height, GL_RGBA, false, data);
    
     auto tex_data = Resource_data::get_resources()->texture_data;
     assert(tex_data);
@@ -215,7 +215,6 @@ Texture::update_sub_texture(const uint32_t x_offset,
                             const uint32_t height,
                             const void *data)
 {
-  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
   Ogl::Texture get_texture = get_texture_data(m_impl->texture_id);
   Ogl::texture_update_texture_2d(&get_texture, x_offset, y_offset, width, height, data);
   

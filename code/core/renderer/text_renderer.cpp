@@ -3,6 +3,7 @@
 #include <core/font/font.hpp>
 #include <data/global_data/text_mesh_data.hpp>
 #include <data/global_data/resource_data.hpp>
+#include <systems/text/character.hpp>
 
 
 namespace Core {
@@ -95,23 +96,40 @@ Text_renderer::set_text(const char *str)
     static int pointer_x = 0;
     static int pointer_y = 0;
     
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    
     while(curr_char != '\0')
     {
+      // Check to see if the character exists already.
+      
+      
+      // If it doesn't exsit already add it
       FT_Load_Char(face, curr_char, FT_LOAD_RENDER);
       curr_char = str[++char_index];
       
       if(face->glyph->bitmap.buffer)
       {
+        const unsigned int width = face->glyph->bitmap.width;
+        const unsigned int height = face->glyph->bitmap.rows;
+      
+        Text::Character glyph_details;
+        glyph_details.uv[0] = math::to_float(pointer_x) / math::to_float(glyph_texture.width);
+        glyph_details.uv[1] = math::to_float(pointer_y) / math::to_float(glyph_texture.height);
+        
+        glyph_details.st[0] = math::to_float(pointer_x + width) / math::to_float(glyph_texture.width);
+        glyph_details.st[1] = math::to_float(pointer_y + height) / math::to_float(glyph_texture.height);
+        
+        glyph_details.advance[0] = face->glyph->advance.x;
+        glyph_details.advance[1] = face->glyph->advance.y;
+        
+///        assert(false); // this is where I'm at
+      
         Ogl::texture_update_texture_2d(&glyph_texture,
                                        pointer_x,
                                        pointer_y,
-                                       face->glyph->bitmap.width,
-                                       face->glyph->bitmap.rows,
+                                       width,
+                                       height,
                                        face->glyph->bitmap.buffer);
         
-        pointer_x += face->glyph->bitmap.width;
+        pointer_x += width;
       }
       else
       {

@@ -102,6 +102,11 @@ texture_update_texture_2d(Texture *update_texture,
     return;
   }
   
+  if(update_texture->format == GL_RED)
+  {
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+  }
+  
   glBindTexture(GL_TEXTURE_2D, update_texture->texture_id);
   glTexSubImage2D(GL_TEXTURE_2D,
                   0,
@@ -116,6 +121,12 @@ texture_update_texture_2d(Texture *update_texture,
 //  if(update_texture->has_mips)
   {
     glGenerateMipmap(GL_TEXTURE_2D);
+  }
+  
+  // Put packing back to what it was.
+  if(update_texture->format == GL_RED)
+  {
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
   }
   
   // Calling code checks for error.
