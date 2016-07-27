@@ -40,6 +40,7 @@ core_project_data = {
 
   inc_dirs_macosx = {
     "/usr/local/include/",
+    "/usr/local/include/freetype2/",
   },
 
   lib_dirs_windows = {

@@ -1,0 +1,16 @@
+data:
+  name: font
+  namespace: Resource_data
+  header_dir: data/global_data/
+  path: code/data/global_data/
+
+  key:
+    name: font_id
+    search_type: binary
+    auto_increment: false
+
+  properties:
+    - name: font_face
+      type: FT_Face
+      return: value
+      include: <ft2build.h>

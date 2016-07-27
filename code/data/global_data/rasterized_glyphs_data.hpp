@@ -6,32 +6,30 @@
 */
 
 
-#ifndef TRANSFORM_DATA_INCLUDED_3C37AF0B_DABE_40F3_85BD_CF8B24F3481D
-#define TRANSFORM_DATA_INCLUDED_3C37AF0B_DABE_40F3_85BD_CF8B24F3481D
+#ifndef RASTERIZED_GLYPHS_DATA_INCLUDED_36464A6B_C53E_489A_A34D_28E7D743737F
+#define RASTERIZED_GLYPHS_DATA_INCLUDED_36464A6B_C53E_489A_A34D_28E7D743737F
 
 
 #include <utilities/generic_id.hpp>
 #include <utilities/memory_pool.hpp>
 #include <stddef.h>
-#include <math/transform/transform.hpp>
-#include <math/geometry/aabb.hpp>
+#include <systems/text/character.hpp>
 
 
-namespace World_data {
+namespace Resource_data {
 
 
 
 /*!
-  \brief Auto-generated structure for Transform_data
+  \brief Auto-generated structure for Rasterized_glyphs_data
 */
-struct Transform_data
+struct Rasterized_glyphs_data
 {
   // Data Key
-  util::generic_id *transform_id = nullptr;
+  util::generic_id *rasterized_glyphs_id = nullptr;
 
   // Properties
-  math::transform *property_transform = nullptr;
-  math::aabb *property_aabb = nullptr;
+  Text::Character *property_character = nullptr;
 
   // Size information
   size_t size = 0;
@@ -45,12 +43,12 @@ struct Transform_data
 
 
 /*!
-  \brief initialise the Transform_data structure, this is will allocate the memory for the keys and properties. Function will take a lock.
+  \brief initialise the Rasterized_glyphs_data structure, this is will allocate the memory for the keys and properties. Function will take a lock.
   \param data This structure to initialise.
   \param size_hint This helps the init function allocate the correct memory.
 */
 void
-transform_data_init(Transform_data *data, const size_t size_hint);
+rasterized_glyphs_data_init(Rasterized_glyphs_data *data, const size_t size_hint);
 
 
 /*!
@@ -58,7 +56,7 @@ transform_data_init(Transform_data *data, const size_t size_hint);
   \param data The data to free.
 */
 void
-transform_data_free(Transform_data *data);
+rasterized_glyphs_data_free(Rasterized_glyphs_data *data);
 
 
 /*!
@@ -66,7 +64,7 @@ transform_data_free(Transform_data *data);
   \param data The structure which to find the size.
 */
 size_t
-transform_data_get_size(const Transform_data *data);
+rasterized_glyphs_data_get_size(const Rasterized_glyphs_data *data);
 
 
 /*!
@@ -74,7 +72,7 @@ transform_data_get_size(const Transform_data *data);
   \param data The structure which to find the capacity.
 */
 size_t
-transform_data_get_capacity(const Transform_data *data);
+rasterized_glyphs_data_get_capacity(const Rasterized_glyphs_data *data);
 
 
 /*!
@@ -82,7 +80,7 @@ transform_data_get_capacity(const Transform_data *data);
   \param data The container to lock.
 */
 void
-data_lock(const Transform_data *data);
+data_lock(const Rasterized_glyphs_data *data);
 
 
 /*!
@@ -90,7 +88,7 @@ data_lock(const Transform_data *data);
   \param The container to unlock
 */
 void
-data_unlock(const Transform_data *data);
+data_unlock(const Rasterized_glyphs_data *data);
 
 /*!
   \brief Push back a new element, increases the size by 1. (Does not take a lock).
@@ -100,7 +98,7 @@ data_unlock(const Transform_data *data);
   \return Returns true if it was successful.
 */
 bool
-transform_data_push_back(Transform_data *data, const util::generic_id key, size_t *out_index = nullptr);
+rasterized_glyphs_data_push_back(Rasterized_glyphs_data *data, const util::generic_id key, size_t *out_index = nullptr);
 
 
 /*!
@@ -110,7 +108,7 @@ transform_data_push_back(Transform_data *data, const util::generic_id key, size_
   \return Returns true if it was successful.
 */
 bool
-transform_data_erase(Transform_data *data, const util::generic_id key);
+rasterized_glyphs_data_erase(Rasterized_glyphs_data *data, const util::generic_id key);
 
 
 /*!
@@ -121,51 +119,29 @@ transform_data_erase(Transform_data *data, const util::generic_id key);
   \return Returns true if a key was found.
 */
 bool
-transform_data_exists(const Transform_data *data, const util::generic_id key, size_t *out_index = nullptr);
+rasterized_glyphs_data_exists(const Rasterized_glyphs_data *data, const util::generic_id key, size_t *out_index = nullptr);
 
 
 /*!
-  \brief Getter for property_transform.
+  \brief Getter for property_character.
   \param data The container to get information from.
   \param key The key to search for.
   \param value The output value, which will be set if the key is found.
   \return Returns true if the data was found.
 */
 bool
-transform_data_get_property_transform(const Transform_data *data, const util::generic_id key, math::transform *value);
+rasterized_glyphs_data_get_property_character(const Rasterized_glyphs_data *data, const util::generic_id key, Text::Character *value);
 
 
 /*!
-  \brief Setter for property_transform.
+  \brief Setter for property_character.
   \param data The container to update.
   \param key The key to search for.
   \param value The new value of the data.
   \return Returns true if the data was set.
 */
 bool
-transform_data_set_property_transform(Transform_data *data,  const util::generic_id key, const math::transform value);
-
-
-/*!
-  \brief Getter for property_aabb.
-  \param data The container to get information from.
-  \param key The key to search for.
-  \param value The output value, which will be set if the key is found.
-  \return Returns true if the data was found.
-*/
-bool
-transform_data_get_property_aabb(const Transform_data *data, const util::generic_id key, math::aabb *value);
-
-
-/*!
-  \brief Setter for property_aabb.
-  \param data The container to update.
-  \param key The key to search for.
-  \param value The new value of the data.
-  \return Returns true if the data was set.
-*/
-bool
-transform_data_set_property_aabb(Transform_data *data,  const util::generic_id key, const math::aabb value);
+rasterized_glyphs_data_set_property_character(Rasterized_glyphs_data *data,  const util::generic_id key, const Text::Character value);
 
 
 } // ns
