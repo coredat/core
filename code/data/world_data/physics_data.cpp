@@ -232,7 +232,7 @@ physics_data_erase(Physics_data *data, const util::generic_id key)
     const size_t size_to_end = data->size - index_to_erase - 1;
 
     --(data->size);
-    
+
     // Shuffle the memory down.
     memmove(&data->physics_id[index_to_erase], &data->physics_id[start_index], size_to_end * sizeof(*data->physics_id));
     memmove(&data->property_transform[index_to_erase], &data->property_transform[start_index], size_to_end * sizeof(*data->property_transform));
@@ -495,7 +495,7 @@ physics_data_get_property_rigidbody(const Physics_data *data, const util::generi
 
 
 bool
-physics_data_set_property_rigidbody(Physics_data *data,  const util::generic_id key, uintptr_t value)
+physics_data_set_property_rigidbody(Physics_data *data,  const util::generic_id key, const uintptr_t value)
 {
   assert(data && key);
 

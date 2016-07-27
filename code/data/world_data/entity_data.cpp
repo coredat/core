@@ -9,7 +9,6 @@
 #include <common/error_strings.hpp>
 #include <utilities/logging.hpp>
 #include <utilities/memory.hpp>
-#include <utilities/string_helpers.hpp>
 #include <assert.h>
 #include <cstring>
 
@@ -270,7 +269,7 @@ entity_data_exists(const Entity_data *data, const util::generic_id key, size_t *
   size_t no_index;
   if(!out_index) { out_index = &no_index; }
 
-  found = util::generic_id_search_linear(out_index, key, data->entity_id, data->size);
+  found = util::generic_id_search_binary(out_index, key, data->entity_id, data->size);
 
   return found;
 }

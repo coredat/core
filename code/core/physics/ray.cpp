@@ -45,12 +45,11 @@ Ray::Ray(Core::World &world,
          const Search search)
 : m_impl(new Impl)
 {
-  m_impl->ray.data = world.get_world_data();
-
+  m_impl->ray.data           = world.get_world_data();
   m_impl->ray.ray_data.start = math::vec3_to_q3vec(from);
-  m_impl->ray.ray_data.dir = math::vec3_to_q3vec(math::vec3_normalize(dir));
-  m_impl->ray.ray_data.t = FLT_MAX;
-  m_impl->ray.ray_data.toi = m_impl->ray.ray_data.t;
+  m_impl->ray.ray_data.dir   = math::vec3_to_q3vec(math::vec3_normalize(dir));
+  m_impl->ray.ray_data.t     = FLT_MAX;
+  m_impl->ray.ray_data.toi   = m_impl->ray.ray_data.t;
   
   world.get_world_data()->scene.RayCast(&m_impl->ray, m_impl->ray.ray_data);
 }
@@ -87,8 +86,8 @@ Ray::get_hit_position(const uint32_t i) const
 
   if(i == 0)
   {
-    const math::vec3 start = math::vec3_from_q3vec(m_impl->ray.ray_data.start);
-    const math::vec3 dir = math::vec3_from_q3vec(m_impl->ray.ray_data.dir);
+    const math::vec3 start      = math::vec3_from_q3vec(m_impl->ray.ray_data.start);
+    const math::vec3 dir        = math::vec3_from_q3vec(m_impl->ray.ray_data.dir);
     const math::vec3 scaled_dir = math::vec3_scale(dir, m_impl->ray.distance);
     
     return math::vec3_add(start, scaled_dir);

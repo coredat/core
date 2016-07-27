@@ -6,8 +6,8 @@
 */
 
 
-#ifndef PHYSICS_DATA_INCLUDED_DD3AF454_4414_4153_A618_0C101A474A84
-#define PHYSICS_DATA_INCLUDED_DD3AF454_4414_4153_A618_0C101A474A84
+#ifndef PHYSICS_DATA_INCLUDED_DB9492A1_BC88_4992_ADF8_F4B12E7CF5C1
+#define PHYSICS_DATA_INCLUDED_DB9492A1_BC88_4992_ADF8_F4B12E7CF5C1
 
 
 #include <utilities/generic_id.hpp>
@@ -247,7 +247,7 @@ physics_data_get_property_rigidbody(const Physics_data *data, const util::generi
   \return Returns true if the data was set.
 */
 bool
-physics_data_set_property_rigidbody(Physics_data *data,  const util::generic_id key,  uintptr_t value);
+physics_data_set_property_rigidbody(Physics_data *data,  const util::generic_id key, const uintptr_t value);
 
 
 } // ns
