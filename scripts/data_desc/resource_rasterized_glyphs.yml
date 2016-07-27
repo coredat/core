@@ -1,0 +1,16 @@
+data:
+  name: rasterized_glyphs
+  namespace: Resource_data
+  header_dir: data/global_data/
+  path: code/data/global_data/
+
+  key:
+    name: font_char_id
+    search_type: binary
+    auto_increment: false
+
+  properties:
+    - name: character
+      type: Text::Character
+      return: value
+      include: <systems/text/character.hpp>
