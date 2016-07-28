@@ -20,8 +20,9 @@ cast_to_material_renderer(const Renderer &renderer)
 Text_renderer
 cast_to_text_renderer(const Renderer &renderer)
 {
-  assert(false); // no impl yet
-  return Text_renderer();
+  assert(renderer.get_type() == Core::Renderer_type::text);
+
+  return Text_renderer(renderer.get_arg_01(), renderer.get_arg_02());
 }
 
 

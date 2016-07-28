@@ -1,5 +1,6 @@
 #include <core/renderer/renderer.hpp>
 #include <core/renderer/material_renderer.hpp>
+#include <core/renderer/text_renderer.hpp>
 #include <common/error_strings.hpp>
 #include <utilities/logging.hpp>
 #include <utilities/optimizations.hpp>
@@ -93,6 +94,17 @@ Renderer::operator Material_renderer() const
   }
   
   return Renderer_utils::cast_to_material_renderer(*this);
+}
+
+
+Renderer::operator Text_renderer() const
+{
+  if(m_renderer_type != Renderer_type::text)
+  {
+    LOG_ERROR(Error_string::invalid_cast());
+  }
+  
+  return Renderer_utils::cast_to_text_renderer(*this);
 }
 
 

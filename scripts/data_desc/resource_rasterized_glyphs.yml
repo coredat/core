@@ -6,7 +6,7 @@ data:
 
   key:
     name: font_char_id
-    search_type: binary
+    search_type: linear
     auto_increment: false
 
   properties:

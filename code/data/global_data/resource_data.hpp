@@ -10,6 +10,7 @@
 #include "post_process_data.hpp"
 #include "text_mesh_data.hpp"
 #include "font_data.hpp"
+#include "rasterized_glyphs_data.hpp"
 
 
 namespace Resource_data {
@@ -25,6 +26,7 @@ struct Resources
   Text_mesh_data *text_mesh_data = nullptr;
   Audio_pool    *audio_pool      = nullptr;
   Font_data     *font_data       = nullptr;
+  Rasterized_glyphs_data *glyphs_data = nullptr;
 };
 
 

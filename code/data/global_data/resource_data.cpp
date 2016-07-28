@@ -49,6 +49,10 @@ resources_init()
   static Font_data font_data;
   font_data_init(&font_data, 32);
   data->font_data = &font_data;
+  
+  static Rasterized_glyphs_data glyphs;
+  rasterized_glyphs_data_init(&glyphs, 2048);
+  data->glyphs_data = &glyphs;
 }
 
 

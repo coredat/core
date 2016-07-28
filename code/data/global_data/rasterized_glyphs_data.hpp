@@ -6,8 +6,8 @@
 */
 
 
-#ifndef RASTERIZED_GLYPHS_DATA_INCLUDED_F48F12A8_6A98_43BA_81F6_25702603EF35
-#define RASTERIZED_GLYPHS_DATA_INCLUDED_F48F12A8_6A98_43BA_81F6_25702603EF35
+#ifndef RASTERIZED_GLYPHS_DATA_INCLUDED_31F20A81_1021_4BCC_B370_5B56ED9B8F97
+#define RASTERIZED_GLYPHS_DATA_INCLUDED_31F20A81_1021_4BCC_B370_5B56ED9B8F97
 
 
 #include <utilities/generic_id.hpp>
@@ -109,6 +109,17 @@ rasterized_glyphs_data_push_back(Rasterized_glyphs_data *data, const util::gener
 */
 bool
 rasterized_glyphs_data_erase(Rasterized_glyphs_data *data, const util::generic_id key);
+
+
+/*!
+  \brief Inserts a new element shuffling down any data that exists in the array. (Does not take a lock).
+  \param data The container to insert into.
+  \param key The key which is used to remove the data.
+  \param insert_point Where to insert. If bigger then the size it will push back.
+  \return Returns true if it was successful.
+*/
+bool
+rasterized_glyphs_data_insert(Rasterized_glyphs_data *data, const util::generic_id key, const size_t insert_index);
 
 
 /*!

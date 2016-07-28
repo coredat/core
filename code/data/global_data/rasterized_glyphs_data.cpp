@@ -190,6 +190,47 @@ rasterized_glyphs_data_erase(Rasterized_glyphs_data *data, const util::generic_i
 
 
 bool
+rasterized_glyphs_data_insert(Rasterized_glyphs_data *data, const util::generic_id key, const size_t insert_index)
+{
+  assert(data && key);
+
+  // If we are past the end of the size
+  // Use push back.
+  if(insert_index > data->size)
+  {
+    return rasterized_glyphs_data_push_back(data, key);
+  }
+
+  // Check that we have capacity
+  if(data->size >= data->capacity)
+  {
+    LOG_ERROR(Error_string::no_free_space())
+    return false;
+  }
+
+  // Check we are inserting in bounds, then insert
+  if(insert_index < data->capacity)
+  {
+    const size_t dest_index = insert_index + 1;
+    const size_t size_to_end = data->size - insert_index;
+
+    ++(data->size);
+
+    // Shuffle the memory up.
+    memmove(&data->rasterized_glyphs_id[dest_index], &data->rasterized_glyphs_id[insert_index], size_to_end * sizeof(*data->rasterized_glyphs_id));
+    memmove(&data->property_character[dest_index], &data->property_character[insert_index], size_to_end * sizeof(*data->property_character));
+
+    // Add key to new entry.
+    data->rasterized_glyphs_id[insert_index] = key;
+
+    return true;
+  }
+
+  return false;
+}
+
+
+bool
 rasterized_glyphs_data_exists(const Rasterized_glyphs_data *data, const util::generic_id key, size_t *out_index)
 {
   assert(data && key);
@@ -204,7 +245,7 @@ rasterized_glyphs_data_exists(const Rasterized_glyphs_data *data, const util::ge
   size_t no_index;
   if(!out_index) { out_index = &no_index; }
 
-  found = util::generic_id_search_binary(out_index, key, data->rasterized_glyphs_id, data->size);
+  found = util::generic_id_search_linear(out_index, key, data->rasterized_glyphs_id, data->size);
 
   return found;
 }

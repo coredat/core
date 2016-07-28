@@ -54,6 +54,10 @@ data_not_found() { return "Data not found."; }
 
 
 constexpr const char *
+data_not_set() { return "Data not set."; }
+
+
+constexpr const char *
 resource_not_found() { return "Resource not found."; }
 
 

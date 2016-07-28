@@ -6,7 +6,6 @@
 #include <data/world_data/world_data_fwd.hpp>
 
 
-namespace Core {
 namespace Entity_detail {
 
 
@@ -15,7 +14,6 @@ Core::Renderer
 get_renderer(const util::generic_id this_id, World_data::World *world);
 
 
-} // ns
 } // ns
 
 

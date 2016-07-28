@@ -1,5 +1,9 @@
 #include <core/entity/entity_ref.hpp>
-#include <core/entity/detail/entity_interface.hpp>
+#include <transformations/entity/entity_common.hpp>
+#include <transformations/entity/entity_data.hpp>
+#include <transformations/entity/entity_transform.hpp>
+#include <transformations/entity/entity_rigidbody.hpp>
+#include <transformations/entity/entity_renderer.hpp>
 #include <core/transform/transform.hpp>
 #include <core/model/model.hpp>
 #include <core/physics/collider.hpp>

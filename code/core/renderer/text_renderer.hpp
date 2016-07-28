@@ -14,6 +14,7 @@ class Text_renderer final
 public:
 
   explicit            Text_renderer();
+  explicit            Text_renderer(const util::generic_id font_id, const util::generic_id text_id);
 
   void                set_font(const Font &font);
   Font                get_font() const;

@@ -35,6 +35,15 @@ Text_renderer::Text_renderer()
 }
 
 
+Text_renderer::Text_renderer(const util::generic_id font_id,
+                             const util::generic_id text_id)
+: m_font_id(font_id)
+, m_text_id(text_id)
+{
+  LOG_TODO("Check these ids are valid.");
+}
+
+
 void
 Text_renderer::set_font(const Font &font)
 {
@@ -64,6 +73,9 @@ Text_renderer::set_text(const char *str)
     
     auto texture = resources->texture_data;
     assert(texture);
+    
+    auto glyphs = resources->glyphs_data;
+    assert(glyphs);
     
     // Get the font and build the data.
     Resource_data::data_lock(font);
@@ -103,7 +115,6 @@ Text_renderer::set_text(const char *str)
       
       // If it doesn't exsit already add it
       FT_Load_Char(face, curr_char, FT_LOAD_RENDER);
-      curr_char = str[++char_index];
       
       if(face->glyph->bitmap.buffer)
       {
@@ -120,7 +131,7 @@ Text_renderer::set_text(const char *str)
         glyph_details.advance[0] = face->glyph->advance.x;
         glyph_details.advance[1] = face->glyph->advance.y;
         
-///        assert(false); // this is where I'm at
+//        assert(false); // this is where I'm at
       
         Ogl::texture_update_texture_2d(&glyph_texture,
                                        pointer_x,
@@ -129,12 +140,17 @@ Text_renderer::set_text(const char *str)
                                        height,
                                        face->glyph->bitmap.buffer);
         
+        Resource_data::rasterized_glyphs_data_push_back(glyphs, (uint32_t)curr_char);
+        Resource_data::rasterized_glyphs_data_set_property_character(glyphs, (uint32_t)curr_char, glyph_details);
+        
         pointer_x += width;
       }
       else
       {
         LOG_ERROR("Failed rasterizing glyph");
       }
+      
+      curr_char = str[++char_index];
     }
     
 //    FT_Load_Char(face, curr_char, FT_LOAD_RENDER);

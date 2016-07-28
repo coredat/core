@@ -3,7 +3,6 @@
 #include <core/physics/collision_pair.hpp>
 #include <core/physics/collision.hpp>
 #include <core/transform/transform.hpp>
-#include <core/entity/detail/entity_interface.hpp>
 
 #include <debug_gui/debug_menu.hpp>
 
@@ -33,6 +32,7 @@
 #include <transformations/rendering/material_renderer.hpp>
 #include <transformations/camera/cam_priorities.hpp>
 #include <transformations/rendering/render_scene.hpp>
+#include <transformations/entity/entity_transform.hpp>
 
 #include <utilities/timer.hpp>
 #include <utilities/logging.hpp>
@@ -204,7 +204,7 @@ World::think()
         
 //        ref.set_transform(core_trans);
         
-        Core::Entity_detail::set_transform(m_impl->world_data->physics_data->physics_id[i],
+        Entity_detail::set_transform(m_impl->world_data->physics_data->physics_id[i],
                                            m_impl->world_data.get(),
                                            core_trans,
                                            false);
