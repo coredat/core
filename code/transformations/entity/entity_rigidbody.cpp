@@ -181,19 +181,32 @@ update_collider(const util::generic_id this_id,
                 const math::aabb *model_aabb,
                 const bool inform_phys_engine)
 {
-  auto phys_data = world->physics_data;
+  // Check valid
+  if(!is_valid(this_id, world, true)) {
+    assert(false); return;
+  }
   
-  // If this is a physics object then update it.
+  // Find the components
+  uint32_t components = 0;
   {
-    World_data::data_lock(world->entity);
+    auto entity_data = world->entity;
+    assert(entity_data);
+    
+    World_data::data_lock(entity_data);
   
     uint32_t components;
-    World_data::entity_data_get_property_components(world->entity,
+    World_data::entity_data_get_property_components(entity_data,
                                                     this_id,
                                                     &components);
     
-    World_data::data_unlock(world->entity);
-    
+    World_data::data_unlock(entity_data);
+  }
+  
+  // If this is a physics object then update it.
+  {
+    auto phys_data = world->physics_data;
+    assert(phys_data);
+  
     // Update the physics stuff.
     if(components & World_data::Entity_component::has_physics)
     {
@@ -232,7 +245,13 @@ update_collider(const util::generic_id this_id,
       
       World_data::data_unlock(phys_data);
     }
-  }
+    else
+    {
+//      assert(false);
+      LOG_TODO_ONCE("We should be able to check components before getting this far I think.");
+    }
+  } // if phys component
+  
 }
 
 

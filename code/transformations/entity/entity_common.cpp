@@ -43,7 +43,9 @@ void
 destroy(const util::generic_id this_id,
         World_data::World *world)
 {
-  if(!is_valid(this_id, world)) { return; }
+  if(!is_valid(this_id, world, true)) {
+    assert(false); return;
+  }
   
   // Destroy this.
   World_data::pending_scene_graph_change_delete(world->entity_graph_changes, this_id);

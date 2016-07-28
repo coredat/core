@@ -141,7 +141,7 @@ set_tags(const util::generic_id this_id,
       LOG_WARNING(Error_string::data_not_found());
     }
     
-    data_unlock(entity_data);
+    World_data::data_unlock(entity_data);
   }
 }
 
