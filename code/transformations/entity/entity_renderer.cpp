@@ -84,8 +84,8 @@ set_renderer(const util::generic_id this_id,
     
     case(Core::Renderer_type::text):
     {
-      const Core::Text_renderer tex_renderer(renderer);
-      LOG_TODO_ONCE("You have text trying to render");
+      const Core::Text_renderer text_renderer(renderer);
+      LOG_ERROR(Error_string::no_implimentation());
       
       break;
     }
@@ -333,129 +333,10 @@ set_renderer_text(const util::generic_id this_id,
                   const util::generic_id font_id,
                   const util::generic_id model_id)
 {
-//  assert(this_id && world);
-//  
-//  // Check to see entity has a renderer.
-//  // If not then set it.
-//  {
-//    auto entity_data = world->entity;
-//    assert(entity_data);
-//    
-//    World_data::data_lock(entity_data);
-//    
-//    uint32_t renderer_type(0);
-//    World_data::entity_data_get_property_renderer(entity_data, this_id, &renderer_type);
-//    
-//    if(renderer_type != 0 && (Core::Renderer_type)renderer_type != Core::Renderer_type::text)
-//    {
-//      LOG_ERROR(Error_string::no_implimentation()); // Currently no mechanism to change a renderer type.
-//      return;
-//    }
-//    else
-//    {
-//      World_data::entity_data_set_property_renderer(entity_data, this_id, (uint32_t)Core::Renderer_type::material);
-//    }
-//    
-//    World_data::data_unlock(entity_data);
-//  }
-//  
-//  auto mesh_data = world->mesh_data;
-//  assert(mesh_data);
-//
-//  // We need to find the material remove it.
-//  // Then insert it with draw calls with the same id.
-//  World_data::data_lock(mesh_data);
-//  {
-//    size_t find_index;
-//    World_data::Mesh_renderer_draw_call *draw;
-//    World_data::Mesh_renderer_draw_call copy;
-//
-//    // If it already exists. The data and erase the old info.
-//    if(World_data::renderer_mesh_data_exists(mesh_data, this_id, &find_index))
-//    {
-//      World_data::renderer_mesh_data_get_property_draw_call(mesh_data, this_id, &draw);
-//      copy = World_data::Mesh_renderer_draw_call(*draw);
-//      World_data::renderer_mesh_data_erase(mesh_data, this_id);
-//    }
-//    
-//    // Insert new draw call in order of material_id
-//    {
-//      size_t insert_point = mesh_data->size;
-//    
-//      const auto mat_data = Resource_data::get_resources()->material_data;
-//      
-//      Resource_data::data_lock(mat_data);
-//    
-//      ::Material_renderer::Material_id this_key;
-//      Resource_data::material_data_get_property_material_hash_id(mat_data, material_id, &this_key);
-//    
-//      // Loop through and find insert point
-//      for(size_t i = 0; i < mesh_data->size; ++i)
-//      {
-//        ::Material_renderer::Material_id other_key;
-//        Resource_data::material_data_get_property_material_hash_id(mat_data, mesh_data->property_material_id[i], &other_key);
-//
-//        if(this_key > other_key)
-//        {
-//          insert_point = i;
-//          break;
-//        }
-//      }
-//      
-//      Resource_data::data_unlock(mat_data);
-//    
-//      // Get the trasnform as we are insreting a new record.
-//      math::transform trans;
-//      World_data::transform_data_get_property_transform(world->transform, this_id, &trans);
-//      
-//      const math::mat4 world_mat = math::transform_get_world_matrix(trans);
-//      memcpy(copy.world_matrix, &world_mat, sizeof(world_mat));
-//    
-//      World_data::renderer_mesh_data_insert(mesh_data, this_id, insert_point);
-//      World_data::renderer_mesh_data_set_property_material_id(mesh_data, this_id, material_id);
-//      World_data::renderer_mesh_data_set_property_draw_call(mesh_data, this_id, &copy);
-//    }
-//    
-//  }
-//  World_data::data_unlock(mesh_data);
-//  
-//  // Model
-//  {
-//    World_data::data_lock(mesh_data);
-//    
-//    size_t index;
-//    
-//    if(World_data::renderer_mesh_data_exists(mesh_data, this_id, &index))
-//    {
-//      mesh_data->property_draw_call[index].model_id = model_id;
-//    }
-//    else
-//    {
-//      // Has no material yet. Will insert one for the moment.
-//      World_data::renderer_mesh_data_insert(mesh_data, this_id, 0);
-//      mesh_data->property_draw_call[0].model_id = model_id;
-//    }
-//    
-//    World_data::data_unlock(mesh_data);
-//  }
-//
-//  // Update aabb
-//  math::aabb return_aabb;
-//  {
-//    Resource_data::Mesh_data *mesh_data = Resource_data::get_resources()->mesh_data;
-//    assert(mesh_data);
-//    
-//    Resource_data::data_lock(mesh_data);
-//    Resource_data::mesh_data_get_property_aabb(mesh_data, model_id, &return_aabb);
-//    Resource_data::data_unlock(mesh_data);
-//  }
-//  
-//  auto transform_data = world->transform;
-//  {
-//    World_data::data_lock(transform_data);
-//    World_data::transform_data_set_property_aabb(transform_data, this_id, return_aabb);
-//    World_data::data_unlock(transform_data);
-//  }
+  // Check valid
+  if(!is_valid(this_id, world, true)) {
+    assert(false); return;
+  }
 }
 
 

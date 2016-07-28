@@ -153,14 +153,10 @@ Text_renderer::set_text(const char *str)
       curr_char = str[++char_index];
     }
     
-//    FT_Load_Char(face, curr_char, FT_LOAD_RENDER);
-
-    //    font_texture.update_sub_texture(0,
-    //                                    0,
-    //                                    face->glyph->bitmap.width,
-    //                                    face->glyph->bitmap.rows,
-    //                                    face->glyph->bitmap.buffer);
-    
+    // Build mesh
+    {
+      
+    }
     
     Resource_data::data_unlock(texture);
     Resource_data::data_unlock(text_mesh);
