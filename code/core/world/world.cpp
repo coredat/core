@@ -202,8 +202,6 @@ World::think()
         auto core_trans = to_core_trans(trans);
         core_trans.set_scale(old_tran.get_scale());
         
-//        ref.set_transform(core_trans);
-        
         Entity_detail::set_transform(m_impl->world_data->physics_data->physics_id[i],
                                            m_impl->world_data.get(),
                                            core_trans,

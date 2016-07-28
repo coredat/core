@@ -91,6 +91,11 @@ Text_renderer::set_text(const char *str)
     FT_Face face;
     Resource_data::font_data_get_property_font_face(font, font->size, &face);
     
+    if(face == nullptr)
+    {
+      return;
+    }
+    
     util::generic_id texture_id;
     Resource_data::font_data_get_property_texture_id(font, font->size, &texture_id);
     

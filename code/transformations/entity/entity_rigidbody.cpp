@@ -194,7 +194,6 @@ update_collider(const util::generic_id this_id,
     
     World_data::data_lock(entity_data);
   
-    uint32_t components;
     World_data::entity_data_get_property_components(entity_data,
                                                     this_id,
                                                     &components);

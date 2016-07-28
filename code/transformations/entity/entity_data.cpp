@@ -84,7 +84,7 @@ get_tags(const util::generic_id this_id,
   // Get data
   {
     auto entity_data = world->entity;
-    assert(false);
+    assert(entity_data);
     
     World_data::data_lock(entity_data);
     assert(entity_data);
