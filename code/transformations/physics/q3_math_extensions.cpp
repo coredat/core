@@ -46,8 +46,8 @@ transform_init_from_q3(const q3Transform transform)
   };
   
   const math::mat3 q3_rot_mat     = math::mat3_init_with_array(arr_mat);
-//      const math::mat3 q3_rot_mat_tr  = math::mat3_get_transpose(q3_rot_mat);
-  const math::quat final_rot      = math::quat_init_with_mat3(q3_rot_mat);
+  const math::mat3 q3_rot_mat_tr  = math::mat3_get_transpose(q3_rot_mat);
+  const math::quat final_rot      = math::quat_init_with_mat3(q3_rot_mat_tr);
 
   return math::transform_init(pos, math::vec3_one(), final_rot);
 }
