@@ -39,6 +39,7 @@ transform_init_from_q3(const q3Transform transform)
 {
   math::vec3 pos = vec3_from_q3vec(transform.position);
   
+  // This is transpose.
   const float arr_mat[] = {
     transform.rotation.ex.x, transform.rotation.ex.y, transform.rotation.ex.z,
     transform.rotation.ey.x, transform.rotation.ey.y, transform.rotation.ey.z,
@@ -46,8 +47,8 @@ transform_init_from_q3(const q3Transform transform)
   };
   
   const math::mat3 q3_rot_mat     = math::mat3_init_with_array(arr_mat);
-  const math::mat3 q3_rot_mat_tr  = math::mat3_get_transpose(q3_rot_mat);
-  const math::quat final_rot      = math::quat_init_with_mat3(q3_rot_mat_tr);
+//  const math::mat3 q3_rot_mat_tr  = math::mat3_get_transpose(q3_rot_mat);
+  const math::quat final_rot      = math::quat_init_with_mat3(q3_rot_mat);
 
   return math::transform_init(pos, math::vec3_one(), final_rot);
 }
@@ -61,16 +62,23 @@ transform_to_q3(const math::transform *math_transform,
 {
   assert(math_transform);
 
-  // This seems to be pointing in the wrong direction.
-  q3Quaternion quat = quat_to_q3quat(math_transform->rotation);
+  math::quat friendly_rot;
+  {
+    const math::mat3 rot_mat    = math::quat_get_rotation_matrix(math_transform->rotation);
+    const math::mat3 rot_mat_tr = math::mat3_get_transpose(rot_mat);
+    
+    friendly_rot = math::quat_init_with_mat3(rot_mat_tr);
+  }
+
+  const q3Quaternion quat = quat_to_q3quat(friendly_rot);
 
   r32 angle = 0;
   q3Vec3 axis;
 
   quat.ToAxisAngle(&axis, &angle);
   
-  if(out_angle)     { *out_angle = angle; }
-  if(out_axis)      { *out_axis = axis; }
+  if(out_angle)     { *out_angle = angle;                                      }
+  if(out_axis)      { *out_axis = axis;                                        }
   if(out_position)  { *out_position = vec3_to_q3vec(math_transform->position); }
 }
 
