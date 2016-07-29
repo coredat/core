@@ -39,6 +39,15 @@ def parse_desc(yml)
   return_data[:header_includes] << "<utilities/memory_pool.hpp>"
   return_data[:header_includes] << "<stddef.h>"
 
+  # Aditional headers
+  if data['additional_includes']
+    data['additional_includes'].each do |inc|
+      if inc['file'] == 'header'
+        return_data[:header_includes] << inc['include']
+      end
+    end
+  end
+
   # Header aditional code
   if data['header'] && data['header']['additional_headers']
     data['header']['additional_headers'].each do |inc|
@@ -56,6 +65,16 @@ def parse_desc(yml)
   return_data[:src_includes] << "<utilities/logging.hpp>"
   return_data[:src_includes] << "<utilities/memory.hpp>"
   return_data[:src_includes] << "<assert.h>"
+
+  # Aditional headers
+  if data['additional_includes']
+    data['additional_includes'].each do |inc|
+      if inc['file'] == 'source'
+        return_data[:src_includes] << inc['include']
+      end
+    end
+  end
+
 
   # Key information
   data_key = data['key'] || {}
