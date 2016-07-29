@@ -126,7 +126,7 @@ Context::Context(const uint32_t width,
     SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE,          8);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER,          1);
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS,    0);
-    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES,    4);
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES,    0);
 
     m_impl->context = SDL_GL_CreateContext(m_impl->window);
     

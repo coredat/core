@@ -81,7 +81,7 @@ Text_renderer::set_text(const char *str)
     Resource_data::data_lock(font);
     Resource_data::data_lock(text_mesh);
     Resource_data::data_lock(texture);
-    
+    Resource_data::data_lock(glyphs);
     
     LOG_TODO_ONCE("Dont create a mesh every time, check to see if it exists first");
     
@@ -158,11 +158,31 @@ Text_renderer::set_text(const char *str)
       curr_char = str[++char_index];
     }
     
+    
     // Build mesh
     {
+      LOG_TODO_ONCE("Font might not be set here!")
       
+      uint32_t char_index = 0;
+      char curr_char = str[char_index];
+    
+      std::vector<float> data;
+      
+      float advance = 0;
+    
+      while(curr_char != '\0')
+      {
+        // Find glyph and build a vertex
+        Text::Character glyph_details;
+        Resource_data::rasterized_glyphs_data_get_property_character(glyphs, (util::generic_id)curr_char, &glyph_details);
+        
+        
+        
+        curr_char = str[++char_index];
+      }
     }
     
+    Resource_data::data_unlock(glyphs);
     Resource_data::data_unlock(texture);
     Resource_data::data_unlock(text_mesh);
     Resource_data::data_unlock(font);
