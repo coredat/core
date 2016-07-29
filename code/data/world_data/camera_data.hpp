@@ -1,13 +1,17 @@
 
 
 /*
-  Warning:
+  WARNING
+  -------
   This file is auto_generated any changes here may be overwritten.
+  See code_gen.rake in scripts folder.
+
+  This file was last generated on: Fri 29 Jul 2016
 */
 
 
-#ifndef CAMERA_DATA_INCLUDED_ACB1E40A_8CC3_481E_AC33_2FFBD4C178E6
-#define CAMERA_DATA_INCLUDED_ACB1E40A_8CC3_481E_AC33_2FFBD4C178E6
+#ifndef CAMERA_DATA_INCLUDED_E0B33A03_8223_4106_A7C7_CF4C3CA07C0A
+#define CAMERA_DATA_INCLUDED_E0B33A03_8223_4106_A7C7_CF4C3CA07C0A
 
 
 #include <utilities/generic_id.hpp>

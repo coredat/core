@@ -1,8 +1,12 @@
 
 
 /*
-  Warning:
+  WARNING
+  -------
   This file is auto_generated any changes here may be overwritten.
+  See code_gen.rake in scripts folder.
+
+  This file was last generated on: Fri 29 Jul 2016
 */
 
 
@@ -49,6 +53,8 @@ display_entity_data(const World_data::Entity_data *data)
       uint32_t property_renderer_value;
       World_data::entity_data_get_property_renderer(data, data->entity_id[i], &property_renderer_value);
       ImGui::Text("Renderer: %d", property_renderer_value);
+
+      // End of data
       ImGui::Separator();
     }
 

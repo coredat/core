@@ -1,13 +1,17 @@
 
 
 /*
-  Warning:
+  WARNING
+  -------
   This file is auto_generated any changes here may be overwritten.
+  See code_gen.rake in scripts folder.
+
+  This file was last generated on: Fri 29 Jul 2016
 */
 
 
-#ifndef RENDERER_TEXT_DRAW_CALLS_DATA_INCLUDED_05A5BC85_E811_4701_89B5_773ADBA691EB
-#define RENDERER_TEXT_DRAW_CALLS_DATA_INCLUDED_05A5BC85_E811_4701_89B5_773ADBA691EB
+#ifndef RENDERER_TEXT_DRAW_CALLS_DATA_INCLUDED_7A08AC63_EBF8_4DEA_9333_76CE6CB1E46D
+#define RENDERER_TEXT_DRAW_CALLS_DATA_INCLUDED_7A08AC63_EBF8_4DEA_9333_76CE6CB1E46D
 
 
 #include <utilities/generic_id.hpp>

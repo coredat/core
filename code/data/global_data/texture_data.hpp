@@ -1,13 +1,17 @@
 
 
 /*
-  Warning:
+  WARNING
+  -------
   This file is auto_generated any changes here may be overwritten.
+  See code_gen.rake in scripts folder.
+
+  This file was last generated on: Fri 29 Jul 2016
 */
 
 
-#ifndef TEXTURE_DATA_INCLUDED_8FEB7257_305A_4021_B12D_F88C4638B258
-#define TEXTURE_DATA_INCLUDED_8FEB7257_305A_4021_B12D_F88C4638B258
+#ifndef TEXTURE_DATA_INCLUDED_C69E01E1_D1D4_4506_A14D_6370A69C8F7D
+#define TEXTURE_DATA_INCLUDED_C69E01E1_D1D4_4506_A14D_6370A69C8F7D
 
 
 #include <utilities/generic_id.hpp>

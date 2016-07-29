@@ -1,10 +1,5 @@
 
-
-/*
-  Warning:
-  This file is auto_generated any changes here may be overwritten.
-*/
-
+{{file_warning}}
 
 #ifndef DEBUG_UI_{{data_name.upcase}}_INCLUDED_{{guid}}
 #define DEBUG_UI_{{data_name.upcase}}_INCLUDED_{{guid}}

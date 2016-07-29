@@ -1,13 +1,17 @@
 
 
 /*
-  Warning:
+  WARNING
+  -------
   This file is auto_generated any changes here may be overwritten.
+  See code_gen.rake in scripts folder.
+
+  This file was last generated on: Fri 29 Jul 2016
 */
 
 
-#ifndef ENTITY_DATA_INCLUDED_52C60BBF_12A9_4CCD_A21C_92FFC019EF5C
-#define ENTITY_DATA_INCLUDED_52C60BBF_12A9_4CCD_A21C_92FFC019EF5C
+#ifndef ENTITY_DATA_INCLUDED_23EF18CC_976C_4F67_8FCE_A6F448177C82
+#define ENTITY_DATA_INCLUDED_23EF18CC_976C_4F67_8FCE_A6F448177C82
 
 
 #include <utilities/generic_id.hpp>

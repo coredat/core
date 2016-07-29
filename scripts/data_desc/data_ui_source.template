@@ -1,10 +1,5 @@
 
-
-/*
-  Warning:
-  This file is auto_generated any changes here may be overwritten.
-*/
-
+{{file_warning}}
 
 #include <3rdparty/imgui/imgui.h>
 #include \"debug_ui_{{data_name}}.hpp\"

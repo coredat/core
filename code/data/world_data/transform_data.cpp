@@ -1,8 +1,14 @@
 
+
 /*
-  Warning:
+  WARNING
+  -------
   This file is auto_generated any changes here may be overwritten.
+  See code_gen.rake in scripts folder.
+
+  This file was last generated on: Fri 29 Jul 2016
 */
+
 
 #include <data/world_data/transform_data.hpp>
 #include <data/global_data/memory_data.hpp>

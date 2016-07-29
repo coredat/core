@@ -1,13 +1,17 @@
 
 
 /*
-  Warning:
+  WARNING
+  -------
   This file is auto_generated any changes here may be overwritten.
+  See code_gen.rake in scripts folder.
+
+  This file was last generated on: Fri 29 Jul 2016
 */
 
 
-#ifndef RASTERIZED_GLYPHS_DATA_INCLUDED_1D73296E_B0FF_4B11_9FE3_F046EDEF0916
-#define RASTERIZED_GLYPHS_DATA_INCLUDED_1D73296E_B0FF_4B11_9FE3_F046EDEF0916
+#ifndef RASTERIZED_GLYPHS_DATA_INCLUDED_144A15C7_0898_4D20_AB7D_D8815FC21D85
+#define RASTERIZED_GLYPHS_DATA_INCLUDED_144A15C7_0898_4D20_AB7D_D8815FC21D85
 
 
 #include <utilities/generic_id.hpp>

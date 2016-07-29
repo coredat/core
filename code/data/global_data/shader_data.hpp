@@ -1,13 +1,17 @@
 
 
 /*
-  Warning:
+  WARNING
+  -------
   This file is auto_generated any changes here may be overwritten.
+  See code_gen.rake in scripts folder.
+
+  This file was last generated on: Fri 29 Jul 2016
 */
 
 
-#ifndef SHADER_DATA_INCLUDED_D89C707A_D0F0_4E6C_BC5A_5C65F5B3C2A4
-#define SHADER_DATA_INCLUDED_D89C707A_D0F0_4E6C_BC5A_5C65F5B3C2A4
+#ifndef SHADER_DATA_INCLUDED_0E32C742_D64B_4D55_AEE6_103ADCFD430B
+#define SHADER_DATA_INCLUDED_0E32C742_D64B_4D55_AEE6_103ADCFD430B
 
 
 #include <utilities/generic_id.hpp>

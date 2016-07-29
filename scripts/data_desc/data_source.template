@@ -1,8 +1,5 @@
 
-/*
-  Warning:
-  This file is auto_generated any changes here may be overwritten.
-*/
+{{file_warning}}
 
 % src_includes.each do |inc|
 #include {{inc}}

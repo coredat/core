@@ -2,6 +2,7 @@
 require 'rubygems'
 require 'securerandom'
 require 'yaml'
+require 'date'
 
 
 # Parses the Data description yaml
@@ -10,6 +11,17 @@ def parse_desc(yml)
   data = yml['data']
 
   return_data = {}
+
+  return_data[:file_warning]     = "
+/*
+  WARNING
+  -------
+  This file is auto_generated any changes here may be overwritten.
+  See code_gen.rake in scripts folder.
+
+  This file was last generated on: #{Date.today.strftime('%a %d %b %Y')}
+*/
+"
 
   # General information"
   return_data[:data_type]         = data['name'].capitalize + "_data"

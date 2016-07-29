@@ -1,13 +1,17 @@
 
 
 /*
-  Warning:
+  WARNING
+  -------
   This file is auto_generated any changes here may be overwritten.
+  See code_gen.rake in scripts folder.
+
+  This file was last generated on: Fri 29 Jul 2016
 */
 
 
-#ifndef RENDERER_MESH_DATA_INCLUDED_481B0103_FB39_42CD_B166_ABA71BE4A299
-#define RENDERER_MESH_DATA_INCLUDED_481B0103_FB39_42CD_B166_ABA71BE4A299
+#ifndef RENDERER_MESH_DATA_INCLUDED_0D824CE3_97E8_4C84_A74E_29804B58B43C
+#define RENDERER_MESH_DATA_INCLUDED_0D824CE3_97E8_4C84_A74E_29804B58B43C
 
 
 #include <utilities/generic_id.hpp>
