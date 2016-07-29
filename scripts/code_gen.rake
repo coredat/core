@@ -21,6 +21,7 @@ task :generate_containers do |t, args|
   data_descs.each do |f|
 
     puts "Generating #{File.basename(f)}"
+    puts "--"
 
     desc = YAML.load_file(f)
 
@@ -63,6 +64,8 @@ task :generate_containers do |t, args|
       puts "[done]"
 
     end
+
+    puts ""
 
   end
 
