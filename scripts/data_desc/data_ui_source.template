@@ -49,6 +49,8 @@ display_{{data_name}}(const {{namespace}}::{{data_type}} *data)
       ImGui::Text(\"{{display_name}}: %p\", (void*){{prop[:name]}}_value);
       % end
     % end
+
+      // End of data
       ImGui::Separator();
     }
 
