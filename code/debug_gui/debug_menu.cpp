@@ -18,6 +18,9 @@
 
 #include <3rdparty/imgui/imgui.h>
 
+// Auto generated
+#include "debug_ui_entity_data.hpp"
+
 
 namespace Debug_menu {
 
@@ -115,7 +118,7 @@ display_world_data_menu(World_data::World *world_data,
     ImGui::EndMainMenuBar();
   }
   
-  if(show_entity_list)     { display_entity_list(world_data->entity);                                   }
+  if(show_entity_list)     { display_entity_data(world_data->entity);                                   }
   if(show_mesh_draw_calls) { display_mesh_draw_calls(world_data->mesh_data);                            }
   if(show_camera_list)     { display_camera_data(world_data->camera_data);                              }
   if(show_world_stats)     { display_world_stats(dt, dt_mul, draw_calls, render_passes, number_of_rbs); }

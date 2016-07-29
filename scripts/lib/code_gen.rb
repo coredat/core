@@ -19,6 +19,20 @@ def parse_desc(yml)
   return_data[:namespace]         = data['namespace'] || "Data"
   return_data[:path]              = data['path']
 
+  # Debug UI
+  return_data[:debug_ui]          = false
+  return_data[:debug_ui_path]        = "./"
+
+  if data['debug_ui']
+    if data['debug_ui']['generate']
+      return_data[:debug_ui] = data['debug_ui']['generate']
+    end
+
+    if data['debug_ui']['path']
+      return_data[:debug_ui_path] = data['debug_ui']['path']
+    end
+  end
+
   # Header Includes
   return_data[:header_includes] = []
   return_data[:header_includes] << "<utilities/generic_id.hpp>"

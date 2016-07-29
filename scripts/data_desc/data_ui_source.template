@@ -1,0 +1,33 @@
+
+
+/*
+  Warning:
+  This file is auto_generated any changes here may be overwritten.
+*/
+
+
+#include <3rdparty/imgui/imgui.h>
+#include \"debug_ui_{{data_name}}.hpp\"
+
+
+namespace Debug_menu {
+
+
+void
+display_{{data_name}}(const {{namespace}}::{{data_type}} *data)
+{
+  ImGui::Begin(\"{{data_name}}\");
+  {
+    // Container Summary
+    ImGui::TextWrapped(\"{{data_name}} container\");
+    ImGui::TextWrapped(\"size/capacity: %zu/%zu\", data->size, data->capacity);
+    ImGui::Separator();
+
+    // List contents
+    
+  }
+  ImGui::End();
+}
+
+
+} // ns

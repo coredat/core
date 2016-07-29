@@ -4,6 +4,10 @@ data:
   header_dir: data/world_data/
   path: code/data/world_data/
 
+  debug_ui:
+    path: code/debug_gui/
+    generate: true
+
   key:
     search_type: binary
     auto_increment: true

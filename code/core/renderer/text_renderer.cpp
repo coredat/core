@@ -176,12 +176,6 @@ Text_renderer::set_text(const char *str)
         Text::Character glyph_details;
         Resource_data::rasterized_glyphs_data_get_property_character(glyphs, (util::generic_id)curr_char, &glyph_details);
         
-        Graphics_api::Vertex_format vert_fmt = {
-          Graphics_api::Vertex_attribute::position_3d,
-          Graphics_api::Vertex_attribute::texture_coord,
-          Graphics_api::Vertex_attribute::normal,
-        };
-        
         curr_char = str[++char_index];
       }
     }
