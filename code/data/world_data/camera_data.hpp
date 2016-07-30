@@ -3,15 +3,15 @@
 /*
   WARNING
   -------
-  This file is auto_generated any changes here may be overwritten.
+  This file is auto generated any changes here may be overwritten.
   See code_gen.rake in scripts folder.
 
-  This file was last generated on: Fri 29 Jul 2016
+  This file was last generated on: Sat 30 Jul 2016
 */
 
 
-#ifndef CAMERA_DATA_INCLUDED_382C898D_7836_4636_888F_E34F5C1FA418
-#define CAMERA_DATA_INCLUDED_382C898D_7836_4636_888F_E34F5C1FA418
+#ifndef CAMERA_DATA_INCLUDED_D8DCF450_D8EA_4BA0_885F_B94DC9782545
+#define CAMERA_DATA_INCLUDED_D8DCF450_D8EA_4BA0_885F_B94DC9782545
 
 
 #include <utilities/generic_id.hpp>
@@ -22,7 +22,6 @@
 
 
 namespace World_data {
-
 
 
 /*!
@@ -47,7 +46,6 @@ struct Camera_data
 
   // Memory chunk
   const util::memory_chunk memory = util::memory_chunk();
-
 }; // struct
 
 

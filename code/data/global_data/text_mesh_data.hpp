@@ -3,15 +3,15 @@
 /*
   WARNING
   -------
-  This file is auto_generated any changes here may be overwritten.
+  This file is auto generated any changes here may be overwritten.
   See code_gen.rake in scripts folder.
 
-  This file was last generated on: Fri 29 Jul 2016
+  This file was last generated on: Sat 30 Jul 2016
 */
 
 
-#ifndef TEXT_MESH_DATA_INCLUDED_80B8D1FB_7421_467A_B9C3_8A6239E3A806
-#define TEXT_MESH_DATA_INCLUDED_80B8D1FB_7421_467A_B9C3_8A6239E3A806
+#ifndef TEXT_MESH_DATA_INCLUDED_049379D1_3FF8_4EAE_A7CE_E786A3F0A96C
+#define TEXT_MESH_DATA_INCLUDED_049379D1_3FF8_4EAE_A7CE_E786A3F0A96C
 
 
 #include <utilities/generic_id.hpp>
@@ -21,7 +21,6 @@
 
 
 namespace Resource_data {
-
 
 
 /*!
@@ -44,7 +43,6 @@ struct Text_mesh_data
 
   // Memory chunk
   const util::memory_chunk memory = util::memory_chunk();
-
 }; // struct
 
 

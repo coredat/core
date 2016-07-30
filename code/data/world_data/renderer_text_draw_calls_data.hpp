@@ -3,15 +3,15 @@
 /*
   WARNING
   -------
-  This file is auto_generated any changes here may be overwritten.
+  This file is auto generated any changes here may be overwritten.
   See code_gen.rake in scripts folder.
 
-  This file was last generated on: Fri 29 Jul 2016
+  This file was last generated on: Sat 30 Jul 2016
 */
 
 
-#ifndef RENDERER_TEXT_DRAW_CALLS_DATA_INCLUDED_14FFBC57_724C_46B4_BCA1_65EF7BF07DA7
-#define RENDERER_TEXT_DRAW_CALLS_DATA_INCLUDED_14FFBC57_724C_46B4_BCA1_65EF7BF07DA7
+#ifndef RENDERER_TEXT_DRAW_CALLS_DATA_INCLUDED_043F1E48_B677_4CB0_9AA1_D8CCD62156E8
+#define RENDERER_TEXT_DRAW_CALLS_DATA_INCLUDED_043F1E48_B677_4CB0_9AA1_D8CCD62156E8
 
 
 #include <utilities/generic_id.hpp>
@@ -20,7 +20,6 @@
 
 
 namespace World_data {
-
 
 
 /*!
@@ -42,7 +41,6 @@ struct Renderer_text_draw_calls_data
 
   // Memory chunk
   const util::memory_chunk memory = util::memory_chunk();
-
 }; // struct
 
 

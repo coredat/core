@@ -3,15 +3,15 @@
 /*
   WARNING
   -------
-  This file is auto_generated any changes here may be overwritten.
+  This file is auto generated any changes here may be overwritten.
   See code_gen.rake in scripts folder.
 
-  This file was last generated on: Fri 29 Jul 2016
+  This file was last generated on: Sat 30 Jul 2016
 */
 
 
-#ifndef MATERIAL_DATA_INCLUDED_29E1DFAE_F352_445C_AB1C_CC4CD66E429A
-#define MATERIAL_DATA_INCLUDED_29E1DFAE_F352_445C_AB1C_CC4CD66E429A
+#ifndef MATERIAL_DATA_INCLUDED_620E3600_C71C_4F50_A311_DD147BD49D56
+#define MATERIAL_DATA_INCLUDED_620E3600_C71C_4F50_A311_DD147BD49D56
 
 
 #include <utilities/generic_id.hpp>
@@ -21,7 +21,6 @@
 
 
 namespace Resource_data {
-
 
 
 /*!
@@ -45,7 +44,6 @@ struct Material_data
 
   // Memory chunk
   const util::memory_chunk memory = util::memory_chunk();
-
 }; // struct
 
 

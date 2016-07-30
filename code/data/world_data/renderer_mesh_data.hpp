@@ -3,15 +3,15 @@
 /*
   WARNING
   -------
-  This file is auto_generated any changes here may be overwritten.
+  This file is auto generated any changes here may be overwritten.
   See code_gen.rake in scripts folder.
 
-  This file was last generated on: Fri 29 Jul 2016
+  This file was last generated on: Sat 30 Jul 2016
 */
 
 
-#ifndef RENDERER_MESH_DATA_INCLUDED_88CE42F3_6823_4279_A101_C97458922746
-#define RENDERER_MESH_DATA_INCLUDED_88CE42F3_6823_4279_A101_C97458922746
+#ifndef RENDERER_MESH_DATA_INCLUDED_F937CD7F_F924_407F_A5F5_E521D8C07700
+#define RENDERER_MESH_DATA_INCLUDED_F937CD7F_F924_407F_A5F5_E521D8C07700
 
 
 #include <utilities/generic_id.hpp>
@@ -26,7 +26,6 @@ struct Mesh_renderer_draw_call {
   util::generic_id model_id;
   float world_matrix[16];
 };
-
 
 
 
@@ -49,7 +48,6 @@ struct Renderer_mesh_data
 
   // Memory chunk
   const util::memory_chunk memory = util::memory_chunk();
-
 }; // struct
 
 

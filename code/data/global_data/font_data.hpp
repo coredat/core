@@ -3,15 +3,15 @@
 /*
   WARNING
   -------
-  This file is auto_generated any changes here may be overwritten.
+  This file is auto generated any changes here may be overwritten.
   See code_gen.rake in scripts folder.
 
-  This file was last generated on: Fri 29 Jul 2016
+  This file was last generated on: Sat 30 Jul 2016
 */
 
 
-#ifndef FONT_DATA_INCLUDED_1F527E3A_1734_4695_A1FC_7C6C6DDE51F3
-#define FONT_DATA_INCLUDED_1F527E3A_1734_4695_A1FC_7C6C6DDE51F3
+#ifndef FONT_DATA_INCLUDED_FDC1F4BF_11E3_451B_A115_5A9C553EBDEB
+#define FONT_DATA_INCLUDED_FDC1F4BF_11E3_451B_A115_5A9C553EBDEB
 
 
 #include <utilities/generic_id.hpp>
@@ -22,7 +22,6 @@
 
 
 namespace Resource_data {
-
 
 
 /*!
@@ -44,7 +43,6 @@ struct Font_data
 
   // Memory chunk
   const util::memory_chunk memory = util::memory_chunk();
-
 }; // struct
 
 

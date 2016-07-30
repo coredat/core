@@ -3,10 +3,10 @@
 /*
   WARNING
   -------
-  This file is auto_generated any changes here may be overwritten.
+  This file is auto generated any changes here may be overwritten.
   See code_gen.rake in scripts folder.
 
-  This file was last generated on: Fri 29 Jul 2016
+  This file was last generated on: Sat 30 Jul 2016
 */
 
 
@@ -15,6 +15,7 @@
 #include <common/error_strings.hpp>
 #include <utilities/logging.hpp>
 #include <utilities/memory.hpp>
+#include <utilities/string_helpers.hpp>
 #include <assert.h>
 #include <cstring>
 
@@ -360,8 +361,6 @@ physics_data_set_property_transform(Physics_data *data,  const util::generic_id 
 }
 
 
-
-
 bool
 physics_data_get_property_aabb_collider(const Physics_data *data, const util::generic_id key, math::aabb *out_value)
 {
@@ -398,8 +397,6 @@ physics_data_set_property_aabb_collider(Physics_data *data,  const util::generic
 
   return true;
 }
-
-
 
 
 bool
@@ -440,8 +437,6 @@ physics_data_set_property_transformed_aabb_collider(Physics_data *data,  const u
 }
 
 
-
-
 bool
 physics_data_get_property_collision_id(const Physics_data *data, const util::generic_id key, uint64_t *out_value)
 {
@@ -480,8 +475,6 @@ physics_data_set_property_collision_id(Physics_data *data,  const util::generic_
 }
 
 
-
-
 bool
 physics_data_get_property_rigidbody(const Physics_data *data, const util::generic_id key, uintptr_t *out_value)
 {
@@ -518,8 +511,6 @@ physics_data_set_property_rigidbody(Physics_data *data,  const util::generic_id 
 
   return true;
 }
-
-
 
 
 } // ns

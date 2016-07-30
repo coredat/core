@@ -3,15 +3,15 @@
 /*
   WARNING
   -------
-  This file is auto_generated any changes here may be overwritten.
+  This file is auto generated any changes here may be overwritten.
   See code_gen.rake in scripts folder.
 
-  This file was last generated on: Fri 29 Jul 2016
+  This file was last generated on: Sat 30 Jul 2016
 */
 
 
-#ifndef TRANSFORM_DATA_INCLUDED_B99145F4_EAF3_4CD9_9BE4_D6FBE4610BA8
-#define TRANSFORM_DATA_INCLUDED_B99145F4_EAF3_4CD9_9BE4_D6FBE4610BA8
+#ifndef TRANSFORM_DATA_INCLUDED_E9F3303E_6722_4A03_9737_9FCB099FEB10
+#define TRANSFORM_DATA_INCLUDED_E9F3303E_6722_4A03_9737_9FCB099FEB10
 
 
 #include <utilities/generic_id.hpp>
@@ -22,7 +22,6 @@
 
 
 namespace World_data {
-
 
 
 /*!
@@ -44,7 +43,6 @@ struct Transform_data
 
   // Memory chunk
   const util::memory_chunk memory = util::memory_chunk();
-
 }; // struct
 
 

@@ -3,15 +3,15 @@
 /*
   WARNING
   -------
-  This file is auto_generated any changes here may be overwritten.
+  This file is auto generated any changes here may be overwritten.
   See code_gen.rake in scripts folder.
 
-  This file was last generated on: Fri 29 Jul 2016
+  This file was last generated on: Sat 30 Jul 2016
 */
 
 
-#ifndef SHADER_DATA_INCLUDED_8506CF17_CAF2_48DB_8519_32203789CB65
-#define SHADER_DATA_INCLUDED_8506CF17_CAF2_48DB_8519_32203789CB65
+#ifndef SHADER_DATA_INCLUDED_F16E671A_965A_49BE_94BD_C039D030BE88
+#define SHADER_DATA_INCLUDED_F16E671A_965A_49BE_94BD_C039D030BE88
 
 
 #include <utilities/generic_id.hpp>
@@ -21,7 +21,6 @@
 
 
 namespace Resource_data {
-
 
 
 /*!
@@ -44,7 +43,6 @@ struct Shader_data
 
   // Memory chunk
   const util::memory_chunk memory = util::memory_chunk();
-
 }; // struct
 
 

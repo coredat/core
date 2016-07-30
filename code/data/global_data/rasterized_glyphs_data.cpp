@@ -3,10 +3,10 @@
 /*
   WARNING
   -------
-  This file is auto_generated any changes here may be overwritten.
+  This file is auto generated any changes here may be overwritten.
   See code_gen.rake in scripts folder.
 
-  This file was last generated on: Fri 29 Jul 2016
+  This file was last generated on: Sat 30 Jul 2016
 */
 
 
@@ -15,6 +15,7 @@
 #include <common/error_strings.hpp>
 #include <utilities/logging.hpp>
 #include <utilities/memory.hpp>
+#include <utilities/string_helpers.hpp>
 #include <assert.h>
 #include <cstring>
 
@@ -299,8 +300,6 @@ rasterized_glyphs_data_set_property_character(Rasterized_glyphs_data *data,  con
 
   return true;
 }
-
-
 
 
 } // ns

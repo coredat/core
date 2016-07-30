@@ -3,15 +3,15 @@
 /*
   WARNING
   -------
-  This file is auto_generated any changes here may be overwritten.
+  This file is auto generated any changes here may be overwritten.
   See code_gen.rake in scripts folder.
 
-  This file was last generated on: Fri 29 Jul 2016
+  This file was last generated on: Sat 30 Jul 2016
 */
 
 
-#ifndef DEBUG_UI_ENTITY_DATA_INCLUDED_C5063444_3BD3_4745_80C4_AABC90B9B515
-#define DEBUG_UI_ENTITY_DATA_INCLUDED_C5063444_3BD3_4745_80C4_AABC90B9B515
+#ifndef DEBUG_UI_ENTITY_DATA_INCLUDED_8BEF082A_3A93_40BD_B770_3B85C19047BC
+#define DEBUG_UI_ENTITY_DATA_INCLUDED_8BEF082A_3A93_40BD_B770_3B85C19047BC
 
 
 #include <data/world_data/entity_data.hpp>

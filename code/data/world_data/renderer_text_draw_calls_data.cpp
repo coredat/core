@@ -3,10 +3,10 @@
 /*
   WARNING
   -------
-  This file is auto_generated any changes here may be overwritten.
+  This file is auto generated any changes here may be overwritten.
   See code_gen.rake in scripts folder.
 
-  This file was last generated on: Fri 29 Jul 2016
+  This file was last generated on: Sat 30 Jul 2016
 */
 
 
@@ -15,6 +15,7 @@
 #include <common/error_strings.hpp>
 #include <utilities/logging.hpp>
 #include <utilities/memory.hpp>
+#include <utilities/string_helpers.hpp>
 #include <assert.h>
 #include <cstring>
 
@@ -318,8 +319,6 @@ renderer_text_draw_calls_data_set_property_text(Renderer_text_draw_calls_data *d
 }
 
 
-
-
 bool
 renderer_text_draw_calls_data_get_property_model_id(const Renderer_text_draw_calls_data *data, const util::generic_id key, util::generic_id *out_value)
 {
@@ -362,8 +361,6 @@ renderer_text_draw_calls_data_set_property_model_id(Renderer_text_draw_calls_dat
 
   return true;
 }
-
-
 
 
 } // ns

@@ -3,15 +3,15 @@
 /*
   WARNING
   -------
-  This file is auto_generated any changes here may be overwritten.
+  This file is auto generated any changes here may be overwritten.
   See code_gen.rake in scripts folder.
 
-  This file was last generated on: Fri 29 Jul 2016
+  This file was last generated on: Sat 30 Jul 2016
 */
 
 
-#ifndef RASTERIZED_GLYPHS_DATA_INCLUDED_2F6955F4_3FAA_4DE9_AB2A_33AD67512879
-#define RASTERIZED_GLYPHS_DATA_INCLUDED_2F6955F4_3FAA_4DE9_AB2A_33AD67512879
+#ifndef RASTERIZED_GLYPHS_DATA_INCLUDED_249A3F74_8DD0_4AF8_A52C_FF009D23332B
+#define RASTERIZED_GLYPHS_DATA_INCLUDED_249A3F74_8DD0_4AF8_A52C_FF009D23332B
 
 
 #include <utilities/generic_id.hpp>
@@ -21,7 +21,6 @@
 
 
 namespace Resource_data {
-
 
 
 /*!
@@ -42,7 +41,6 @@ struct Rasterized_glyphs_data
 
   // Memory chunk
   const util::memory_chunk memory = util::memory_chunk();
-
 }; // struct
 
 

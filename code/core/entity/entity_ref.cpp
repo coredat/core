@@ -21,8 +21,8 @@ namespace Core {
 
 struct Entity_ref::Impl
 {
-  util::generic_id id = 0;
-  std::shared_ptr<World_data::World> world = nullptr;
+  util::generic_id id;
+  std::shared_ptr<World_data::World> world;
 };
 
 

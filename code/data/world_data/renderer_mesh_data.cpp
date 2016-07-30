@@ -3,10 +3,10 @@
 /*
   WARNING
   -------
-  This file is auto_generated any changes here may be overwritten.
+  This file is auto generated any changes here may be overwritten.
   See code_gen.rake in scripts folder.
 
-  This file was last generated on: Fri 29 Jul 2016
+  This file was last generated on: Sat 30 Jul 2016
 */
 
 
@@ -15,6 +15,7 @@
 #include <common/error_strings.hpp>
 #include <utilities/logging.hpp>
 #include <utilities/memory.hpp>
+#include <utilities/string_helpers.hpp>
 #include <assert.h>
 #include <cstring>
 
@@ -318,8 +319,6 @@ renderer_mesh_data_set_property_material_id(Renderer_mesh_data *data,  const uti
 }
 
 
-
-
 bool
 renderer_mesh_data_get_property_draw_call(const Renderer_mesh_data *data, const util::generic_id key, Mesh_renderer_draw_call **out_value)
 {
@@ -362,8 +361,6 @@ renderer_mesh_data_set_property_draw_call(Renderer_mesh_data *data,  const util:
 
   return true;
 }
-
-
 
 
 } // ns
