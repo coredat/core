@@ -76,6 +76,7 @@ def parse_desc(yml)
   return_data[:src_includes] << "<common/error_strings.hpp>"
   return_data[:src_includes] << "<utilities/logging.hpp>"
   return_data[:src_includes] << "<utilities/memory.hpp>"
+  return_data[:src_includes] << "<utilities/string_helpers.hpp>"
   return_data[:src_includes] << "<assert.h>"
 
   # Aditional headers
