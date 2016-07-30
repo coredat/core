@@ -18,7 +18,6 @@ namespace {{namespace}} {
 
 % end
 
-
 /*!
   \\brief Auto-generated structure for {{data_type}}
 */
@@ -46,7 +45,6 @@ struct {{data_type}}
 
   // Memory chunk
   const util::memory_chunk memory = util::memory_chunk();
-
 }; // struct
 
 

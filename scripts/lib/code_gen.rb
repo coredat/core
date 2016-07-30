@@ -16,7 +16,7 @@ def parse_desc(yml)
 /*
   WARNING
   -------
-  This file is auto_generated any changes here may be overwritten.
+  This file is auto generated any changes here may be overwritten.
   See code_gen.rake in scripts folder.
 
   This file was last generated on: #{Date.today.strftime('%a %d %b %Y')}
