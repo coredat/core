@@ -58,7 +58,6 @@ core_project_data = {
   link_dependencies_windows = {
     "glew32.lib",
     "SDL2.lib",
-    "SOIL.lib",
     "opengl32.lib",
     "shlwapi.lib",
   },
@@ -66,7 +65,6 @@ core_project_data = {
   linkoption_dependencies_macosx = {
     "-lsdl2",
     "-lsdl2_mixer",
-    "-lSOIL",
     "-lfreetype",
   },
 }
