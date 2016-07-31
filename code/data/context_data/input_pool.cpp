@@ -10,6 +10,7 @@ void
 input_data_init(Input_pool *data)
 {
   memset(data, 0, sizeof(data->controllers));
+  memset(data, 0, sizeof(data->mice));
 }
 
 
@@ -25,7 +26,7 @@ input_data_update_controller(Input_pool *pool,
 Game_controller*
 input_data_get_controller(Input_pool *pool, const uint32_t controller)
 {
-  assert(controller < pool->size);
+  assert(controller < pool->controller_count);
 
   return &pool->controllers[controller];
 }

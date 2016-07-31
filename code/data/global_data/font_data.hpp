@@ -17,8 +17,7 @@
 #include <utilities/generic_id.hpp>
 #include <utilities/memory_pool.hpp>
 #include <stddef.h>
-#include <ft2build.h>
-#include FT_FREETYPE_H
+
 
 
 namespace Resource_data {
@@ -33,7 +32,7 @@ struct Font_data
   util::generic_id *font_id = nullptr;
 
   // Properties
-  FT_Face *property_font_face = nullptr;
+  int *property_font_face = nullptr;
   util::generic_id *property_texture_id = nullptr;
 
   // Size information
@@ -125,27 +124,6 @@ font_data_erase(Font_data *data, const util::generic_id key);
 bool
 font_data_exists(const Font_data *data, const util::generic_id key, size_t *out_index = nullptr);
 
-
-/*!
-  \brief Getter for property_font_face.
-  \param data The container to get information from.
-  \param key The key to search for.
-  \param value The output value, which will be set if the key is found.
-  \return Returns true if the data was found.
-*/
-bool
-font_data_get_property_font_face(const Font_data *data, const util::generic_id key, FT_Face *value);
-
-
-/*!
-  \brief Setter for property_font_face.
-  \param data The container to update.
-  \param key The key to search for.
-  \param value The new value of the data.
-  \return Returns true if the data was set.
-*/
-bool
-font_data_set_property_font_face(Font_data *data,  const util::generic_id key, const FT_Face value);
 
 
 /*!

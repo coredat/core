@@ -9,7 +9,7 @@ namespace Core {
 
 
 namespace Button {
-enum ENUM : uint32_t {
+enum ENUM : uint32_t { 
 
   button_0 = 0,
   button_1,

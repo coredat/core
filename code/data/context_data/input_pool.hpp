@@ -8,6 +8,7 @@
 
 
 #define NUMBER_OF_CONTROLLERS 4
+#define NUMBER_OF_MICE 1
 
 
 namespace Context_data {
@@ -21,11 +22,22 @@ struct Game_controller
 }; // struct
 
 
+struct Mouse
+{
+  Core::Axis delta;
+  Core::Axis position;
+  Core::Button_state buttons[3];
+};
+
+
 struct Input_pool
 {
   Game_controller controllers[NUMBER_OF_CONTROLLERS];
-  
-  const uint32_t size = NUMBER_OF_CONTROLLERS;
+  const uint32_t controller_count = NUMBER_OF_CONTROLLERS;
+
+  Mouse mice[NUMBER_OF_MICE];
+  const uint32_t mice_count = NUMBER_OF_MICE;
+
 }; // struct
 
 

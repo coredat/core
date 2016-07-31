@@ -7,7 +7,7 @@
 
 namespace
 {
-  FT_Library library = nullptr;
+  //FT_Library library = nullptr;
 }
 
 

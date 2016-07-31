@@ -162,6 +162,11 @@ Context::Context(const uint32_t width,
   ImGui_ImplSdlGL3_NewFrame(m_impl->window);
   #endif
 
+  // Core data
+  Context_data::input_data_init(&core_input);
+  m_impl->context_data->input_pool = &core_input;
+
+
   // Window callback
   Sdl::event_add_callback([](const SDL_Event *evt, void *self)
   {
@@ -176,17 +181,21 @@ Context::Context(const uint32_t width,
     }
   },
   m_impl.get());
-  
-  // Input callback
+
+
+  // Input callbacks
   Sdl::event_add_callback([](const SDL_Event *evt, void *self)
   {
-    // Not currently used.
-  },
-  m_impl.get());
+    Context_data::Input_pool *input_data = reinterpret_cast<Context_data::Input_pool*>(self);
 
-  // Core data
-  Context_data::input_data_init(&core_input);
-  m_impl->context_data->input_pool = &core_input;
+    if(input_data)
+    {
+      Sdl::process_input_messages(evt, input_data);
+    }
+  },
+  &core_input);
+  //nullptr);
+  //m_impl->context_data->input_pool);
 }
 
 
