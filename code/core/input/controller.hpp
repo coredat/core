@@ -23,11 +23,11 @@ public:
   Axis              get_axis(const uint8_t axis) const;                         //!< Get the axis of the controller. 0 or 1
   float             get_trigger(const uint8_t trigger) const;                   //!< Get the trigger of the controller. 0 or 1
   
-  bool              is_button_down(const Button::ENUM button) const;            //!< Returns true if the button is down.
-  bool              is_button_down_on_frame(const Button::ENUM button) const;   //!< Returns true if the button is down on that frame.
+  bool              is_button_down(const Button::ENUM button) const;            //!< Returns true if the button is down. You can 'or' keys together
+  bool              is_button_down_on_frame(const Button::ENUM button) const;   //!< Returns true if the button is down on that frame. You can 'or' keys together
   
-  bool              is_button_up(const Button::ENUM button) const;              //!< Returns true if the button is up.
-  bool              is_button_up_on_frame(const Button::ENUM button) const;     //!< Returns true if the button is up on that frame.
+  bool              is_button_up(const Button::ENUM button) const;              //!< Returns true if the button is up. You can 'or' keys together
+  bool              is_button_up_on_frame(const Button::ENUM button) const;     //!< Returns true if the button is up on that frame. You can 'or' keys together
   
 private:
 

@@ -3,6 +3,7 @@
 
 
 #include <core/common/core_types.hpp>
+#include <utilities/bits.hpp>
 
 
 namespace Core {
@@ -11,14 +12,14 @@ namespace Core {
 namespace Button {
 enum ENUM : uint32_t { 
 
-  button_0 = 0,
-  button_1,
-  button_2,
-  button_3,
-  button_4,
-  button_5,
-  button_6,
-  button_7,
+  button_0 = BIT(0),
+  button_1 = BIT(1),
+  button_2 = BIT(2),
+  button_3 = BIT(3),
+  button_4 = BIT(4),
+  button_5 = BIT(5),
+  button_6 = BIT(6),
+  button_7 = BIT(7),
   
 
 }; // enum

@@ -1,6 +1,7 @@
 #include "sdl_input.hpp"
 #include <SDL2/SDL.h>
 #include <math/general/general.hpp>
+#include <utilities/optimizations.hpp>
 
 
 namespace Sdl {
@@ -170,6 +171,66 @@ is_mouse_captured()
 }
 
 
+namespace {
+
+inline void
+on_button_event(Context_data::Game_controller *controller,
+                const uint32_t key,
+                const uint32_t button_event)
+{
+  switch(key)
+  {
+    case(SDL_CONTROLLER_BUTTON_A):
+      controller->controller_buttons.button_a = button_event;
+      return;
+    case(SDL_CONTROLLER_BUTTON_B):
+      controller->controller_buttons.button_b = button_event;
+      return;
+    case(SDL_CONTROLLER_BUTTON_X):
+      controller->controller_buttons.button_x = button_event;
+      return;
+    case(SDL_CONTROLLER_BUTTON_Y):
+      controller->controller_buttons.button_y = button_event;
+      return;
+    case(SDL_CONTROLLER_BUTTON_BACK):
+      controller->controller_buttons.button_back = button_event;
+      return;
+    case(SDL_CONTROLLER_BUTTON_START):
+      controller->controller_buttons.button_start = button_event;
+      return;
+    case(SDL_CONTROLLER_BUTTON_LEFTSTICK):
+      controller->controller_buttons.button_left_stick = button_event;
+      return;
+    case(SDL_CONTROLLER_BUTTON_RIGHTSTICK):
+      controller->controller_buttons.button_right_stick = button_event;
+      return;
+    case(SDL_CONTROLLER_BUTTON_LEFTSHOULDER):
+      controller->controller_buttons.button_left_shoulder = button_event;
+      return;
+    case(SDL_CONTROLLER_BUTTON_RIGHTSHOULDER):
+      controller->controller_buttons.button_right_shoulder = button_event;
+      return;
+    case(SDL_CONTROLLER_BUTTON_DPAD_UP):
+      controller->controller_buttons.button_dpad_up = button_event;
+      return;
+    case(SDL_CONTROLLER_BUTTON_DPAD_DOWN):
+      controller->controller_buttons.button_dpad_down = button_event;
+      return;
+    case(SDL_CONTROLLER_BUTTON_DPAD_LEFT):
+      controller->controller_buttons.button_dpad_left = button_event;
+      return;
+    case(SDL_CONTROLLER_BUTTON_DPAD_RIGHT):
+      controller->controller_buttons.button_dpad_right = button_event;
+      return;
+    default:
+      return;
+  };
+  UNREACHABLE;
+}
+
+} // anon ns
+
+
 void
 process_input_messages(const SDL_Event *evt,
                        Context_data::Input_pool *input_data)
@@ -190,28 +251,27 @@ process_input_messages(const SDL_Event *evt,
   
   switch(evt->type)
   {
+    /*
+      Gamepad events.
+    */
+  
     case(SDL_JOYBUTTONDOWN):
     case(SDL_CONTROLLERBUTTONDOWN):
     {
+      const uint32_t button_event = (uint32_t)Core::Button_state::down_on_frame;
       Context_data::Game_controller *controller = &input_data->controllers[evt->jbutton.which];
-
-      switch(evt->jbutton.type)
-      {
-        case(SDL_CONTROLLER_BUTTON_A):
-        {
-          //Core::Button_state *button_state_0 = &controller->buttons[Core::Button::button_0];
-          //const Uint8 button_a = SDL_GameControllerGetButton(sdl_controller, SDL_CONTROLLER_BUTTON_A);
-          //*button_state_0 = button_a ? button_down(button_state_0) : button_up(button_state_0);
-        }
-      }
-    }
+      
+      on_button_event(controller, evt->cbutton.which, button_event);
+    } // SDL_CONTROLLERBUTTONDOWN
 
     case(SDL_JOYBUTTONUP):
     case(SDL_CONTROLLERBUTTONUP):
     {
-      int i = 0; 
-      break;
-    }
+      const uint32_t button_event = (uint32_t)Core::Button_state::up_on_frame;
+      Context_data::Game_controller *controller = &input_data->controllers[evt->jbutton.which];
+      
+      on_button_event(controller, evt->cbutton.which, button_event);
+    } // SDL_CONTROLLERBUTTONUP
 
     case(SDL_JOYAXISMOTION):
     case(SDL_CONTROLLERAXISMOTION):
@@ -219,7 +279,7 @@ process_input_messages(const SDL_Event *evt,
       const uint32_t controller_id = evt->caxis.which;
       assert(controller_id < input_data->controller_count);
 
-      if(controller_id >= 0 && controller_id < input_data->controller_count)
+      if(controller_id < input_data->controller_count)
       {
         const float norm  = math::to_float(evt->caxis.value) / sdl_axis_range;
         const float value = math::nearest_floor(norm, sdl_axis_granularity);
@@ -243,7 +303,14 @@ process_input_messages(const SDL_Event *evt,
             break;
         }
       }
-    } // GAMEPAD MOTION
+      
+      break;
+    } // SDL_CONTROLLERAXISMOTION
+
+
+    /*
+      Mouse Events
+    */
 
     case(SDL_MOUSEMOTION):
     {
@@ -255,9 +322,43 @@ process_input_messages(const SDL_Event *evt,
 
       input_data->mice[mouse_id].position.x = math::to_float(evt->motion.x);
       input_data->mice[mouse_id].position.y = math::to_float(evt->motion.y);
-
+      
+      break;
     } // SDL_MOUSEMOTION
+    
+    case(SDL_MOUSEWHEEL):
+    {
+      break;
+    } // SDL_MOUSEWHEEL
+    
+    case(SDL_MOUSEBUTTONDOWN):
+    {
+      break;
+    } // SDL_MOUSEBUTTONDOWN
+    
+    case(SDL_MOUSEBUTTONUP):
+    {
+      break;
+    } // SDL_MOUSEBUTTONUP
+    
+    
+    /*
+      Keyboard Events
+    */
 
+    case(SDL_KEYDOWN):
+    {
+      input_data->keyboard[evt->key.keysym.scancode] = Core::Button_state::down_on_frame;
+      break;
+    } // SDL_KEYDOWN
+    
+    case(SDL_KEYUP):
+    {
+      input_data->keyboard[evt->key.keysym.scancode] = Core::Button_state::up_on_frame;
+      break;
+    } // SDL_KEYUP
+    
+    
   } // Switch
 }
 

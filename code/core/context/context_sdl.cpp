@@ -20,6 +20,7 @@
 #include <utilities/conversion.hpp>
 #include <utilities/threading.hpp>
 #include <common/error_strings.hpp>
+#include <transformations/input/frame_update.hpp>
 #include <assert.h>
 
 #include <3rdparty/imgui/imgui.h>
@@ -139,15 +140,15 @@ Context::Context(const uint32_t width,
     SDL_GL_MakeCurrent(m_impl->window, m_impl->context);
     SDL_GL_SetSwapInterval(settings.vsync ? 1 : 0); // Vsync
 
-                                                    // We initialize GLEW first.
-#ifdef _WIN32
+    // We initialize GLEW first.
+    #ifdef _WIN32
     glewExperimental = GL_TRUE;
     const  GLenum err = glewInit();
     if (err != GLEW_OK)
     {
       LOG_ERROR(Error_string::generic_ogl_fail());
     }
-#endif
+    #endif
   }
   
   // Initialize the graphics api
@@ -383,40 +384,17 @@ Context::is_open() const
   #ifdef CORE_DEBUG_MENU
   ImGui::Render();
   #endif
-  
-  // Reset the memory pool.
-  Memory::scratch_reset();
-  Sdl::event_process();
 
   // Flip buffer and process events.
   SDL_GL_SwapWindow(m_impl->window);
   ImGui_ImplSdlGL3_NewFrame(m_impl->window);
   
-  const uint32_t num_controllers = SDL_NumJoysticks();
+  Input_utils::update_input_state(m_impl->context_data->input_pool);
+  Sdl::update_keyboard_controller(&(m_impl->context_data->input_pool->controllers[0]));
   
-  if(num_controllers)
-  {
-    Sdl::update_gamepad_controller(&(m_impl->context_data->input_pool->controllers[0]), 0);
-    
-    if(num_controllers > 1)
-    {
-      Sdl::update_gamepad_controller(&(m_impl->context_data->input_pool->controllers[1]), 1);
-    }
-    
-    if(num_controllers > 2)
-    {
-      Sdl::update_gamepad_controller(&(m_impl->context_data->input_pool->controllers[2]), 2);
-    }
-
-    if(num_controllers > 3)
-    {
-      Sdl::update_gamepad_controller(&(m_impl->context_data->input_pool->controllers[3]), 3);
-    }
-  }
-  else
-  {
-    Sdl::update_keyboard_controller(&(m_impl->context_data->input_pool->controllers[0]));
-  }
+  // Reset the memory pool.
+  Memory::scratch_reset();
+  Sdl::event_process();
   
   return m_impl->is_open;
 }

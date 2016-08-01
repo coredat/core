@@ -9,8 +9,9 @@ namespace Context_data {
 void
 input_data_init(Input_pool *data)
 {
-  memset(data, 0, sizeof(data->controllers));
-  memset(data, 0, sizeof(data->mice));
+  memset(data->controllers, 0, sizeof(data->controllers));
+  memset(data->mice, 0, sizeof(data->mice));
+  memset(data->keyboard, (uint32_t)Core::Button_state::down, sizeof(data->keyboard));
 }
 
 

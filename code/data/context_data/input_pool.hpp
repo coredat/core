@@ -7,11 +7,34 @@
 #include <stdint.h>
 
 
+// TODO: Kill these numbers
 #define NUMBER_OF_CONTROLLERS 4
 #define NUMBER_OF_MICE 1
+#define NUMBER_OF_KEYS 512
 
 
 namespace Context_data {
+
+
+struct Gamepad_state
+{
+  uint32_t button_a : 2;
+  uint32_t button_b : 2;
+  uint32_t button_x : 2;
+  uint32_t button_y : 2;
+  uint32_t button_left_shoulder : 2;
+  uint32_t button_right_shoulder : 2;
+  uint32_t button_left_stick : 2;
+  uint32_t button_right_stick : 2;
+  uint32_t button_back : 2;
+  uint32_t button_start : 2;
+  uint32_t button_dpad_up : 2;
+  uint32_t button_dpad_down : 2;
+  uint32_t button_dpad_left : 2;
+  uint32_t button_dpad_right : 2;
+  uint32_t extra_01 : 2;
+  uint32_t extra_02 : 2;
+};
 
 
 struct Game_controller
@@ -19,6 +42,7 @@ struct Game_controller
   Core::Axis axis[2];
   float triggers[2];
   Core::Button_state buttons[16];
+  Gamepad_state controller_buttons;
 }; // struct
 
 
@@ -37,7 +61,9 @@ struct Input_pool
 
   Mouse mice[NUMBER_OF_MICE];
   const uint32_t mice_count = NUMBER_OF_MICE;
-
+  
+  Core::Button_state keyboard[NUMBER_OF_KEYS];
+  const uint32_t key_count = NUMBER_OF_KEYS;
 }; // struct
 
 
