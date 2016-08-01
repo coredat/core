@@ -68,25 +68,25 @@ update_gamepad_controller(Context_data::Game_controller *controller, const uint3
   
   // Buttons
   {
-    Core::Button_state *button_state_0 = &controller->buttons[Core::Button::button_0];
-    const Uint8 button_a = SDL_GameControllerGetButton(sdl_controller, SDL_CONTROLLER_BUTTON_A);
-    *button_state_0 = button_a ? button_down(button_state_0) : button_up(button_state_0);
-
-    Core::Button_state *button_state_1 = &controller->buttons[Core::Button::button_1];
-    const Uint8 button_b = SDL_GameControllerGetButton(sdl_controller, SDL_CONTROLLER_BUTTON_B);
-    *button_state_1 = button_b ? button_down(button_state_1) : button_up(button_state_1);
-
-    Core::Button_state *button_state_2 = &controller->buttons[Core::Button::button_2];
-    const Uint8 button_x = SDL_GameControllerGetButton(sdl_controller, SDL_CONTROLLER_BUTTON_X);
-    *button_state_2 = button_x ? button_down(button_state_2) : button_up(button_state_2);
-
-    Core::Button_state *button_state_3 = &controller->buttons[Core::Button::button_3];
-    const Uint8 button_y = SDL_GameControllerGetButton(sdl_controller, SDL_CONTROLLER_BUTTON_Y);
-    *button_state_3 = button_y ? button_down(button_state_3) : button_up(button_state_3);
-
-    Core::Button_state *button_state_4 = &controller->buttons[Core::Button::button_4];
-    const Uint8 button_start = SDL_GameControllerGetButton(sdl_controller, SDL_CONTROLLER_BUTTON_START);
-    *button_state_4 = button_start ? button_down(button_state_4) : button_up(button_state_4);
+//    Core::Button_state *button_state_0 = &controller->buttons[Core::Button::button_0];
+//    const Uint8 button_a = SDL_GameControllerGetButton(sdl_controller, SDL_CONTROLLER_BUTTON_A);
+//    *button_state_0 = button_a ? button_down(button_state_0) : button_up(button_state_0);
+//
+//    Core::Button_state *button_state_1 = &controller->buttons[Core::Button::button_1];
+//    const Uint8 button_b = SDL_GameControllerGetButton(sdl_controller, SDL_CONTROLLER_BUTTON_B);
+//    *button_state_1 = button_b ? button_down(button_state_1) : button_up(button_state_1);
+//
+//    Core::Button_state *button_state_2 = &controller->buttons[Core::Button::button_2];
+//    const Uint8 button_x = SDL_GameControllerGetButton(sdl_controller, SDL_CONTROLLER_BUTTON_X);
+//    *button_state_2 = button_x ? button_down(button_state_2) : button_up(button_state_2);
+//
+//    Core::Button_state *button_state_3 = &controller->buttons[Core::Button::button_3];
+//    const Uint8 button_y = SDL_GameControllerGetButton(sdl_controller, SDL_CONTROLLER_BUTTON_Y);
+//    *button_state_3 = button_y ? button_down(button_state_3) : button_up(button_state_3);
+//
+//    Core::Button_state *button_state_4 = &controller->buttons[Core::Button::button_4];
+//    const Uint8 button_start = SDL_GameControllerGetButton(sdl_controller, SDL_CONTROLLER_BUTTON_START);
+//    *button_state_4 = button_start ? button_down(button_state_4) : button_up(button_state_4);
   }
   
   SDL_GameControllerClose(sdl_controller);
@@ -133,23 +133,23 @@ update_keyboard_controller(Context_data::Game_controller *controller)
     {
       // Mouse keys
       {
-        Core::Button_state *button_state_0 = &controller->buttons[Core::Button::button_0];
-        *button_state_0 = mouse_state & SDL_BUTTON(SDL_BUTTON_LEFT) ? button_down(button_state_0) : button_up(button_state_0);
-
-        Core::Button_state *button_state_1 = &controller->buttons[Core::Button::button_1];
-        *button_state_1 = mouse_state & SDL_BUTTON(SDL_BUTTON_RIGHT) ? button_down(button_state_1) : button_up(button_state_1);
-      }
-      
-      // Keyboard
-      {
-        Core::Button_state *button_state_4 = &controller->buttons[Core::Button::button_2];
-        *button_state_4 = key_state[SDL_SCANCODE_LSHIFT] ? button_down(button_state_4) : button_up(button_state_4);
-
-        Core::Button_state *button_state_5 = &controller->buttons[Core::Button::button_3];
-        *button_state_5 = key_state[SDL_SCANCODE_SPACE] ? button_down(button_state_5) : button_up(button_state_5);
-        
-        Core::Button_state *button_state_6 = &controller->buttons[Core::Button::button_4];
-        *button_state_6 = key_state[SDL_SCANCODE_RETURN] ? button_down(button_state_6) : button_up(button_state_6);
+//        Core::Button_state *button_state_0 = &controller->buttons[Core::Button::button_0];
+//        *button_state_0 = mouse_state & SDL_BUTTON(SDL_BUTTON_LEFT) ? button_down(button_state_0) : button_up(button_state_0);
+//
+//        Core::Button_state *button_state_1 = &controller->buttons[Core::Button::button_1];
+//        *button_state_1 = mouse_state & SDL_BUTTON(SDL_BUTTON_RIGHT) ? button_down(button_state_1) : button_up(button_state_1);
+//      }
+//      
+//      // Keyboard
+//      {
+//        Core::Button_state *button_state_4 = &controller->buttons[Core::Button::button_2];
+//        *button_state_4 = key_state[SDL_SCANCODE_LSHIFT] ? button_down(button_state_4) : button_up(button_state_4);
+//
+//        Core::Button_state *button_state_5 = &controller->buttons[Core::Button::button_3];
+//        *button_state_5 = key_state[SDL_SCANCODE_SPACE] ? button_down(button_state_5) : button_up(button_state_5);
+//        
+//        Core::Button_state *button_state_6 = &controller->buttons[Core::Button::button_4];
+//        *button_state_6 = key_state[SDL_SCANCODE_RETURN] ? button_down(button_state_6) : button_up(button_state_6);
       }
     }
   }
@@ -162,7 +162,6 @@ capture_mouse(const bool set)
   const SDL_bool set_mouse_hold = set ? SDL_TRUE : SDL_FALSE;
   
   int success = SDL_SetRelativeMouseMode(set_mouse_hold);
-  
   assert(success == 0);
   
   #ifndef NDEBUG
@@ -171,7 +170,7 @@ capture_mouse(const bool set)
     assert(SDL_GetRelativeMouseMode());
     
     #ifndef __APPLE__
-    LOG_WARNING("This is broken on Apple right now.");
+    LOG_WARNING("This is broken on Apple right now: Mouse motion events no longer get fired!");
     #endif
   }
   #endif

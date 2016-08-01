@@ -12,15 +12,24 @@ namespace Core {
 namespace Button {
 enum ENUM : uint32_t { 
 
-  button_0 = BIT(0),
-  button_1 = BIT(1),
-  button_2 = BIT(2),
-  button_3 = BIT(3),
-  button_4 = BIT(4),
-  button_5 = BIT(5),
-  button_6 = BIT(6),
-  button_7 = BIT(7),
+  button_a              = BIT(0),
+  button_b              = BIT(1),
+  button_x              = BIT(2),
+  button_y              = BIT(3),
   
+  button_start          = BIT(4),
+  button_back           = BIT(5),
+  
+  button_left_stick     = BIT(6),
+  button_right_stick    = BIT(7),
+  
+  button_right_shoulder = BIT(8),
+  button_left_shoulder  = BIT(9),
+  
+  button_dpad_up        = BIT(10),
+  button_dpad_down      = BIT(11),
+  button_dpad_left      = BIT(12),
+  button_dpad_right     = BIT(13),
 
 }; // enum
 } // ns

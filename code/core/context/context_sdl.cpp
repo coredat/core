@@ -384,13 +384,20 @@ Context::is_open() const
   #ifdef CORE_DEBUG_MENU
   ImGui::Render();
   #endif
+  
+  auto num_controllers = SDL_NumJoysticks();
+  
+  for(uint32_t i = 0; i < num_controllers; ++i)
+  {
+    SDL_GameControllerOpen(i);
+  }
 
   // Flip buffer and process events.
   SDL_GL_SwapWindow(m_impl->window);
   ImGui_ImplSdlGL3_NewFrame(m_impl->window);
   
   Input_utils::update_input_state(m_impl->context_data->input_pool);
-  Sdl::update_keyboard_controller(&(m_impl->context_data->input_pool->controllers[0]));
+//  Sdl::update_keyboard_controller(&(m_impl->context_data->input_pool->controllers[0]));
   
   // Reset the memory pool.
   Memory::scratch_reset();
