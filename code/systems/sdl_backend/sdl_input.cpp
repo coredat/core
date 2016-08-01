@@ -324,9 +324,9 @@ process_input_messages(const SDL_Event *evt,
     case(SDL_CONTROLLERBUTTONDOWN):
     {
       const uint32_t button_event = (uint32_t)Core::Button_state::down_on_frame;
-      Context_data::Game_controller *controller = &input_data->controllers[evt->jbutton.which];
+      Context_data::Game_controller *controller = &input_data->controllers[evt->cbutton.which];
       
-      on_button_event(controller, evt->cbutton.which, button_event);
+      on_button_event(controller, evt->cbutton.button, button_event);
       break;
     } // SDL_CONTROLLERBUTTONDOWN
 
@@ -334,9 +334,9 @@ process_input_messages(const SDL_Event *evt,
     case(SDL_CONTROLLERBUTTONUP):
     {
       const uint32_t button_event = (uint32_t)Core::Button_state::up_on_frame;
-      Context_data::Game_controller *controller = &input_data->controllers[evt->jbutton.which];
+      Context_data::Game_controller *controller = &input_data->controllers[evt->cbutton.which];
       
-      on_button_event(controller, evt->cbutton.which, button_event);
+      on_button_event(controller, evt->cbutton.button, button_event);
       break;
     } // SDL_CONTROLLERBUTTONUP
 
@@ -368,11 +368,20 @@ process_input_messages(const SDL_Event *evt,
           case(SDL_CONTROLLER_AXIS_RIGHTY):
             input_data->controllers[controller_id].axis[1].y = value;
             break;
+            
+          case(SDL_CONTROLLER_AXIS_TRIGGERLEFT):
+            input_data->controllers[controller_id].triggers[0] = value;
+            break;
+            
+          case(SDL_CONTROLLER_AXIS_TRIGGERRIGHT):
+            input_data->controllers[controller_id].triggers[1] = value == -1 ? 0 : math::abs(value); // TODO: No idea why!
+            break;
         }
       }
       
       break;
     } // SDL_CONTROLLERAXISMOTION
+    
     
   } // Switch
 }

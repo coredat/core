@@ -41,7 +41,6 @@ struct Game_controller
 {
   Core::Axis axis[2];
   float triggers[2];
-  Core::Button_state buttons[16];
   Gamepad_state controller_buttons;
 }; // struct
 

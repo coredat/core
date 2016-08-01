@@ -89,7 +89,7 @@ Context::Context(const uint32_t width,
   
   // Create Window
   {
-    const Uint32 init_flags = SDL_INIT_EVERYTHING;
+    const Uint32 init_flags = SDL_INIT_EVERYTHING | SDL_INIT_GAMECONTROLLER;
 
     if(SDL_Init(init_flags) != 0)
     {

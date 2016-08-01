@@ -91,19 +91,19 @@ Controller::get_axis(const uint8_t axis) const
         
         if(w_key == But_state::down || w_key == Button_state::down_on_frame)
         {
-          x_axis += 1.f;
+          y_axis += 1.f;
         }
         if(a_key == But_state::down || a_key == Button_state::down_on_frame)
         {
-          y_axis -= 1.f;
+          x_axis -= 1.f;
         }
         if(s_key == But_state::down || s_key == Button_state::down_on_frame)
         {
-          x_axis -= 1.f;
+          y_axis -= 1.f;
         }
         if(d_key == But_state::down || d_key == Button_state::down_on_frame)
         {
-          y_axis += 1.f;
+          x_axis += 1.f;
         }
         
         // Normalize them so similar to analog stick.
@@ -143,12 +143,6 @@ Controller::get_trigger(const uint8_t trigger) const
 
 namespace {
 
-inline Core::Button_state
-get_state(const Context_data::Input_pool *data, const uint32_t controller, const uint32_t button_id)
-{
-  return data->controllers[controller].buttons[button_id];
-}
-
 
 inline bool
 is_button(Context_data::Input_pool *input,
@@ -164,18 +158,26 @@ is_button(Context_data::Input_pool *input,
   {
     if(buttons & Core::Button::ENUM::button_a)
     {
+      const uint32_t gp_state = input->controllers[controller_id].controller_buttons.button_a;
+      button_state |= ((gp_state == state_a) || (gp_state == state_b));
     }
     
     if(buttons & Core::Button::ENUM::button_b)
     {
+      const uint32_t gp_state = input->controllers[controller_id].controller_buttons.button_b;
+      button_state |= ((gp_state == state_a) || (gp_state == state_b));
     }
     
     if(buttons & Core::Button::ENUM::button_x)
     {
+      const uint32_t gp_state = input->controllers[controller_id].controller_buttons.button_x;
+      button_state |= ((gp_state == state_a) || (gp_state == state_b));
     }
     
     if(buttons & Core::Button::ENUM::button_y)
     {
+      const uint32_t gp_state = input->controllers[controller_id].controller_buttons.button_y;
+      button_state |= ((gp_state == state_a) || (gp_state == state_b));
     }
     
     if(buttons & Core::Button::ENUM::button_start)
@@ -192,38 +194,71 @@ is_button(Context_data::Input_pool *input,
     
     if(buttons & Core::Button::ENUM::button_back)
     {
+      const uint32_t gp_state = input->controllers[controller_id].controller_buttons.button_back;
+      button_state |= ((gp_state == state_a) || (gp_state == state_b));
+      
+      const uint32_t kb_state = (uint32_t)input->keyboard[SDL_SCANCODE_ESCAPE];
+      button_state |= ((kb_state == state_a) || (kb_state == state_b));
     }
     
     if(buttons & Core::Button::ENUM::button_left_shoulder)
     {
+      const uint32_t gp_state = input->controllers[controller_id].controller_buttons.button_left_shoulder;
+      button_state |= ((gp_state == state_a) || (gp_state == state_b));
     }
     
     if(buttons & Core::Button::ENUM::button_right_shoulder)
     {
+      const uint32_t gp_state = input->controllers[controller_id].controller_buttons.button_right_shoulder;
+      button_state |= ((gp_state == state_a) || (gp_state == state_b));
     }
     
     if(buttons & Core::Button::ENUM::button_left_stick)
     {
+      const uint32_t gp_state = input->controllers[controller_id].controller_buttons.button_left_stick;
+      button_state |= ((gp_state == state_a) || (gp_state == state_b));
     }
     
     if(buttons & Core::Button::ENUM::button_right_stick)
     {
+      const uint32_t gp_state = input->controllers[controller_id].controller_buttons.button_right_stick;
+      button_state |= ((gp_state == state_a) || (gp_state == state_b));
     }
     
     if(buttons & Core::Button::ENUM::button_dpad_up)
     {
+      const uint32_t gp_state = input->controllers[controller_id].controller_buttons.button_dpad_up;
+      button_state |= ((gp_state == state_a) || (gp_state == state_b));
+      
+      const uint32_t kb_state = (uint32_t)input->keyboard[SDL_SCANCODE_UP];
+      button_state |= ((kb_state == state_a) || (kb_state == state_b));
     }
     
     if(buttons & Core::Button::ENUM::button_dpad_down)
     {
+      const uint32_t gp_state = input->controllers[controller_id].controller_buttons.button_dpad_down;
+      button_state |= ((gp_state == state_a) || (gp_state == state_b));
+      
+      const uint32_t kb_state = (uint32_t)input->keyboard[SDL_SCANCODE_DOWN];
+      button_state |= ((kb_state == state_a) || (kb_state == state_b));
     }
 
     if(buttons & Core::Button::ENUM::button_dpad_left)
     {
+      const uint32_t gp_state = input->controllers[controller_id].controller_buttons.button_dpad_left;
+      button_state |= ((gp_state == state_a) || (gp_state == state_b));
+      
+      const uint32_t kb_state = (uint32_t)input->keyboard[SDL_SCANCODE_LEFT];
+      button_state |= ((kb_state == state_a) || (kb_state == state_b));
     }
 
     if(buttons & Core::Button::ENUM::button_dpad_right)
     {
+      const uint32_t gp_state = input->controllers[controller_id].controller_buttons.button_dpad_right;
+      button_state |= ((gp_state == state_a) || (gp_state == state_b));
+      
+      const uint32_t kb_state = (uint32_t)input->keyboard[SDL_SCANCODE_RIGHT];
+      button_state |= ((kb_state == state_a) || (kb_state == state_b));
     }
 
   }
