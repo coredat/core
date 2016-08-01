@@ -1,6 +1,7 @@
 #include "sdl_input.hpp"
 #include <SDL2/SDL.h>
 #include <math/general/general.hpp>
+#include <utilities/logging.hpp>
 #include <utilities/optimizations.hpp>
 
 
@@ -159,7 +160,21 @@ void
 capture_mouse(const bool set)
 {
   const SDL_bool set_mouse_hold = set ? SDL_TRUE : SDL_FALSE;
-  SDL_SetRelativeMouseMode(set_mouse_hold);
+  
+  int success = SDL_SetRelativeMouseMode(set_mouse_hold);
+  
+  assert(success == 0);
+  
+  #ifndef NDEBUG
+  if(set)
+  {
+    assert(SDL_GetRelativeMouseMode());
+    
+    #ifndef __APPLE__
+    LOG_WARNING("This is broken on Apple right now.");
+    #endif
+  }
+  #endif
 }
 
 
@@ -252,63 +267,6 @@ process_input_messages(const SDL_Event *evt,
   switch(evt->type)
   {
     /*
-      Gamepad events.
-    */
-  
-    case(SDL_JOYBUTTONDOWN):
-    case(SDL_CONTROLLERBUTTONDOWN):
-    {
-      const uint32_t button_event = (uint32_t)Core::Button_state::down_on_frame;
-      Context_data::Game_controller *controller = &input_data->controllers[evt->jbutton.which];
-      
-      on_button_event(controller, evt->cbutton.which, button_event);
-    } // SDL_CONTROLLERBUTTONDOWN
-
-    case(SDL_JOYBUTTONUP):
-    case(SDL_CONTROLLERBUTTONUP):
-    {
-      const uint32_t button_event = (uint32_t)Core::Button_state::up_on_frame;
-      Context_data::Game_controller *controller = &input_data->controllers[evt->jbutton.which];
-      
-      on_button_event(controller, evt->cbutton.which, button_event);
-    } // SDL_CONTROLLERBUTTONUP
-
-    case(SDL_JOYAXISMOTION):
-    case(SDL_CONTROLLERAXISMOTION):
-    {
-      const uint32_t controller_id = evt->caxis.which;
-      assert(controller_id < input_data->controller_count);
-
-      if(controller_id < input_data->controller_count)
-      {
-        const float norm  = math::to_float(evt->caxis.value) / sdl_axis_range;
-        const float value = math::nearest_floor(norm, sdl_axis_granularity);
-
-        switch(evt->caxis.axis)
-        {
-          case(SDL_CONTROLLER_AXIS_LEFTX):
-            input_data->controllers[controller_id].axis[0].x = value;
-            break;
-
-          case(SDL_CONTROLLER_AXIS_LEFTY):
-            input_data->controllers[controller_id].axis[0].y = value;
-            break;
-
-          case(SDL_CONTROLLER_AXIS_RIGHTX):
-            input_data->controllers[controller_id].axis[1].x = value;
-            break;
-
-          case(SDL_CONTROLLER_AXIS_RIGHTY):
-            input_data->controllers[controller_id].axis[1].y = value;
-            break;
-        }
-      }
-      
-      break;
-    } // SDL_CONTROLLERAXISMOTION
-
-
-    /*
       Mouse Events
     */
 
@@ -358,6 +316,64 @@ process_input_messages(const SDL_Event *evt,
       break;
     } // SDL_KEYUP
     
+    
+    /*
+      Gamepad events.
+    */
+  
+    case(SDL_JOYBUTTONDOWN):
+    case(SDL_CONTROLLERBUTTONDOWN):
+    {
+      const uint32_t button_event = (uint32_t)Core::Button_state::down_on_frame;
+      Context_data::Game_controller *controller = &input_data->controllers[evt->jbutton.which];
+      
+      on_button_event(controller, evt->cbutton.which, button_event);
+      break;
+    } // SDL_CONTROLLERBUTTONDOWN
+
+    case(SDL_JOYBUTTONUP):
+    case(SDL_CONTROLLERBUTTONUP):
+    {
+      const uint32_t button_event = (uint32_t)Core::Button_state::up_on_frame;
+      Context_data::Game_controller *controller = &input_data->controllers[evt->jbutton.which];
+      
+      on_button_event(controller, evt->cbutton.which, button_event);
+      break;
+    } // SDL_CONTROLLERBUTTONUP
+
+    case(SDL_JOYAXISMOTION):
+    case(SDL_CONTROLLERAXISMOTION):
+    {
+      const uint32_t controller_id = evt->caxis.which;
+      assert(controller_id < input_data->controller_count);
+
+      if(controller_id < input_data->controller_count)
+      {
+        const float norm  = math::to_float(evt->caxis.value) / sdl_axis_range;
+        const float value = math::nearest_floor(norm, sdl_axis_granularity);
+
+        switch(evt->caxis.axis)
+        {
+          case(SDL_CONTROLLER_AXIS_LEFTX):
+            input_data->controllers[controller_id].axis[0].x = value;
+            break;
+
+          case(SDL_CONTROLLER_AXIS_LEFTY):
+            input_data->controllers[controller_id].axis[0].y = value;
+            break;
+
+          case(SDL_CONTROLLER_AXIS_RIGHTX):
+            input_data->controllers[controller_id].axis[1].x = value;
+            break;
+
+          case(SDL_CONTROLLER_AXIS_RIGHTY):
+            input_data->controllers[controller_id].axis[1].y = value;
+            break;
+        }
+      }
+      
+      break;
+    } // SDL_CONTROLLERAXISMOTION
     
   } // Switch
 }

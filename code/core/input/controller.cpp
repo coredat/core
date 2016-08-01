@@ -54,7 +54,24 @@ Controller::get_axis(const uint8_t axis) const
 
   if(input && input->controller_count > m_impl->controller_number && axis < max_axes)
   {
-    return input->controllers[m_impl->controller_number].axis[axis];
+    const Axis return_gp_axis = input->controllers[m_impl->controller_number].axis[axis];
+    
+    /*
+      If we are gamepad 0, and requesting the second axis.
+      Then check the mouse
+    */
+    if((m_impl->controller_number == 0) &&
+      (axis == 1) &&
+      return_gp_axis.x == 0 &&
+      return_gp_axis.y == 0)
+    {
+      const Axis mouse_axis = input->mice[0].delta;
+      const Axis normialized_axis = Axis{mouse_axis.x, mouse_axis.y};
+      
+      return normialized_axis;
+    }
+    
+    return return_gp_axis;
   }
 
   return Axis();
