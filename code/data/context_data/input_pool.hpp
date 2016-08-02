@@ -11,6 +11,7 @@
 #define NUMBER_OF_CONTROLLERS 4
 #define NUMBER_OF_MICE 1
 #define NUMBER_OF_KEYS 512
+#define NUMBER_OF_MOUSE_BUTTONS 5
 
 
 namespace Context_data {
@@ -49,7 +50,7 @@ struct Mouse
 {
   Core::Axis delta;
   Core::Axis position;
-  Core::Button_state buttons[3];
+  Core::Button_state buttons[NUMBER_OF_MOUSE_BUTTONS];
 };
 
 

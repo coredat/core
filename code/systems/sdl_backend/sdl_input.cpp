@@ -189,7 +189,7 @@ namespace {
 
 inline void
 on_button_event(Context_data::Game_controller *controller,
-                const uint32_t key,
+                const Uint8 key,
                 const uint32_t button_event)
 {
   switch(key)
@@ -197,46 +197,91 @@ on_button_event(Context_data::Game_controller *controller,
     case(SDL_CONTROLLER_BUTTON_A):
       controller->controller_buttons.button_a = button_event;
       return;
+      
     case(SDL_CONTROLLER_BUTTON_B):
       controller->controller_buttons.button_b = button_event;
       return;
+      
     case(SDL_CONTROLLER_BUTTON_X):
       controller->controller_buttons.button_x = button_event;
       return;
+      
     case(SDL_CONTROLLER_BUTTON_Y):
       controller->controller_buttons.button_y = button_event;
       return;
+      
     case(SDL_CONTROLLER_BUTTON_BACK):
       controller->controller_buttons.button_back = button_event;
       return;
+      
     case(SDL_CONTROLLER_BUTTON_START):
       controller->controller_buttons.button_start = button_event;
       return;
+      
     case(SDL_CONTROLLER_BUTTON_LEFTSTICK):
       controller->controller_buttons.button_left_stick = button_event;
       return;
+      
     case(SDL_CONTROLLER_BUTTON_RIGHTSTICK):
       controller->controller_buttons.button_right_stick = button_event;
       return;
+      
     case(SDL_CONTROLLER_BUTTON_LEFTSHOULDER):
       controller->controller_buttons.button_left_shoulder = button_event;
       return;
+      
     case(SDL_CONTROLLER_BUTTON_RIGHTSHOULDER):
       controller->controller_buttons.button_right_shoulder = button_event;
       return;
+      
     case(SDL_CONTROLLER_BUTTON_DPAD_UP):
       controller->controller_buttons.button_dpad_up = button_event;
       return;
+      
     case(SDL_CONTROLLER_BUTTON_DPAD_DOWN):
       controller->controller_buttons.button_dpad_down = button_event;
       return;
+      
     case(SDL_CONTROLLER_BUTTON_DPAD_LEFT):
       controller->controller_buttons.button_dpad_left = button_event;
       return;
+      
     case(SDL_CONTROLLER_BUTTON_DPAD_RIGHT):
       controller->controller_buttons.button_dpad_right = button_event;
       return;
+      
     default:
+      return;
+  };
+  UNREACHABLE;
+}
+
+
+inline void
+on_mouse_button_event(Context_data::Mouse *mouse,
+                      const Uint8 key,
+                      const Core::Button_state button_event)
+{
+  switch(key)
+  {
+    case(SDL_BUTTON_LEFT):
+      mouse->buttons[0] = button_event;
+      return;
+      
+    case(SDL_BUTTON_MIDDLE):
+      mouse->buttons[1] = button_event;
+      return;
+      
+    case(SDL_BUTTON_RIGHT):
+      mouse->buttons[2] = button_event;
+      return;
+      
+    case(SDL_BUTTON_X1):
+      mouse->buttons[3] = button_event;
+      return;
+      
+    case(SDL_BUTTON_X2):
+      mouse->buttons[4] = button_event;
       return;
   };
   UNREACHABLE;
@@ -290,11 +335,29 @@ process_input_messages(const SDL_Event *evt,
     
     case(SDL_MOUSEBUTTONDOWN):
     {
+      const uint32_t mouse_id = 0;
+      assert(mouse_id < input_data->mice_count);
+    
+      if(mouse_id < input_data->mice_count)
+      {
+        Context_data::Mouse *mouse = &input_data->mice[mouse_id];
+        on_mouse_button_event(mouse, evt->button.button, Core::Button_state::down_on_frame);
+      }
+      
       break;
     } // SDL_MOUSEBUTTONDOWN
     
     case(SDL_MOUSEBUTTONUP):
     {
+      const uint32_t mouse_id = 0;
+      assert(mouse_id < input_data->mice_count);
+    
+      if(mouse_id < input_data->mice_count)
+      {
+        Context_data::Mouse *mouse = &input_data->mice[mouse_id];
+        on_mouse_button_event(mouse, evt->button.button, Core::Button_state::up_on_frame);
+      }
+      
       break;
     } // SDL_MOUSEBUTTONUP
     

@@ -9,7 +9,7 @@
 namespace Core {
 
 
-namespace Button {
+namespace Gamepad_button {
 enum ENUM : uint32_t { 
 
   button_a              = BIT(0),
@@ -31,6 +31,19 @@ enum ENUM : uint32_t {
   button_dpad_left      = BIT(12),
   button_dpad_right     = BIT(13),
 
+}; // enum
+} // ns
+
+
+namespace Mouse_button {
+enum ENUM : uint32_t {
+
+  left    = BIT(0),
+  middle  = BIT(1),
+  right   = BIT(2),
+  extra_1 = BIT(3),
+  extra_2 = BIT(4),
+  
 }; // enum
 } // ns
 

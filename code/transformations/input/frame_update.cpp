@@ -78,6 +78,21 @@ update_input_state(Context_data::Input_pool *input_data)
     if(input_data->keyboard[i] == Core::Button_state::up_on_frame)          { input_data->keyboard[i] = Core::Button_state::up;   }
     else if(input_data->keyboard[i] == Core::Button_state::down_on_frame)   { input_data->keyboard[i] = Core::Button_state::down; }
   }
+  
+  
+  /*
+    Update mouse events
+  */
+  for(uint32_t i = 0; i < input_data->mice_count; ++i)
+  {
+    Context_data::Mouse *mouse = &input_data->mice[i];
+    
+    for(uint32_t j = 0; j < NUMBER_OF_MOUSE_BUTTONS; ++j)
+    {
+      if(mouse->buttons[j] == Core::Button_state::up_on_frame)          { mouse->buttons[j] = Core::Button_state::up;   }
+      else if(mouse->buttons[j] == Core::Button_state::down_on_frame)   { mouse->buttons[j] = Core::Button_state::down; }
+    }
+  }
 }
 
 
