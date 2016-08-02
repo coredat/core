@@ -62,17 +62,22 @@ Controller::get_axis(const uint8_t axis) const
       Then check the mouse and keyboard if gp returned nothing to use.
     */
     if((m_impl->controller_number == 0) &&
-      return_gp_axis.x == 0 &&
-      return_gp_axis.y == 0)
+      return_gp_axis.x == 0.f &&
+      return_gp_axis.y == 0.f)
     {
       // We can think of mouse as axis 1
       // ie head rotation.
       if(axis == 1)
       {
+        constexpr float scale_factor = 35.f; // TODO: This should be customisable.
+      
         const Axis mouse_axis = input->mice[0].delta;
-        const Axis normialized_axis = Axis{mouse_axis.x, mouse_axis.y};
+        const Axis normialized_axis = Axis{mouse_axis.x / scale_factor, mouse_axis.y / scale_factor};
         
-        return normialized_axis;
+        if(math::abs(normialized_axis.x) > 0.2f || math::abs(normialized_axis.y) > 0.2f)
+        {
+          return normialized_axis;
+        }
       }
       
       // We can think of wasd as movement.
@@ -303,7 +308,6 @@ is_button(Context_data::Input_pool *input,
         button_state |= ((kb_state == state_a) || (kb_state == state_b));
       }
     }
-
   }
 
   return !!button_state;

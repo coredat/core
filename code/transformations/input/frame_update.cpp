@@ -87,6 +87,9 @@ update_input_state(Context_data::Input_pool *input_data)
   {
     Context_data::Mouse *mouse = &input_data->mice[i];
     
+    mouse->delta.x = 0.f;
+    mouse->delta.y = 0.f;
+    
     for(uint32_t j = 0; j < NUMBER_OF_MOUSE_BUTTONS; ++j)
     {
       if(mouse->buttons[j] == Core::Button_state::up_on_frame)          { mouse->buttons[j] = Core::Button_state::up;   }
