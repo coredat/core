@@ -70,13 +70,21 @@ Text_renderer::set_text(const char *str)
   auto texture_data = resources->texture_data;
   assert(texture_data);
   
+  auto text_mesh_data = resources->text_mesh_data;
+  assert(text_mesh_data);
+  
   Resource_data::data_lock(font_data);
   Resource_data::data_lock(texture_data);
+  Resource_data::data_lock(text_mesh_data);
   
   uint32_t texture_id = 0;
   stbtt_fontinfo info;
+  
   Resource_data::font_data_get_property_font_face(font_data, m_font_id, &info);
   Resource_data::font_data_get_property_texture_id(font_data, m_font_id, &texture_id);
+  
+  m_text_id = Resource_data::text_mesh_data_push_back(text_mesh_data);
+  
   
   Ogl::Texture glyph_texture;
   Resource_data::texture_data_get_property_texture(texture_data, texture_id, &glyph_texture);
@@ -126,6 +134,10 @@ Text_renderer::set_text(const char *str)
   
   Ogl::texture_update_texture_2d(&glyph_texture, 0, 0, 512, 512, bitmap);
   
+  // Generate the text mesh here.
+  // bunch of quads
+  
+  Resource_data::data_unlock(text_mesh_data);
   Resource_data::data_lock(texture_data);
   Resource_data::data_lock(font_data);
 
