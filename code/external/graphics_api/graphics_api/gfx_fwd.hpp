@@ -10,9 +10,11 @@ namespace Graphics_api {
 
 struct Texture;
 struct Shader;
+struct Mesh;
+struct Vertex_format;
 
-enum class Pixel_format : uint8_t
-enum class Dimention : uint8_t
+enum class Pixel_format : uint8_t;
+enum class Dimention : uint8_t;
 
 
 } // ns

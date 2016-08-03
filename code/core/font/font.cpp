@@ -57,8 +57,6 @@ Font::Font(const char *filename)
   
   Resource_data::texture_data_set_property_texture(texture_data, texture_id, texture_glyphs);
 
-  
-  
   auto font_id = font_data->size + 1;
   Resource_data::font_data_push_back(font_data, font_id);
   

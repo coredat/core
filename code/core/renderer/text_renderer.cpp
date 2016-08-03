@@ -106,8 +106,15 @@ Text_renderer::set_text(const char *str)
   ascent *= scale;
   descent *= scale;
 
+  Text::Character char_props;
+  char_props.advance[0] = ascent;
+  char_props.advance[1] = descent;
+  
+  
+
   int x = 0;
   int i;
+  
   for (i = 0; i < strlen(str); ++i)
   {
     /* get bounding box for character (may be offset to account for chars that dip above or below the line */

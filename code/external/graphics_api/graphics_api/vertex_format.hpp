@@ -10,14 +10,16 @@
 namespace Graphics_api {
 
 
-struct Vertex_format : public API_TYPE::Vertex_format
+struct Vertex_format
 {
+  API_TYPE::Vertex_format format;
 };
 
 
 enum class Vertex_attribute
 {
   position_3d,
+  position_2d,
   normal,
   texture_coord,
 };
@@ -26,6 +28,18 @@ enum class Vertex_attribute
 Vertex_format
 vertex_format_create(const Vertex_attribute desc[],
                      const uint32_t attribute_count);
+
+
+uint32_t
+vertex_format_get_number_of_attributes(const Vertex_format *fmt);
+
+
+/*!
+  Its upto the calling code to make sure the array is the correct size.
+*/
+void
+vertex_format_get_desc(const Vertex_format *fmt,
+                       Vertex_attribute *out_desc);
   
 
 
