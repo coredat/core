@@ -6,12 +6,12 @@
   This file is auto generated any changes here may be overwritten.
   See code_gen.rake in scripts folder.
 
-  This file was last generated on: Sat 30 Jul 2016
+  This file was last generated on: Wed 03 Aug 2016
 */
 
 
-#ifndef CAMERA_DATA_INCLUDED_D8DCF450_D8EA_4BA0_885F_B94DC9782545
-#define CAMERA_DATA_INCLUDED_D8DCF450_D8EA_4BA0_885F_B94DC9782545
+#ifndef CAMERA_DATA_INCLUDED_ACA51FD3_FBD0_4F75_81D0_1FAD977C2A33
+#define CAMERA_DATA_INCLUDED_ACA51FD3_FBD0_4F75_81D0_1FAD977C2A33
 
 
 #include <utilities/generic_id.hpp>

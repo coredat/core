@@ -47,6 +47,7 @@ Text_renderer::Text_renderer(const util::generic_id font_id,
 void
 Text_renderer::set_font(const Font &font)
 {
+  m_font_id = font.get_id();
 }
 
 
@@ -60,6 +61,74 @@ Text_renderer::get_font() const
 void
 Text_renderer::set_text(const char *str)
 {
+  auto resources = Resource_data::get_resources();
+  assert(resources);
+  
+  auto font_data = resources->font_data;
+  assert(font_data);
+  
+  auto texture_data = resources->texture_data;
+  assert(texture_data);
+  
+  Resource_data::data_lock(font_data);
+  Resource_data::data_lock(texture_data);
+  
+  uint32_t texture_id = 0;
+  stbtt_fontinfo info;
+  Resource_data::font_data_get_property_font_face(font_data, m_font_id, &info);
+  Resource_data::font_data_get_property_texture_id(font_data, m_font_id, &texture_id);
+  
+  Ogl::Texture glyph_texture;
+  Resource_data::texture_data_get_property_texture(texture_data, texture_id, &glyph_texture);
+  
+  int b_w = glyph_texture.width; /* bitmap width */
+  int b_h = glyph_texture.height; /* bitmap height */
+  int l_h = 64; /* line height */
+
+  /* create a bitmap for the phrase */
+  unsigned char* bitmap = (unsigned char*)malloc(b_w * b_h);
+  memset(bitmap, 0, sizeof(unsigned char) * (b_w * b_h));
+  
+  /* calculate font scaling */
+  float scale = stbtt_ScaleForPixelHeight(&info, l_h);
+
+  int ascent, descent, lineGap;
+  stbtt_GetFontVMetrics(&info, &ascent, &descent, &lineGap);
+  
+  ascent *= scale;
+  descent *= scale;
+
+  int x = 0;
+  int i;
+  for (i = 0; i < strlen(str); ++i)
+  {
+    /* get bounding box for character (may be offset to account for chars that dip above or below the line */
+    int c_x1, c_y1, c_x2, c_y2;
+    stbtt_GetCodepointBitmapBox(&info, str[i], scale, scale, &c_x1, &c_y1, &c_x2, &c_y2);
+    
+    /* compute y (different characters have different heights */
+    int y = ascent + c_y1;
+    
+    /* render character (stride and offset is important here) */
+    int byteOffset = x + (y  * b_w);
+    stbtt_MakeCodepointBitmap(&info, bitmap + byteOffset, c_x2 - c_x1, c_y2 - c_y1, b_w, scale, scale, str[i]);
+    
+    /* how wide is this character */
+    int ax;
+    stbtt_GetCodepointHMetrics(&info, str[i], &ax, 0);
+    x += ax * scale;
+    
+    /* add kerning */
+    int kern;
+    kern = stbtt_GetCodepointKernAdvance(&info, str[i], str[i + 1]);
+    x += kern * scale;
+  }
+  
+  Ogl::texture_update_texture_2d(&glyph_texture, 0, 0, 512, 512, bitmap);
+  
+  Resource_data::data_lock(texture_data);
+  Resource_data::data_lock(font_data);
+
 //  return;
 //  // Generate the underlying resource
 //  {

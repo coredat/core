@@ -6,7 +6,7 @@
   This file is auto generated any changes here may be overwritten.
   See code_gen.rake in scripts folder.
 
-  This file was last generated on: Sat 30 Jul 2016
+  This file was last generated on: Wed 03 Aug 2016
 */
 
 
@@ -70,7 +70,7 @@ font_data_init(Font_data *data, const size_t size_hint)
       void *offset = util::mem_offset(alloc_start, byte_counter);
       void *aligned = util::mem_next_16byte_boundry(offset);
 
-      data->property_font_face = reinterpret_cast<int*>(aligned);
+      data->property_font_face = reinterpret_cast<stbtt_fontinfo*>(aligned);
       #ifndef NDEBUG
       memset(offset, 0, bytes_property_font_face);
       #endif
@@ -230,6 +230,50 @@ font_data_exists(const Font_data *data, const util::generic_id key, size_t *out_
   found = util::generic_id_search_binary(out_index, key, data->font_id, data->size);
 
   return found;
+}
+
+
+bool
+font_data_get_property_font_face(const Font_data *data, const util::generic_id key, stbtt_fontinfo *out_value)
+{
+  size_t index;
+
+  if(font_data_exists(data, key, &index))
+  {
+    *out_value = data->property_font_face[index];
+  }
+  else
+  {
+    LOG_ERROR(Error_string::entity_not_found());
+    assert(false);
+
+    return false;
+  }
+
+  return true;
+}
+
+
+bool
+font_data_set_property_font_face(Font_data *data,  const util::generic_id key, const stbtt_fontinfo value)
+{
+  assert(data && key);
+
+  size_t index;
+
+  if(font_data_exists(data, key, &index))
+  {
+    data->property_font_face[index] = value;
+  }
+  else
+  {
+    LOG_ERROR(Error_string::entity_not_found());
+    assert(false);
+
+    return false;
+  }
+
+  return true;
 }
 
 

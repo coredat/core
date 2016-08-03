@@ -6,18 +6,18 @@
   This file is auto generated any changes here may be overwritten.
   See code_gen.rake in scripts folder.
 
-  This file was last generated on: Sat 30 Jul 2016
+  This file was last generated on: Wed 03 Aug 2016
 */
 
 
-#ifndef FONT_DATA_INCLUDED_FDC1F4BF_11E3_451B_A115_5A9C553EBDEB
-#define FONT_DATA_INCLUDED_FDC1F4BF_11E3_451B_A115_5A9C553EBDEB
+#ifndef FONT_DATA_INCLUDED_38BBBF11_4EC1_4D9C_9EAA_46705FE5993F
+#define FONT_DATA_INCLUDED_38BBBF11_4EC1_4D9C_9EAA_46705FE5993F
 
 
 #include <utilities/generic_id.hpp>
 #include <utilities/memory_pool.hpp>
 #include <stddef.h>
-
+#include <3rdparty/stb/stb_truetype.h>
 
 
 namespace Resource_data {
@@ -32,7 +32,7 @@ struct Font_data
   util::generic_id *font_id = nullptr;
 
   // Properties
-  int *property_font_face = nullptr;
+  stbtt_fontinfo *property_font_face = nullptr;
   util::generic_id *property_texture_id = nullptr;
 
   // Size information
@@ -124,6 +124,27 @@ font_data_erase(Font_data *data, const util::generic_id key);
 bool
 font_data_exists(const Font_data *data, const util::generic_id key, size_t *out_index = nullptr);
 
+
+/*!
+  \brief Getter for property_font_face.
+  \param data The container to get information from.
+  \param key The key to search for.
+  \param value The output value, which will be set if the key is found.
+  \return Returns true if the data was found.
+*/
+bool
+font_data_get_property_font_face(const Font_data *data, const util::generic_id key, stbtt_fontinfo *value);
+
+
+/*!
+  \brief Setter for property_font_face.
+  \param data The container to update.
+  \param key The key to search for.
+  \param value The new value of the data.
+  \return Returns true if the data was set.
+*/
+bool
+font_data_set_property_font_face(Font_data *data,  const util::generic_id key, const stbtt_fontinfo value);
 
 
 /*!

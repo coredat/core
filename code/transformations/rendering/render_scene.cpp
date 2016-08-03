@@ -44,8 +44,8 @@ render_main_scene(const float delta_time,
       
       LOG_TODO_ONCE("Move this to graphcis api somewhere.");
       
-      const GLsizei width = cam->fbo.color_buffer[0].width; // viewport_x ?
-      const GLsizei height = cam->fbo.color_buffer[0].height; // viewport_y ?
+      const GLsizei width = viewport_x; //cam->fbo.color_buffer[0].width; // viewport_x ?
+      const GLsizei height = viewport_y; //cam->fbo.color_buffer[0].height; // viewport_y ?
       
       glViewport(0, 0, width, height);
     }

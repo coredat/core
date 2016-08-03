@@ -4,12 +4,6 @@ data:
   header_dir: data/global_data/
   path: code/data/global_data/
 
-  additional_includes:
-    - file: header
-      include: <ft2build.h>
-    - file: header
-      include: FT_FREETYPE_H
-
   key:
     name: font_id
     search_type: binary
@@ -17,8 +11,9 @@ data:
 
   properties:
     - name: font_face
-      type: FT_Face
+      type: stbtt_fontinfo
       return: value
+      include: <3rdparty/stb/stb_truetype.h>
 
     - name: texture_id
       type: util::generic_id

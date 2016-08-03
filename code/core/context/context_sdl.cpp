@@ -97,7 +97,7 @@ Context::Context(const uint32_t width,
       LOG_FATAL(Error_string::generic_sdl_fail());
     }
 
-    const Uint32 default_window_flags = /*SDL_WINDOW_ALLOW_HIGHDPI |*/ SDL_WINDOW_OPENGL;
+    const Uint32 default_window_flags = SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_OPENGL;
     const Uint32 window_flags = is_fullscreen ? default_window_flags | fullscreen_mode : default_window_flags;
 
     m_impl->window = SDL_CreateWindow(title,
@@ -173,12 +173,37 @@ Context::Context(const uint32_t width,
   {
     Context::Impl *impl = reinterpret_cast<Context::Impl*>(self);
     
+    LOG_TODO_ONCE("Move this to a transform or into sdl_backend system");
+    
     switch(evt->type)
     {
       // Time to quit.
       case(SDL_QUIT):
         impl->is_open = false;
         break;
+        
+      case(SDL_WINDOWEVENT):
+      {
+        switch(evt->window.event)
+        {
+          case(SDL_WINDOWEVENT_RESIZED):
+          {
+            LOG_TODO("This event could be called when transitioning to or from a retina monitor. Do I need to regenerate fbo's?");
+            break;
+          }
+          case(SDL_WINDOWEVENT_FOCUS_LOST):
+          {
+            LOG_TODO("Should button events be reset? Do We still get other events?");
+            break;
+          }
+          case(SDL_WINDOWEVENT_FOCUS_GAINED):
+          {
+            LOG_TODO("Do we need to reinitialize anything here?");
+            break;
+          }
+        }
+        break;
+      }
     }
   },
   m_impl.get());

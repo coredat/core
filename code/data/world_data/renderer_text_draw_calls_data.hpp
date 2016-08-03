@@ -6,12 +6,12 @@
   This file is auto generated any changes here may be overwritten.
   See code_gen.rake in scripts folder.
 
-  This file was last generated on: Sat 30 Jul 2016
+  This file was last generated on: Wed 03 Aug 2016
 */
 
 
-#ifndef RENDERER_TEXT_DRAW_CALLS_DATA_INCLUDED_043F1E48_B677_4CB0_9AA1_D8CCD62156E8
-#define RENDERER_TEXT_DRAW_CALLS_DATA_INCLUDED_043F1E48_B677_4CB0_9AA1_D8CCD62156E8
+#ifndef RENDERER_TEXT_DRAW_CALLS_DATA_INCLUDED_C4D2AB5C_A297_4AC5_A970_00F681C33451
+#define RENDERER_TEXT_DRAW_CALLS_DATA_INCLUDED_C4D2AB5C_A297_4AC5_A970_00F681C33451
 
 
 #include <utilities/generic_id.hpp>
