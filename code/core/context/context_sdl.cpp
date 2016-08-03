@@ -89,7 +89,7 @@ Context::Context(const uint32_t width,
   
   // Create Window
   {
-    const Uint32 init_flags = SDL_INIT_EVERYTHING | SDL_INIT_GAMECONTROLLER;
+    const Uint32 init_flags = SDL_INIT_EVERYTHING;
 
     if(SDL_Init(init_flags) != 0)
     {
@@ -97,7 +97,8 @@ Context::Context(const uint32_t width,
       LOG_FATAL(Error_string::generic_sdl_fail());
     }
 
-    const Uint32 default_window_flags = SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_OPENGL;
+    const Uint32 window_high_dpi = settings.high_dpi_support ? SDL_WINDOW_ALLOW_HIGHDPI : 0;
+    const Uint32 default_window_flags = window_high_dpi | SDL_WINDOW_OPENGL;
     const Uint32 window_flags = is_fullscreen ? default_window_flags | fullscreen_mode : default_window_flags;
 
     m_impl->window = SDL_CreateWindow(title,
