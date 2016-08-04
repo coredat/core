@@ -89,7 +89,7 @@ create_quads(const Vertex_format *fmt,
   }
   
   const size_t buffer_size = sizeof(float) * (buffer_items * number_of_quads);
-  float *buffer_data = (float*)GFX_MALLOC(buffer_size);
+  float *buffer_data = new float[buffer_items * number_of_quads];
   uint32_t buffer_offset = 0;
   
   const uint32_t number_of_attributes = vertex_format_get_number_of_attributes(fmt);
@@ -101,7 +101,7 @@ create_quads(const Vertex_format *fmt,
     for(uint32_t j = 0; j < number_of_attributes * verts_in_quad; ++j)
     {
       const uint32_t current_vert = j % verts_in_quad;
-    
+      
       switch(desc[i])
       {
         case(Vertex_attribute::position_3d):
@@ -134,7 +134,8 @@ create_quads(const Vertex_format *fmt,
   Mesh return_mesh;
   Graphics_api::mesh_create_new(&return_mesh, buffer_data, number_of_attributes);
   
-  GFX_FREE(buffer_data);
+  delete[] buffer_data; //(buffer_data);
+//  GFX_FREE(buffer_data);
   
   return return_mesh;
 }
