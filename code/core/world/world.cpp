@@ -317,7 +317,11 @@ World::think()
                                draw_calls,
                                world->mesh_data->size,
                                &number_of_draw_calls);
-
+  
+  LOG_TODO_ONCE("Scratch code for text rendering");
+  
+  
+  
   /*
     Debug Menu
     --

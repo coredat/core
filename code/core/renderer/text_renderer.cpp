@@ -5,6 +5,10 @@
 #include <data/global_data/resource_data.hpp>
 #include <systems/text/character.hpp>
 
+#include <graphics_api/utils/geometry.hpp>
+#include <graphics_api/mesh.hpp>
+#include <graphics_api/vertex_format.hpp>
+
 
 namespace Core {
 
@@ -143,6 +147,24 @@ Text_renderer::set_text(const char *str)
   
   // Generate the text mesh here.
   // bunch of quads
+  
+  Graphics_api::Vertex_attribute vertdesc[3] = {
+    Graphics_api::Vertex_attribute::position_3d,
+    Graphics_api::Vertex_attribute::normal,
+    Graphics_api::Vertex_attribute::texture_coord,
+  };
+  
+  Graphics_api::Vertex_format v_fmt = Graphics_api::vertex_format_create(vertdesc, 3);
+  
+  Graphics_api::Quad_info q;
+  
+  auto mesh = Graphics_api::create_quads(&v_fmt, &q, 1);
+  assert(Ogl::vertex_buffer_is_valid(mesh.vbo));
+  
+  auto text_mesh_id = Resource_data::text_mesh_data_push_back(text_mesh_data);
+  
+  Resource_data::text_mesh_data_set_property_text(text_mesh_data, text_mesh_id, str);
+  Resource_data::text_mesh_data_set_property_mesh(text_mesh_data, text_mesh_id, mesh);
   
   Resource_data::data_unlock(text_mesh_data);
   Resource_data::data_lock(texture_data);

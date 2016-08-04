@@ -29,9 +29,10 @@ render_main_scene(const float delta_time,
                   const uint32_t                         number_of_draws,
                   uint32_t *out_draw_calls)
 {
+  LOG_TODO_ONCE("Pass the data not the containers here, This makes it difficult to use for other things Phil!")
+
   // Stats to gather
   uint32_t number_of_draw_calls = 0;
-  
   
   for(uint32_t c = 0; c < number_of_cam_runs; ++c)
   {
