@@ -34,6 +34,10 @@ uint32_t
 vertex_format_get_number_of_attributes(const Vertex_format *fmt);
 
 
+constexpr uint32_t
+vertex_format_get_max_number_attributes() { return 16; }
+
+
 /*!
   Its upto the calling code to make sure the array is the correct size.
 */
@@ -41,7 +45,6 @@ void
 vertex_format_get_desc(const Vertex_format *fmt,
                        Vertex_attribute *out_desc);
   
-
 
 } // ns
 

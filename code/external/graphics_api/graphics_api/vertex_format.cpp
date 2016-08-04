@@ -1,9 +1,18 @@
 #include "vertex_format.hpp"
 
 
-#define VF_NAME "in_vs_position"
-#define VF_NORMAL "in_vs_normal"
-#define VF_TEX_COORD "in_vs_texture_coord"
+// These needed to be macros because they don't work
+// as constexpr in the inline ctors {} below.
+#define VF_POSITION_NAME "in_vs_position"
+#define VF_NORMAL_NAME "in_vs_normal"
+#define VF_TEX_COORD_NAME "in_vs_texture_coord"
+
+
+namespace {
+
+constexpr uint32_t max_attr_count = Graphics_api::vertex_format_get_max_number_attributes();
+
+}
 
 
 namespace Graphics_api {
@@ -14,8 +23,8 @@ vertex_format_create(const Vertex_attribute desc[],
                      const uint32_t attribute_count)
 {
   // Only support 16 attributes.
-  Ogl::Attribute_desc ogl_vert_attr[16];
-  assert(attribute_count < 16);
+  Ogl::Attribute_desc ogl_vert_attr[max_attr_count];
+  assert(attribute_count < max_attr_count);
   
   bool has_position       = false;
   bool has_normal         = false;
@@ -29,7 +38,7 @@ vertex_format_create(const Vertex_attribute desc[],
       {
         assert(!has_position); // Can only have one pos attr
         has_position = true;
-        ogl_vert_attr[i] = {VF_NAME, Ogl::Attr_type::FLOAT3};
+        ogl_vert_attr[i] = {VF_POSITION_NAME, Ogl::Attr_type::FLOAT3};
         break;
       }
       
@@ -37,7 +46,7 @@ vertex_format_create(const Vertex_attribute desc[],
       {
         assert(!has_position); // Can only have one pos attr
         has_position = true;
-        ogl_vert_attr[i] = {"in_vs_position", Ogl::Attr_type::FLOAT2};
+        ogl_vert_attr[i] = {VF_POSITION_NAME, Ogl::Attr_type::FLOAT2};
         break;
       }
       
@@ -45,7 +54,7 @@ vertex_format_create(const Vertex_attribute desc[],
       {
         assert(!has_normal); // Can only have one normal
         has_normal = true;
-        ogl_vert_attr[i] = {VF_TEX_COORD, Ogl::Attr_type::FLOAT3};
+        ogl_vert_attr[i] = {VF_NORMAL_NAME, Ogl::Attr_type::FLOAT3};
         break;
       }
       
@@ -53,7 +62,7 @@ vertex_format_create(const Vertex_attribute desc[],
       {
         assert(!has_texture_coord); // Can only have one tex coord
         has_texture_coord = true;
-        ogl_vert_attr[i] = {"in_vs_texture_coord", Ogl::Attr_type::FLOAT2};
+        ogl_vert_attr[i] = {VF_TEX_COORD_NAME, Ogl::Attr_type::FLOAT2};
         break;
       }
       
@@ -87,20 +96,30 @@ vertex_format_get_desc(const Vertex_format *fmt,
   for(uint32_t i = 0; i < attr_count; ++i)
   {
     // Is position?
-    if(strcmp(fmt->format.attributes->name, "in_vs_position") == 0)
+    if(strcmp(fmt->format.attributes[i].name, VF_POSITION_NAME) == 0)
     {
-      
+      const uint32_t attr_size = fmt->format.attributes[i].size;
+    
+      if(attr_size == 3)
+      {
+        out_desc[i] = Vertex_attribute::position_3d;
+      }
+      else if(attr_size == 2)
+      {
+        out_desc[i] = Vertex_attribute::position_2d;
+      }
     }
     
     // Normal
-    else if(strcmp(fmt->format.attributes->name, "in_vs_normal") == 0)
+    else if(strcmp(fmt->format.attributes[i].name, VF_NORMAL_NAME) == 0)
     {
+      out_desc[i] = Vertex_attribute::normal;
     }
     
-    //
-    else if(strcmp(fmt->format.attributes->name, "in_vs_texture_coord") == 0)
+    // If tex coord name
+    else if(strcmp(fmt->format.attributes[i].name, VF_TEX_COORD_NAME) == 0)
     {
-    
+      out_desc[i] = Vertex_attribute::texture_coord;
     }
   }
 }
