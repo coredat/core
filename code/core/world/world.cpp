@@ -321,7 +321,30 @@ World::think()
                                &number_of_draw_calls);
   
   LOG_TODO_ONCE("Scratch code for text rendering");
-  ::Text_renderer::render(const math::mat4 &view_proj_mat, const Text_renderer::Draw_call *calls, const uint32_t number_of_calls)
+  
+  
+  for(uint32_t i = 0; i < number_of_cam_runs; ++i)
+  {
+    const math::mat4 world = math::mat4_multiply(math::mat4_id(), math::mat4_scale(math::vec3_init(20.f)));
+    const math::mat4 view_proj = math::mat4_multiply(world, cam_runs[i].view, cam_runs[i].proj);
+    
+    ::Text_renderer::Draw_call dc[2];
+    
+    // Get text mesh and try and render it.
+    Graphics_api::Mesh mesh;
+    Resource_data::text_mesh_data_get_property_mesh(resources->text_mesh_data, 1, &mesh);
+    
+    dc[0].mesh = mesh;
+    
+    Resource_data::text_mesh_data_get_property_mesh(resources->text_mesh_data, 2, &mesh);
+    
+    Graphics_api::Mesh test;
+    Resource_data::mesh_data_get_property_mesh(resources->mesh_data, 1, &test);
+    
+    dc[1].mesh = mesh;
+    
+    ::Text_renderer::render(view_proj, &dc[1], 1);
+  }
   
   
   /*
