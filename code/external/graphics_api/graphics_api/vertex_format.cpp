@@ -1,4 +1,5 @@
 #include "vertex_format.hpp"
+#include "ogl/ogl_vertex_format.hpp"
 
 
 // These needed to be macros because they don't work
@@ -122,6 +123,14 @@ vertex_format_get_desc(const Vertex_format *fmt,
       out_desc[i] = Vertex_attribute::texture_coord;
     }
   }
+}
+
+
+bool
+vertex_format_is_valid(const Vertex_format *fmt)
+{
+  assert(fmt);
+  return Ogl::vertex_format_is_valid(&fmt->format);
 }
 
 

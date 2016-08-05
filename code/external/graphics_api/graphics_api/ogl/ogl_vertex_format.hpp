@@ -72,7 +72,7 @@ vertex_format_load(Vertex_format *out_format,
   \return true if the format is valid.
 */
 inline bool
-vertex_format_is_valid(Vertex_format *vert_fmt)
+vertex_format_is_valid(const Vertex_format *vert_fmt)
 {
   assert(vert_fmt);
   return vert_fmt->stride > 0;

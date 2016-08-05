@@ -142,7 +142,7 @@ create_quads(const Vertex_format *fmt,
   
   // Create vbo
   Mesh return_mesh;
-  Graphics_api::mesh_create_new(&return_mesh, buffer_data, number_of_attributes);
+  Graphics_api::mesh_create_new(&return_mesh, buffer_data, number_of_attributes * verts_in_quad * number_of_quads);
   
 //  delete[] buffer_data; //(buffer_data);
   GFX_FREE(buffer_data);

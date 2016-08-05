@@ -3,6 +3,7 @@
 #include <graphics_api/ogl/ogl_shader_uniform.hpp>
 #include <graphics_api/ogl/ogl_vertex_format.hpp>
 #include <graphics_api/vertex_format.hpp>
+#include <systems/renderer_common/vertex_format.hpp>
 
 
 namespace {
@@ -59,13 +60,7 @@ initialize()
   
   Ogl::shader_create(&text_shader, vs_shader, nullptr, ps_shader);
   
-  const Graphics_api::Vertex_attribute vertex_desc[] = {
-    Graphics_api::Vertex_attribute::position_3d,
-    Graphics_api::Vertex_attribute::normal,
-    Graphics_api::Vertex_attribute::texture_coord,
-  };
-  
-  vert_fmt = Graphics_api::vertex_format_create(vertex_desc, 3);
+  vert_fmt = Renderer_common::get_standard_vertex_format();
   
   Ogl::Shader_uniforms unis;
   Ogl::shader_uniforms_retrive(&unis, &text_shader);
@@ -91,9 +86,6 @@ render(const math::mat4 &view_proj_mat,
   
   for(uint32_t i = 0; i < number_of_calls; ++i)
   {
-    glDisable(GL_CULL_FACE);
-    glDisable(GL_BLEND);
-  
     Ogl::vertex_buffer_bind(calls[i].mesh.vbo, &vert_fmt.format, &text_shader);
     
     Ogl::shader_uniforms_apply(wvp_uni, (void*)&view_proj_mat);

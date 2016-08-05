@@ -45,6 +45,10 @@ void
 vertex_format_get_desc(const Vertex_format *fmt,
                        Vertex_attribute *out_desc);
   
+  
+bool
+vertex_format_is_valid(const Vertex_format *fmt);
+  
 
 } // ns
 

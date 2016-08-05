@@ -322,10 +322,11 @@ World::think()
   
   LOG_TODO_ONCE("Scratch code for text rendering");
   
-  
   for(uint32_t i = 0; i < number_of_cam_runs; ++i)
   {
-    const math::mat4 world = math::mat4_multiply(math::mat4_id(), math::mat4_scale(math::vec3_init(20.f)));
+//    const math::mat4 rot       = math::mat4_rotate_around_axis(math::vec3_init(1, 0, 0), 0.5f);
+    const math::mat4 scale     = math::mat4_scale(math::vec3_init(100.f));
+    const math::mat4 world     = math::mat4_multiply(math::mat4_id(), scale);
     const math::mat4 view_proj = math::mat4_multiply(world, cam_runs[i].view, cam_runs[i].proj);
     
     ::Text_renderer::Draw_call dc[2];
@@ -337,9 +338,6 @@ World::think()
     dc[0].mesh = mesh;
     
     Resource_data::text_mesh_data_get_property_mesh(resources->text_mesh_data, 2, &mesh);
-    
-    Graphics_api::Mesh test;
-    Resource_data::mesh_data_get_property_mesh(resources->mesh_data, 1, &test);
     
     dc[1].mesh = mesh;
     
