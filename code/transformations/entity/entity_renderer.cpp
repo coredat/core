@@ -17,6 +17,21 @@
 namespace Entity_detail {
 
 
+uint32_t
+has_renderer(const util::generic_id this_id,
+             World_data::Entity_data *entity_data)
+{
+  World_data::data_lock(entity_data);
+  
+  uint32_t renderer_type(0);
+  World_data::entity_data_get_property_renderer(entity_data, this_id, &renderer_type);
+  
+  World_data::data_unlock(entity_data);
+
+  return renderer_type;
+}
+
+
 void
 set_renderer(const util::generic_id this_id,
              World_data::World *world,
@@ -85,7 +100,10 @@ set_renderer(const util::generic_id this_id,
     case(Core::Renderer_type::text):
     {
       const Core::Text_renderer text_renderer(renderer);
-      LOG_ERROR(Error_string::no_implimentation());
+      set_renderer_text(this_id,
+                        world,
+                        text_renderer.get_font_id(),
+                        text_renderer.get_text_id());
       
       break;
     }
@@ -336,6 +354,32 @@ set_renderer_text(const util::generic_id this_id,
   // Check valid
   if(!is_valid(this_id, world, true)) {
     assert(false); return;
+  }
+  
+  // Check to see entity has a renderer.
+  // If not then set it.
+  {
+    LOG_TODO_ONCE("This is duplicated - unduplicate it")
+  
+    auto entity_data = world->entity;
+    assert(entity_data);
+    
+    const uint32_t renderer_type = has_renderer(this_id, entity_data);
+    
+    World_data::data_lock(entity_data);
+  
+    if(renderer_type != 0 && (Core::Renderer_type)renderer_type != Core::Renderer_type::material)
+    {
+      // Currently no mechanism to change a renderer type.
+      LOG_ERROR(Error_string::no_implimentation());
+      return;
+    }
+    else
+    {
+      World_data::entity_data_set_property_renderer(entity_data, this_id, (uint32_t)Core::Renderer_type::text);
+    }
+    
+    World_data::data_unlock(entity_data);
   }
 }
 

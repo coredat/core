@@ -4,8 +4,6 @@
 
 #include <systems/renderer_material/material.hpp> // Can be fwd declared
 #include <graphics_api/mesh.hpp>
-#include <graphics_api/ogl/ogl_shader.hpp>
-#include <graphics_api/ogl/ogl_texture.hpp>
 #include <math/mat/mat_types.hpp>
 #include <stdint.h>
 

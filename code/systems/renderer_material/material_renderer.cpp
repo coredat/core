@@ -69,7 +69,7 @@ render(const math::mat4 &view_proj_mat,
 
   Ogl::error_clear();
   
-  // TODO: This is a hack!
+  // TODO: This is a hack! for text
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   

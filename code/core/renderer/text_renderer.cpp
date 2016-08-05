@@ -312,4 +312,18 @@ Text_renderer::operator Renderer() const
 }
 
 
+util::generic_id
+Text_renderer::get_font_id() const
+{
+  return m_font_id;
+}
+
+
+util::generic_id
+Text_renderer::get_text_id() const
+{
+  return m_text_id;
+}
+
+
 } // ns

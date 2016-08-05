@@ -8,6 +8,11 @@
 namespace Entity_detail {
 
 
+uint32_t
+has_renderer(const util::generic_id this_id,
+             World_data::Entity_data *entity_data);
+
+
 void
 set_renderer(const util::generic_id this_id,
              World_data::World *world,

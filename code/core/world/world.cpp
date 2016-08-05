@@ -26,6 +26,7 @@
 #include <systems/renderer_post/post_process.hpp>
 #include <systems/renderer_material/material_renderer.hpp>
 #include <systems/renderer_aabb/renderer_aabb.hpp>
+#include <systems/renderer_text/text_renderer.hpp>
 
 #include <transformations/physics/overlapping_aabb.hpp>
 #include <transformations/physics/update_world.hpp>
@@ -73,6 +74,7 @@ World::World(Context &ctx, const World_setup setup)
   Debug_line_renderer::initialize();
   Aabb_renderer::initialize();
   
+  ::Text_renderer::initialize();
   ::Material_renderer::initialize();
   ::Post_renderer::initialize();
   
@@ -319,7 +321,7 @@ World::think()
                                &number_of_draw_calls);
   
   LOG_TODO_ONCE("Scratch code for text rendering");
-  
+  ::Text_renderer::render(const math::mat4 &view_proj_mat, const Text_renderer::Draw_call *calls, const uint32_t number_of_calls)
   
   
   /*
