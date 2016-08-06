@@ -16,6 +16,10 @@ constexpr Graphics_api::Vertex_attribute vertex_desc[vertex_attr_count] =
   Graphics_api::Vertex_attribute::texture_coord,
 };
 
+
+/*!
+  Standard vertex format for most mesh style renderings.
+*/
 Graphics_api::Vertex_format
 get_standard_vertex_format()
 {

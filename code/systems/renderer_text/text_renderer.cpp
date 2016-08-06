@@ -3,6 +3,8 @@
 #include <graphics_api/ogl/ogl_shader_uniform.hpp>
 #include <graphics_api/ogl/ogl_vertex_format.hpp>
 #include <graphics_api/vertex_format.hpp>
+#include <graphics_api/texture_filtering.hpp>
+#include <graphics_api/ogl/ogl_texture_filtering.hpp>
 #include <systems/renderer_common/vertex_format.hpp>
 
 
@@ -11,7 +13,7 @@ namespace {
   Ogl::Shader text_shader;
   Graphics_api::Vertex_format vert_fmt;
   Ogl::Uniform wvp_uni;
-
+  Ogl::Uniform texture_uni;
 }
 
 
@@ -24,18 +26,19 @@ initialize()
   const char *vs_shader = R"(
     #version 150 core
 
-    in vec3 vs_in_position;
-    in vec3 vs_in_normal;
-    in vec2 vs_in_texture_coords;
+    in vec3 in_vs_position;
+    in vec3 in_vs_normal;
+    in vec2 in_vs_texture_coord;
 
     uniform mat4 uni_wvp_mat;
   
-    out vec2 ps_in_texture_coords;
+    out vec2 in_ps_texture_coord;
 
     void
     main()
     {
-      gl_Position = uni_wvp_mat * vec4(vs_in_position, 1.0);
+      gl_Position = uni_wvp_mat * vec4(in_vs_position, 1.0);
+      in_ps_texture_coord = in_vs_texture_coord;
     }
   )";
   
@@ -51,10 +54,9 @@ initialize()
     void
     main()
     {
-//      vec4 tex_sample = texture(uni_map_01, in_ps_texture_coord);
-//      out_frag_color = tex_sample.rgba;
-      
-      out_frag_color = vec4(1,1,1,1);
+      vec4 tex_sample = texture(uni_map_01, in_ps_texture_coord);
+      out_frag_color = tex_sample;
+    
     }
   )";
   
@@ -66,6 +68,7 @@ initialize()
   Ogl::shader_uniforms_retrive(&unis, &text_shader);
   
   Ogl::shader_uniforms_get_uniform_index(&wvp_uni, &unis, "uni_wvp_mat");
+  Ogl::shader_uniforms_get_uniform_index(&texture_uni, &unis, "uni_map_01");
   
 }
 
@@ -88,7 +91,18 @@ render(const math::mat4 &view_proj_mat,
   {
     Ogl::vertex_buffer_bind(calls[i].mesh.vbo, &vert_fmt.format, &text_shader);
     
+    // Move the filter selection into the material.
+    static Graphics_api::Texture_filtering filter =
+    {
+      Graphics_api::Filtering_mode::anisotropic,
+      Graphics_api::Wrap_mode::wrap,
+      Graphics_api::Wrap_mode::wrap
+    };
+    
+    Ogl::filtering_apply(filter);
+    
     Ogl::shader_uniforms_apply(wvp_uni, (void*)&view_proj_mat);
+    Ogl::shader_uniforms_apply(texture_uni, (void*)&calls[i].texture.texture_id);
     
     const GLsizei count = calls[i].mesh.vbo.number_of_entries / vert_fmt.format.number_of_attributes;
     glDrawArrays(GL_TRIANGLES, 0, count);

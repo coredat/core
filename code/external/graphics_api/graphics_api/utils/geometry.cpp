@@ -106,7 +106,7 @@ create_quads(const Vertex_format *fmt,
 
   for(size_t i = 0; i < number_of_quads; ++i) {
     for(uint32_t j = 0; j < verts_in_quad; ++j) {
-      for(uint32_t k = 0; k < number_of_attributes; ++k)
+      for(uint32_t k = 0; k < 3; ++k)
       {
         const uint32_t current_vert = j % verts_in_quad;
         

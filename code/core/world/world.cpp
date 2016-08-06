@@ -324,8 +324,7 @@ World::think()
   
   for(uint32_t i = 0; i < number_of_cam_runs; ++i)
   {
-//    const math::mat4 rot       = math::mat4_rotate_around_axis(math::vec3_init(1, 0, 0), 0.5f);
-    const math::mat4 scale     = math::mat4_scale(math::vec3_init(100.f));
+    const math::mat4 scale     = math::mat4_scale(math::vec3_init(40.f));
     const math::mat4 world     = math::mat4_multiply(math::mat4_id(), scale);
     const math::mat4 view_proj = math::mat4_multiply(world, cam_runs[i].view, cam_runs[i].proj);
     
@@ -338,8 +337,20 @@ World::think()
     dc[0].mesh = mesh;
     
     Resource_data::text_mesh_data_get_property_mesh(resources->text_mesh_data, 2, &mesh);
+  
+//    mesh = resources->mesh_data->property_mesh[resources->mesh_data->size - 1];
     
     dc[1].mesh = mesh;
+    
+    Ogl::Texture texture;
+    const char *name = nullptr;
+    util::generic_id id = resources->texture_data->texture_id[0];
+    Resource_data::texture_data_get_property_texture(resources->texture_data, id, &texture);
+    Resource_data::texture_data_get_property_name(resources->texture_data, id, &name);
+    
+    dc[1].texture = texture;
+    
+//    glViewport(0, 0, m_impl->context->get_width(), m_impl->context->get_height());
     
     ::Text_renderer::render(view_proj, &dc[1], 1);
   }
