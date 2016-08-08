@@ -119,34 +119,77 @@ Text_renderer::set_text(const char *str)
   int x = 0;
   int i;
   
+  Text::Font_bitmap font_bitmap;
+  Resource_data::font_data_get_property_font_bitmap(font_data, m_font_id, &font_bitmap);
+  font_bitmap.line_height = ascent + math::abs(descent);
+  font_bitmap.bitmap_size[0] = glyph_texture.width;
+  font_bitmap.bitmap_size[1] = glyph_texture.height;
+  
   Text::Character char_props[64];
   
   for (i = 0; i < strlen(str); ++i) // utf8 support?
   {
-    const char codepoint = str[i];
-  
+    const int codepoint = str[i];
+    
+    // If code point exists skip
+    
 //    FontGlyph * glyph = font->glyphs + get_font_glyph_index((char)code_point);
-
-    int bitmap_width, bitmap_height;
+    
+    int glyph_width, glyph_height;
     int x_offset, y_offset;
     
-    unsigned char * bitmap_data = stbtt_GetCodepointBitmap(&info, 0, scale, codepoint, &bitmap_width, &bitmap_height, &x_offset, &y_offset);
-//    assert(bitmap_data);
+    unsigned char * glyph_bitmap = stbtt_GetCodepointBitmap(&info,
+                                                            0,
+                                                            scale,
+                                                            codepoint,
+                                                            &glyph_width,
+                                                            &glyph_height,
+                                                            &x_offset,
+                                                            &y_offset);
 
-    //NOTE: When you render a glyph add this offset to it's position to align it correctly
-    const math::vec2 offset = math::vec2_init(bitmap_width * 0.5 + x_offset, -(bitmap_height * 0.5f + y_offset));
+//    const math::vec2 offset = math::vec2_init(bitmap_width * 0.5 + x_offset, -(bitmap_height * 0.5f + y_offset));
 
     int advance, left_side_bearing;
     stbtt_GetCodepointHMetrics(&info, codepoint, &advance, &left_side_bearing);
 
     advance *= scale;
     
-    x += advance;
+    const int bitmap_advance = math::max(advance, glyph_width);
+    const int width_needed = bitmap_advance + glyph_width;
     
-    if(bitmap_data)
-    Ogl::texture_update_texture_2d(&glyph_texture, x, 0, bitmap_width, bitmap_height, bitmap_data);
+    if(font_bitmap.bitmap_offset[0] + width_needed > bitmap_width)
+    {
+      if(font_bitmap.bitmap_offset[1] + font_bitmap.line_height > font_bitmap.bitmap_size[1])
+      {
+        LOG_WARNING("Font map is full.");
+        break;
+      }
+      
+      font_bitmap.bitmap_offset[0] = 0;
+      font_bitmap.bitmap_offset[1] += font_bitmap.line_height;
+    }
     
-    stbtt_FreeBitmap(bitmap_data, nullptr);
+    Ogl::texture_update_texture_2d(&glyph_texture,
+                                   font_bitmap.bitmap_offset[0],
+                                   font_bitmap.bitmap_offset[1],
+                                   glyph_width,
+                                   glyph_height,
+                                   glyph_bitmap);
+    
+    stbtt_FreeBitmap(glyph_bitmap, nullptr);
+    
+    // Set glyph stats
+    Text::Character char_info;
+    char_info.advance[0] = advance;
+    char_info.uv[0] = math::to_float(font_bitmap.bitmap_offset[0]) / math::to_float(font_bitmap.bitmap_size[0]);
+    char_info.uv[1] = math::to_float(font_bitmap.bitmap_offset[1]) / math::to_float(font_bitmap.bitmap_size[1]);
+    
+    assert(false);
+    // Need to add width / height.
+    
+    
+    // We can now add the advance
+    font_bitmap.bitmap_offset[0] += bitmap_advance;
   }
   
   // Generate the text mesh here.

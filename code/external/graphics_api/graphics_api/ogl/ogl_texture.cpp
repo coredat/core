@@ -78,7 +78,7 @@ texture_update_texture_2d(Texture *update_texture,
                           const void *data)
 {
   // Param check
-  if(!update_texture || !data || (width + offset_x) > update_texture->width || (height + offset_y) > update_texture->height)
+  if(!update_texture || (width + offset_x) > update_texture->width || (height + offset_y) > update_texture->height)
   {
     assert(false); // Param fail
     
@@ -86,11 +86,6 @@ texture_update_texture_2d(Texture *update_texture,
     if(!update_texture)
     {
       LOG_GL_PARAM_ERROR("'update_texture' may not be null.");
-    }
-    
-    if(!data)
-    {
-      LOG_GL_PARAM_ERROR("'data' may not be null.");
     }
     
     if((width + offset_x) > update_texture->width || (height + offset_y) > update_texture->height)
