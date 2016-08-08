@@ -12,7 +12,8 @@ struct Quad_info
 {
   float position[3];
   float normal[3];
-  float texture_coord[3];
+  float uv[2];
+  float st[2];
 };
 
 

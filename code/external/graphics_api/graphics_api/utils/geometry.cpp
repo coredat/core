@@ -104,7 +104,10 @@ create_quads(const Vertex_format *fmt,
   float *buffer_data = (float*)GFX_MALLOC(buffer_size);
   uint32_t buffer_offset = 0;
 
-  for(size_t i = 0; i < number_of_quads; ++i) {
+  for(size_t i = 0; i < number_of_quads; ++i)
+  {
+    Quad_info info = quad_info[i];
+  
     for(uint32_t j = 0; j < verts_in_quad; ++j) {
       for(uint32_t k = 0; k < 3; ++k)
       {
@@ -130,6 +133,10 @@ create_quads(const Vertex_format *fmt,
             
           case(Vertex_attribute::texture_coord):
             memcpy(&buffer_data[buffer_offset], &texture_coord_data[current_vert * texture_data_per_vertex], sizeof(float) * texture_data_per_vertex);
+            
+            // Put the uv, and st args here
+            assert(false);
+            
             buffer_offset += texture_data_per_vertex;
             break;
             

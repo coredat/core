@@ -89,17 +89,16 @@ Text_renderer::set_text(const char *str)
   
   m_text_id = Resource_data::text_mesh_data_push_back(text_mesh_data);
   
-  
   Ogl::Texture glyph_texture;
   Resource_data::texture_data_get_property_texture(texture_data, texture_id, &glyph_texture);
   
-  int b_w = glyph_texture.width; /* bitmap width */
-  int b_h = glyph_texture.height; /* bitmap height */
+  const int bitmap_width  = glyph_texture.width; /* bitmap width */
+  const int bitmap_height = glyph_texture.height; /* bitmap height */
   int l_h = 64; /* line height */
 
   /* create a bitmap for the phrase */
-  unsigned char* bitmap = (unsigned char*)malloc(b_w * b_h);
-  memset(bitmap, 0, sizeof(unsigned char) * (b_w * b_h));
+  unsigned char* bitmap = (unsigned char*)malloc(bitmap_width * bitmap_height);
+  memset(bitmap, 0, sizeof(unsigned char) * (bitmap_width * bitmap_height));
   
   /* calculate font scaling */
   float scale = stbtt_ScaleForPixelHeight(&info, l_h);
@@ -107,40 +106,67 @@ Text_renderer::set_text(const char *str)
   int ascent, descent, lineGap;
   stbtt_GetFontVMetrics(&info, &ascent, &descent, &lineGap);
   
+//  Text::Character char_props;
+//  char_props.advance[0] = ascent;
+//  char_props.advance[1] = descent;
+  
   ascent *= scale;
   descent *= scale;
-
-  Text::Character char_props;
-  char_props.advance[0] = ascent;
-  char_props.advance[1] = descent;
-  
-  
 
   int x = 0;
   int i;
   
+  Text::Character char_props[64];
+  
   for (i = 0; i < strlen(str); ++i)
   {
+    const float u = math::to_float(x) / 512.f;
+    const float v = math::to_float(0) / 512.f;
+  
+  
+    const int codepoint = str[i];
+    const int next_codepoint = str[i + 1]; // Err! out of bounds?
+    
     /* get bounding box for character (may be offset to account for chars that dip above or below the line */
     int c_x1, c_y1, c_x2, c_y2;
-    stbtt_GetCodepointBitmapBox(&info, str[i], scale, scale, &c_x1, &c_y1, &c_x2, &c_y2);
+    stbtt_GetCodepointBitmapBox(&info, codepoint, scale, scale, &c_x1, &c_y1, &c_x2, &c_y2);
     
     /* compute y (different characters have different heights */
     int y = ascent + c_y1;
     
     /* render character (stride and offset is important here) */
-    int byteOffset = x + (y  * b_w);
-    stbtt_MakeCodepointBitmap(&info, bitmap + byteOffset, c_x2 - c_x1, c_y2 - c_y1, b_w, scale, scale, str[i]);
+    int byteOffset = x + (y  * bitmap_width);
+    stbtt_MakeCodepointBitmap(&info, &bitmap[byteOffset], c_x2 - c_x1, c_y2 - c_y1, bitmap_width, scale, scale, codepoint);
     
     /* how wide is this character */
     int ax;
-    stbtt_GetCodepointHMetrics(&info, str[i], &ax, 0);
+    stbtt_GetCodepointHMetrics(&info, codepoint, &ax, 0);
     x += ax * scale;
+    
+    
     
     /* add kerning */
     int kern;
-    kern = stbtt_GetCodepointKernAdvance(&info, str[i], str[i + 1]);
+    kern = stbtt_GetCodepointKernAdvance(&info, codepoint, next_codepoint);
     x += kern * scale;
+    
+    const int glyph_width = c_x2 - c_x1;
+    const int glyph_height = c_y2 - c_y1;
+    
+    
+    const float s = math::to_float(glyph_width) / 512.f;
+    const float t = math::to_float(glyph_height) / 512.f;
+    
+    {
+      char_props[i].advance[0] = ascent;
+      char_props[i].advance[1] = descent;
+      
+      char_props[i].uv[0] = u;
+      char_props[i].uv[1] = v;
+      
+      char_props[i].st[0] = s;
+      char_props[i].st[1] = t;
+    }
   }
   
   Ogl::texture_update_texture_2d(&glyph_texture, 0, 0, 512, 512, bitmap);
@@ -157,6 +183,19 @@ Text_renderer::set_text(const char *str)
   Graphics_api::Vertex_format v_fmt = Graphics_api::vertex_format_create(vertdesc, 3);
   
   Graphics_api::Quad_info q;
+  q.position[0] = 0.f;
+  q.position[1] = 0.f;
+  q.position[2] = 0.f;
+  
+  q.normal[0] = 0.f;
+  q.normal[1] = 1.f;
+  q.normal[2] = 0.f;
+  
+  q.uv[0] = char_props[0].uv[0];
+  q.uv[1] = char_props[0].uv[1];
+
+  q.st[0] = char_props[0].st[0];
+  q.st[1] = char_props[0].st[1];
   
   auto mesh = Graphics_api::create_quads(&v_fmt, &q, 1);
   assert(Ogl::vertex_buffer_is_valid(mesh.vbo));
