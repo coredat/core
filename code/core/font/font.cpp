@@ -34,7 +34,7 @@ Font::Font(const char *filename)
   stbtt_fontinfo info;
   if (!stbtt_InitFont(&info, fontBuffer, 0))
   {
-      printf("failed\n");
+    printf("failed\n");
   }
   
   auto resources = Resource_data::get_resources();

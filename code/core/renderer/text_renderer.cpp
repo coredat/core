@@ -9,6 +9,9 @@
 #include <graphics_api/mesh.hpp>
 #include <graphics_api/vertex_format.hpp>
 
+#define STB_TRUETYPE_IMPLEMENTATION
+#include <3rdparty/stb/stb_truetype.h>
+
 
 namespace Core {
 
@@ -120,56 +123,31 @@ Text_renderer::set_text(const char *str)
   
   for (i = 0; i < strlen(str); ++i) // utf8 support?
   {
-    const float u = math::to_float(x) / 512.f;
-    const float v = math::to_float(0) / 512.f;
+    const char codepoint = str[i];
   
-  
-    const int codepoint = str[i];
-    const int next_codepoint = str[i + 1]; // Err! out of bounds?
+//    FontGlyph * glyph = font->glyphs + get_font_glyph_index((char)code_point);
+
+    int bitmap_width, bitmap_height;
+    int x_offset, y_offset;
     
-    /* get bounding box for character (may be offset to account for chars that dip above or below the line */
-    int c_x1, c_y1, c_x2, c_y2;
-    stbtt_GetCodepointBitmapBox(&info, codepoint, scale, scale, &c_x1, &c_y1, &c_x2, &c_y2);
+    unsigned char * bitmap_data = stbtt_GetCodepointBitmap(&info, 0, scale, codepoint, &bitmap_width, &bitmap_height, &x_offset, &y_offset);
+//    assert(bitmap_data);
+
+    //NOTE: When you render a glyph add this offset to it's position to align it correctly
+    const math::vec2 offset = math::vec2_init(bitmap_width * 0.5 + x_offset, -(bitmap_height * 0.5f + y_offset));
+
+    int advance, left_side_bearing;
+    stbtt_GetCodepointHMetrics(&info, codepoint, &advance, &left_side_bearing);
+
+    advance *= scale;
     
-    /* compute y (different characters have different heights */
-    int y = ascent + c_y1;
+    x += advance;
     
-    /* render character (stride and offset is important here) */
-    int byteOffset = x + (y  * bitmap_width);
-    stbtt_MakeCodepointBitmap(&info, &bitmap[byteOffset], c_x2 - c_x1, c_y2 - c_y1, bitmap_width, scale, scale, codepoint);
+    if(bitmap_data)
+    Ogl::texture_update_texture_2d(&glyph_texture, x, 0, bitmap_width, bitmap_height, bitmap_data);
     
-    /* how wide is this character */
-    int ax;
-    stbtt_GetCodepointHMetrics(&info, codepoint, &ax, 0);
-    x += ax * scale;
-    
-    int ay;
-    
-    /* add kerning */
-    int kern;
-    kern = stbtt_GetCodepointKernAdvance(&info, codepoint, next_codepoint);
-    x += kern * scale;
-    
-    const int glyph_width = c_x2 - c_x1;
-    const int glyph_height = c_y2 - c_y1;
-    
-    
-    const float s = math::to_float(glyph_width) / 512.f;
-    const float t = math::to_float(glyph_height) / 512.f;
-    
-    {
-      char_props[i].advance[0] = ascent;
-      char_props[i].advance[1] = descent;
-      
-      char_props[i].uv[0] = u;
-      char_props[i].uv[1] = v;
-      
-      char_props[i].st[0] = s;
-      char_props[i].st[1] = t;
-    }
+    stbtt_FreeBitmap(bitmap_data, nullptr);
   }
-  
-  Ogl::texture_update_texture_2d(&glyph_texture, 0, 0, 512, 512, bitmap);
   
   // Generate the text mesh here.
   // bunch of quads
