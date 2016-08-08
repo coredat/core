@@ -6,12 +6,12 @@
   This file is auto generated any changes here may be overwritten.
   See code_gen.rake in scripts folder.
 
-  This file was last generated on: Wed 03 Aug 2016
+  This file was last generated on: Mon 08 Aug 2016
 */
 
 
-#ifndef TEXTURE_DATA_INCLUDED_0AF349DF_5B94_422B_AC75_1B338C2B99E1
-#define TEXTURE_DATA_INCLUDED_0AF349DF_5B94_422B_AC75_1B338C2B99E1
+#ifndef TEXTURE_DATA_INCLUDED_B1941FD6_8502_4F09_B196_F58A03AA536B
+#define TEXTURE_DATA_INCLUDED_B1941FD6_8502_4F09_B196_F58A03AA536B
 
 
 #include <utilities/generic_id.hpp>

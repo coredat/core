@@ -135,7 +135,7 @@ create_quads(const Vertex_format *fmt,
             memcpy(&buffer_data[buffer_offset], &texture_coord_data[current_vert * texture_data_per_vertex], sizeof(float) * texture_data_per_vertex);
             
             // Put the uv, and st args here
-            assert(false);
+//            assert(false);
             
             buffer_offset += texture_data_per_vertex;
             break;

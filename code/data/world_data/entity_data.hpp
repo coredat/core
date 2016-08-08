@@ -6,12 +6,12 @@
   This file is auto generated any changes here may be overwritten.
   See code_gen.rake in scripts folder.
 
-  This file was last generated on: Wed 03 Aug 2016
+  This file was last generated on: Mon 08 Aug 2016
 */
 
 
-#ifndef ENTITY_DATA_INCLUDED_B606FB1E_FE33_454E_9F88_AC7A873E578B
-#define ENTITY_DATA_INCLUDED_B606FB1E_FE33_454E_9F88_AC7A873E578B
+#ifndef ENTITY_DATA_INCLUDED_80AD43CA_BE70_4441_A3D9_BFE85792BEDA
+#define ENTITY_DATA_INCLUDED_80AD43CA_BE70_4441_A3D9_BFE85792BEDA
 
 
 #include <utilities/generic_id.hpp>

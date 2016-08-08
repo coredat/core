@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <3rdparty/stb/stb_truetype.h>
+#include <utilities/string_helpers.hpp>
 
 
 namespace
@@ -60,6 +61,18 @@ Font::Font(const char *filename)
   auto font_id = font_data->size + 1;
   Resource_data::font_data_push_back(font_data, font_id);
   
+  auto get_name = util::get_filename_from_path(filename);
+  
+  Resource_data::font_data_set_property_font_name(font_data, font_id, get_name.c_str());
+  
+  Text::Font_bitmap font_bitmap;
+  font_bitmap.bitmap_channels  = 1;
+  font_bitmap.bitmap_size[0]   = 512;
+  font_bitmap.bitmap_size[1]   = 512;
+  font_bitmap.bitmap_offset[0] = 0;
+  font_bitmap.bitmap_offset[1] = 0;
+  
+  Resource_data::font_data_set_property_font_bitmap(font_data, font_id, font_bitmap);
   Resource_data::font_data_set_property_font_face(font_data, font_id, info);
   Resource_data::font_data_set_property_texture_id(font_data, font_id, texture_id);
   

@@ -10,10 +10,20 @@ data:
     auto_increment: false
 
   properties:
+    - name: font_name
+      type: char_32
+      return: pointer
+      searchable: true
+
     - name: font_face
       type: stbtt_fontinfo
       return: value
       include: <3rdparty/stb/stb_truetype.h>
+
+    - name: font_bitmap
+      type: Text::Font_bitmap
+      return: value
+      include: <systems/text/font_bitmap.hpp>
 
     - name: texture_id
       type: util::generic_id

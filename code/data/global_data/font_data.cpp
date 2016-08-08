@@ -6,7 +6,7 @@
   This file is auto generated any changes here may be overwritten.
   See code_gen.rake in scripts folder.
 
-  This file was last generated on: Wed 03 Aug 2016
+  This file was last generated on: Mon 08 Aug 2016
 */
 
 
@@ -34,10 +34,12 @@ font_data_init(Font_data *data, const size_t size_hint)
 
   // Calculate the various sizes of things.
   const size_t bytes_font_id = sizeof(*data->font_id) * size_hint + simd_buffer;
+  const size_t bytes_property_font_name = sizeof(*data->property_font_name) * 32 * size_hint + simd_buffer;
   const size_t bytes_property_font_face = sizeof(*data->property_font_face) * size_hint + simd_buffer;
+  const size_t bytes_property_font_bitmap = sizeof(*data->property_font_bitmap) * size_hint + simd_buffer;
   const size_t bytes_property_texture_id = sizeof(*data->property_texture_id) * size_hint + simd_buffer;
 
-  const size_t bytes_to_alloc = bytes_font_id + bytes_property_font_face + bytes_property_texture_id;
+  const size_t bytes_to_alloc = bytes_font_id + bytes_property_font_name + bytes_property_font_face + bytes_property_font_bitmap + bytes_property_texture_id;
 
   // Allocate some memory.
   util::memory_chunk *data_memory = const_cast<util::memory_chunk*>(&data->memory);
@@ -65,6 +67,19 @@ font_data_init(Font_data *data, const size_t size_hint)
       byte_counter += bytes_font_id;
       assert(byte_counter <= bytes_to_alloc);
     }
+    // Assign property_font_name memory
+    {
+      void *offset = util::mem_offset(alloc_start, byte_counter);
+      void *aligned = util::mem_next_16byte_boundry(offset);
+
+      data->property_font_name = reinterpret_cast<char*>(aligned);
+      #ifndef NDEBUG
+      memset(offset, 0, bytes_property_font_name);
+      #endif
+
+      byte_counter += bytes_property_font_name;
+      assert(byte_counter <= bytes_to_alloc);
+    }
     // Assign property_font_face memory
     {
       void *offset = util::mem_offset(alloc_start, byte_counter);
@@ -76,6 +91,19 @@ font_data_init(Font_data *data, const size_t size_hint)
       #endif
 
       byte_counter += bytes_property_font_face;
+      assert(byte_counter <= bytes_to_alloc);
+    }
+    // Assign property_font_bitmap memory
+    {
+      void *offset = util::mem_offset(alloc_start, byte_counter);
+      void *aligned = util::mem_next_16byte_boundry(offset);
+
+      data->property_font_bitmap = reinterpret_cast<Text::Font_bitmap*>(aligned);
+      #ifndef NDEBUG
+      memset(offset, 0, bytes_property_font_bitmap);
+      #endif
+
+      byte_counter += bytes_property_font_bitmap;
       assert(byte_counter <= bytes_to_alloc);
     }
     // Assign property_texture_id memory
@@ -170,7 +198,9 @@ font_data_push_back(Font_data *data, const util::generic_id key, size_t *out_ind
 
   // Memset the properties
   {
+    memset(&data->property_font_name[index * 32], 0, sizeof(*data->property_font_name));
     memset(&data->property_font_face[index], 0, sizeof(*data->property_font_face));
+    memset(&data->property_font_bitmap[index], 0, sizeof(*data->property_font_bitmap));
     memset(&data->property_texture_id[index], 0, sizeof(*data->property_texture_id));
   }
 
@@ -197,7 +227,9 @@ font_data_erase(Font_data *data, const util::generic_id key)
 
     // Shuffle the memory down.
     memmove(&data->font_id[index_to_erase], &data->font_id[start_index], size_to_end * sizeof(*data->font_id));
+    memmove(&data->property_font_name[index_to_erase * 32], &data->property_font_name[start_index * 32], (size_to_end * 32) * sizeof(*data->property_font_name));
     memmove(&data->property_font_face[index_to_erase], &data->property_font_face[start_index], size_to_end * sizeof(*data->property_font_face));
+    memmove(&data->property_font_bitmap[index_to_erase], &data->property_font_bitmap[start_index], size_to_end * sizeof(*data->property_font_bitmap));
     memmove(&data->property_texture_id[index_to_erase], &data->property_texture_id[start_index], size_to_end * sizeof(*data->property_texture_id));
   }
   else
@@ -234,6 +266,74 @@ font_data_exists(const Font_data *data, const util::generic_id key, size_t *out_
 
 
 bool
+font_data_get_property_font_name(const Font_data *data, const util::generic_id key, char const **out_value)
+{
+  size_t index;
+
+  if(font_data_exists(data, key, &index))
+  {
+    *out_value = &data->property_font_name[index * 32];
+  }
+  else
+  {
+    LOG_ERROR(Error_string::entity_not_found());
+    assert(false);
+
+    return false;
+  }
+
+  return true;
+}
+
+
+bool
+font_data_set_property_font_name(Font_data *data,  const util::generic_id key, const char *value)
+{
+  assert(data && key);
+
+  size_t index;
+
+  if(font_data_exists(data, key, &index))
+  {
+    strlcpy(&data->property_font_name[index * 32], value, 32);
+  }
+  else
+  {
+    LOG_ERROR(Error_string::entity_not_found());
+    assert(false);
+
+    return false;
+  }
+
+  return true;
+}
+
+
+bool
+font_data_search_property_font_name(const Font_data *data, const char *value, util::generic_id *out_key)
+{
+  bool found = false;
+
+  for(size_t i = 0; i < data->size; ++i)
+  {
+    if(!strcmp(value, &data->property_font_name[i * 32]))
+    {
+      found = true;
+
+      if(out_key)
+      {
+        *out_key = data->font_id[i];
+      }
+
+      break;
+    }
+  }
+
+  return found;
+}
+
+
+bool
 font_data_get_property_font_face(const Font_data *data, const util::generic_id key, stbtt_fontinfo *out_value)
 {
   size_t index;
@@ -264,6 +364,50 @@ font_data_set_property_font_face(Font_data *data,  const util::generic_id key, c
   if(font_data_exists(data, key, &index))
   {
     data->property_font_face[index] = value;
+  }
+  else
+  {
+    LOG_ERROR(Error_string::entity_not_found());
+    assert(false);
+
+    return false;
+  }
+
+  return true;
+}
+
+
+bool
+font_data_get_property_font_bitmap(const Font_data *data, const util::generic_id key, Text::Font_bitmap *out_value)
+{
+  size_t index;
+
+  if(font_data_exists(data, key, &index))
+  {
+    *out_value = data->property_font_bitmap[index];
+  }
+  else
+  {
+    LOG_ERROR(Error_string::entity_not_found());
+    assert(false);
+
+    return false;
+  }
+
+  return true;
+}
+
+
+bool
+font_data_set_property_font_bitmap(Font_data *data,  const util::generic_id key, const Text::Font_bitmap value)
+{
+  assert(data && key);
+
+  size_t index;
+
+  if(font_data_exists(data, key, &index))
+  {
+    data->property_font_bitmap[index] = value;
   }
   else
   {

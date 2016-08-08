@@ -118,7 +118,7 @@ Text_renderer::set_text(const char *str)
   
   Text::Character char_props[64];
   
-  for (i = 0; i < strlen(str); ++i)
+  for (i = 0; i < strlen(str); ++i) // utf8 support?
   {
     const float u = math::to_float(x) / 512.f;
     const float v = math::to_float(0) / 512.f;
@@ -143,7 +143,7 @@ Text_renderer::set_text(const char *str)
     stbtt_GetCodepointHMetrics(&info, codepoint, &ax, 0);
     x += ax * scale;
     
-    
+    int ay;
     
     /* add kerning */
     int kern;

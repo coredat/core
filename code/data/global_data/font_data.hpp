@@ -6,18 +6,19 @@
   This file is auto generated any changes here may be overwritten.
   See code_gen.rake in scripts folder.
 
-  This file was last generated on: Wed 03 Aug 2016
+  This file was last generated on: Mon 08 Aug 2016
 */
 
 
-#ifndef FONT_DATA_INCLUDED_38BBBF11_4EC1_4D9C_9EAA_46705FE5993F
-#define FONT_DATA_INCLUDED_38BBBF11_4EC1_4D9C_9EAA_46705FE5993F
+#ifndef FONT_DATA_INCLUDED_C3E07CBB_0609_4859_B73E_F5F1037591DB
+#define FONT_DATA_INCLUDED_C3E07CBB_0609_4859_B73E_F5F1037591DB
 
 
 #include <utilities/generic_id.hpp>
 #include <utilities/memory_pool.hpp>
 #include <stddef.h>
 #include <3rdparty/stb/stb_truetype.h>
+#include <systems/text/font_bitmap.hpp>
 
 
 namespace Resource_data {
@@ -32,7 +33,9 @@ struct Font_data
   util::generic_id *font_id = nullptr;
 
   // Properties
+  char *property_font_name = nullptr;
   stbtt_fontinfo *property_font_face = nullptr;
+  Text::Font_bitmap *property_font_bitmap = nullptr;
   util::generic_id *property_texture_id = nullptr;
 
   // Size information
@@ -126,6 +129,39 @@ font_data_exists(const Font_data *data, const util::generic_id key, size_t *out_
 
 
 /*!
+  \brief Getter for property_font_name.
+  \param data The container to get information from.
+  \param key The key to search for.
+  \param value The output value, which will be set if the key is found.
+  \return Returns true if the data was found.
+*/
+bool
+font_data_get_property_font_name(const Font_data *data, const util::generic_id key, const char **value);
+
+
+/*!
+  \brief Setter for property_font_name.
+  \param data The container to update.
+  \param key The key to search for.
+  \param value The new value of the data.
+  \return Returns true if the data was set.
+*/
+bool
+font_data_set_property_font_name(Font_data *data,  const util::generic_id key, const char *value);
+
+
+/*!
+  \brief Searches for a given value.
+  \param data The container to search.
+  \param value The value which to search for.
+  \param out_key Optional the key for that value.
+  \return Returns true if the data was found.
+*/
+bool
+font_data_search_property_font_name(const Font_data *data, const char *value, util::generic_id *out_key = nullptr);
+
+
+/*!
   \brief Getter for property_font_face.
   \param data The container to get information from.
   \param key The key to search for.
@@ -145,6 +181,28 @@ font_data_get_property_font_face(const Font_data *data, const util::generic_id k
 */
 bool
 font_data_set_property_font_face(Font_data *data,  const util::generic_id key, const stbtt_fontinfo value);
+
+
+/*!
+  \brief Getter for property_font_bitmap.
+  \param data The container to get information from.
+  \param key The key to search for.
+  \param value The output value, which will be set if the key is found.
+  \return Returns true if the data was found.
+*/
+bool
+font_data_get_property_font_bitmap(const Font_data *data, const util::generic_id key, Text::Font_bitmap *value);
+
+
+/*!
+  \brief Setter for property_font_bitmap.
+  \param data The container to update.
+  \param key The key to search for.
+  \param value The new value of the data.
+  \return Returns true if the data was set.
+*/
+bool
+font_data_set_property_font_bitmap(Font_data *data,  const util::generic_id key, const Text::Font_bitmap value);
 
 
 /*!
