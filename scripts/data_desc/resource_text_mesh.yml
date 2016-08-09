@@ -15,6 +15,10 @@ data:
       return: pointer
       searchable: true
 
+    - name: font_id
+      type: util::generic_id
+      return: value
+
     - name: mesh
       type: Graphics_api::Mesh
       return: value

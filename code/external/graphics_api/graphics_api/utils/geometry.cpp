@@ -38,13 +38,13 @@ create_quads(const Vertex_format *fmt,
   constexpr uint32_t texture_data_per_vertex = 2;
   constexpr float texture_coord_data[] =
   {
+    0.f, 0.f,
     0.f, 1.f,
-    0.f, 0.f,
-    1.f, 1.f,
-    
-    0.f, 0.f,
     1.f, 0.f,
+    
+    0.f, 1.f,
     1.f, 1.f,
+    1.f, 0.f,
   };
   
   constexpr uint32_t normal_data_per_vertex = 3;
@@ -117,6 +117,11 @@ create_quads(const Vertex_format *fmt,
         {
           case(Vertex_attribute::position_3d):
             memcpy(&buffer_data[buffer_offset], &position_data[current_vert * pos3d_data_per_vertex], sizeof(float) * pos3d_data_per_vertex);
+            
+            buffer_data[buffer_offset + 0] = info.position[0] + (buffer_data[buffer_offset + 0] * info.scale[0]);
+            buffer_data[buffer_offset + 1] = info.position[1] + (buffer_data[buffer_offset + 1] * info.scale[1]);
+            buffer_data[buffer_offset + 2] = info.position[2] + (buffer_data[buffer_offset + 2] * info.scale[2]);
+            
             buffer_offset += pos3d_data_per_vertex;
             break;
             
@@ -134,8 +139,8 @@ create_quads(const Vertex_format *fmt,
           case(Vertex_attribute::texture_coord):
             memcpy(&buffer_data[buffer_offset], &texture_coord_data[current_vert * texture_data_per_vertex], sizeof(float) * texture_data_per_vertex);
             
-            // Put the uv, and st args here
-//            assert(false);
+            buffer_data[buffer_offset + 0] = buffer_data[buffer_offset + 0] ? info.st[0] : info.uv[0];
+            buffer_data[buffer_offset + 1] = buffer_data[buffer_offset + 1] ? info.st[1] : info.uv[1];
             
             buffer_offset += texture_data_per_vertex;
             break;

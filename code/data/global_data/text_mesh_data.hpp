@@ -6,12 +6,12 @@
   This file is auto generated any changes here may be overwritten.
   See code_gen.rake in scripts folder.
 
-  This file was last generated on: Mon 08 Aug 2016
+  This file was last generated on: Tue 09 Aug 2016
 */
 
 
-#ifndef TEXT_MESH_DATA_INCLUDED_EA2B14AD_6395_4796_9488_3E8687D3DCBA
-#define TEXT_MESH_DATA_INCLUDED_EA2B14AD_6395_4796_9488_3E8687D3DCBA
+#ifndef TEXT_MESH_DATA_INCLUDED_3E790A13_27AC_4F1D_8FC6_9FC73FBA67EE
+#define TEXT_MESH_DATA_INCLUDED_3E790A13_27AC_4F1D_8FC6_9FC73FBA67EE
 
 
 #include <utilities/generic_id.hpp>
@@ -33,6 +33,7 @@ struct Text_mesh_data
 
   // Properties
   char *property_text = nullptr;
+  util::generic_id *property_font_id = nullptr;
   Graphics_api::Mesh *property_mesh = nullptr;
 
   // Size information
@@ -156,6 +157,28 @@ text_mesh_data_set_property_text(Text_mesh_data *data,  const util::generic_id k
 */
 bool
 text_mesh_data_search_property_text(const Text_mesh_data *data, const char *value, util::generic_id *out_key = nullptr);
+
+
+/*!
+  \brief Getter for property_font_id.
+  \param data The container to get information from.
+  \param key The key to search for.
+  \param value The output value, which will be set if the key is found.
+  \return Returns true if the data was found.
+*/
+bool
+text_mesh_data_get_property_font_id(const Text_mesh_data *data, const util::generic_id key, util::generic_id *value);
+
+
+/*!
+  \brief Setter for property_font_id.
+  \param data The container to update.
+  \param key The key to search for.
+  \param value The new value of the data.
+  \return Returns true if the data was set.
+*/
+bool
+text_mesh_data_set_property_font_id(Text_mesh_data *data,  const util::generic_id key, const util::generic_id value);
 
 
 /*!

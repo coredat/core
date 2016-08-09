@@ -6,7 +6,7 @@
   This file is auto generated any changes here may be overwritten.
   See code_gen.rake in scripts folder.
 
-  This file was last generated on: Mon 08 Aug 2016
+  This file was last generated on: Tue 09 Aug 2016
 */
 
 
@@ -35,9 +35,10 @@ text_mesh_data_init(Text_mesh_data *data, const size_t size_hint)
   // Calculate the various sizes of things.
   const size_t bytes_text_mesh_id = sizeof(*data->text_mesh_id) * size_hint + simd_buffer;
   const size_t bytes_property_text = sizeof(*data->property_text) * 32 * size_hint + simd_buffer;
+  const size_t bytes_property_font_id = sizeof(*data->property_font_id) * size_hint + simd_buffer;
   const size_t bytes_property_mesh = sizeof(*data->property_mesh) * size_hint + simd_buffer;
 
-  const size_t bytes_to_alloc = bytes_text_mesh_id + bytes_property_text + bytes_property_mesh;
+  const size_t bytes_to_alloc = bytes_text_mesh_id + bytes_property_text + bytes_property_font_id + bytes_property_mesh;
 
   // Allocate some memory.
   util::memory_chunk *data_memory = const_cast<util::memory_chunk*>(&data->memory);
@@ -76,6 +77,19 @@ text_mesh_data_init(Text_mesh_data *data, const size_t size_hint)
       #endif
 
       byte_counter += bytes_property_text;
+      assert(byte_counter <= bytes_to_alloc);
+    }
+    // Assign property_font_id memory
+    {
+      void *offset = util::mem_offset(alloc_start, byte_counter);
+      void *aligned = util::mem_next_16byte_boundry(offset);
+
+      data->property_font_id = reinterpret_cast<util::generic_id*>(aligned);
+      #ifndef NDEBUG
+      memset(offset, 0, bytes_property_font_id);
+      #endif
+
+      byte_counter += bytes_property_font_id;
       assert(byte_counter <= bytes_to_alloc);
     }
     // Assign property_mesh memory
@@ -172,6 +186,7 @@ text_mesh_data_push_back(Text_mesh_data *data, size_t *out_index)
   // Memset the properties
   {
     memset(&data->property_text[index * 32], 0, sizeof(*data->property_text));
+    memset(&data->property_font_id[index], 0, sizeof(*data->property_font_id));
     memset(&data->property_mesh[index], 0, sizeof(*data->property_mesh));
   }
 
@@ -199,6 +214,7 @@ text_mesh_data_erase(Text_mesh_data *data, const util::generic_id key)
     // Shuffle the memory down.
     memmove(&data->text_mesh_id[index_to_erase], &data->text_mesh_id[start_index], size_to_end * sizeof(*data->text_mesh_id));
     memmove(&data->property_text[index_to_erase * 32], &data->property_text[start_index * 32], (size_to_end * 32) * sizeof(*data->property_text));
+    memmove(&data->property_font_id[index_to_erase], &data->property_font_id[start_index], size_to_end * sizeof(*data->property_font_id));
     memmove(&data->property_mesh[index_to_erase], &data->property_mesh[start_index], size_to_end * sizeof(*data->property_mesh));
   }
   else
@@ -299,6 +315,50 @@ text_mesh_data_search_property_text(const Text_mesh_data *data, const char *valu
   }
 
   return found;
+}
+
+
+bool
+text_mesh_data_get_property_font_id(const Text_mesh_data *data, const util::generic_id key, util::generic_id *out_value)
+{
+  size_t index;
+
+  if(text_mesh_data_exists(data, key, &index))
+  {
+    *out_value = data->property_font_id[index];
+  }
+  else
+  {
+    LOG_ERROR(Error_string::entity_not_found());
+    assert(false);
+
+    return false;
+  }
+
+  return true;
+}
+
+
+bool
+text_mesh_data_set_property_font_id(Text_mesh_data *data,  const util::generic_id key, const util::generic_id value)
+{
+  assert(data && key);
+
+  size_t index;
+
+  if(text_mesh_data_exists(data, key, &index))
+  {
+    data->property_font_id[index] = value;
+  }
+  else
+  {
+    LOG_ERROR(Error_string::entity_not_found());
+    assert(false);
+
+    return false;
+  }
+
+  return true;
 }
 
 

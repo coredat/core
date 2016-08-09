@@ -8,12 +8,6 @@
 namespace Text {
 
 
-struct Font_char_id
-{
-  uint64_t font_id : 8;
-  uint64_t size_id : 8;
-  uint64_t char_id : 48;
-};
 
 
 } // ns

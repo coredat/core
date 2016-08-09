@@ -1,4 +1,6 @@
 #include <transformations/entity/entity_renderer.hpp>
+#include <transformations/text/rasterized_glyph_id.hpp>
+#include <systems/text/character.hpp>
 #include <core/renderer/renderer.hpp>
 #include <core/renderer/material_renderer.hpp>
 #include <core/renderer/text_renderer.hpp>
@@ -6,10 +8,13 @@
 #include <core/model/model.hpp>
 #include <core/model/mesh.hpp>
 #include <data/global_data/resource_data.hpp>
+#include <data/global_data/memory_data.hpp>
 #include <data/world_data/world_data.hpp>
 #include <data/world_data/entity_data.hpp>
 #include <data/world_data/transform_data.hpp>
 #include <common/error_strings.hpp>
+#include <graphics_api/vertex_format.hpp>
+#include <graphics_api/utils/geometry.hpp>
 #include <utilities/logging.hpp>
 #include <assert.h>
 
@@ -381,6 +386,205 @@ set_renderer_text(const util::generic_id this_id,
     
     World_data::data_unlock(entity_data);
   }
+  
+  auto resources = Resource_data::get_resources();
+  assert(resources);
+  
+  auto text_mesh_data = resources->text_mesh_data;
+  assert(text_mesh_data);
+  
+  // Set the renderer and build the mesh
+  auto font_data = resources->font_data;
+  assert(font_data);
+  
+  auto texture_data = resources->texture_data;
+  assert(texture_data);
+  
+  
+  auto glyph_data = resources->glyphs_data;
+  assert(glyph_data);
+  
+  Resource_data::data_lock(font_data);
+  Resource_data::data_lock(texture_data);
+  Resource_data::data_lock(text_mesh_data);
+  Resource_data::data_lock(glyph_data);
+  
+  uint32_t texture_id = 0;
+  stbtt_fontinfo info;
+  
+  Resource_data::font_data_get_property_font_face(font_data, font_id, &info);
+  Resource_data::font_data_get_property_texture_id(font_data, font_id, &texture_id);
+  
+  Ogl::Texture glyph_texture;
+  Resource_data::texture_data_get_property_texture(texture_data, texture_id, &glyph_texture);
+  
+  const int bitmap_width  = glyph_texture.width; /* bitmap width */
+  const int bitmap_height = glyph_texture.height; /* bitmap height */
+  int l_h = 64; /* line height */
+
+  /* create a bitmap for the phrase */
+  unsigned char* bitmap = (unsigned char*)malloc(bitmap_width * bitmap_height);
+  memset(bitmap, 0, sizeof(unsigned char) * (bitmap_width * bitmap_height));
+  
+  /* calculate font scaling */
+  float scale = stbtt_ScaleForPixelHeight(&info, l_h);
+
+  int ascent, descent, lineGap;
+  stbtt_GetFontVMetrics(&info, &ascent, &descent, &lineGap);
+  
+//  Text::Character char_props;
+//  char_props.advance[0] = ascent;
+//  char_props.advance[1] = descent;
+  
+  ascent *= scale;
+  descent *= scale;
+  
+  Text::Font_bitmap font_bitmap;
+  Resource_data::font_data_get_property_font_bitmap(font_data, font_id, &font_bitmap);
+  font_bitmap.line_height = ascent + math::abs(descent);
+  font_bitmap.bitmap_size[0] = glyph_texture.width;
+  font_bitmap.bitmap_size[1] = glyph_texture.height;
+  
+  Text::Character *glyph_info = nullptr;
+  uint32_t glyph_info_count = 0;
+  
+  // Generate missing glyphs
+  {
+    const char *str;
+    Resource_data::text_mesh_data_get_property_text(text_mesh_data, model_id, &str);
+    
+    glyph_info = SCRATCH_ALIGNED_ALLOC(Text::Character, strlen(str) * sizeof(Text::Character));
+  
+    for(int i = 0; i < strlen(str); ++i)
+    {
+      const int codepoint = str[i];
+      
+      // If code point exists skip
+      const uint32_t glyph_id = Text::create_glyph_id(font_id, codepoint);
+      
+      if(Resource_data::rasterized_glyphs_data_exists(glyph_data, glyph_id))
+      {
+        Resource_data::rasterized_glyphs_data_get_property_character(glyph_data, glyph_id, &glyph_info[glyph_info_count]);
+        ++glyph_info_count;
+        
+        continue;
+      }
+      
+      int glyph_width, glyph_height;
+      int x_offset, y_offset;
+      
+      unsigned char * glyph_bitmap = stbtt_GetCodepointBitmap(&info,
+                                                              0,
+                                                              scale,
+                                                              codepoint,
+                                                              &glyph_width,
+                                                              &glyph_height,
+                                                              &x_offset,
+                                                              &y_offset);
+
+  //    const math::vec2 offset = math::vec2_init(bitmap_width * 0.5 + x_offset, -(bitmap_height * 0.5f + y_offset));
+
+      int advance, left_side_bearing;
+      stbtt_GetCodepointHMetrics(&info, codepoint, &advance, &left_side_bearing);
+
+      advance *= scale;
+      
+      const int bitmap_advance = math::max(advance, glyph_width);
+      const int width_needed = bitmap_advance + glyph_width;
+      
+      if(font_bitmap.bitmap_offset[0] + width_needed > bitmap_width)
+      {
+        if(font_bitmap.bitmap_offset[1] + font_bitmap.line_height > font_bitmap.bitmap_size[1])
+        {
+          LOG_WARNING("Font map is full.");
+          break;
+        }
+        
+        font_bitmap.bitmap_offset[0] = 0;
+        font_bitmap.bitmap_offset[1] += font_bitmap.line_height;
+      }
+      
+      Ogl::texture_update_texture_2d(&glyph_texture,
+                                     font_bitmap.bitmap_offset[0],
+                                     font_bitmap.bitmap_offset[1],
+                                     glyph_width,
+                                     glyph_height,
+                                     glyph_bitmap);
+      
+      stbtt_FreeBitmap(glyph_bitmap, nullptr);
+      
+      // Set the glyph properties.
+      Text::Character char_info;
+
+      char_info.size[0] = glyph_width;
+      char_info.size[1] = glyph_height;
+
+      char_info.advance[0] = advance;
+      char_info.uv[0] = math::to_float(font_bitmap.bitmap_offset[0]) / math::to_float(font_bitmap.bitmap_size[0]);
+      char_info.uv[1] = math::to_float(font_bitmap.bitmap_offset[1]) / math::to_float(font_bitmap.bitmap_size[1]);
+      
+      char_info.st[0] = char_info.uv[0] + (math::to_float(glyph_width) / math::to_float(font_bitmap.bitmap_size[0]));
+      char_info.st[1] = char_info.uv[1] + (math::to_float(glyph_height) / math::to_float(font_bitmap.bitmap_size[1]));
+      
+      // We can now add the advance
+      font_bitmap.bitmap_offset[0] += bitmap_advance;
+      
+      // Add glyph info
+      Resource_data::rasterized_glyphs_data_push_back(glyph_data, glyph_id);
+      Resource_data::rasterized_glyphs_data_set_property_character(glyph_data, glyph_id, char_info);
+      
+      // Also add it to the glyph info array.
+      glyph_info[glyph_info_count++] = char_info;
+    }
+  } // gen missing glyphs
+  
+  // Generate the text mesh here.
+  // bunch of quads
+  
+  Graphics_api::Vertex_attribute vertdesc[3] = {
+    Graphics_api::Vertex_attribute::position_3d,
+    Graphics_api::Vertex_attribute::normal,
+    Graphics_api::Vertex_attribute::texture_coord,
+  };
+  
+  Graphics_api::Vertex_format v_fmt = Graphics_api::vertex_format_create(vertdesc, 3);
+  
+  Graphics_api::Quad_info *quad_info = SCRATCH_ALLOC(Graphics_api::Quad_info, glyph_info_count);
+  float x_cursor = 0;
+  
+  for(uint32_t i = 0; i < glyph_info_count; ++i)
+  {
+    quad_info[i].position[0] = x_cursor / 30.f;
+    quad_info[i].position[1] = 0.f;
+    quad_info[i].position[2] = 0.f;
+    
+    quad_info[i].normal[0] = 0.f;
+    quad_info[i].normal[1] = 1.f;
+    quad_info[i].normal[2] = 0.f;
+    
+    quad_info[i].scale[0] = 0.5f; //glyph_info[i].advance[0];
+    quad_info[i].scale[1] = 0.5f; //glyph_info[i].advance[0];
+    
+    quad_info[i].uv[0] = glyph_info[i].uv[0];
+    quad_info[i].uv[1] = glyph_info[i].uv[1];
+
+    quad_info[i].st[0] = glyph_info[i].st[0];
+    quad_info[i].st[1] = glyph_info[i].st[1];
+    
+    x_cursor += glyph_info[i].advance[0];
+  }
+  
+  auto mesh = Graphics_api::create_quads(&v_fmt, quad_info, glyph_info_count);
+  assert(Ogl::vertex_buffer_is_valid(mesh.vbo));
+  
+  auto text_mesh_id = Resource_data::text_mesh_data_push_back(text_mesh_data);
+  
+  Resource_data::text_mesh_data_set_property_mesh(text_mesh_data, text_mesh_id, mesh);
+  
+  Resource_data::data_unlock(glyph_data);
+  Resource_data::data_unlock(text_mesh_data);
+  Resource_data::data_unlock(texture_data);
+  Resource_data::data_unlock(font_data);
 }
 
 

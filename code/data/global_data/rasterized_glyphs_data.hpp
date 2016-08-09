@@ -6,12 +6,12 @@
   This file is auto generated any changes here may be overwritten.
   See code_gen.rake in scripts folder.
 
-  This file was last generated on: Mon 08 Aug 2016
+  This file was last generated on: Tue 09 Aug 2016
 */
 
 
-#ifndef RASTERIZED_GLYPHS_DATA_INCLUDED_94D03D75_9A7C_47BD_8C27_D9B17513095C
-#define RASTERIZED_GLYPHS_DATA_INCLUDED_94D03D75_9A7C_47BD_8C27_D9B17513095C
+#ifndef RASTERIZED_GLYPHS_DATA_INCLUDED_0AA618C6_99D9_44FD_A26F_368AE9C7CB41
+#define RASTERIZED_GLYPHS_DATA_INCLUDED_0AA618C6_99D9_44FD_A26F_368AE9C7CB41
 
 
 #include <utilities/generic_id.hpp>
