@@ -519,7 +519,7 @@ set_renderer_text(const util::generic_id this_id,
       char_info.size[0] = glyph_width;
       char_info.size[1] = glyph_height;
 
-      char_info.advance[0] = advance;
+      char_info.advance[0] = (advance * 0.4);
       char_info.uv[0] = math::to_float(font_bitmap.bitmap_offset[0]) / math::to_float(font_bitmap.bitmap_size[0]);
       char_info.uv[1] = math::to_float(font_bitmap.bitmap_offset[1]) / math::to_float(font_bitmap.bitmap_size[1]);
       
