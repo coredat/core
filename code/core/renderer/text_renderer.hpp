@@ -21,6 +21,9 @@ public:
 
   void                set_text(const char *str);
   const char *        get_text() const;
+  
+  void                set_text_size(const uint32_t size);
+  uint32_t            get_text_size() const;
 
                       operator Renderer() const;
 

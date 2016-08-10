@@ -217,7 +217,7 @@ Entity_ref::get_renderer() const
 Transform
 Entity_ref::get_transform() const
 {
-  return Entity_detail::get_transform(m_impl->id, m_impl->world.get());
+  return Entity_detail::get_core_transform(m_impl->id, m_impl->world.get());
 }
 
 

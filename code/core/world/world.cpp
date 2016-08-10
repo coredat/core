@@ -15,6 +15,7 @@
 #include <data/world_data/transform_data.hpp>
 #include <data/world_data/entity_data.hpp>
 #include <data/world_data/world_data.hpp>
+#include <data/world_data/renderer_text_draw_calls_data.hpp>
 #include <data/global_data/resource_data.hpp>
 #include <data/global_data/memory_data.hpp>
 
@@ -324,40 +325,16 @@ World::think()
   
   for(uint32_t i = 0; i < number_of_cam_runs; ++i)
   {
-    const math::mat4 scale     = math::mat4_scale(math::vec3_init(40.f));
-    const math::mat4 world     = math::mat4_multiply(math::mat4_id(), scale);
-    const math::mat4 view_proj = math::mat4_multiply(world, cam_runs[i].view, cam_runs[i].proj);
-    
-    ::Text_renderer::Draw_call dc[2];
-    
-    // Get text mesh and try and render it.
-    Graphics_api::Mesh mesh;
-    Resource_data::text_mesh_data_get_property_mesh(resources->text_mesh_data, 1, &mesh);
-    
-    dc[0].mesh = mesh;
-    
-    Resource_data::text_mesh_data_get_property_mesh(resources->text_mesh_data, 2, &mesh);
-  
-//    mesh = resources->mesh_data->property_mesh[resources->mesh_data->size - 1];
-    
-    dc[1].mesh = mesh;
-    
-    Ogl::Texture texture;
-    const char *name = nullptr;
-    util::generic_id id = resources->texture_data->texture_id[0];
-    Resource_data::texture_data_get_property_texture(resources->texture_data, id, &texture);
-    Resource_data::texture_data_get_property_name(resources->texture_data, id, &name);
-    
-    dc[1].texture = texture;
-    
-//    glViewport(0, 0, m_impl->context->get_width(), m_impl->context->get_height());
-      const GLsizei width = m_impl->context->get_width(); //cam->fbo.color_buffer[0].width; // viewport_x ?
-      const GLsizei height = m_impl->context->get_height(); //cam->fbo.color_buffer[0].height; // viewport_y ?
-      
-      glViewport(0, 0, width, height);
+//    const math::mat4 scale     = math::mat4_scale(math::vec3_init(1.f));
+//    const math::mat4 world     = math::mat4_multiply(math::mat4_id(), scale);
+    const math::mat4 view_proj = math::mat4_multiply(cam_runs[i].view, cam_runs[i].proj);
 
+    const GLsizei width = m_impl->context->get_width(); //cam->fbo.color_buffer[0].width; // viewport_x ?
+    const GLsizei height = m_impl->context->get_height(); //cam->fbo.color_buffer[0].height; // viewport_y ?
     
-    ::Text_renderer::render(view_proj, &dc[1], 1);
+    glViewport(0, 0, width, height);
+
+    ::Text_renderer::render(view_proj, m_impl->world_data->text_data->property_draw_call, m_impl->world_data->text_data->size);
   }
   
   

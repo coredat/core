@@ -6,17 +6,18 @@
   This file is auto generated any changes here may be overwritten.
   See code_gen.rake in scripts folder.
 
-  This file was last generated on: Tue 09 Aug 2016
+  This file was last generated on: Wed 10 Aug 2016
 */
 
 
-#ifndef TEXT_MESH_DATA_INCLUDED_3E790A13_27AC_4F1D_8FC6_9FC73FBA67EE
-#define TEXT_MESH_DATA_INCLUDED_3E790A13_27AC_4F1D_8FC6_9FC73FBA67EE
+#ifndef TEXT_MESH_DATA_INCLUDED_A67940BE_9041_4897_B97B_F924308F19C1
+#define TEXT_MESH_DATA_INCLUDED_A67940BE_9041_4897_B97B_F924308F19C1
 
 
 #include <utilities/generic_id.hpp>
 #include <utilities/memory_pool.hpp>
 #include <stddef.h>
+#include <stdint.h>
 #include <graphics_api/mesh.hpp>
 
 
@@ -33,6 +34,7 @@ struct Text_mesh_data
 
   // Properties
   char *property_text = nullptr;
+  uint32_t *property_text_size = nullptr;
   util::generic_id *property_font_id = nullptr;
   Graphics_api::Mesh *property_mesh = nullptr;
 
@@ -157,6 +159,28 @@ text_mesh_data_set_property_text(Text_mesh_data *data,  const util::generic_id k
 */
 bool
 text_mesh_data_search_property_text(const Text_mesh_data *data, const char *value, util::generic_id *out_key = nullptr);
+
+
+/*!
+  \brief Getter for property_text_size.
+  \param data The container to get information from.
+  \param key The key to search for.
+  \param value The output value, which will be set if the key is found.
+  \return Returns true if the data was found.
+*/
+bool
+text_mesh_data_get_property_text_size(const Text_mesh_data *data, const util::generic_id key, uint32_t *value);
+
+
+/*!
+  \brief Setter for property_text_size.
+  \param data The container to update.
+  \param key The key to search for.
+  \param value The new value of the data.
+  \return Returns true if the data was set.
+*/
+bool
+text_mesh_data_set_property_text_size(Text_mesh_data *data,  const util::generic_id key, const uint32_t value);
 
 
 /*!

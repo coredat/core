@@ -1,4 +1,5 @@
 #include <transformations/entity/entity_renderer.hpp>
+#include <transformations/entity/entity_transform.hpp>
 #include <transformations/text/rasterized_glyph_id.hpp>
 #include <systems/text/character.hpp>
 #include <core/renderer/renderer.hpp>
@@ -387,6 +388,8 @@ set_renderer_text(const util::generic_id this_id,
     World_data::data_unlock(entity_data);
   }
   
+  LOG_TODO_ONCE("Are all these resources required? - locking up a large portion of data!");
+  
   auto resources = Resource_data::get_resources();
   assert(resources);
   
@@ -399,7 +402,6 @@ set_renderer_text(const util::generic_id this_id,
   
   auto texture_data = resources->texture_data;
   assert(texture_data);
-  
   
   auto glyph_data = resources->glyphs_data;
   assert(glyph_data);
@@ -464,7 +466,9 @@ set_renderer_text(const util::generic_id this_id,
       
       if(Resource_data::rasterized_glyphs_data_exists(glyph_data, glyph_id))
       {
-        Resource_data::rasterized_glyphs_data_get_property_character(glyph_data, glyph_id, &glyph_info[glyph_info_count]);
+        Resource_data::rasterized_glyphs_data_get_property_character(glyph_data,
+                                                                     glyph_id,
+                                                                     &glyph_info[glyph_info_count]);
         ++glyph_info_count;
         
         continue;
@@ -556,7 +560,7 @@ set_renderer_text(const util::generic_id this_id,
   Graphics_api::Quad_info *quad_info = SCRATCH_ALLOC(Graphics_api::Quad_info, glyph_info_count);
   float x_cursor = 0;
   
-  const float some_scale = 0.03f;
+  const float some_scale = 1.f;
   
   for(uint32_t i = 0; i < glyph_info_count; ++i)
   {
@@ -588,6 +592,39 @@ set_renderer_text(const util::generic_id this_id,
   auto text_mesh_id = Resource_data::text_mesh_data_push_back(text_mesh_data);
   
   Resource_data::text_mesh_data_set_property_mesh(text_mesh_data, text_mesh_id, mesh);
+  
+  /*
+    Add this to the text draw calls
+  */
+  {
+    auto text_dc = world->text_data;
+    assert(text_dc);
+    
+    World_data::data_lock(text_dc);
+    
+    const math::transform transform = Entity_detail::get_transform(this_id, world);
+    const math::mat4 world_mat = math::transform_get_world_matrix(transform);
+    
+    // If we don't have a draw call insert one.
+    if(!World_data::renderer_text_draw_calls_data_exists(text_dc, this_id))
+    {
+      World_data::renderer_text_draw_calls_data_push_back(text_dc, this_id);
+    }
+    
+    if(World_data::renderer_text_draw_calls_data_exists(text_dc, this_id))
+    {
+      ::Text_renderer::Draw_call dc;
+      dc.texture = glyph_texture;
+
+      memcpy(dc.world_matrix, &world_mat, sizeof(world_mat));
+
+      dc.mesh = mesh;
+
+      World_data::renderer_text_draw_calls_data_set_property_draw_call(text_dc, this_id, &dc);
+    }
+
+    World_data::data_unlock(text_dc);
+  }
   
   Resource_data::data_unlock(glyph_data);
   Resource_data::data_unlock(text_mesh_data);

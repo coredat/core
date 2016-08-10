@@ -76,7 +76,9 @@ Text_renderer::set_text(const char *str)
     Resource_data::data_lock(text_mesh_data);
     
     // Search for text, if it doesn't exist then add it.
-    if(!Resource_data::text_mesh_data_search_property_text(text_mesh_data, str))
+    util::generic_id search_id = util::generic_id_invalid();
+    
+    if(!Resource_data::text_mesh_data_search_property_text(text_mesh_data, str, &search_id))
     {
       m_text_id = Resource_data::text_mesh_data_push_back(text_mesh_data);
     }
@@ -93,6 +95,21 @@ const char*
 Text_renderer::get_text() const
 {
   return "";
+}
+
+
+void
+Text_renderer::set_text_size(const uint32_t size)
+{
+  assert(false);
+}
+
+
+uint32_t
+Text_renderer::get_text_size() const
+{
+  assert(false);
+  return 0;
 }
 
 

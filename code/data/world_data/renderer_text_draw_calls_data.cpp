@@ -6,7 +6,7 @@
   This file is auto generated any changes here may be overwritten.
   See code_gen.rake in scripts folder.
 
-  This file was last generated on: Tue 09 Aug 2016
+  This file was last generated on: Wed 10 Aug 2016
 */
 
 
@@ -35,9 +35,10 @@ renderer_text_draw_calls_data_init(Renderer_text_draw_calls_data *data, const si
   // Calculate the various sizes of things.
   const size_t bytes_renderer_text_draw_calls_id = sizeof(*data->renderer_text_draw_calls_id) * size_hint + simd_buffer;
   const size_t bytes_property_text = sizeof(*data->property_text) * 32 * size_hint + simd_buffer;
+  const size_t bytes_property_draw_call = sizeof(*data->property_draw_call) * size_hint + simd_buffer;
   const size_t bytes_property_model_id = sizeof(*data->property_model_id) * size_hint + simd_buffer;
 
-  const size_t bytes_to_alloc = bytes_renderer_text_draw_calls_id + bytes_property_text + bytes_property_model_id;
+  const size_t bytes_to_alloc = bytes_renderer_text_draw_calls_id + bytes_property_text + bytes_property_draw_call + bytes_property_model_id;
 
   // Allocate some memory.
   util::memory_chunk *data_memory = const_cast<util::memory_chunk*>(&data->memory);
@@ -76,6 +77,19 @@ renderer_text_draw_calls_data_init(Renderer_text_draw_calls_data *data, const si
       #endif
 
       byte_counter += bytes_property_text;
+      assert(byte_counter <= bytes_to_alloc);
+    }
+    // Assign property_draw_call memory
+    {
+      void *offset = util::mem_offset(alloc_start, byte_counter);
+      void *aligned = util::mem_next_16byte_boundry(offset);
+
+      data->property_draw_call = reinterpret_cast<Text_renderer::Draw_call*>(aligned);
+      #ifndef NDEBUG
+      memset(offset, 0, bytes_property_draw_call);
+      #endif
+
+      byte_counter += bytes_property_draw_call;
       assert(byte_counter <= bytes_to_alloc);
     }
     // Assign property_model_id memory
@@ -171,6 +185,7 @@ renderer_text_draw_calls_data_push_back(Renderer_text_draw_calls_data *data, con
   // Memset the properties
   {
     memset(&data->property_text[index * 32], 0, sizeof(*data->property_text));
+    memset(&data->property_draw_call[index], 0, sizeof(*data->property_draw_call));
     memset(&data->property_model_id[index], 0, sizeof(*data->property_model_id));
   }
 
@@ -198,6 +213,7 @@ renderer_text_draw_calls_data_erase(Renderer_text_draw_calls_data *data, const u
     // Shuffle the memory down.
     memmove(&data->renderer_text_draw_calls_id[index_to_erase], &data->renderer_text_draw_calls_id[start_index], size_to_end * sizeof(*data->renderer_text_draw_calls_id));
     memmove(&data->property_text[index_to_erase * 32], &data->property_text[start_index * 32], (size_to_end * 32) * sizeof(*data->property_text));
+    memmove(&data->property_draw_call[index_to_erase], &data->property_draw_call[start_index], size_to_end * sizeof(*data->property_draw_call));
     memmove(&data->property_model_id[index_to_erase], &data->property_model_id[start_index], size_to_end * sizeof(*data->property_model_id));
   }
   else
@@ -242,6 +258,7 @@ renderer_text_draw_calls_data_insert(Renderer_text_draw_calls_data *data, const 
     // Shuffle the memory up.
     memmove(&data->renderer_text_draw_calls_id[dest_index], &data->renderer_text_draw_calls_id[insert_index], size_to_end * sizeof(*data->renderer_text_draw_calls_id));
     memmove(&data->property_text[dest_index * 32], &data->property_text[insert_index * 32], (size_to_end * 32) * sizeof(*data->property_text));
+    memmove(&data->property_draw_call[dest_index], &data->property_draw_call[insert_index], size_to_end * sizeof(*data->property_draw_call));
     memmove(&data->property_model_id[dest_index], &data->property_model_id[insert_index], size_to_end * sizeof(*data->property_model_id));
 
     // Add key to new entry.
@@ -306,6 +323,50 @@ renderer_text_draw_calls_data_set_property_text(Renderer_text_draw_calls_data *d
   if(renderer_text_draw_calls_data_exists(data, key, &index))
   {
     strlcpy(&data->property_text[index * 32], value, 32);
+  }
+  else
+  {
+    LOG_ERROR(Error_string::entity_not_found());
+    assert(false);
+
+    return false;
+  }
+
+  return true;
+}
+
+
+bool
+renderer_text_draw_calls_data_get_property_draw_call(const Renderer_text_draw_calls_data *data, const util::generic_id key, Text_renderer::Draw_call **out_value)
+{
+  size_t index;
+
+  if(renderer_text_draw_calls_data_exists(data, key, &index))
+  {
+    *out_value = &data->property_draw_call[index];
+  }
+  else
+  {
+    LOG_ERROR(Error_string::entity_not_found());
+    assert(false);
+
+    return false;
+  }
+
+  return true;
+}
+
+
+bool
+renderer_text_draw_calls_data_set_property_draw_call(Renderer_text_draw_calls_data *data,  const util::generic_id key, const Text_renderer::Draw_call *value)
+{
+  assert(data && key);
+
+  size_t index;
+
+  if(renderer_text_draw_calls_data_exists(data, key, &index))
+  {
+    data->property_draw_call[index] = *value;
   }
   else
   {

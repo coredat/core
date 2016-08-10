@@ -6,6 +6,7 @@
 #include <graphics_api/texture_filtering.hpp>
 #include <graphics_api/ogl/ogl_texture_filtering.hpp>
 #include <systems/renderer_common/vertex_format.hpp>
+#include <math/mat/mat4.hpp>
 
 
 namespace {
@@ -104,7 +105,10 @@ render(const math::mat4 &view_proj_mat,
     
     Ogl::filtering_apply(filter);
     
-    Ogl::shader_uniforms_apply(wvp_uni, (void*)&view_proj_mat);
+    const math::mat4 world_mat = math::mat4_init_with_array(calls[i].world_matrix);
+    const math::mat4 wvp_mat = math::mat4_multiply(world_mat, view_proj_mat);
+    
+    Ogl::shader_uniforms_apply(wvp_uni, (void*)&wvp_mat);
     Ogl::shader_uniforms_apply(texture_uni, (void*)&calls[i].texture.texture_id);
     
     const GLsizei count = calls[i].mesh.vbo.number_of_entries / vert_fmt.format.number_of_attributes;

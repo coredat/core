@@ -289,15 +289,17 @@ Entity::set_transform(const Transform &transform)
 Transform
 Entity::get_transform() const
 {
-  return Entity_detail::get_transform(m_impl->id,
-                                      m_impl->world.get());
+  return Entity_detail::get_core_transform(m_impl->id,
+                                           m_impl->world.get());
 }
 
 
 void
 Entity::set_renderer(const Core::Renderer &renderer)
 {
-  Entity_detail::set_renderer(m_impl->id, m_impl->world.get(), renderer);
+  Entity_detail::set_renderer(m_impl->id,
+                              m_impl->world.get(),
+                              renderer);
 }
 
 

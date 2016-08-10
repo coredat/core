@@ -6,17 +6,18 @@
   This file is auto generated any changes here may be overwritten.
   See code_gen.rake in scripts folder.
 
-  This file was last generated on: Tue 09 Aug 2016
+  This file was last generated on: Wed 10 Aug 2016
 */
 
 
-#ifndef RENDERER_TEXT_DRAW_CALLS_DATA_INCLUDED_8C872E4C_1890_4C22_A28F_447578014BF0
-#define RENDERER_TEXT_DRAW_CALLS_DATA_INCLUDED_8C872E4C_1890_4C22_A28F_447578014BF0
+#ifndef RENDERER_TEXT_DRAW_CALLS_DATA_INCLUDED_AFF0B98F_668F_4F1C_B87D_C3359448469C
+#define RENDERER_TEXT_DRAW_CALLS_DATA_INCLUDED_AFF0B98F_668F_4F1C_B87D_C3359448469C
 
 
 #include <utilities/generic_id.hpp>
 #include <utilities/memory_pool.hpp>
 #include <stddef.h>
+#include <systems/renderer_text/text_draw_call.hpp>
 
 
 namespace World_data {
@@ -32,6 +33,7 @@ struct Renderer_text_draw_calls_data
 
   // Properties
   char *property_text = nullptr;
+  Text_renderer::Draw_call *property_draw_call = nullptr;
   util::generic_id *property_model_id = nullptr;
 
   // Size information
@@ -155,6 +157,28 @@ renderer_text_draw_calls_data_get_property_text(const Renderer_text_draw_calls_d
 */
 bool
 renderer_text_draw_calls_data_set_property_text(Renderer_text_draw_calls_data *data,  const util::generic_id key, const char *value);
+
+
+/*!
+  \brief Getter for property_draw_call.
+  \param data The container to get information from.
+  \param key The key to search for.
+  \param value The output value, which will be set if the key is found.
+  \return Returns true if the data was found.
+*/
+bool
+renderer_text_draw_calls_data_get_property_draw_call(const Renderer_text_draw_calls_data *data, const util::generic_id key, Text_renderer::Draw_call **value);
+
+
+/*!
+  \brief Setter for property_draw_call.
+  \param data The container to update.
+  \param key The key to search for.
+  \param value The new value of the data.
+  \return Returns true if the data was set.
+*/
+bool
+renderer_text_draw_calls_data_set_property_draw_call(Renderer_text_draw_calls_data *data,  const util::generic_id key, const Text_renderer::Draw_call *value);
 
 
 /*!

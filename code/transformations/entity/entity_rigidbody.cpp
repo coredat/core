@@ -145,7 +145,7 @@ set_rigidbody(const util::generic_id this_id,
   {
     World_data::data_lock(phys_pool);
     
-    const Core::Transform transform = get_transform(this_id, world);
+    const Core::Transform transform = get_core_transform(this_id, world);
     
     q3Body *body = nullptr;
     Physics_transform::convert_core_rb_to_qu3e(&this_id,

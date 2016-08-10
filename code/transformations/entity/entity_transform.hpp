@@ -16,6 +16,11 @@ set_transform(const util::generic_id this_id,
 
 
 Core::Transform
+get_core_transform(const util::generic_id this_id,
+              World_data::World *world);
+  
+  
+math::transform
 get_transform(const util::generic_id this_id,
               World_data::World *world);
 

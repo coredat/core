@@ -13,6 +13,11 @@ data:
       type: char_32
       return: pointer
 
+    - name: draw_call
+      type: Text_renderer::Draw_call
+      return: pointer
+      include: <systems/renderer_text/text_draw_call.hpp>
+
     - name: model_id
       type: util::generic_id
       include: <utilities/generic_id.hpp>

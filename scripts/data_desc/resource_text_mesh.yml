@@ -15,6 +15,11 @@ data:
       return: pointer
       searchable: true
 
+    - name: text_size
+      type: uint32_t
+      return: value
+      include: <stdint.h>
+
     - name: font_id
       type: util::generic_id
       return: value
