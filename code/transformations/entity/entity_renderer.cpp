@@ -556,7 +556,7 @@ set_renderer_text(const util::generic_id this_id,
   Graphics_api::Quad_info *quad_info = SCRATCH_ALLOC(Graphics_api::Quad_info, glyph_info_count);
   float x_cursor = 0;
   
-  const float some_scale = 0.05f;
+  const float some_scale = 0.03f;
   
   for(uint32_t i = 0; i < glyph_info_count; ++i)
   {

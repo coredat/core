@@ -351,6 +351,11 @@ World::think()
     dc[1].texture = texture;
     
 //    glViewport(0, 0, m_impl->context->get_width(), m_impl->context->get_height());
+      const GLsizei width = m_impl->context->get_width(); //cam->fbo.color_buffer[0].width; // viewport_x ?
+      const GLsizei height = m_impl->context->get_height(); //cam->fbo.color_buffer[0].height; // viewport_y ?
+      
+      glViewport(0, 0, width, height);
+
     
     ::Text_renderer::render(view_proj, &dc[1], 1);
   }

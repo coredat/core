@@ -48,7 +48,7 @@ initialize()
     in vec2 in_ps_texture_coord;
   
     uniform sampler2D uni_map_01;
-    uniform vec3 uni_color = vec3(1,0,0.2);
+    uniform vec3 uni_color = vec3(1,1,1);
   
     out vec4 out_frag_color;
   
@@ -97,7 +97,7 @@ render(const math::mat4 &view_proj_mat,
     // Move the filter selection into the material.
     static Graphics_api::Texture_filtering filter =
     {
-      Graphics_api::Filtering_mode::anisotropic,
+      Graphics_api::Filtering_mode::point,
       Graphics_api::Wrap_mode::wrap,
       Graphics_api::Wrap_mode::wrap
     };
