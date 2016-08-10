@@ -1,6 +1,7 @@
 #include <core/font/font.hpp>
 #include <data/global_data/resource_data.hpp>
 #include <data/global_data/font_data.hpp>
+#include <data/global_data/memory_data.hpp>
 #include <stdio.h>
 #include <stdlib.h>
 #include <3rdparty/stb/stb_truetype.h>
@@ -49,10 +50,14 @@ Font::Font(const char *filename)
   Resource_data::data_lock(font_data);
   Resource_data::data_lock(texture_data);
   
-  
   // Generate a texture for it
   Ogl::Texture texture_glyphs;
-  Ogl::texture_create_2d(&texture_glyphs, 512, 512, GL_RED, true, nullptr);
+  
+  // Some empty data to zero the texture
+  unsigned char *tex_data = SCRATCH_ALLOC(unsigned char, 512 * 512 * 1);
+  memset(tex_data, 0, sizeof(unsigned char) * 512 * 512 * 1);
+  
+  Ogl::texture_create_2d(&texture_glyphs, 512, 512, GL_RED, true, tex_data);
   
   auto texture_id = Resource_data::texture_data_push_back(texture_data);
   

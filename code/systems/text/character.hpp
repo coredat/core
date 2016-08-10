@@ -12,8 +12,9 @@ struct Character
 {
   float uv[2];
   float st[2];
-  uint32_t size[2];
+  float size[2];
   float advance[2];
+  float offset[2];
 };
 
 

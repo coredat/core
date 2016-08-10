@@ -427,7 +427,7 @@ set_renderer_text(const util::generic_id this_id,
   memset(bitmap, 0, sizeof(unsigned char) * (bitmap_width * bitmap_height));
   
   /* calculate font scaling */
-  float scale = stbtt_ScaleForPixelHeight(&info, l_h);
+  const float scale = stbtt_ScaleForPixelHeight(&info, l_h);
 
   int ascent, descent, lineGap;
   stbtt_GetFontVMetrics(&info, &ascent, &descent, &lineGap);
@@ -486,10 +486,8 @@ set_renderer_text(const util::generic_id this_id,
 
       int advance, left_side_bearing;
       stbtt_GetCodepointHMetrics(&info, codepoint, &advance, &left_side_bearing);
-
-      advance *= scale;
       
-      const int bitmap_advance = math::max(advance, glyph_width);
+      const int bitmap_advance = glyph_width; //math::max((int32_t)advance_ft, glyph_width);
       const int width_needed = bitmap_advance + glyph_width;
       
       if(font_bitmap.bitmap_offset[0] + width_needed > bitmap_width)
@@ -511,6 +509,9 @@ set_renderer_text(const util::generic_id this_id,
                                      glyph_height,
                                      glyph_bitmap);
       
+       int kern;
+      kern = stbtt_GetCodepointKernAdvance(&info, codepoint, str[i + 1]);
+      
       stbtt_FreeBitmap(glyph_bitmap, nullptr);
       
       // Set the glyph properties.
@@ -518,8 +519,11 @@ set_renderer_text(const util::generic_id this_id,
 
       char_info.size[0] = glyph_width;
       char_info.size[1] = glyph_height;
+      
+      char_info.offset[0] = x_offset;
+      char_info.offset[1] = y_offset;
 
-      char_info.advance[0] = (advance * 0.4);
+      char_info.advance[0] = (advance * scale);
       char_info.uv[0] = math::to_float(font_bitmap.bitmap_offset[0]) / math::to_float(font_bitmap.bitmap_size[0]);
       char_info.uv[1] = math::to_float(font_bitmap.bitmap_offset[1]) / math::to_float(font_bitmap.bitmap_size[1]);
       
@@ -527,7 +531,7 @@ set_renderer_text(const util::generic_id this_id,
       char_info.st[1] = char_info.uv[1] + (math::to_float(glyph_height) / math::to_float(font_bitmap.bitmap_size[1]));
       
       // We can now add the advance
-      font_bitmap.bitmap_offset[0] += bitmap_advance;
+      font_bitmap.bitmap_offset[0] += bitmap_advance + 2;
       
       // Add glyph info
       Resource_data::rasterized_glyphs_data_push_back(glyph_data, glyph_id);
@@ -552,26 +556,30 @@ set_renderer_text(const util::generic_id this_id,
   Graphics_api::Quad_info *quad_info = SCRATCH_ALLOC(Graphics_api::Quad_info, glyph_info_count);
   float x_cursor = 0;
   
+  const float some_scale = 0.05f;
+  
   for(uint32_t i = 0; i < glyph_info_count; ++i)
   {
-    quad_info[i].position[0] = x_cursor / 30.f;
-    quad_info[i].position[1] = 0.f;
+    Text::Character *curr_glyph = &glyph_info[i];
+    
+    quad_info[i].position[0] = (x_cursor + curr_glyph->offset[0]) * some_scale;
+    quad_info[i].position[1] = -(curr_glyph->size[1] + curr_glyph->offset[1]) * some_scale;
     quad_info[i].position[2] = 0.f;
     
     quad_info[i].normal[0] = 0.f;
     quad_info[i].normal[1] = 1.f;
     quad_info[i].normal[2] = 0.f;
     
-    quad_info[i].scale[0] = 0.5f; //glyph_info[i].advance[0];
-    quad_info[i].scale[1] = 0.5f; //glyph_info[i].advance[0];
+    quad_info[i].scale[0] = curr_glyph->size[0] * some_scale;
+    quad_info[i].scale[1] = curr_glyph->size[1] * some_scale;
     
-    quad_info[i].uv[0] = glyph_info[i].uv[0];
-    quad_info[i].uv[1] = glyph_info[i].uv[1];
+    quad_info[i].uv[0] = curr_glyph->uv[0];
+    quad_info[i].uv[1] = curr_glyph->uv[1];
 
-    quad_info[i].st[0] = glyph_info[i].st[0];
-    quad_info[i].st[1] = glyph_info[i].st[1];
+    quad_info[i].st[0] = curr_glyph->st[0];
+    quad_info[i].st[1] = curr_glyph->st[1];
     
-    x_cursor += glyph_info[i].advance[0];
+    x_cursor += static_cast<float>(curr_glyph->advance[0]);
   }
   
   auto mesh = Graphics_api::create_quads(&v_fmt, quad_info, glyph_info_count);

@@ -26,12 +26,12 @@ create_quads(const Vertex_format *fmt,
   constexpr uint32_t pos2d_data_per_vertex = 2;
   constexpr float position_data[] =
   {
-    -1.f, +1.f, 0.f,
-    -1.f, -1.f, 0.f,
+    -0.f, +1.f, 0.f,
+    -0.f, -0.f, 0.f,
     +1.f, +1.f, 0.f,
     
-    -1.f, -1.f, 0.f,
-    +1.f, -1.f, 0.f,
+    -0.f, -0.f, 0.f,
+    +1.f, -0.f, 0.f,
     +1.f, +1.f, 0.f,
   };
   
@@ -116,14 +116,16 @@ create_quads(const Vertex_format *fmt,
         switch(desc[k])
         {
           case(Vertex_attribute::position_3d):
-            memcpy(&buffer_data[buffer_offset], &position_data[current_vert * pos3d_data_per_vertex], sizeof(float) * pos3d_data_per_vertex);
+          {
+            const uint32_t pos_data_offset = current_vert * pos3d_data_per_vertex;
             
-            buffer_data[buffer_offset + 0] = info.position[0] + (buffer_data[buffer_offset + 0] * info.scale[0]);
-            buffer_data[buffer_offset + 1] = info.position[1] + (buffer_data[buffer_offset + 1] * info.scale[1]);
-            buffer_data[buffer_offset + 2] = info.position[2] + (buffer_data[buffer_offset + 2] * info.scale[2]);
+            buffer_data[buffer_offset + 0] = info.position[0] + (position_data[pos_data_offset + 0] * info.scale[0]);
+            buffer_data[buffer_offset + 1] = info.position[1] + (position_data[pos_data_offset + 1] * info.scale[1]);
+            buffer_data[buffer_offset + 2] = info.position[2] + (position_data[pos_data_offset + 2] * info.scale[2]);
             
             buffer_offset += pos3d_data_per_vertex;
             break;
+          }
             
           case(Vertex_attribute::position_2d):
             // We need to use pos3d_data_per_vertex to get the data, as the data is 3d.

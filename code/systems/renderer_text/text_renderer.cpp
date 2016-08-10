@@ -48,6 +48,7 @@ initialize()
     in vec2 in_ps_texture_coord;
   
     uniform sampler2D uni_map_01;
+    uniform vec3 uni_color = vec3(1,0,0.2);
   
     out vec4 out_frag_color;
   
@@ -55,8 +56,7 @@ initialize()
     main()
     {
       vec4 tex_sample = texture(uni_map_01, in_ps_texture_coord);
-      out_frag_color = tex_sample;
-    
+      out_frag_color = vec4(uni_color, tex_sample.r);
     }
   )";
   
@@ -84,6 +84,9 @@ render(const math::mat4 &view_proj_mat,
        const uint32_t number_of_calls)
 {
   uint32_t draw_call_count = 0;
+  
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
   Ogl::shader_bind(&text_shader);
   
