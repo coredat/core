@@ -96,7 +96,6 @@ render_main_scene(const float delta_time,
 
       const math::mat4 view_proj = math::mat4_multiply(cam->view, cam->proj);
     
-//      glViewport(0, 0, width, height);
       LOG_TODO_ONCE("Huge bug here! Text system ignores cullmask");
       // We need to sink the entities data, or queue up draw calls better.
       // So that every renderer sinks into the same draw_call path.

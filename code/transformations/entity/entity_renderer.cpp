@@ -558,9 +558,22 @@ set_renderer_text(const util::generic_id this_id,
   Graphics_api::Vertex_format v_fmt = Graphics_api::vertex_format_create(vertdesc, 3);
   
   Graphics_api::Quad_info *quad_info = SCRATCH_ALLOC(Graphics_api::Quad_info, glyph_info_count);
-  float x_cursor = 0;
   
   const float some_scale = 1.f;
+  
+  // Get the dimentions of the text
+  float string_width = 0;
+  float string_height = 0;
+  
+  for(uint32_t i = 0; i < glyph_info_count; ++i)
+  {
+    Text::Character *curr_glyph = &glyph_info[i];
+    
+    string_width += curr_glyph->advance[0];
+    string_height += curr_glyph->size[1];
+  }
+  
+  float x_cursor = 0.f - (string_width / 2.f);
   
   for(uint32_t i = 0; i < glyph_info_count; ++i)
   {
