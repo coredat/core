@@ -275,7 +275,7 @@ Entity_ref::set_rigidbody(const Rigidbody &rigidbody)
 Rigidbody
 Entity_ref::get_rigidbody() const
 {
-  return Entity_detail::get_rigidbody(m_impl->id, m_impl->world.get());
+  return Entity_detail::get_rigidbody(m_impl->id);
 }
 
 

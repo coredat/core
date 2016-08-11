@@ -104,7 +104,16 @@ world_update_scene_graph_changes(World_data::World *world_data,
     
     entity_data_erase(world_data->entity, id);
     transform_data_erase(world_data->transform, id);
-    renderer_mesh_data_erase(world_data->mesh_data, id);
+    
+    if(renderer_mesh_data_exists(world_data->mesh_data, id))
+    {
+      renderer_mesh_data_erase(world_data->mesh_data, id);
+    }
+    
+    if(renderer_text_draw_calls_data_exists(world_data->text_data, id))
+    {
+      renderer_text_draw_calls_data_erase(world_data->text_data, id);
+    }
     
     uintptr_t body = 0;
     physics_data_get_property_rigidbody(world_data->physics_data, id, &body);

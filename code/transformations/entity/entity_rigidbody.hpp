@@ -29,8 +29,7 @@ set_rigidbody(const util::generic_id this_id,
   
 
 Core::Rigidbody
-get_rigidbody(const util::generic_id this_id,
-              World_data::World *world);
+get_rigidbody(const util::generic_id this_id);
 
 
 void
