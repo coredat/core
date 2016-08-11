@@ -1,8 +1,11 @@
 #include <transformations/rendering/render_scene.hpp>
 #include <data/global_data/memory_data.hpp>
+#include <data/world_data/renderer_text_draw_calls_data.hpp>
+#include <data/world_data/renderer_mesh_data.hpp>
 #include <systems/renderer_material/material.hpp>
 #include <systems/renderer_post/post_process.hpp>
 #include <systems/renderer_post/post_shader.hpp>
+#include <systems/renderer_text/text_renderer.hpp>
 #include <renderer/debug_line_renderer/debug_line_renderer.hpp>
 #include <transformations/rendering/material_renderer.hpp>
 #include <core/color/color_utils.hpp>
@@ -20,7 +23,7 @@ render_main_scene(const float delta_time,
                   const float total_time,
                   const uint32_t viewport_x,
                   const uint32_t viewport_y,                  
-                  const World_data::Renderer_mesh_data   *mesh_renderer_data,
+                  const World_data::World                *world,
                   const Resource_data::Material_data     *material_data,
                   const Resource_data::Post_process_data *post_data,
                   const Camera_utils::Cam_run            cam_runs[],
@@ -86,9 +89,22 @@ render_main_scene(const float delta_time,
                                                            total_time,
                                                            material_data,
                                                            cam->cull_mask,
-                                                           mesh_renderer_data,
+                                                           world->mesh_data,
                                                            draw_calls,
-                                                           mesh_renderer_data->size);
+                                                           world->mesh_data->size);
+      
+
+      const math::mat4 view_proj = math::mat4_multiply(cam->view, cam->proj);
+    
+//      glViewport(0, 0, width, height);
+      LOG_TODO_ONCE("Huge bug here! Text system ignores cullmask");
+      // We need to sink the entities data, or queue up draw calls better.
+      // So that every renderer sinks into the same draw_call path.
+      // or somesuch...
+      number_of_draw_calls += Text_renderer::render(view_proj,
+                                                    cam->cull_mask,
+                                                    world->text_data->property_draw_call,
+                                                    world->text_data->size);
       
       math::mat4 wvp = math::mat4_multiply(cam->view, cam->proj);
       ::Debug_line_renderer::render(math::mat4_get_data(wvp));

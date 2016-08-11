@@ -13,23 +13,24 @@ namespace Entity_detail {
 
 util::generic_id
 get_id(const util::generic_id this_id,
-       World_data::World *world);
+       World_data::Entity_data *entity_data);
 
 
 bool
 is_valid(const util::generic_id this_id,
-         World_data::World *world,
+         World_data::Entity_data *entity_data,
          const bool emit_error = false);
 
 
 void
 destroy(const util::generic_id this_id,
-        World_data::World *world);
+        World_data::Entity_data *entity_data,
+        World_data::Pending_scene_graph_change_data *scene_graph_changes);
 
 
 void
 update_component(const util::generic_id this_id,
-                 World_data::World *data,
+                 World_data::Entity_data *entity_data,
                  const uint32_t component_id);
 
 

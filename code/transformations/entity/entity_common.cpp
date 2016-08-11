@@ -10,25 +10,25 @@ namespace Entity_detail {
 
 util::generic_id
 get_id(const util::generic_id this_id,
-       World_data::World *world)
+       World_data::Entity_data *entity_data)
 {
-  return is_valid(this_id, world) ? this_id : util::generic_id_invalid();
+  return is_valid(this_id, entity_data) ? this_id : util::generic_id_invalid();
 }
 
 
 bool
 is_valid(const util::generic_id this_id,
-         World_data::World *world,
+         World_data::Entity_data *entity_data,
          const bool emit_error)
 {
   // Invalid data, means invalid entity.
   if(this_id == util::generic_id_invalid()) { return false; }
-  if(!world)                                { return false; }
+  if(!entity_data)                          { return false; }
 
   // Our id might have expired, so we need to check it.
-  World_data::data_lock(world->entity);
-  const bool exists = World_data::entity_data_exists(world->entity, this_id);
-  World_data::data_unlock(world->entity);
+  World_data::data_lock(entity_data);
+  const bool exists = World_data::entity_data_exists(entity_data, this_id);
+  World_data::data_unlock(entity_data);
   
   if(!exists && emit_error)
   {
@@ -41,32 +41,32 @@ is_valid(const util::generic_id this_id,
 
 void
 destroy(const util::generic_id this_id,
-        World_data::World *world)
+        World_data::Entity_data *entity_data,
+        World_data::Pending_scene_graph_change_data *scene_graph_changes)
 {
-  if(!is_valid(this_id, world, true)) {
+  if(!is_valid(this_id, entity_data, true)) {
     assert(false); return;
   }
   
-  // Destroy this.
-  World_data::pending_scene_graph_change_delete(world->entity_graph_changes, this_id);
+  World_data::pending_scene_graph_change_delete(scene_graph_changes, this_id);
 }
 
 
 void
 update_component(const util::generic_id this_id,
-                 World_data::World *data,
+                 World_data::Entity_data *entity_data,
                  const uint32_t component_id)
 {
-  auto entity_data = data->entity;
-  
+  if(!is_valid(this_id, entity_data, true)) {
+    assert(false); return;
+  }
+ 
   World_data::data_lock(entity_data);
 
   uint32_t comps;
   World_data::entity_data_get_property_components(entity_data, this_id, &comps);
 
-  // Add new component_id
   comps = comps | component_id;
-
   World_data::entity_data_set_property_components(entity_data, this_id, comps);
   
   World_data::data_unlock(entity_data);

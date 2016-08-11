@@ -178,8 +178,12 @@ Entity::operator Entity_ref() const
 void
 Entity::destroy()
 {
-  Entity_detail::destroy(m_impl->id, m_impl->world.get());
-  m_impl->id = util::generic_id_invalid();
+  Entity_detail::destroy(m_impl->id,
+                         m_impl->world->entity,
+                         m_impl->world->entity_graph_changes);
+  
+  util::generic_id *id = const_cast<util::generic_id*>(&m_impl->id);
+  *id = util::generic_id_invalid();
 }
 
 // ** Common Entity Interface ** //
@@ -188,8 +192,12 @@ Entity::destroy()
 bool
 Entity::is_valid() const
 {
-  return Entity_detail::is_valid(m_impl->id,
-                                 m_impl->world.get());
+  if(!m_impl || !m_impl->id || !m_impl->world)
+  {
+    return false;
+  }
+
+  return Entity_detail::is_valid(m_impl->id, m_impl->world->entity);
 }
 
 
@@ -327,8 +335,7 @@ Entity::get_rigidbody() const
 util::generic_id
 Entity::get_id() const
 {
-  return Entity_detail::get_id(m_impl->id,
-                               m_impl->world.get());
+  return Entity_detail::get_id(m_impl->id, m_impl->world->entity);
 }
 
 

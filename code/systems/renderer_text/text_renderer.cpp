@@ -38,7 +38,7 @@ initialize()
     void
     main()
     {
-      gl_Position = uni_wvp_mat * vec4(in_vs_position, 1.0);
+      gl_Position =  uni_wvp_mat * vec4(in_vs_position, 1.0);
       in_ps_texture_coord = in_vs_texture_coord;
     }
   )";
@@ -81,6 +81,7 @@ reset()
 
 uint32_t
 render(const math::mat4 &view_proj_mat,
+       const uint32_t cull_mask,
        const Draw_call calls[],
        const uint32_t number_of_calls)
 {

@@ -26,7 +26,7 @@ set_collider(const util::generic_id this_id,
 {
   LOG_DEPRECATED_ONCE("set rb should do this now.");
 
-  if(!is_valid(this_id, world))
+  if(!is_valid(this_id, world->entity))
   {
     LOG_ERROR(Error_string::entity_is_invalid());
     return;
@@ -44,7 +44,7 @@ set_collider(const util::generic_id this_id,
     if(World_data::transform_data_exists(transform_data, this_id, &index))
     {
       //TODO: This can be async
-      update_component(this_id, world, World_data::Entity_component::has_physics);
+      update_component(this_id, world->entity, World_data::Entity_component::has_physics);
     
       switch(collider.get_type())
       {
@@ -182,7 +182,7 @@ update_collider(const util::generic_id this_id,
                 const bool inform_phys_engine)
 {
   // Check valid
-  if(!is_valid(this_id, world, true)) {
+  if(!is_valid(this_id, world->entity, true)) {
     assert(false); return;
   }
   

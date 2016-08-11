@@ -95,7 +95,7 @@ set_transform(const util::generic_id this_id,
               bool inform_phys_engine)
 {
   // Check valid
-  if(!is_valid(this_id, world, true)) {
+  if(!is_valid(this_id, world->entity, true)) {
     assert(false); return;
   }
   
@@ -130,7 +130,7 @@ get_core_transform(const util::generic_id this_id,
               World_data::World *world)
 {
   // Check valid
-  if(!is_valid(this_id, world, true)) {
+  if(!is_valid(this_id, world->entity, true)) {
     assert(false); return Core::Transform();
   }
   
@@ -145,7 +145,7 @@ get_transform(const util::generic_id this_id,
               World_data::World *world)
 {
   // Check valid
-  if(!is_valid(this_id, world, true)) {
+  if(!is_valid(this_id, world->entity, true)) {
     assert(false); return math::transform();
   }
   

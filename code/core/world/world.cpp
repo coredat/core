@@ -312,7 +312,7 @@ World::think()
                                m_impl->running_time,
                                m_impl->context->get_width(),
                                m_impl->context->get_height(),
-                               world->mesh_data,
+                               world,
                                resources->material_data,
                                resources->post_data,
                                cam_runs,
@@ -325,16 +325,23 @@ World::think()
   
   for(uint32_t i = 0; i < number_of_cam_runs; ++i)
   {
-//    const math::mat4 scale     = math::mat4_scale(math::vec3_init(1.f));
-//    const math::mat4 world     = math::mat4_multiply(math::mat4_id(), scale);
-    const math::mat4 view_proj = math::mat4_multiply(cam_runs[i].view, cam_runs[i].proj);
-
-    const GLsizei width = m_impl->context->get_width(); //cam->fbo.color_buffer[0].width; // viewport_x ?
-    const GLsizei height = m_impl->context->get_height(); //cam->fbo.color_buffer[0].height; // viewport_y ?
+    auto cam = &cam_runs[i];
     
-    glViewport(0, 0, width, height);
-
-    ::Text_renderer::render(view_proj, m_impl->world_data->text_data->property_draw_call, m_impl->world_data->text_data->size);
+    if(cam->post_process_id)
+    {
+      continue;
+    }
+//    
+////    const math::mat4 scale     = math::mat4_scale(math::vec3_init(1.f));
+////    const math::mat4 world     = math::mat4_multiply(math::mat4_id(), scale);
+//    const math::mat4 view_proj = math::mat4_multiply(cam_runs[i].view, cam_runs[i].proj);
+//
+//    const GLsizei width  = m_impl->context->get_width(); //cam->fbo.color_buffer[0].width; // viewport_x ?
+//    const GLsizei height = m_impl->context->get_height(); //cam->fbo.color_buffer[0].height; // viewport_y ?
+//    
+//    glViewport(0, 0, width, height);
+//
+//    ::Text_renderer::render(view_proj, m_impl->world_data->text_data->property_draw_call, m_impl->world_data->text_data->size);
   }
   
   

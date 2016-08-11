@@ -109,7 +109,6 @@ render(const float wvp_mat[16])
   
   //glUseProgram(debug_line_shader.program_id);
   Ogl::shader_bind(&debug_line_shader);
-  
   Ogl::shader_uniforms_apply(uni_wvp, (void*)wvp_mat);
   
   for(uint32_t b = 0; b < number_to_batch; ++b)

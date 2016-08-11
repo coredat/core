@@ -44,7 +44,7 @@ set_renderer(const util::generic_id this_id,
              const Core::Renderer &renderer)
 {
   // Check valid
-  if(!is_valid(this_id, world, true)) {
+  if(!is_valid(this_id, world->entity, true)) {
     assert(false); return;
   }
   
@@ -126,7 +126,7 @@ get_renderer(const util::generic_id this_id,
              World_data::World *world)
 {
   // Check valid
-  if(!is_valid(this_id, world, true)) {
+  if(!is_valid(this_id, world->entity, true)) {
     assert(false); return Core::Renderer();
   }
 
@@ -194,7 +194,7 @@ set_renderer_material(const util::generic_id this_id,
                       const util::generic_id model_id)
 {
   // Check valid
-  if(!is_valid(this_id, world, true)) {
+  if(!is_valid(this_id, world->entity, true)) {
     assert(false); return;
   }
   
@@ -358,7 +358,7 @@ set_renderer_text(const util::generic_id this_id,
                   const util::generic_id model_id)
 {
   // Check valid
-  if(!is_valid(this_id, world, true)) {
+  if(!is_valid(this_id, world->entity, true)) {
     assert(false); return;
   }
   

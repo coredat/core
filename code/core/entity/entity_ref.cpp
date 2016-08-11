@@ -1,9 +1,4 @@
 #include <core/entity/entity_ref.hpp>
-#include <transformations/entity/entity_common.hpp>
-#include <transformations/entity/entity_data.hpp>
-#include <transformations/entity/entity_transform.hpp>
-#include <transformations/entity/entity_rigidbody.hpp>
-#include <transformations/entity/entity_renderer.hpp>
 #include <core/transform/transform.hpp>
 #include <core/model/model.hpp>
 #include <core/physics/collider.hpp>
@@ -13,7 +8,15 @@
 #include <core/renderer/renderer.hpp>
 #include <core/renderer/material_renderer.hpp>
 #include <core/resources/material.hpp>
+#include <transformations/entity/entity_common.hpp>
+#include <transformations/entity/entity_data.hpp>
+#include <transformations/entity/entity_transform.hpp>
+#include <transformations/entity/entity_rigidbody.hpp>
+#include <transformations/entity/entity_renderer.hpp>
+#include <data/world_data/world_pools.hpp>
+#include <data/world_data/entity_data.hpp>
 #include <utilities/logging.hpp>
+
 
 
 namespace Core {
@@ -104,14 +107,17 @@ Entity_ref::operator=(Entity_ref &&other)
 util::generic_id
 Entity_ref::get_id() const
 {
-  return Entity_detail::get_id(m_impl->id, m_impl->world.get());
+  return Entity_detail::get_id(m_impl->id, m_impl->world->entity);
 }
 
 
 void
 Entity_ref::destroy()
 {
-  Entity_detail::destroy(m_impl->id, m_impl->world.get());
+  Entity_detail::destroy(m_impl->id,
+                         m_impl->world->entity,
+                         m_impl->world->entity_graph_changes);
+  
   util::generic_id *id = const_cast<util::generic_id*>(&m_impl->id);
   *id = util::generic_id_invalid();
 }
@@ -120,7 +126,12 @@ Entity_ref::destroy()
 bool
 Entity_ref::is_valid() const
 {
-  return Entity_detail::is_valid(m_impl->id, m_impl->world.get());
+  if(!m_impl || !m_impl->id || !m_impl->world)
+  {
+    return false;
+  }
+
+  return Entity_detail::is_valid(m_impl->id, m_impl->world->entity);
 }
 
 

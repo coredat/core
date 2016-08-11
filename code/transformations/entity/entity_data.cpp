@@ -15,7 +15,7 @@ set_user_data(const util::generic_id this_id,
               const uintptr_t user_data)
 {
   // Check is valid
-  if(!is_valid(this_id, world, true)) {
+  if(!is_valid(this_id, world->entity, true)) {
     assert(false); return;
   }
   
@@ -42,7 +42,7 @@ get_user_data(const util::generic_id this_id,
               World_data::World *world)
 {
   // Check valid
-  if(!is_valid(this_id, world, true)) {
+  if(!is_valid(this_id, world->entity, true)) {
     assert(false); return 0;
   }
   
@@ -74,7 +74,7 @@ get_tags(const util::generic_id this_id,
          World_data::World *world)
 {
   // Check valid
-  if(!is_valid(this_id, world, true)) {
+  if(!is_valid(this_id, world->entity, true)) {
     assert(false); return 0;
   }
 
@@ -108,7 +108,7 @@ has_tag(const util::generic_id this_id,
         const uint32_t tag_id)
 {
   // Check valid
-  if(!is_valid(this_id, world, true)) {
+  if(!is_valid(this_id, world->entity, true)) {
     assert(false); return 0;
   }
   
@@ -124,7 +124,7 @@ set_tags(const util::generic_id this_id,
          const uint32_t set_tags)
 {
   // Check valid
-  if(!is_valid(this_id, world, true)) {
+  if(!is_valid(this_id, world->entity, true)) {
     assert(false); return;
   }
   
@@ -152,7 +152,7 @@ add_tag(const util::generic_id this_id,
         const uint32_t add_tag)
 {
   // Check valid
-  if(!is_valid(this_id, world, true)) {
+  if(!is_valid(this_id, world->entity, true)) {
     assert(false); return;
   }
 
@@ -167,7 +167,7 @@ remove_tag(const util::generic_id this_id,
            const uint32_t tag)
 {
   // Check is valid
-  if(!is_valid(this_id, world, true)) {
+  if(!is_valid(this_id, world->entity, true)) {
     assert(false); return;
   }
 
@@ -183,7 +183,7 @@ set_name(const util::generic_id this_id,
          const char* set_name)
 {
   // Check is valid
-  if(!is_valid(this_id, world, true)) {
+  if(!is_valid(this_id, world->entity, true)) {
     assert(false); return;
   }
   
@@ -210,7 +210,7 @@ get_name(const util::generic_id this_id,
          World_data::World *world)
 {
   // Check is valid
-  if(!is_valid(this_id, world, true)) {
+  if(!is_valid(this_id, world->entity, true)) {
     assert(false); return nullptr;
   }
   

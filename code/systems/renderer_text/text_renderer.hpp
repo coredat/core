@@ -20,6 +20,7 @@ reset();
 
 uint32_t
 render(const math::mat4 &view_proj_mat,
+       const uint32_t cam_cull_mask,
        const Draw_call calls[],
        const uint32_t number_of_calls);
 
