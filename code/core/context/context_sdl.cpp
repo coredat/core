@@ -100,10 +100,11 @@ Context::Context(const uint32_t width,
     const Uint32 window_high_dpi = settings.high_dpi_support ? SDL_WINDOW_ALLOW_HIGHDPI : 0;
     const Uint32 default_window_flags = window_high_dpi | SDL_WINDOW_OPENGL;
     const Uint32 window_flags = is_fullscreen ? default_window_flags | fullscreen_mode : default_window_flags;
+    const Uint32 display_startup = 0;
 
     m_impl->window = SDL_CreateWindow(title,
-                                      SDL_WINDOWPOS_CENTERED,
-                                      SDL_WINDOWPOS_CENTERED,
+                                      SDL_WINDOWPOS_CENTERED_DISPLAY(display_startup),
+                                      SDL_WINDOWPOS_CENTERED_DISPLAY(display_startup),
                                       width,
                                       height,
                                       window_flags);

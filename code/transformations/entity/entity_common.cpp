@@ -1,5 +1,5 @@
 #include <transformations/entity/entity_common.hpp>
-#include <data/world_data/world_data.hpp>
+#include <data/world_data/pending_scene_graph_change_data.hpp>
 #include <data/world_data/entity_data.hpp>
 #include <common/error_strings.hpp>
 #include <utilities/logging.hpp>

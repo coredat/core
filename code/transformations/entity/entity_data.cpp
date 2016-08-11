@@ -1,8 +1,5 @@
 #include <transformations/entity/entity_data.hpp>
-#include <data/world_data/world_pools.hpp>
 #include <data/world_data/entity_data.hpp>
-#include <common/error_strings.hpp>
-#include <utilities/logging.hpp>
 #include <assert.h>
 
 
@@ -11,27 +8,18 @@ namespace Entity_detail {
 
 void
 set_user_data(const util::generic_id this_id,
-              World_data::World *world,
+              World_data::Entity_data *entity_data,
               const uintptr_t user_data)
 {
   // Check is valid
-  if(!is_valid(this_id, world->entity, true)) {
+  if(!is_valid(this_id, entity_data, true)) {
     assert(false); return;
   }
   
   // Set data
   {
-    auto entity_data = world->entity;
-    assert(entity_data);
-    
     World_data::data_lock(entity_data);
-    
-    if(!World_data::entity_data_set_property_user_data(entity_data, this_id, user_data))
-    {
-      assert(false);
-      LOG_WARNING(Error_string::data_not_set());
-    }
-    
+    World_data::entity_data_set_property_user_data(entity_data, this_id, user_data);
     World_data::data_unlock(entity_data);
   }
 }
@@ -39,10 +27,10 @@ set_user_data(const util::generic_id this_id,
 
 uintptr_t
 get_user_data(const util::generic_id this_id,
-              World_data::World *world)
+              World_data::Entity_data *entity_data)
 {
   // Check valid
-  if(!is_valid(this_id, world->entity, true)) {
+  if(!is_valid(this_id, entity_data, true)) {
     assert(false); return 0;
   }
   
@@ -51,17 +39,8 @@ get_user_data(const util::generic_id this_id,
   
   // Get data
   {
-    auto entity_data = world->entity;
-    assert(entity_data);
-    
     World_data::data_lock(entity_data);
-    
-    if(!World_data::entity_data_get_property_user_data(entity_data, this_id, &user_data))
-    {
-      assert(false);
-      LOG_WARNING(Error_string::data_not_found());
-    }
-    
+    World_data::entity_data_get_property_user_data(entity_data, this_id, &user_data);
     World_data::data_unlock(entity_data);
   }
   
@@ -71,10 +50,10 @@ get_user_data(const util::generic_id this_id,
 
 uint32_t
 get_tags(const util::generic_id this_id,
-         World_data::World *world)
+         World_data::Entity_data *entity_data)
 {
   // Check valid
-  if(!is_valid(this_id, world->entity, true)) {
+  if(!is_valid(this_id, entity_data, true)) {
     assert(false); return 0;
   }
 
@@ -83,18 +62,8 @@ get_tags(const util::generic_id this_id,
   
   // Get data
   {
-    auto entity_data = world->entity;
-    assert(entity_data);
-    
     World_data::data_lock(entity_data);
-    assert(entity_data);
-    
-    if(!World_data::entity_data_get_property_tag(entity_data, this_id, &tags))
-    {
-      assert(false);
-      LOG_WARNING(Error_string::data_not_found());
-    }
-    
+    World_data::entity_data_get_property_tag(entity_data, this_id, &tags);
     World_data::data_unlock(entity_data);
   }
   
@@ -104,43 +73,32 @@ get_tags(const util::generic_id this_id,
 
 bool
 has_tag(const util::generic_id this_id,
-        World_data::World *world,
+        World_data::Entity_data *entity_data,
         const uint32_t tag_id)
 {
   // Check valid
-  if(!is_valid(this_id, world->entity, true)) {
+  if(!is_valid(this_id, entity_data, true)) {
     assert(false); return 0;
   }
   
-  const uint32_t tags = get_tags(this_id, world);
-  
-  return !!(tags & tag_id);
+  return !!(get_tags(this_id, entity_data) & tag_id);
 }
 
 
 void
 set_tags(const util::generic_id this_id,
-         World_data::World *world,
+         World_data::Entity_data *entity_data,
          const uint32_t set_tags)
 {
   // Check valid
-  if(!is_valid(this_id, world->entity, true)) {
+  if(!is_valid(this_id, entity_data, true)) {
     assert(false); return;
   }
   
   // Set data
   {
-    auto entity_data = world->entity;
-    assert(entity_data);
-    
     World_data::data_lock(entity_data);
-    
-    if(!World_data::entity_data_set_property_tag(entity_data, this_id, set_tags))
-    {
-      assert(false);
-      LOG_WARNING(Error_string::data_not_found());
-    }
-    
+    World_data::entity_data_set_property_tag(entity_data, this_id, set_tags);
     World_data::data_unlock(entity_data);
   }
 }
@@ -148,69 +106,60 @@ set_tags(const util::generic_id this_id,
 
 void
 add_tag(const util::generic_id this_id,
-        World_data::World *world,
+        World_data::Entity_data *entity_data,
         const uint32_t add_tag)
 {
   // Check valid
-  if(!is_valid(this_id, world->entity, true)) {
+  if(!is_valid(this_id, entity_data, true)) {
     assert(false); return;
   }
 
-  const uint32_t tags = get_tags(this_id, world);
-  set_tags(this_id, world, tags | add_tag);
+  const uint32_t tags = get_tags(this_id, entity_data);
+  set_tags(this_id, entity_data, tags | add_tag);
 }
 
 
 void
 remove_tag(const util::generic_id this_id,
-           World_data::World *world,
+           World_data::Entity_data *entity_data,
            const uint32_t tag)
 {
   // Check is valid
-  if(!is_valid(this_id, world->entity, true)) {
+  if(!is_valid(this_id, entity_data, true)) {
     assert(false); return;
   }
 
   // Remove tag
-  const uint32_t tags = get_tags(this_id, world);
-  set_tags(this_id, world, tags &~ tag);
+  const uint32_t tags = get_tags(this_id, entity_data);
+  set_tags(this_id, entity_data, tags &~ tag);
 }
 
 
 void
 set_name(const util::generic_id this_id,
-         World_data::World *world,
+         World_data::Entity_data *entity_data,
          const char* set_name)
 {
   // Check is valid
-  if(!is_valid(this_id, world->entity, true)) {
+  if(!is_valid(this_id, entity_data, true)) {
     assert(false); return;
   }
   
   // Set data
   {
-    auto entity_data = world->entity;
-    assert(entity_data);
-
-    World_data::data_lock(world->entity);
-    
-    if(!World_data::entity_data_set_property_name(world->entity, this_id, set_name))
-    {
-      assert(false);
-      LOG_WARNING(Error_string::data_not_set());
-    }
-    
-    World_data::data_unlock(world->entity);
+    World_data::data_lock(entity_data);
+    World_data::entity_data_set_property_name(entity_data, this_id, set_name);
+    World_data::data_unlock(entity_data);
   }
 }
   
   
 const char*
 get_name(const util::generic_id this_id,
-         World_data::World *world)
+         World_data::Entity_data *entity_data)
 {
   // Check is valid
-  if(!is_valid(this_id, world->entity, true)) {
+  if(!is_valid(this_id, entity_data, true)) {
     assert(false); return nullptr;
   }
   
@@ -219,17 +168,8 @@ get_name(const util::generic_id this_id,
   
   // Get data
   {
-    auto entity_data = world->entity;
-    assert(entity_data);
-    
     World_data::data_lock(entity_data);
-    
-    if(!World_data::entity_data_get_property_name(world->entity, this_id, &name))
-    {
-      assert(false);
-      LOG_WARNING(Error_string::data_not_found());
-    }
-    
+    World_data::entity_data_get_property_name(entity_data, this_id, &name);
     World_data::data_unlock(entity_data);
   }
   

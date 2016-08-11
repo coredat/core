@@ -18,7 +18,6 @@
 #include <utilities/logging.hpp>
 
 
-
 namespace Core {
 
 
@@ -144,63 +143,63 @@ Entity_ref::operator bool() const
 void
 Entity_ref::set_user_data(const uintptr_t user_data)
 {
-  Entity_detail::set_user_data(m_impl->id, m_impl->world.get(), user_data);
+  Entity_detail::set_user_data(m_impl->id, m_impl->world->entity, user_data);
 }
 
 
 uintptr_t
 Entity_ref::get_user_data() const
 {
-  return Entity_detail::get_user_data(m_impl->id, m_impl->world.get());
+  return Entity_detail::get_user_data(m_impl->id, m_impl->world->entity);
 }
 
 
 uint32_t
 Entity_ref::get_tags() const
 {
-  return Entity_detail::get_tags(m_impl->id, m_impl->world.get());
+  return Entity_detail::get_tags(m_impl->id, m_impl->world->entity);
 }
 
 
 bool
 Entity_ref::has_tag(const uint32_t tag_id) const
 {
-  return Entity_detail::has_tag(m_impl->id, m_impl->world.get(), tag_id);
+  return Entity_detail::has_tag(m_impl->id, m_impl->world->entity, tag_id);
 }
 
 
 void
 Entity_ref::set_tags(const uint32_t set_tags)
 {
-  Entity_detail::set_tags(m_impl->id, m_impl->world.get(), set_tags);
+  Entity_detail::set_tags(m_impl->id, m_impl->world->entity, set_tags);
 }
 
 
 void
 Entity_ref::add_tag(const uint32_t add_tag)
 {
-  Entity_detail::add_tag(m_impl->id, m_impl->world.get(), add_tag);
+  Entity_detail::add_tag(m_impl->id, m_impl->world->entity, add_tag);
 }
 
 
 void
 Entity_ref::remove_tag(const uint32_t tag)
 {
-  Entity_detail::remove_tag(m_impl->id, m_impl->world.get(), tag);
+  Entity_detail::remove_tag(m_impl->id, m_impl->world->entity, tag);
 }
 
 
 void
 Entity_ref::set_name(const char* set_name)
 {
-  Entity_detail::set_name(m_impl->id, m_impl->world.get(), set_name);
+  Entity_detail::set_name(m_impl->id, m_impl->world->entity, set_name);
 }
 
 
 const char*
 Entity_ref::get_name() const
 {
-  return Entity_detail::get_name(m_impl->id, m_impl->world.get());
+  return Entity_detail::get_name(m_impl->id, m_impl->world->entity);
 }
 
 
