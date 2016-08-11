@@ -27,8 +27,8 @@ class Renderer final
 {
   friend class Material_renderer;
   friend class Text_renderer;
-  friend Core::Renderer Entity_detail::get_renderer(const util::generic_id this_id, World_data::World *world);
-
+  friend Core::Renderer Entity_detail::get_renderer(const util::generic_id, World_data::Entity_data *,World_data::Renderer_mesh_data *);
+  
   explicit                  Renderer(const Renderer_type renderer_type = Renderer_type::unknown,
                                      const util::generic_id arg_01 = util::generic_id_invalid(),
                                      const util::generic_id arg_02 = util::generic_id_invalid(),

@@ -3,6 +3,7 @@
 
 
 #include <transformations/entity/entity_common.hpp>
+#include <data/world_data/physics_data.hpp>
 #include <math/transform/transform_fwd.hpp>
 #include <math/geometry/geometry_fwd.hpp>
 
@@ -34,7 +35,8 @@ get_rigidbody(const util::generic_id this_id,
 
 void
 update_collider(const util::generic_id this_id,
-                World_data::World *world,
+                World_data::Entity_data *entity_data,
+                World_data::Physics_data *phys_data,
                 const math::transform *transform,
                 const math::aabb *model_aabb,
                 const bool inform_phys_engine = true);

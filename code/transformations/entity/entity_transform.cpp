@@ -18,11 +18,9 @@ namespace {
 
 inline void
 update_transform(const util::generic_id this_id,
-                 World_data::World *world,
+                 World_data::Transform_data *transform_data,
                  const math::transform *transform)
 {
-  auto transform_data = world->transform;
-  
   World_data::data_lock(transform_data);
 
   size_t index;
@@ -37,12 +35,9 @@ update_transform(const util::generic_id this_id,
 
 inline void
 update_mesh_renderer(const util::generic_id this_id,
-                     World_data::World *world,
+                     World_data::Renderer_mesh_data *mesh_data,
                      const math::transform *transform)
 {
-
-  auto mesh_data = world->mesh_data;
-
   // Update mesh renderer data
   {
     World_data::data_lock(mesh_data);
@@ -62,11 +57,10 @@ update_mesh_renderer(const util::generic_id this_id,
 
 inline void
 udpate_text_renderer(const util::generic_id this_id,
-                     World_data::World *world,
+                     World_data::Renderer_text_draw_calls_data *text_data,
                      const math::transform *transform)
 {
-
-  auto text_data = world->text_data;
+  assert(text_data);
 
   // Update mesh renderer data
   {
@@ -90,24 +84,33 @@ udpate_text_renderer(const util::generic_id this_id,
 
 void
 set_transform(const util::generic_id this_id,
-              World_data::World *world,
+              World_data::Entity_data *entity_data,
+              World_data::Transform_data *transform_data,
+              World_data::Physics_data *phys_data,
+              World_data::Renderer_mesh_data *mesh_data,
+              World_data::Renderer_text_draw_calls_data *text_data,
               const Core::Transform &set_transform,
               bool inform_phys_engine)
 {
+  assert(entity_data);
+  assert(transform_data);
+  assert(phys_data);
+  assert(mesh_data);
+  assert(text_data);
+
   // Check valid
-  if(!is_valid(this_id, world->entity, true)) {
+  if(!is_valid(this_id, entity_data, true)) {
     assert(false); return;
   }
   
   // Get aabb
   math::aabb curr_aabb;
   {
-    auto transform_data = world->transform;
     assert(transform_data);
   
     World_data::data_lock(transform_data);
-    World_data::transform_data_get_property_aabb(world->transform, this_id, &curr_aabb);
-    World_data::data_unlock(world->transform);
+    World_data::transform_data_get_property_aabb(transform_data, this_id, &curr_aabb);
+    World_data::data_unlock(transform_data);
   }
   
   // Update all the things that want to know.
@@ -117,24 +120,28 @@ set_transform(const util::generic_id this_id,
                                                                set_transform.get_scale(),
                                                                set_transform.get_rotation());
     
-    update_transform(this_id, world, &new_transform);
-    update_collider(this_id, world, &new_transform, &curr_aabb, inform_phys_engine);
-    update_mesh_renderer(this_id, world, &new_transform);
-    udpate_text_renderer(this_id, world, &new_transform);
+    update_transform(this_id, transform_data, &new_transform);
+    update_collider(this_id, entity_data, phys_data, &new_transform, &curr_aabb, inform_phys_engine);
+    update_mesh_renderer(this_id, mesh_data, &new_transform);
+    udpate_text_renderer(this_id, text_data, &new_transform);
   }
 }
 
 
 Core::Transform
 get_core_transform(const util::generic_id this_id,
-              World_data::World *world)
+                   World_data::Entity_data *entity_data,
+                   World_data::Transform_data *transform_data)
 {
+  assert(entity_data);
+  assert(transform_data);
+
   // Check valid
-  if(!is_valid(this_id, world->entity, true)) {
+  if(!is_valid(this_id, entity_data, true)) {
     assert(false); return Core::Transform();
   }
   
-  const math::transform transform_prop = get_transform(this_id, world);
+  const math::transform transform_prop = get_transform(this_id, entity_data, transform_data);
   
   return Core::Transform(transform_prop.position, transform_prop.scale, transform_prop.rotation);
 }
@@ -142,19 +149,19 @@ get_core_transform(const util::generic_id this_id,
 
 math::transform
 get_transform(const util::generic_id this_id,
-              World_data::World *world)
+              World_data::Entity_data *entity_data,
+              World_data::Transform_data *transform_data)
 {
+  assert(transform_data);
+
   // Check valid
-  if(!is_valid(this_id, world->entity, true)) {
+  if(!is_valid(this_id, entity_data, true)) {
     assert(false); return math::transform();
   }
   
   // Get Data
   math::transform return_transform;
   {
-    auto transform_data = world->transform;
-    assert(transform_data);
-    
     World_data::data_lock(transform_data);
 
     if(!World_data::transform_data_get_property_transform(transform_data,

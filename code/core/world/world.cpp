@@ -206,9 +206,13 @@ World::think()
         core_trans.set_scale(old_tran.get_scale());
         
         Entity_detail::set_transform(m_impl->world_data->physics_data->physics_id[i],
-                                           m_impl->world_data.get(),
-                                           core_trans,
-                                           false);
+                                     m_impl->world_data->entity,
+                                     m_impl->world_data->transform,
+                                     m_impl->world_data->physics_data,
+                                     m_impl->world_data->mesh_data,
+                                     m_impl->world_data->text_data,
+                                     core_trans,
+                                     false);
       }
     }
   }

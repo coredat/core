@@ -40,11 +40,14 @@ has_renderer(const util::generic_id this_id,
 
 void
 set_renderer(const util::generic_id this_id,
-             World_data::World *world,
+             World_data::Entity_data *entity_data,
+             World_data::Transform_data *transform_data,
+             World_data::Renderer_mesh_data *renderer_material,
+             World_data::Renderer_text_draw_calls_data *text_data,
              const Core::Renderer &renderer)
 {
   // Check valid
-  if(!is_valid(this_id, world->entity, true)) {
+  if(!is_valid(this_id, entity_data, true)) {
     assert(false); return;
   }
   
@@ -56,10 +59,8 @@ set_renderer(const util::generic_id this_id,
 
   // Check to see if renderer has been set.
   {
-    auto entity_data = world->entity;
     assert(entity_data);
     
-    auto renderer_material = world->mesh_data;
     assert(renderer_material);
     
     World_data::data_lock(entity_data);
@@ -97,7 +98,9 @@ set_renderer(const util::generic_id this_id,
     {
       const Core::Material_renderer mat_renderer(renderer);
       set_renderer_material(this_id,
-                            world,
+                            entity_data,
+                            transform_data,
+                            renderer_material,
                             mat_renderer.get_material().get_id(),
                             mat_renderer.get_model().get_id());
       break;
@@ -107,7 +110,9 @@ set_renderer(const util::generic_id this_id,
     {
       const Core::Text_renderer text_renderer(renderer);
       set_renderer_text(this_id,
-                        world,
+                        entity_data,
+                        transform_data,
+                        text_data,
                         text_renderer.get_font_id(),
                         text_renderer.get_text_id());
       
@@ -123,10 +128,11 @@ set_renderer(const util::generic_id this_id,
 
 Core::Renderer
 get_renderer(const util::generic_id this_id,
-             World_data::World *world)
+             World_data::Entity_data *entity_data,
+             World_data::Renderer_mesh_data *renderer_material)
 {
   // Check valid
-  if(!is_valid(this_id, world->entity, true)) {
+  if(!is_valid(this_id, entity_data, true)) {
     assert(false); return Core::Renderer();
   }
 
@@ -134,10 +140,8 @@ get_renderer(const util::generic_id this_id,
 
   // Check to see if renderer has been set.
   {
-    auto entity_data = world->entity;
     assert(entity_data);
 
-    auto renderer_material = world->mesh_data;
     assert(renderer_material);
     
     World_data::data_lock(renderer_material);
@@ -189,19 +193,20 @@ get_renderer(const util::generic_id this_id,
 
 void
 set_renderer_material(const util::generic_id this_id,
-                      World_data::World *world,
+                      World_data::Entity_data *entity_data,
+                      World_data::Transform_data *transform_data,
+                      World_data::Renderer_mesh_data *mesh_data,
                       const util::generic_id material_id,
                       const util::generic_id model_id)
 {
   // Check valid
-  if(!is_valid(this_id, world->entity, true)) {
+  if(!is_valid(this_id, entity_data, true)) {
     assert(false); return;
   }
   
   // Check to see entity has a renderer.
   // If not then set it.
   {
-    auto entity_data = world->entity;
     assert(entity_data);
     
     World_data::data_lock(entity_data);
@@ -222,7 +227,6 @@ set_renderer_material(const util::generic_id this_id,
     World_data::data_unlock(entity_data);
   }
   
-  auto mesh_data = world->mesh_data;
   assert(mesh_data);
 
   // We need to find the material remove it.
@@ -268,7 +272,7 @@ set_renderer_material(const util::generic_id this_id,
       
       // Get the trasnform as we are insreting a new record.
       math::transform trans;
-      World_data::transform_data_get_property_transform(world->transform, this_id, &trans);
+      World_data::transform_data_get_property_transform(transform_data, this_id, &trans);
       
       const math::mat4 world_mat = math::transform_get_world_matrix(trans);
       memcpy(copy.world_matrix, &world_mat, sizeof(world_mat));
@@ -313,7 +317,6 @@ set_renderer_material(const util::generic_id this_id,
     Resource_data::data_unlock(mesh_data);
   }
   
-  auto transform_data = world->transform;
   {
     World_data::data_lock(transform_data);
     World_data::transform_data_set_property_aabb(transform_data, this_id, return_aabb);
@@ -324,12 +327,10 @@ set_renderer_material(const util::generic_id this_id,
 
 void
 get_renderer_material(const util::generic_id this_id,
-                      World_data::World *world,
+                      World_data::Renderer_mesh_data *mesh_data,
                       util::generic_id *out_material_id,
                       util::generic_id *out_model_id)
 {
-  auto mesh_data = world->mesh_data;
-
   // Material and Mesh
   {
     World_data::data_lock(mesh_data);
@@ -353,12 +354,14 @@ get_renderer_material(const util::generic_id this_id,
 
 void
 set_renderer_text(const util::generic_id this_id,
-                  World_data::World *world,
+                  World_data::Entity_data *entity_data,
+                  World_data::Transform_data *transform_data,
+                  World_data::Renderer_text_draw_calls_data *text_data,
                   const util::generic_id font_id,
                   const util::generic_id model_id)
 {
   // Check valid
-  if(!is_valid(this_id, world->entity, true)) {
+  if(!is_valid(this_id, entity_data, true)) {
     assert(false); return;
   }
   
@@ -367,7 +370,6 @@ set_renderer_text(const util::generic_id this_id,
   {
     LOG_TODO_ONCE("This is duplicated - unduplicate it")
   
-    auto entity_data = world->entity;
     assert(entity_data);
     
     const uint32_t renderer_type = has_renderer(this_id, entity_data);
@@ -610,21 +612,20 @@ set_renderer_text(const util::generic_id this_id,
     Add this to the text draw calls
   */
   {
-    auto text_dc = world->text_data;
-    assert(text_dc);
+    assert(text_data);
     
-    World_data::data_lock(text_dc);
+    World_data::data_lock(text_data);
     
-    const math::transform transform = Entity_detail::get_transform(this_id, world);
+    const math::transform transform = Entity_detail::get_transform(this_id, entity_data, transform_data);
     const math::mat4 world_mat = math::transform_get_world_matrix(transform);
     
     // If we don't have a draw call insert one.
-    if(!World_data::renderer_text_draw_calls_data_exists(text_dc, this_id))
+    if(!World_data::renderer_text_draw_calls_data_exists(text_data, this_id))
     {
-      World_data::renderer_text_draw_calls_data_push_back(text_dc, this_id);
+      World_data::renderer_text_draw_calls_data_push_back(text_data, this_id);
     }
     
-    if(World_data::renderer_text_draw_calls_data_exists(text_dc, this_id))
+    if(World_data::renderer_text_draw_calls_data_exists(text_data, this_id))
     {
       ::Text_renderer::Draw_call dc;
       dc.texture = glyph_texture;
@@ -633,10 +634,10 @@ set_renderer_text(const util::generic_id this_id,
 
       dc.mesh = mesh;
 
-      World_data::renderer_text_draw_calls_data_set_property_draw_call(text_dc, this_id, &dc);
+      World_data::renderer_text_draw_calls_data_set_property_draw_call(text_data, this_id, &dc);
     }
 
-    World_data::data_unlock(text_dc);
+    World_data::data_unlock(text_data);
   }
   
   Resource_data::data_unlock(glyph_data);

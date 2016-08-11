@@ -81,7 +81,11 @@ set_collider(const util::generic_id this_id,
               
               World_data::data_unlock(phys_pool);
               
-              update_collider(this_id, world, &curr_transform, &entity_aabb);
+              update_collider(this_id,
+                              world->entity,
+                              world->physics_data,
+                              &curr_transform,
+                              &entity_aabb);
             }
           }
           break;
@@ -145,7 +149,7 @@ set_rigidbody(const util::generic_id this_id,
   {
     World_data::data_lock(phys_pool);
     
-    const Core::Transform transform = get_core_transform(this_id, world);
+    const Core::Transform transform = get_core_transform(this_id, world->entity, world->transform);
     
     q3Body *body = nullptr;
     Physics_transform::convert_core_rb_to_qu3e(&this_id,
@@ -176,20 +180,20 @@ get_rigidbody(const util::generic_id this_id,
 
 void
 update_collider(const util::generic_id this_id,
-                World_data::World *world,
+                World_data::Entity_data *entity_data,
+                World_data::Physics_data *phys_data,
                 const math::transform *transform,
                 const math::aabb *model_aabb,
                 const bool inform_phys_engine)
 {
   // Check valid
-  if(!is_valid(this_id, world->entity, true)) {
+  if(!is_valid(this_id, entity_data, true)) {
     assert(false); return;
   }
   
   // Find the components
   uint32_t components = 0;
   {
-    auto entity_data = world->entity;
     assert(entity_data);
     
     World_data::data_lock(entity_data);
@@ -203,7 +207,6 @@ update_collider(const util::generic_id this_id,
   
   // If this is a physics object then update it.
   {
-    auto phys_data = world->physics_data;
     assert(phys_data);
   
     // Update the physics stuff.

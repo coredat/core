@@ -289,7 +289,11 @@ void
 Entity::set_transform(const Transform &transform)
 {
   Entity_detail::set_transform(m_impl->id,
-                               m_impl->world.get(),
+                               m_impl->world->entity,
+                               m_impl->world->transform,
+                               m_impl->world->physics_data,
+                               m_impl->world->mesh_data,
+                               m_impl->world->text_data,
                                transform);
 }
 
@@ -298,7 +302,8 @@ Transform
 Entity::get_transform() const
 {
   return Entity_detail::get_core_transform(m_impl->id,
-                                           m_impl->world.get());
+                                           m_impl->world->entity,
+                                           m_impl->world->transform);
 }
 
 
@@ -306,7 +311,10 @@ void
 Entity::set_renderer(const Core::Renderer &renderer)
 {
   Entity_detail::set_renderer(m_impl->id,
-                              m_impl->world.get(),
+                              m_impl->world->entity,
+                              m_impl->world->transform,
+                              m_impl->world->mesh_data,
+                              m_impl->world->text_data,
                               renderer);
 }
 
@@ -314,7 +322,7 @@ Entity::set_renderer(const Core::Renderer &renderer)
 Renderer
 Entity::get_renderer() const
 {
-  return Entity_detail::get_renderer(m_impl->id, m_impl->world.get());
+  return Entity_detail::get_renderer(m_impl->id, m_impl->world->entity, m_impl->world->mesh_data);
 }
 
 

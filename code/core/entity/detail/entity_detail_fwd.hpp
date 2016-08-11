@@ -11,7 +11,9 @@ namespace Entity_detail {
 
 // Prototype the function here so that we can use it as a friend dec.
 Core::Renderer
-get_renderer(const util::generic_id this_id, World_data::World *world);
+get_renderer(const util::generic_id this_id,
+             World_data::Entity_data *entity_data,
+             World_data::Renderer_mesh_data *renderer_material);
 
 
 } // ns

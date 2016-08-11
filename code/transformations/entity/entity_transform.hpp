@@ -3,27 +3,46 @@
 
 
 #include <transformations/entity/entity_common.hpp>
+#include <data/world_data/entity_data.hpp>
+#include <data/world_data/transform_data.hpp>
 
 
 namespace Entity_detail {
 
 
+/*
+  Sets a transform.
+  This method will update all the transformation information
+  everywhere.
+*/
 void
 set_transform(const util::generic_id this_id,
-              World_data::World *world,
+              World_data::Entity_data *entity_data,
+              World_data::Transform_data *transform_data,
+              World_data::Physics_data *phys_data,
+              World_data::Renderer_mesh_data *mesh_data,
+              World_data::Renderer_text_draw_calls_data *text_data,
               const Core::Transform &transform,
               bool inform_phys_engine = true);
 
 
-Core::Transform
-get_core_transform(const util::generic_id this_id,
-              World_data::World *world);
-  
-  
+/*
+  Gets a math::transform from the entity data.
+*/
 math::transform
 get_transform(const util::generic_id this_id,
-              World_data::World *world);
+              World_data::Entity_data *entity_data,
+              World_data::Transform_data *transform_data);
 
+
+/*
+  Sugar method, that will convert a math::transform into a Core::Transform.
+*/
+Core::Transform
+get_core_transform(const util::generic_id this_id,
+                   World_data::Entity_data *entity_data,
+                   World_data::Transform_data *transform_data);
+  
 
 } // ns
 
