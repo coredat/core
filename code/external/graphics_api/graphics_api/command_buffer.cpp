@@ -3,6 +3,7 @@
 #include "shader.hpp"
 #include "texture.hpp"
 #include "mesh.hpp"
+#include "vertex_format.hpp"
 #include <assert.h>
 #include <cstring>
 
@@ -33,17 +34,18 @@ namespace {
 
 
 namespace Gfx = ::Graphics_api;
+namespace Gfx_detail = ::Graphics_api::Detail;
 
 
 inline bool
 insert_cmd(Gfx::Command_buffer *buf,
-           const Gfx::Detail::Buffer_state state,
+           const Gfx_detail::Buffer_state state,
            const void *data,
            const size_t bytes_in_data)
 {
   assert(buf);
   
-  const size_t bytes_needed = sizeof(Gfx::Detail::Buffer_state) + bytes_in_data;
+  const size_t bytes_needed = sizeof(Gfx_detail::Buffer_state) + bytes_in_data;
   const size_t total_bytes = bytes_needed + buf->bytes_used;
   
   // Can it fit into the data.
@@ -67,15 +69,39 @@ insert_cmd(Gfx::Command_buffer *buf,
 
 
 void
-command_buffer_bind(Command_buffer *buffer, const Shader *shader)
+command_buffer_bind(Command_buffer *buffer,
+                    const Shader *shader)
 {
   assert(buffer);
   
-  insert_cmd(buffer,
-             Detail::Buffer_state::set_shader,
-             (void*)&shader->program_id,
-             sizeof(shader->program_id));
+  Gfx_detail::Bind_shader shader_data;
+  shader_data.shader_id = shader->program_id;
+  
+  insert_cmd(buffer, Detail::Buffer_state::set_shader, &shader_data, sizeof(shader_data));
 }
+
+
+void
+command_buffer_bind(Command_buffer *buffer,
+                    const Vertex_format *vert_fmt)
+{
+  Gfx_detail::Bind_vertex_format vertex_fmt_data;
+  
+  // Loop through and att and attribute for each vertex format
+}
+
+
+void
+command_buffer_bind(Command_buffer *buffer,
+                    const Mesh *mesh)
+{
+  Gfx_detail::Bind_mesh mesh_data;
+  mesh_data.vbo_id = mesh->vbo.vertex_buffer_id;
+  mesh_data.vbo_entries = mesh->vbo.number_of_entries;
+  
+  insert_cmd(buffer, Gfx_detail::Buffer_state::set_geometry, &mesh_data, sizeof(mesh_data));
+}
+
 
 
 } // ns

@@ -30,6 +30,11 @@ command_buffer_destroy(Command_buffer *buffer);
 void
 command_buffer_bind(Command_buffer *buffer,
                     const Shader *shader);
+  
+  
+void
+command_buffer_bind(Command_buffer *buffer,
+                    const Vertex_format *vert_fmt);
 
 
 void
