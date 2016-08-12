@@ -106,6 +106,19 @@ render_main_scene(const float delta_time,
                                                     world->text_data->size);
       
       math::mat4 wvp = math::mat4_multiply(cam->view, cam->proj);
+      
+      ::Debug_line_renderer::Line_node node;
+      
+      const float color[3] = {1,0,0};
+      memcpy(node.color, color, sizeof(color));
+      
+      const float pos[3] = {0,0,0};
+      memcpy(node.position_from, pos, sizeof(pos));
+      
+      const float pos2[3] = {3,3,3};
+      memcpy(node.position_to, pos2, sizeof(pos2));
+      
+      ::Debug_line_renderer::add_lines(&node, 1);
       ::Debug_line_renderer::render(math::mat4_get_data(wvp));
     }
     else

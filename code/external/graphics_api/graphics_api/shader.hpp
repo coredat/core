@@ -9,9 +9,7 @@
 namespace Graphics_api {
 
 
-struct Shader : public API_TYPE::Shader
-{
-};
+using Shader = API_TYPE::Shader;
 
 
 inline void       shader_init();

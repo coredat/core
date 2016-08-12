@@ -33,12 +33,11 @@ command_buffer_destroy(Command_buffer *buffer)
 namespace {
 
 
-namespace Gfx = ::Graphics_api;
 namespace Gfx_detail = ::Graphics_api::Detail;
 
 
 inline bool
-insert_cmd(Gfx::Command_buffer *buf,
+insert_cmd(Graphics_api::Command_buffer *buf,
            const Gfx_detail::Buffer_state state,
            const void *data,
            const size_t bytes_in_data)
@@ -77,7 +76,10 @@ command_buffer_bind(Command_buffer *buffer,
   Gfx_detail::Bind_shader shader_data;
   shader_data.shader_id = shader->program_id;
   
-  insert_cmd(buffer, Detail::Buffer_state::set_shader, &shader_data, sizeof(shader_data));
+  insert_cmd(buffer,
+             Gfx_detail::Buffer_state::set_shader,
+             &shader_data,
+             sizeof(shader_data));
 }
 
 
@@ -85,9 +87,26 @@ void
 command_buffer_bind(Command_buffer *buffer,
                     const Vertex_format *vert_fmt)
 {
-  Gfx_detail::Bind_vertex_format vertex_fmt_data;
+  // Loop through and att and attribute for each vertex formats
+  for(uint32_t i = 0; i < vert_fmt->format.number_of_attributes; ++i)
+  {
+    const auto *curr_attr = &vert_fmt->format.attributes[i];
   
-  // Loop through and att and attribute for each vertex format
+    Gfx_detail::Bind_vertex_attr attr;
+    
+    memset(attr.name, 0, sizeof(attr.name));
+    strcpy(attr.name, curr_attr->name);
+    
+    attr.type    = curr_attr->type;
+    attr.size    = curr_attr->size;
+    attr.pointer = curr_attr->pointer;
+    
+    
+    insert_cmd(buffer,
+               Gfx_detail::Buffer_state::set_vertex_attribute,
+               &attr,
+               sizeof(attr));
+  }
 }
 
 
@@ -96,10 +115,13 @@ command_buffer_bind(Command_buffer *buffer,
                     const Mesh *mesh)
 {
   Gfx_detail::Bind_mesh mesh_data;
-  mesh_data.vbo_id = mesh->vbo.vertex_buffer_id;
+  mesh_data.vbo_id      = mesh->vbo.vertex_buffer_id;
   mesh_data.vbo_entries = mesh->vbo.number_of_entries;
   
-  insert_cmd(buffer, Gfx_detail::Buffer_state::set_geometry, &mesh_data, sizeof(mesh_data));
+  insert_cmd(buffer,
+             Gfx_detail::Buffer_state::set_geometry,
+             &mesh_data,
+             sizeof(mesh_data));
 }
 
 

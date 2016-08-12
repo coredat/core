@@ -14,6 +14,12 @@
 #include <stddef.h>
 
 
+#include <graphics_api/command_buffer.hpp>
+#include <graphics_api/vertex_format.hpp>
+#include <graphics_api/uniform.hpp>
+#include <graphics_api/shader.hpp>
+
+
 namespace
 {
   Ogl::Shader debug_line_shader;
@@ -28,6 +34,8 @@ namespace
   float data[size_of_data_buffer];
   
   uint32_t data_ptr = 0; // Keeps a track of the data that we push in.
+  
+  Graphics_api::Command_buffer buffer;
 }
 
 
@@ -37,6 +45,8 @@ namespace Debug_line_renderer {
 void
 initialize()
 {
+  Graphics_api::command_buffer_create(&buffer, 2048);
+
   Ogl::error_clear();
 
   char debug_lines_shd_path[MAX_FILE_PATH_SIZE];
@@ -67,7 +77,8 @@ initialize()
   if(err_code != GL_NO_ERROR)
   {
     LOG_GL_ERROR(err_code, "Setting up debug line renderer");
-  }}
+  }
+}
 
 
 void
@@ -101,6 +112,9 @@ void
 render(const float wvp_mat[16])
 {
   const uint32_t number_to_batch = (data_ptr / number_of_lines) + 1;
+  
+  Graphics_api::command_buffer_bind(&buffer, &debug_line_shader);
+
   
   // Render
   Ogl::default_state();

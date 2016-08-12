@@ -9,7 +9,7 @@ namespace Graphics_api {
 
 
 struct Texture;
-struct Shader;
+//struct Shader;
 struct Mesh;
 struct Vertex_format;
 struct Command_buffer;

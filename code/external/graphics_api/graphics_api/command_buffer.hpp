@@ -4,6 +4,7 @@
 
 #include "gfx_common.hpp"
 #include "gfx_fwd.hpp"
+#include "shader.hpp"
 
 
 namespace Graphics_api {

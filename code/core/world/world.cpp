@@ -352,7 +352,9 @@ World::think()
 //    ::Text_renderer::render(view_proj, m_impl->world_data->text_data->property_draw_call, m_impl->world_data->text_data->size);
   }
   
-  Graphics_api::command_buffer_execute(&m_impl->graphcis_command_buffer);
+  
+  auto buf = &m_impl->graphcis_command_buffer;
+  Graphics_api::command_buffer_execute(buf);
   
   /*
     Debug Menu

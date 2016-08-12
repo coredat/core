@@ -28,7 +28,7 @@ struct Bind_shader
 };
 
 
-struct Bind_vertex_format
+struct Bind_vertex_attr
 {
   GLchar    name[32]  = "";
   GLenum    type      = 0;

@@ -86,6 +86,7 @@ initialize()
 void
 render(const math::aabb boxes[], const uint32_t number_of_boxes)
 {
+
 }
 
 
