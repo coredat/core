@@ -43,6 +43,7 @@
 
 #include <graphics_api/initialize.hpp>
 #include <graphics_api/clear.hpp>
+#include <graphics_api/command_buffer.hpp>
 
 #include <3rdparty/qu3e/q3.h>
 #include <transformations/physics/q3_math_extensions.hpp>
@@ -60,6 +61,8 @@ struct World::Impl
   float       dt_mul       = 1.f;
   float       running_time = 0.f;
   Collision_callback collision_callback = nullptr;
+  
+  Graphics_api::Command_buffer graphcis_command_buffer;
 };
 
 
@@ -70,6 +73,8 @@ World::World(Context &ctx, const World_setup setup)
   
   m_impl->world_data = std::make_shared<World_data::World>(setup.entity_pool_size);
   m_impl->context = &ctx;
+  
+  Graphics_api::command_buffer_create(&m_impl->graphcis_command_buffer, 1 << 17);
   
   Simple_renderer::initialize(); // TODO: This can be removed I think, largely superceded by mat renderer
   Debug_line_renderer::initialize();
@@ -305,7 +310,6 @@ World::think()
     }
   }
   
-  
   /*
     Render the world
     --
@@ -348,6 +352,7 @@ World::think()
 //    ::Text_renderer::render(view_proj, m_impl->world_data->text_data->property_draw_call, m_impl->world_data->text_data->size);
   }
   
+  Graphics_api::command_buffer_execute(&m_impl->graphcis_command_buffer);
   
   /*
     Debug Menu

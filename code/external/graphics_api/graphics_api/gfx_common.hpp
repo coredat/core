@@ -3,10 +3,11 @@
 
 
 #define GL_IS_OGL
-
-
 #define API_TYPE Ogl
 
+
+#include <stdint.h>
+#include <stddef.h>
 
 
 #endif // inc guard
