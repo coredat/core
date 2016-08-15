@@ -1,5 +1,6 @@
 #include <core/input/input.hpp>
 #include <core/context/context.hpp>
+#include <core/context/detail/context_detail.hpp>
 #include <data/context_data/input_pool.hpp>
 #include <systems/sdl_backend/sdl_input.hpp>
 
@@ -25,7 +26,7 @@ mouse_is_capture(Core::Context &context)
 Axis
 mouse_get_coordinates(Core::Context &context)
 {
-  context.get_context_data();
+  return context.get_context_data()->input_pool->mice[0].position;
 }
 
 
