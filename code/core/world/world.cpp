@@ -48,6 +48,87 @@
 #include <3rdparty/qu3e/q3.h>
 #include <transformations/physics/q3_math_extensions.hpp>
 
+#include <3rdparty/qu3e/debug/q3Render.h>
+#include <transformations/physics/q3_math_extensions.hpp>
+
+
+namespace {
+
+struct Debug_renderer : public q3Render
+{
+  math::vec3 pen_pos = math::vec3_zero();
+  math::vec3 pen_color = math::vec3_zero();
+  math::vec3 scale = math::vec3_one();
+
+  void SetPenColor( f32 r, f32 g, f32 b, f32 a = 1.0f ) override
+  {
+    pen_color = math::vec3_init(r, g, b);
+  }
+  
+  
+	void SetPenPosition( f32 x, f32 y, f32 z ) override
+  {
+    pen_pos = math::vec3_from_q3vec(q3Vec3(x, y, z));
+  }
+  
+  
+	void SetScale( f32 sx, f32 sy, f32 sz ) override
+  {
+    scale = math::vec3_init(sx, sy, sz);
+  }
+
+	// Render a line from pen position to this point.
+	// Sets the pen position to the new point.
+	void Line( f32 x, f32 y, f32 z ) override
+  {
+    math::vec3 pos = math::vec3_from_q3vec(q3Vec3(x, y, z));
+  
+    Debug_line_renderer::Line_node node;
+    node.color[0] = math::get_x(pen_color);
+    node.color[1] = math::get_y(pen_color);
+    node.color[2] = math::get_z(pen_color);
+    
+    node.position_from[0] = math::get_x(pen_pos);
+    node.position_from[1] = math::get_y(pen_pos);
+    node.position_from[2] = math::get_z(pen_pos);
+    
+    node.position_to[0] = math::get_x(pos);
+    node.position_to[1] = math::get_y(pos);
+    node.position_to[2] = math::get_z(pos);
+    
+    Debug_line_renderer::add_lines(&node, 1);
+  }
+  
+
+	void SetTriNormal( f32 x, f32 y, f32 z ) override {}
+
+	// Render a triangle with the normal set by SetTriNormal.
+	void Triangle(
+		f32 x1, f32 y1, f32 z1,
+		f32 x2, f32 y2, f32 z2,
+		f32 x3, f32 y3, f32 z3
+		) override
+  {
+    const math::vec3 old_pos = pen_pos;
+  
+    pen_pos = math::vec3_init(x3, y3, z3);
+    Line(x1, y1, z1);
+    
+    pen_pos = math::vec3_init(x1, y1, z1);
+    Line(x2, y2, z2);
+    
+    pen_pos = math::vec3_init(x2, y2, z2);
+    Line(x3, y3, z3);
+    
+    pen_pos = old_pos;
+  }
+
+	// Draw a point with the scale from SetScale
+	void Point( ) override {}
+} debug_renderer;
+
+} // anon ns
+
 
 namespace Core {
 
@@ -358,6 +439,8 @@ World::think()
   */
   auto buf = &m_impl->graphcis_command_buffer;
   Graphics_api::command_buffer_execute(buf);
+  
+    m_impl->world_data->scene.Render(&debug_renderer);
   
   /*
     Debug Menu
