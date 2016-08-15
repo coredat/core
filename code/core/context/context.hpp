@@ -6,6 +6,7 @@
 #include <core/context/detail/context_detail_fwd.hpp>
 #include <core/common/core_fwd.hpp>
 #include <core/common/core_types.hpp>
+#include <core/input/input.hpp>
 
 
 namespace Core {
@@ -54,6 +55,7 @@ private:
 
   friend class Core::Controller;
   friend class Core::World;
+  friend Axis Input::mouse_get_coordinates(Core::Context &context);
   
   explicit            Context(std::shared_ptr<Context_detail::Data> data);
 

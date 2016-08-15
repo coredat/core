@@ -10,6 +10,8 @@
 namespace Core {
 
 
+typedef void (*callback_entity_mouseover)(Core::Entity_ref entity);
+
 /*!
   Entity represents an object on the screen.
   This is an owning object, if it goes out of scope it will
@@ -60,6 +62,8 @@ public:
   
   void                          set_rigidbody(const Rigidbody &rigidbody);    //!< Set the rigidbody for the entity.
   Rigidbody                     get_rigidbody() const;                        //!< Get the rigidbody for the entity. Returns by type.
+  
+  void                          on_mouse_over(const callback_entity_mouseover mouse_cb);
   
   // ** Equality ** //
   

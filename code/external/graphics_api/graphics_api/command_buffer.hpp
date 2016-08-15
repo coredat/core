@@ -5,6 +5,7 @@
 #include "gfx_common.hpp"
 #include "gfx_fwd.hpp"
 #include "shader.hpp"
+#include "uniform.hpp"
 
 
 namespace Graphics_api {
@@ -32,7 +33,7 @@ void
 command_buffer_bind(Command_buffer *buffer,
                     const Shader *shader);
   
-  
+
 void
 command_buffer_bind(Command_buffer *buffer,
                     const Vertex_format *vert_fmt);

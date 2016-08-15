@@ -1,6 +1,7 @@
 #include "transform.hpp"
 #include <math/vec/vec3.hpp>
 #include <math/quat/quat.hpp>
+#include <utilities/logging.hpp>
 
 
 namespace
@@ -22,6 +23,7 @@ Transform::Transform(const math::vec3 pos,
 , m_scale(scale)
 , m_rotation(rot)
 {
+  LOG_TODO_ONCE("Remove world directions");
 }
 
 

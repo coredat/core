@@ -96,14 +96,16 @@ render_main_scene(const float delta_time,
 
       const math::mat4 view_proj = math::mat4_multiply(cam->view, cam->proj);
     
-      LOG_TODO_ONCE("Huge bug here! Text system ignores cullmask");
-      // We need to sink the entities data, or queue up draw calls better.
-      // So that every renderer sinks into the same draw_call path.
-      // or somesuch...
-      number_of_draw_calls += Text_renderer::render(view_proj,
-                                                    cam->cull_mask,
-                                                    world->text_data->property_draw_call,
-                                                    world->text_data->size);
+      
+      if(c == 2)
+      {
+        LOG_TODO_ONCE("Complete hack! Draw calls need to be revisited, will deal with this then.");
+      
+        number_of_draw_calls += Text_renderer::render(view_proj,
+                                                      cam->cull_mask,
+                                                      world->text_data->property_draw_call,
+                                                      world->text_data->size);
+      }
       
       math::mat4 wvp = math::mat4_multiply(cam->view, cam->proj);
       
@@ -118,12 +120,12 @@ render_main_scene(const float delta_time,
       const float pos2[3] = {3,3,3};
       memcpy(node.position_to, pos2, sizeof(pos2));
       
-      ::Debug_line_renderer::add_lines(&node, 1);
+//      ::Debug_line_renderer::add_lines(&node, 1);
       ::Debug_line_renderer::render(math::mat4_get_data(wvp));
     }
     else
     // Post process rendering
-    {    
+    {
       // Get post process details
       Post_renderer::Post_shader *post_shd;
       Resource_data::post_process_data_get_property_post_shader(post_data,

@@ -6,6 +6,7 @@
 #include <core/common/core_types.hpp>
 #include <data/world_data/world_data_fwd.hpp>
 #include <core/world/world_setup.hpp>
+#include <core/physics/ray.hpp>
 #include <functional> // kill
 
 
@@ -60,6 +61,8 @@ public:
   void                  find_entities_by_tag(const uint32_t tag_id,
                                              Entity_ref **out_array,
                                              size_t *out_array_size);
+  
+  
   
 private:
 

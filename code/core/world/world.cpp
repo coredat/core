@@ -340,8 +340,8 @@ World::think()
       continue;
     }
 //    
-////    const math::mat4 scale     = math::mat4_scale(math::vec3_init(1.f));
-////    const math::mat4 world     = math::mat4_multiply(math::mat4_id(), scale);
+//    const math::mat4 scale     = math::mat4_scale(math::vec3_init(1.f));
+//    const math::mat4 world     = math::mat4_multiply(math::mat4_id(), scale);
 //    const math::mat4 view_proj = math::mat4_multiply(cam_runs[i].view, cam_runs[i].proj);
 //
 //    const GLsizei width  = m_impl->context->get_width(); //cam->fbo.color_buffer[0].width; // viewport_x ?
@@ -353,6 +353,9 @@ World::think()
   }
   
   
+  /*
+   Testing
+  */
   auto buf = &m_impl->graphcis_command_buffer;
   Graphics_api::command_buffer_execute(buf);
   

@@ -3,6 +3,7 @@
 
 
 #include <core/common/core_fwd.hpp>
+#include <core/input/axis.hpp>
 
 
 namespace Core {
@@ -21,6 +22,13 @@ mouse_set_capture(Core::Context &context, const bool capture);
 */
 bool
 mouse_is_capture(Core::Context &context);
+
+
+/*!
+  Returns the mouse coordinates.
+*/
+Axis
+mouse_get_coordinates(Core::Context &context);
 
 
 } // ns
