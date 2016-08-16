@@ -1,5 +1,9 @@
 #include <core/camera/camera_utils.hpp>
 #include <core/camera/camera.hpp>
+#include <core/camera/camera_properties.hpp>
+#include <core/context/context.hpp>
+#include <core/context/world.hpp>
+#include <core/physics/ray.hpp>
 #include <core/entity/entity_ref.hpp>
 #include <core/transform/transform.hpp>
 #include <math/mat/mat4.hpp>
@@ -13,18 +17,21 @@ namespace Camera_utils {
 math::mat4
 camera_get_projection_matrix(const Camera &camera)
 {
-  return math::mat4_projection(camera.get_width(),
-                               camera.get_height(),
-                               camera.get_near_plane(),
-                               camera.get_far_plane(),
-                               camera.get_field_of_view());
-}
-
-
-math::mat4
-camera_get_inverse_projection_matrix(const Camera &camera)
-{
-  return math::mat4_get_inverse(camera_get_projection_matrix(camera));
+  if(camera.get_type() == Core::Camera_type::perspective)
+  {
+    return math::mat4_projection(camera.get_width(),
+                                 camera.get_height(),
+                                 camera.get_near_plane(),
+                                 camera.get_far_plane(),
+                                 camera.get_field_of_view());
+  }
+  else
+  {
+    return math::mat4_orthographic(camera.get_width(),
+                                   camera.get_height(),
+                                   camera.get_near_plane(),
+                                   camera.get_far_plane());
+  }
 }
 
 
@@ -43,10 +50,11 @@ camera_get_view_matrix(const Camera &camera)
 }
 
 
-math::mat4
-camera_get_inverse_view_matrix(const Camera &cam)
+
+Ray
+unproject(const Camera &camera, const Context &ctx, World &world)
 {
-  return math::mat4_get_inverse(camera_get_view_matrix(cam));
+  return Ray(world, math::vec3_zero(), math::vec3_one());
 }
 
 
