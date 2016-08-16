@@ -24,7 +24,7 @@ get_view_matrix(const Camera &camera);
 
 
 Ray
-unproject(const Camera &camera, const Context &ctx, World &world);
+viewport_to_ray(const Camera &camera, World &world, const Axis viewport_coords, const Axis viewport_size);
 
 
 } // ns

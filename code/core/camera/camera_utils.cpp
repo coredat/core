@@ -1,12 +1,13 @@
 #include <core/camera/camera_utils.hpp>
 #include <core/camera/camera.hpp>
 #include <core/camera/camera_properties.hpp>
-#include <core/context/context.hpp>
-#include <core/context/world.hpp>
+#include <core/input/axis.hpp>
+#include <core/world/world.hpp>
 #include <core/physics/ray.hpp>
 #include <core/entity/entity_ref.hpp>
 #include <core/transform/transform.hpp>
 #include <math/mat/mat4.hpp>
+#include <utilities/logging.hpp>
 #include <assert.h>
 
 
@@ -15,7 +16,7 @@ namespace Camera_utils {
 
 
 math::mat4
-camera_get_projection_matrix(const Camera &camera)
+get_projection_matrix(const Camera &camera)
 {
   if(camera.get_type() == Core::Camera_type::perspective)
   {
@@ -36,7 +37,7 @@ camera_get_projection_matrix(const Camera &camera)
 
 
 math::mat4
-camera_get_view_matrix(const Camera &camera)
+get_view_matrix(const Camera &camera)
 {
   const Entity_ref attached_entity = camera.get_attached_entity();
   
@@ -48,13 +49,66 @@ camera_get_view_matrix(const Camera &camera)
                            math::vec3_add(trans.get_position(), trans.get_forward()),
                            trans.get_up());
 }
-
-
+ 
 
 Ray
-unproject(const Camera &camera, const Context &ctx, World &world)
+viewport_to_ray(const Camera &camera, World &world, const Axis viewport_coords, const Axis viewport_size)
 {
-  return Ray(world, math::vec3_zero(), math::vec3_one());
+  if(camera.get_type() == Core::Camera_type::perspective)
+  {
+    Core::Axis mouse_coords = viewport_coords;
+    mouse_coords.x = (2.f * mouse_coords.x) / viewport_size.x - 1.f;
+    mouse_coords.y = 1.f - (2.f * mouse_coords.y) / viewport_size.y;
+    
+    const math::vec3 ray_nds = math::vec3_init(mouse_coords.x, mouse_coords.y, 1.f);
+
+    const math::vec4 ray_clip = math::vec4_init(math::get_x(ray_nds), math::get_y(ray_nds), -1.f, 1.f);
+    
+    const math::mat4 proj_mat = Core::Camera_utils::get_projection_matrix(camera);
+    const math::mat4 proj_inv_mat = math::mat4_get_inverse(proj_mat);
+    
+    const math::vec4 ray_eye_get = math::mat4_multiply(ray_clip, proj_inv_mat);
+    const math::vec4 ray_eye = math::vec4_init(math::get_x(ray_eye_get), math::get_y(ray_eye_get), -1.0, 0.0);
+    
+    // --
+    
+    const math::mat4 view_mat = Core::Camera_utils::get_view_matrix(camera);
+    const math::mat4 view_inv_mat = math::mat4_get_inverse(view_mat);
+    
+    const math::vec4 ray_wor_all =  math::mat4_multiply(ray_eye, view_inv_mat);
+    const math::vec3 ray_wor = math::vec3_normalize(math::vec3_init(math::get_x(ray_wor_all), math::get_y(ray_wor_all), math::get_z(ray_wor_all)));
+
+    // --
+
+    const math::vec3 cam_pos = camera.get_attached_entity().get_transform().get_position();
+
+    const math::vec3 ray_start = cam_pos;
+    const math::vec3 ray_dir = ray_wor;
+
+    return Core::Ray(world, ray_start, ray_dir);
+  }
+  else
+  {
+    Core::Axis mouse_coords = viewport_coords;
+    mouse_coords.x = (viewport_size.x * 0.5f) - mouse_coords.x;
+    mouse_coords.y = (viewport_size.y * 0.5f) - mouse_coords.y;
+    
+    const Core::Transform cam_tran = camera.get_attached_entity().get_transform();
+    
+    const math::vec3 left = math::vec3_scale(cam_tran.get_left(), mouse_coords.x);
+    const math::vec3 up = math::vec3_scale(cam_tran.get_up(), mouse_coords.y);
+    
+    const math::vec3 cam_pos = cam_tran.get_position();
+    
+    const math::vec3 ray_start = math::vec3_add(math::vec3_add(cam_pos, left), up);
+    const math::vec3 ray_dir = cam_tran.get_forward();
+
+    return Core::Ray(world, ray_start, ray_dir);
+  }
+  
+  assert(false);
+  LOG_FATAL("This Code path shouldn't ever happen.");
+  return Core::Ray(world, math::vec3_zero(), math::vec3_zero_zero_one());
 }
 
 

@@ -35,6 +35,8 @@ public:
   
                         ~Ray();
   
+                        Ray(const Ray &other);
+  
   bool                  has_hit() const;
   uint32_t              number_of_hits() const;
 

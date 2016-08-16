@@ -60,6 +60,13 @@ Ray::~Ray()
 }
 
 
+Ray::Ray(const Ray &other)
+: m_impl(new Impl)
+{
+  m_impl->ray = other.m_impl->ray;
+}
+
+
 bool
 Ray::has_hit() const
 {
