@@ -52,7 +52,11 @@ get_view_matrix(const Camera &camera)
  
 
 Ray
-viewport_to_ray(const Camera &camera, World &world, const Axis viewport_coords, const Axis viewport_size)
+viewport_to_ray(const Camera &camera,
+                const World &world,
+                const Axis viewport_coords,
+                const Axis viewport_size,
+                const Ray_search search)
 {
   if(camera.get_type() == Core::Camera_type::perspective)
   {
@@ -85,7 +89,7 @@ viewport_to_ray(const Camera &camera, World &world, const Axis viewport_coords, 
     const math::vec3 ray_start = cam_pos;
     const math::vec3 ray_dir = ray_wor;
 
-    return Core::Ray(world, ray_start, ray_dir);
+    return Core::Ray(world, ray_start, ray_dir, search);
   }
   else
   {
@@ -103,7 +107,7 @@ viewport_to_ray(const Camera &camera, World &world, const Axis viewport_coords, 
     const math::vec3 ray_start = math::vec3_add(math::vec3_add(cam_pos, left), up);
     const math::vec3 ray_dir = cam_tran.get_forward();
 
-    return Core::Ray(world, ray_start, ray_dir);
+    return Core::Ray(world, ray_start, ray_dir, search);
   }
   
   assert(false);

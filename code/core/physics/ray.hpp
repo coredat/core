@@ -4,6 +4,7 @@
 
 #include <core/common/core_fwd.hpp>
 #include <core/common/core_types.hpp>
+#include <core/physics/ray_search.hpp>
 
 
 /*
@@ -22,16 +23,10 @@ class Ray final
 {
 public:
 
-  enum class Search
-  {
-    first,
-  }; // enum
-
-
-  explicit              Ray(Core::World &world, // TODO: Const
+  explicit              Ray(const Core::World &world,
                             const math::vec3 from,
                             const math::vec3 dir,
-                            const Search search = Search::first);
+                            const Ray_search search = Ray_search::first);
   
                         ~Ray();
   

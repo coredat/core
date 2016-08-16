@@ -22,13 +22,13 @@ struct Ray::Impl
         auto parent = shape->body;
         auto user_data = util::generic_id_from_ptr(parent->GetUserData());
         
-        hit = Entity_ref(user_data, data);
+        hit = Entity_ref(user_data, std::const_pointer_cast<World_data::World>(data));
       }
       
       return hit;
     }
     
-    std::shared_ptr<World_data::World> data;
+    std::shared_ptr<const World_data::World> data;
     Entity_ref hit;
     math::vec3 hit_pos = math::vec3_zero();
     q3RaycastData ray_data;
@@ -39,10 +39,10 @@ struct Ray::Impl
 };
 
 
-Ray::Ray(Core::World &world,
+Ray::Ray(const Core::World &world,
          const math::vec3 from,
          const math::vec3 dir,
-         const Search search)
+         const Ray_search search)
 : m_impl(new Impl)
 {
   m_impl->ray.data           = world.get_world_data();
