@@ -26,14 +26,17 @@ get_view_matrix(const Camera &camera);
 
 
 /*!
-  Casts a ray from the viewport into the the world.
+  Get a ray cast from a camera.
 */
 Ray
-viewport_to_ray(const Camera &camera,
-                const World &world,
-                const Axis viewport_coords,
-                const Axis viewport_size,
-                const Ray_search search = Ray_search::first);
+get_ray_from_viewport(const Camera &camera, const Axis viewport_coords);
+
+
+/*!
+  Gets the world position on the nearplane from a screen coord.
+*/
+math::vec3
+get_world_position_on_nearplane(const Camera &camera, const Axis viewport_coords);
 
 
 } // ns

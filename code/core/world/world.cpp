@@ -3,6 +3,7 @@
 #include <core/physics/collision_pair.hpp>
 #include <core/physics/collision.hpp>
 #include <core/transform/transform.hpp>
+#include <core/common/ray.hpp>
 
 #include <debug_gui/debug_menu.hpp>
 
@@ -577,6 +578,46 @@ World::find_entities_by_tag(const uint32_t tag_id,
   
   *out_array = found_ents;
   *out_array_size = count;
+}
+
+
+Entity_ref
+World::find_entity_by_ray(const Ray ray)
+{
+  struct Raycast : public q3QueryCallback
+  {
+    bool ReportShape(q3Box *shape)
+    {
+      if(distance > ray_data.toi)
+      {
+        distance = ray_data.toi;
+        auto parent = shape->body;
+        auto user_data = util::generic_id_from_ptr(parent->GetUserData());
+        
+        hit = Entity_ref(user_data, std::const_pointer_cast<World_data::World>(data));
+      }
+      
+      return hit;
+    }
+    
+    std::shared_ptr<const World_data::World> data;
+    Entity_ref hit = Entity_ref();
+    math::vec3 hit_pos = math::vec3_zero();
+    q3RaycastData ray_data;
+    float distance = FLT_MAX;
+  };
+  
+  Raycast raycast;
+  
+  raycast.data           = get_world_data();
+  raycast.ray_data.start = math::vec3_to_q3vec(ray.get_origin());
+  raycast.ray_data.dir   = math::vec3_to_q3vec(math::vec3_normalize(ray.get_direction()));
+  raycast.ray_data.t     = FLT_MAX;
+  raycast.ray_data.toi   = raycast.ray_data.t;
+  
+  m_impl->world_data->scene.RayCast(&raycast, raycast.ray_data);
+  
+  return raycast.hit;
 }
 
 

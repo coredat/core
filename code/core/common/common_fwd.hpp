@@ -7,6 +7,8 @@ namespace Core {
 
 class Bounds;
 class Rect;
+class Ray;
+class Plane;
 
 
 } // ns

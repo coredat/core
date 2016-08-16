@@ -8,7 +8,7 @@
 namespace Core {
 
 
-class Ray;
+//class Ray;
 class Collider;
 class Box_collider;
 class Rigidbody;

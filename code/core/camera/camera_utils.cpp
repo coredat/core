@@ -2,8 +2,9 @@
 #include <core/camera/camera.hpp>
 #include <core/camera/camera_properties.hpp>
 #include <core/input/axis.hpp>
-#include <core/world/world.hpp>
-#include <core/physics/ray.hpp>
+#include <core/common/ray.hpp>
+#include <core/common/plane.hpp>
+#include <core/common/plane_utils.hpp>
 #include <core/entity/entity_ref.hpp>
 #include <core/transform/transform.hpp>
 #include <math/mat/mat4.hpp>
@@ -49,15 +50,14 @@ get_view_matrix(const Camera &camera)
                            math::vec3_add(trans.get_position(), trans.get_forward()),
                            trans.get_up());
 }
- 
+
 
 Ray
-viewport_to_ray(const Camera &camera,
-                const World &world,
-                const Axis viewport_coords,
-                const Axis viewport_size,
-                const Ray_search search)
+get_ray_from_viewport(const Camera &camera, const Axis viewport_coords)
 {
+  const Axis viewport_size{math::to_float(camera.get_width()),
+                           math::to_float(camera.get_height())};
+
   if(camera.get_type() == Core::Camera_type::perspective)
   {
     Core::Axis mouse_coords = viewport_coords;
@@ -89,7 +89,7 @@ viewport_to_ray(const Camera &camera,
     const math::vec3 ray_start = cam_pos;
     const math::vec3 ray_dir = ray_wor;
 
-    return Core::Ray(world, ray_start, ray_dir, search);
+    return Core::Ray(ray_start, ray_dir);
   }
   else
   {
@@ -107,13 +107,42 @@ viewport_to_ray(const Camera &camera,
     const math::vec3 ray_start = math::vec3_add(math::vec3_add(cam_pos, left), up);
     const math::vec3 ray_dir = cam_tran.get_forward();
 
-    return Core::Ray(world, ray_start, ray_dir, search);
+    return Core::Ray(ray_start, ray_dir);
   }
   
   assert(false);
-  LOG_FATAL("This Code path shouldn't ever happen.");
-  return Core::Ray(world, math::vec3_zero(), math::vec3_zero_zero_one());
+  LOG_FATAL("This is unreachable code");
+  return Core::Ray(math::vec3_zero(), math::vec3_zero_zero_one());
 }
+ 
+
+math::vec3
+get_world_position_on_nearplane(const Camera &camera,
+                                const Axis viewport_coords)
+{
+  // Create a plane that represents the near plane.
+  const Core::Transform cam_tran = camera.get_attached_entity().get_transform();
+  
+  const math::vec3 scaled_fwd = math::vec3_scale(cam_tran.get_forward(), camera.get_near_plane());
+  const math::vec3 offset_pos = math::vec3_add(cam_tran.get_position(), scaled_fwd);
+  const math::vec3 plane_norm = math::vec3_scale(cam_tran.get_forward(), -1);
+  
+  const Core::Plane plane(offset_pos, plane_norm);
+  const Core::Ray ray = get_ray_from_viewport(camera, viewport_coords);
+  
+  float distance = 0;
+  const bool hit = Core::Plane_utils::ray_intersects_with_plane(plane, ray, distance);
+  
+  // This should always intersect as we know
+  // the nearplane is in front of the camera.
+  assert(hit);
+  assert(distance > 0);
+  
+  const math::vec3 scaled_dir = math::vec3_scale(ray.get_direction(), distance);
+  
+  return math::vec3_add(cam_tran.get_position(), scaled_dir);
+}
+
 
 
 } // ns
