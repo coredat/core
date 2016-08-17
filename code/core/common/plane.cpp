@@ -1,4 +1,5 @@
 #include <core/common/plane.hpp>
+#include <math/vec/vec3.hpp>
 
 
 namespace Core {
@@ -6,7 +7,7 @@ namespace Core {
 
 Plane::Plane(const math::vec3 position, const math::vec3 normal)
 : m_position(position)
-, m_normal(normal)
+, m_normal(math::vec3_normalize(normal))
 {
 }
 
