@@ -55,7 +55,8 @@ public:
   Renderer                      get_renderer() const;                         //!< Get the entities renderer.
   
   void                          set_rigidbody(const Rigidbody &rigidbody);    //!< Set the rigidbody for the entity.
-  Rigidbody                     get_rigidbody() const;                        //!< Get the rigidbody for the entity. Returns by type.    
+  Rigidbody                     get_rigidbody() const;                        //!< Get the rigidbody for the entity. Returns by type.
+
 
   // ** Equality ** //
   

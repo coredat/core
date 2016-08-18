@@ -347,13 +347,6 @@ Entity::get_id() const
 }
 
 
-void
-Entity::on_mouse_over(const callback_entity_mouseover mouse_cb)
-{
-  // Need to save the callback
-}
-
-
 std::shared_ptr<const World_data::World>
 Entity::get_world_data() const
 {

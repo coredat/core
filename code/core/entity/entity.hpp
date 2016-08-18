@@ -62,9 +62,7 @@ public:
   
   void                          set_rigidbody(const Rigidbody &rigidbody);    //!< Set the rigidbody for the entity.
   Rigidbody                     get_rigidbody() const;                        //!< Get the rigidbody for the entity. Returns by type.
-  
-  void                          on_mouse_over(const callback_entity_mouseover mouse_cb);
-  
+    
   // ** Equality ** //
   
   bool                          operator ==(const Entity &other) const;
