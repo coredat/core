@@ -18,7 +18,7 @@ public:
   
 private:
 
-  util::generic_id id;
+  util::generic_id m_font_id;
 
 };
 

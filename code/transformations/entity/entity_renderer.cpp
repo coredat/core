@@ -548,6 +548,9 @@ set_renderer_text(const util::generic_id this_id,
     }
   } // gen missing glyphs
   
+  // Update the bitmap information.
+  Resource_data::font_data_set_property_font_bitmap(font_data, font_id, font_bitmap);
+  
   // Generate the text mesh here.
   // bunch of quads
   
