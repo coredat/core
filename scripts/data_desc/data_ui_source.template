@@ -53,18 +53,22 @@ display_{{data_name}}(const {{namespace}}::{{data_type}} *data)
       // Get {{prop[:name]}}
       {{prop[:type]}} {{prop[:name]}}_value;
       {{namespace}}::{{data_name}}_get_{{prop[:name]}}(data, data->{{key_name}}[i], &{{prop[:name]}}_value);
-      ImGui::Text(\"{{display_name}} position: %f, %f, %f\", math::get_x({{prop[:name]}}_value.position), math::get_y({{prop[:name]}}_value.position), math::get_z({{prop[:name]}}_value.position));
-      ImGui::Text(\"{{display_name}} rotation: %f, %f, %f, %f\", math::get_x({{prop[:name]}}_value.rotation), math::get_y({{prop[:name]}}_value.rotation), math::get_z({{prop[:name]}}_value.rotation), math::get_w({{prop[:name]}}_value.rotation));
-      ImGui::Text(\"{{display_name}} scale: %f, %f, %f\", math::get_x({{prop[:name]}}_value.scale), math::get_y({{prop[:name]}}_value.scale), math::get_z({{prop[:name]}}_value.scale));
+      ImGui::Text(\"{{display_name}}\");
+      ImGui::Text(\"position: %.3f, %.3f, %.3f\", math::get_x({{prop[:name]}}_value.position), math::get_y({{prop[:name]}}_value.position), math::get_z({{prop[:name]}}_value.position));
+      ImGui::Text(\"rotation: %.3f, %.3f, %.3f, %.3f\", math::get_x({{prop[:name]}}_value.rotation), math::get_y({{prop[:name]}}_value.rotation), math::get_z({{prop[:name]}}_value.rotation), math::get_w({{prop[:name]}}_value.rotation));
+      ImGui::Text(\"scale: %.3f, %.3f, %.3f\", math::get_x({{prop[:name]}}_value.scale), math::get_y({{prop[:name]}}_value.scale), math::get_z({{prop[:name]}}_value.scale));
 
       % elsif prop[:type] == "math::aabb"
 
       // Get {{prop[:name]}}
       {{prop[:type]}} {{prop[:name]}}_value;
       {{namespace}}::{{data_name}}_get_{{prop[:name]}}(data, data->{{key_name}}[i], &{{prop[:name]}}_value);
-      ImGui::Text(\"{{display_name}} position: %f, %f, %f\", math::get_x({{prop[:name]}}_value.position), math::get_y({{prop[:name]}}_value.position), math::get_z({{prop[:name]}}_value.position));
-      ImGui::Text(\"{{display_name}} rotation: %f, %f, %f, %f\", math::get_x({{prop[:name]}}_value.rotation), math::get_y({{prop[:name]}}_value.rotation), math::get_z({{prop[:name]}}_value.rotation), math::get_w({{prop[:name]}}_value.rotation));
-      ImGui::Text(\"{{display_name}} scale: %f, %f, %f\", math::get_x({{prop[:name]}}_value.scale), math::get_y({{prop[:name]}}_value.scale), math::get_z({{prop[:name]}}_value.scale));
+      ImGui::Text(\"{{display_name}}\");
+      ImGui::Text(\"Min: %.3f, %.3f, %.3f\", math::get_x({{prop[:name]}}_value.min), math::get_y({{prop[:name]}}_value.min), math::get_z({{prop[:name]}}_value.min));
+      ImGui::Text(\"Max: %.3f, %.3f, %.3f\", math::get_x({{prop[:name]}}_value.max), math::get_y({{prop[:name]}}_value.max), math::get_z({{prop[:name]}}_value.max));
+
+      const math::vec3 origin = math::aabb_get_origin({{prop[:name]}}_value);
+      ImGui::Text(\"Origin: %.3f, %.3f, %.3f\", math::get_x(origin), math::get_y(origin), math::get_z(origin));
 
       % end
     % end
