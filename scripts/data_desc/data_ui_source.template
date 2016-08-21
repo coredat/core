@@ -28,20 +28,44 @@ display_{{data_name}}(const {{namespace}}::{{data_type}} *data)
     % properties.each do |prop|
       % display_name = prop[:name].gsub('_', ' ').gsub('property ', '').capitalize
       % if prop[:type] == "char"
+
       // Get {{prop[:name]}}
       const char *{{prop[:name]}}_str;
-      {{namespace}}::{{data_name}}_get_{{prop[:name]}}(data, data->entity_id[i], &{{prop[:name]}}_str);
+      {{namespace}}::{{data_name}}_get_{{prop[:name]}}(data, data->{{key_name}}[i], &{{prop[:name]}}_str);
       ImGui::Text(\"{{display_name}} %s\", {{prop[:name]}}_str);
+
       % elsif prop[:type] == "uint32_t" || prop[:type] == "uint64_t" || prop[:type] == "int32_t" || prop[:type] == "int64_t"
+
       // Get {{prop[:name].gsub("_", " ")}}
       {{prop[:type]}} {{prop[:name]}}_value;
-      {{namespace}}::{{data_name}}_get_{{prop[:name]}}(data, data->entity_id[i], &{{prop[:name]}}_value);
+      {{namespace}}::{{data_name}}_get_{{prop[:name]}}(data, data->{{key_name}}[i], &{{prop[:name]}}_value);
       ImGui::Text(\"{{display_name}}: %d\", {{prop[:name]}}_value);
+
       % elsif prop[:type] == "uintptr_t"
+
       // Get {{prop[:name]}}
       {{prop[:type]}} {{prop[:name]}}_value;
-      {{namespace}}::{{data_name}}_get_{{prop[:name]}}(data, data->entity_id[i], &{{prop[:name]}}_value);
+      {{namespace}}::{{data_name}}_get_{{prop[:name]}}(data, data->{{key_name}}[i], &{{prop[:name]}}_value);
       ImGui::Text(\"{{display_name}}: %p\", (void*){{prop[:name]}}_value);
+
+      % elsif prop[:type] == "math::transform"
+
+      // Get {{prop[:name]}}
+      {{prop[:type]}} {{prop[:name]}}_value;
+      {{namespace}}::{{data_name}}_get_{{prop[:name]}}(data, data->{{key_name}}[i], &{{prop[:name]}}_value);
+      ImGui::Text(\"{{display_name}} position: %f, %f, %f\", math::get_x({{prop[:name]}}_value.position), math::get_y({{prop[:name]}}_value.position), math::get_z({{prop[:name]}}_value.position));
+      ImGui::Text(\"{{display_name}} rotation: %f, %f, %f, %f\", math::get_x({{prop[:name]}}_value.rotation), math::get_y({{prop[:name]}}_value.rotation), math::get_z({{prop[:name]}}_value.rotation), math::get_w({{prop[:name]}}_value.rotation));
+      ImGui::Text(\"{{display_name}} scale: %f, %f, %f\", math::get_x({{prop[:name]}}_value.scale), math::get_y({{prop[:name]}}_value.scale), math::get_z({{prop[:name]}}_value.scale));
+
+      % elsif prop[:type] == "math::aabb"
+
+      // Get {{prop[:name]}}
+      {{prop[:type]}} {{prop[:name]}}_value;
+      {{namespace}}::{{data_name}}_get_{{prop[:name]}}(data, data->{{key_name}}[i], &{{prop[:name]}}_value);
+      ImGui::Text(\"{{display_name}} position: %f, %f, %f\", math::get_x({{prop[:name]}}_value.position), math::get_y({{prop[:name]}}_value.position), math::get_z({{prop[:name]}}_value.position));
+      ImGui::Text(\"{{display_name}} rotation: %f, %f, %f, %f\", math::get_x({{prop[:name]}}_value.rotation), math::get_y({{prop[:name]}}_value.rotation), math::get_z({{prop[:name]}}_value.rotation), math::get_w({{prop[:name]}}_value.rotation));
+      ImGui::Text(\"{{display_name}} scale: %f, %f, %f\", math::get_x({{prop[:name]}}_value.scale), math::get_y({{prop[:name]}}_value.scale), math::get_z({{prop[:name]}}_value.scale));
+
       % end
     % end
 

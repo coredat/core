@@ -6,12 +6,12 @@
   This file is auto generated any changes here may be overwritten.
   See code_gen.rake in scripts folder.
 
-  This file was last generated on: Wed 10 Aug 2016
+  This file was last generated on: Sun 21 Aug 2016
 */
 
 
-#ifndef DEBUG_UI_ENTITY_DATA_INCLUDED_1B6E89E3_F389_4D29_BEF3_3A132082B785
-#define DEBUG_UI_ENTITY_DATA_INCLUDED_1B6E89E3_F389_4D29_BEF3_3A132082B785
+#ifndef DEBUG_UI_ENTITY_DATA_INCLUDED_50B4C91B_C8A4_49ED_BA10_86A0DF5B7F14
+#define DEBUG_UI_ENTITY_DATA_INCLUDED_50B4C91B_C8A4_49ED_BA10_86A0DF5B7F14
 
 
 #include <data/world_data/entity_data.hpp>

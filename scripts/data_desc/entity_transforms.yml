@@ -10,6 +10,10 @@ data:
   relationships:
     - belongs_to: entity
 
+  debug_ui:
+    path: code/debug_gui/
+    generate: true    
+
   properties:
     - name: transform
       type: math::transform

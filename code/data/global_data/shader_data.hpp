@@ -6,12 +6,12 @@
   This file is auto generated any changes here may be overwritten.
   See code_gen.rake in scripts folder.
 
-  This file was last generated on: Wed 10 Aug 2016
+  This file was last generated on: Sun 21 Aug 2016
 */
 
 
-#ifndef SHADER_DATA_INCLUDED_32BBE84E_8353_4AF4_9A8D_CDAE390FE77B
-#define SHADER_DATA_INCLUDED_32BBE84E_8353_4AF4_9A8D_CDAE390FE77B
+#ifndef SHADER_DATA_INCLUDED_649E2727_19C1_440A_94F7_EB8180305A9E
+#define SHADER_DATA_INCLUDED_649E2727_19C1_440A_94F7_EB8180305A9E
 
 
 #include <utilities/generic_id.hpp>
