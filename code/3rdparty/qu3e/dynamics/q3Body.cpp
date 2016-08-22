@@ -33,12 +33,6 @@
 //--------------------------------------------------------------------------------------------------
 // q3Body
 //--------------------------------------------------------------------------------------------------
-void*
-q3Body::GetUserData( ) const
-{
-  return m_userData;
-}
-
 q3Body::q3Body( const q3BodyDef& def, q3Scene* scene )
 {
 	m_linearVelocity = def.linearVelocity;
@@ -382,6 +376,12 @@ i32 q3Body::GetLayers( ) const
 const q3Quaternion q3Body::GetQuaternion( ) const
 {
 	return m_q;
+}
+
+//--------------------------------------------------------------------------------------------------
+void* q3Body::GetUserData( ) const
+{
+  return m_userData;
 }
 
 //--------------------------------------------------------------------------------------------------

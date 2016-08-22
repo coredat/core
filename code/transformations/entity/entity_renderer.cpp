@@ -643,6 +643,23 @@ set_renderer_text(const util::generic_id this_id,
     World_data::data_unlock(text_data);
   }
   
+  // Update aabb
+  math::aabb return_aabb;
+  {
+    Resource_data::Mesh_data *mesh_data = Resource_data::get_resources()->mesh_data;
+    assert(mesh_data);
+    
+    Resource_data::data_lock(mesh_data);
+    Resource_data::mesh_data_get_property_aabb(mesh_data, model_id, &return_aabb);
+    Resource_data::data_unlock(mesh_data);
+  }
+  
+  {
+    World_data::data_lock(transform_data);
+    World_data::transform_data_set_property_aabb(transform_data, this_id, return_aabb);
+    World_data::data_unlock(transform_data);
+  }  
+  
   Resource_data::data_unlock(glyph_data);
   Resource_data::data_unlock(text_mesh_data);
   Resource_data::data_unlock(texture_data);
