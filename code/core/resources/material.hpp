@@ -39,8 +39,12 @@ public:
   const char *          get_name() const;
 
   void                  set_shader(const Shader &shader);
+  
   void                  set_map_01(const Texture &texture);
+  Texture               get_map_01() const;
+  
   void                  set_color(const Color color);
+  Color                 get_color() const;
   
   bool                  exists() const;
                         operator bool() const;

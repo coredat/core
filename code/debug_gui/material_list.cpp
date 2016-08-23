@@ -49,7 +49,7 @@ display_material_list(Resource_data::Material_data *data)
       Resource_data::material_data_get_property_material(data, data->material_id[i], &material);
       
       ImGui::Text("%02d", material->shader.program_id); ImGui::NextColumn();
-      ImGui::Text("%02d", material->map_01_id.texture_id); ImGui::NextColumn();
+      ImGui::Text("%02d", material->map_01.texture_id); ImGui::NextColumn();
     }
     
     ImGui::Columns(1);

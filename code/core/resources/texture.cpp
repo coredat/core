@@ -1,9 +1,10 @@
 #include <core/resources/texture.hpp>
 #include <data/global_data/resource_data.hpp>
 #include <common/error_strings.hpp>
+#include <transformations/texture/create_texture.hpp>
 #include <utilities/logging.hpp>
 #include <utilities/string_helpers.hpp>
-#include <transformations/texture/create_texture.hpp>
+#include <utilities/assert.hpp>
 
 
 namespace Core {
@@ -231,6 +232,13 @@ Texture::get_width() const
 {
   assert(m_impl);
   
+  if(!m_impl->texture_id)
+  {
+    LOG_WARNING("No texture");
+    ASSERT_FAIL;
+    return 0;
+  }
+  
   return get_texture_data(m_impl->texture_id).width;
 }
 
@@ -239,6 +247,13 @@ uint32_t
 Texture::get_height() const
 {
   assert(m_impl);
+  
+  if(!m_impl->texture_id)
+  {
+    LOG_WARNING("No texture");
+    ASSERT_FAIL;
+    return 0;
+  }
   
   return get_texture_data(m_impl->texture_id).height;
 }

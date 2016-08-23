@@ -210,7 +210,8 @@ Material::set_map_01(const Texture &texture)
       ::Material_renderer::Material *out_material;
       Resource_data::material_data_get_property_material(mat_data, m_impl->material_id, &out_material);
       
-      out_material->map_01_id = out_texture;
+      out_material->map_01 = out_texture;
+      out_material->map_01_id = texture.get_id();
       Resource_data::material_data_set_property_material(mat_data, m_impl->material_id, out_material);
 
       Resource_data::data_unlock(mat_data);
@@ -230,6 +231,41 @@ Material::set_map_01(const Texture &texture)
     LOG_ERROR(Error_string::resource_not_found());
     return;
   }
+}
+
+
+Texture
+Material::get_map_01() const
+{
+  assert(m_impl);
+  
+  if(!m_impl->material_id)
+  {
+    LOG_WARNING("No texture on this material.");
+    return Core::Texture();
+  }
+
+  auto resource = Resource_data::get_resources();
+  assert(resource);
+
+  auto mat_data = resource->material_data;
+  assert(mat_data);
+
+  auto tex_data = resource->texture_data;
+  assert(tex_data);
+  
+  Resource_data::data_lock(mat_data);
+  Resource_data::data_lock(tex_data);
+  
+  ::Material_renderer::Material *mat = nullptr;
+  Resource_data::material_data_get_property_material(mat_data, m_impl->material_id, &mat);
+  
+  const util::generic_id map_id = mat->map_01_id;
+  
+  Resource_data::data_unlock(mat_data);
+  Resource_data::data_unlock(tex_data);
+  
+  return Core::Texture(map_id);
 }
 
 

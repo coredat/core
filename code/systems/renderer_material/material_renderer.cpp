@@ -90,9 +90,9 @@ render(const math::mat4 &view_proj_mat,
     }
     
     // Texture
-    if(material->map_01_id.texture_id != mat_renderer_last_map_01_texture)
+    if(material->map_01.texture_id != mat_renderer_last_map_01_texture)
     {
-      if(material->map_01.index != -1)
+      if(material->map_01_index.index != -1)
       {
         // Move the filter selection into the material.
         static Graphics_api::Texture_filtering filter =
@@ -103,10 +103,10 @@ render(const math::mat4 &view_proj_mat,
         };
         
         Ogl::filtering_apply(filter);
-        Ogl::shader_uniforms_apply(material->map_01, (void*)&material->map_01_id.texture_id);
+        Ogl::shader_uniforms_apply(material->map_01_index, (void*)&material->map_01.texture_id);
       }
       
-      mat_renderer_last_map_01_texture = material->map_01_id.texture_id;
+      mat_renderer_last_map_01_texture = material->map_01.texture_id;
     }
     
     // Color

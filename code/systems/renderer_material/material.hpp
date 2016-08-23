@@ -15,17 +15,18 @@ struct Material
 {
   Ogl::Shader shader;
 
-  Ogl::Texture map_01_id;
-  Ogl::Uniform map_01;
+  util::generic_id map_01_id = 0;
+  Ogl::Texture map_01;
+  Ogl::Uniform map_01_index;
 
-  util::generic_id map_02_id;
-  Ogl::Uniform map_02;
+  util::generic_id map_02_id = 0;
+  Ogl::Uniform map_02_index;
 
-  util::generic_id map_03_id;
-  Ogl::Uniform map_03;
+  util::generic_id map_03_id = 0;
+  Ogl::Uniform map_03_index;
 
-  util::generic_id map_04_id;
-  Ogl::Uniform map_04;
+  util::generic_id map_04_id = 0;
+  Ogl::Uniform map_04_index;
 
   Ogl::Uniform mat_world;
   Ogl::Uniform mat_proj;

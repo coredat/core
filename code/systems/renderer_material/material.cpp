@@ -18,10 +18,10 @@ create_material(Material *out_mat, const Ogl::Shader *shader)
 
   // Get the texture maps
   {
-    Ogl::shader_uniforms_get_uniform_index(&out_mat->map_01, &uniforms, "uni_map_01");
-    Ogl::shader_uniforms_get_uniform_index(&out_mat->map_02, &uniforms, "uni_map_02");
-    Ogl::shader_uniforms_get_uniform_index(&out_mat->map_03, &uniforms, "uni_map_03");
-    Ogl::shader_uniforms_get_uniform_index(&out_mat->map_04, &uniforms, "uni_map_04");
+    Ogl::shader_uniforms_get_uniform_index(&out_mat->map_01_index, &uniforms, "uni_map_01");
+    Ogl::shader_uniforms_get_uniform_index(&out_mat->map_02_index, &uniforms, "uni_map_02");
+    Ogl::shader_uniforms_get_uniform_index(&out_mat->map_03_index, &uniforms, "uni_map_03");
+    Ogl::shader_uniforms_get_uniform_index(&out_mat->map_04_index, &uniforms, "uni_map_04");
   }
   
   // Get mats
