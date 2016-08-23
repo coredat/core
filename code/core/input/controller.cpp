@@ -186,9 +186,9 @@ is_button(Context_data::Input_pool *input,
       button_state |= ((gp_state == state_a) || (gp_state == state_b));
       
       if(controller_id == 0)
-      {
-        const uint32_t kb_state = (uint32_t)input->keyboard[SDL_SCANCODE_SPACE];
-        button_state |= ((kb_state == state_a) || (kb_state == state_b));
+      { 
+        const uint32_t ms_state = (uint32_t)input->mice[0].buttons[0];
+        button_state |= ((ms_state == state_a) || (ms_state == state_b));;
       }
     }
     
@@ -196,6 +196,12 @@ is_button(Context_data::Input_pool *input,
     {
       const uint32_t gp_state = input->controllers[controller_id].controller_buttons.button_b;
       button_state |= ((gp_state == state_a) || (gp_state == state_b));
+      
+      if(controller_id == 0)
+      { 
+        const uint32_t kb_state_1 = (uint32_t)input->keyboard[SDL_SCANCODE_SPACE];
+        button_state |= ((kb_state_1 == state_a) || (kb_state_1 == state_b));
+      }
     }
     
     if(buttons & Core::Gamepad_button::ENUM::button_x)
