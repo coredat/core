@@ -12,8 +12,8 @@ namespace Graphics_api {
 namespace Clear_flag {
 enum ENUM : uint32_t {
   
-  color    = BIT(0),
-  depth    = BIT(1),
+  color = BIT(0),
+  depth = BIT(1),
   
 };
 } // ns

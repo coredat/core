@@ -48,7 +48,6 @@ command_buffer_execute(Command_buffer *cmd)
       */
       case(Buffer_state::set_vertex_attribute):
       {
-      
         break;
       }
       
