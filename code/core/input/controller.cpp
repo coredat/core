@@ -61,7 +61,7 @@ Controller::get_axis(const uint8_t axis) const
       If we are gamepad 0
       Then check the mouse and keyboard if gp returned nothing to use.
     */
-    if((m_impl->controller_number == 0) &&
+    if((m_impl->controller_number == 0.f) &&
       return_gp_axis.x == 0.f &&
       return_gp_axis.y == 0.f)
     {
