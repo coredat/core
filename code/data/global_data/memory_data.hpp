@@ -8,7 +8,6 @@
 
 #define SCRATCH_ALIGNED_ALLOC(type, size) reinterpret_cast<type*>(::Memory::scratch_alloc_aligned(sizeof(type) * size));
 
-
 #define SCRATCH_ALLOC(type, size) reinterpret_cast<type*>(::Memory::scratch_alloc_aligned(sizeof(type) * size));
 
 

@@ -172,6 +172,43 @@ get_world_position_on_nearplane(const Camera &camera,
 }
 
 
+namespace {
+
+
+/*
+  Generic plane creation method.
+  Takes a transform and a distance and creates a plane from it.
+  The plane normal is the transform forward reversed.
+*/
+Core::Plane
+create_plane(const Core::Transform &trans, const float distance)
+{
+  const math::vec3 cam_pos  = trans.get_position();
+  const math::vec3 move_fwd = math::vec3_scale(trans.get_forward(), distance);
+  const math::vec3 position = math::vec3_add(cam_pos, move_fwd);
+  const math::vec3 normal   = math::vec3_scale(trans.get_forward(), -1.f);
+
+  return Core::Plane(position, normal);
+}
+
+
+} // anon ns
+
+
+Plane
+get_near_plane(const Camera &camera)
+{
+  const Core::Transform trans = camera.get_attached_entity().get_transform();
+  return create_plane(trans, camera.get_near_plane());
+}
+
+
+Plane
+get_far_plane(const Camera &camera)
+{
+  const Core::Transform trans = camera.get_attached_entity().get_transform();
+  return create_plane(trans, camera.get_far_plane());
+}
 
 } // ns
 } // ns

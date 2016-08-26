@@ -29,14 +29,32 @@ get_view_matrix(const Camera &camera);
   Get a ray cast from a camera.
 */
 Ray
-get_ray_from_viewport(const Camera &camera, const Axis viewport_coords);
+get_ray_from_viewport(const Camera &camera,
+                      const Axis viewport_coords);
 
 
 /*!
   Gets the world position on the nearplane from a screen coord.
 */
 math::vec3
-get_world_position_on_nearplane(const Camera &camera, const Axis viewport_coords);
+get_world_position_on_nearplane(const Camera &camera,
+                                const Axis viewport_coords);
+
+
+/*!
+  Get a plane that represents the near plane.
+  The normal is facing the camera.
+*/
+Plane
+get_near_plane(const Camera &camera);
+
+
+/*!
+  Get a plane that represents the far plane.
+  The normal is facing the camera.
+*/
+Plane
+get_near_plane(const Camera &camera);
 
 
 } // ns
