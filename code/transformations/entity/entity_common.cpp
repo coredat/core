@@ -44,8 +44,8 @@ destroy(const util::generic_id this_id,
         World_data::Entity_data *entity_data,
         World_data::Pending_scene_graph_change_data *scene_graph_changes)
 {
-  if(!is_valid(this_id, entity_data, true)) {
-    assert(false); return;
+  if(!is_valid(this_id, entity_data, false)) {
+    return; // No assert, destroying an invalid entity shouldn't result in chaos.
   }
   
   World_data::pending_scene_graph_change_delete(scene_graph_changes, this_id);
