@@ -3,7 +3,6 @@
 
 
 #include "ogl_blend.hpp"
-#include "ogl_common.hpp"
 #include "ogl_fwd.hpp"
 #include "ogl_index_buffer.hpp"
 #include "ogl_shader_uniform.hpp"

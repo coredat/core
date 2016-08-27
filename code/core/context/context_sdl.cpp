@@ -27,8 +27,8 @@
 #include <3rdparty/imgui/imgui_impl_sdl_gl3.h>
 
 
-namespace
-{
+namespace {
+
   // Rather than SDL_WINDOW_FULLSCREEN - aka fake fullscreen.
   constexpr Uint32 fullscreen_mode = SDL_WINDOW_FULLSCREEN_DESKTOP;
   
@@ -37,10 +37,11 @@ namespace
   atomic_bool instance_created(false);
   
   Context_data::Input_pool core_input;
-}
+
+} // anon ns
 
 
-namespace Core {
+namespace Core {  
 
 
 /*

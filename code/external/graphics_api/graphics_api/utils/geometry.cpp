@@ -1,6 +1,7 @@
 #include <graphics_api/utils/geometry.hpp>
 #include <graphics_api/vertex_format.hpp>
 #include <graphics_api/mesh.hpp>
+#include <stdlib.h>
 #include <cstring>
 
 

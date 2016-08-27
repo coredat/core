@@ -169,9 +169,9 @@ capture_mouse(const bool set)
   {
     assert(SDL_GetRelativeMouseMode());
     
-    #ifndef __APPLE__
+    #ifdef __APPLE__
     // https://forums.libsdl.org/viewtopic.php?p=51127&sid=570a47d0f562cc0b1d4c91b7712c663f
-    SDL_SetHint(SDL_HINT_MOUSE_RELATIVE_MODE_WARP, "1")
+    //SDL_SetHint(SDL_HINT_MOUSE_RELATIVE_MODE_WARP, "1");
     LOG_WARNING("This is broken on Apple right now: Mouse motion events no longer get fired!");
     #endif
   }
