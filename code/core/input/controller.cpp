@@ -69,10 +69,10 @@ Controller::get_axis(const uint8_t axis) const
       // ie head rotation.
       if(axis == 1)
       {
-        constexpr float scale_factor = 35.f; // TODO: This should be customisable.
+        constexpr float scale_factor = 0.15f; // TODO: This should be customisable.
       
         const Axis mouse_axis = input->mice[0].delta;
-        const Axis normialized_axis = Axis{mouse_axis.x / scale_factor, mouse_axis.y / scale_factor};
+        const Axis normialized_axis = Axis{mouse_axis.x * scale_factor, mouse_axis.y * scale_factor};
         
         if(math::abs(normialized_axis.x) > 0.2f || math::abs(normialized_axis.y) > 0.2f)
         {
