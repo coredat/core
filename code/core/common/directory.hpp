@@ -5,6 +5,9 @@
 #define CORE_MAX_FILE_PATH 2048
 
 
+#include <stdarg.h>
+
+
 namespace Core {
 namespace Directory {
 
@@ -15,9 +18,9 @@ namespace Directory {
   \param resource file or path to be appended to the resource directory.
   \return returns a path that is valid for one frame.
 */
+
 const char*
 volatile_resource_path(const char *append_path);
-
 
 /*!
   Returns a string containing the resource path.
