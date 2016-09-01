@@ -30,5 +30,12 @@ mouse_get_coordinates(Core::Context &context)
 }
 
 
+bool
+controllers_are_in_use(Core::Context &context)
+{
+  return context.get_context_data()->input_pool->controllers_touched;
+}
+
+
 } // ns
 } // ns

@@ -289,6 +289,16 @@ on_mouse_button_event(Context_data::Mouse *mouse,
   UNREACHABLE;
 }
 
+
+inline void
+controller_used(bool *in_use)
+{
+  if(!(*in_use))
+  {
+    *in_use = true;
+  }
+}
+
 } // anon ns
 
 
@@ -388,6 +398,8 @@ process_input_messages(const SDL_Event *evt,
     case(SDL_JOYBUTTONDOWN):
     case(SDL_CONTROLLERBUTTONDOWN):
     {
+      controller_used(&input_data->controllers_touched);
+    
       const uint32_t button_event = (uint32_t)Core::Button_state::down_on_frame;
       Context_data::Game_controller *controller = &input_data->controllers[evt->cbutton.which];
       
@@ -398,6 +410,8 @@ process_input_messages(const SDL_Event *evt,
     case(SDL_JOYBUTTONUP):
     case(SDL_CONTROLLERBUTTONUP):
     {
+      controller_used(&input_data->controllers_touched);
+    
       const uint32_t button_event = (uint32_t)Core::Button_state::up_on_frame;
       Context_data::Game_controller *controller = &input_data->controllers[evt->cbutton.which];
       
@@ -408,6 +422,8 @@ process_input_messages(const SDL_Event *evt,
     case(SDL_JOYAXISMOTION):
     case(SDL_CONTROLLERAXISMOTION):
     {
+      controller_used(&input_data->controllers_touched);
+    
       const uint32_t controller_id = evt->caxis.which;
       assert(controller_id < input_data->controller_count);
 

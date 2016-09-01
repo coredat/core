@@ -31,6 +31,13 @@ Axis
 mouse_get_coordinates(Core::Context &context);
 
 
+/*!
+  Returns true if the controller have been used.
+*/
+bool
+controllers_are_in_use(Core::Context &context);
+
+
 } // ns
 } // ns
 

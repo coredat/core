@@ -58,6 +58,7 @@ struct Input_pool
 {
   Game_controller controllers[NUMBER_OF_CONTROLLERS];
   const uint32_t controller_count = NUMBER_OF_CONTROLLERS;
+  bool controllers_touched = false;
 
   Mouse mice[NUMBER_OF_MICE];
   const uint32_t mice_count = NUMBER_OF_MICE;

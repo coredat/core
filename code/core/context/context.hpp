@@ -56,6 +56,7 @@ private:
   friend class Core::Controller;
   friend class Core::World;
   friend Axis Input::mouse_get_coordinates(Core::Context &context);
+  friend bool Input::controllers_are_in_use(Core::Context &context);
   
   explicit            Context(std::shared_ptr<Context_detail::Data> data);
 
