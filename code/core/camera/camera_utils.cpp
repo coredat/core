@@ -68,14 +68,14 @@ get_ray_from_viewport(const Camera &camera, const Axis viewport_coords)
 
   if(camera.get_type() == Core::Camera_type::perspective)
   {
-    const Core::Axis mouse_coords {
+    const Core::Axis coords {
       (((2.f * clamped_viewport.x) / viewport_size.x) - 1.f),
       1.f - (2.f * clamped_viewport.y) / viewport_size.y
     };
   
     // --
     
-    const math::vec3 ray_nds  = math::vec3_init(mouse_coords.x, mouse_coords.y, 1.f);
+    const math::vec3 ray_nds  = math::vec3_init(coords.x, coords.y, 1.f);
     const math::vec4 ray_clip = math::vec4_init(math::get_x(ray_nds),
                                                 math::get_y(ray_nds),
                                                 1.f,
@@ -109,15 +109,15 @@ get_ray_from_viewport(const Camera &camera, const Axis viewport_coords)
   }
   else
   {
-    const Core::Axis mouse_coords {
+    const Core::Axis coords {
       ((viewport_size.x * 0.5f) - clamped_viewport.x) * -1.f,
       (viewport_size.y * 0.5f) - clamped_viewport.y
     };
     
     const Core::Transform cam_tran = camera.get_attached_entity().get_transform();
     
-    const math::vec3 left = math::vec3_scale(cam_tran.get_left(), mouse_coords.x);
-    const math::vec3 up   = math::vec3_scale(cam_tran.get_up(), mouse_coords.y);
+    const math::vec3 left = math::vec3_scale(cam_tran.get_left(), coords.x);
+    const math::vec3 up   = math::vec3_scale(cam_tran.get_up(), coords.y);
     
     const math::vec3 cam_pos = cam_tran.get_position();
     

@@ -80,21 +80,21 @@ Transform::set_scale(const math::vec3 scale)
 math::vec3
 Transform::get_forward() const
 {
-  return math::quat_rotate_point(m_rotation, world_forward);
+  return math::vec3_normalize(math::quat_rotate_point(m_rotation, world_forward));
 }
 
 
 math::vec3
 Transform::get_up() const
 {
-  return math::quat_rotate_point(m_rotation, world_up);
+  return math::vec3_normalize(math::quat_rotate_point(m_rotation, world_up));
 }
 
 
 math::vec3
 Transform::get_left() const
 {
-  return math::quat_rotate_point(m_rotation, world_left);
+  return math::vec3_normalize(math::quat_rotate_point(m_rotation, world_left));
 }
 
 
