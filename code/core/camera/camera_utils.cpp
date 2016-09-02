@@ -107,7 +107,7 @@ get_ray_from_viewport(const Camera &camera, const Axis viewport_coords)
     
     return Core::Ray(ray_start, ray_dir);
   }
-  else
+  else if(camera.get_type() == Core::Camera_type::orthographic)
   {
     const Core::Axis coords {
       ((viewport_size.x * 0.5f) - clamped_viewport.x) * -1.f,
@@ -126,10 +126,14 @@ get_ray_from_viewport(const Camera &camera, const Axis viewport_coords)
 
     return Core::Ray(ray_start, ray_dir);
   }
+  else
+  {
+    assert(false);
+    LOG_FATAL("This is unreachable code");
+    return Core::Ray(math::vec3_zero(), math::vec3_zero_zero_one());
+  }
   
-  assert(false);
-  LOG_FATAL("This is unreachable code");
-  return Core::Ray(math::vec3_zero(), math::vec3_zero_zero_one());
+  // UNREACHABLE //
 }
  
 
