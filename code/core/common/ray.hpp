@@ -12,6 +12,7 @@ class Ray final
 {
 public:
 
+  explicit          Ray();
   explicit          Ray(const math::vec3 origin, const math::vec3 direction);
   
   math::vec3        get_origin() const;
