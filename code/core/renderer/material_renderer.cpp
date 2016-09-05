@@ -76,9 +76,22 @@ Material_renderer::get_model_id() const
 }
 
 
+bool
+Material_renderer::is_valid() const
+{
+  return (m_material_id != util::generic_id_invalid() && m_model_id != util::generic_id_invalid());
+}
+
+
 Material_renderer::operator Renderer() const
 {
   return Renderer(Core::Renderer_type::material, m_material_id, m_model_id);
+}
+
+
+Material_renderer::operator bool() const
+{
+  return is_valid();
 }
 
 

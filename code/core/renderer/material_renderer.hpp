@@ -27,7 +27,10 @@ public:
   void                    set_model(const Model &model);
   Model                   get_model() const;
   
+  bool                    is_valid() const;
+  
                           operator Renderer() const;
+                          operator bool() const;
   
 private:
 
