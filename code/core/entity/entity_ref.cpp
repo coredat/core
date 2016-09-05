@@ -247,6 +247,21 @@ Entity_ref::get_transform() const
 bool
 Entity_ref::operator==(const Entity &other) const
 {
+  if(!m_impl || !other.m_impl)
+  {
+    return false;
+  }
+  
+  if(!is_valid() || !other.is_valid())
+  {
+    return false;
+  }
+
+  if(!this->get_id() || !other.get_id())
+  {
+    return false;
+  }
+
   return this->get_id() == other.get_id();
 }
 
