@@ -97,9 +97,9 @@ update_world(std::shared_ptr<World_data::World> curr_world,
   
   auto &phys_scene = world->scene;
   
-  phys_scene.SetContactListener(&cb);
-  phys_scene.SetIterations(5);
-  phys_scene.Step();
+  phys_scene->SetContactListener(&cb);
+  phys_scene->SetIterations(5);
+  phys_scene->Step();
   
   if(out_number_of_collisions)
   {

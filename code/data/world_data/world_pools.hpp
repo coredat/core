@@ -23,7 +23,8 @@ struct World
   Renderer_text_draw_calls_data     *text_data            = nullptr;
   
   // RB
-  q3Scene scene = q3Scene(1.f/60.f); // Should this be here?
+//  q3Scene scene = q3Scene(1.f/60.f); // Should this be here?
+  q3Scene *scene;// = q3Scene(1.f/60.f); // Should this be here?
   
   explicit World(const uint32_t size_hint);
   ~World();

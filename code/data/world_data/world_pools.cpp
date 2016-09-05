@@ -18,6 +18,8 @@ namespace World_data {
 
 World::World(const uint32_t entity_hint)
 {
+  this->scene = new q3Scene(1.f / 60.f);
+
   Pending_scene_graph_change_data *graph_changes = new Pending_scene_graph_change_data();
   pending_scene_graph_change_init(graph_changes, entity_hint);
   
@@ -115,12 +117,15 @@ world_update_scene_graph_changes(World_data::World *world_data,
       renderer_text_draw_calls_data_erase(world_data->text_data, id);
     }
     
-    uintptr_t body = 0;
-    physics_data_get_property_rigidbody(world_data->physics_data, id, &body);
+    
+    uintptr_t body_ptr = 0;
+    physics_data_get_property_rigidbody(world_data->physics_data, id, &body_ptr);
+    
+    q3Body *body = reinterpret_cast<q3Body*>(body_ptr);
     
     if(body)
     {
-      world_data->scene.RemoveBody(reinterpret_cast<q3Body*>(body));
+      world_data->scene->RemoveBody(body);
     }
     
     physics_data_erase(world_data->physics_data, id);

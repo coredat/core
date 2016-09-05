@@ -252,7 +252,7 @@ World::think()
     ray_data.t = r32(100000.0);
     ray_data.toi = ray_data.t;
     
-    world->scene.RayCast(&ray, ray_data);
+    world->scene->RayCast(&ray, ray_data);
   }
   
   // Collisions
@@ -441,7 +441,7 @@ World::think()
   auto buf = &m_impl->graphcis_command_buffer;
   Graphics_api::command_buffer_execute(buf);
   
-//    m_impl->world_data->scene.Render(&debug_renderer);
+  m_impl->world_data->scene->Render(&debug_renderer);
   
   /*
     Debug Menu
@@ -454,7 +454,7 @@ World::think()
     Debug_menu::display_world_data_menu(m_impl->world_data.get(),
                                         m_impl->dt,
                                         m_impl->dt_mul,
-                                        world->scene.GetBodyCount(),
+                                        world->scene->GetBodyCount(),
                                         number_of_draw_calls,
                                         number_of_cam_runs);
   }
@@ -615,7 +615,7 @@ World::find_entity_by_ray(const Ray ray)
   raycast.ray_data.t     = FLT_MAX;
   raycast.ray_data.toi   = raycast.ray_data.t;
   
-  m_impl->world_data->scene.RayCast(&raycast, raycast.ray_data);
+  m_impl->world_data->scene->RayCast(&raycast, raycast.ray_data);
   
   return raycast.hit;
 }

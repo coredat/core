@@ -156,7 +156,7 @@ set_rigidbody(const util::generic_id this_id,
                                                &rigidbody,
                                                &transform,
                                                &body,
-                                               &world->scene,
+                                               world->scene,
                                                1);
     
     World_data::physics_data_set_property_rigidbody(phys_pool, this_id, (uintptr_t)body);

@@ -324,7 +324,7 @@ is_button(Context_data::Input_pool *input,
 
 
 bool
-Controller::is_button_down(const Gamepad_button::ENUM buttons) const
+Controller::is_button_down(const uint32_t buttons) const
 {
   return is_button(m_impl->context_data->input_pool,
                    buttons,
@@ -335,7 +335,7 @@ Controller::is_button_down(const Gamepad_button::ENUM buttons) const
 
 
 bool
-Controller::is_button_down_on_frame(const Gamepad_button::ENUM buttons) const
+Controller::is_button_down_on_frame(const uint32_t buttons) const
 {
   return is_button(m_impl->context_data->input_pool,
                    buttons,
@@ -346,7 +346,7 @@ Controller::is_button_down_on_frame(const Gamepad_button::ENUM buttons) const
  
  
 bool
-Controller::is_button_up(const Gamepad_button::ENUM buttons) const
+Controller::is_button_up(const uint32_t buttons) const
 {
   return is_button(m_impl->context_data->input_pool,
                    buttons,
@@ -357,7 +357,7 @@ Controller::is_button_up(const Gamepad_button::ENUM buttons) const
 
 
 bool
-Controller::is_button_up_on_frame(const Gamepad_button::ENUM buttons) const
+Controller::is_button_up_on_frame(const uint32_t buttons) const
 {
   return is_button(m_impl->context_data->input_pool,
                    buttons,
