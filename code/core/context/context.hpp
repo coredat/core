@@ -51,6 +51,8 @@ public:
   bool                is_open() const;                          //!< Returns true if the context is open.
                       operator bool() const;                    //!< Shorthand for is_open().
   
+  void                close();                                  //!< Closes the context. is_open will return false;
+  
 private:
 
   friend class Core::Controller;

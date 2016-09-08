@@ -408,6 +408,11 @@ Context::set_title(const char * title)
 bool
 Context::is_open() const
 {
+  if(!m_impl->is_open)
+  {
+    return true;
+  }
+
   assert(m_impl);
   #ifdef CORE_DEBUG_MENU
   ImGui::Render();
@@ -438,6 +443,14 @@ Context::is_open() const
 Context::operator bool() const
 {
   return is_open();
+}
+
+
+void
+Context::close()
+{
+  m_impl->is_open = false;
+  SDL_Quit();
 }
 
 
