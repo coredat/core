@@ -441,7 +441,10 @@ World::think()
   auto buf = &m_impl->graphcis_command_buffer;
   Graphics_api::command_buffer_execute(buf);
   
+  
+  #ifdef CORE_DEBUG_MENU
   m_impl->world_data->scene->Render(&debug_renderer);
+  #endif
   
   /*
     Debug Menu
