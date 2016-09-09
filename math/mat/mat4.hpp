@@ -12,7 +12,6 @@
 #include "mat_types.hpp"
 #include "mat3.hpp"
 #include "../vec/vec4.hpp"
-#include <array>
 #include <assert.h>
 
 
@@ -28,7 +27,6 @@ MATH_MAT4_INLINE mat4                       mat4_init(); // will return an id ar
 MATH_MAT4_INLINE mat4                       mat4_init(const float x);
 MATH_MAT4_INLINE mat4                       mat4_init_with_mat3(const mat3 sub_matrix);
 MATH_MAT4_INLINE mat4                       mat4_init_with_array(const float arr[]);
-MATH_MAT4_INLINE mat4                       mat4_init_with_array(const std::array<float, 16> &array);
 
 // Generate affine/special transformation matrices.
 MATH_MAT4_INLINE mat4                       mat4_lookat(const vec3 eye_position, const vec3 look_at_position, const vec3 up);
@@ -53,6 +51,7 @@ MATH_MAT4_INLINE mat4                       mat4_get_transpose(const mat4 &a);
 MATH_MAT4_INLINE mat4                       mat4_get_inverse(const mat4 &a);
 MATH_MAT4_INLINE float                      mat4_get_determinant(const mat4 &a);
 MATH_MAT4_INLINE mat4                       mat4_get_scale(const mat4 &a, const vec3 scale);
+
 // Get/Set information
 MATH_MAT4_INLINE float                      mat4_get(const mat4 &mat, const uint32_t row, const uint32_t col);
 MATH_MAT4_INLINE float                      mat4_get(const mat4 &mat, const uint32_t i);
@@ -63,7 +62,6 @@ MATH_MAT4_INLINE vec3                       mat4_get_scale(const mat4 &a);
 MATH_MAT4_INLINE const float*               mat4_get_data(const mat4 &mat);
 
 MATH_MAT4_INLINE void                       mat4_to_array(const mat4 &m, float *array);
-MATH_MAT4_INLINE std::array<float, 16>      mat4_to_array(const mat4 &m);
 
 
 // Impl
@@ -147,13 +145,6 @@ mat4_init_with_array(const float array[])
   memcpy(internal_mat->data, array, sizeof(internal_mat->data));
   
   return return_mat;
-}
-
-
-mat4
-mat4_init_with_array(const std::array<float, 16> &array)
-{
-  return mat4_init_with_array(array.data());
 }
 
 
@@ -247,8 +238,8 @@ mat4_orthographic(const float width, const float height, const float near_plane,
     
     0.f,
     0.f,
-    1.f / depth,
-    -near_plane / depth,
+    2.f / depth,
+    0.f,//-near_plane / depth,
  
     0.f,
     0.f,
@@ -552,9 +543,9 @@ mat4_get_determinant(const mat4 &det)
 
   const detail::internal_mat3 *mat = reinterpret_cast<const detail::internal_mat3*>(&det);
 
-  const mat3 det_a_mat = mat3_init_with_array({mat->data[5], mat->data[6], mat->data[7],
+  const mat3 det_a_mat = mat3_init_with_array({{mat->data[5], mat->data[6], mat->data[7],
                                                mat->data[9], mat->data[10], mat->data[11],
-                                               mat->data[13], mat->data[14], mat->data[15]});
+                                               mat->data[13], mat->data[14], mat->data[15]}});
   const float det_a = mat->data[0] * mat3_get_determinant(det_a_mat);
 
   const mat3 det_b_mat = mat3_init_with_array({mat->data[4], mat->data[6], mat->data[7],
@@ -643,17 +634,6 @@ mat4_to_array(const mat4 &mat, float *out_array)
 {
   const detail::internal_mat4 *internal_mat = reinterpret_cast<const detail::internal_mat4*>(&mat);
   memcpy(out_array, internal_mat->data, sizeof(float) * 16);
-}
-
-
-std::array<float, 16>
-mat4_to_array(const mat4 &mat)
-{
-  std::array<float, 16> return_arr;
-  
-  mat4_to_array(mat, return_arr.data());
-
-  return return_arr;
 }
 
 

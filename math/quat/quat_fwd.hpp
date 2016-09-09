@@ -5,10 +5,10 @@
 namespace math {
 
 
-class quat;
+struct quat;
 
 
 } // ns
 
 
-#ENDIF // inc guard
+#endif // inc guard

@@ -4,17 +4,35 @@
 // Intrinsics settings
 
 #ifdef MATH_USE_SIMD
-#define MATH_ON_SSE2
+#define MATH_ON_SIMD 1
+#define MATH_ON_SSE2 1
 #include <emmintrin.h>
 #else
-#define MATH_ON_FPU
+#define MATH_ON_FPU 1
 #endif
 
 
-#ifdef MATH_FORCE_INLINE
-#define MATH_INLINE __forceinline
+// Windows Inline
+#ifdef _WIN32
+
+#define MATH_INLINE inline __force_inline
+
+// GCC and Clang support this method.
+#elif defined __has_attribute
+
+  // Will likely always exist, but in case it doesn't.
+  #if __has_attribute(always_inline)
+  #define MATH_INLINE inline __attribute__((always_inline))
+  // Fallback to regular inline.
+  #else
+  #define MATH_INLINE inline
+  #endif
+
+// Fallback to regular inline.
 #else
+
 #define MATH_INLINE inline
+
 #endif
 
 

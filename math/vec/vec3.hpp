@@ -31,6 +31,9 @@ MATH_VEC3_INLINE vec3                   vec3_init_with_array(const float *arr);
 MATH_VEC3_INLINE float                  vec3_get_x(const vec3 vec);
 MATH_VEC3_INLINE float                  vec3_get_y(const vec3 vec);
 MATH_VEC3_INLINE float                  vec3_get_z(const vec3 vec);
+MATH_VEC3_INLINE float                  get_x(const vec3 vec);
+MATH_VEC3_INLINE float                  get_y(const vec3 vec);
+MATH_VEC3_INLINE float                  get_z(const vec3 vec);
 MATH_VEC3_INLINE void                   vec3_to_array(const vec3 a, float *out_array);
 
 // Component wise arithmetic.
@@ -53,6 +56,38 @@ MATH_VEC3_INLINE bool                   vec3_is_equal(const vec3 a, const vec3 b
 MATH_VEC3_INLINE bool                   vec3_is_not_equal(const vec3 a, const vec3 b);
 MATH_VEC3_INLINE bool                   vec3_is_near(const vec3 a, const vec3 b, const float error);
 MATH_VEC3_INLINE bool                   vec3_is_not_near(const vec3 a, const vec3 b, const float error);
+
+
+// Shorthand init
+
+//vec3
+//vec3_init(const vec2 vec, const float z)
+//{
+//  return vec3_init(math::get_x(vec), math::get_y(vec), z);
+//}
+
+
+// Alias getters
+
+float
+get_x(const vec3 vec)
+{
+  return vec3_get_x(vec);
+}
+
+
+float
+get_y(const vec3 vec)
+{
+  return vec3_get_y(vec);
+}
+
+
+float
+get_z(const vec3 vec)
+{
+  return vec3_get_z(vec);
+}
 
 
 } // ns
