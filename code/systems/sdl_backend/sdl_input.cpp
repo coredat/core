@@ -421,9 +421,7 @@ process_input_messages(const SDL_Event *evt,
 
     case(SDL_JOYAXISMOTION):
     case(SDL_CONTROLLERAXISMOTION):
-    {
-      controller_used(&input_data->controllers_touched);
-    
+    {    
       const uint32_t controller_id = evt->caxis.which;
       assert(controller_id < input_data->controller_count);
 
@@ -431,6 +429,11 @@ process_input_messages(const SDL_Event *evt,
       {
         const float norm  = math::to_float(evt->caxis.value) / sdl_axis_range;
         const float value = math::nearest_floor(norm, sdl_axis_granularity);
+
+        if(math::abs(value) > sdl_axis_granularity)
+        {
+          controller_used(&input_data->controllers_touched);
+        }
 
         switch(evt->caxis.axis)
         {
@@ -455,7 +458,8 @@ process_input_messages(const SDL_Event *evt,
             break;
             
           case(SDL_CONTROLLER_AXIS_TRIGGERRIGHT):
-            input_data->controllers[controller_id].triggers[1] = value == -1 ? 0 : math::abs(value); // TODO: No idea why!
+            // This trigger can sometimes come back as neg values.
+            input_data->controllers[controller_id].triggers[1] = value == -1 ? 0 : math::abs(value);
             break;
         }
       }

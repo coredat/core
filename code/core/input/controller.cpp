@@ -49,6 +49,7 @@ Axis
 Controller::get_axis(const uint8_t axis) const
 {
   constexpr uint8_t max_axes = 2;
+  assert(axis < max_axes);
 
   assert(m_impl && m_impl->context_data);
   const Context_data::Input_pool *input = m_impl->context_data->input_pool;
@@ -61,7 +62,7 @@ Controller::get_axis(const uint8_t axis) const
       If we are gamepad 0
       Then check the mouse and keyboard if gp returned nothing to use.
     */
-    if((m_impl->controller_number == 0.f) &&
+    if((m_impl->controller_number == 0) &&
       return_gp_axis.x == 0.f &&
       return_gp_axis.y == 0.f)
     {

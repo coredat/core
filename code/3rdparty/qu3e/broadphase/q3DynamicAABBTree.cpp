@@ -463,7 +463,8 @@ void q3DynamicAABBTree::InsertLeaf( i32 id )
   
   if(sibling > 10000)
   {
-    __builtin_trap();
+    
+    //__builtin_trap();
   }
 
 	SyncHeirarchy( m_nodes[ id ].parent );
