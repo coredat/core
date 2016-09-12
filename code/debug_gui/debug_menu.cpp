@@ -11,10 +11,12 @@
 #include <debug_gui/stats_overlay.hpp>
 #include <debug_gui/text_mesh.hpp>
 #include <debug_gui/data_capacities.hpp>
+#include <debug_gui/input_data.hpp>
 
 #include <data/global_data/resource_data.hpp>
 #include <data/global_data/memory_data.hpp>
 #include <data/world_data/world_pools.hpp>
+#include <data/context_data/input_pool.hpp>
 
 #include <3rdparty/imgui/imgui.h>
 
@@ -35,11 +37,12 @@ namespace
   bool show_material_list  = false;
   bool show_post_list      = false;
   bool show_text_mesh_list = false;
+  bool show_input_data     = false;
 }
 #endif
 
 void
-display_global_data_menu()
+display_global_data_menu(const Context_data::Input_pool *input_data)
 {
   #ifdef CORE_DEBUG_MENU
   auto global_data = Resource_data::get_resources();
@@ -53,13 +56,14 @@ display_global_data_menu()
   {
     if (ImGui::BeginMenu("Global Data"))
     {
-      ImGui::MenuItem("Texture",   nullptr, &show_texture_list);
-      ImGui::MenuItem("Model",     nullptr, &show_model_list);
-      ImGui::MenuItem("Shaders",   nullptr, &show_shader_list);
-      ImGui::MenuItem("Memory",    nullptr, &show_memory_view);
-      ImGui::MenuItem("Material",  nullptr, &show_material_list);
-      ImGui::MenuItem("Post",      nullptr, &show_post_list);
-      ImGui::MenuItem("Text Mesh", nullptr, &show_text_mesh_list);
+      ImGui::MenuItem("Texture",    nullptr, &show_texture_list);
+      ImGui::MenuItem("Model",      nullptr, &show_model_list);
+      ImGui::MenuItem("Shaders",    nullptr, &show_shader_list);
+      ImGui::MenuItem("Memory",     nullptr, &show_memory_view);
+      ImGui::MenuItem("Material",   nullptr, &show_material_list);
+      ImGui::MenuItem("Post",       nullptr, &show_post_list);
+      ImGui::MenuItem("Text Mesh",  nullptr, &show_text_mesh_list);
+      ImGui::MenuItem("Input Data", nullptr, &show_input_data);
       
       ImGui::EndMenu();
     }
@@ -74,6 +78,7 @@ display_global_data_menu()
   if(show_material_list)  { display_material_list(global_data->material_data);      }
   if(show_post_list)      { display_post_process_list(global_data->post_data);      }
   if(show_text_mesh_list) { display_text_mesh_list((global_data->text_mesh_data));  }
+  if(show_input_data)     { display_input_data(input_data);                         }
   #endif
 }
 

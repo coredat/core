@@ -3,6 +3,7 @@
 
 
 #include <data/world_data/world_data_fwd.hpp>
+#include <data/context_data/context_data_fwd.hpp>
 #include <stdint.h>
 
 
@@ -10,7 +11,7 @@ namespace Debug_menu {
 
 
 void
-display_global_data_menu();
+display_global_data_menu(const Context_data::Input_pool *input_data);
 
 
 void

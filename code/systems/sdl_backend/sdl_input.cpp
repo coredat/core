@@ -395,7 +395,7 @@ process_input_messages(const SDL_Event *evt,
       Gamepad events.
     */
   
-    case(SDL_JOYBUTTONDOWN):
+    //case(SDL_JOYBUTTONDOWN):
     case(SDL_CONTROLLERBUTTONDOWN):
     {
       controller_used(&input_data->controllers_touched);
@@ -407,7 +407,7 @@ process_input_messages(const SDL_Event *evt,
       break;
     } // SDL_CONTROLLERBUTTONDOWN
 
-    case(SDL_JOYBUTTONUP):
+    //case(SDL_JOYBUTTONUP):
     case(SDL_CONTROLLERBUTTONUP):
     {
       controller_used(&input_data->controllers_touched);
@@ -419,7 +419,7 @@ process_input_messages(const SDL_Event *evt,
       break;
     } // SDL_CONTROLLERBUTTONUP
 
-    case(SDL_JOYAXISMOTION):
+    //case(SDL_JOYAXISMOTION):
     case(SDL_CONTROLLERAXISMOTION):
     {    
       const uint32_t controller_id = evt->caxis.which;

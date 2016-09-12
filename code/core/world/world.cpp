@@ -1,5 +1,6 @@
 #include <core/world/world.hpp>
 #include <core/context/context.hpp>
+#include <core/context/detail/context_detail.hpp>
 #include <core/physics/collision_pair.hpp>
 #include <core/physics/collision.hpp>
 #include <core/transform/transform.hpp>
@@ -453,7 +454,7 @@ World::think()
   */
   #ifdef CORE_DEBUG_MENU
   {
-    Debug_menu::display_global_data_menu();
+    Debug_menu::display_global_data_menu(m_impl->context->get_context_data()->input_pool);
     Debug_menu::display_world_data_menu(m_impl->world_data.get(),
                                         m_impl->dt,
                                         m_impl->dt_mul,
