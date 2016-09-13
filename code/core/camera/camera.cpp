@@ -49,33 +49,64 @@ Camera::Camera()
 }
 
 
+namespace {
+
+
+inline util::generic_id
+create_new_camera(World_data::Camera_data *cam_data)
+{
+  World_data::data_lock(cam_data);
+  
+  // Push and set the defaults.
+  util::generic_id id = cam_data->size + 1;
+  World_data::camera_data_push_back(cam_data, id);
+  
+  if(id)
+  {
+    World_data::camera_data_set_property_entity_id(cam_data, id, util::generic_id_invalid());
+    World_data::camera_data_set_property_camera(cam_data, id, ::Camera::Camera_properties{});
+    
+    const uint32_t priority = Camera_utils::find_highest_priority(cam_data->property_priority, cam_data->size);
+    World_data::camera_data_set_property_priority(cam_data, id, priority + 1);
+  }
+  
+  World_data::data_unlock(cam_data);
+  
+  return id;
+}
+
+
+}
+
+
+Camera::Camera(Core::Entity_ref attach_entity,
+               const uint32_t width,
+               const uint32_t height,
+               const float near_plane,
+               const float far_plane,
+               const float fov)
+: m_impl(new Impl)
+{
+  m_impl->world = attach_entity.get_world_data();
+
+  auto cam_data = m_impl->world->camera_data;
+  m_impl->camera_id = create_new_camera(cam_data);
+
+  set_attached_entity(attach_entity);
+  set_width(width);
+  set_height(height);
+  set_near_plane(near_plane);
+  set_far_plane(far_plane);
+  set_feild_of_view(fov);
+}
+
 Camera::Camera(Core::World &world)
 : m_impl(new Impl)
 {
   m_impl->world = world.get_world_data();
   
-  // Creaet a new camera.
-  {
-    auto cam_data = m_impl->world->camera_data;
-    
-    World_data::data_lock(cam_data);
-    
-    // Push and set the defaults.
-    util::generic_id id = cam_data->size + 1;
-    World_data::camera_data_push_back(cam_data, id);
-    if(id)
-    {
-      m_impl->camera_id = id;
-      World_data::camera_data_set_property_entity_id(cam_data, id, util::generic_id_invalid());
-      World_data::camera_data_set_property_camera(cam_data, id, ::Camera::Camera_properties{});
-      
-      const uint32_t priority = Camera_utils::find_highest_priority(cam_data->property_priority, cam_data->size);
-      World_data::camera_data_set_property_priority(cam_data, id, priority + 1);
-    }
-    
-    World_data::data_unlock(cam_data);
-  }
-
+  auto cam_data = m_impl->world->camera_data;
+  m_impl->camera_id = create_new_camera(cam_data);
 }
 
 

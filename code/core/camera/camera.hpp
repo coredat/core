@@ -19,6 +19,13 @@ public:
 
   explicit              Camera();
   explicit              Camera(Core::World &world);
+  explicit              Camera(Core::Entity_ref attach_entity,
+                               const uint32_t width = 800,
+                               const uint32_t height = 600,
+                               const float near_plane = 0.1f,
+                               const float far_plane = 100.f,
+                               const float fov = math::quart_tau() * 0.5f);
+  
                         ~Camera();
   
                         Camera(Camera &&);

@@ -9,9 +9,6 @@
 /*!
   Materials are used to encapsulate shader and uniforms
   for the mesh renderer.
-  --
-  TODO:
-  - Getters to get the attributes.
 */
 namespace Core {
 
