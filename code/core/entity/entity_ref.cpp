@@ -106,6 +106,11 @@ Entity_ref::operator=(Entity_ref &&other)
 util::generic_id
 Entity_ref::get_id() const
 {
+  if(!m_impl || !m_impl->world || !m_impl->world->entity)
+  {
+    return util::generic_id_invalid();
+  }
+
   return Entity_detail::get_id(m_impl->id, m_impl->world->entity);
 }
 
