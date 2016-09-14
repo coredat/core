@@ -21,6 +21,8 @@ public:
                                    const char *ps);             //!< Creates a shader from given code. gs maybe empty or null.
                             ~Shader();
   
+                            Shader(const Shader &shd);
+  
   bool                      is_valid() const;                   //!< Returns true if the shader loaded successfully.
                             operator bool() const;              //!< Alias for is_valid().
 

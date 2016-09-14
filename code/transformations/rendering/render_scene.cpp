@@ -59,8 +59,8 @@ render_main_scene(const float delta_time,
       
       LOG_TODO_ONCE("Move this to graphcis api somewhere.");
       
-      const GLsizei width = cam->width;
-      const GLsizei height = cam->height;
+      const GLsizei width = viewport_x;// cam->width;
+      const GLsizei height = viewport_y;//cam->height;
       
       glViewport(0, 0, width, height);
     }

@@ -133,6 +133,13 @@ Shader::Shader(const char *name, const char *vs, const char *gs, const char *ps)
 }
 
 
+Shader::Shader(const Shader &other)
+: m_impl(new Impl)
+{
+  m_impl->id = other.m_impl->id;
+}
+
+
 Shader::~Shader()
 {
 }
