@@ -61,7 +61,7 @@ public:
                                              Entity_ref **out_array,
                                              size_t *out_array_size);
   
-  Entity_ref            find_entity_by_ray(const Ray ray);
+  Entity_ref            find_entity_by_ray(const Ray ray) const;
   
   
   

@@ -586,7 +586,7 @@ World::find_entities_by_tag(const uint32_t tag_id,
 
 
 Entity_ref
-World::find_entity_by_ray(const Ray ray)
+World::find_entity_by_ray(const Ray ray) const
 {
   struct Raycast : public q3QueryCallback
   {
