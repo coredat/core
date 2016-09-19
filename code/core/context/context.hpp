@@ -48,6 +48,8 @@ public:
   bool                is_fullscreen() const;                    //!< Returns true if the context is fullscreen.
   void                set_fullscreen(const bool fullscreen);    //!< Sets the context fullscreen or not if the platform supports windowing.
   
+  uint32_t            get_display() const;                      //!< Returns the display number.
+  
   bool                is_open() const;                          //!< Returns true if the context is open.
                       operator bool() const;                    //!< Shorthand for is_open().
   

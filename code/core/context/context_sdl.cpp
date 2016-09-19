@@ -99,10 +99,10 @@ Context::Context(const uint32_t width,
       LOG_FATAL(Error_string::generic_sdl_fail());
     }
 
-    const Uint32 window_high_dpi = settings.high_dpi_support ? SDL_WINDOW_ALLOW_HIGHDPI : 0;
+    const Uint32 window_high_dpi      = settings.high_dpi_support ? SDL_WINDOW_ALLOW_HIGHDPI : 0;
     const Uint32 default_window_flags = window_high_dpi | SDL_WINDOW_OPENGL;
-    const Uint32 window_flags = is_fullscreen ? default_window_flags | fullscreen_mode : default_window_flags;
-    const Uint32 display_startup = math::min(settings.monitor_preference, (uint32_t)SDL_GetNumVideoDisplays());
+    const Uint32 window_flags         = is_fullscreen ? default_window_flags | fullscreen_mode : default_window_flags;
+    const Uint32 display_startup      = math::min(settings.monitor_preference, math::to_uint(SDL_GetNumVideoDisplays()));
 
     m_impl->window = SDL_CreateWindow(title,
                                       SDL_WINDOWPOS_CENTERED_DISPLAY(display_startup),
@@ -343,18 +343,11 @@ bool
 Context::is_fullscreen() const
 {
   assert(m_impl);
+  assert(m_impl->window);
   
-  SDL_Surface* surface = SDL_GetWindowSurface(m_impl->window);
-  assert(surface);
+  const int flags = SDL_GetWindowFlags(m_impl->window);
   
-  if(!surface)
-  {
-    assert(false);
-    LOG_ERROR(Error_string::generic_sdl_fail())
-    return false;
-  }
-  
-  return !!(surface->flags & fullscreen_mode);
+  return !!(flags & fullscreen_mode);
 }
 
 
@@ -385,6 +378,15 @@ Context::set_fullscreen(const bool is_fullscreen)
     LOG_ERROR(Error_string::generic_sdl_fail())
     return;
   }
+}
+
+
+uint32_t
+Context::get_display() const
+{
+  assert(m_impl);
+  
+  return SDL_GetWindowDisplayIndex(m_impl->window);
 }
 
 
