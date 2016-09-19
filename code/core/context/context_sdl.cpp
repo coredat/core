@@ -21,6 +21,7 @@
 #include <utilities/threading.hpp>
 #include <common/error_strings.hpp>
 #include <transformations/input/frame_update.hpp>
+#include <math/general/general.hpp>
 #include <assert.h>
 
 #include <3rdparty/imgui/imgui.h>
@@ -101,7 +102,7 @@ Context::Context(const uint32_t width,
     const Uint32 window_high_dpi = settings.high_dpi_support ? SDL_WINDOW_ALLOW_HIGHDPI : 0;
     const Uint32 default_window_flags = window_high_dpi | SDL_WINDOW_OPENGL;
     const Uint32 window_flags = is_fullscreen ? default_window_flags | fullscreen_mode : default_window_flags;
-    const Uint32 display_startup = 0;
+    const Uint32 display_startup = math::min(settings.monitor_preference, (uint32_t)SDL_GetNumVideoDisplays());
 
     m_impl->window = SDL_CreateWindow(title,
                                       SDL_WINDOWPOS_CENTERED_DISPLAY(display_startup),
