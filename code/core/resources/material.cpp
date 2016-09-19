@@ -178,6 +178,7 @@ Material::set_map_01(const Texture &texture)
   {
     assert(false);
     LOG_ERROR(Error_string::resource_is_invalid());
+    
     return;
   }
 
