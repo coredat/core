@@ -335,6 +335,7 @@ Context::set_height(const uint32_t height)
     return;
   }
   
+  
   SDL_SetWindowSize(m_impl->window, curr_width, static_cast<int>(height));
 }
 
@@ -352,27 +353,16 @@ Context::is_fullscreen() const
 
 
 void
-Context::set_fullscreen(const bool is_fullscreen)
+Context::set_fullscreen(const bool set_fullscreen)
 {
   assert(m_impl);
   
-  SDL_Surface* surface = SDL_GetWindowSurface(m_impl->window);
-  assert(surface);
-  
-  if(!surface)
+  if(is_fullscreen() == set_fullscreen)
   {
-    assert(false);
-    LOG_ERROR(Error_string::generic_sdl_fail())
     return;
   }
   
-  if((surface->flags & fullscreen_mode) == is_fullscreen)
-  {
-    assert(false);
-    return;
-  }
-
-  if(SDL_SetWindowFullscreen(m_impl->window, is_fullscreen ? fullscreen_mode : 0) < 0)
+  if(SDL_SetWindowFullscreen(m_impl->window, set_fullscreen ? fullscreen_mode : 0) < 0)
   {
     assert(false);
     LOG_ERROR(Error_string::generic_sdl_fail())
