@@ -625,6 +625,28 @@ World::find_entity_by_ray(const Ray ray) const
 }
 
 
+Entity_ref
+World::find_entity_by_name(const char *name) const
+{
+  auto data = m_impl->world_data->entity;
+  
+  data_lock(data);
+  
+  util::generic_id id;
+  const bool found = World_data::entity_data_search_property_name(data, name, &id);
+  
+  data_unlock(data);
+  
+  if(found)
+  {
+    return Entity_ref(id, *const_cast<World*>(this));
+  }
+  
+  return Entity_ref();
+  
+}
+
+
 std::shared_ptr<const World_data::World>
 World::get_world_data() const
 {

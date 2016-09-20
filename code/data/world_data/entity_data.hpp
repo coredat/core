@@ -6,12 +6,12 @@
   This file is auto generated any changes here may be overwritten.
   See code_gen.rake in scripts folder.
 
-  This file was last generated on: Sun 21 Aug 2016
+  This file was last generated on: Tue 20 Sep 2016
 */
 
 
-#ifndef ENTITY_DATA_INCLUDED_4384E13F_BB4D_477B_BF60_3722486CAB70
-#define ENTITY_DATA_INCLUDED_4384E13F_BB4D_477B_BF60_3722486CAB70
+#ifndef ENTITY_DATA_INCLUDED_6215457B_77E6_4680_994B_297555DB6B21
+#define ENTITY_DATA_INCLUDED_6215457B_77E6_4680_994B_297555DB6B21
 
 
 #include <utilities/generic_id.hpp>
@@ -156,6 +156,17 @@ entity_data_get_property_name(const Entity_data *data, const util::generic_id ke
 */
 bool
 entity_data_set_property_name(Entity_data *data,  const util::generic_id key, const char *value);
+
+
+/*!
+  \brief Searches for a given value.
+  \param data The container to search.
+  \param value The value which to search for.
+  \param out_key Optional the key for that value.
+  \return Returns true if the data was found.
+*/
+bool
+entity_data_search_property_name(const Entity_data *data, const char *value, util::generic_id *out_key = nullptr);
 
 
 /*!

@@ -473,6 +473,7 @@ Camera::set_width(const uint32_t width)
   }
 
   // Set the viewport width
+  
   {
     auto cam_data = m_impl->world->camera_data;
     const auto cam_id = m_impl->camera_id;
@@ -494,6 +495,7 @@ uint32_t
 Camera::get_width() const
 {
   if(!m_impl || !m_impl->camera_id)
+  
   {
     LOG_ERROR(Error_string::object_has_no_valid_world());
     return 0;

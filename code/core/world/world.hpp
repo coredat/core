@@ -63,6 +63,8 @@ public:
   
   Entity_ref            find_entity_by_ray(const Ray ray) const;
   
+  Entity_ref            find_entity_by_name(const char *name) const;
+  
   
   
 private:

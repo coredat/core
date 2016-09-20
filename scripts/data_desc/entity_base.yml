@@ -29,6 +29,7 @@ data:
     - name: name
       type: char_32
       return: pointer
+      searchable: true
 
     - name: tag
       type: uint32_t
