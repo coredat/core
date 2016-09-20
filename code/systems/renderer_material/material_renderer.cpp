@@ -97,7 +97,7 @@ render(const math::mat4 &view_proj_mat,
         // Move the filter selection into the material.
         static Graphics_api::Texture_filtering filter =
         {
-          Graphics_api::Filtering_mode::point,
+          Graphics_api::Filtering_mode::anisotropic,
           Graphics_api::Wrap_mode::wrap,
           Graphics_api::Wrap_mode::wrap
         };

@@ -192,6 +192,7 @@ Context::Context(const uint32_t width,
         {
           case(SDL_WINDOWEVENT_RESIZED):
           {
+
             LOG_TODO("This event could be called when transitioning to or from a retina monitor. Do I need to regenerate fbo's?");
             break;
           }
