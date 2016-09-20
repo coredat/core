@@ -40,10 +40,9 @@ public:
   void                set_title(const char * title);            //!< Sets the title, if platform supports it, it will be displayed in the window.
   
   uint32_t            get_width() const;                        //!< Gets the current width of the graphics context.
-  void                set_width(const uint32_t width);          //!< Sets the width of the graphics context. Some platforms this could be fixed.
-  
   uint32_t            get_height() const;                       //!< Gets the height of the graphics context.
-  void                set_height(const uint32_t height);        //!< Sets the height of the graphics context. Some platforms this could be fixed.
+  void                set_resolution(const uint32_t width,
+                                     const uint32_t height);    //!< Sets the context resolution.
   
   bool                is_fullscreen() const;                    //!< Returns true if the context is fullscreen.
   void                set_fullscreen(const bool fullscreen);    //!< Sets the context fullscreen or not if the platform supports windowing.

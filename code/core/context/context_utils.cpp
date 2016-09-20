@@ -29,8 +29,7 @@ set_resolution(Core::Context &context,
                const uint32_t height,
                const bool is_fullscreen)
 {
-  context.set_width(width);
-  context.set_height(height);
+  context.set_resolution(width, height);
   context.set_fullscreen(is_fullscreen);
 }
 

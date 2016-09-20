@@ -291,23 +291,6 @@ Context::get_width() const
 }
 
 
-void
-Context::set_width(const uint32_t width)
-{
-  assert(m_impl);
-
-  int curr_width, curr_height;
-  SDL_GetWindowSize(m_impl->window, &curr_width, &curr_height);
-  
-  if(curr_width == width)
-  {
-    return;
-  }
-  
-  SDL_SetWindowSize(m_impl->window, static_cast<int>(width), curr_height);
-}
-
-
 uint32_t
 Context::get_height() const
 {
@@ -324,20 +307,19 @@ Context::get_height() const
 
 
 void
-Context::set_height(const uint32_t height)
+Context::set_resolution(const uint32_t width, const uint32_t height)
 {
   assert(m_impl);
 
   int curr_width, curr_height;
   SDL_GetWindowSize(m_impl->window, &curr_width, &curr_height);
   
-  if(curr_height == height)
+  if(curr_height == height && curr_width == width)
   {
     return;
   }
   
-  
-  SDL_SetWindowSize(m_impl->window, curr_width, static_cast<int>(height));
+  SDL_SetWindowSize(m_impl->window, static_cast<int>(width), static_cast<int>(height));
 }
 
 
