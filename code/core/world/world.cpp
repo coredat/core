@@ -643,7 +643,40 @@ World::find_entity_by_name(const char *name) const
   }
   
   return Entity_ref();
+}
+
+
+void
+World::find_entities_by_name(const char *name,
+                             Entity_ref **out_array,
+                             size_t *out_array_size)
+{
+  static Entity_ref found_ents[1024];
+  static size_t count = 0;
   
+  count = 0;
+  
+  // Loop through entity data and find entities.
+  auto data = m_impl->world_data->entity;
+  
+  data_lock(data);
+  
+  LOG_TODO_ONCE("This is such a hack, relies on knowing a string can only be 32 chars long");
+  
+  for(uint32_t i = 0; i < data->size; ++i)
+  {
+    if(strcmp(&data->property_name[i * 32], name) == 0)
+    {
+      found_ents[count] = Entity_ref(data->entity_id[i], *const_cast<World*>(this));
+      count++;
+    }
+  }
+  
+  data_unlock(data);
+  
+  *out_array = found_ents;
+  *out_array_size = count;
+
 }
 
 
