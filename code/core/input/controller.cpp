@@ -4,6 +4,7 @@
 #include <data/context_data/input_pool.hpp>
 #include <utilities/logging.hpp>
 #include <SDL2/SDL_scancode.h>
+#include <utilities/logging.hpp>
 #include <assert.h>
 
 
@@ -18,10 +19,24 @@ struct Controller::Impl
 };
 
 
-Controller::Controller(const Core::Context &ctx, const uint32_t controller_id)
-: m_impl(new Impl{controller_id, ctx.get_context_data()})
+Controller::Controller()
+: m_impl(nullptr)
 {
-  assert(m_impl->context_data);
+}
+
+
+Controller::Controller(const Core::Context &ctx, const uint32_t controller_id)
+: m_impl(nullptr)
+{
+  if(ctx.get_context_data()->input_pool->controller_count < controller_id)
+  {
+    m_impl.reset(new Impl{controller_id, ctx.get_context_data()});
+    assert(m_impl->context_data);
+  }
+  else
+  {
+    LOG_WARNING("Controller id not available.");
+  }
 }
 
 
@@ -42,6 +57,19 @@ Controller::operator=(const Controller &other)
   *m_impl = *other.m_impl;
 
   return *this;
+}
+
+
+bool
+Controller::is_valid() const
+{
+  return !!m_impl;
+}
+
+
+Controller::operator bool() const
+{
+  return is_valid();
 }
 
 
@@ -177,7 +205,7 @@ is_button(Context_data::Input_pool *input,
           const uint32_t controller_id)
 {
   assert(input);
-  uint32_t button_state = false;
+  bool button_state = false;
 
   if(input && input->controller_count > controller_id)
   {
@@ -345,7 +373,7 @@ Controller::is_button_down_on_frame(const uint32_t buttons) const
                    m_impl->controller_number);
 }
  
- 
+
 bool
 Controller::is_button_up(const uint32_t buttons) const
 {
