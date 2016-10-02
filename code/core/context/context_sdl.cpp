@@ -30,8 +30,12 @@
 
 namespace {
 
-  // Rather than SDL_WINDOW_FULLSCREEN - aka fake fullscreen.
-  constexpr Uint32 fullscreen_mode = SDL_WINDOW_FULLSCREEN_DESKTOP;
+  /*
+    SDL has two fullscreen modes.
+    SDL_WINDOW_FULLSCREEN_DESKTOP - uses current resolution of desktop
+    SDL_WINDOW_FULLSCREEN
+  */
+  constexpr Uint32 fullscreen_mode = SDL_WINDOW_FULLSCREEN;
   
   // only one instance allowed in an application lifetime.
   // This could change, just right now no need.

@@ -12,24 +12,24 @@ namespace Core {
 namespace Gamepad_button {
 enum ENUM : uint32_t { 
 
-  button_a              = BIT(0),
-  button_b              = BIT(1),
-  button_x              = BIT(2),
-  button_y              = BIT(3),
+  a              = BIT(0),
+  b              = BIT(1),
+  x              = BIT(2),
+  y              = BIT(3),
   
-  button_start          = BIT(4),
-  button_back           = BIT(5),
+  start          = BIT(4),
+  back           = BIT(5),
   
-  button_left_stick     = BIT(6),
-  button_right_stick    = BIT(7),
+  left_stick     = BIT(6),
+  right_stick    = BIT(7),
   
-  button_right_shoulder = BIT(8),
-  button_left_shoulder  = BIT(9),
+  right_shoulder = BIT(8),
+  left_shoulder  = BIT(9),
   
-  button_dpad_up        = BIT(10),
-  button_dpad_down      = BIT(11),
-  button_dpad_left      = BIT(12),
-  button_dpad_right     = BIT(13),
+  dpad_up        = BIT(10),
+  dpad_down      = BIT(11),
+  dpad_left      = BIT(12),
+  dpad_right     = BIT(13),
 
 }; // enum
 } // ns

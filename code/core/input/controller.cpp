@@ -133,7 +133,7 @@ Controller::get_axis(const uint8_t axis) const
           
           if(w_key == But_state::down || w_key == Button_state::down_on_frame)
           {
-            y_axis += 1.f;
+            y_axis -= 1.f;
           }
           if(a_key == But_state::down || a_key == Button_state::down_on_frame)
           {
@@ -141,7 +141,7 @@ Controller::get_axis(const uint8_t axis) const
           }
           if(s_key == But_state::down || s_key == Button_state::down_on_frame)
           {
-            y_axis -= 1.f;
+            y_axis += 1.f;
           }
           if(d_key == But_state::down || d_key == Button_state::down_on_frame)
           {
@@ -224,7 +224,7 @@ is_button(Context_data::Input_pool *input,
 
   if(input && input->controller_count > controller_id)
   {
-    if(buttons & Core::Gamepad_button::ENUM::button_a)
+    if(buttons & Core::Gamepad_button::a)
     {
       const uint32_t gp_state = input->controllers[controller_id].controller_buttons.button_a;
       button_state |= ((gp_state == state_a) || (gp_state == state_b));
@@ -236,7 +236,7 @@ is_button(Context_data::Input_pool *input,
       }
     }
     
-    if(buttons & Core::Gamepad_button::ENUM::button_b)
+    if(buttons & Core::Gamepad_button::b)
     {
       const uint32_t gp_state = input->controllers[controller_id].controller_buttons.button_b;
       button_state |= ((gp_state == state_a) || (gp_state == state_b));
@@ -248,19 +248,19 @@ is_button(Context_data::Input_pool *input,
       }
     }
     
-    if(buttons & Core::Gamepad_button::ENUM::button_x)
+    if(buttons & Core::Gamepad_button::x)
     {
       const uint32_t gp_state = input->controllers[controller_id].controller_buttons.button_x;
       button_state |= ((gp_state == state_a) || (gp_state == state_b));
     }
     
-    if(buttons & Core::Gamepad_button::ENUM::button_y)
+    if(buttons & Core::Gamepad_button::y)
     {
       const uint32_t gp_state = input->controllers[controller_id].controller_buttons.button_y;
       button_state |= ((gp_state == state_a) || (gp_state == state_b));
     }
     
-    if(buttons & Core::Gamepad_button::ENUM::button_start)
+    if(buttons & Core::Gamepad_button::start)
     {
       const uint32_t gp_state = input->controllers[controller_id].controller_buttons.button_start;
       button_state |= ((gp_state == state_a) || (gp_state == state_b));
@@ -275,7 +275,7 @@ is_button(Context_data::Input_pool *input,
       }
     }
     
-    if(buttons & Core::Gamepad_button::ENUM::button_back)
+    if(buttons & Core::Gamepad_button::back)
     {
       const uint32_t gp_state = input->controllers[controller_id].controller_buttons.button_back;
       button_state |= ((gp_state == state_a) || (gp_state == state_b));
@@ -287,31 +287,31 @@ is_button(Context_data::Input_pool *input,
       }
     }
     
-    if(buttons & Core::Gamepad_button::ENUM::button_left_shoulder)
+    if(buttons & Core::Gamepad_button::left_shoulder)
     {
       const uint32_t gp_state = input->controllers[controller_id].controller_buttons.button_left_shoulder;
       button_state |= ((gp_state == state_a) || (gp_state == state_b));
     }
     
-    if(buttons & Core::Gamepad_button::ENUM::button_right_shoulder)
+    if(buttons & Core::Gamepad_button::right_shoulder)
     {
       const uint32_t gp_state = input->controllers[controller_id].controller_buttons.button_right_shoulder;
       button_state |= ((gp_state == state_a) || (gp_state == state_b));
     }
     
-    if(buttons & Core::Gamepad_button::ENUM::button_left_stick)
+    if(buttons & Core::Gamepad_button::left_stick)
     {
       const uint32_t gp_state = input->controllers[controller_id].controller_buttons.button_left_stick;
       button_state |= ((gp_state == state_a) || (gp_state == state_b));
     }
     
-    if(buttons & Core::Gamepad_button::ENUM::button_right_stick)
+    if(buttons & Core::Gamepad_button::right_stick)
     {
       const uint32_t gp_state = input->controllers[controller_id].controller_buttons.button_right_stick;
       button_state |= ((gp_state == state_a) || (gp_state == state_b));
     }
     
-    if(buttons & Core::Gamepad_button::ENUM::button_dpad_up)
+    if(buttons & Core::Gamepad_button::dpad_up)
     {
       const uint32_t gp_state = input->controllers[controller_id].controller_buttons.button_dpad_up;
       button_state |= ((gp_state == state_a) || (gp_state == state_b));
@@ -323,7 +323,7 @@ is_button(Context_data::Input_pool *input,
       }
     }
     
-    if(buttons & Core::Gamepad_button::ENUM::button_dpad_down)
+    if(buttons & Core::Gamepad_button::dpad_down)
     {
       const uint32_t gp_state = input->controllers[controller_id].controller_buttons.button_dpad_down;
       button_state |= ((gp_state == state_a) || (gp_state == state_b));
@@ -335,7 +335,7 @@ is_button(Context_data::Input_pool *input,
       }
     }
 
-    if(buttons & Core::Gamepad_button::ENUM::button_dpad_left)
+    if(buttons & Core::Gamepad_button::dpad_left)
     {
       const uint32_t gp_state = input->controllers[controller_id].controller_buttons.button_dpad_left;
       button_state |= ((gp_state == state_a) || (gp_state == state_b));
@@ -347,7 +347,7 @@ is_button(Context_data::Input_pool *input,
       }
     }
 
-    if(buttons & Core::Gamepad_button::ENUM::button_dpad_right)
+    if(buttons & Core::Gamepad_button::dpad_right)
     {
       const uint32_t gp_state = input->controllers[controller_id].controller_buttons.button_dpad_right;
       button_state |= ((gp_state == state_a) || (gp_state == state_b));
