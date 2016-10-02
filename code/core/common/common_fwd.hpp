@@ -9,6 +9,7 @@ class Bounds;
 class Rect;
 class Ray;
 class Plane;
+class Collision;
 
 
 } // ns

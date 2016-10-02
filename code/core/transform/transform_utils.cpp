@@ -19,7 +19,7 @@ namespace Transform_utils {
 
 
 math::vec3
-get_world_fwd()
+get_world_forward()
 {
   return world_forward;
 }

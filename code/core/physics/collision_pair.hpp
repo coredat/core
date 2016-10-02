@@ -8,7 +8,7 @@
 namespace Core {
 
 
-struct Collision_pair
+struct Collision_pairs
 {
   Entity_ref entity_a;
   Entity_ref entity_b;

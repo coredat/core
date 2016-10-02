@@ -13,7 +13,7 @@ namespace Physics_transform {
 
 void
 update_world(std::shared_ptr<World_data::World> world,
-             Core::Collision *out_collisions[] = nullptr,
+             Core::Collision_pair *out_collisions[] = nullptr,
              uint32_t *out_number_of_collisions = nullptr);
 
 

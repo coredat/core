@@ -10,14 +10,14 @@
 namespace Core {
 
 
-class Collision
+class Collision_pair
 {
 public:
 
-  explicit    Collision(const Core::Entity_ref &ent_a,
-                        const Core::Entity_ref &ent_b,
-                        const math::vec3 collision_norm,
-                        const float pen_depth);
+  explicit    Collision_pair(const Core::Entity_ref &ent_a,
+                             const Core::Entity_ref &ent_b,
+                             const math::vec3 collision_norm,
+                             const float pen_depth);
   
   Entity_ref  get_entity_a() const;
   Entity_ref  get_entity_b() const;

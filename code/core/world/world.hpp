@@ -19,7 +19,7 @@ enum class Collision_type
 };
 
 
-typedef void (*Collision_callback)(const Collision_type type, const Core::Collision &collision);
+typedef void (*Collision_callback)(const Collision_type type, const Core::Collision_pair &collision);
 
 
 /*!
@@ -48,7 +48,7 @@ public:
   uint32_t              get_time_running() const;
 
   void                  think();
-  void                  get_overlapping_aabbs(const std::function<void(const Core::Collision_pair pairs[],
+  void                  get_overlapping_aabbs(const std::function<void(const Core::Collision_pairs pairs[],
                                                                        const uint32_t number_of_pairs)> &callback);
   
   size_t                get_entity_count_in_world() const;
@@ -56,7 +56,7 @@ public:
   void                  set_collision_callback(Collision_callback callback);
 
   Entity_ref            find_entity_by_id(const util::generic_id id) const;
-  Entity_ref            find_entity_by_ray(const Ray ray) const;
+  Collision             find_entity_by_ray(const Ray ray) const;
   Entity_ref            find_entity_by_name(const char *name) const;
 
   void                  find_entities_by_tag(const uint32_t tag_id,

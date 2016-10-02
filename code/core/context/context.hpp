@@ -58,6 +58,7 @@ private:
 
   friend class Core::Controller;
   friend class Core::Mouse;
+  friend class Core::Keyboard;
   friend class Core::World;
   friend Axis Input::mouse_get_coordinates(Core::Context &context);
   friend bool Input::controllers_are_in_use(Core::Context &context);

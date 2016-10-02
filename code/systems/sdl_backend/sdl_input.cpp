@@ -331,14 +331,27 @@ process_input_messages(const SDL_Event *evt,
       const uint32_t mouse_id = 0;
       assert(mouse_id < input_data->mice_count);
       
-      input_data->mice[mouse_id].delta.x = math::to_float(evt->motion.xrel);
-      input_data->mice[mouse_id].delta.y = math::to_float(evt->motion.yrel);
-
-      input_data->mice[mouse_id].position.x = math::to_float(evt->motion.x);
-      input_data->mice[mouse_id].position.y = math::to_float(evt->motion.y);
+//      input_data->mice[mouse_id].delta.x = math::to_float(evt->motion.xrel);
+//      input_data->mice[mouse_id].delta.y = math::to_float(evt->motion.yrel);
+//
+//      input_data->mice[mouse_id].position.x = math::to_float(evt->motion.x);
+//      input_data->mice[mouse_id].position.y = math::to_float(evt->motion.y);
       
       break;
     } // SDL_MOUSEMOTION
+    
+    case(SDL_FINGERMOTION):
+    {
+      const uint32_t mouse_id = 0;
+      assert(mouse_id < input_data->mice_count);
+
+      input_data->mice[mouse_id].delta.x = evt->tfinger.dx * 10000;
+      input_data->mice[mouse_id].delta.y = evt->tfinger.dy * 10000;
+
+//      input_data->mice[mouse_id].position.x = math::to_float(evt->motion.x);
+//      input_data->mice[mouse_id].position.y = math::to_float(evt->motion.y);
+      break;
+    }
     
     case(SDL_MOUSEWHEEL):
     {

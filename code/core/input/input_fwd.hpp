@@ -10,6 +10,7 @@ namespace Core {
 
 class Controller;
 class Mouse;
+class Keyboard;
 struct Axis;
 
 namespace Gamepad_button {

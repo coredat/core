@@ -9,6 +9,7 @@ namespace Core {
 
 struct Mouse::Impl
 {
+  uint32_t mouse_id;
   std::shared_ptr<const Context_detail::Data> context_data;
 };
 
@@ -22,6 +23,7 @@ Mouse::Mouse()
 Mouse::Mouse(Core::Context &ctx)
 : m_impl(new Impl)
 {
+  m_impl->mouse_id = 0;
   m_impl->context_data = ctx.get_context_data();
 }
 

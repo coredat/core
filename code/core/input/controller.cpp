@@ -14,6 +14,7 @@ namespace Core {
 struct Controller::Impl
 {
   uint32_t controller_number;
+  bool kb_mouse_alias;
   
   std::shared_ptr<const Context_detail::Data> context_data;
 };
@@ -30,7 +31,12 @@ Controller::Controller(const Core::Context &ctx, const uint32_t controller_id)
 {
   if(ctx.get_context_data()->input_pool->controller_count > controller_id)
   {
-    m_impl.reset(new Impl{controller_id, ctx.get_context_data()});
+    LOG_TODO_ONCE("The kb/mouse alias needs addressing some how");
+  
+    m_impl.reset(new Impl{(controller_id == decltype(controller_id)(-1) ? 0 : controller_id),
+                          (controller_id == 0),
+                          ctx.get_context_data()});
+    
     assert(m_impl->context_data);
   }
   else
@@ -92,7 +98,7 @@ Controller::get_axis(const uint8_t axis) const
         If we are gamepad 0
         Then check the mouse and keyboard if gp returned nothing to use.
       */
-      if((m_impl->controller_number == 0) &&
+      if((m_impl->kb_mouse_alias) &&
         return_gp_axis.x == 0.f &&
         return_gp_axis.y == 0.f)
       {
@@ -210,7 +216,8 @@ is_button(Context_data::Input_pool *input,
           const uint32_t buttons,
           const uint32_t state_a,
           const uint32_t state_b,
-          const uint32_t controller_id)
+          const uint32_t controller_id,
+          const bool kb_mouse_alias)
 {
   assert(input);
   bool button_state = false;
@@ -222,7 +229,7 @@ is_button(Context_data::Input_pool *input,
       const uint32_t gp_state = input->controllers[controller_id].controller_buttons.button_a;
       button_state |= ((gp_state == state_a) || (gp_state == state_b));
       
-      if(controller_id == 0)
+      if(kb_mouse_alias)
       { 
         const uint32_t ms_state = (uint32_t)input->mice[0].buttons[0];
         button_state |= ((ms_state == state_a) || (ms_state == state_b));;
@@ -234,7 +241,7 @@ is_button(Context_data::Input_pool *input,
       const uint32_t gp_state = input->controllers[controller_id].controller_buttons.button_b;
       button_state |= ((gp_state == state_a) || (gp_state == state_b));
       
-      if(controller_id == 0)
+      if(kb_mouse_alias)
       { 
         const uint32_t kb_state_1 = (uint32_t)input->keyboard[SDL_SCANCODE_SPACE];
         button_state |= ((kb_state_1 == state_a) || (kb_state_1 == state_b));
@@ -258,7 +265,7 @@ is_button(Context_data::Input_pool *input,
       const uint32_t gp_state = input->controllers[controller_id].controller_buttons.button_start;
       button_state |= ((gp_state == state_a) || (gp_state == state_b));
       
-      if(controller_id == 0)
+      if(kb_mouse_alias)
       {
         const uint32_t kb_state_1 = (uint32_t)input->keyboard[SDL_SCANCODE_RETURN];
         button_state |= ((kb_state_1 == state_a) || (kb_state_1 == state_b));
@@ -273,7 +280,7 @@ is_button(Context_data::Input_pool *input,
       const uint32_t gp_state = input->controllers[controller_id].controller_buttons.button_back;
       button_state |= ((gp_state == state_a) || (gp_state == state_b));
       
-      if(controller_id == 0)
+      if(kb_mouse_alias)
       {
         const uint32_t kb_state = (uint32_t)input->keyboard[SDL_SCANCODE_ESCAPE];
         button_state |= ((kb_state == state_a) || (kb_state == state_b));
@@ -309,7 +316,7 @@ is_button(Context_data::Input_pool *input,
       const uint32_t gp_state = input->controllers[controller_id].controller_buttons.button_dpad_up;
       button_state |= ((gp_state == state_a) || (gp_state == state_b));
       
-      if(controller_id == 0)
+      if(kb_mouse_alias)
       {
         const uint32_t kb_state = (uint32_t)input->keyboard[SDL_SCANCODE_UP];
         button_state |= ((kb_state == state_a) || (kb_state == state_b));
@@ -321,7 +328,7 @@ is_button(Context_data::Input_pool *input,
       const uint32_t gp_state = input->controllers[controller_id].controller_buttons.button_dpad_down;
       button_state |= ((gp_state == state_a) || (gp_state == state_b));
       
-      if(controller_id == 0)
+      if(kb_mouse_alias)
       {
         const uint32_t kb_state = (uint32_t)input->keyboard[SDL_SCANCODE_DOWN];
         button_state |= ((kb_state == state_a) || (kb_state == state_b));
@@ -333,7 +340,7 @@ is_button(Context_data::Input_pool *input,
       const uint32_t gp_state = input->controllers[controller_id].controller_buttons.button_dpad_left;
       button_state |= ((gp_state == state_a) || (gp_state == state_b));
       
-      if(controller_id == 0)
+      if(kb_mouse_alias)
       {
         const uint32_t kb_state = (uint32_t)input->keyboard[SDL_SCANCODE_LEFT];
         button_state |= ((kb_state == state_a) || (kb_state == state_b));
@@ -345,7 +352,7 @@ is_button(Context_data::Input_pool *input,
       const uint32_t gp_state = input->controllers[controller_id].controller_buttons.button_dpad_right;
       button_state |= ((gp_state == state_a) || (gp_state == state_b));
       
-      if(controller_id == 0)
+      if(kb_mouse_alias)
       {
         const uint32_t kb_state = (uint32_t)input->keyboard[SDL_SCANCODE_RIGHT];
         button_state |= ((kb_state == state_a) || (kb_state == state_b));
@@ -369,7 +376,8 @@ Controller::is_button_down(const uint32_t buttons) const
                      buttons,
                      (uint32_t)Core::Button_state::down,
                      (uint32_t)Core::Button_state::down_on_frame,
-                     m_impl->controller_number);
+                     m_impl->controller_number,
+                     m_impl->kb_mouse_alias);
   }
   
   return false;
@@ -385,7 +393,8 @@ Controller::is_button_down_on_frame(const uint32_t buttons) const
                      buttons,
                      (uint32_t)Core::Button_state::down_on_frame,
                      (uint32_t)Core::Button_state::down_on_frame,
-                     m_impl->controller_number);
+                     m_impl->controller_number,
+                     m_impl->kb_mouse_alias);
   }
   
   return false;
@@ -401,7 +410,8 @@ Controller::is_button_up(const uint32_t buttons) const
                      buttons,
                      (uint32_t)Core::Button_state::up,
                      (uint32_t)Core::Button_state::up_on_frame,
-                     m_impl->controller_number);
+                     m_impl->controller_number,
+                     m_impl->kb_mouse_alias);
   }
   
   return false;
@@ -417,7 +427,8 @@ Controller::is_button_up_on_frame(const uint32_t buttons) const
                      buttons,
                      (uint32_t)Core::Button_state::up_on_frame,
                      (uint32_t)Core::Button_state::up_on_frame,
-                     m_impl->controller_number);
+                     m_impl->controller_number,
+                     m_impl->kb_mouse_alias);
   }
   
   return false;  

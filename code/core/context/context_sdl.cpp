@@ -89,6 +89,12 @@ Context::Context(const uint32_t width,
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
   }
   
+  // SDL Hints
+  {
+    SDL_SetHint(SDL_HINT_MOUSE_RELATIVE_MODE_WARP, "0");
+  }
+
+  
   // Create Window
   {
     const Uint32 init_flags = SDL_INIT_EVERYTHING;

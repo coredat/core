@@ -12,8 +12,8 @@ namespace Core {
 class Collider;
 class Box_collider;
 class Rigidbody;
-class Collision;
-struct Collision_pair;
+class Collision_pair;
+struct Collision_pairs;
 
 enum class Ray_search : uint32_t;
 

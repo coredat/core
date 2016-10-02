@@ -11,7 +11,7 @@ namespace
 {
   uint32_t number_of_callbacks = 0;
   atomic_bool is_listening(false);
-  Core::Collision *collisions = nullptr;
+  Core::Collision_pair *collisions = nullptr;
   std::shared_ptr<World_data::World> world; // this is a bad bad hack to smuggle world into the callback.
 }
 
@@ -33,7 +33,7 @@ namespace Physics_transform {
 
 void
 update_world(std::shared_ptr<World_data::World> curr_world,
-             Core::Collision *out_collisions[],
+             Core::Collision_pair *out_collisions[],
              uint32_t *out_number_of_collisions)
 {
   number_of_callbacks = 0;
@@ -42,7 +42,7 @@ update_world(std::shared_ptr<World_data::World> curr_world,
   
   LOG_TODO_ONCE("Use Scratch stream");
   
-  collisions = SCRATCH_ALIGNED_ALLOC(Core::Collision, 2048);
+  collisions = SCRATCH_ALIGNED_ALLOC(Core::Collision_pair, 2048);
   memset(collisions, 0, sizeof(collisions) * 2048);
   
   // Generate an arrray for results.
@@ -74,16 +74,16 @@ update_world(std::shared_ptr<World_data::World> curr_world,
       assert(coll_ent_b.is_valid());
       
       // Make two collisions for each entity.
-      new(&collisions[number_of_callbacks++]) Core::Collision(coll_ent_a,
-                                                              coll_ent_b,
-                                                              math::vec3_from_qu3e(contact->manifold.normal),
-                                                              0);
+      new(&collisions[number_of_callbacks++]) Core::Collision_pair(coll_ent_a,
+                                                                   coll_ent_b,
+                                                                   math::vec3_from_qu3e(contact->manifold.normal),
+                                                                   0);
       
-      new(&collisions[number_of_callbacks++]) Core::Collision(coll_ent_b,
-                                                              coll_ent_a,
-                                                              math::vec3_scale(math::vec3_from_qu3e(contact->manifold.normal), -1.f),
-                                                              0);
-          
+      new(&collisions[number_of_callbacks++]) Core::Collision_pair(coll_ent_b,
+                                                                   coll_ent_a,
+                                                                   math::vec3_scale(math::vec3_from_qu3e(contact->manifold.normal), -1.f),
+                                                                   0);
+      
     }
     
     /*

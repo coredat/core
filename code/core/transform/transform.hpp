@@ -35,10 +35,6 @@ public:
   math::vec3          get_up() const;
   math::vec3          get_left() const;
   
-  static math::vec3   get_world_forward();
-  static math::vec3   get_world_up();
-  static math::vec3   get_world_left();
-  
 private:
 
   math::vec3          m_position;

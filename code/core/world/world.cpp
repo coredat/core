@@ -5,6 +5,7 @@
 #include <core/physics/collision.hpp>
 #include <core/transform/transform.hpp>
 #include <core/common/ray.hpp>
+#include <core/common/collision.hpp>
 
 #include <debug_gui/debug_menu.hpp>
 
@@ -232,33 +233,9 @@ World::think()
     World_data::pending_scene_graph_change_reset(graph_changes);
   }
   
-  LOG_TODO_ONCE("scratch code to get rb transforms");
-  // Raycast test
-  {
-    class Raycast : public q3QueryCallback
-    {
-      bool ReportShape(q3Box *shape)
-      {
-        auto parent = shape->body;
-        auto user_data = util::generic_id_from_ptr(parent->GetUserData());
-        
-        return user_data != util::generic_id_invalid();
-      };
-      
-    } ray;
-    
-    q3RaycastData ray_data;
-    ray_data.start = q3Vec3(0,-10,0);
-    ray_data.dir = q3Vec3(0, 1, 0);
-    ray_data.t = r32(100000.0);
-    ray_data.toi = ray_data.t;
-    
-    world->scene->RayCast(&ray, ray_data);
-  }
-  
   // Collisions
   {
-    Core::Collision *collisions_arr;
+    Core::Collision_pair *collisions_arr;
     uint32_t number_of_collisions = 0;
     
     Physics_transform::update_world(m_impl->world_data,
@@ -467,7 +444,7 @@ World::think()
 
 
 void
-World::get_overlapping_aabbs(const std::function<void(const Core::Collision_pair pairs[],
+World::get_overlapping_aabbs(const std::function<void(const Core::Collision_pairs pairs[],
                                                       const uint32_t number_of_pairs)> &callback)
 {
   LOG_TODO_ONCE("There is no need for this to be a callback like this.");
@@ -499,10 +476,10 @@ World::get_overlapping_aabbs(const std::function<void(const Core::Collision_pair
                                                     number_of_collidables);
   
   
-  static Core::Collision_pair *pairs = nullptr;
+  static Core::Collision_pairs *pairs = nullptr;
   if(!pairs)
   {
-    pairs = new Core::Collision_pair[2048 * 10];
+    pairs = new Core::Collision_pairs[2048 * 10];
   }
   
   uint32_t number_of_pairs = 0;
@@ -516,7 +493,7 @@ World::get_overlapping_aabbs(const std::function<void(const Core::Collision_pair
       const uint32_t index_a = out_pairs.pair_arr[i].a;
       const uint32_t index_b = out_pairs.pair_arr[i].b;
 
-      pairs[number_of_pairs++] = Core::Collision_pair
+      pairs[number_of_pairs++] = Core::Collision_pairs
       {
         find_entity_by_id(out_ids[index_a]),
         find_entity_by_id(out_ids[index_b])
@@ -585,7 +562,7 @@ World::find_entities_by_tag(const uint32_t tag_id,
 }
 
 
-Entity_ref
+Collision
 World::find_entity_by_ray(const Ray ray) const
 {
   struct Raycast : public q3QueryCallback
@@ -599,6 +576,14 @@ World::find_entity_by_ray(const Ray ray) const
         auto user_data = util::generic_id_from_ptr(parent->GetUserData());
         
         hit = Entity_ref(user_data, std::const_pointer_cast<World_data::World>(data));
+        hit_normal = math::vec3_from_q3vec(ray_data.normal);
+        
+        // Calculate positions
+        {
+          const math::vec3 start = math::vec3_from_q3vec(ray_data.start);
+          const math::vec3 dir = math::vec3_scale(math::vec3_from_q3vec(ray_data.dir), ray_data.toi);
+          hit_pos = math::vec3_add(start, dir);
+        }
       }
       
       return hit;
@@ -607,6 +592,7 @@ World::find_entity_by_ray(const Ray ray) const
     std::shared_ptr<const World_data::World> data;
     Entity_ref hit = Entity_ref();
     math::vec3 hit_pos = math::vec3_zero();
+    math::vec3 hit_normal = math::vec3_zero();
     q3RaycastData ray_data;
     float distance = FLT_MAX;
   };
@@ -621,7 +607,7 @@ World::find_entity_by_ray(const Ray ray) const
   
   m_impl->world_data->scene->RayCast(&raycast, raycast.ray_data);
   
-  return raycast.hit;
+  return Collision(raycast.hit, raycast.hit_pos, raycast.hit_normal);
 }
 
 
