@@ -91,7 +91,9 @@ Context::Context(const uint32_t width,
   
   // SDL Hints
   {
-    SDL_SetHint(SDL_HINT_MOUSE_RELATIVE_MODE_WARP, "0");
+    #ifdef __APPLE__
+    SDL_SetHint(SDL_HINT_MOUSE_RELATIVE_MODE_WARP, "1"); // https://forums.libsdl.org/viewtopic.php?p=51127&sid=570a47d0f562cc0b1d4c91b7712c663f
+    #endif
   }
 
   

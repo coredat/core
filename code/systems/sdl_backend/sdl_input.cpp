@@ -5,6 +5,17 @@
 #include <utilities/optimizations.hpp>
 
 
+namespace {
+
+
+constexpr float sdl_axis_range       = 32767.f; // SDL's max axis range.
+constexpr float sdl_axis_granularity = 0.2f;    // Creates a dead zone in the center of the stick to eliminate drift.
+constexpr float sdl_touchpad_upscale = 5000.f;  // Upscale touchpad input events so they can be used as alternative mouse delta's.
+
+
+} // anon ns
+
+
 namespace Sdl {
 
 
@@ -34,9 +45,6 @@ void
 update_gamepad_controller(Context_data::Game_controller *controller, const uint32_t controller_id)
 {
   SDL_GameController *sdl_controller = SDL_GameControllerOpen(controller_id);
-
-  constexpr float sdl_axis_range       = 32767.f; // SDL's max axis range.
-  constexpr float sdl_axis_granularity = 0.2f;    // Creates a dead zone in the center of the stick to eliminate drift.
 
   // Left Axis
   {
@@ -159,21 +167,13 @@ update_keyboard_controller(Context_data::Game_controller *controller)
 void
 capture_mouse(const bool set)
 {
-  const SDL_bool set_mouse_hold = set ? SDL_TRUE : SDL_FALSE;
-  
-  int success = SDL_SetRelativeMouseMode(set_mouse_hold);
+  const int success = SDL_SetRelativeMouseMode(set ? SDL_TRUE : SDL_FALSE);
   assert(success == 0);
   
   #ifndef NDEBUG
   if(set)
   {
     assert(SDL_GetRelativeMouseMode());
-    
-    #ifdef __APPLE__
-    // https://forums.libsdl.org/viewtopic.php?p=51127&sid=570a47d0f562cc0b1d4c91b7712c663f
-    //SDL_SetHint(SDL_HINT_MOUSE_RELATIVE_MODE_WARP, "1");
-    LOG_WARNING("This is broken on Apple right now: Mouse motion events no longer get fired!");
-    #endif
   }
   #endif
 }
@@ -317,9 +317,6 @@ process_input_messages(const SDL_Event *evt,
     input_data->mice[i].delta = Core::Axis{0.f,0.f};
   }
   
-  constexpr float sdl_axis_range       = 32767.f; // SDL's max axis range.
-  constexpr float sdl_axis_granularity = 0.2f;    // Creates a dead zone in the center of the stick to eliminate drift.
-  
   switch(evt->type)
   {
     /*
@@ -331,11 +328,11 @@ process_input_messages(const SDL_Event *evt,
       const uint32_t mouse_id = 0;
       assert(mouse_id < input_data->mice_count);
       
-//      input_data->mice[mouse_id].delta.x = math::to_float(evt->motion.xrel);
-//      input_data->mice[mouse_id].delta.y = math::to_float(evt->motion.yrel);
-//
-//      input_data->mice[mouse_id].position.x = math::to_float(evt->motion.x);
-//      input_data->mice[mouse_id].position.y = math::to_float(evt->motion.y);
+      input_data->mice[mouse_id].delta.x = math::to_float(evt->motion.xrel);
+      input_data->mice[mouse_id].delta.y = math::to_float(evt->motion.yrel);
+      
+      input_data->mice[mouse_id].position.x = math::to_float(evt->motion.x);
+      input_data->mice[mouse_id].position.y = math::to_float(evt->motion.y);
       
       break;
     } // SDL_MOUSEMOTION
@@ -345,13 +342,11 @@ process_input_messages(const SDL_Event *evt,
       const uint32_t mouse_id = 0;
       assert(mouse_id < input_data->mice_count);
 
-      input_data->mice[mouse_id].delta.x = evt->tfinger.dx * 10000;
-      input_data->mice[mouse_id].delta.y = evt->tfinger.dy * 10000;
+      input_data->mice[mouse_id].delta.x = evt->tfinger.dx * sdl_touchpad_upscale;
+      input_data->mice[mouse_id].delta.y = evt->tfinger.dy * sdl_touchpad_upscale;
 
-//      input_data->mice[mouse_id].position.x = math::to_float(evt->motion.x);
-//      input_data->mice[mouse_id].position.y = math::to_float(evt->motion.y);
       break;
-    }
+    } // SDL_FINGERMOTION
     
     case(SDL_MOUSEWHEEL):
     {
