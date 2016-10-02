@@ -1,13 +1,4 @@
-# Core Doc
+# Core Engine
 
-Quick docs for the core.
+[![Discord Channel](https://img.shields.io/badge/discord-republic of almost-738bd7.svg?style=flat-square)](https://discord.gg/krxmn)
 
-
-## Compile Flags
-
-These are the internal flags that allow some compile time functionality.
-
-
-
-### CORE_DEUBG_MENU
-This will turn on or off the debug menu's that allow you to see the data layer.
