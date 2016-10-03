@@ -575,22 +575,16 @@ World::find_entity_by_ray(const Ray ray) const
         auto parent = shape->body;
         auto user_data = util::generic_id_from_ptr(parent->GetUserData());
         
-        hit = Entity_ref(user_data, std::const_pointer_cast<World_data::World>(data));
+        hit_entity = Entity_ref(user_data, std::const_pointer_cast<World_data::World>(data));
         hit_normal = math::vec3_from_q3vec(ray_data.normal);
-        
-        // Calculate positions
-        {
-          const math::vec3 start = math::vec3_from_q3vec(ray_data.start);
-          const math::vec3 dir = math::vec3_scale(math::vec3_from_q3vec(ray_data.dir), ray_data.toi);
-          hit_pos = math::vec3_add(start, dir);
-        }
+        hit_pos    = math::vec3_from_q3vec(ray_data.GetImpactPoint());
       }
       
-      return hit;
+      return hit_entity;
     }
     
     std::shared_ptr<const World_data::World> data;
-    Entity_ref hit = Entity_ref();
+    Entity_ref hit_entity = Entity_ref();
     math::vec3 hit_pos = math::vec3_zero();
     math::vec3 hit_normal = math::vec3_zero();
     q3RaycastData ray_data;
@@ -607,7 +601,7 @@ World::find_entity_by_ray(const Ray ray) const
   
   m_impl->world_data->scene->RayCast(&raycast, raycast.ray_data);
   
-  return Collision(raycast.hit, raycast.hit_pos, raycast.hit_normal);
+  return Collision(raycast.hit_entity, raycast.hit_pos, raycast.hit_normal);
 }
 
 
