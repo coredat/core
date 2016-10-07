@@ -7,7 +7,7 @@
 
 
 namespace Core {
-namespace Core_detail {
+namespace Collision_detail {
 
 constexpr uint32_t get_max_contacts() { return 4; }
 
@@ -18,6 +18,7 @@ class Collision
 {
 public:
 
+  explicit        Collision();
   explicit        Collision(const Entity_ref ref,
                             const Contact contact[],
                             const size_t number_of_contacts);
@@ -32,9 +33,9 @@ public:
 
 private:
 
-  const Entity_ref  m_object;
-  const Contact     m_contacts[Core_detail::get_max_contacts()];
-  const size_t      m_number_of_contacts;
+  Entity_ref  m_object;
+  Contact     m_contacts[Collision_detail::get_max_contacts()];
+  size_t      m_number_of_contacts;
 
 };
 

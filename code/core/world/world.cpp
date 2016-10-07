@@ -1,7 +1,6 @@
 #include <core/world/world.hpp>
 #include <core/context/context.hpp>
 #include <core/context/detail/context_detail.hpp>
-#include <core/physics/collision_pair.hpp>
 #include <core/physics/collision.hpp>
 #include <core/transform/transform.hpp>
 #include <core/common/ray.hpp>
@@ -236,7 +235,7 @@ World::think()
   
   // Collisions
   {
-    Core::Collision_pair *collisions_arr;
+    Core::Collision_pair *collisions_arr = nullptr;
     uint32_t number_of_collisions = 0;
     
     Physics_transform::update_world(m_impl->world_data,
@@ -445,70 +444,6 @@ World::think()
 
 
 void
-World::get_overlapping_aabbs(const std::function<void(const Core::Collision_pairs pairs[],
-                                                      const uint32_t number_of_pairs)> &callback)
-{
-  LOG_TODO_ONCE("There is no need for this to be a callback like this.");
-
-  // Check we have a callback.
-  if(!callback) { return; }
-  
-  util::generic_id *out_ids = nullptr;
-  Physics::Collision::Axis_collidable *out_axis_array = nullptr;
-  size_t number_of_collidables = 0;
- 
-  const World_data::Physics_data *data = m_impl->world_data->physics_data;
-  Transformation::get_overlapping(data->physics_id,
-                                 data->property_collision_id,
-                                 data->property_transformed_aabb_collider,
-                                 data->property_transform,
-                                 data->size,
-                                 &out_axis_array,
-                                 &out_ids,
-                                 &number_of_collidables);
-
-  //  
-  // Calculate collisions
-  Physics::Collision::Pairs out_pairs;
-  Physics::Collision::pairs_init(&out_pairs, 2048 * 10);
-
-  Physics::Collision::aabb_calculate_overlaps_pairs(&out_pairs,
-                                                    out_axis_array,
-                                                    number_of_collidables);
-  
-  
-  static Core::Collision_pairs *pairs = nullptr;
-  if(!pairs)
-  {
-    pairs = new Core::Collision_pairs[2048 * 10];
-  }
-  
-  uint32_t number_of_pairs = 0;
-  const uint32_t max_pairs = 2048 * 10;
-  
-  if(out_pairs.size)
-  {
-    // Build collision pairs array.
-    for(int32_t i = 0; i < std::min(out_pairs.size, max_pairs); ++i)
-    {
-      const uint32_t index_a = out_pairs.pair_arr[i].a;
-      const uint32_t index_b = out_pairs.pair_arr[i].b;
-
-      pairs[number_of_pairs++] = Core::Collision_pairs
-      {
-        find_entity_by_id(out_ids[index_a]),
-        find_entity_by_id(out_ids[index_b])
-      };
-    }
-  
-    callback(pairs, number_of_pairs);
-  }
-  
-  Physics::Collision::pairs_free(&out_pairs);
-}
-
-
-void
 World::set_collision_callback(Collision_callback callback)
 {
   assert(m_impl);
@@ -586,7 +521,7 @@ World::find_entity_by_ray(const Ray ray) const
     
     std::shared_ptr<const World_data::World> data;
     Entity_ref hit_entity = Entity_ref();
-    math::vec3 hit_pos = math::vec3_zero();
+    math::vec3 hit_pos    = math::vec3_zero();
     math::vec3 hit_normal = math::vec3_zero();
     q3RaycastData ray_data;
     float distance = FLT_MAX;

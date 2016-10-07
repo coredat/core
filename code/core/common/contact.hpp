@@ -24,9 +24,9 @@ public:
 
 private:
 
-  const math::vec3  m_position;
-  const math::vec3  m_normal;
-  const float       m_penetration_depth;
+  math::vec3  m_position;
+  math::vec3  m_normal;
+  float       m_penetration_depth;
 
 };
 

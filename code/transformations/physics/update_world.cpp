@@ -1,5 +1,6 @@
 #include <transformations/physics/update_world.hpp>
 #include <core/physics/collision.hpp>
+#include <core/common/collision.hpp>
 #include <data/global_data/memory_data.hpp>
 #include <utilities/logging.hpp>
 #include <utilities/threading.hpp>
@@ -67,23 +68,40 @@ update_world(std::shared_ptr<World_data::World> curr_world,
         LOG_ERROR("too many collisions");
       }
       
-      Core::Entity_ref coll_ent_a(util::generic_id_from_ptr(contact->bodyA->GetUserData()), world);
-      Core::Entity_ref coll_ent_b(util::generic_id_from_ptr(contact->bodyB->GetUserData()), world);
-      
+      const Core::Entity_ref coll_ent_a(util::generic_id_from_ptr(contact->bodyA->GetUserData()), world);
       assert(coll_ent_a.is_valid());
+      
+      const Core::Entity_ref coll_ent_b(util::generic_id_from_ptr(contact->bodyB->GetUserData()), world);
       assert(coll_ent_b.is_valid());
       
-      // Make two collisions for each entity.
-      new(&collisions[number_of_callbacks++]) Core::Collision_pair(coll_ent_a,
-                                                                   coll_ent_b,
-                                                                   math::vec3_from_qu3e(contact->manifold.normal),
-                                                                   0);
+      static Core::Contact contacts_a[Core::Collision_detail::get_max_contacts()];
+      static Core::Contact contacts_b[Core::Collision_detail::get_max_contacts()];
       
-      new(&collisions[number_of_callbacks++]) Core::Collision_pair(coll_ent_b,
-                                                                   coll_ent_a,
-                                                                   math::vec3_scale(math::vec3_from_qu3e(contact->manifold.normal), -1.f),
-                                                                   0);
+      const size_t contact_count = math::min(Core::Collision_detail::get_max_contacts(),
+                                             static_cast<decltype(Core::Collision_detail::get_max_contacts())>(contact->manifold.contactCount));
       
+      for(uint32_t i = 0; i < contact_count; ++i)
+      {
+        const q3Manifold &m = contact->manifold;
+        const q3Contact &c = contact->manifold.contacts[i];
+      
+        contacts_a[i] = Core::Contact(
+          math::vec3_from_qu3e(c.position),
+          math::vec3_from_qu3e(m.normal),
+          c.penetration
+        );
+        
+        contacts_b[i] = Core::Contact(
+          math::vec3_from_qu3e(c.position),
+          math::vec3_scale(math::vec3_from_qu3e(m.normal), -1.f),
+          c.penetration
+        );
+      }
+      
+      new(&collisions[number_of_callbacks++]) Core::Collision_pair{
+        Core::Collision(coll_ent_a, contacts_a, contact_count),
+        Core::Collision(coll_ent_b, contacts_b, contact_count)
+      };
     }
     
     /*

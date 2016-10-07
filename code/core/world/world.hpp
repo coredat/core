@@ -48,8 +48,6 @@ public:
   uint32_t              get_time_running() const;
 
   void                  think();
-  void                  get_overlapping_aabbs(const std::function<void(const Core::Collision_pairs pairs[],
-                                                                       const uint32_t number_of_pairs)> &callback);
   
   size_t                get_entity_count_in_world() const;
   

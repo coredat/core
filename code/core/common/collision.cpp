@@ -5,6 +5,12 @@
 namespace Core {
 
 
+Collision::Collision()
+: Collision(Core::Entity_ref(), nullptr, 0)
+{
+}
+
+
 Collision::Collision(const Entity_ref ref,
                      const Contact contact[],
                      const size_t number_of_contacts)
@@ -16,7 +22,7 @@ Collision::Collision(const Entity_ref ref,
     number_of_contacts > 2 ? contact[2] : Contact(),
     number_of_contacts > 3 ? contact[3] : Contact(),
   }
-, m_number_of_contacts(math::min(number_of_contacts, Core_detail::get_max_contacts()))
+, m_number_of_contacts(math::min(number_of_contacts, Collision_detail::get_max_contacts()))
 {
   
 }
@@ -39,12 +45,12 @@ Collision::get_number_of_contacts() const
 Contact
 Collision::get_contact(const size_t i) const
 {
-  if(i > Core_detail::get_max_contacts())
+  if(i > Collision_detail::get_max_contacts())
   {
     LOG_ERROR("Requesting contact that is out of range.");
   }
 
-  return m_contacts[math::min(i, Core_detail::get_max_contacts())];
+  return m_contacts[math::min(i, Collision_detail::get_max_contacts())];
 }
 
 

@@ -4,34 +4,19 @@
 
 #include <core/common/core_types.hpp>
 #include <core/common/core_fwd.hpp>
-#include <core/entity/entity_ref.hpp>
+#include <core/common/collision.hpp>
 
 
 namespace Core {
 
 
-class Collision_pair
+/*
+  Pair of entities that collided with each other.
+*/
+struct Collision_pair
 {
-public:
-
-  explicit    Collision_pair(const Core::Entity_ref &ent_a,
-                             const Core::Entity_ref &ent_b,
-                             const math::vec3 collision_norm,
-                             const float pen_depth);
-  
-  Entity_ref  get_entity_a() const;
-  Entity_ref  get_entity_b() const;
-  
-  math::vec3  get_collision_normal() const;
-  float       get_penitration_depth() const;
-  
-private:
-
-  Entity_ref  m_entity_a;
-  Entity_ref  m_entity_b;
-  math::vec3  m_collision_normal;
-  float       m_penitation_depth;
-  
+  Collision with_this;
+  Collision with_that;
 };
 
 

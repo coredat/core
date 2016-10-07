@@ -8,12 +8,10 @@
 namespace Core {
 
 
-//class Ray;
 class Collider;
 class Box_collider;
 class Rigidbody;
-class Collision_pair;
-struct Collision_pairs;
+struct Collision_pair;
 
 enum class Ray_search : uint32_t;
 
