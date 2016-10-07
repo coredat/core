@@ -6,6 +6,7 @@
 #include <core/transform/transform.hpp>
 #include <core/common/ray.hpp>
 #include <core/common/collision.hpp>
+#include <core/common/contact.hpp>
 
 #include <debug_gui/debug_menu.hpp>
 
@@ -601,7 +602,9 @@ World::find_entity_by_ray(const Ray ray) const
   
   m_impl->world_data->scene->RayCast(&raycast, raycast.ray_data);
   
-  return Collision(raycast.hit_entity, raycast.hit_pos, raycast.hit_normal);
+  const Contact contact(raycast.hit_pos, raycast.hit_normal, 0.f);
+  
+  return Collision(raycast.hit_entity, &contact, 1);
 }
 
 

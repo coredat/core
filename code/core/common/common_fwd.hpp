@@ -10,6 +10,7 @@ class Rect;
 class Ray;
 class Plane;
 class Collision;
+class Contact;
 
 
 } // ns

@@ -3,21 +3,29 @@
 
 
 #include <core/entity/entity_ref.hpp>
-#include <math/vec/vec_types.hpp>
+#include <core/common/contact.hpp>
 
 
 namespace Core {
+namespace Core_detail {
+
+constexpr uint32_t get_max_contacts() { return 4; }
+
+} // ns
 
 
 class Collision
 {
 public:
 
-  explicit        Collision(const Entity_ref ref, const math::vec3 pos, const math::vec3 norm);
+  explicit        Collision(const Entity_ref ref,
+                            const Contact contact[],
+                            const size_t number_of_contacts);
   
   Entity_ref      get_entity() const;
-  math::vec3      get_position() const;
-  math::vec3      get_normal() const;
+  
+  size_t          get_number_of_contacts() const;
+  Contact         get_contact(const size_t i) const;
   
   bool            has_hit() const;
                   operator bool() const;
@@ -25,8 +33,9 @@ public:
 private:
 
   const Entity_ref  m_object;
-  const math::vec3  m_position;
-  const math::vec3  m_normal;
+  const Contact     m_contacts[Core_detail::get_max_contacts()];
+  const size_t      m_number_of_contacts;
+
 };
 
 

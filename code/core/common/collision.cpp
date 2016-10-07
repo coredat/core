@@ -1,16 +1,24 @@
 #include <core/common/collision.hpp>
+#include <utilities/logging.hpp>
 
 
 namespace Core {
 
 
 Collision::Collision(const Entity_ref ref,
-                     const math::vec3 pos,
-                     const math::vec3 norm)
+                     const Contact contact[],
+                     const size_t number_of_contacts)
 : m_object(ref)
-, m_position(pos)
-, m_normal(norm)
+, m_contacts
+  {
+    number_of_contacts > 0 ? contact[0] : Contact(),
+    number_of_contacts > 1 ? contact[1] : Contact(),
+    number_of_contacts > 2 ? contact[2] : Contact(),
+    number_of_contacts > 3 ? contact[3] : Contact(),
+  }
+, m_number_of_contacts(math::min(number_of_contacts, Core_detail::get_max_contacts()))
 {
+  
 }
 
 
@@ -21,17 +29,22 @@ Collision::get_entity() const
 }
 
 
-math::vec3
-Collision::get_normal() const
+size_t
+Collision::get_number_of_contacts() const
 {
-  return m_normal;
+  return m_number_of_contacts;
 }
 
 
-math::vec3
-Collision::get_position() const
+Contact
+Collision::get_contact(const size_t i) const
 {
-  return m_position;
+  if(i > Core_detail::get_max_contacts())
+  {
+    LOG_ERROR("Requesting contact that is out of range.");
+  }
+
+  return m_contacts[math::min(i, Core_detail::get_max_contacts())];
 }
 
 
