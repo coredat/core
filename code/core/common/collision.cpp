@@ -21,6 +21,10 @@ Collision::Collision(const Entity_ref ref,
     number_of_contacts > 1 ? contact[1] : Contact(),
     number_of_contacts > 2 ? contact[2] : Contact(),
     number_of_contacts > 3 ? contact[3] : Contact(),
+    number_of_contacts > 4 ? contact[4] : Contact(),
+    number_of_contacts > 5 ? contact[5] : Contact(),
+    number_of_contacts > 6 ? contact[6] : Contact(),
+    number_of_contacts > 7 ? contact[7] : Contact(),
   }
 , m_number_of_contacts(math::min(number_of_contacts, Collision_detail::get_max_contacts()))
 {
@@ -51,6 +55,20 @@ Collision::get_contact(const size_t i) const
   }
 
   return m_contacts[math::min(i, Collision_detail::get_max_contacts())];
+}
+
+
+const Contact*
+Collision::begin() const
+{
+  return &m_contacts[0];
+}
+
+
+const Contact*
+Collision::end() const
+{
+  return &m_contacts[m_number_of_contacts];
 }
 
 

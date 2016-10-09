@@ -321,8 +321,8 @@ bool q3Body::CanCollide( const q3Body *other ) const
 		return false;
 
 	// Every collision must have at least one dynamic body involved
-	if ( !(m_flags & eDynamic) && !(other->m_flags & eDynamic) )
-		return false;
+//	if ( !(m_flags & eDynamic) && !(other->m_flags & eDynamic) )
+//		return false;
 
 	if ( !(m_layers & other->m_layers) )
 		return false;

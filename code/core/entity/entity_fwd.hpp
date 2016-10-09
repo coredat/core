@@ -7,6 +7,7 @@ namespace Core {
 
 class Entity;
 class Entity_ref;
+class Entity_interface;
 
 
 } // ns

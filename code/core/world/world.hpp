@@ -6,7 +6,6 @@
 #include <core/common/core_types.hpp>
 #include <data/world_data/world_data_fwd.hpp>
 #include <core/world/world_setup.hpp>
-#include <functional> // kill
 
 
 namespace Core {
@@ -67,11 +66,11 @@ public:
   
 private:
 
-  friend class Core::Entity;
-  friend class Core::Entity_ref;
+  friend class Core::Entity_interface;
   friend class Core::Camera;
   friend class Core::Ray;
 
+  uint32_t                                 get_id() const;
   std::shared_ptr<const World_data::World> get_world_data() const;
   std::shared_ptr<World_data::World>       get_world_data();
 

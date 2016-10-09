@@ -6,12 +6,12 @@
   This file is auto generated any changes here may be overwritten.
   See code_gen.rake in scripts folder.
 
-  This file was last generated on: Tue 20 Sep 2016
+  This file was last generated on: Sun 09 Oct 2016
 */
 
 
-#ifndef ENTITY_DATA_INCLUDED_6215457B_77E6_4680_994B_297555DB6B21
-#define ENTITY_DATA_INCLUDED_6215457B_77E6_4680_994B_297555DB6B21
+#ifndef ENTITY_DATA_INCLUDED_55B46E75_1184_471E_BAC5_71617F91174E
+#define ENTITY_DATA_INCLUDED_55B46E75_1184_471E_BAC5_71617F91174E
 
 
 #include <utilities/generic_id.hpp>
@@ -50,7 +50,6 @@ struct Entity_data
   size_t size = 0;
   const size_t capacity = 0;
 
-  util::generic_id key_count = 0;
 
   // Memory chunk
   const util::memory_chunk memory = util::memory_chunk();
@@ -108,11 +107,12 @@ data_unlock(const Entity_data *data);
 /*!
   \brief Push back a new element, increases the size by 1. (Does not take a lock).
   \param data The container which to push back.
+  \param key The id to use as a key.
   \param out_index Optional - this will return the inserted location in the container.
-  \return Returns the id of the data.
+  \return Returns true if it was successful.
 */
-util::generic_id
-entity_data_push_back(Entity_data *data, size_t *out_index = nullptr);
+bool
+entity_data_push_back(Entity_data *data, const util::generic_id key, size_t *out_index = nullptr);
 
 
 /*!

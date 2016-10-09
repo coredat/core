@@ -1,4 +1,6 @@
 #include <transformations/physics/update_world.hpp>
+#include <data/world_data/physics_data.hpp>
+#include <core/entity/detail/entity_id.hpp>
 #include <core/physics/collision.hpp>
 #include <core/common/collision.hpp>
 #include <data/global_data/memory_data.hpp>
@@ -68,10 +70,12 @@ update_world(std::shared_ptr<World_data::World> curr_world,
         LOG_ERROR("too many collisions");
       }
       
-      const Core::Entity_ref coll_ent_a(util::generic_id_from_ptr(contact->bodyA->GetUserData()), world);
+      const auto user_data_a = util::generic_id_from_ptr(contact->bodyA->GetUserData());
+      const Core::Entity_ref coll_ent_a(Core_detail::entity_id_from_uint(user_data_a));
       assert(coll_ent_a.is_valid());
       
-      const Core::Entity_ref coll_ent_b(util::generic_id_from_ptr(contact->bodyB->GetUserData()), world);
+      const auto user_data_b = util::generic_id_from_ptr(contact->bodyB->GetUserData());
+      const Core::Entity_ref coll_ent_b(Core_detail::entity_id_from_uint(user_data_b));
       assert(coll_ent_b.is_valid());
       
       static Core::Contact contacts_a[Core::Collision_detail::get_max_contacts()];
@@ -84,7 +88,7 @@ update_world(std::shared_ptr<World_data::World> curr_world,
       {
         const q3Manifold &m = contact->manifold;
         const q3Contact &c = contact->manifold.contacts[i];
-      
+        
         contacts_a[i] = Core::Contact(
           math::vec3_from_qu3e(c.position),
           math::vec3_from_qu3e(m.normal),
@@ -111,13 +115,38 @@ update_world(std::shared_ptr<World_data::World> curr_world,
     void EndContact(const q3ContactConstraint *contact) override    { Register_contact(contact); }
   };
   
-  static callback cb;
+  static callback *cb = nullptr;
+  
   
   auto &phys_scene = world->scene;
   
-  phys_scene->SetContactListener(&cb);
-  phys_scene->SetIterations(5);
+  if(!cb)
+  {
+    cb = new callback();
+    phys_scene->SetContactListener(cb);
+    phys_scene->SetIterations(60);
+  }
+  
   phys_scene->Step();
+  
+  // Check trigger volumes for things that might be inside
+  {
+    auto phys_data = world->physics_data;
+    World_data::data_lock(phys_data);
+    
+    for(uint32_t i = 0; i < phys_data->size; ++i)
+    {
+      q3Body *body = reinterpret_cast<q3Body*>(phys_data->property_rigidbody);
+      q3Box *box = body->m_boxes;
+      
+      if(box && box->sensor)
+      {
+        
+      }
+    }
+    
+    World_data::data_unlock(phys_data);
+  }
   
   if(out_number_of_collisions)
   {
@@ -129,8 +158,8 @@ update_world(std::shared_ptr<World_data::World> curr_world,
     *out_collisions = collisions;
   }
   
-  is_listening = false;
-  world.reset();
+//  is_listening = false;
+//  world.reset();
 }
 
 

@@ -1,54 +1,26 @@
 #include <core/entity/entity_ref.hpp>
-#include <core/transform/transform.hpp>
-#include <core/model/model.hpp>
-#include <core/physics/collider.hpp>
-#include <core/physics/rigidbody.hpp>
 #include <core/entity/entity.hpp>
-#include <core/world/world.hpp>
-#include <core/renderer/renderer.hpp>
-#include <core/renderer/material_renderer.hpp>
-#include <core/resources/material.hpp>
-#include <transformations/entity/entity_common.hpp>
-#include <transformations/entity/entity_data.hpp>
-#include <transformations/entity/entity_transform.hpp>
-#include <transformations/entity/entity_rigidbody.hpp>
-#include <transformations/entity/entity_renderer.hpp>
-#include <data/world_data/world_pools.hpp>
-#include <data/world_data/entity_data.hpp>
-#include <utilities/logging.hpp>
+#include <core/entity/detail/entity_id.hpp>
 
 
 namespace Core {
 
 
-struct Entity_ref::Impl
-{
-  util::generic_id id;
-  std::shared_ptr<World_data::World> world;
-};
-
-
 Entity_ref::Entity_ref()
-: Entity_ref(util::generic_id_invalid(), nullptr)
+: Entity_ref(Core_detail::entity_id_invalid())
 {
 }
 
 
-Entity_ref::Entity_ref(Entity &entity)
-: Entity_ref(entity.get_id(), entity.get_world_data())
+Entity_ref::Entity_ref(const Core_detail::Entity_id id)
+: Entity_interface(id)
 {
 }
 
 
-Entity_ref::Entity_ref(const util::generic_id id, World &world)
-: Entity_ref(id, world.get_world_data())
+Entity_ref::Entity_ref(const Entity &entity)
 {
-}
-
-
-Entity_ref::Entity_ref(const util::generic_id id, std::shared_ptr<World_data::World> world_data)
-: m_impl(new Impl{id, world_data})
-{
+  copy(entity);
 }
 
 
@@ -57,272 +29,19 @@ Entity_ref::~Entity_ref()
   // Entity Ref does nothing, it is an observer here.
 }
 
-  
-Entity_ref::Entity_ref(const Entity_ref &other)
-: m_impl(new Impl{other.m_impl->id, other.m_impl->world})
-{
-}
 
-
-Entity_ref::Entity_ref(Entity_ref &&other)
-: m_impl(new Impl{other.m_impl->id, other.m_impl->world})
+Entity_ref::Entity_ref(const Entity_ref &entity)
+: Entity_interface(entity)
 {
 }
 
 
 Entity_ref&
-Entity_ref::operator=(const Entity_ref &other)
+Entity_ref::operator=(const Entity_ref &entity)
 {
-  if(!m_impl)
-  {
-    m_impl.reset(new Impl);
-  }
-
-  m_impl->id = other.m_impl->id;
-  m_impl->world = other.m_impl->world;
+  copy(entity);
   
   return *this;
-}
-
-
-Entity_ref&
-Entity_ref::operator=(Entity_ref &&other)
-{
-  if(!m_impl)
-  {
-    m_impl.reset(new Impl);
-  }
-
-  m_impl->id = other.m_impl->id;
-  m_impl->world = other.m_impl->world;
-  
-  return *this;
-}
-
-
-// ** Common Entity Interface ** //
-
-
-util::generic_id
-Entity_ref::get_id() const
-{
-  if(!m_impl || !m_impl->world || !m_impl->world->entity)
-  {
-    return util::generic_id_invalid();
-  }
-
-  return Entity_detail::get_id(m_impl->id, m_impl->world->entity);
-}
-
-
-void
-Entity_ref::destroy()
-{
-  Entity_detail::destroy(m_impl->id,
-                         m_impl->world->entity,
-                         m_impl->world->entity_graph_changes);
-  
-  util::generic_id *id = const_cast<util::generic_id*>(&m_impl->id);
-  *id = util::generic_id_invalid();
-}
-
-
-bool
-Entity_ref::is_valid() const
-{
-  if(!m_impl || !m_impl->id || !m_impl->world)
-  {
-    return false;
-  }
-
-  return Entity_detail::is_valid(m_impl->id, m_impl->world->entity);
-}
-
-
-Entity_ref::operator bool() const
-{
-  return is_valid();
-}
-
-
-void
-Entity_ref::set_user_data(const uintptr_t user_data)
-{
-  Entity_detail::set_user_data(m_impl->id, m_impl->world->entity, user_data);
-}
-
-
-uintptr_t
-Entity_ref::get_user_data() const
-{
-  return Entity_detail::get_user_data(m_impl->id, m_impl->world->entity);
-}
-
-
-uint32_t
-Entity_ref::get_tags() const
-{
-  return Entity_detail::get_tags(m_impl->id, m_impl->world->entity);
-}
-
-
-bool
-Entity_ref::has_tag(const uint32_t tag_id) const
-{
-  return Entity_detail::has_tag(m_impl->id, m_impl->world->entity, tag_id);
-}
-
-
-void
-Entity_ref::set_tags(const uint32_t set_tags)
-{
-  Entity_detail::set_tags(m_impl->id, m_impl->world->entity, set_tags);
-}
-
-
-void
-Entity_ref::add_tag(const uint32_t add_tag)
-{
-  Entity_detail::add_tag(m_impl->id, m_impl->world->entity, add_tag);
-}
-
-
-void
-Entity_ref::remove_tag(const uint32_t tag)
-{
-  Entity_detail::remove_tag(m_impl->id, m_impl->world->entity, tag);
-}
-
-
-void
-Entity_ref::set_name(const char* set_name)
-{
-  Entity_detail::set_name(m_impl->id, m_impl->world->entity, set_name);
-}
-
-
-const char*
-Entity_ref::get_name() const
-{
-  return Entity_detail::get_name(m_impl->id, m_impl->world->entity);
-}
-
-
-void
-Entity_ref::set_transform(const Transform &transform)
-{
-  Entity_detail::set_transform(m_impl->id,
-                               m_impl->world->entity,
-                               m_impl->world->transform,
-                               m_impl->world->physics_data,
-                               m_impl->world->mesh_data,
-                               m_impl->world->text_data,
-                               transform);
-}
-
-
-void
-Entity_ref::set_renderer(const Core::Renderer &renderer)
-{
-  Entity_detail::set_renderer(m_impl->id,
-                              m_impl->world->entity,
-                              m_impl->world->transform,
-                              m_impl->world->mesh_data,
-                              m_impl->world->text_data,
-                              renderer);
-}
-
-
-Renderer
-Entity_ref::get_renderer() const
-{
-  return Entity_detail::get_renderer(m_impl->id, m_impl->world->entity, m_impl->world->mesh_data);
-}
-
-
-Transform
-Entity_ref::get_transform() const
-{
-  return Entity_detail::get_core_transform(m_impl->id,
-                                           m_impl->world->entity,
-                                           m_impl->world->transform);
-}
-
-
-bool
-Entity_ref::operator==(const Entity &other) const
-{
-  if(!m_impl || !other.m_impl)
-  {
-    return false;
-  }
-  
-  if(!is_valid() || !other.is_valid())
-  {
-    return false;
-  }
-
-  if(!this->get_id() || !other.get_id())
-  {
-    return false;
-  }
-
-  return this->get_id() == other.get_id();
-}
-
-
-std::shared_ptr<const World_data::World>
-Entity_ref::get_world_data() const
-{
-  return m_impl->world;
-}
-
-
-std::shared_ptr<World_data::World>
-Entity_ref::get_world_data()
-{
-  return m_impl->world;
-}
-
-
-void
-Entity_ref::set_rigidbody(const Rigidbody &rigidbody)
-{
-  Entity_detail::set_rigidbody(m_impl->id, m_impl->world.get(), rigidbody);
-}
-
-
-Rigidbody
-Entity_ref::get_rigidbody() const
-{
-  return Entity_detail::get_rigidbody(m_impl->id);
-}
-
-
-bool
-Entity_ref::operator==(const Entity_ref &other) const
-{
-  return this->get_id() == other.get_id();
-}
-
-
-bool
-Entity_ref::operator!=(const Entity &other) const
-{
-  return this->get_id() != other.get_id();
-}
-
-
-bool
-Entity_ref::operator !=(const Entity_ref &other) const
-{
-  return this->get_id() != other.get_id();
-}
-
-
-Entity_ref::operator util::generic_id() const
-{
-  return get_id();
 }
 
 

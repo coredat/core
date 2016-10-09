@@ -1,4 +1,6 @@
 #include <core/world/world.hpp>
+#include <core/entity/detail/entity_id.hpp>
+#include <core/world/detail/world_index.hpp>
 #include <core/context/context.hpp>
 #include <core/context/detail/context_detail.hpp>
 #include <core/physics/collision.hpp>
@@ -130,6 +132,7 @@ struct Debug_renderer : public q3Render
 	void Point( ) override {}
 } debug_renderer;
 
+
 } // anon ns
 
 
@@ -138,7 +141,8 @@ namespace Core {
 
 struct World::Impl
 {
-  std::shared_ptr<World_data::World> world_data;
+  uint32_t world_instance_id;
+  
   Core::Context *context = nullptr;
   util::timer dt_timer;
   float       dt           = 0.f;
@@ -155,7 +159,9 @@ World::World(Context &ctx, const World_setup setup)
 {
   LOG_TODO_ONCE("World should be 'moveable'");
   
-  m_impl->world_data = std::make_shared<World_data::World>(setup.entity_pool_size);
+  m_impl->world_instance_id = Core_detail::world_index_add_world_data(setup.entity_pool_size);
+  
+//  m_impl->world_data = std::make_shared<World_data::World>(setup.entity_pool_size);
   m_impl->context = &ctx;
   
   Graphics_api::command_buffer_create(&m_impl->graphcis_command_buffer, 1 << 17);
@@ -174,6 +180,7 @@ World::World(Context &ctx, const World_setup setup)
 
 World::~World()
 {
+  Core_detail::world_index_release_world_data(m_impl->world_instance_id);
 }
 
 
@@ -217,28 +224,35 @@ World::think()
   // DONT MOVE.
   // These are handy for debugging, lldb sometimes has hard time with unique_ptr.
   auto resources = Resource_data::get_resources();
-  auto world = m_impl->world_data.get();
+  auto world = Core_detail::world_index_get_world_data(m_impl->world_instance_id);
 
   // THIS MUST BE FIRST STATE CHANGES!
   // Otherwise we might process things that the calling code as already removed.
   {
     // Update world
-    auto data = m_impl->world_data;
-    auto graph_changes = m_impl->world_data->entity_graph_changes;
+    auto graph_changes = world->entity_graph_changes;
 
     // Push in new phy entities.
-    World_data::world_update_scene_graph_changes(data.get(), graph_changes);
+    World_data::world_update_scene_graph_changes(world.get(), graph_changes);
     
     // Reset the entity pool for new chandges.
     World_data::pending_scene_graph_change_reset(graph_changes);
   }
+  
+  // Calculate delta_time
+  {
+    const util::milliseconds frame_time = m_impl->dt_timer.split();
+    m_impl->dt = static_cast<float>(frame_time) / 1000.f;
+    
+    m_impl->running_time += m_impl->dt;
+  }  
   
   // Collisions
   {
     Core::Collision_pair *collisions_arr = nullptr;
     uint32_t number_of_collisions = 0;
     
-    Physics_transform::update_world(m_impl->world_data,
+    Physics_transform::update_world(world,
                                     &collisions_arr,
                                     &number_of_collisions);
     
@@ -256,38 +270,30 @@ World::think()
       return Core::Transform(trans.position, trans.scale, trans.rotation);
     };
   
-    for(size_t i = 0; i < m_impl->world_data->physics_data->size; ++i)
+    // Set transforms.
+    for(size_t i = 0; i < world->physics_data->size; ++i)
     {
-      if(m_impl->world_data->physics_data->property_rigidbody[i])
+      if(world->physics_data->property_rigidbody[i])
       {
-        auto trans = reinterpret_cast<q3Body*>(m_impl->world_data->physics_data->property_rigidbody[i])->GetTransform();
+        auto trans = reinterpret_cast<q3Body*>(world->physics_data->property_rigidbody[i])->GetTransform();
         
-        Core::Entity_ref ref(m_impl->world_data->physics_data->physics_id[i],
-                             m_impl->world_data);
+        Core::Entity_ref ref(Core_detail::entity_id_from_uint(world->physics_data->physics_id[i]));
         
         auto old_tran = ref.get_transform();
         
         auto core_trans = to_core_trans(trans);
         core_trans.set_scale(old_tran.get_scale());
         
-        Entity_detail::set_transform(m_impl->world_data->physics_data->physics_id[i],
-                                     m_impl->world_data->entity,
-                                     m_impl->world_data->transform,
-                                     m_impl->world_data->physics_data,
-                                     m_impl->world_data->mesh_data,
-                                     m_impl->world_data->text_data,
+        Entity_detail::set_transform(world->physics_data->physics_id[i],
+                                     world->entity,
+                                     world->transform,
+                                     world->physics_data,
+                                     world->mesh_data,
+                                     world->text_data,
                                      core_trans,
                                      false);
       }
     }
-  }
-
-  // Calculate delta_time
-  {
-    const util::milliseconds frame_time = m_impl->dt_timer.split();
-    m_impl->dt = static_cast<float>(frame_time) / 1000.f;
-    
-    m_impl->running_time += m_impl->dt;
   }
   
 
@@ -370,6 +376,13 @@ World::think()
     }
   }
   
+  
+  // Render before as it will use the camera matrix from the wrong frame otherwise.
+  #ifdef CORE_DEBUG_MENU
+  world->scene->Render(&debug_renderer);
+  #endif
+  
+  
   /*
     Render the world
     --
@@ -380,7 +393,7 @@ World::think()
                                m_impl->running_time,
                                m_impl->context->get_width(),
                                m_impl->context->get_height(),
-                               world,
+                               world.get(),
                                resources->material_data,
                                resources->post_data,
                                cam_runs,
@@ -419,11 +432,6 @@ World::think()
   auto buf = &m_impl->graphcis_command_buffer;
   Graphics_api::command_buffer_execute(buf);
   
-  
-  #ifdef CORE_DEBUG_MENU
-  m_impl->world_data->scene->Render(&debug_renderer);
-  #endif
-  
   /*
     Debug Menu
     --
@@ -432,7 +440,7 @@ World::think()
   #ifdef CORE_DEBUG_MENU
   {
     Debug_menu::display_global_data_menu(m_impl->context->get_context_data()->input_pool);
-    Debug_menu::display_world_data_menu(m_impl->world_data.get(),
+    Debug_menu::display_world_data_menu(world.get(),
                                         m_impl->dt,
                                         m_impl->dt_mul,
                                         world->scene->GetBodyCount(),
@@ -454,16 +462,17 @@ World::set_collision_callback(Collision_callback callback)
 size_t
 World::get_entity_count_in_world() const
 {
-  assert(m_impl && m_impl->world_data && m_impl->world_data->entity);
+  assert(m_impl && m_impl->world_instance_id);
+  auto world = Core_detail::world_index_get_world_data(m_impl->world_instance_id);
 
-  return m_impl->world_data->entity->size;
+  return world->entity->size;
 }
 
 
 Entity_ref
 World::find_entity_by_id(const util::generic_id id) const
 {
-  return Entity_ref(id, *const_cast<World*>(this));
+  return Entity_ref(Core_detail::entity_id_from_uint(id));
 }
 
 
@@ -477,8 +486,11 @@ World::find_entities_by_tag(const uint32_t tag_id,
   
   count = 0;
   
+  assert(m_impl && m_impl->world_instance_id);
+  auto world = Core_detail::world_index_get_world_data(m_impl->world_instance_id);
+  
   // Loop through entity data and find entities.
-  auto data = m_impl->world_data->entity;
+  auto data = world->entity;
   
   data_lock(data);
   
@@ -486,7 +498,7 @@ World::find_entities_by_tag(const uint32_t tag_id,
   {
     if(data->property_tag[i] & tag_id)
     {
-      found_ents[count] = Entity_ref(data->entity_id[i], *const_cast<World*>(this));
+      found_ents[count] = Entity_ref(Core_detail::entity_id_from_uint(data->entity_id[i]));
       count++;
     }
   }
@@ -511,7 +523,7 @@ World::find_entity_by_ray(const Ray ray) const
         auto parent = shape->body;
         auto user_data = util::generic_id_from_ptr(parent->GetUserData());
         
-        hit_entity = Entity_ref(user_data, std::const_pointer_cast<World_data::World>(data));
+        hit_entity = Entity_ref(Core_detail::entity_id_from_uint(user_data));
         hit_normal = math::vec3_from_q3vec(ray_data.normal);
         hit_pos    = math::vec3_from_q3vec(ray_data.GetImpactPoint());
       }
@@ -527,6 +539,9 @@ World::find_entity_by_ray(const Ray ray) const
     float distance = FLT_MAX;
   };
   
+  assert(m_impl && m_impl->world_instance_id);
+  auto world = Core_detail::world_index_get_world_data(m_impl->world_instance_id);
+  
   Raycast raycast;
   
   raycast.data           = get_world_data();
@@ -535,7 +550,7 @@ World::find_entity_by_ray(const Ray ray) const
   raycast.ray_data.t     = FLT_MAX;
   raycast.ray_data.toi   = raycast.ray_data.t;
   
-  m_impl->world_data->scene->RayCast(&raycast, raycast.ray_data);
+  world->scene->RayCast(&raycast, raycast.ray_data);
   
   const Contact contact(raycast.hit_pos, raycast.hit_normal, 0.f);
   
@@ -546,7 +561,10 @@ World::find_entity_by_ray(const Ray ray) const
 Entity_ref
 World::find_entity_by_name(const char *name) const
 {
-  auto data = m_impl->world_data->entity;
+  assert(m_impl && m_impl->world_instance_id);
+  auto world = Core_detail::world_index_get_world_data(m_impl->world_instance_id);
+
+  auto data = world->entity;
   
   data_lock(data);
   
@@ -557,7 +575,7 @@ World::find_entity_by_name(const char *name) const
   
   if(found)
   {
-    return Entity_ref(id, *const_cast<World*>(this));
+    return Entity_ref(Core_detail::entity_id_from_uint(id));
   }
   
   return Entity_ref();
@@ -574,8 +592,11 @@ World::find_entities_by_name(const char *name,
   
   count = 0;
   
+  assert(m_impl && m_impl->world_instance_id);
+  auto world = Core_detail::world_index_get_world_data(m_impl->world_instance_id);
+  
   // Loop through entity data and find entities.
-  auto data = m_impl->world_data->entity;
+  auto data = world->entity;
   
   data_lock(data);
   
@@ -585,7 +606,7 @@ World::find_entities_by_name(const char *name,
   {
     if(strcmp(&data->property_name[i * 32], name) == 0)
     {
-      found_ents[count] = Entity_ref(data->entity_id[i], *const_cast<World*>(this));
+      found_ents[count] = Entity_ref(Core_detail::entity_id_from_uint(data->entity_id[i]));
       count++;
     }
   }
@@ -594,23 +615,35 @@ World::find_entities_by_name(const char *name,
   
   *out_array = found_ents;
   *out_array_size = count;
+}
 
+
+uint32_t
+World::get_id() const
+{
+  assert(m_impl);
+  
+  return m_impl->world_instance_id;
 }
 
 
 std::shared_ptr<const World_data::World>
 World::get_world_data() const
 {
-  assert(m_impl);
-  return m_impl->world_data;
+  assert(m_impl && m_impl->world_instance_id);
+  auto world = Core_detail::world_index_get_world_data(m_impl->world_instance_id);
+
+  return world;
 }
 
 
 std::shared_ptr<World_data::World>
 World::get_world_data()
 {
-  assert(m_impl);
-  return m_impl->world_data;
+  assert(m_impl && m_impl->world_instance_id);
+  auto world = Core_detail::world_index_get_world_data(m_impl->world_instance_id);
+
+  return world;
 }
 
 

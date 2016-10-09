@@ -6,7 +6,7 @@
   This file is auto generated any changes here may be overwritten.
   See code_gen.rake in scripts folder.
 
-  This file was last generated on: Tue 20 Sep 2016
+  This file was last generated on: Sun 09 Oct 2016
 */
 
 
@@ -184,10 +184,10 @@ data_unlock(const Entity_data *data)
 }
 
 
-util::generic_id
-entity_data_push_back(Entity_data *data, size_t *out_index)
+bool
+entity_data_push_back(Entity_data *data, const util::generic_id key, size_t *out_index)
 {
-  assert(data);
+  assert(data && key);
   assert(data->size < data->capacity);
 
   // TODO: Duplicate key check
@@ -196,11 +196,10 @@ entity_data_push_back(Entity_data *data, size_t *out_index)
   {
     LOG_ERROR(Error_string::no_free_space());
 
-    return 0;
+    return false;
   }
 
   const uint32_t index = data->size;
-  const util::generic_id key = ++data->key_count;
 
   if(out_index)
   {
@@ -220,7 +219,7 @@ entity_data_push_back(Entity_data *data, size_t *out_index)
     memset(&data->property_renderer[index], 0, sizeof(*data->property_renderer));
   }
 
-  return key;
+  return true;
 }
 
 

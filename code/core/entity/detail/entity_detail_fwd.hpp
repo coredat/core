@@ -6,10 +6,20 @@
 #include <data/world_data/world_data_fwd.hpp>
 
 
+namespace Core_detail {
+
+
+struct Entity_id;
+
+
+} // ns
+
+
 namespace Entity_detail {
 
 
 // Prototype the function here so that we can use it as a friend dec.
+[[deprecated("These little friend things need to go")]]
 Core::Renderer
 get_renderer(const util::generic_id this_id,
              World_data::Entity_data *entity_data,

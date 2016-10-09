@@ -10,7 +10,6 @@ data:
 
   key:
     search_type: binary
-    auto_increment: true
 
   header:
     additional_code: >

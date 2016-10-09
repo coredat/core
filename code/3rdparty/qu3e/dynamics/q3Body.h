@@ -103,7 +103,7 @@ public:
 	// used as C++ code to re-create an initial scene setup.
 	void Dump( FILE* file, i32 index ) const;
 
-private:
+//private:
 	// m_flags
 	enum
 	{

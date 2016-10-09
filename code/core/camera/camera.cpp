@@ -1,4 +1,6 @@
 #include <core/camera/camera.hpp>
+#include <core/entity/detail/entity_id.hpp>
+#include <core/world/detail/world_index.hpp>
 #include <core/world/world.hpp>
 #include <core/color/color.hpp>
 #include <core/entity/entity.hpp>
@@ -87,7 +89,8 @@ Camera::Camera(Core::Entity_ref attach_entity,
                const float fov)
 : m_impl(new Impl)
 {
-  m_impl->world = attach_entity.get_world_data();
+  const Core_detail::Entity_id id = Core_detail::entity_id_from_uint(attach_entity.get_id());
+  m_impl->world = Core_detail::world_index_get_world_data(id.world_instance);
 
   auto cam_data = m_impl->world->camera_data;
   m_impl->camera_id = create_new_camera(cam_data);
@@ -255,7 +258,7 @@ Camera::set_attached_entity(Entity_ref entity)
     
     World_data::data_lock(cam_data);
     
-    World_data::camera_data_set_property_entity_id(cam_data, m_impl->camera_id, entity);
+    World_data::camera_data_set_property_entity_id(cam_data, m_impl->camera_id, entity.get_id());
     
     World_data::data_unlock(cam_data);
   }
@@ -280,7 +283,7 @@ Camera::get_attached_entity() const
     World_data::data_unlock(cam_data);
   }
   
-  Entity_ref entity(entity_id, m_impl->world);
+  Entity_ref entity(Core_detail::entity_id_from_uint(entity_id));
   
   return entity;
 }

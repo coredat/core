@@ -9,7 +9,7 @@
 namespace Core {
 namespace Collision_detail {
 
-constexpr uint32_t get_max_contacts() { return 4; }
+constexpr uint32_t get_max_contacts() { return 8; }
 
 } // ns
 
@@ -27,6 +27,9 @@ public:
   
   size_t          get_number_of_contacts() const;
   Contact         get_contact(const size_t i) const;
+  
+  const Contact*  begin() const;
+  const Contact*  end() const;
   
   bool            has_hit() const;
                   operator bool() const;

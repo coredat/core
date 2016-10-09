@@ -99,8 +99,8 @@ convert_core_rb_to_qu3e(const util::generic_id user_data[],
       else
       {
         box_def[i].SetSensor(true);
-        box_def[i].SetDensity(0.f);
-        box_def[i].SetRestitution(0.f);
+//        box_def[i].SetDensity(0.f);
+//        box_def[i].SetRestitution(0.f);
       }
     }
   }
