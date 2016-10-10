@@ -16,12 +16,70 @@ namespace {
 */
 constexpr Uint32 fullscreen_mode = SDL_WINDOW_FULLSCREEN;
 
+
+void
+register_sdl_callbacks(void *context, void *input)
+{
+  // Window callback
+  Sdl::event_add_callback([](const SDL_Event *evt, void *self)
+  {
+    Core_detail::Sdl_context *impl = reinterpret_cast<Core_detail::Sdl_context*>(self);
+    
+    LOG_TODO_ONCE("Move this to a transform or into sdl_backend system");
+    
+    switch(evt->type)
+    {
+      // Time to quit.
+      case(SDL_QUIT):
+        impl->close();
+        break;
+        
+      case(SDL_WINDOWEVENT):
+      {
+        switch(evt->window.event)
+        {
+          case(SDL_WINDOWEVENT_RESIZED):
+          {
+            LOG_TODO("This event could be called when transitioning to or from a retina monitor. Do I need to regenerate fbo's?");
+            break;
+          }
+          case(SDL_WINDOWEVENT_FOCUS_LOST):
+          {
+            LOG_TODO("Should button events be reset? Do We still get other events?");
+            break;
+          }
+          case(SDL_WINDOWEVENT_FOCUS_GAINED):
+          {
+            LOG_TODO("Do we need to reinitialize anything here?");
+            break;
+          }
+        }
+        break;
+      }
+    }
+  },
+  Sdl::context_slot(),
+  context);
+
+  // Input callbacks
+  Sdl::event_add_callback([](const SDL_Event *evt, void *self)
+  {
+    Context_data::Input_pool *input_data = reinterpret_cast<Context_data::Input_pool*>(self);
+
+    if(input_data)
+    {
+      Sdl::process_input_messages(evt, input_data);
+    }
+  },
+  Sdl::input_slot(),
+  input);
+}
+
   
 } // anon ns
 
 
-namespace Core {
-namespace Detail {
+namespace Core_detail {
 
 
 Sdl_context::Sdl_context()
@@ -123,79 +181,76 @@ Sdl_context::Sdl_context(const uint32_t width,
     }
     #endif
   }
-
-  // Window callback
-  Sdl::event_add_callback([](const SDL_Event *evt, void *self)
-  {
-    Sdl_context *impl = reinterpret_cast<Sdl_context*>(self);
-    
-    LOG_TODO_ONCE("Move this to a transform or into sdl_backend system");
-    
-    switch(evt->type)
-    {
-      // Time to quit.
-      case(SDL_QUIT):
-        impl->close();
-        break;
-        
-      case(SDL_WINDOWEVENT):
-      {
-        switch(evt->window.event)
-        {
-          case(SDL_WINDOWEVENT_RESIZED):
-          {
-
-            LOG_TODO("This event could be called when transitioning to or from a retina monitor. Do I need to regenerate fbo's?");
-            break;
-          }
-          case(SDL_WINDOWEVENT_FOCUS_LOST):
-          {
-            LOG_TODO("Should button events be reset? Do We still get other events?");
-            break;
-          }
-          case(SDL_WINDOWEVENT_FOCUS_GAINED):
-          {
-            LOG_TODO("Do we need to reinitialize anything here?");
-            break;
-          }
-        }
-        break;
-      }
-    }
-  },
-  this);
-
-
-  // Input callbacks
-  Sdl::event_add_callback([](const SDL_Event *evt, void *self)
-  {
-    Context_data::Input_pool *input_data = reinterpret_cast<Context_data::Input_pool*>(self);
-
-    if(input_data)
-    {
-      Sdl::process_input_messages(evt, input_data);
-    }
-  },
-  m_data->input_pool);
+  
+  register_sdl_callbacks(this, m_data->input_pool);
 }
 
 
 Sdl_context::~Sdl_context()
 {
+  if(m_window)
+  {
+    SDL_Quit();
+    
+    SDL_DestroyWindow(m_window);
+    m_window = nullptr;
+  }
+  
+  if(m_context)
+  {
+    SDL_GL_DeleteContext(m_context);
+    m_context = nullptr;
+  }
+
+}
+
+
+Sdl_context::Sdl_context(Sdl_context &&other)
+{
+  m_is_open = other.m_is_open;
+  m_window  = other.m_window;
+  m_context = other.m_context;
+  m_data    = other.m_data;
+  
+  other.m_is_open = false;
+  other.m_window  = nullptr;
+  other.m_context = nullptr;
+  other.m_data    = nullptr;
+  
+  register_sdl_callbacks(this, m_data->input_pool);
+}
+
+
+Sdl_context&
+Sdl_context::operator=(Sdl_context &&other)
+{
+  m_is_open = other.m_is_open;
+  m_window  = other.m_window;
+  m_context = other.m_context;
+  m_data    = other.m_data;
+  
+  other.m_is_open = false;
+  other.m_window  = nullptr;
+  other.m_context = nullptr;
+  other.m_data    = nullptr;
+  
+  register_sdl_callbacks(this, m_data->input_pool);
+  
+  return *this;
 }
 
 
 bool
 Sdl_context::is_open() const
 {
-  return !!m_window;
+  return m_is_open;
 }
 
 
 void
 Sdl_context::close()
 {
-  SDL_Quit();
+  m_is_open = false;
 }
 
 
@@ -270,17 +325,20 @@ Sdl_context::is_fullscreen() const
 bool
 Sdl_context::process()
 {
-  auto num_controllers = SDL_NumJoysticks();
-  
-  for(uint32_t i = 0; i < num_controllers; ++i)
+  if(m_is_open)
   {
-    SDL_GameControllerOpen(i);
+    auto num_controllers = SDL_NumJoysticks();
+    
+    for(uint32_t i = 0; i < num_controllers; ++i)
+    {
+      SDL_GameControllerOpen(i);
+    }
+
+    // Flip buffer and process events.
+    SDL_GL_SwapWindow(m_window);
+
+    Sdl::event_process();
   }
-
-  // Flip buffer and process events.
-  SDL_GL_SwapWindow(m_window);
-
-  Sdl::event_process();
   
   return is_open();
 }
@@ -321,5 +379,4 @@ Sdl_context::get_sdl_gl_context() const
 }
 
 
-} // ns
 } // ns

@@ -61,14 +61,14 @@ Collision::get_contact(const size_t i) const
 const Contact*
 Collision::begin() const
 {
-  return &m_contacts[0];
+  return m_number_of_contacts ? &m_contacts[0] : nullptr;
 }
 
 
 const Contact*
 Collision::end() const
 {
-  return &m_contacts[m_number_of_contacts];
+  return m_number_of_contacts ? &m_contacts[m_number_of_contacts - 1] : nullptr;
 }
 
 

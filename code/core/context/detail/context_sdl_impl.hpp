@@ -8,12 +8,15 @@
 #include <systems/sdl_backend/sdl_input.hpp>
 
 
-namespace Core {
-namespace Detail {
+namespace Core_detail {
 
 
 class Sdl_context
 {
+
+  Sdl_context(const Sdl_context &) = delete;
+  Sdl_context& operator=(const Sdl_context &) = delete;
+
 public:
 
   explicit        Sdl_context();
@@ -24,6 +27,9 @@ public:
                               const Core::Context_setup &settings,
                               std::shared_ptr<Core::Context_detail::Data> data);
                   ~Sdl_context();
+  
+                  Sdl_context(Sdl_context &&other);
+  Sdl_context&    operator=(Sdl_context &&other);
   
   bool            is_open() const;
   void            close();
@@ -55,7 +61,6 @@ private:
 };
 
 
-} // ns
 } // ns
 
 

@@ -1,13 +1,3 @@
-
-/*
-  TODO:
-  Split SDL Out need to trim this stuff outta here.
-*/
-
-#define CORE_USE_SDL // Only have sdl at this point
-
-#ifdef CORE_USE_SDL
-
 #include <core/context/context.hpp>
 #include <core/context/detail/context_detail.hpp>
 #include <graphics_api/initialize.hpp>
@@ -49,7 +39,7 @@ struct
 Context::Impl
 {
   std::shared_ptr<Context_detail::Data> context_data;
-  Detail::Sdl_context impl_context;
+  Core_detail::Sdl_context impl_context;
 };
 
 
@@ -70,12 +60,12 @@ Context::Context(const uint32_t width,
   else
   {
     m_impl->context_data.reset(new Context_detail::Data{&core_input});
-    m_impl->impl_context = Detail::Sdl_context(width,
-                                               height,
-                                               is_fullscreen,
-                                               title,
-                                               settings,
-                                               m_impl->context_data);
+    m_impl->impl_context = Core_detail::Sdl_context(width,
+                                                    height,
+                                                    is_fullscreen,
+                                                    title,
+                                                    settings,
+                                                    m_impl->context_data);
 
     instance_created = true;
   }
@@ -120,35 +110,13 @@ Context::~Context()
 Context::Context(Context &&other)
 : m_impl(std::move(other.m_impl))
 {
-//  m_impl->impl_context = other.m_impl->impl_context;
-//  other.m_impl->impl_context();
-//  
-//  m_impl->context_data = other.m_impl->context_data;
-//  other.m_impl->context_data = nullptr;
-//  
-//  m_impl->is_open = other.m_impl->is_open;
-//  other.m_impl->is_open = false;
-//  
-//  m_impl->window = other.m_impl->window;
-//  other.m_impl->window = nullptr;
+
 }
 
 
 Context&
 Context::operator=(Context &&other)
 {
-//  m_impl->context = other.m_impl->context;
-//  other.m_impl->context = nullptr;
-//  
-//  m_impl->context_data = other.m_impl->context_data;
-//  other.m_impl->context_data = nullptr;
-//  
-//  m_impl->is_open = other.m_impl->is_open;
-//  other.m_impl->is_open = false;
-//  
-//  m_impl->window = other.m_impl->window;
-//  other.m_impl->window = nullptr;
-  
   return *this;
 }
 
@@ -263,5 +231,3 @@ Context::get_context_data() const
 
 
 } // ns
-
-#endif // define CORE_USE_SDL

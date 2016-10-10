@@ -89,14 +89,9 @@ Entity_interface::Entity_interface(Core::World &world)
       entity_id.entity_instance = entity_instance_counter;
       entity_id.world_instance  = world.get_id();
       const uint32_t id = Core_detail::entity_id_to_uint(entity_id);
-      
-      const bool added = World_data::entity_data_push_back(entity_data, id);
-      
-      
       m_impl->id = entity_id;
       
-      
-      Core_detail::Entity_id from_int = Core_detail::entity_id_from_uint(id);
+      const bool added = World_data::entity_data_push_back(entity_data, id);
       
       if(added && success)
       {
@@ -346,7 +341,8 @@ Entity_interface::get_rigidbody() const
 uint32_t
 Entity_interface::get_id() const
 {
-  return Entity_detail::get_id(Core_detail::entity_id_to_uint(m_impl->id), m_impl->world->entity);
+  return Core_detail::entity_id_to_uint(m_impl->id);
+//  return Entity_detail::get_id(Core_detail::entity_id_to_uint(m_impl->id), m_impl->world->entity);
 }
 
 

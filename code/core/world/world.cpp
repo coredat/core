@@ -56,6 +56,8 @@
 #include <3rdparty/qu3e/debug/q3Render.h>
 #include <transformations/physics/q3_math_extensions.hpp>
 
+#include <systems/engine/engine.hpp>
+
 
 namespace {
 

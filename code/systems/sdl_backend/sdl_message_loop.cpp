@@ -3,15 +3,15 @@
 #include <assert.h>
 #include <3rdparty/imgui/imgui.h>
 #include <3rdparty/imgui/imgui_impl_sdl_gl3.h>
+#include <utilities/logging.hpp>
 
 
 namespace
 {
   constexpr uint32_t max_sdl_callbacks(2); // 1 for window, 1 for input
-  uint32_t number_of_callbacks(0);
 
-  Sdl::Callback_event callbacks[max_sdl_callbacks];
-  uintptr_t user_data[max_sdl_callbacks]; // user ptr
+  Sdl::Callback_event callbacks[max_sdl_callbacks] = {nullptr, nullptr};
+  uintptr_t user_data[max_sdl_callbacks] = {0, 0};
 }
 
 
@@ -19,14 +19,14 @@ namespace Sdl {
 
 
 void
-event_add_callback(Callback_event cb, void *self)
+event_add_callback(Callback_event cb, int slot, void *self)
 {
-  if(number_of_callbacks < max_sdl_callbacks)
+  LOG_TODO_ONCE("SDL subscription callback's are dreadful!");
+
+  if(slot < max_sdl_callbacks)
   {
-    callbacks[number_of_callbacks] = cb;
-    user_data[number_of_callbacks] = (uintptr_t)self;
-    
-    ++number_of_callbacks;
+    callbacks[slot] = cb;
+    user_data[slot] = (uintptr_t)self;
   }
   else
   {
@@ -43,7 +43,7 @@ event_process()
   
   while (SDL_PollEvent(&evt))
   {
-    for(uint32_t cb = 0; cb < number_of_callbacks; ++cb)
+    for(uint32_t cb = 0; cb < max_sdl_callbacks; ++cb)
     {
       #ifdef CORE_DEBUG_MENU
 //      if(ImGui_ImplSdlGL3_ProcessEvent(&evt))
@@ -51,9 +51,12 @@ event_process()
 //        continue;
       }
       #endif
-    
-      void *self = (void*)user_data[cb];
-      callbacks[cb](&evt, self);
+      
+      if(callbacks[cb])
+      {
+        void *self = (void*)user_data[cb];
+        callbacks[cb](&evt, self);
+      }
     }
   }
 }

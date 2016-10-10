@@ -8,10 +8,14 @@
 namespace Sdl {
 
 
+constexpr int context_slot() { return 0; }
+constexpr int input_slot() { return 1; }
+
+
 using Callback_event = void (*)(const SDL_Event *, void *self);
 
 
-void event_add_callback(Callback_event cb, void *user_data);
+void event_add_callback(Callback_event cb, int slot, void *user_data);
 void event_process();
 
 
