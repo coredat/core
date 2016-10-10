@@ -201,7 +201,6 @@ Sdl_context::~Sdl_context()
     SDL_GL_DeleteContext(m_context);
     m_context = nullptr;
   }
-
 }
 
 

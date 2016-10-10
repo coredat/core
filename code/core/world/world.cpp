@@ -177,6 +177,8 @@ World::World(Context &ctx, const World_setup setup)
   ::Post_renderer::initialize();
   
   m_impl->dt_timer.start();
+  
+  Engine::initialize();
 }
 
 
