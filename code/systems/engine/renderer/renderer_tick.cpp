@@ -15,6 +15,7 @@
 #include <systems/renderer_material/material_renderer.hpp>
 
 #include <transformations/camera/cam_priorities.hpp>
+#include <transformations/rendering/render_scene.hpp>
 
 #include <3rdparty/qu3e/scene/q3Scene.h>
 
@@ -43,7 +44,11 @@ initialize()
 void
 think(std::shared_ptr<World_data::World> world,
       std::shared_ptr<Resource_data::Resources> resources,
-      const float dt)
+      const float dt,
+      const float running_time,
+      const uint32_t width,
+      const uint32_t height,
+      Tick_information *out_tick_info)
 {
   /*
     Camera Runs
@@ -138,9 +143,9 @@ think(std::shared_ptr<World_data::World> world,
   */
   uint32_t number_of_draw_calls = 0;
   Rendering::render_main_scene(dt,
-                               m_impl->running_time,
-                               m_impl->context->get_width(), // context data!
-                               m_impl->context->get_height(),
+                               running_time,
+                               width, // context data!
+                               height,
                                world.get(),
                                resources->material_data,
                                resources->post_data,
@@ -173,6 +178,8 @@ think(std::shared_ptr<World_data::World> world,
 //    ::Text_renderer::render(view_proj, m_impl->world_data->text_data->property_draw_call, m_impl->world_data->text_data->size);
   }
   
+  out_tick_info->number_of_draw_calls = number_of_draw_calls;
+  out_tick_info->camera_runs = number_of_cam_runs;
   
   /*
    Testing

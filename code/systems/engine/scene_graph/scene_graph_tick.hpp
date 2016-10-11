@@ -2,6 +2,10 @@
 #define SCENE_GRAPH_TICK_INCLUDE_635CF1F4_1A74_4BD7_AC81_77677C8F198F
 
 
+#include "../tick_information.hpp"
+#include <data/world_data/world_data.hpp>
+
+
 namespace Engine {
 namespace Scene_graph_tick {
 
@@ -11,7 +15,7 @@ initialize();
 
 
 void
-think();
+think(std::shared_ptr<World_data::World> world, Tick_information *tick_info = nullptr);
 
 
 void

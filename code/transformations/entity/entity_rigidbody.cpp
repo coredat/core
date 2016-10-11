@@ -24,8 +24,6 @@ set_collider(const util::generic_id this_id,
              World_data::World *world,
              const Core::Collider &collider)
 {
-  LOG_DEPRECATED_ONCE("set rb should do this now.");
-
   if(!is_valid(this_id, world->entity))
   {
     LOG_ERROR(Error_string::entity_is_invalid());
@@ -127,7 +125,6 @@ set_rigidbody(const util::generic_id this_id,
               World_data::World *world,
               const Core::Rigidbody &rigidbody)
 {
-  LOG_TODO_ONCE("Do set collider here not in other method.")
   set_collider(this_id, world, rigidbody.get_collider());
 
   auto phys_pool = world->physics_data;

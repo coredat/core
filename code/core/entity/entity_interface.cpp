@@ -69,8 +69,6 @@ Entity_interface::Entity_interface(const Core_detail::Entity_id id)
 Entity_interface::Entity_interface(Core::World &world)
 : m_impl(new Impl{Core_detail::entity_id_invalid(), nullptr})
 {
-  LOG_TODO_ONCE("Make entity interface auto generated.");
-
   m_impl->world = world.get_world_data();
   
   bool success = true;

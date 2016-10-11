@@ -2,8 +2,8 @@
 #define PHYSICS_TICK_INCLUDED_37BBB181_825A_416C_A1E4_13E1DF9736CF
 
 
+#include "../tick_information.hpp"
 #include <data/world_data/world_data.hpp> // fwd
-
 
 #include <core/world/world.hpp> // for collision callback haack
 
@@ -16,12 +16,8 @@ void
 initialize();
 
 
-/*
-  TODO:
-  Break down world to the actual data sources we want.
-*/
 void
-think(std::shared_ptr<World_data::World> world, const float dt);
+think(std::shared_ptr<World_data::World> world, const float dt, Tick_information *out_tick_info = nullptr);
 
 
 void

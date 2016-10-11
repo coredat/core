@@ -17,7 +17,7 @@ initialize()
 
 
 void
-think()
+think(std::shared_ptr<World_data::World> world, Tick_information *tick_info)
 {
   // Otherwise we might process things that the calling code as already removed.
   {

@@ -2,11 +2,17 @@
 #include <core/entity/entity_ref.hpp>
 #include <core/entity/detail/entity_id.hpp>
 #include <core/world/detail/world_index.hpp>
+#include <core/context/context.hpp>
+#include <core/context/detail/context_detail.hpp>
 #include <core/physics/collision.hpp>
 #include <core/common/ray.hpp>
 #include <data/world_data/entity_data.hpp>
+#include <data/context_data/input_pool.hpp>
+#include <core/context/detail/context_data.hpp>
 #include <transformations/physics/q3_math_extensions.hpp>
 #include <systems/engine/engine.hpp>
+#include <systems/engine/tick_information.hpp>
+#include <debug_gui/debug_menu.hpp>
 #include <utilities/timer.hpp>
 #include <utilities/logging.hpp>
 
@@ -95,11 +101,18 @@ World::think()
   }
 
   // Engine Think
+  Engine::Tick_information tick_info;
   {
     auto resources = Resource_data::get_resource_data();
     auto world = Core_detail::world_index_get_world_data(m_impl->world_instance_id);
 
-    Engine::think(world, resources, m_impl->dt);
+    Engine::think(world,
+                  resources,
+                  m_impl->dt,
+                  m_impl->running_time,
+                  m_impl->context->get_width(),
+                  m_impl->context->get_height(),
+                  &tick_info);
   }
   
   /*
@@ -109,13 +122,15 @@ World::think()
   */
   #ifdef CORE_DEBUG_MENU
   {
-//    Debug_menu::display_global_data_menu(m_impl->context->get_context_data()->input_pool);
-//    Debug_menu::display_world_data_menu(world.get(),
-//                                        m_impl->dt,
-//                                        m_impl->dt_mul,
-//                                        world->scene->GetBodyCount(),
-//                                        number_of_draw_calls,
-//                                        number_of_cam_runs);
+    auto world = Core_detail::world_index_get_world_data(m_impl->world_instance_id);
+  
+    Debug_menu::display_global_data_menu(m_impl->context->get_context_data()->input_pool);
+    Debug_menu::display_world_data_menu(world.get(),
+                                        m_impl->dt,
+                                        m_impl->dt_mul,
+                                        world->scene->GetBodyCount(),
+                                        tick_info.number_of_draw_calls,
+                                        tick_info.camera_runs);
   }
   #endif
 }

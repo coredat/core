@@ -26,14 +26,27 @@ initialize()
 
 
 void
-think(const std::shared_ptr<World_data::World> world_data, const float dt)
+think(const std::shared_ptr<World_data::World> world_data,
+      const std::shared_ptr<Resource_data::Resources> resource_data,
+      const float dt,
+      const float running_time,
+      const uint32_t width,
+      const uint32_t height,
+      Tick_information *out_tick_info)
 {
-  // Scene graph must be first so that the rest is working on correct data.
-  Scene_graph_tick::think();
+  // Gives reader better assumption on what data is being transformed.
+  LOG_TODO_ONCE("Engine ticks should pass in only the data they need.");
+
+  /*
+    Scene graph must come first. So it can remove any data that shouldn't be processed.
+  */
+  Scene_graph_tick::think(world_data, out_tick_info);
   
-  Physics_tick::think(world_data, dt);
-  
-  Renderer_tick::think();
+  /*
+    We should get to a point where rendering and physics can operate on different threads.
+  */
+  Physics_tick::think(world_data, dt, out_tick_info);
+  Renderer_tick::think(world_data, resource_data, dt, running_time, width, height, out_tick_info);
 }
 
 
@@ -48,6 +61,13 @@ void
 de_initialize()
 {
   init = false;
+  
+  /*
+    Keep this in reverse order to initialize();
+  */
+  Renderer_tick::de_initialize();
+  Physics_tick::de_initialize();
+  Scene_graph_tick::de_initialize();
 }
 
 

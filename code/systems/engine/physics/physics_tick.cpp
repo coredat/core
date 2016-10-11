@@ -117,7 +117,7 @@ collision_callback(Core::Collision_callback callback)
 
 
 void
-think(std::shared_ptr<World_data::World> world, const float dt)
+think(std::shared_ptr<World_data::World> world, const float dt, Tick_information *out_tick_info)
 {
   /*
     Collisions
