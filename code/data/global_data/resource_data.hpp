@@ -34,8 +34,13 @@ void
 resources_init();
 
 
+[[deprecated("Use shared ptr one")]]
 Resources*
 get_resources();
+
+
+std::shared_ptr<Resource_data::Resources>
+get_resource_data();
 
 
 } // ns

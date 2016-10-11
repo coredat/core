@@ -5,7 +5,9 @@
 
 namespace
 {
-  Resource_data::Resources *data = nullptr;
+  // No real technical reason for this being a shared ptr.
+  // its just to keep it uniform with the other data collections.
+  std::shared_ptr<Resource_data::Resources> data(nullptr);
 }
 
 
@@ -15,8 +17,10 @@ namespace Resource_data {
 void
 resources_init()
 {
-  static Resources resource_data;
-  data = &resource_data;
+  if(!data)
+  {
+    data.reset(new Resources);
+  }
   
   static Audio_pool audio;
   audio_pool_init(&audio);
@@ -64,6 +68,13 @@ get_resources()
     resources_init();
   }
 
+  return data.get();
+}
+
+
+std::shared_ptr<Resource_data::Resources>
+get_resource_data()
+{
   return data;
 }
 

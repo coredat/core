@@ -1,141 +1,14 @@
 #include <core/world/world.hpp>
+#include <core/entity/entity_ref.hpp>
 #include <core/entity/detail/entity_id.hpp>
 #include <core/world/detail/world_index.hpp>
-#include <core/context/context.hpp>
-#include <core/context/detail/context_detail.hpp>
 #include <core/physics/collision.hpp>
-#include <core/transform/transform.hpp>
 #include <core/common/ray.hpp>
-#include <core/common/collision.hpp>
-#include <core/common/contact.hpp>
-
-#include <debug_gui/debug_menu.hpp>
-
-#include <renderer/simple_renderer/simple_renderer_node.hpp>
-#include <renderer/simple_renderer/simple_renderer.hpp>
-#include <renderer/debug_line_renderer/debug_line_renderer_node.hpp>
-#include <renderer/debug_line_renderer/debug_line_renderer.hpp>
-
-#include <data/world_data/physics_data.hpp>
-#include <data/world_data/transform_data.hpp>
 #include <data/world_data/entity_data.hpp>
-#include <data/world_data/world_data.hpp>
-#include <data/world_data/renderer_text_draw_calls_data.hpp>
-#include <data/global_data/resource_data.hpp>
-#include <data/global_data/memory_data.hpp>
-
-#include <systems/physics_engine/collision/aabb_overlap.hpp>
-#include <systems/physics_engine/collision/collision_pairs.hpp>
-
-#include <systems/renderer_material/material.hpp>
-#include <systems/renderer_material/material_renderer.hpp>
-#include <systems/renderer_post/post_process.hpp>
-#include <systems/renderer_material/material_renderer.hpp>
-#include <systems/renderer_aabb/renderer_aabb.hpp>
-#include <systems/renderer_text/text_renderer.hpp>
-
-#include <transformations/physics/overlapping_aabb.hpp>
-#include <transformations/physics/update_world.hpp>
-#include <transformations/rendering/material_renderer.hpp>
-#include <transformations/camera/cam_priorities.hpp>
-#include <transformations/rendering/render_scene.hpp>
-#include <transformations/entity/entity_transform.hpp>
-
+#include <transformations/physics/q3_math_extensions.hpp>
+#include <systems/engine/engine.hpp>
 #include <utilities/timer.hpp>
 #include <utilities/logging.hpp>
-#include <utilities/generic_id.hpp>
-#include <utilities/conversion.hpp>
-
-#include <graphics_api/initialize.hpp>
-#include <graphics_api/clear.hpp>
-#include <graphics_api/command_buffer.hpp>
-
-#include <3rdparty/qu3e/q3.h>
-#include <transformations/physics/q3_math_extensions.hpp>
-
-#include <3rdparty/qu3e/debug/q3Render.h>
-#include <transformations/physics/q3_math_extensions.hpp>
-
-#include <systems/engine/engine.hpp>
-
-
-namespace {
-
-struct Debug_renderer : public q3Render
-{
-  math::vec3 pen_pos = math::vec3_zero();
-  math::vec3 pen_color = math::vec3_zero();
-  math::vec3 scale = math::vec3_one();
-
-  void SetPenColor( f32 r, f32 g, f32 b, f32 a = 1.0f ) override
-  {
-    pen_color = math::vec3_init(r, g, b);
-  }
-  
-  
-	void SetPenPosition( f32 x, f32 y, f32 z ) override
-  {
-    pen_pos = math::vec3_from_q3vec(q3Vec3(x, y, z));
-  }
-  
-  
-	void SetScale( f32 sx, f32 sy, f32 sz ) override
-  {
-    scale = math::vec3_init(sx, sy, sz);
-  }
-
-	// Render a line from pen position to this point.
-	// Sets the pen position to the new point.
-	void Line( f32 x, f32 y, f32 z ) override
-  {
-    math::vec3 pos = math::vec3_from_q3vec(q3Vec3(x, y, z));
-  
-    Debug_line_renderer::Line_node node;
-    node.color[0] = math::get_x(pen_color);
-    node.color[1] = math::get_y(pen_color);
-    node.color[2] = math::get_z(pen_color);
-    
-    node.position_from[0] = math::get_x(pen_pos);
-    node.position_from[1] = math::get_y(pen_pos);
-    node.position_from[2] = math::get_z(pen_pos);
-    
-    node.position_to[0] = math::get_x(pos);
-    node.position_to[1] = math::get_y(pos);
-    node.position_to[2] = math::get_z(pos);
-    
-    Debug_line_renderer::add_lines(&node, 1);
-  }
-  
-
-	void SetTriNormal( f32 x, f32 y, f32 z ) override {}
-
-	// Render a triangle with the normal set by SetTriNormal.
-	void Triangle(
-		f32 x1, f32 y1, f32 z1,
-		f32 x2, f32 y2, f32 z2,
-		f32 x3, f32 y3, f32 z3
-		) override
-  {
-    const math::vec3 old_pos = pen_pos;
-  
-    pen_pos = math::vec3_init(x3, y3, z3);
-    Line(x1, y1, z1);
-    
-    pen_pos = math::vec3_init(x1, y1, z1);
-    Line(x2, y2, z2);
-    
-    pen_pos = math::vec3_init(x2, y2, z2);
-    Line(x3, y3, z3);
-    
-    pen_pos = old_pos;
-  }
-
-	// Draw a point with the scale from SetScale
-	void Point( ) override {}
-} debug_renderer;
-
-
-} // anon ns
 
 
 namespace Core {
@@ -151,8 +24,6 @@ struct World::Impl
   float       dt_mul       = 1.f;
   float       running_time = 0.f;
   Collision_callback collision_callback = nullptr;
-  
-  Graphics_api::Command_buffer graphcis_command_buffer;
 };
 
 
@@ -165,16 +36,6 @@ World::World(Context &ctx, const World_setup setup)
   
 //  m_impl->world_data = std::make_shared<World_data::World>(setup.entity_pool_size);
   m_impl->context = &ctx;
-  
-  Graphics_api::command_buffer_create(&m_impl->graphcis_command_buffer, 1 << 17);
-  
-  Simple_renderer::initialize(); // TODO: This can be removed I think, largely superceded by mat renderer
-  Debug_line_renderer::initialize();
-  Aabb_renderer::initialize();
-  
-  ::Text_renderer::initialize();
-  ::Material_renderer::initialize();
-  ::Post_renderer::initialize();
   
   m_impl->dt_timer.start();
   
@@ -225,216 +86,21 @@ World::get_time_running() const
 void
 World::think()
 {
-  // DONT MOVE.
-  // These are handy for debugging, lldb sometimes has hard time with unique_ptr.
-  auto resources = Resource_data::get_resources();
-  auto world = Core_detail::world_index_get_world_data(m_impl->world_instance_id);
-
-  // THIS MUST BE FIRST STATE CHANGES!
-  // Otherwise we might process things that the calling code as already removed.
-  {
-    // Update world
-    auto graph_changes = world->entity_graph_changes;
-
-    // Push in new phy entities.
-    World_data::world_update_scene_graph_changes(world.get(), graph_changes);
-    
-    // Reset the entity pool for new chandges.
-    World_data::pending_scene_graph_change_reset(graph_changes);
-  }
-  
   // Calculate delta_time
   {
     const util::milliseconds frame_time = m_impl->dt_timer.split();
     m_impl->dt = static_cast<float>(frame_time) / 1000.f;
     
     m_impl->running_time += m_impl->dt;
-  }  
-  
-  // Collisions
-  {
-    Core::Collision_pair *collisions_arr = nullptr;
-    uint32_t number_of_collisions = 0;
-    
-    Physics_transform::update_world(world,
-                                    &collisions_arr,
-                                    &number_of_collisions);
-    
-    if(number_of_collisions && m_impl->collision_callback)
-    {
-      for(uint32_t i = 0; i < number_of_collisions; ++i)
-      {
-        m_impl->collision_callback(Collision_type::enter, collisions_arr[i]);
-      }
-    }
-    
-    auto to_core_trans = [](const q3Transform &other)
-    {
-      math::transform trans = math::transform_init_from_q3(other);
-      return Core::Transform(trans.position, trans.scale, trans.rotation);
-    };
-  
-    // Set transforms.
-    for(size_t i = 0; i < world->physics_data->size; ++i)
-    {
-      if(world->physics_data->property_rigidbody[i])
-      {
-        auto trans = reinterpret_cast<q3Body*>(world->physics_data->property_rigidbody[i])->GetTransform();
-        
-        Core::Entity_ref ref(Core_detail::entity_id_from_uint(world->physics_data->physics_id[i]));
-        
-        auto old_tran = ref.get_transform();
-        
-        auto core_trans = to_core_trans(trans);
-        core_trans.set_scale(old_tran.get_scale());
-        
-        Entity_detail::set_transform(world->physics_data->physics_id[i],
-                                     world->entity,
-                                     world->transform,
-                                     world->physics_data,
-                                     world->mesh_data,
-                                     world->text_data,
-                                     core_trans,
-                                     false);
-      }
-    }
   }
-  
 
-  /*
-    Camera Runs
-    --
-    For each camera we need a to create a camera run.
-    Will will render all the things it is interested in.
-    
-    TODO
-    --
-    Can we async this?
-  */
-  auto cam_data = world->camera_data;
-
-  World_data::data_lock(cam_data);
-  uint32_t number_of_cam_runs = 0;
-  
-  Camera_utils::Cam_run *cam_runs = SCRATCH_ALIGNED_ALLOC(Camera_utils::Cam_run, cam_data->size);
-  memset(cam_runs, 0, sizeof(Camera_utils::Cam_run) * cam_data->size);
+  // Engine Think
   {
-    number_of_cam_runs = cam_data->size;
-    
-    // Generate cam_run data
-    {
-      Core::Transform *cam_transforms = SCRATCH_ALIGNED_ALLOC(Core::Transform, cam_data->size);
-      
-      Camera_utils::get_camera_transforms(world->transform,
-                                          cam_data->property_entity_id,
-                                          cam_transforms,
-                                          cam_data->size);
-      
-      Camera_utils::calculate_camera_runs(cam_data,
-                                          Resource_data::get_resources()->texture_data,
-                                          cam_transforms,
-                                          cam_runs,
-                                          cam_data->size);
-    }
-  }
-  
-  World_data::data_unlock(cam_data);
-  
-  
-  /*
-    Generate the Draw call list
-    --
-    This list is every draw call that needs to be rendered.
-    
-    TODO
-    --
-    Can we async this?
-  */
-  const size_t draw_call_count = world->mesh_data->size;
-  ::Material_renderer::Draw_call *draw_calls = SCRATCH_ALIGNED_ALLOC(::Material_renderer::Draw_call, draw_call_count);
-  memset(draw_calls, 0, sizeof(::Material_renderer::Draw_call) * draw_call_count);
-  {
-    for(uint32_t i = 0; i < world->mesh_data->size; ++i)
-    {
-      // Draw call from the data.
-      const World_data::Mesh_renderer_draw_call *draw_call_data = &world->mesh_data->property_draw_call[i];
+    auto resources = Resource_data::get_resource_data();
+    auto world = Core_detail::world_index_get_world_data(m_impl->world_instance_id);
 
-      // No model? keep moving.
-      if(!draw_call_data->model_id)
-      {
-        continue;
-      }
-      
-      // Get the hardware mesh.
-      // Possible extension. We could also process these based on how far away the camera is.
-      Resource_data::mesh_data_get_property_mesh(resources->mesh_data, draw_call_data->model_id, &draw_calls[i].mesh);
-      
-      const float *world_mat = draw_call_data->world_matrix;
-
-      memcpy(&draw_calls[i], world_mat, sizeof(float) * 16);
-      
-      // Get cull mask.
-      // This isn't particularly nice. We should already have this data to save us looking for it.
-      const util::generic_id entity_id = world->mesh_data->renderer_mesh_id[i];
-      World_data::entity_data_get_property_tag(world->entity, entity_id, &draw_calls[i].cull_mask);
-    }
+    Engine::think(world, resources, m_impl->dt);
   }
-  
-  
-  // Render before as it will use the camera matrix from the wrong frame otherwise.
-  #ifdef CORE_DEBUG_MENU
-  world->scene->Render(&debug_renderer);
-  #endif
-  
-  
-  /*
-    Render the world
-    --
-    Takes the camera, and draw calls and renders the world accordingly.
-  */
-  uint32_t number_of_draw_calls = 0;
-  Rendering::render_main_scene(m_impl->dt,
-                               m_impl->running_time,
-                               m_impl->context->get_width(),
-                               m_impl->context->get_height(),
-                               world.get(),
-                               resources->material_data,
-                               resources->post_data,
-                               cam_runs,
-                               number_of_cam_runs,
-                               draw_calls,
-                               world->mesh_data->size,
-                               &number_of_draw_calls);
-  
-  LOG_TODO_ONCE("Scratch code for text rendering");
-  
-  for(uint32_t i = 0; i < number_of_cam_runs; ++i)
-  {
-    auto cam = &cam_runs[i];
-    
-    if(cam->post_process_id)
-    {
-      continue;
-    }
-//    
-//    const math::mat4 scale     = math::mat4_scale(math::vec3_init(1.f));
-//    const math::mat4 world     = math::mat4_multiply(math::mat4_id(), scale);
-//    const math::mat4 view_proj = math::mat4_multiply(cam_runs[i].view, cam_runs[i].proj);
-//
-//    const GLsizei width  = m_impl->context->get_width(); //cam->fbo.color_buffer[0].width; // viewport_x ?
-//    const GLsizei height = m_impl->context->get_height(); //cam->fbo.color_buffer[0].height; // viewport_y ?
-//    
-//    glViewport(0, 0, width, height);
-//
-//    ::Text_renderer::render(view_proj, m_impl->world_data->text_data->property_draw_call, m_impl->world_data->text_data->size);
-  }
-  
-  
-  /*
-   Testing
-  */
-  auto buf = &m_impl->graphcis_command_buffer;
-  Graphics_api::command_buffer_execute(buf);
   
   /*
     Debug Menu
@@ -443,13 +109,13 @@ World::think()
   */
   #ifdef CORE_DEBUG_MENU
   {
-    Debug_menu::display_global_data_menu(m_impl->context->get_context_data()->input_pool);
-    Debug_menu::display_world_data_menu(world.get(),
-                                        m_impl->dt,
-                                        m_impl->dt_mul,
-                                        world->scene->GetBodyCount(),
-                                        number_of_draw_calls,
-                                        number_of_cam_runs);
+//    Debug_menu::display_global_data_menu(m_impl->context->get_context_data()->input_pool);
+//    Debug_menu::display_world_data_menu(world.get(),
+//                                        m_impl->dt,
+//                                        m_impl->dt_mul,
+//                                        world->scene->GetBodyCount(),
+//                                        number_of_draw_calls,
+//                                        number_of_cam_runs);
   }
   #endif
 }
@@ -460,6 +126,9 @@ World::set_collision_callback(Collision_callback callback)
 {
   assert(m_impl);
   m_impl->collision_callback = callback;
+  
+  LOG_TODO_ONCE("Remove this hack callback");
+  Engine::set_collision_callback(callback);
 }
 
 

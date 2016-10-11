@@ -28,9 +28,19 @@ initialize()
 void
 think(const std::shared_ptr<World_data::World> world_data, const float dt)
 {
+  // Scene graph must be first so that the rest is working on correct data.
   Scene_graph_tick::think();
-  Physics_tick::think();
+  
+  Physics_tick::think(world_data, dt);
+  
   Renderer_tick::think();
+}
+
+
+void
+set_collision_callback(Core::Collision_callback callback)
+{
+  Physics_tick::collision_callback(callback);
 }
 
 
