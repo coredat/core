@@ -15,18 +15,19 @@ class Entity_interface
 {
 protected:
 
-  Entity_interface();
-  Entity_interface(Core::World &world);
-  Entity_interface(const Core_detail::Entity_id id);
+                                Entity_interface();
+                                Entity_interface(Core::World &world);
+                                Entity_interface(const Core_detail::Entity_id id);
   
-  virtual ~Entity_interface();
+  virtual                       ~Entity_interface();
   
-  Entity_interface(const Entity_interface &other);
-  Entity_interface(Entity_interface &&other);
+                                Entity_interface(const Entity_interface &other);
+                                Entity_interface(Entity_interface &&other);
 
 public:
 
   uint32_t                      get_id() const;
+  
   
   // ** Life time ** //
   void                          destroy();                                    //!< Marks the entity for destruction, this wont happen till then end of the frame.
