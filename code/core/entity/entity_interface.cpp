@@ -12,7 +12,7 @@
 #include <data/world_data/pending_scene_graph_change_data.hpp>
 #include <data/world_data/world_pools.hpp>
 #include <data/world_data/entity_data.hpp>
-#include <data/world_data/transform_data.hpp>
+#include <data/world_data/transform.hpp>
 #include <data/world_data/renderer_mesh_data.hpp>
 
 #include <transformations/entity/entity_common.hpp>
