@@ -14,7 +14,7 @@ namespace World_data {
 
 struct World
 {
-  Transform_data                    *transform            = nullptr;
+  Data::Transform_data                    *transform            = nullptr;
   Entity_data                       *entity               = nullptr;
   Pending_scene_graph_change_data   *entity_graph_changes = nullptr;
   Camera_data                       *camera_data          = nullptr;

@@ -18,7 +18,7 @@ namespace Entity_detail {
 void
 set_transform(const util::generic_id this_id,
               World_data::Entity_data *entity_data,
-              World_data::Transform_data *transform_data,
+              Data::Transform_data *transform_data,
               World_data::Physics_data *phys_data,
               World_data::Renderer_mesh_data *mesh_data,
               World_data::Renderer_text_draw_calls_data *text_data,
@@ -32,7 +32,7 @@ set_transform(const util::generic_id this_id,
 math::transform
 get_transform(const util::generic_id this_id,
               World_data::Entity_data *entity_data,
-              World_data::Transform_data *transform_data);
+              Data::Transform_data *transform_data);
 
 
 /*
@@ -41,7 +41,7 @@ get_transform(const util::generic_id this_id,
 Core::Transform
 get_core_transform(const util::generic_id this_id,
                    World_data::Entity_data *entity_data,
-                   World_data::Transform_data *transform_data);
+                   Data::Transform_data *transform_data);
   
 
 } // ns

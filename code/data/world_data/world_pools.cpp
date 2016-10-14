@@ -32,8 +32,9 @@ World::World(const uint32_t entity_hint)
   Renderer_mesh_data *mesh_data = new Renderer_mesh_data;
   renderer_mesh_data_init(mesh_data, entity_hint);
   
-  Transform_data *transform_data = new Transform_data;
-  World_data::transform_data_init(transform_data, entity_hint);
+  Data::Transform_data *transform_data = new Data::Transform_data;
+//  World_data::transform_data_init(transform_data, entity_hint);
+  Data::transform_create(transform_data, entity_hint);
   
   Entity_data *entity_data = new Entity_data;
   World_data::entity_data_init(entity_data, entity_hint);
@@ -105,7 +106,7 @@ world_update_scene_graph_changes(World_data::World *world_data,
     const util::generic_id id = graph_changes->entities_to_delete[i];
     
     entity_data_erase(world_data->entity, id);
-    transform_data_erase(world_data->transform, id);
+    transform_remove(world_data->transform, id);
     
     if(renderer_mesh_data_exists(world_data->mesh_data, id))
     {

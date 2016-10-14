@@ -112,23 +112,23 @@ calculate_camera_runs(const World_data::Camera_data *cam_data,
 
 
 void
-get_camera_transforms(const World_data::Transform_data *transform_data,
+get_camera_transforms(const Data::Transform_data *transform_data,
                       const util::generic_id entity_ids[],
                       Core::Transform out_transforms[],
                       const uint32_t size)
 {
-  World_data::data_lock(transform_data);
+  Data::data_lock(transform_data);
 
   for(uint32_t i = 0; i < size; ++i)
   {
     // Get the transform entity and
     math::transform trans;
-    World_data::transform_data_get_property_transform(transform_data, entity_ids[i], &trans);
+    Data::transform_get_transform(transform_data, entity_ids[i], &trans);
     
     out_transforms[i] = Core::Transform(trans.position, trans.scale, trans.rotation);
   }
   
-  World_data::data_unlock(transform_data);
+  Data::data_unlock(transform_data);
 }
 
 

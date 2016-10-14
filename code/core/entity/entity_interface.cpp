@@ -115,24 +115,24 @@ Entity_interface::Entity_interface(Core::World &world)
     {
       auto transform_data = m_impl->world->transform;
       
-      World_data::data_lock(transform_data);
+      Data::data_lock(transform_data);
       
       const util::generic_id entity_id = Core_detail::entity_id_to_uint(m_impl->id);
     
-      if(World_data::transform_data_push_back(transform_data, entity_id))
+      if(Data::transform_insert(transform_data, entity_id))
       {
         const math::transform trans{};
-        World_data::transform_data_set_property_transform(transform_data, entity_id, trans);
+        Data::transform_set_transform(transform_data, entity_id, &trans);
         
         const math::aabb bounding_box{};
-        World_data::transform_data_set_property_aabb(transform_data, entity_id, bounding_box);
+        Data::transform_set_aabb(transform_data, entity_id, &bounding_box);
       }
       else
       {
         success = false;
       }
       
-      World_data::data_unlock(transform_data);
+      Data::data_unlock(transform_data);
     }
     
     // Create Mesh record

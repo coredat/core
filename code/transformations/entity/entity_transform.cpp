@@ -18,18 +18,18 @@ namespace {
 
 inline void
 update_transform(const util::generic_id this_id,
-                 World_data::Transform_data *transform_data,
+                 Data::Transform_data *transform_data,
                  const math::transform *transform)
 {
-  World_data::data_lock(transform_data);
+  Data::data_lock(transform_data);
 
   size_t index;
-  if(World_data::transform_data_exists(transform_data, this_id, &index))
+  if(Data::transform_exists(transform_data, this_id, &index))
   {
-    transform_data->property_transform[index] = *transform;
+    transform_data->field_transform[index] = *transform;
   }
   
-  World_data::data_unlock(transform_data);
+  Data::data_unlock(transform_data);
 }
 
 
@@ -85,7 +85,7 @@ udpate_text_renderer(const util::generic_id this_id,
 void
 set_transform(const util::generic_id this_id,
               World_data::Entity_data *entity_data,
-              World_data::Transform_data *transform_data,
+              Data::Transform_data *transform_data,
               World_data::Physics_data *phys_data,
               World_data::Renderer_mesh_data *mesh_data,
               World_data::Renderer_text_draw_calls_data *text_data,
@@ -108,9 +108,9 @@ set_transform(const util::generic_id this_id,
   {
     assert(transform_data);
   
-    World_data::data_lock(transform_data);
-    World_data::transform_data_get_property_aabb(transform_data, this_id, &curr_aabb);
-    World_data::data_unlock(transform_data);
+    Data::data_lock(transform_data);
+    Data::transform_get_aabb(transform_data, this_id, &curr_aabb);
+    Data::data_unlock(transform_data);
   }
   
   // Update all the things that want to know.
@@ -131,7 +131,7 @@ set_transform(const util::generic_id this_id,
 Core::Transform
 get_core_transform(const util::generic_id this_id,
                    World_data::Entity_data *entity_data,
-                   World_data::Transform_data *transform_data)
+                   Data::Transform_data *transform_data)
 {
   assert(entity_data);
   assert(transform_data);
@@ -150,7 +150,7 @@ get_core_transform(const util::generic_id this_id,
 math::transform
 get_transform(const util::generic_id this_id,
               World_data::Entity_data *entity_data,
-              World_data::Transform_data *transform_data)
+              Data::Transform_data *transform_data)
 {
   assert(transform_data);
 
@@ -162,17 +162,17 @@ get_transform(const util::generic_id this_id,
   // Get Data
   math::transform return_transform;
   {
-    World_data::data_lock(transform_data);
+    Data::data_lock(transform_data);
 
-    if(!World_data::transform_data_get_property_transform(transform_data,
-                                                          this_id,
-                                                          &return_transform))
+    if(!Data::transform_get_transform(transform_data,
+                                            this_id,
+                                            &return_transform))
     {
       assert(false);
       LOG_WARNING(Error_string::data_not_found());
     }
     
-    World_data::data_unlock(transform_data);
+    Data::data_unlock(transform_data);
   }
   
   return return_transform;

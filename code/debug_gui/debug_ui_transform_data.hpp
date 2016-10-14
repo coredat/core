@@ -21,7 +21,7 @@ namespace Debug_menu {
 
 
 void
-display_transform_data(const World_data::Transform_data *data);
+display_transform_data(const Data::Transform_data *data);
 
 
 } // ns

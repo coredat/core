@@ -18,7 +18,7 @@ namespace Debug_menu {
 
 
 void
-display_transform_data(const World_data::Transform_data *data)
+display_transform_data(const Data::Transform_data *data)
 {
   ImGui::Begin("Transform data");
   {
@@ -31,12 +31,12 @@ display_transform_data(const World_data::Transform_data *data)
     for(size_t i = 0; i < data->size; ++i)
     {
       // Key
-      ImGui::Text("Key: %d", data->transform_id[i]);
+      ImGui::Text("Key: %d", data->keys[i]);
 
 
       // Get property_transform
       math::transform property_transform_value;
-      World_data::transform_data_get_property_transform(data, data->transform_id[i], &property_transform_value);
+      Data::transform_get_transform(data, data->keys[i], &property_transform_value);
       ImGui::Text("Transform");
       ImGui::Text("position: %.3f, %.3f, %.3f", math::get_x(property_transform_value.position), math::get_y(property_transform_value.position), math::get_z(property_transform_value.position));
       ImGui::Text("rotation: %.3f, %.3f, %.3f, %.3f", math::get_x(property_transform_value.rotation), math::get_y(property_transform_value.rotation), math::get_z(property_transform_value.rotation), math::get_w(property_transform_value.rotation));
@@ -45,7 +45,7 @@ display_transform_data(const World_data::Transform_data *data)
 
       // Get property_aabb
       math::aabb property_aabb_value;
-      World_data::transform_data_get_property_aabb(data, data->transform_id[i], &property_aabb_value);
+      Data::transform_get_aabb(data, data->keys[i], &property_aabb_value);
       ImGui::Text("Aabb");
       ImGui::Text("Min: %.3f, %.3f, %.3f", math::get_x(property_aabb_value.min), math::get_y(property_aabb_value.min), math::get_z(property_aabb_value.min));
       ImGui::Text("Max: %.3f, %.3f, %.3f", math::get_x(property_aabb_value.max), math::get_y(property_aabb_value.max), math::get_z(property_aabb_value.max));

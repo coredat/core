@@ -39,7 +39,7 @@ set_collider(const util::generic_id this_id,
     assert(transform_data);
   
     size_t index;
-    if(World_data::transform_data_exists(transform_data, this_id, &index))
+    if(Data::transform_exists(transform_data, this_id, &index))
     {
       //TODO: This can be async
       update_component(this_id, world->entity, World_data::Entity_component::has_physics);
@@ -61,10 +61,10 @@ set_collider(const util::generic_id this_id,
             math::aabb entity_aabb;
             math::transform curr_transform;
             {
-              World_data::data_lock(world->transform);
-              World_data::transform_data_get_property_aabb(world->transform, this_id, &entity_aabb);
-              World_data::transform_data_get_property_transform(world->transform, this_id, &curr_transform);
-              World_data::data_unlock(world->transform);
+              Data::data_lock(world->transform);
+              Data::transform_get_aabb(world->transform, this_id, &entity_aabb);
+              Data::transform_get_transform(world->transform, this_id, &curr_transform);
+              Data::data_unlock(world->transform);
             }
           
             // Set physics

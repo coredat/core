@@ -151,7 +151,7 @@ World::get_entity_count_in_world() const
 {
   assert(m_impl && m_impl->world_instance_id);
   auto world = Core_detail::world_index_get_world_data(m_impl->world_instance_id);
-
+  
   return world->entity->size;
 }
 

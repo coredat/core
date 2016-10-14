@@ -41,7 +41,7 @@ has_renderer(const util::generic_id this_id,
 void
 set_renderer(const util::generic_id this_id,
              World_data::Entity_data *entity_data,
-             World_data::Transform_data *transform_data,
+             Data::Transform_data *transform_data,
              World_data::Renderer_mesh_data *renderer_material,
              World_data::Renderer_text_draw_calls_data *text_data,
              const Core::Renderer &renderer)
@@ -194,7 +194,7 @@ get_renderer(const util::generic_id this_id,
 void
 set_renderer_material(const util::generic_id this_id,
                       World_data::Entity_data *entity_data,
-                      World_data::Transform_data *transform_data,
+                      Data::Transform_data *transform_data,
                       World_data::Renderer_mesh_data *mesh_data,
                       const util::generic_id material_id,
                       const util::generic_id model_id)
@@ -272,7 +272,7 @@ set_renderer_material(const util::generic_id this_id,
       
       // Get the trasnform as we are insreting a new record.
       math::transform trans;
-      World_data::transform_data_get_property_transform(transform_data, this_id, &trans);
+      Data::transform_get_transform(transform_data, this_id, &trans);
       
       const math::mat4 world_mat = math::transform_get_world_matrix(trans);
       memcpy(copy.world_matrix, &world_mat, sizeof(world_mat));
@@ -318,9 +318,9 @@ set_renderer_material(const util::generic_id this_id,
   }
   
   {
-    World_data::data_lock(transform_data);
-    World_data::transform_data_set_property_aabb(transform_data, this_id, return_aabb);
-    World_data::data_unlock(transform_data);
+    Data::data_lock(transform_data);
+    Data::transform_set_aabb(transform_data, this_id, &return_aabb);
+    Data::data_unlock(transform_data);
   }
 }
 
@@ -355,7 +355,7 @@ get_renderer_material(const util::generic_id this_id,
 void
 set_renderer_text(const util::generic_id this_id,
                   World_data::Entity_data *entity_data,
-                  World_data::Transform_data *transform_data,
+                  Data::Transform_data *transform_data,
                   World_data::Renderer_text_draw_calls_data *text_data,
                   const util::generic_id font_id,
                   const util::generic_id model_id)
@@ -655,9 +655,9 @@ set_renderer_text(const util::generic_id this_id,
   }
   
   {
-    World_data::data_lock(transform_data);
-    World_data::transform_data_set_property_aabb(transform_data, this_id, return_aabb);
-    World_data::data_unlock(transform_data);
+    Data::data_lock(transform_data);
+    Data::transform_set_aabb(transform_data, this_id, &return_aabb);
+    Data::data_unlock(transform_data);
   }  
   
   Resource_data::data_unlock(glyph_data);

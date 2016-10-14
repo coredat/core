@@ -16,7 +16,7 @@ has_renderer(const util::generic_id this_id,
 void
 set_renderer(const util::generic_id this_id,
              World_data::Entity_data *entity_data,
-             World_data::Transform_data *transform_data,
+             Data::Transform_data *transform_data,
              World_data::Renderer_mesh_data *mesh_data,
              World_data::Renderer_text_draw_calls_data *text_data,
              const Core::Renderer &renderer);
@@ -31,7 +31,7 @@ get_renderer(const util::generic_id this_id,
 void
 set_renderer_material(const util::generic_id this_id,
                       World_data::Entity_data *entity_data,
-                      World_data::Transform_data *transform_data,
+                      Data::Transform_data *transform_data,
                       World_data::Renderer_mesh_data *mesh_data,
                       const util::generic_id material_id,
                       const util::generic_id model_id);
@@ -47,7 +47,7 @@ get_renderer_material(const util::generic_id this_id,
 void
 set_renderer_text(const util::generic_id this_id,
                   World_data::Entity_data *entity_data,
-                  World_data::Transform_data *transform_data,
+                  Data::Transform_data *transform_data,
                   World_data::Renderer_text_draw_calls_data *text_data,
                   const util::generic_id font_id,
                   const util::generic_id model_id);

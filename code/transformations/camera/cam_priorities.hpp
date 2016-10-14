@@ -54,7 +54,7 @@ calculate_camera_runs(const World_data::Camera_data *cam_data,
 
 
 void
-get_camera_transforms(const World_data::Transform_data *transform_data,
+get_camera_transforms(const Data::Transform_data *transform_data,
                       const util::generic_id entity_ids[],
                       Core::Transform out_transforms[],
                       const uint32_t size);

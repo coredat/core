@@ -1,192 +1,151 @@
 
-
 /*
-  WARNING
-  -------
-  This file is auto generated any changes here may be overwritten.
-  See code_gen.rake in scripts folder.
-
-  This file was last generated on: Sun 09 Oct 2016
+  Warning
+  --
+  This file is auto generated changes here may be overwritten.
 */
 
 
-#include <data/world_data/transform_data.hpp>
-#include <data/global_data/memory_data.hpp>
-#include <common/error_strings.hpp>
-#include <utilities/logging.hpp>
-#include <utilities/memory.hpp>
-#include <utilities/string_helpers.hpp>
+#include "transform_data.hpp"
 #include <assert.h>
 #include <cstring>
 
 
-namespace World_data {
+namespace Data {
 
 
-void
-transform_data_init(Transform_data *data, const size_t size_hint)
-{
-  // Argument validation.
-  assert(data && size_hint);
+// ====================== //
+// COMMON MODEL FUNCTIONS //
+// ====================== //
 
-  // 16 byte alignment buffer, apply to all for safety.
-  constexpr size_t simd_buffer = 16;
-
-  // Calculate the various sizes of things.
-  const size_t bytes_transform_id = sizeof(*data->transform_id) * size_hint + simd_buffer;
-  const size_t bytes_property_transform = sizeof(*data->property_transform) * size_hint + simd_buffer;
-  const size_t bytes_property_aabb = sizeof(*data->property_aabb) * size_hint + simd_buffer;
-
-  const size_t bytes_to_alloc = bytes_transform_id + bytes_property_transform + bytes_property_aabb;
-
-  // Allocate some memory.
-  util::memory_chunk *data_memory = const_cast<util::memory_chunk*>(&data->memory);
-  *data_memory = Memory::request_memory_chunk(bytes_to_alloc, "transform_data");
-
-  assert(data_memory->bytes_in_chunk == bytes_to_alloc);
-
-  data_lock(data);
-
-  // Init memory
-  {
-    size_t byte_counter = 0;
-    const void *alloc_start = data->memory.chunk_start;
-
-    // Assign transform_id memory
-    {
-      void *offset = util::mem_offset(alloc_start, byte_counter);
-      void *aligned = util::mem_next_16byte_boundry(offset);
-
-      data->transform_id = reinterpret_cast<util::generic_id*>(aligned);
-      #ifndef NDEBUG
-      memset(offset, 0, bytes_transform_id);
-      #endif
-
-      byte_counter += bytes_transform_id;
-      assert(byte_counter <= bytes_to_alloc);
-    }
-    // Assign property_transform memory
-    {
-      void *offset = util::mem_offset(alloc_start, byte_counter);
-      void *aligned = util::mem_next_16byte_boundry(offset);
-
-      data->property_transform = reinterpret_cast<math::transform*>(aligned);
-      #ifndef NDEBUG
-      memset(offset, 0, bytes_property_transform);
-      #endif
-
-      byte_counter += bytes_property_transform;
-      assert(byte_counter <= bytes_to_alloc);
-    }
-    // Assign property_aabb memory
-    {
-      void *offset = util::mem_offset(alloc_start, byte_counter);
-      void *aligned = util::mem_next_16byte_boundry(offset);
-
-      data->property_aabb = reinterpret_cast<math::aabb*>(aligned);
-      #ifndef NDEBUG
-      memset(offset, 0, bytes_property_aabb);
-      #endif
-
-      byte_counter += bytes_property_aabb;
-      assert(byte_counter <= bytes_to_alloc);
-    }
-  }
-
-  // Set the size and capacity
-  {
-    data->size = 0;
-
-    size_t *capacity = const_cast<size_t*>(&data->capacity);
-    *capacity = size_hint;
-  }
-
-  data_unlock(data);
-}
-
-
-void
-transform_data_free(Transform_data *data)
-{
-  assert(data);
-}
-
-
-size_t
-transform_data_get_size(const Transform_data *data)
-{
-  assert(data);
-  return data->size;
-}
-
-
-size_t
-transform_data_get_capacity(const Transform_data *data)
-{
-  assert(data);
-  return data->capacity;
-}
 
 
 void
 data_lock(const Transform_data *data)
 {
-  assert(data);
+  // Not yet impl.
 }
 
 
 void
 data_unlock(const Transform_data *data)
 {
-  assert(data);
+  // Not yet impl.
 }
 
 
 bool
-transform_data_push_back(Transform_data *data, const util::generic_id key, size_t *out_index)
+transform_create(Transform_data *data, const size_t size_hint)
 {
-  assert(data && key);
-  assert(data->size < data->capacity);
+  assert(data);
+  assert(size_hint);
 
-  // TODO: Duplicate key check
+  // Size up the capacity
+  {
+    size_t *capacity = const_cast<size_t*>(&data->capacity);
+    *capacity = size_hint;
+  }
 
+  // Allocate memory
+  bool all_alloc = true;
+  {
+    // Alloc keys
+    if(all_alloc)
+    {
+      data->keys = new uint32_t[size_hint];
+      assert(data->keys);
+      if(!data->keys) { all_alloc = false; }
+      else { memset(data->keys, 0, sizeof(uint32_t) * size_hint); }
+    }
+
+    // Alloc space for transform
+    if(all_alloc)
+    {
+      data->field_transform = new math::transform[size_hint * 1];
+      assert(data->field_transform);
+      if(!data->field_transform) { all_alloc = false; }
+      else { memset(data->field_transform, 0, sizeof(math::transform) * size_hint * 1); }
+    }
+
+    // Alloc space for aabb
+    if(all_alloc)
+    {
+      data->field_aabb = new math::aabb[size_hint * 1];
+      assert(data->field_aabb);
+      if(!data->field_aabb) { all_alloc = false; }
+      else { memset(data->field_aabb, 0, sizeof(math::aabb) * size_hint * 1); }
+    }
+  }
+
+  // Failed so clean up.
+  if(!all_alloc)
+  {
+    transform_destroy(data);
+  }
+
+  return all_alloc;
+}
+
+
+void
+transform_destroy(Transform_data *data)
+{
+  // Free up the memory.
+  {
+    // Remove keys
+    if(data->keys) { delete[] data->keys; }
+    data->keys = nullptr;
+
+    // Remove transform
+    if(data->field_transform) { delete[] data->field_transform; }
+    data->field_transform = nullptr;
+
+    // Remove aabb
+    if(data->field_aabb) { delete[] data->field_aabb; }
+    data->field_aabb = nullptr;
+  }
+
+  // Zero capacity and size
+  {
+    data->size = 0;
+
+    size_t *capacity = const_cast<size_t*>(&data->capacity);
+    *capacity = 0;
+  }
+}
+
+
+uint32_t
+transform_insert(Transform_data *data, const uint32_t key)
+{
+  assert(data);
+  assert(data->keys);
+
+  // Do we need to resize?
   if(data->size >= data->capacity)
   {
-    LOG_ERROR(Error_string::no_free_space());
-
-    return false;
+    transform_resize_capacity(data, data->capacity << 1);
   }
 
-  const uint32_t index = data->size;
-
-  if(out_index)
+  // Insert key at the back
   {
-    *out_index = index;
+    const uint32_t new_key = key;
+    data->keys[data->size++] = new_key;
+
+    return new_key;
   }
 
-  ++(data->size);
 
-  data->transform_id[index] = key;
-
-  // Memset the properties
-  {
-    memset(&data->property_transform[index], 0, sizeof(*data->property_transform));
-    memset(&data->property_aabb[index], 0, sizeof(*data->property_aabb));
-  }
-
-  return true;
+  return 0;
 }
 
 
 bool
-transform_data_erase(Transform_data *data, const util::generic_id key)
+transform_remove(Transform_data *data, const uint32_t key)
 {
-  // Param check
-  assert(data && key);
+  size_t index_to_erase = 0;
 
-  size_t index_to_erase;
-
-  if(transform_data_exists(data, key, &index_to_erase))
+  if(transform_exists(data, key, &index_to_erase))
   {
     assert(index_to_erase < data->size);
 
@@ -195,130 +154,295 @@ transform_data_erase(Transform_data *data, const util::generic_id key)
 
     --(data->size);
 
-    // Shuffle the memory down.
-    memmove(&data->transform_id[index_to_erase], &data->transform_id[start_index], size_to_end * sizeof(*data->transform_id));
-    memmove(&data->property_transform[index_to_erase], &data->property_transform[start_index], size_to_end * sizeof(*data->property_transform));
-    memmove(&data->property_aabb[index_to_erase], &data->property_aabb[start_index], size_to_end * sizeof(*data->property_aabb));
-  }
-  else
-  {
-    LOG_ERROR(Error_string::entity_not_found());
-    assert(false);
+    // Shuffle the data down
+    memmove(&data->keys[index_to_erase], &data->keys[start_index], size_to_end * sizeof(*data->keys));
+    memmove(&data->field_transform[index_to_erase * 1], &data->field_transform[start_index * 1], size_to_end * sizeof(*data->field_transform) * 1);
+    memmove(&data->field_aabb[index_to_erase * 1], &data->field_aabb[start_index * 1], size_to_end * sizeof(*data->field_aabb) * 1);
 
+    return true;
+  }
+
+  return false;
+}
+
+
+bool
+transform_exists(const Transform_data *data, const uint32_t key, size_t *out_index)
+{
+  assert(data);
+  assert(data != 0);
+
+  for(size_t i = 0; i < data->size; ++i)
+  {
+    if(data->keys[i] == key)
+    {
+      if(out_index)
+      {
+        *out_index = i;
+      }
+
+      return true;
+    }
+  }
+
+  return false;
+}
+
+
+bool
+transform_is_empty(const Transform_data *data, const size_t size_hint)
+{
+  assert(data);
+
+  if(!data) { return false; }
+
+  return !!data->size;
+}
+
+
+size_t
+transform_get_size(const Transform_data *data)
+{
+  assert(data);
+
+  if(!data) { return 0; }
+
+  return data->size;
+}
+
+
+size_t
+transform_get_capacity(const Transform_data *data)
+{
+  assert(data);
+
+  if(!data) { return 0; }
+
+  return data->capacity;
+}
+
+
+bool
+transform_resize_capacity(Transform_data *data, const size_t size_hint)
+{
+  assert(data);
+  assert(size_hint > data->size); // Will slice data
+
+  // Create new data.
+  Transform_data new_data;
+  const bool created_new = transform_create(&new_data, size_hint);
+
+  // Failed to resize.
+  if(!created_new)
+  {
+    transform_destroy(&new_data);
     return false;
   }
+
+  // Copy over data
+  {
+    memcpy(new_data.keys, data->keys, sizeof(uint32_t) * data->size);
+    memcpy(new_data.field_transform, data->field_transform, sizeof(math::transform) * data->size * 1);
+    memcpy(new_data.field_aabb, data->field_aabb, sizeof(math::aabb) * data->size * 1);
+  }
+
+  // Swap ptrs
+  {
+    uint32_t *old_keys = data->keys;
+    data->keys = new_data.keys;
+    new_data.keys = old_keys;
+
+    math::transform *old_transform = data->field_transform;
+    data->field_transform = new_data.field_transform;
+    new_data.field_transform = old_transform;
+
+    math::aabb *old_aabb = data->field_aabb;
+    data->field_aabb = new_data.field_aabb;
+    new_data.field_aabb = old_aabb;
+  }
+
+  // Set the Capacity
+  {
+    size_t *capacity = const_cast<size_t*>(&data->capacity);
+    *capacity = new_data.capacity;
+  }
+
+  // Destroy new data
+  transform_destroy(&new_data);
 
   return true;
 }
 
 
-bool
-transform_data_exists(const Transform_data *data, const util::generic_id key, size_t *out_index)
-{
-  assert(data && key);
 
-  if(data->size == 0)
+// ===================== //
+// DATA GETTER FUNCTIONS //
+// ===================== //
+
+
+const math::transform*
+transform_get_const_transform_data(const Transform_data *data)
+{
+  assert(data);
+  assert(data->field_transform);
+
+  return data->field_transform;
+}
+
+
+math::transform*
+transform_get_transform_data(Transform_data *data)
+{
+  assert(data);
+  assert(data->field_transform);
+
+  return data->field_transform;
+}
+
+
+const math::aabb*
+transform_get_const_aabb_data(const Transform_data *data)
+{
+  assert(data);
+  assert(data->field_aabb);
+
+  return data->field_aabb;
+}
+
+
+math::aabb*
+transform_get_aabb_data(Transform_data *data)
+{
+  assert(data);
+  assert(data->field_aabb);
+
+  return data->field_aabb;
+}
+
+
+// =============== //
+// FIELD FUNCTIONS //
+// =============== //
+
+
+bool
+transform_get_transform(const Transform_data *data, const uint32_t key, math::transform *return_value)
+{
+  assert(data);
+  assert(key != 0);
+  assert(data->field_transform);
+  assert(return_value);
+
+  // Search for its index.
+  // If we find it we can return the value.
+
+  size_t index = 0;
+
+  if(transform_exists(data, key, &index))
   {
-    return false;
+    assert(index < data->size);
+
+    if(index < data->size)
+    {
+      *return_value = data->field_transform[index];
+
+      return true;
+    }
   }
 
-  bool found = false;
-
-  size_t no_index;
-  if(!out_index) { out_index = &no_index; }
-
-  found = util::generic_id_search_binary(out_index, key, data->transform_id, data->size);
-
-  return found;
+  return false;
 }
 
 
 bool
-transform_data_get_property_transform(const Transform_data *data, const util::generic_id key, math::transform *out_value)
+transform_set_transform(const Transform_data *data, const uint32_t key, const math::transform *set_value)
 {
-  size_t index;
+  assert(data);
+  assert(key != 0);
+  assert(data->field_transform);
+  assert(set_value);
 
-  if(transform_data_exists(data, key, &index))
+  // Search for its index.
+  // If we find it we can set the value.
+
+  size_t index = 0;
+
+  if(transform_exists(data, key, &index))
+
+  index = index * 1;
+
   {
-    *out_value = data->property_transform[index];
-  }
-  else
-  {
-    LOG_ERROR(Error_string::entity_not_found());
-    assert(false);
+    assert(index < data->size);
+    if(index < data->size)
+    {
+      data->field_transform[index] = *set_value;
 
-    return false;
+      return true;
+    }
   }
 
-  return true;
+  return false;
 }
 
 
 bool
-transform_data_set_property_transform(Transform_data *data,  const util::generic_id key, const math::transform value)
+transform_get_aabb(const Transform_data *data, const uint32_t key, math::aabb *return_value)
 {
-  assert(data && key);
+  assert(data);
+  assert(key != 0);
+  assert(data->field_aabb);
+  assert(return_value);
 
-  size_t index;
+  // Search for its index.
+  // If we find it we can return the value.
 
-  if(transform_data_exists(data, key, &index))
+  size_t index = 0;
+
+  if(transform_exists(data, key, &index))
   {
-    data->property_transform[index] = value;
-  }
-  else
-  {
-    LOG_ERROR(Error_string::entity_not_found());
-    assert(false);
+    assert(index < data->size);
 
-    return false;
+    if(index < data->size)
+    {
+      *return_value = data->field_aabb[index];
+
+      return true;
+    }
   }
 
-  return true;
+  return false;
 }
 
 
 bool
-transform_data_get_property_aabb(const Transform_data *data, const util::generic_id key, math::aabb *out_value)
+transform_set_aabb(const Transform_data *data, const uint32_t key, const math::aabb *set_value)
 {
-  size_t index;
+  assert(data);
+  assert(key != 0);
+  assert(data->field_aabb);
+  assert(set_value);
 
-  if(transform_data_exists(data, key, &index))
+  // Search for its index.
+  // If we find it we can set the value.
+
+  size_t index = 0;
+
+  if(transform_exists(data, key, &index))
+
+  index = index * 1;
+
   {
-    *out_value = data->property_aabb[index];
-  }
-  else
-  {
-    LOG_ERROR(Error_string::entity_not_found());
-    assert(false);
+    assert(index < data->size);
+    if(index < data->size)
+    {
+      data->field_aabb[index] = *set_value;
 
-    return false;
+      return true;
+    }
   }
 
-  return true;
+  return false;
 }
 
 
-bool
-transform_data_set_property_aabb(Transform_data *data,  const util::generic_id key, const math::aabb value)
-{
-  assert(data && key);
-
-  size_t index;
-
-  if(transform_data_exists(data, key, &index))
-  {
-    data->property_aabb[index] = value;
-  }
-  else
-  {
-    LOG_ERROR(Error_string::entity_not_found());
-    assert(false);
-
-    return false;
-  }
-
-  return true;
-}
-
-
-} // ns
+} // Data ns
