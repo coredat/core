@@ -6,7 +6,7 @@
 #include "pending_entity_removal.hpp"
 #include "world_pools.hpp"
 #include "world_data_fwd.hpp"
-#include "physics_data.hpp"
+#include "rigidbody_data.hpp"
 #include "renderer_mesh_data.hpp"
 #include "renderer_text_draw_calls_data.hpp"
 

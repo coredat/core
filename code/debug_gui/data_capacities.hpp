@@ -11,7 +11,7 @@
 
 #include <data/world_data/camera_data.hpp>
 #include <data/world_data/entity_data.hpp>
-#include <data/world_data/physics_data.hpp>
+#include <data/world_data/rigidbody_data.hpp>
 #include <data/world_data/renderer_mesh_data.hpp>
 #include <data/world_data/renderer_text_draw_calls_data.hpp>
 #include <data/world_data/transform.hpp>

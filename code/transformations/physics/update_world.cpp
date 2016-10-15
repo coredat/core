@@ -1,5 +1,5 @@
 #include <transformations/physics/update_world.hpp>
-#include <data/world_data/physics_data.hpp>
+#include <data/world_data/rigidbody_data.hpp>
 #include <core/entity/detail/entity_id.hpp>
 #include <core/physics/collision.hpp>
 #include <core/common/collision.hpp>

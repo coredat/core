@@ -6,7 +6,7 @@
 */
 
 
-#include "physics_data.hpp"
+#include "rigidbody_data.hpp"
 #include <assert.h>
 #include <cstring>
 

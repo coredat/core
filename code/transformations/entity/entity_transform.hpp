@@ -7,7 +7,7 @@
 
 // Fwd Dec these
 #include <data/world_data/transform.hpp>
-#include <data/world_data/physics_data.hpp>
+#include <data/world_data/rigidbody_data.hpp>
 
 
 namespace Entity_detail {

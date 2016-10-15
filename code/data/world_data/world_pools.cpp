@@ -1,6 +1,6 @@
 #include "world_pools.hpp"
 #include "renderer_mesh_data.hpp"
-#include "physics_data.hpp"
+#include "rigidbody_data.hpp"
 #include "pending_entity_removal.hpp"
 #include "camera_data.hpp"
 #include "renderer_mesh_data.hpp"
