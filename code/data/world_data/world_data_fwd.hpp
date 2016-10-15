@@ -9,12 +9,10 @@ namespace World_data {
 
 
 struct World;
-struct Camera_data;
-struct Physics_data;
 struct Renderer_mesh_data;
 struct Renderer_text_draw_calls_data;
 struct Entity_data;
-struct Pending_scene_graph_change_data;
+struct Camera_data;
 
 
 } // ns
@@ -24,6 +22,8 @@ namespace Data {
 
 
 struct Transform_data;
+struct Pending_entity_removal_data;
+struct Rigidbody_data;
 
 };
 

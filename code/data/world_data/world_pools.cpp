@@ -1,7 +1,7 @@
 #include "world_pools.hpp"
 #include "renderer_mesh_data.hpp"
 #include "physics_data.hpp"
-#include "pending_scene_graph_change_data.hpp"
+#include "pending_entity_removal.hpp"
 #include "camera_data.hpp"
 #include "renderer_mesh_data.hpp"
 #include "renderer_text_draw_calls_data.hpp"
@@ -20,20 +20,19 @@ World::World(const uint32_t entity_hint)
 {
   this->scene = new q3Scene(1.f / 60.f);
 
-  Pending_scene_graph_change_data *graph_changes = new Pending_scene_graph_change_data();
-  pending_scene_graph_change_init(graph_changes, entity_hint);
+  Data::Pending_entity_removal_data *graph_changes = new Data::Pending_entity_removal_data();
+  Data::pending_entity_removal_create(graph_changes, entity_hint);
   
   Camera_data *camera_data = new Camera_data;
   camera_data_init(camera_data, 32);
     
-  Physics_data* physics_data = new Physics_data;
-  physics_data_init(physics_data, entity_hint);
+  Data::Rigidbody_data* rb_data = new Data::Rigidbody_data;
+  Data::rigidbody_create(rb_data, entity_hint);
   
   Renderer_mesh_data *mesh_data = new Renderer_mesh_data;
   renderer_mesh_data_init(mesh_data, entity_hint);
   
   Data::Transform_data *transform_data = new Data::Transform_data;
-//  World_data::transform_data_init(transform_data, entity_hint);
   Data::transform_create(transform_data, entity_hint);
   
   Entity_data *entity_data = new Entity_data;
@@ -42,8 +41,8 @@ World::World(const uint32_t entity_hint)
   Renderer_text_draw_calls_data *text_draw_calls = new Renderer_text_draw_calls_data;
   renderer_text_draw_calls_data_init(text_draw_calls, entity_hint);
   
-  this->entity_graph_changes = graph_changes;
-  this->physics_data         = physics_data;
+  this->entity_removal       = graph_changes;
+  this->rigidbody_data       = rb_data;
   this->mesh_data            = mesh_data;
   this->camera_data          = camera_data;
   this->transform            = transform_data;
@@ -53,11 +52,26 @@ World::World(const uint32_t entity_hint)
 
 World::~World()
 {
-  delete this->entity_graph_changes;
-  delete this->physics_data;
+  if(this->entity_removal)
+  {
+    Data::pending_entity_removal_destroy(entity_removal);
+    delete this->entity_removal;
+  }
+  
+  if(this->rigidbody_data)
+  {
+    Data::rigidbody_destroy(rigidbody_data);
+    delete this->rigidbody_data;
+  }
+  
+  if(this->transform)
+  {
+    Data::transform_destroy(transform);
+    delete this->transform;
+  }
+  
   delete this->mesh_data;
   delete this->camera_data;
-  delete this->transform;
   delete this->entity;
   delete this->text_data;
 }
@@ -99,11 +113,11 @@ world_find_entities_with_tag(World *world_data,
 
 void
 world_update_scene_graph_changes(World_data::World *world_data,
-                                 const Pending_scene_graph_change_data *graph_changes)
+                                 const Data::Pending_entity_removal_data *graph_changes)
 {
-  for(uint32_t i = 0; i < graph_changes->delete_size; ++i)
+  for(uint32_t i = 0; i < graph_changes->size; ++i)
   {
-    const util::generic_id id = graph_changes->entities_to_delete[i];
+    const util::generic_id id = graph_changes->field_deleted_entity[i];
     
     entity_data_erase(world_data->entity, id);
     transform_remove(world_data->transform, id);
@@ -113,23 +127,35 @@ world_update_scene_graph_changes(World_data::World *world_data,
       renderer_mesh_data_erase(world_data->mesh_data, id);
     }
     
-    if(renderer_text_draw_calls_data_exists(world_data->text_data, id))
     {
-      renderer_text_draw_calls_data_erase(world_data->text_data, id);
+      if(renderer_text_draw_calls_data_exists(world_data->text_data, id))
+      {
+        renderer_text_draw_calls_data_erase(world_data->text_data, id);
+      }
     }
-    
-    
-    uintptr_t body_ptr = 0;
-    physics_data_get_property_rigidbody(world_data->physics_data, id, &body_ptr);
-    
-    q3Body *body = reinterpret_cast<q3Body*>(body_ptr);
-    
-    if(body)
+
+    // Remove RB
     {
-      world_data->scene->RemoveBody(body);
+      Data::Rigidbody_data *rb_data = world_data->rigidbody_data;
+      Data::data_lock(rb_data);
+      
+      if(Data::rigidbody_exists(rb_data, id))
+      {
+        uintptr_t body_ptr = 0;
+        Data::rigidbody_get_rigidbody(rb_data, id, &body_ptr);
+        
+        q3Body *body = reinterpret_cast<q3Body*>(body_ptr);
+        
+        if(body)
+        {
+          world_data->scene->RemoveBody(body);
+        }
+        
+        Data::rigidbody_remove(rb_data, id);
+      }
+      
+      Data::data_unlock(rb_data);
     }
-    
-    physics_data_erase(world_data->physics_data, id);
   }
 }
 

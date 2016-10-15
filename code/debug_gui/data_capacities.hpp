@@ -34,7 +34,7 @@ display_capacities(Resource_data::Text_mesh_data *text_mesh_data,
                    World_data::Renderer_mesh_data *renderer_mesh_data,
                    World_data::Renderer_text_draw_calls_data *renderer_text_draw_calls,
                    Data::Transform_data *transforms,
-                   World_data::Physics_data *phs_data);
+                   Data::Rigidbody_data *rb_data);
 
 
 } // ns

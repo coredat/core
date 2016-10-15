@@ -151,26 +151,31 @@ think(std::shared_ptr<World_data::World> world, const float dt, Tick_information
     };
   
     // Set transforms.
-    for(size_t i = 0; i < world->physics_data->size; ++i)
+    Data::Rigidbody_data *rb_data = world->rigidbody_data;
+    
+    for(size_t i = 0; i < Data::rigidbody_get_size(rb_data); ++i)
     {
-      if(world->physics_data->property_rigidbody[i])
+      const uintptr_t rb_ptr = Data::rigidbody_get_rigidbody_data(rb_data)[i];
+      
+      if(rb_ptr)
       {
-        auto trans = reinterpret_cast<q3Body*>(world->physics_data->property_rigidbody[i])->GetTransform();
+        const q3Transform trans(reinterpret_cast<q3Body*>(rb_ptr)->GetTransform());
         
-        Core::Entity_ref ref(Core_detail::entity_id_from_uint(world->physics_data->physics_id[i]));
+        const uint32_t entity_id(rb_data->keys[i]);
+        const Core::Entity_ref ref(Core_detail::entity_id_from_uint(entity_id));
         
-        auto old_tran = ref.get_transform();
+        const Core::Transform old_trans(ref.get_transform());
         
-        auto core_trans = to_core_trans(trans);
-        core_trans.set_scale(old_tran.get_scale());
+        Core::Transform new_trans(to_core_trans(trans));
+        new_trans.set_scale(old_trans.get_scale());
         
-        Entity_detail::set_transform(world->physics_data->physics_id[i],
+        Entity_detail::set_transform(entity_id,
                                      world->entity,
                                      world->transform,
-                                     world->physics_data,
+                                     world->rigidbody_data,
                                      world->mesh_data,
                                      world->text_data,
-                                     core_trans,
+                                     new_trans,
                                      false);
       }
     }

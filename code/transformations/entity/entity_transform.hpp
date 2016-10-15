@@ -4,7 +4,10 @@
 
 #include <transformations/entity/entity_common.hpp>
 #include <data/world_data/entity_data.hpp>
+
+// Fwd Dec these
 #include <data/world_data/transform.hpp>
+#include <data/world_data/physics_data.hpp>
 
 
 namespace Entity_detail {
@@ -19,7 +22,7 @@ void
 set_transform(const util::generic_id this_id,
               World_data::Entity_data *entity_data,
               Data::Transform_data *transform_data,
-              World_data::Physics_data *phys_data,
+              Data::Rigidbody_data *rb_data,
               World_data::Renderer_mesh_data *mesh_data,
               World_data::Renderer_text_draw_calls_data *text_data,
               const Core::Transform &transform,

@@ -3,7 +3,7 @@
 
 
 #include "camera_data.hpp"
-#include "pending_scene_graph_change_data.hpp"
+#include "pending_entity_removal.hpp"
 #include "world_pools.hpp"
 #include "world_data_fwd.hpp"
 #include "physics_data.hpp"

@@ -25,7 +25,7 @@ is_valid(const util::generic_id this_id,
 void
 destroy(const util::generic_id this_id,
         World_data::Entity_data *entity_data,
-        World_data::Pending_scene_graph_change_data *scene_graph_changes);
+        Data::Pending_entity_removal_data *scene_graph_changes);
 
 
 void

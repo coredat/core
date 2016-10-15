@@ -34,6 +34,7 @@ Entity::Entity(Entity &&other)
 Entity&
 Entity::operator=(Entity &&other)
 {
+  destroy();
   move(other);
   
   return *this;

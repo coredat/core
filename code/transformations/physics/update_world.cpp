@@ -129,25 +129,6 @@ update_world(std::shared_ptr<World_data::World> curr_world,
   
   phys_scene->Step();
   
-  // Check trigger volumes for things that might be inside
-  {
-    auto phys_data = world->physics_data;
-    World_data::data_lock(phys_data);
-    
-    for(uint32_t i = 0; i < phys_data->size; ++i)
-    {
-      q3Body *body = reinterpret_cast<q3Body*>(phys_data->property_rigidbody);
-      q3Box *box = body->m_boxes;
-      
-      if(box && box->sensor)
-      {
-        
-      }
-    }
-    
-    World_data::data_unlock(phys_data);
-  }
-  
   if(out_number_of_collisions)
   {
     *out_number_of_collisions = number_of_callbacks;

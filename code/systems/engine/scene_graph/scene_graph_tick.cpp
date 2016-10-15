@@ -22,13 +22,13 @@ think(std::shared_ptr<World_data::World> world, Tick_information *tick_info)
   // Otherwise we might process things that the calling code as already removed.
   {
     // Update world
-    auto graph_changes = world->entity_graph_changes;
+    auto graph_changes = world->entity_removal;
 
     // Push in new phy entities.
     World_data::world_update_scene_graph_changes(world.get(), graph_changes);
     
     // Reset the entity pool for new chandges.
-    World_data::pending_scene_graph_change_reset(graph_changes);
+    Data::pending_entity_removal_clear(graph_changes);
   }
 }
 

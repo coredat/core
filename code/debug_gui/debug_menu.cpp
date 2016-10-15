@@ -153,7 +153,7 @@ display_world_data_menu(World_data::World *world_data,
                        world_data->mesh_data,
                        world_data->text_data,
                        world_data->transform,
-                       world_data->physics_data);
+                       world_data->rigidbody_data);
   }
   #endif
 }

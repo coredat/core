@@ -86,7 +86,7 @@ void
 set_transform(const util::generic_id this_id,
               World_data::Entity_data *entity_data,
               Data::Transform_data *transform_data,
-              World_data::Physics_data *phys_data,
+              Data::Rigidbody_data *rb_data,
               World_data::Renderer_mesh_data *mesh_data,
               World_data::Renderer_text_draw_calls_data *text_data,
               const Core::Transform &set_transform,
@@ -94,7 +94,7 @@ set_transform(const util::generic_id this_id,
 {
   assert(entity_data);
   assert(transform_data);
-  assert(phys_data);
+  assert(rb_data);
   assert(mesh_data);
   assert(text_data);
 
@@ -121,7 +121,7 @@ set_transform(const util::generic_id this_id,
                                                                set_transform.get_rotation());
     
     update_transform(this_id, transform_data, &new_transform);
-    update_collider(this_id, entity_data, phys_data, &new_transform, &curr_aabb, inform_phys_engine);
+    update_collider(this_id, entity_data, rb_data, &new_transform, &curr_aabb, inform_phys_engine);
     update_mesh_renderer(this_id, mesh_data, &new_transform);
     udpate_text_renderer(this_id, text_data, &new_transform);
   }

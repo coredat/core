@@ -30,10 +30,10 @@ set_collider(const util::generic_id this_id,
     return;
   }
   
-  auto phys_pool = world->physics_data;
-  assert(phys_pool);
+  auto rb_data = world->rigidbody_data;
+  assert(rb_data);
   
-  if(phys_pool)
+  if(rb_data)
   {
     auto transform_data = world->transform;
     assert(transform_data);
@@ -69,19 +69,19 @@ set_collider(const util::generic_id this_id,
           
             // Set physics
             {
-              World_data::data_lock(phys_pool);
+              Data::data_lock(rb_data);
               
               // Add the collider box
-              if(World_data::physics_data_push_back(phys_pool, this_id))
+              if(Data::rigidbody_insert(rb_data, this_id))
               {
-                World_data::physics_data_set_property_aabb_collider(phys_pool, this_id, collider_box);
+                Data::rigidbody_set_aabb_collider(rb_data, this_id, &collider_box);
               }
               
-              World_data::data_unlock(phys_pool);
+              Data::data_unlock(rb_data);
               
               update_collider(this_id,
                               world->entity,
-                              world->physics_data,
+                              world->rigidbody_data,
                               &curr_transform,
                               &entity_aabb);
             }
@@ -127,24 +127,24 @@ set_rigidbody(const util::generic_id this_id,
 {
   set_collider(this_id, world, rigidbody.get_collider());
 
-  auto phys_pool = world->physics_data;
+  auto phys_pool = world->rigidbody_data;
   assert(phys_pool);
 
   if (phys_pool)
   {
     // Set rb masking
-    World_data::data_lock(phys_pool);
+    Data::data_lock(phys_pool);
     
     const uint64_t mask = util::bits_pack(rigidbody.get_rb_id(), rigidbody.get_rb_mask());
     
-    World_data::physics_data_set_property_collision_id(phys_pool, this_id, mask);
+    Data::rigidbody_set_collision_id(phys_pool, this_id, &mask);
     
-    World_data::data_unlock(phys_pool);
+    Data::data_unlock(phys_pool);
   }
   
   LOG_TODO_ONCE("This is scratch code to get rbs working")
   {
-    World_data::data_lock(phys_pool);
+    Data::data_lock(phys_pool);
     
     const Core::Transform transform = get_core_transform(this_id, world->entity, world->transform);
     
@@ -156,9 +156,10 @@ set_rigidbody(const util::generic_id this_id,
                                                world->scene,
                                                1);
     
-    World_data::physics_data_set_property_rigidbody(phys_pool, this_id, (uintptr_t)body);
+    const uintptr_t body_property(reinterpret_cast<uintptr_t>(body));
+    Data::rigidbody_set_rigidbody(phys_pool, this_id, &body_property);
     
-    World_data::data_unlock(phys_pool);
+    Data::data_unlock(phys_pool);
   }
 }
 
@@ -176,7 +177,7 @@ get_rigidbody(const util::generic_id this_id)
 void
 update_collider(const util::generic_id this_id,
                 World_data::Entity_data *entity_data,
-                World_data::Physics_data *phys_data,
+                Data::Rigidbody_data *phys_data,
                 const math::transform *transform,
                 const math::aabb *model_aabb,
                 const bool inform_phys_engine)
@@ -207,10 +208,10 @@ update_collider(const util::generic_id this_id,
     // Update the physics stuff.
     if(components & World_data::Entity_component::has_physics)
     {
-      World_data::data_lock(phys_data);
+      Data::data_lock(phys_data);
       
       math::aabb collider_box;
-      World_data::physics_data_get_property_aabb_collider(phys_data, this_id, &collider_box);
+      Data::rigidbody_get_aabb_collider(phys_data, this_id, &collider_box);
       
       const math::vec3 collider_scale  = math::aabb_get_extents(collider_box);
       const math::vec3 transform_scale = transform->scale;
@@ -220,13 +221,13 @@ update_collider(const util::generic_id this_id,
       math::aabb_scale(collider_box, total_scale);
       math::aabb_set_origin(collider_box, transform->position);
       
-      World_data::physics_data_set_property_transform(phys_data, this_id, *transform);
-      World_data::physics_data_set_property_transformed_aabb_collider(phys_data, this_id, collider_box);
+      Data::rigidbody_set_transform(phys_data, this_id, transform);
+      Data::rigidbody_set_transformed_aabb_collider(phys_data, this_id, &collider_box);
       
       if(inform_phys_engine)
       {
         uintptr_t body = 0;
-        World_data::physics_data_get_property_rigidbody(phys_data, this_id, &body);
+        Data::rigidbody_get_rigidbody(phys_data, this_id, &body);
         
         if(body)
         {
@@ -240,7 +241,7 @@ update_collider(const util::generic_id this_id,
         }
       }
       
-      World_data::data_unlock(phys_data);
+      Data::data_unlock(phys_data);
     }
     else
     {

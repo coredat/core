@@ -35,7 +35,7 @@ get_rigidbody(const util::generic_id this_id);
 void
 update_collider(const util::generic_id this_id,
                 World_data::Entity_data *entity_data,
-                World_data::Physics_data *phys_data,
+                Data::Rigidbody_data *phys_data,
                 const math::transform *transform,
                 const math::aabb *model_aabb,
                 const bool inform_phys_engine = true);

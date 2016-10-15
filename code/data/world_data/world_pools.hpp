@@ -3,6 +3,7 @@
 
 
 #include "world_data_fwd.hpp"
+#include "pending_entity_removal.hpp"
 #include <utilities/generic_id.hpp>
 #include <core/entity/entity_fwd.hpp>
 #include <3rdparty/qu3e/q3.h>
@@ -16,9 +17,9 @@ struct World
 {
   Data::Transform_data                    *transform            = nullptr;
   Entity_data                       *entity               = nullptr;
-  Pending_scene_graph_change_data   *entity_graph_changes = nullptr;
+  Data::Pending_entity_removal_data   *entity_removal = nullptr;
   Camera_data                       *camera_data          = nullptr;
-  Physics_data                      *physics_data         = nullptr;
+  Data::Rigidbody_data                      *rigidbody_data         = nullptr;
   Renderer_mesh_data                *mesh_data            = nullptr;
   Renderer_text_draw_calls_data     *text_data            = nullptr;
   
@@ -56,7 +57,7 @@ world_find_entities_with_tag(World *world_data,
 */
 void
 world_update_scene_graph_changes(World *world_data,
-                                 const Pending_scene_graph_change_data *graph_changes);
+                                 const Data::Pending_entity_removal_data *graph_changes);
 
 
 } // ns

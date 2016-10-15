@@ -9,7 +9,7 @@
 #include <core/world/world.hpp>
 #include <core/world/detail/world_index.hpp>
 
-#include <data/world_data/pending_scene_graph_change_data.hpp>
+#include <data/world_data/pending_entity_removal.hpp>
 #include <data/world_data/world_pools.hpp>
 #include <data/world_data/entity_data.hpp>
 #include <data/world_data/transform.hpp>
@@ -174,9 +174,14 @@ Entity_interface::~Entity_interface()
 void
 Entity_interface::destroy()
 {
+  if(!m_impl || !m_impl->world)
+  {
+    return;
+  }
+  
   Entity_detail::destroy(Core_detail::entity_id_to_uint(m_impl->id),
                          m_impl->world->entity,
-                         m_impl->world->entity_graph_changes);
+                         m_impl->world->entity_removal);
   
   m_impl->id = Core_detail::entity_id_invalid();
 }
@@ -287,7 +292,7 @@ Entity_interface::set_transform(const Transform &transform)
   Entity_detail::set_transform(Core_detail::entity_id_to_uint(m_impl->id),
                                m_impl->world->entity,
                                m_impl->world->transform,
-                               m_impl->world->physics_data,
+                               m_impl->world->rigidbody_data,
                                m_impl->world->mesh_data,
                                m_impl->world->text_data,
                                transform);

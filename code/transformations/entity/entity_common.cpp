@@ -1,5 +1,5 @@
 #include <transformations/entity/entity_common.hpp>
-#include <data/world_data/pending_scene_graph_change_data.hpp>
+#include <data/world_data/pending_entity_removal.hpp>
 #include <data/world_data/entity_data.hpp>
 #include <common/error_strings.hpp>
 #include <utilities/logging.hpp>
@@ -42,13 +42,19 @@ is_valid(const util::generic_id this_id,
 void
 destroy(const util::generic_id this_id,
         World_data::Entity_data *entity_data,
-        World_data::Pending_scene_graph_change_data *scene_graph_changes)
+        Data::Pending_entity_removal_data *scene_graph_changes)
 {
   if(!is_valid(this_id, entity_data, false)) {
     return; // No assert, destroying an invalid entity shouldn't result in chaos.
   }
   
-  World_data::pending_scene_graph_change_delete(scene_graph_changes, this_id);
+  // Add entity to the destruction list.
+  Data::data_lock(scene_graph_changes);
+  
+  const uint32_t removal_id = Data::pending_entity_removal_insert(scene_graph_changes);
+  Data::pending_entity_removal_set_deleted_entity(scene_graph_changes, removal_id, &this_id);
+  
+  Data::data_unlock(scene_graph_changes);
 }
 
 
