@@ -1,237 +1,190 @@
 
-
 /*
-  WARNING
-  -------
-  This file is auto generated any changes here may be overwritten.
-  See code_gen.rake in scripts folder.
-
-  This file was last generated on: Sun 09 Oct 2016
+  Warning
+  --
+  This file is auto generated changes here may be overwritten.
 */
 
 
-#include <data/world_data/entity_data.hpp>
-#include <data/global_data/memory_data.hpp>
-#include <common/error_strings.hpp>
-#include <utilities/logging.hpp>
-#include <utilities/memory.hpp>
-#include <utilities/string_helpers.hpp>
+#include "entity_data.hpp"
 #include <assert.h>
 #include <cstring>
 
 
-namespace World_data {
+namespace Data {
 
 
-void
-entity_data_init(Entity_data *data, const size_t size_hint)
-{
-  // Argument validation.
-  assert(data && size_hint);
+// ====================== //
+// COMMON MODEL FUNCTIONS //
+// ====================== //
 
-  // 16 byte alignment buffer, apply to all for safety.
-  constexpr size_t simd_buffer = 16;
-
-  // Calculate the various sizes of things.
-  const size_t bytes_entity_id = sizeof(*data->entity_id) * size_hint + simd_buffer;
-  const size_t bytes_property_name = sizeof(*data->property_name) * 32 * size_hint + simd_buffer;
-  const size_t bytes_property_tag = sizeof(*data->property_tag) * size_hint + simd_buffer;
-  const size_t bytes_property_components = sizeof(*data->property_components) * size_hint + simd_buffer;
-  const size_t bytes_property_user_data = sizeof(*data->property_user_data) * size_hint + simd_buffer;
-  const size_t bytes_property_renderer = sizeof(*data->property_renderer) * size_hint + simd_buffer;
-
-  const size_t bytes_to_alloc = bytes_entity_id + bytes_property_name + bytes_property_tag + bytes_property_components + bytes_property_user_data + bytes_property_renderer;
-
-  // Allocate some memory.
-  util::memory_chunk *data_memory = const_cast<util::memory_chunk*>(&data->memory);
-  *data_memory = Memory::request_memory_chunk(bytes_to_alloc, "entity_data");
-
-  assert(data_memory->bytes_in_chunk == bytes_to_alloc);
-
-  data_lock(data);
-
-  // Init memory
-  {
-    size_t byte_counter = 0;
-    const void *alloc_start = data->memory.chunk_start;
-
-    // Assign entity_id memory
-    {
-      void *offset = util::mem_offset(alloc_start, byte_counter);
-      void *aligned = util::mem_next_16byte_boundry(offset);
-
-      data->entity_id = reinterpret_cast<util::generic_id*>(aligned);
-      #ifndef NDEBUG
-      memset(offset, 0, bytes_entity_id);
-      #endif
-
-      byte_counter += bytes_entity_id;
-      assert(byte_counter <= bytes_to_alloc);
-    }
-    // Assign property_name memory
-    {
-      void *offset = util::mem_offset(alloc_start, byte_counter);
-      void *aligned = util::mem_next_16byte_boundry(offset);
-
-      data->property_name = reinterpret_cast<char*>(aligned);
-      #ifndef NDEBUG
-      memset(offset, 0, bytes_property_name);
-      #endif
-
-      byte_counter += bytes_property_name;
-      assert(byte_counter <= bytes_to_alloc);
-    }
-    // Assign property_tag memory
-    {
-      void *offset = util::mem_offset(alloc_start, byte_counter);
-      void *aligned = util::mem_next_16byte_boundry(offset);
-
-      data->property_tag = reinterpret_cast<uint32_t*>(aligned);
-      #ifndef NDEBUG
-      memset(offset, 0, bytes_property_tag);
-      #endif
-
-      byte_counter += bytes_property_tag;
-      assert(byte_counter <= bytes_to_alloc);
-    }
-    // Assign property_components memory
-    {
-      void *offset = util::mem_offset(alloc_start, byte_counter);
-      void *aligned = util::mem_next_16byte_boundry(offset);
-
-      data->property_components = reinterpret_cast<uint32_t*>(aligned);
-      #ifndef NDEBUG
-      memset(offset, 0, bytes_property_components);
-      #endif
-
-      byte_counter += bytes_property_components;
-      assert(byte_counter <= bytes_to_alloc);
-    }
-    // Assign property_user_data memory
-    {
-      void *offset = util::mem_offset(alloc_start, byte_counter);
-      void *aligned = util::mem_next_16byte_boundry(offset);
-
-      data->property_user_data = reinterpret_cast<uintptr_t*>(aligned);
-      #ifndef NDEBUG
-      memset(offset, 0, bytes_property_user_data);
-      #endif
-
-      byte_counter += bytes_property_user_data;
-      assert(byte_counter <= bytes_to_alloc);
-    }
-    // Assign property_renderer memory
-    {
-      void *offset = util::mem_offset(alloc_start, byte_counter);
-      void *aligned = util::mem_next_16byte_boundry(offset);
-
-      data->property_renderer = reinterpret_cast<uint32_t*>(aligned);
-      #ifndef NDEBUG
-      memset(offset, 0, bytes_property_renderer);
-      #endif
-
-      byte_counter += bytes_property_renderer;
-      assert(byte_counter <= bytes_to_alloc);
-    }
-  }
-
-  // Set the size and capacity
-  {
-    data->size = 0;
-
-    size_t *capacity = const_cast<size_t*>(&data->capacity);
-    *capacity = size_hint;
-  }
-
-  data_unlock(data);
-}
-
-
-void
-entity_data_free(Entity_data *data)
-{
-  assert(data);
-}
-
-
-size_t
-entity_data_get_size(const Entity_data *data)
-{
-  assert(data);
-  return data->size;
-}
-
-
-size_t
-entity_data_get_capacity(const Entity_data *data)
-{
-  assert(data);
-  return data->capacity;
-}
 
 
 void
 data_lock(const Entity_data *data)
 {
-  assert(data);
+  // Not yet impl.
 }
 
 
 void
 data_unlock(const Entity_data *data)
 {
-  assert(data);
+  // Not yet impl.
 }
 
 
 bool
-entity_data_push_back(Entity_data *data, const util::generic_id key, size_t *out_index)
+entity_create(Entity_data *data, const size_t size_hint)
 {
-  assert(data && key);
-  assert(data->size < data->capacity);
+  assert(data);
+  assert(size_hint);
 
-  // TODO: Duplicate key check
+  // Size up the capacity
+  {
+    size_t *capacity = const_cast<size_t*>(&data->capacity);
+    *capacity = size_hint;
+  }
 
+  // Allocate memory
+  bool all_alloc = true;
+  {
+    // Alloc keys
+    if(all_alloc)
+    {
+      data->keys = new uint32_t[size_hint];
+      assert(data->keys);
+      if(!data->keys) { all_alloc = false; }
+      else { memset(data->keys, 0, sizeof(uint32_t) * size_hint); }
+    }
+
+    // Alloc space for name
+    if(all_alloc)
+    {
+      data->field_name = new char[size_hint * 32];
+      assert(data->field_name);
+      if(!data->field_name) { all_alloc = false; }
+      else { memset(data->field_name, 0, sizeof(char) * size_hint * 32); }
+    }
+
+    // Alloc space for tags
+    if(all_alloc)
+    {
+      data->field_tags = new uint32_t[size_hint * 1];
+      assert(data->field_tags);
+      if(!data->field_tags) { all_alloc = false; }
+      else { memset(data->field_tags, 0, sizeof(uint32_t) * size_hint * 1); }
+    }
+
+    // Alloc space for components
+    if(all_alloc)
+    {
+      data->field_components = new uint32_t[size_hint * 1];
+      assert(data->field_components);
+      if(!data->field_components) { all_alloc = false; }
+      else { memset(data->field_components, 0, sizeof(uint32_t) * size_hint * 1); }
+    }
+
+    // Alloc space for renderer
+    if(all_alloc)
+    {
+      data->field_renderer = new uint32_t[size_hint * 1];
+      assert(data->field_renderer);
+      if(!data->field_renderer) { all_alloc = false; }
+      else { memset(data->field_renderer, 0, sizeof(uint32_t) * size_hint * 1); }
+    }
+
+    // Alloc space for user_data
+    if(all_alloc)
+    {
+      data->field_user_data = new uintptr_t[size_hint * 1];
+      assert(data->field_user_data);
+      if(!data->field_user_data) { all_alloc = false; }
+      else { memset(data->field_user_data, 0, sizeof(uintptr_t) * size_hint * 1); }
+    }
+  }
+
+  // Failed so clean up.
+  if(!all_alloc)
+  {
+    entity_destroy(data);
+  }
+
+  return all_alloc;
+}
+
+
+void
+entity_destroy(Entity_data *data)
+{
+  // Free up the memory.
+  {
+    // Remove keys
+    if(data->keys) { delete[] data->keys; }
+    data->keys = nullptr;
+
+    // Remove name
+    if(data->field_name) { delete[] data->field_name; }
+    data->field_name = nullptr;
+
+    // Remove tags
+    if(data->field_tags) { delete[] data->field_tags; }
+    data->field_tags = nullptr;
+
+    // Remove components
+    if(data->field_components) { delete[] data->field_components; }
+    data->field_components = nullptr;
+
+    // Remove renderer
+    if(data->field_renderer) { delete[] data->field_renderer; }
+    data->field_renderer = nullptr;
+
+    // Remove user_data
+    if(data->field_user_data) { delete[] data->field_user_data; }
+    data->field_user_data = nullptr;
+  }
+
+  // Zero capacity and size
+  {
+    data->size = 0;
+
+    size_t *capacity = const_cast<size_t*>(&data->capacity);
+    *capacity = 0;
+  }
+}
+
+
+uint32_t
+entity_insert(Entity_data *data, const uint32_t key)
+{
+  assert(data);
+  assert(data->keys);
+
+  // Do we need to resize?
   if(data->size >= data->capacity)
   {
-    LOG_ERROR(Error_string::no_free_space());
-
-    return false;
+    entity_resize_capacity(data, data->capacity << 1);
   }
 
-  const uint32_t index = data->size;
-
-  if(out_index)
+  // Insert key at the back
   {
-    *out_index = index;
+    const uint32_t new_key = key;
+    data->keys[data->size++] = new_key;
+
+    return new_key;
   }
 
-  ++(data->size);
 
-  data->entity_id[index] = key;
-
-  // Memset the properties
-  {
-    memset(&data->property_name[index * 32], 0, sizeof(*data->property_name));
-    memset(&data->property_tag[index], 0, sizeof(*data->property_tag));
-    memset(&data->property_components[index], 0, sizeof(*data->property_components));
-    memset(&data->property_user_data[index], 0, sizeof(*data->property_user_data));
-    memset(&data->property_renderer[index], 0, sizeof(*data->property_renderer));
-  }
-
-  return true;
+  return 0;
 }
 
 
 bool
-entity_data_erase(Entity_data *data, const util::generic_id key)
+entity_remove(Entity_data *data, const uint32_t key)
 {
-  // Param check
-  assert(data && key);
+  size_t index_to_erase = 0;
 
-  size_t index_to_erase;
-
-  if(entity_data_exists(data, key, &index_to_erase))
+  if(entity_exists(data, key, &index_to_erase))
   {
     assert(index_to_erase < data->size);
 
@@ -240,289 +193,562 @@ entity_data_erase(Entity_data *data, const util::generic_id key)
 
     --(data->size);
 
-    // Shuffle the memory down.
-    memmove(&data->entity_id[index_to_erase], &data->entity_id[start_index], size_to_end * sizeof(*data->entity_id));
-    memmove(&data->property_name[index_to_erase * 32], &data->property_name[start_index * 32], (size_to_end * 32) * sizeof(*data->property_name));
-    memmove(&data->property_tag[index_to_erase], &data->property_tag[start_index], size_to_end * sizeof(*data->property_tag));
-    memmove(&data->property_components[index_to_erase], &data->property_components[start_index], size_to_end * sizeof(*data->property_components));
-    memmove(&data->property_user_data[index_to_erase], &data->property_user_data[start_index], size_to_end * sizeof(*data->property_user_data));
-    memmove(&data->property_renderer[index_to_erase], &data->property_renderer[start_index], size_to_end * sizeof(*data->property_renderer));
-  }
-  else
-  {
-    LOG_ERROR(Error_string::entity_not_found());
-    assert(false);
+    // Shuffle the data down
+    memmove(&data->keys[index_to_erase], &data->keys[start_index], size_to_end * sizeof(*data->keys));
+    memmove(&data->field_name[index_to_erase * 32], &data->field_name[start_index * 32], size_to_end * sizeof(*data->field_name) * 32);
+    memmove(&data->field_tags[index_to_erase * 1], &data->field_tags[start_index * 1], size_to_end * sizeof(*data->field_tags) * 1);
+    memmove(&data->field_components[index_to_erase * 1], &data->field_components[start_index * 1], size_to_end * sizeof(*data->field_components) * 1);
+    memmove(&data->field_renderer[index_to_erase * 1], &data->field_renderer[start_index * 1], size_to_end * sizeof(*data->field_renderer) * 1);
+    memmove(&data->field_user_data[index_to_erase * 1], &data->field_user_data[start_index * 1], size_to_end * sizeof(*data->field_user_data) * 1);
 
-    return false;
+    return true;
   }
 
-  return true;
+  return false;
 }
 
 
 bool
-entity_data_exists(const Entity_data *data, const util::generic_id key, size_t *out_index)
+entity_exists(const Entity_data *data, const uint32_t key, size_t *out_index)
 {
-  assert(data && key);
-
-  if(data->size == 0)
-  {
-    return false;
-  }
-
-  bool found = false;
-
-  size_t no_index;
-  if(!out_index) { out_index = &no_index; }
-
-  found = util::generic_id_search_binary(out_index, key, data->entity_id, data->size);
-
-  return found;
-}
-
-
-bool
-entity_data_get_property_name(const Entity_data *data, const util::generic_id key, char const **out_value)
-{
-  size_t index;
-
-  if(entity_data_exists(data, key, &index))
-  {
-    *out_value = &data->property_name[index * 32];
-  }
-  else
-  {
-    LOG_ERROR(Error_string::entity_not_found());
-    assert(false);
-
-    return false;
-  }
-
-  return true;
-}
-
-
-bool
-entity_data_set_property_name(Entity_data *data,  const util::generic_id key, const char *value)
-{
-  assert(data && key);
-
-  size_t index;
-
-  if(entity_data_exists(data, key, &index))
-  {
-    strlcpy(&data->property_name[index * 32], value, 32);
-  }
-  else
-  {
-    LOG_ERROR(Error_string::entity_not_found());
-    assert(false);
-
-    return false;
-  }
-
-  return true;
-}
-
-
-bool
-entity_data_search_property_name(const Entity_data *data, const char *value, util::generic_id *out_key)
-{
-  bool found = false;
+  assert(data);
+  assert(data != 0);
 
   for(size_t i = 0; i < data->size; ++i)
   {
-    if(!strcmp(value, &data->property_name[i * 32]))
+    if(data->keys[i] == key)
     {
-      found = true;
-
-      if(out_key)
+      if(out_index)
       {
-        *out_key = data->entity_id[i];
+        *out_index = i;
       }
 
-      break;
+      return true;
     }
   }
 
-  return found;
+  return false;
+}
+
+
+void
+entity_clear(Entity_data *data)
+{
+  assert(data);
+
+  data->size = 0;
 }
 
 
 bool
-entity_data_get_property_tag(const Entity_data *data, const util::generic_id key, uint32_t *out_value)
+entity_is_empty(const Entity_data *data, const size_t size_hint)
 {
-  size_t index;
+  assert(data);
 
-  if(entity_data_exists(data, key, &index))
-  {
-    *out_value = data->property_tag[index];
-  }
-  else
-  {
-    LOG_ERROR(Error_string::entity_not_found());
-    assert(false);
+  if(!data) { return false; }
 
+  return !!data->size;
+}
+
+
+size_t
+entity_get_size(const Entity_data *data)
+{
+  assert(data);
+
+  if(!data) { return 0; }
+
+  return data->size;
+}
+
+
+size_t
+entity_get_capacity(const Entity_data *data)
+{
+  assert(data);
+
+  if(!data) { return 0; }
+
+  return data->capacity;
+}
+
+
+bool
+entity_resize_capacity(Entity_data *data, const size_t size_hint)
+{
+  assert(data);
+  assert(size_hint > data->size); // Will slice data
+
+  // Create new data.
+  Entity_data new_data;
+  const bool created_new = entity_create(&new_data, size_hint);
+
+  // Failed to resize.
+  if(!created_new)
+  {
+    entity_destroy(&new_data);
     return false;
   }
+
+  // Copy over data
+  {
+    memcpy(new_data.keys, data->keys, sizeof(uint32_t) * data->size);
+    memcpy(new_data.field_name, data->field_name, sizeof(char) * data->size * 32);
+    memcpy(new_data.field_tags, data->field_tags, sizeof(uint32_t) * data->size * 1);
+    memcpy(new_data.field_components, data->field_components, sizeof(uint32_t) * data->size * 1);
+    memcpy(new_data.field_renderer, data->field_renderer, sizeof(uint32_t) * data->size * 1);
+    memcpy(new_data.field_user_data, data->field_user_data, sizeof(uintptr_t) * data->size * 1);
+  }
+
+  // Swap ptrs
+  {
+    uint32_t *old_keys = data->keys;
+    data->keys = new_data.keys;
+    new_data.keys = old_keys;
+
+    char *old_name = data->field_name;
+    data->field_name = new_data.field_name;
+    new_data.field_name = old_name;
+
+    uint32_t *old_tags = data->field_tags;
+    data->field_tags = new_data.field_tags;
+    new_data.field_tags = old_tags;
+
+    uint32_t *old_components = data->field_components;
+    data->field_components = new_data.field_components;
+    new_data.field_components = old_components;
+
+    uint32_t *old_renderer = data->field_renderer;
+    data->field_renderer = new_data.field_renderer;
+    new_data.field_renderer = old_renderer;
+
+    uintptr_t *old_user_data = data->field_user_data;
+    data->field_user_data = new_data.field_user_data;
+    new_data.field_user_data = old_user_data;
+  }
+
+  // Set the Capacity
+  {
+    size_t *capacity = const_cast<size_t*>(&data->capacity);
+    *capacity = new_data.capacity;
+  }
+
+  // Destroy new data
+  entity_destroy(&new_data);
 
   return true;
 }
 
 
-bool
-entity_data_set_property_tag(Entity_data *data,  const util::generic_id key, const uint32_t value)
+
+// ===================== //
+// DATA GETTER FUNCTIONS //
+// ===================== //
+
+
+const char*
+entity_get_const_name_data(const Entity_data *data)
 {
-  assert(data && key);
+  assert(data);
+  assert(data->field_name);
 
-  size_t index;
+  return data->field_name;
+}
 
-  if(entity_data_exists(data, key, &index))
+
+char*
+entity_get_name_data(Entity_data *data)
+{
+  assert(data);
+  assert(data->field_name);
+
+  return data->field_name;
+}
+
+
+const uint32_t*
+entity_get_const_tags_data(const Entity_data *data)
+{
+  assert(data);
+  assert(data->field_tags);
+
+  return data->field_tags;
+}
+
+
+uint32_t*
+entity_get_tags_data(Entity_data *data)
+{
+  assert(data);
+  assert(data->field_tags);
+
+  return data->field_tags;
+}
+
+
+const uint32_t*
+entity_get_const_components_data(const Entity_data *data)
+{
+  assert(data);
+  assert(data->field_components);
+
+  return data->field_components;
+}
+
+
+uint32_t*
+entity_get_components_data(Entity_data *data)
+{
+  assert(data);
+  assert(data->field_components);
+
+  return data->field_components;
+}
+
+
+const uint32_t*
+entity_get_const_renderer_data(const Entity_data *data)
+{
+  assert(data);
+  assert(data->field_renderer);
+
+  return data->field_renderer;
+}
+
+
+uint32_t*
+entity_get_renderer_data(Entity_data *data)
+{
+  assert(data);
+  assert(data->field_renderer);
+
+  return data->field_renderer;
+}
+
+
+const void**
+entity_get_const_user_data_data(const Entity_data *data)
+{
+  assert(data);
+  assert(data->field_user_data);
+
+  return reinterpret_cast<const void**>(data->field_user_data);
+}
+
+
+void**
+entity_get_user_data_data(Entity_data *data)
+{
+  assert(data);
+  assert(data->field_user_data);
+
+  return reinterpret_cast<void**>(data->field_user_data);
+}
+
+
+// =============== //
+// FIELD FUNCTIONS //
+// =============== //
+
+
+bool
+entity_get_name(const Entity_data *data, const uint32_t key, const char **return_value)
+{
+  assert(data);
+  assert(key != 0);
+  assert(data->field_name);
+  assert(return_value);
+
+  // Search for its index.
+  // If we find it we can return the value.
+
+  size_t index = 0;
+
+  if(entity_exists(data, key, &index))
   {
-    data->property_tag[index] = value;
-  }
-  else
-  {
-    LOG_ERROR(Error_string::entity_not_found());
-    assert(false);
+    assert(index < data->size);
 
-    return false;
+    if(index < data->size)
+    {
+      *return_value = &data->field_name[index];
+
+      return true;
+    }
   }
 
-  return true;
+  return false;
 }
 
 
 bool
-entity_data_get_property_components(const Entity_data *data, const util::generic_id key, uint32_t *out_value)
+entity_set_name(const Entity_data *data, const uint32_t key, const char *set_value, const size_t size)
 {
-  size_t index;
+  assert(data);
+  assert(key != 0);
+  assert(data->field_name);
+  assert(set_value);
 
-  if(entity_data_exists(data, key, &index))
+  // Search for its index.
+  // If we find it we can set the value.
+
+  size_t index = 0;
+
+  if(entity_exists(data, key, &index))
+
+  index = index * 32;
+
   {
-    *out_value = data->property_components[index];
-  }
-  else
-  {
-    LOG_ERROR(Error_string::entity_not_found());
-    assert(false);
+    assert(index < data->size * 32);
+    if(index < data->size)
+    {
+      memcpy(&data->field_name[index], set_value, sizeof(char) * size);
 
-    return false;
+      return true;
+    }
   }
 
-  return true;
+  return false;
 }
 
 
 bool
-entity_data_set_property_components(Entity_data *data,  const util::generic_id key, const uint32_t value)
+entity_get_tags(const Entity_data *data, const uint32_t key, uint32_t *return_value)
 {
-  assert(data && key);
+  assert(data);
+  assert(key != 0);
+  assert(data->field_tags);
+  assert(return_value);
 
-  size_t index;
+  // Search for its index.
+  // If we find it we can return the value.
 
-  if(entity_data_exists(data, key, &index))
+  size_t index = 0;
+
+  if(entity_exists(data, key, &index))
   {
-    data->property_components[index] = value;
-  }
-  else
-  {
-    LOG_ERROR(Error_string::entity_not_found());
-    assert(false);
+    assert(index < data->size);
 
-    return false;
+    if(index < data->size)
+    {
+      *return_value = data->field_tags[index];
+
+      return true;
+    }
   }
 
-  return true;
+  return false;
 }
 
 
 bool
-entity_data_get_property_user_data(const Entity_data *data, const util::generic_id key, uintptr_t *out_value)
+entity_set_tags(const Entity_data *data, const uint32_t key, const uint32_t *set_value)
 {
-  size_t index;
+  assert(data);
+  assert(key != 0);
+  assert(data->field_tags);
+  assert(set_value);
 
-  if(entity_data_exists(data, key, &index))
+  // Search for its index.
+  // If we find it we can set the value.
+
+  size_t index = 0;
+
+  if(entity_exists(data, key, &index))
+
+  index = index * 1;
+
   {
-    *out_value = data->property_user_data[index];
-  }
-  else
-  {
-    LOG_ERROR(Error_string::entity_not_found());
-    assert(false);
+    assert(index < data->size);
+    if(index < data->size)
+    {
+      data->field_tags[index] = *set_value;
 
-    return false;
+      return true;
+    }
   }
 
-  return true;
+  return false;
 }
 
 
 bool
-entity_data_set_property_user_data(Entity_data *data,  const util::generic_id key, const uintptr_t value)
+entity_get_components(const Entity_data *data, const uint32_t key, uint32_t *return_value)
 {
-  assert(data && key);
+  assert(data);
+  assert(key != 0);
+  assert(data->field_components);
+  assert(return_value);
 
-  size_t index;
+  // Search for its index.
+  // If we find it we can return the value.
 
-  if(entity_data_exists(data, key, &index))
+  size_t index = 0;
+
+  if(entity_exists(data, key, &index))
   {
-    data->property_user_data[index] = value;
-  }
-  else
-  {
-    LOG_ERROR(Error_string::entity_not_found());
-    assert(false);
+    assert(index < data->size);
 
-    return false;
+    if(index < data->size)
+    {
+      *return_value = data->field_components[index];
+
+      return true;
+    }
   }
 
-  return true;
+  return false;
 }
 
 
 bool
-entity_data_get_property_renderer(const Entity_data *data, const util::generic_id key, uint32_t *out_value)
+entity_set_components(const Entity_data *data, const uint32_t key, const uint32_t *set_value)
 {
-  size_t index;
+  assert(data);
+  assert(key != 0);
+  assert(data->field_components);
+  assert(set_value);
 
-  if(entity_data_exists(data, key, &index))
+  // Search for its index.
+  // If we find it we can set the value.
+
+  size_t index = 0;
+
+  if(entity_exists(data, key, &index))
+
+  index = index * 1;
+
   {
-    *out_value = data->property_renderer[index];
-  }
-  else
-  {
-    LOG_ERROR(Error_string::entity_not_found());
-    assert(false);
+    assert(index < data->size);
+    if(index < data->size)
+    {
+      data->field_components[index] = *set_value;
 
-    return false;
+      return true;
+    }
   }
 
-  return true;
+  return false;
 }
 
 
 bool
-entity_data_set_property_renderer(Entity_data *data,  const util::generic_id key, const uint32_t value)
+entity_get_renderer(const Entity_data *data, const uint32_t key, uint32_t *return_value)
 {
-  assert(data && key);
+  assert(data);
+  assert(key != 0);
+  assert(data->field_renderer);
+  assert(return_value);
 
-  size_t index;
+  // Search for its index.
+  // If we find it we can return the value.
 
-  if(entity_data_exists(data, key, &index))
+  size_t index = 0;
+
+  if(entity_exists(data, key, &index))
   {
-    data->property_renderer[index] = value;
-  }
-  else
-  {
-    LOG_ERROR(Error_string::entity_not_found());
-    assert(false);
+    assert(index < data->size);
 
-    return false;
+    if(index < data->size)
+    {
+      *return_value = data->field_renderer[index];
+
+      return true;
+    }
   }
 
-  return true;
+  return false;
 }
 
 
-} // ns
+bool
+entity_set_renderer(const Entity_data *data, const uint32_t key, const uint32_t *set_value)
+{
+  assert(data);
+  assert(key != 0);
+  assert(data->field_renderer);
+  assert(set_value);
+
+  // Search for its index.
+  // If we find it we can set the value.
+
+  size_t index = 0;
+
+  if(entity_exists(data, key, &index))
+
+  index = index * 1;
+
+  {
+    assert(index < data->size);
+    if(index < data->size)
+    {
+      data->field_renderer[index] = *set_value;
+
+      return true;
+    }
+  }
+
+  return false;
+}
+
+
+bool
+entity_get_user_data(const Entity_data *data, const uint32_t key, uintptr_t *return_value)
+{
+  assert(data);
+  assert(key != 0);
+  assert(data->field_user_data);
+  assert(return_value);
+
+  // Search for its index.
+  // If we find it we can return the value.
+
+  size_t index = 0;
+
+  if(entity_exists(data, key, &index))
+  {
+    assert(index < data->size);
+
+    if(index < data->size)
+    {
+      *return_value = data->field_user_data[index];
+
+      return true;
+    }
+  }
+
+  return false;
+}
+
+
+bool
+entity_set_user_data(const Entity_data *data, const uint32_t key, const uintptr_t *set_value)
+{
+  assert(data);
+  assert(key != 0);
+  assert(data->field_user_data);
+  assert(set_value);
+
+  // Search for its index.
+  // If we find it we can set the value.
+
+  size_t index = 0;
+
+  if(entity_exists(data, key, &index))
+
+  index = index * 1;
+
+  {
+    assert(index < data->size);
+    if(index < data->size)
+    {
+      data->field_user_data[index] = *set_value;
+
+      return true;
+    }
+  }
+
+  return false;
+}
+
+
+} // Data ns

@@ -184,9 +184,9 @@ World::find_entities_by_tag(const uint32_t tag_id,
   
   for(uint32_t i = 0; i < data->size; ++i)
   {
-    if(data->property_tag[i] & tag_id)
+    if(Data::entity_get_tags_data(data)[i])
     {
-      found_ents[count] = Entity_ref(Core_detail::entity_id_from_uint(data->entity_id[i]));
+      found_ents[count] = Entity_ref(Core_detail::entity_id_from_uint(data->keys[i]));
       count++;
     }
   }
@@ -256,8 +256,32 @@ World::find_entity_by_name(const char *name) const
   
   data_lock(data);
   
+  auto
+  entity_data_search_property_name = [](const Data::Entity_data *data, const char *value, util::generic_id *out_key) -> bool
+  {
+    LOG_TODO_ONCE("This is a hack solve it.");
+    bool found = false;
+
+    for(size_t i = 0; i < data->size; ++i)
+    {
+      if(!strcmp(value, &data->field_name[i * 32]))
+      {
+        found = true;
+
+        if(out_key)
+        {
+          *out_key = data->keys[i];
+        }
+
+        break;
+      }
+    }
+
+    return found;
+  };
+  
   util::generic_id id;
-  const bool found = World_data::entity_data_search_property_name(data, name, &id);
+  const bool found = entity_data_search_property_name(data, name, &id);
   
   data_unlock(data);
   
@@ -288,13 +312,37 @@ World::find_entities_by_name(const char *name,
   
   data_lock(data);
   
-  LOG_TODO_ONCE("This is such a hack, relies on knowing a string can only be 32 chars long");
+  auto
+  entity_data_search_property_name = [](const Data::Entity_data *data, const char *value, util::generic_id *out_key) -> bool
+  {
+    LOG_TODO_ONCE("This is a hack solve it.");
+    bool found = false;
+
+    for(size_t i = 0; i < data->size; ++i)
+    {
+      if(!strcmp(value, &data->field_name[i * 32]))
+      {
+        found = true;
+
+        if(out_key)
+        {
+          *out_key = data->keys[i];
+        }
+
+        break;
+      }
+    }
+
+    return found;
+  };
   
   for(uint32_t i = 0; i < data->size; ++i)
   {
-    if(strcmp(&data->property_name[i * 32], name) == 0)
+    const bool found = entity_data_search_property_name(data, name, &data->keys[i]);
+
+    if(found)
     {
-      found_ents[count] = Entity_ref(Core_detail::entity_id_from_uint(data->entity_id[i]));
+      found_ents[count] = Entity_ref(Core_detail::entity_id_from_uint(data->keys[i]));
       count++;
     }
   }

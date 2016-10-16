@@ -20,7 +20,7 @@ namespace Entity_detail {
 */
 void
 set_transform(const util::generic_id this_id,
-              World_data::Entity_data *entity_data,
+              Data::Entity_data *entity_data,
               Data::Transform_data *transform_data,
               Data::Rigidbody_data *rb_data,
               World_data::Renderer_mesh_data *mesh_data,
@@ -34,7 +34,7 @@ set_transform(const util::generic_id this_id,
 */
 math::transform
 get_transform(const util::generic_id this_id,
-              World_data::Entity_data *entity_data,
+              Data::Entity_data *entity_data,
               Data::Transform_data *transform_data);
 
 
@@ -43,7 +43,7 @@ get_transform(const util::generic_id this_id,
 */
 Core::Transform
 get_core_transform(const util::generic_id this_id,
-                   World_data::Entity_data *entity_data,
+                   Data::Entity_data *entity_data,
                    Data::Transform_data *transform_data);
   
 

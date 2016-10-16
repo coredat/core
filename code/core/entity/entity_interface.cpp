@@ -79,7 +79,7 @@ Entity_interface::Entity_interface(Core::World &world)
     {
       auto entity_data = m_impl->world->entity;
       
-      World_data::data_lock(entity_data);
+      Data::data_lock(entity_data);
       
       entity_instance_counter++;
       Core_detail::Entity_id entity_id;
@@ -89,25 +89,25 @@ Entity_interface::Entity_interface(Core::World &world)
       const uint32_t id = Core_detail::entity_id_to_uint(entity_id);
       m_impl->id = entity_id;
       
-      const bool added = World_data::entity_data_push_back(entity_data, id);
+      const bool added = Data::entity_insert(entity_data, id);
       
       if(added && success)
       {
         // Zero the data.
         const uint32_t zero(0);
-        World_data::entity_data_set_property_components(entity_data, id, zero);
-        World_data::entity_data_set_property_tag(entity_data, id, zero);
-        World_data::entity_data_set_property_renderer(entity_data, id, zero);
+        Data::entity_set_components(entity_data, id, &zero);
+        Data::entity_set_tags(entity_data, id, &zero);
+        Data::entity_set_renderer(entity_data, id, &zero);
         
         const char *nilstr = "";
-        World_data::entity_data_set_property_name(entity_data, id, nilstr);
+        Data::entity_set_name(entity_data, id, nilstr, 0);
       }
       else
       {
         success = false;
       }
       
-      World_data::data_unlock(entity_data);
+      Data::data_unlock(entity_data);
     }
     
     // Create Transform record

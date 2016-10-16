@@ -21,7 +21,7 @@ namespace Debug_menu {
 
 
 void
-display_entity_data(const World_data::Entity_data *data);
+display_entity_data(const Data::Entity_data *data);
 
 
 } // ns

@@ -10,12 +10,12 @@ namespace Entity_detail {
 
 uint32_t
 has_renderer(const util::generic_id this_id,
-             World_data::Entity_data *entity_data);
+             Data::Entity_data *entity_data);
 
 
 void
 set_renderer(const util::generic_id this_id,
-             World_data::Entity_data *entity_data,
+             Data::Entity_data *entity_data,
              Data::Transform_data *transform_data,
              World_data::Renderer_mesh_data *mesh_data,
              World_data::Renderer_text_draw_calls_data *text_data,
@@ -24,13 +24,13 @@ set_renderer(const util::generic_id this_id,
   
 Core::Renderer
 get_renderer(const util::generic_id this_id,
-             World_data::Entity_data *entity_data,
+             Data::Entity_data *entity_data,
              World_data::Renderer_mesh_data *renderer_material);
 
 
 void
 set_renderer_material(const util::generic_id this_id,
-                      World_data::Entity_data *entity_data,
+                      Data::Entity_data *entity_data,
                       Data::Transform_data *transform_data,
                       World_data::Renderer_mesh_data *mesh_data,
                       const util::generic_id material_id,
@@ -46,7 +46,7 @@ get_renderer_material(const util::generic_id this_id,
   
 void
 set_renderer_text(const util::generic_id this_id,
-                  World_data::Entity_data *entity_data,
+                  Data::Entity_data *entity_data,
                   Data::Transform_data *transform_data,
                   World_data::Renderer_text_draw_calls_data *text_data,
                   const util::generic_id font_id,

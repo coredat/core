@@ -8,7 +8,7 @@ namespace Debug_menu {
 
 
 void
-display_entity_list(World_data::Entity_data *data)
+display_entity_list(Data::Entity_data *data)
 {
   ImGui::Begin("Entities");
   {
@@ -17,15 +17,15 @@ display_entity_list(World_data::Entity_data *data)
   
     for(uint32_t i = 0; i < data->size; ++i)
     {
-      ImGui::Text("%d", data->entity_id[i]);
+      ImGui::Text("%d", data->keys[i]);
       
       const char *name;
-      World_data::entity_data_get_property_name(data, data->entity_id[i], &name);
+      Data::entity_get_name(data, data->keys[i], &name);
       
       ImGui::Text("%s", name);
-      ImGui::Text("%d", data->property_tag[i]);
-      ImGui::Text("%p", (void*)data->property_user_data[i]);
-      ImGui::Text("%d", data->property_renderer[i]);
+      ImGui::Text("%d", data->field_tags[i]);
+      ImGui::Text("%p", (void*)data->field_user_data[i]);
+      ImGui::Text("%d", data->field_renderer[i]);
       
       ImGui::Separator();
     }

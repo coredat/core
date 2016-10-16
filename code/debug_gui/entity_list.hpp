@@ -10,7 +10,7 @@ namespace Debug_menu {
 
 
 void
-display_entity_list(World_data::Entity_data *data);
+display_entity_list(Data::Entity_data *data);
 
 
 } // ns

@@ -125,7 +125,7 @@ think(std::shared_ptr<World_data::World> world,
       // Get cull mask.
       // This isn't particularly nice. We should already have this data to save us looking for it.
       const util::generic_id entity_id = world->mesh_data->renderer_mesh_id[i];
-      World_data::entity_data_get_property_tag(world->entity, entity_id, &draw_calls[i].cull_mask);
+      Data::entity_get_tags(world->entity, entity_id, &draw_calls[i].cull_mask);
     }
   }
   

@@ -1,26 +1,20 @@
 
-
 /*
-  WARNING
-  -------
-  This file is auto generated any changes here may be overwritten.
-  See code_gen.rake in scripts folder.
-
-  This file was last generated on: Sun 09 Oct 2016
+  Warning
+  --
+  This file is auto generated changes here may be overwritten.
 */
 
 
-#ifndef ENTITY_DATA_INCLUDED_55B46E75_1184_471E_BAC5_71617F91174E
-#define ENTITY_DATA_INCLUDED_55B46E75_1184_471E_BAC5_71617F91174E
+#ifndef ENTITY_INCLUDED_18687684_EE0D_42BB_A000_D73617F41A63
+#define ENTITY_INCLUDED_18687684_EE0D_42BB_A000_D73617F41A63
 
 
-#include <utilities/generic_id.hpp>
-#include <utilities/memory_pool.hpp>
-#include <stddef.h>
 #include <stdint.h>
+#include <stddef.h>
 
 
-namespace World_data {
+namespace Data {
 
 
 namespace Entity_component {
@@ -30,234 +24,178 @@ namespace Entity_component {
 } // ns
 
 
-
 /*!
-  \brief Auto-generated structure for Entity_data
+  Entity Model
 */
 struct Entity_data
 {
-  // Data Key
-  util::generic_id *entity_id = nullptr;
+  // key //
+  uint32_t *keys = nullptr;
 
-  // Properties
-  char *property_name = nullptr;
-  uint32_t *property_tag = nullptr;
-  uint32_t *property_components = nullptr;
-  uintptr_t *property_user_data = nullptr;
-  uint32_t *property_renderer = nullptr;
+  // name field data //
+  char *field_name = nullptr;
 
-  // Size information
+  // tags field data //
+  uint32_t *field_tags = nullptr;
+
+  // components field data //
+  uint32_t *field_components = nullptr;
+
+  // renderer field data //
+  uint32_t *field_renderer = nullptr;
+
+  // user_data field data //
+  uintptr_t *field_user_data = nullptr;
+
+  // size //
   size_t size = 0;
   const size_t capacity = 0;
+}; // Entity Model
 
 
-  // Memory chunk
-  const util::memory_chunk memory = util::memory_chunk();
-}; // struct
-
-
-/*!
-  \brief initialise the Entity_data structure, this is will allocate the memory for the keys and properties. Function will take a lock.
-  \param data This structure to initialise.
-  \param size_hint This helps the init function allocate the correct memory.
-*/
-void
-entity_data_init(Entity_data *data, const size_t size_hint);
-
-
-/*!
-  \brief Not currently implemented, but will return the memory. Function will take a lock.
-  \param data The data to free.
-*/
-void
-entity_data_free(Entity_data *data);
-
-
-/*!
-  \brief Gets the number of items in the container.
-  \param data The structure which to find the size.
-*/
-size_t
-entity_data_get_size(const Entity_data *data);
-
-
-/*!
-  \brief Gets the capacity before new memory is needed.
-  \param data The structure which to find the capacity.
-*/
-size_t
-entity_data_get_capacity(const Entity_data *data);
-
-
-/*!
-  \brief Locks the data, any thing else requiring a lock will have to wait (not implemented).
-  \param data The container to lock.
-*/
+// ====================== //
+// COMMON MODEL FUNCTIONS //
+// ====================== //
 void
 data_lock(const Entity_data *data);
 
 
-/*!
-  \brief Unlocks the data, any pending locks can now proceed (not implemented).
-  \param The container to unlock
-*/
 void
 data_unlock(const Entity_data *data);
 
-/*!
-  \brief Push back a new element, increases the size by 1. (Does not take a lock).
-  \param data The container which to push back.
-  \param key The id to use as a key.
-  \param out_index Optional - this will return the inserted location in the container.
-  \return Returns true if it was successful.
-*/
+
 bool
-entity_data_push_back(Entity_data *data, const util::generic_id key, size_t *out_index = nullptr);
+entity_create(Entity_data *data, const size_t size_hint);
 
 
-/*!
-  \brief Erase an item from the container, decreases size by 1. (Does not take a lock).
-  \param data The container to erase from.
-  \param key The key which is used to remove the data.
-  \return Returns true if it was successful.
-*/
+void
+entity_destroy(Entity_data *data);
+
+
+uint32_t
+entity_insert(Entity_data *data, const uint32_t key);
+
+
 bool
-entity_data_erase(Entity_data *data, const util::generic_id key);
+entity_remove(Entity_data *data, const uint32_t key);
 
 
-/*!
-  \brief Checks to see if a key exists in the container.
-  \param data The container to search.
-  \param key The key to search for.
-  \param out_index Optional - this will return the location of the key.
-  \return Returns true if a key was found.
-*/
 bool
-entity_data_exists(const Entity_data *data, const util::generic_id key, size_t *out_index = nullptr);
+entity_exists(const Entity_data *data, const uint32_t key, size_t *out_index = nullptr);
 
 
-/*!
-  \brief Getter for property_name.
-  \param data The container to get information from.
-  \param key The key to search for.
-  \param value The output value, which will be set if the key is found.
-  \return Returns true if the data was found.
-*/
+void
+entity_clear(Entity_data *data);
+
+
 bool
-entity_data_get_property_name(const Entity_data *data, const util::generic_id key, const char **value);
+entity_is_empty(const Entity_data *data);
 
 
-/*!
-  \brief Setter for property_name.
-  \param data The container to update.
-  \param key The key to search for.
-  \param value The new value of the data.
-  \return Returns true if the data was set.
-*/
+size_t
+entity_get_size(const Entity_data *data);
+
+
+size_t
+entity_get_capacity(const Entity_data *data);
+
+
 bool
-entity_data_set_property_name(Entity_data *data,  const util::generic_id key, const char *value);
+entity_resize_capacity(Entity_data *data, const size_t size_hint);
 
 
-/*!
-  \brief Searches for a given value.
-  \param data The container to search.
-  \param value The value which to search for.
-  \param out_key Optional the key for that value.
-  \return Returns true if the data was found.
-*/
+
+// ===================== //
+// DATA GETTER FUNCTIONS //
+// ===================== //
+
+
+const char*
+entity_get_const_name_data(const Entity_data *data);
+
+
+char*
+entity_get_name_data(Entity_data *data);
+
+
+const uint32_t*
+entity_get_const_tags_data(const Entity_data *data);
+
+
+uint32_t*
+entity_get_tags_data(Entity_data *data);
+
+
+const uint32_t*
+entity_get_const_components_data(const Entity_data *data);
+
+
+uint32_t*
+entity_get_components_data(Entity_data *data);
+
+
+const uint32_t*
+entity_get_const_renderer_data(const Entity_data *data);
+
+
+uint32_t*
+entity_get_renderer_data(Entity_data *data);
+
+
+const void**
+entity_get_const_user_data_data(const Entity_data *data);
+
+
+void**
+entity_get_user_data_data(Entity_data *data);
+
+
+// =============== //
+// FIELD FUNCTIONS //
+// =============== //
+
+
 bool
-entity_data_search_property_name(const Entity_data *data, const char *value, util::generic_id *out_key = nullptr);
+entity_get_name(const Entity_data *data, const uint32_t key, const char **return_value);
 
 
-/*!
-  \brief Getter for property_tag.
-  \param data The container to get information from.
-  \param key The key to search for.
-  \param value The output value, which will be set if the key is found.
-  \return Returns true if the data was found.
-*/
 bool
-entity_data_get_property_tag(const Entity_data *data, const util::generic_id key, uint32_t *value);
+entity_set_name(const Entity_data *data, const uint32_t key, const char *set_value, const size_t size);
 
 
-/*!
-  \brief Setter for property_tag.
-  \param data The container to update.
-  \param key The key to search for.
-  \param value The new value of the data.
-  \return Returns true if the data was set.
-*/
 bool
-entity_data_set_property_tag(Entity_data *data,  const util::generic_id key, const uint32_t value);
+entity_get_tags(const Entity_data *data, const uint32_t key, uint32_t *return_value);
 
 
-/*!
-  \brief Getter for property_components.
-  \param data The container to get information from.
-  \param key The key to search for.
-  \param value The output value, which will be set if the key is found.
-  \return Returns true if the data was found.
-*/
 bool
-entity_data_get_property_components(const Entity_data *data, const util::generic_id key, uint32_t *value);
+entity_set_tags(const Entity_data *data, const uint32_t key, const uint32_t *set_value);
 
 
-/*!
-  \brief Setter for property_components.
-  \param data The container to update.
-  \param key The key to search for.
-  \param value The new value of the data.
-  \return Returns true if the data was set.
-*/
 bool
-entity_data_set_property_components(Entity_data *data,  const util::generic_id key, const uint32_t value);
+entity_get_components(const Entity_data *data, const uint32_t key, uint32_t *return_value);
 
 
-/*!
-  \brief Getter for property_user_data.
-  \param data The container to get information from.
-  \param key The key to search for.
-  \param value The output value, which will be set if the key is found.
-  \return Returns true if the data was found.
-*/
 bool
-entity_data_get_property_user_data(const Entity_data *data, const util::generic_id key, uintptr_t *value);
+entity_set_components(const Entity_data *data, const uint32_t key, const uint32_t *set_value);
 
 
-/*!
-  \brief Setter for property_user_data.
-  \param data The container to update.
-  \param key The key to search for.
-  \param value The new value of the data.
-  \return Returns true if the data was set.
-*/
 bool
-entity_data_set_property_user_data(Entity_data *data,  const util::generic_id key, const uintptr_t value);
+entity_get_renderer(const Entity_data *data, const uint32_t key, uint32_t *return_value);
 
 
-/*!
-  \brief Getter for property_renderer.
-  \param data The container to get information from.
-  \param key The key to search for.
-  \param value The output value, which will be set if the key is found.
-  \return Returns true if the data was found.
-*/
 bool
-entity_data_get_property_renderer(const Entity_data *data, const util::generic_id key, uint32_t *value);
+entity_set_renderer(const Entity_data *data, const uint32_t key, const uint32_t *set_value);
 
 
-/*!
-  \brief Setter for property_renderer.
-  \param data The container to update.
-  \param key The key to search for.
-  \param value The new value of the data.
-  \return Returns true if the data was set.
-*/
 bool
-entity_data_set_property_renderer(Entity_data *data,  const util::generic_id key, const uint32_t value);
+entity_get_user_data(const Entity_data *data, const uint32_t key, uintptr_t *return_value);
 
 
-} // ns
+bool
+entity_set_user_data(const Entity_data *data, const uint32_t key, const uintptr_t *set_value);
+
+
+} // Data ns
 
 
 #endif // inc guard

@@ -22,7 +22,7 @@ namespace Entity_detail {
 [[deprecated("These little friend things need to go")]]
 Core::Renderer
 get_renderer(const util::generic_id this_id,
-             World_data::Entity_data *entity_data,
+             Data::Entity_data *entity_data,
              World_data::Renderer_mesh_data *renderer_material);
 
 

@@ -11,53 +11,53 @@ namespace Entity_detail {
 
 void
 set_user_data(const util::generic_id this_id,
-              World_data::Entity_data *entity_data,
+              Data::Entity_data *entity_data,
               const uintptr_t user_data);
   
   
 uintptr_t
 get_user_data(const util::generic_id this_id,
-              World_data::Entity_data *entity_data);
+              Data::Entity_data *entity_data);
 
 
 uint32_t
 get_tags(const util::generic_id this_id,
-         World_data::Entity_data *entity_data);
+         Data::Entity_data *entity_data);
   
   
 bool
 has_tag(const util::generic_id this_id,
-        World_data::Entity_data *entity_data,
+        Data::Entity_data *entity_data,
         const uint32_t tag_id);
   
   
 void
 set_tags(const util::generic_id this_id,
-         World_data::Entity_data *entity_data,
+         Data::Entity_data *entity_data,
          const uint32_t set_tags);
   
   
 void
 add_tag(const util::generic_id this_id,
-        World_data::Entity_data *entity_data,
+        Data::Entity_data *entity_data,
         const uint32_t add_tag);
   
   
 void
 remove_tag(const util::generic_id this_id,
-           World_data::Entity_data *entity_data,
+           Data::Entity_data *entity_data,
            const uint32_t tag);
 
 
 void
 set_name(const util::generic_id this_id,
-         World_data::Entity_data *entity_data,
+         Data::Entity_data *entity_data,
          const char* set_name);
   
   
 const char*
 get_name(const util::generic_id this_id,
-         World_data::Entity_data *entity_data);
+         Data::Entity_data *entity_data);
 
 
 } // ns

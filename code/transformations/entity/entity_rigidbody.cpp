@@ -42,7 +42,7 @@ set_collider(const util::generic_id this_id,
     if(Data::transform_exists(transform_data, this_id, &index))
     {
       //TODO: This can be async
-      update_component(this_id, world->entity, World_data::Entity_component::has_physics);
+      update_component(this_id, world->entity, Data::Entity_component::has_physics);
     
       switch(collider.get_type())
       {
@@ -176,7 +176,7 @@ get_rigidbody(const util::generic_id this_id)
 
 void
 update_collider(const util::generic_id this_id,
-                World_data::Entity_data *entity_data,
+                Data::Entity_data *entity_data,
                 Data::Rigidbody_data *phys_data,
                 const math::transform *transform,
                 const math::aabb *model_aabb,
@@ -192,13 +192,13 @@ update_collider(const util::generic_id this_id,
   {
     assert(entity_data);
     
-    World_data::data_lock(entity_data);
+    Data::data_lock(entity_data);
   
-    World_data::entity_data_get_property_components(entity_data,
-                                                    this_id,
-                                                    &components);
+    Data::entity_get_components(entity_data,
+                                this_id,
+                                &components);
     
-    World_data::data_unlock(entity_data);
+    Data::data_unlock(entity_data);
   }
   
   // If this is a physics object then update it.
@@ -206,7 +206,7 @@ update_collider(const util::generic_id this_id,
     assert(phys_data);
   
     // Update the physics stuff.
-    if(components & World_data::Entity_component::has_physics)
+    if(components & Data::Entity_component::has_physics)
     {
       Data::data_lock(phys_data);
       

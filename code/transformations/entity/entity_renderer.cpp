@@ -25,14 +25,14 @@ namespace Entity_detail {
 
 uint32_t
 has_renderer(const util::generic_id this_id,
-             World_data::Entity_data *entity_data)
+             Data::Entity_data *entity_data)
 {
-  World_data::data_lock(entity_data);
+  Data::data_lock(entity_data);
   
   uint32_t renderer_type(0);
-  World_data::entity_data_get_property_renderer(entity_data, this_id, &renderer_type);
+  Data::entity_get_renderer(entity_data, this_id, &renderer_type);
   
-  World_data::data_unlock(entity_data);
+  Data::data_unlock(entity_data);
 
   return renderer_type;
 }
@@ -40,7 +40,7 @@ has_renderer(const util::generic_id this_id,
 
 void
 set_renderer(const util::generic_id this_id,
-             World_data::Entity_data *entity_data,
+             Data::Entity_data *entity_data,
              Data::Transform_data *transform_data,
              World_data::Renderer_mesh_data *renderer_material,
              World_data::Renderer_text_draw_calls_data *text_data,
@@ -63,11 +63,11 @@ set_renderer(const util::generic_id this_id,
     
     assert(renderer_material);
     
-    World_data::data_lock(entity_data);
+    Data::data_lock(entity_data);
     World_data::data_lock(renderer_material);
     
     uint32_t renderer_type = 0;
-    World_data::entity_data_get_property_renderer(entity_data, this_id, &renderer_type);
+    Data::entity_get_renderer(entity_data, this_id, &renderer_type);
     
     // If exists destroy old renderer
     if(renderer_type != 0)
@@ -88,7 +88,7 @@ set_renderer(const util::generic_id this_id,
     }
     
     World_data::data_unlock(renderer_material);
-    World_data::data_unlock(entity_data);
+    Data::data_unlock(entity_data);
   }
   
   // Set or update renderer
@@ -128,7 +128,7 @@ set_renderer(const util::generic_id this_id,
 
 Core::Renderer
 get_renderer(const util::generic_id this_id,
-             World_data::Entity_data *entity_data,
+             Data::Entity_data *entity_data,
              World_data::Renderer_mesh_data *renderer_material)
 {
   // Check valid
@@ -145,10 +145,10 @@ get_renderer(const util::generic_id this_id,
     assert(renderer_material);
     
     World_data::data_lock(renderer_material);
-    World_data::data_lock(entity_data);
+    Data::data_lock(entity_data);
     
     uint32_t renderer_type = 0;
-    World_data::entity_data_get_property_renderer(entity_data, this_id, &renderer_type);
+    Data::entity_get_renderer(entity_data, this_id, &renderer_type);
     
     // What type of renderer?
     if(renderer_type != 0)
@@ -184,7 +184,7 @@ get_renderer(const util::generic_id this_id,
     }
     
     World_data::data_unlock(renderer_material);
-    World_data::data_unlock(entity_data);
+    Data::data_unlock(entity_data);
   }
   
   return return_renderer;
@@ -193,7 +193,7 @@ get_renderer(const util::generic_id this_id,
 
 void
 set_renderer_material(const util::generic_id this_id,
-                      World_data::Entity_data *entity_data,
+                      Data::Entity_data *entity_data,
                       Data::Transform_data *transform_data,
                       World_data::Renderer_mesh_data *mesh_data,
                       const util::generic_id material_id,
@@ -209,10 +209,10 @@ set_renderer_material(const util::generic_id this_id,
   {
     assert(entity_data);
     
-    World_data::data_lock(entity_data);
+    Data::data_lock(entity_data);
     
     uint32_t renderer_type(0);
-    World_data::entity_data_get_property_renderer(entity_data, this_id, &renderer_type);
+    Data::entity_get_renderer(entity_data, this_id, &renderer_type);
     
     if(renderer_type != 0 && (Core::Renderer_type)renderer_type != Core::Renderer_type::material)
     {
@@ -221,10 +221,11 @@ set_renderer_material(const util::generic_id this_id,
     }
     else
     {
-      World_data::entity_data_set_property_renderer(entity_data, this_id, (uint32_t)Core::Renderer_type::material);
+      auto renderer = (uint32_t)Core::Renderer_type::material;
+      Data::entity_set_renderer(entity_data, this_id, &renderer);
     }
     
-    World_data::data_unlock(entity_data);
+    Data::data_unlock(entity_data);
   }
   
   assert(mesh_data);
@@ -354,7 +355,7 @@ get_renderer_material(const util::generic_id this_id,
 
 void
 set_renderer_text(const util::generic_id this_id,
-                  World_data::Entity_data *entity_data,
+                  Data::Entity_data *entity_data,
                   Data::Transform_data *transform_data,
                   World_data::Renderer_text_draw_calls_data *text_data,
                   const util::generic_id font_id,
@@ -374,7 +375,7 @@ set_renderer_text(const util::generic_id this_id,
     
     const uint32_t renderer_type = has_renderer(this_id, entity_data);
     
-    World_data::data_lock(entity_data);
+    Data::data_lock(entity_data);
   
     if(renderer_type != 0 && (Core::Renderer_type)renderer_type != Core::Renderer_type::material)
     {
@@ -384,10 +385,11 @@ set_renderer_text(const util::generic_id this_id,
     }
     else
     {
-      World_data::entity_data_set_property_renderer(entity_data, this_id, (uint32_t)Core::Renderer_type::text);
+      auto renderer = (uint32_t)Core::Renderer_type::text;
+      Data::entity_set_renderer(entity_data, this_id, &renderer);
     }
     
-    World_data::data_unlock(entity_data);
+    Data::data_unlock(entity_data);
   }
   
   LOG_TODO_ONCE("Are all these resources required? - locking up a large portion of data!");

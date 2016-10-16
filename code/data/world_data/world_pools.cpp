@@ -36,8 +36,8 @@ World::World(const uint32_t entity_hint)
   Data::Transform_data *transform_data = new Data::Transform_data;
   Data::transform_create(transform_data, entity_hint);
   
-  Entity_data *entity_data = new Entity_data;
-  World_data::entity_data_init(entity_data, entity_hint);
+  Data::Entity_data *entity_data = new Data::Entity_data;
+  Data::entity_create(entity_data, entity_hint);
   
   Renderer_text_draw_calls_data *text_draw_calls = new Renderer_text_draw_calls_data;
   renderer_text_draw_calls_data_init(text_draw_calls, entity_hint);
@@ -93,13 +93,13 @@ world_find_entities_with_tag(World *world_data,
   
   for(uint32_t i = 0; i < entity_data->size; ++i)
   {
-    auto tags = entity_data->property_tag[i];
+    auto tags = Data::entity_get_tags_data(entity_data)[i];
     
     if(tags & tag)
     {
       if(size_of_out > number_found)
       {
-        out_ids[number_found++] = entity_data->entity_id[i];
+        out_ids[number_found++] = entity_data->keys[i];
       }
       else
       {
@@ -120,7 +120,7 @@ world_update_scene_graph_changes(World_data::World *world_data,
   {
     const util::generic_id id = graph_changes->field_deleted_entity[i];
     
-    entity_data_erase(world_data->entity, id);
+    entity_remove(world_data->entity, id);
     transform_remove(world_data->transform, id);
     
     if(renderer_mesh_data_exists(world_data->mesh_data, id))
