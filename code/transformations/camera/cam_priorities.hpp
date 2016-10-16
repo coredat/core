@@ -4,7 +4,7 @@
 
 #include <systems/camera/camera_properties.hpp>
 #include <core/transform/transform_fwd.hpp>
-#include <data/world_data/transform.hpp> // fwd dec
+#include <data/world_data/transform_data.hpp> // fwd dec
 #include <data/world_data/camera_data.hpp> /// fwd dec
 #include <data/global_data/texture_data.hpp> // fwd dec
 #include <graphics_api/ogl/ogl_frame_buffer.hpp>

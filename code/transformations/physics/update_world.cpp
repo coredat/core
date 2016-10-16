@@ -43,7 +43,7 @@ update_world(std::shared_ptr<World_data::World> curr_world,
   is_listening = true;
   world = curr_world;
   
-  LOG_TODO_ONCE("Use Scratch stream");
+  LOG_TODO_ONCE("Use A data pool");
   
   collisions = SCRATCH_ALIGNED_ALLOC(Core::Collision_pair, 2048);
   memset(collisions, 0, sizeof(collisions) * 2048);

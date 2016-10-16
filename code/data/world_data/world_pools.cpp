@@ -3,6 +3,7 @@
 #include "rigidbody_data.hpp"
 #include "pending_entity_removal.hpp"
 #include "camera_data.hpp"
+#include "transform_data.hpp"
 #include "renderer_mesh_data.hpp"
 #include "renderer_text_draw_calls_data.hpp"
 #include "entity_data.hpp"

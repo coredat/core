@@ -40,6 +40,7 @@ World::World(Context &ctx, const World_setup setup)
   
   m_impl->world_instance_id = Core_detail::world_index_add_world_data(setup.entity_pool_size);
   
+//  m_impl->world_data = std::make_shared<World_data::World>(setup.entity_pool_size);
   m_impl->context = &ctx;
   
   m_impl->dt_timer.start();
@@ -151,7 +152,7 @@ World::get_entity_count_in_world() const
 {
   assert(m_impl && m_impl->world_instance_id);
   auto world = Core_detail::world_index_get_world_data(m_impl->world_instance_id);
-  
+
   return world->entity->size;
 }
 

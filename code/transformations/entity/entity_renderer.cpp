@@ -12,7 +12,7 @@
 #include <data/global_data/memory_data.hpp>
 #include <data/world_data/world_data.hpp>
 #include <data/world_data/entity_data.hpp>
-#include <data/world_data/transform.hpp>
+#include <data/world_data/transform_data.hpp>
 #include <common/error_strings.hpp>
 #include <graphics_api/vertex_format.hpp>
 #include <graphics_api/utils/geometry.hpp>
