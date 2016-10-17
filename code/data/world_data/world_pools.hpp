@@ -18,7 +18,7 @@ struct World
   Data::Transform_data                    *transform            = nullptr;
   Data::Entity_data                       *entity               = nullptr;
   Data::Pending_entity_removal_data   *entity_removal = nullptr;
-  Camera_data                       *camera_data          = nullptr;
+  Data::Camera_data                       *camera_data          = nullptr;
   Data::Rigidbody_data                      *rigidbody_data         = nullptr;
   Renderer_mesh_data                *mesh_data            = nullptr;
   Renderer_text_draw_calls_data     *text_data            = nullptr;

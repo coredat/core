@@ -62,7 +62,7 @@ think(std::shared_ptr<World_data::World> world,
   */
   auto cam_data = world->camera_data;
 
-  World_data::data_lock(cam_data);
+  Data::data_lock(cam_data);
   uint32_t number_of_cam_runs = 0;
   
   Camera_utils::Cam_run *cam_runs = SCRATCH_ALIGNED_ALLOC(Camera_utils::Cam_run, cam_data->size);
@@ -75,7 +75,7 @@ think(std::shared_ptr<World_data::World> world,
       Core::Transform *cam_transforms = SCRATCH_ALIGNED_ALLOC(Core::Transform, cam_data->size);
       
       Camera_utils::get_camera_transforms(world->transform,
-                                          cam_data->property_entity_id,
+                                          cam_data->field_entity_id,
                                           cam_transforms,
                                           cam_data->size);
       
@@ -87,7 +87,7 @@ think(std::shared_ptr<World_data::World> world,
     }
   }
   
-  World_data::data_unlock(cam_data);
+  Data::data_unlock(cam_data);
   
   
   /*

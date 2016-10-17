@@ -9,7 +9,7 @@ namespace Debug_menu {
 
 
 void
-display_camera_data(World_data::Camera_data *data);
+display_camera_data(Data::Camera_data *data);
 
 
 } // ns

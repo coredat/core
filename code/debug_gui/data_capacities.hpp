@@ -29,7 +29,7 @@ display_capacities(Resource_data::Text_mesh_data *text_mesh_data,
                    Resource_data::Shader_data *shader_data,
                    Resource_data::Texture_data *texture_data,
                    
-                   World_data::Camera_data *camera_data,
+                   Data::Camera_data *camera_data,
                    Data::Entity_data *entity_data,
                    World_data::Renderer_mesh_data *renderer_mesh_data,
                    World_data::Renderer_text_draw_calls_data *renderer_text_draw_calls,

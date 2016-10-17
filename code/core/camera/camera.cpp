@@ -55,24 +55,26 @@ namespace {
 
 
 inline util::generic_id
-create_new_camera(World_data::Camera_data *cam_data)
+create_new_camera(Data::Camera_data *cam_data)
 {
-  World_data::data_lock(cam_data);
+  Data::data_lock(cam_data);
   
   // Push and set the defaults.
-  util::generic_id id = cam_data->size + 1;
-  World_data::camera_data_push_back(cam_data, id);
-  
+  const util::generic_id id = Data::camera_insert(cam_data);
+
   if(id)
   {
-    World_data::camera_data_set_property_entity_id(cam_data, id, util::generic_id_invalid());
-    World_data::camera_data_set_property_camera(cam_data, id, ::Camera::Camera_properties{});
+    const auto no_id = util::generic_id_invalid();
+    Data::camera_set_entity_id(cam_data, id, &no_id);
     
-    const uint32_t priority = Camera_utils::find_highest_priority(cam_data->property_priority, cam_data->size);
-    World_data::camera_data_set_property_priority(cam_data, id, priority + 1);
+    const auto default_prop = ::Camera::Camera_properties{};
+    Data::camera_set_properties(cam_data, id, &default_prop);
+    
+    const uint32_t priority = Camera_utils::find_highest_priority(cam_data->field_priority, cam_data->size) + 1;
+    Data::camera_set_priority(cam_data, id, &priority);
   }
   
-  World_data::data_unlock(cam_data);
+  Data::data_unlock(cam_data);
   
   return id;
 }
@@ -162,15 +164,15 @@ Camera::set_tags_to_render(const uint32_t tags)
     auto cam_data = m_impl->world->camera_data;
     const auto cam_id = m_impl->camera_id;
     
-    World_data::data_lock(cam_data);
+    Data::data_lock(cam_data);
     
     ::Camera::Camera_properties props;
-    World_data::camera_data_get_property_camera(cam_data, cam_id, &props);
+    Data::camera_get_properties(cam_data, cam_id, &props);
     
     props.cull_mask = tags;
-    World_data::camera_data_set_property_camera(cam_data, cam_id, props);
+    Data::camera_set_properties(cam_data, cam_id, &props);
     
-    World_data::data_unlock(cam_data);
+    Data::data_unlock(cam_data);
   }
 }
 
@@ -179,15 +181,15 @@ namespace
 {
 
 inline ::Camera::Camera_properties
-get_properties(World_data::Camera_data *cam_data, util::generic_id cam_id)
+get_properties(Data::Camera_data *cam_data, util::generic_id cam_id)
 {
   ::Camera::Camera_properties props;
 
-  World_data::data_lock(cam_data);
+  Data::data_lock(cam_data);
 
-  World_data::camera_data_get_property_camera(cam_data, cam_id, &props);
+  Data::camera_set_properties(cam_data, cam_id, &props);
 
-  World_data::data_unlock(cam_data);
+  Data::data_unlock(cam_data);
   
   return props;
 }
@@ -222,15 +224,16 @@ Camera::set_post_process(const Core::Post_process &post)
   {
     auto cam_data = m_impl->world->camera_data;
     
-    World_data::data_lock(cam_data);
+    Data::data_lock(cam_data);
     
     Post_renderer::Post_shader post_shader;
 //    Post_renderer::create_post_shader();
     
-    World_data::camera_data_set_property_post_process_id(cam_data, m_impl->camera_id, post.get_id());
+    const auto id = post.get_id();
+    Data::camera_set_post_process_id(cam_data, m_impl->camera_id, &id);
     
     
-    World_data::data_unlock(cam_data);
+    Data::data_unlock(cam_data);
   }
 }
 
@@ -256,11 +259,12 @@ Camera::set_attached_entity(Entity_ref entity)
   {
     auto cam_data = m_impl->world->camera_data;
     
-    World_data::data_lock(cam_data);
+    Data::data_lock(cam_data);
     
-    World_data::camera_data_set_property_entity_id(cam_data, m_impl->camera_id, entity.get_id());
+    const auto id = entity.get_id();
+    Data::camera_set_entity_id(cam_data, m_impl->camera_id, &id);
     
-    World_data::data_unlock(cam_data);
+    Data::data_unlock(cam_data);
   }
 }
 
@@ -278,9 +282,9 @@ Camera::get_attached_entity() const
   {
     auto cam_data = m_impl->world->camera_data;
     
-    World_data::data_lock(cam_data);
-    World_data::camera_data_get_property_entity_id(cam_data, m_impl->camera_id, &entity_id);
-    World_data::data_unlock(cam_data);
+    Data::data_lock(cam_data);
+    Data::camera_get_entity_id(cam_data, m_impl->camera_id, &entity_id);
+    Data::data_unlock(cam_data);
   }
   
   Entity_ref entity(Core_detail::entity_id_from_uint(entity_id));
@@ -301,47 +305,48 @@ Camera::set_priority(const uint32_t priority)
   auto cam_data = m_impl->world->camera_data;
   const auto cam_id = m_impl->camera_id;
   
-  World_data::data_lock(cam_data);
+  Data::data_lock(cam_data);
   
   // Check priority is different.
   uint32_t old_priority;
-  World_data::camera_data_get_property_priority(cam_data, cam_id, &old_priority);
+  Data::camera_get_priority(cam_data, cam_id, &old_priority);
   
   if(old_priority != priority)
   {
     // Get the rest of the data.
     ::Camera::Camera_properties props;
-    World_data::camera_data_get_property_camera(cam_data, cam_id, &props);
+    Data::camera_get_properties(cam_data, cam_id, &props);
     
     util::generic_id attached_entity;
-    World_data::camera_data_get_property_entity_id(cam_data, cam_id, &attached_entity);
+    Data::camera_get_entity_id(cam_data, cam_id, &attached_entity);
     
     util::generic_id texture_id;
-    World_data::camera_data_get_property_texture_id(cam_data, cam_id, &texture_id);
+    Data::camera_get_texture_id(cam_data, cam_id, &texture_id);
     
     util::generic_id post_id;
-    World_data::camera_data_get_property_post_process_id(cam_data, cam_id, &post_id);
+    Data::camera_get_post_process_id(cam_data, cam_id, &post_id);
     
     // Remove old data.
-    World_data::camera_data_erase(cam_data, cam_id);
-  
-    // Insert the new data
-    const size_t insert_at = Camera_utils::find_insert_point_based_on_priority(priority, cam_data->property_priority, cam_data->size);
-    if(World_data::camera_data_insert(cam_data, cam_id, insert_at))
-    {
-      World_data::camera_data_set_property_camera(cam_data, cam_id, props);
-      World_data::camera_data_set_property_entity_id(cam_data, cam_id, attached_entity);
-      World_data::camera_data_set_property_priority(cam_data, cam_id, priority);
-      World_data::camera_data_set_property_post_process_id(cam_data, cam_id, post_id);
-      World_data::camera_data_set_property_texture_id(cam_data, cam_id, texture_id);
-    }
-    else
-    {
-      LOG_ERROR(Error_string::failed_to_create_resource());
-    }
+//    Data::camera_erase(cam_data, cam_id);
+//  
+//    // Insert the new data
+//    const size_t insert_at = Camera_utils::find_insert_point_based_on_priority(priority, cam_data->field_priority, cam_data->size);
+//    if(Data::camera_insert(cam_data, cam_id, insert_at))
+//    {
+//      Data::camera_set_properties(cam_data, cam_id, &props);
+//      Data::camera_set_entity_id(cam_data, cam_id, &attached_entity);
+//      Data::camera_set_priority(cam_data, cam_id, &priority);
+//      Data::camera_set_post_process_id(cam_data, cam_id, &post_id);
+//      Data::camera_set_texture_id(cam_data, cam_id, &texture_id);
+//    }
+//    else
+//    {
+//      LOG_ERROR(Error_string::failed_to_create_resource());
+//    }
+    LOG_FATAL("Setting priority disabled.");
   }
   
-  World_data::data_unlock(cam_data);
+  Data::data_unlock(cam_data);
 }
 
 
@@ -352,12 +357,12 @@ Camera::get_priority() const
   {
     auto cam_data = m_impl->world->camera_data;
     
-    World_data::data_lock(cam_data);
-    if(!World_data::camera_data_get_property_priority(cam_data, m_impl->camera_id, &priority))
+    Data::data_lock(cam_data);
+    if(!Data::camera_get_priority(cam_data, m_impl->camera_id, &priority))
     {
       LOG_ERROR(Error_string::failed_to_find_resource());
     }
-    World_data::data_unlock(cam_data);
+    Data::data_unlock(cam_data);
   }
   
   return priority;
@@ -378,15 +383,15 @@ Camera::set_type(const Core::Camera_type cam_type)
     auto cam_data = m_impl->world->camera_data;
     const auto cam_id = m_impl->camera_id;
     
-    World_data::data_lock(cam_data);
+    Data::data_lock(cam_data);
     
     ::Camera::Camera_properties props;
-    World_data::camera_data_get_property_camera(cam_data, cam_id, &props);
+    Data::camera_get_properties(cam_data, cam_id, &props);
     
     props.type = cam_type;
-    World_data::camera_data_set_property_camera(cam_data, cam_id, props);
+    Data::camera_set_properties(cam_data, cam_id, &props);
     
-    World_data::data_unlock(cam_data);
+    Data::data_unlock(cam_data);
   }
 }
 
@@ -418,15 +423,15 @@ Camera::set_clear_flags(const uint32_t flags)
     auto cam_data = m_impl->world->camera_data;
     const auto cam_id = m_impl->camera_id;
     
-    World_data::data_lock(cam_data);
+    Data::data_lock(cam_data);
     
     ::Camera::Camera_properties props;
-    World_data::camera_data_get_property_camera(cam_data, cam_id, &props);
+    Data::camera_get_properties(cam_data, cam_id, &props);
     
     props.clear_flags = flags;
-    World_data::camera_data_set_property_camera(cam_data, cam_id, props);
+    Data::camera_set_properties(cam_data, cam_id, &props);
     
-    World_data::data_unlock(cam_data);
+    Data::data_unlock(cam_data);
   }
 }
 
@@ -449,11 +454,12 @@ Camera::set_render_target(const Render_target &target)
 {
   auto cam_data = m_impl->world->camera_data;
   
-  World_data::data_lock(cam_data);
+  Data::data_lock(cam_data);
   
-  World_data::camera_data_set_property_texture_id(cam_data, m_impl->camera_id, target.get_id());
+  const auto id = target.get_id();
+  Data::camera_set_texture_id(cam_data, m_impl->camera_id, &id);
   
-  World_data::data_unlock(cam_data);
+  Data::data_unlock(cam_data);
 }
 
 
@@ -481,15 +487,15 @@ Camera::set_width(const uint32_t width)
     auto cam_data = m_impl->world->camera_data;
     const auto cam_id = m_impl->camera_id;
     
-    World_data::data_lock(cam_data);
+    Data::data_lock(cam_data);
     
     ::Camera::Camera_properties props;
-    World_data::camera_data_get_property_camera(cam_data, cam_id, &props);
+    Data::camera_get_properties(cam_data, cam_id, &props);
     
     props.viewport_width = width;
-    World_data::camera_data_set_property_camera(cam_data, cam_id, props);
+    Data::camera_set_properties(cam_data, cam_id, &props);
     
-    World_data::data_unlock(cam_data);
+    Data::data_unlock(cam_data);
   }
 }
 
@@ -522,15 +528,15 @@ Camera::set_height(const uint32_t height)
     auto cam_data = m_impl->world->camera_data;
     const auto cam_id = m_impl->camera_id;
     
-    World_data::data_lock(cam_data);
+    Data::data_lock(cam_data);
     
     ::Camera::Camera_properties props;
-    World_data::camera_data_get_property_camera(cam_data, cam_id, &props);
+    Data::camera_get_properties(cam_data, cam_id, &props);
     
     props.viewport_height = height;
-    World_data::camera_data_set_property_camera(cam_data, cam_id, props);
+    Data::camera_set_properties(cam_data, cam_id, &props);
     
-    World_data::data_unlock(cam_data);
+    Data::data_unlock(cam_data);
   }
 }
 
@@ -562,15 +568,15 @@ Camera::set_feild_of_view(const float fov_radians)
     auto cam_data = m_impl->world->camera_data;
     const auto cam_id = m_impl->camera_id;
     
-    World_data::data_lock(cam_data);
+    Data::data_lock(cam_data);
     
     ::Camera::Camera_properties props;
-    World_data::camera_data_get_property_camera(cam_data, cam_id, &props);
+    Data::camera_get_properties(cam_data, cam_id, &props);
     
     props.fov = fov_radians;
-    World_data::camera_data_set_property_camera(cam_data, cam_id, props);
+    Data::camera_set_properties(cam_data, cam_id, &props);
     
-    World_data::data_unlock(cam_data);
+    Data::data_unlock(cam_data);
   }
 }
 
@@ -602,15 +608,15 @@ Camera::set_near_plane(const float near_plane)
     auto cam_data = m_impl->world->camera_data;
     const auto cam_id = m_impl->camera_id;
     
-    World_data::data_lock(cam_data);
+    Data::data_lock(cam_data);
     
     ::Camera::Camera_properties props;
-    World_data::camera_data_get_property_camera(cam_data, cam_id, &props);
+    Data::camera_get_properties(cam_data, cam_id, &props);
     
     props.near_plane = near_plane;
-    World_data::camera_data_set_property_camera(cam_data, cam_id, props);
+    Data::camera_set_properties(cam_data, cam_id, &props);
     
-    World_data::data_unlock(cam_data);
+    Data::data_unlock(cam_data);
   }
 }
 
@@ -642,15 +648,15 @@ Camera::set_far_plane(const float far_plane)
     auto cam_data = m_impl->world->camera_data;
     const auto cam_id = m_impl->camera_id;
     
-    World_data::data_lock(cam_data);
+    Data::data_lock(cam_data);
     
     ::Camera::Camera_properties props;
-    World_data::camera_data_get_property_camera(cam_data, cam_id, &props);
+    Data::camera_get_properties(cam_data, cam_id, &props);
     
     props.far_plane = far_plane;
-    World_data::camera_data_set_property_camera(cam_data, cam_id, props);
+    Data::camera_set_properties(cam_data, cam_id, &props);
     
-    World_data::data_unlock(cam_data);
+    Data::data_unlock(cam_data);
   }
 }
 
@@ -682,15 +688,15 @@ Camera::set_clear_color(const Core::Color color)
     auto cam_data = m_impl->world->camera_data;
     const auto cam_id = m_impl->camera_id;
     
-    World_data::data_lock(cam_data);
+    Data::data_lock(cam_data);
     
     ::Camera::Camera_properties props;
-    World_data::camera_data_get_property_camera(cam_data, cam_id, &props);
+    Data::camera_set_properties(cam_data, cam_id, &props);
     
     props.clear_color = color.get_color();
-    World_data::camera_data_set_property_camera(cam_data, cam_id, props);
+    Data::camera_get_properties(cam_data, cam_id, &props);
     
-    World_data::data_unlock(cam_data);
+    Data::data_unlock(cam_data);
   }
 }
 

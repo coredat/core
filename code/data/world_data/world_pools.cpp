@@ -24,8 +24,8 @@ World::World(const uint32_t entity_hint)
   Data::Pending_entity_removal_data *graph_changes = new Data::Pending_entity_removal_data();
   Data::pending_entity_removal_create(graph_changes, entity_hint);
   
-  Camera_data *camera_data = new Camera_data;
-  camera_data_init(camera_data, 32);
+  Data::Camera_data *camera_data = new Data::Camera_data;
+  Data::camera_create(camera_data, 32);
     
   Data::Rigidbody_data* rb_data = new Data::Rigidbody_data;
   Data::rigidbody_create(rb_data, entity_hint);

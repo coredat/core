@@ -11,7 +11,6 @@ namespace World_data {
 struct World;
 struct Renderer_mesh_data;
 struct Renderer_text_draw_calls_data;
-struct Camera_data;
 
 
 } // ns
@@ -24,6 +23,7 @@ struct Transform_data;
 struct Pending_entity_removal_data;
 struct Rigidbody_data;
 struct Entity_data;
+struct Camera_data;
 
 };
 

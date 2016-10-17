@@ -7,7 +7,7 @@ namespace Debug_menu {
 
 
 void
-display_camera_data(World_data::Camera_data *data)
+display_camera_data(Data::Camera_data *data)
 {
   ImGui::Begin("Camera List");
   {
@@ -33,20 +33,20 @@ display_camera_data(World_data::Camera_data *data)
     for(uint32_t i = 0; i < data->size; ++i)
     {
       char id[4];
-      sprintf(id, "%02d", data->camera_id[i]);
+      sprintf(id, "%02d", data->keys[i]);
     
       ImGui::Selectable(id, selected == i, ImGuiSelectableFlags_SpanAllColumns);
       ImGui::NextColumn();
       
-      ImGui::Text("%04d", data->property_entity_id[i]);       ImGui::NextColumn();
-      ImGui::Text("%02d", data->property_post_process_id[i]); ImGui::NextColumn();
-      ImGui::Text("%02d", data->property_texture_id[i]);      ImGui::NextColumn();
+      ImGui::Text("%04d", data->field_entity_id[i]);       ImGui::NextColumn();
+      ImGui::Text("%02d", data->field_post_process_id[i]); ImGui::NextColumn();
+      ImGui::Text("%02d", data->field_texture_id[i]);      ImGui::NextColumn();
       
-      ImGui::Text("%d", *reinterpret_cast<uint32_t*>(&data->property_priority[i]));
+      ImGui::Text("%d", *reinterpret_cast<uint32_t*>(&data->field_priority[i]));
       ImGui::NextColumn();
       
       ::Camera::Camera_properties props;
-      World_data::camera_data_get_property_camera(data, data->camera_id[i], &props);
+      Data::camera_get_properties(data, data->keys[i], &props);
 
       ImGui::Text("%d",           props.clear_flags);                                                  ImGui::NextColumn();
       ImGui::Text("%s",           (props.type == Core::Camera_type::orthographic ? "Orth" : "Perp"));  ImGui::NextColumn();

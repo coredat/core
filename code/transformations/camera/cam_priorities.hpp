@@ -46,7 +46,7 @@ struct Cam_run
   All arrays must be at least the size of count.
 */
 void
-calculate_camera_runs(const World_data::Camera_data *cam_data,
+calculate_camera_runs(const Data::Camera_data *cam_data,
                       const Resource_data::Texture_data *texture_data,
                       const Core::Transform transforms[],
                       Cam_run out_runs[],

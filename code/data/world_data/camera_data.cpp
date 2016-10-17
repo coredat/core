@@ -1,237 +1,196 @@
 
-
 /*
-  WARNING
-  -------
-  This file is auto generated any changes here may be overwritten.
-  See code_gen.rake in scripts folder.
-
-  This file was last generated on: Sun 09 Oct 2016
+  Warning
+  --
+  This file is auto generated changes here may be overwritten.
 */
 
 
-#include <data/world_data/camera_data.hpp>
-#include <data/global_data/memory_data.hpp>
-#include <common/error_strings.hpp>
-#include <utilities/logging.hpp>
-#include <utilities/memory.hpp>
-#include <utilities/string_helpers.hpp>
+#include "camera_data.hpp"
 #include <assert.h>
 #include <cstring>
 
 
-namespace World_data {
+namespace Data {
 
 
-void
-camera_data_init(Camera_data *data, const size_t size_hint)
-{
-  // Argument validation.
-  assert(data && size_hint);
+// ====================== //
+// COMMON MODEL FUNCTIONS //
+// ====================== //
 
-  // 16 byte alignment buffer, apply to all for safety.
-  constexpr size_t simd_buffer = 16;
+namespace {
 
-  // Calculate the various sizes of things.
-  const size_t bytes_camera_id = sizeof(*data->camera_id) * size_hint + simd_buffer;
-  const size_t bytes_property_entity_id = sizeof(*data->property_entity_id) * size_hint + simd_buffer;
-  const size_t bytes_property_priority = sizeof(*data->property_priority) * size_hint + simd_buffer;
-  const size_t bytes_property_texture_id = sizeof(*data->property_texture_id) * size_hint + simd_buffer;
-  const size_t bytes_property_post_process_id = sizeof(*data->property_post_process_id) * size_hint + simd_buffer;
-  const size_t bytes_property_camera = sizeof(*data->property_camera) * size_hint + simd_buffer;
+// Key our keys unique.
+uint32_t camera_model_key_instance_number{0};
 
-  const size_t bytes_to_alloc = bytes_camera_id + bytes_property_entity_id + bytes_property_priority + bytes_property_texture_id + bytes_property_post_process_id + bytes_property_camera;
-
-  // Allocate some memory.
-  util::memory_chunk *data_memory = const_cast<util::memory_chunk*>(&data->memory);
-  *data_memory = Memory::request_memory_chunk(bytes_to_alloc, "camera_data");
-
-  assert(data_memory->bytes_in_chunk == bytes_to_alloc);
-
-  data_lock(data);
-
-  // Init memory
-  {
-    size_t byte_counter = 0;
-    const void *alloc_start = data->memory.chunk_start;
-
-    // Assign camera_id memory
-    {
-      void *offset = util::mem_offset(alloc_start, byte_counter);
-      void *aligned = util::mem_next_16byte_boundry(offset);
-
-      data->camera_id = reinterpret_cast<util::generic_id*>(aligned);
-      #ifndef NDEBUG
-      memset(offset, 0, bytes_camera_id);
-      #endif
-
-      byte_counter += bytes_camera_id;
-      assert(byte_counter <= bytes_to_alloc);
-    }
-    // Assign property_entity_id memory
-    {
-      void *offset = util::mem_offset(alloc_start, byte_counter);
-      void *aligned = util::mem_next_16byte_boundry(offset);
-
-      data->property_entity_id = reinterpret_cast<util::generic_id*>(aligned);
-      #ifndef NDEBUG
-      memset(offset, 0, bytes_property_entity_id);
-      #endif
-
-      byte_counter += bytes_property_entity_id;
-      assert(byte_counter <= bytes_to_alloc);
-    }
-    // Assign property_priority memory
-    {
-      void *offset = util::mem_offset(alloc_start, byte_counter);
-      void *aligned = util::mem_next_16byte_boundry(offset);
-
-      data->property_priority = reinterpret_cast<uint32_t*>(aligned);
-      #ifndef NDEBUG
-      memset(offset, 0, bytes_property_priority);
-      #endif
-
-      byte_counter += bytes_property_priority;
-      assert(byte_counter <= bytes_to_alloc);
-    }
-    // Assign property_texture_id memory
-    {
-      void *offset = util::mem_offset(alloc_start, byte_counter);
-      void *aligned = util::mem_next_16byte_boundry(offset);
-
-      data->property_texture_id = reinterpret_cast<util::generic_id*>(aligned);
-      #ifndef NDEBUG
-      memset(offset, 0, bytes_property_texture_id);
-      #endif
-
-      byte_counter += bytes_property_texture_id;
-      assert(byte_counter <= bytes_to_alloc);
-    }
-    // Assign property_post_process_id memory
-    {
-      void *offset = util::mem_offset(alloc_start, byte_counter);
-      void *aligned = util::mem_next_16byte_boundry(offset);
-
-      data->property_post_process_id = reinterpret_cast<util::generic_id*>(aligned);
-      #ifndef NDEBUG
-      memset(offset, 0, bytes_property_post_process_id);
-      #endif
-
-      byte_counter += bytes_property_post_process_id;
-      assert(byte_counter <= bytes_to_alloc);
-    }
-    // Assign property_camera memory
-    {
-      void *offset = util::mem_offset(alloc_start, byte_counter);
-      void *aligned = util::mem_next_16byte_boundry(offset);
-
-      data->property_camera = reinterpret_cast<Camera::Camera_properties*>(aligned);
-      #ifndef NDEBUG
-      memset(offset, 0, bytes_property_camera);
-      #endif
-
-      byte_counter += bytes_property_camera;
-      assert(byte_counter <= bytes_to_alloc);
-    }
-  }
-
-  // Set the size and capacity
-  {
-    data->size = 0;
-
-    size_t *capacity = const_cast<size_t*>(&data->capacity);
-    *capacity = size_hint;
-  }
-
-  data_unlock(data);
-}
-
-
-void
-camera_data_free(Camera_data *data)
-{
-  assert(data);
-}
-
-
-size_t
-camera_data_get_size(const Camera_data *data)
-{
-  assert(data);
-  return data->size;
-}
-
-
-size_t
-camera_data_get_capacity(const Camera_data *data)
-{
-  assert(data);
-  return data->capacity;
-}
+} // anon ns
 
 
 void
 data_lock(const Camera_data *data)
 {
-  assert(data);
+  // Not yet impl.
 }
 
 
 void
 data_unlock(const Camera_data *data)
 {
-  assert(data);
+  // Not yet impl.
 }
 
 
 bool
-camera_data_push_back(Camera_data *data, const util::generic_id key, size_t *out_index)
+camera_create(Camera_data *data, const size_t size_hint)
 {
-  assert(data && key);
-  assert(data->size < data->capacity);
+  assert(data);
+  assert(size_hint);
 
-  // TODO: Duplicate key check
+  // Size up the capacity
+  {
+    size_t *capacity = const_cast<size_t*>(&data->capacity);
+    *capacity = size_hint;
+  }
 
+  // Allocate memory
+  bool all_alloc = true;
+  {
+    // Alloc keys
+    if(all_alloc)
+    {
+      data->keys = new uint32_t[size_hint];
+      assert(data->keys);
+      if(!data->keys) { all_alloc = false; }
+      else { memset(data->keys, 0, sizeof(uint32_t) * size_hint); }
+    }
+
+    // Alloc space for entity_id
+    if(all_alloc)
+    {
+      data->field_entity_id = new uint32_t[size_hint * 1];
+      assert(data->field_entity_id);
+      if(!data->field_entity_id) { all_alloc = false; }
+      else { memset(data->field_entity_id, 0, sizeof(uint32_t) * size_hint * 1); }
+    }
+
+    // Alloc space for priority
+    if(all_alloc)
+    {
+      data->field_priority = new uint32_t[size_hint * 1];
+      assert(data->field_priority);
+      if(!data->field_priority) { all_alloc = false; }
+      else { memset(data->field_priority, 0, sizeof(uint32_t) * size_hint * 1); }
+    }
+
+    // Alloc space for properties
+    if(all_alloc)
+    {
+      data->field_properties = new Camera::Camera_properties[size_hint * 1];
+      assert(data->field_properties);
+      if(!data->field_properties) { all_alloc = false; }
+      else { memset(data->field_properties, 0, sizeof(Camera::Camera_properties) * size_hint * 1); }
+    }
+
+    // Alloc space for texture_id
+    if(all_alloc)
+    {
+      data->field_texture_id = new util::generic_id[size_hint * 1];
+      assert(data->field_texture_id);
+      if(!data->field_texture_id) { all_alloc = false; }
+      else { memset(data->field_texture_id, 0, sizeof(util::generic_id) * size_hint * 1); }
+    }
+
+    // Alloc space for post_process_id
+    if(all_alloc)
+    {
+      data->field_post_process_id = new util::generic_id[size_hint * 1];
+      assert(data->field_post_process_id);
+      if(!data->field_post_process_id) { all_alloc = false; }
+      else { memset(data->field_post_process_id, 0, sizeof(util::generic_id) * size_hint * 1); }
+    }
+  }
+
+  // Failed so clean up.
+  if(!all_alloc)
+  {
+    camera_destroy(data);
+  }
+
+  return all_alloc;
+}
+
+
+void
+camera_destroy(Camera_data *data)
+{
+  // Free up the memory.
+  {
+    // Remove keys
+    if(data->keys) { delete[] data->keys; }
+    data->keys = nullptr;
+
+    // Remove entity_id
+    if(data->field_entity_id) { delete[] data->field_entity_id; }
+    data->field_entity_id = nullptr;
+
+    // Remove priority
+    if(data->field_priority) { delete[] data->field_priority; }
+    data->field_priority = nullptr;
+
+    // Remove properties
+    if(data->field_properties) { delete[] data->field_properties; }
+    data->field_properties = nullptr;
+
+    // Remove texture_id
+    if(data->field_texture_id) { delete[] data->field_texture_id; }
+    data->field_texture_id = nullptr;
+
+    // Remove post_process_id
+    if(data->field_post_process_id) { delete[] data->field_post_process_id; }
+    data->field_post_process_id = nullptr;
+  }
+
+  // Zero capacity and size
+  {
+    data->size = 0;
+
+    size_t *capacity = const_cast<size_t*>(&data->capacity);
+    *capacity = 0;
+  }
+}
+
+
+uint32_t
+camera_insert(Camera_data *data)
+{
+  assert(data);
+  assert(data->keys);
+
+  // Do we need to resize?
   if(data->size >= data->capacity)
   {
-    LOG_ERROR(Error_string::no_free_space());
-
-    return false;
+    camera_resize_capacity(data, data->capacity << 1);
   }
 
-  const uint32_t index = data->size;
-
-  if(out_index)
+  // Insert key at the back
   {
-    *out_index = index;
+    const uint32_t new_key = ++camera_model_key_instance_number;
+    data->keys[data->size++] = new_key;
+
+    return new_key;
   }
 
-  ++(data->size);
 
-  data->camera_id[index] = key;
-
-  // Memset the properties
-  {
-    memset(&data->property_entity_id[index], 0, sizeof(*data->property_entity_id));
-    memset(&data->property_priority[index], 0, sizeof(*data->property_priority));
-    memset(&data->property_texture_id[index], 0, sizeof(*data->property_texture_id));
-    memset(&data->property_post_process_id[index], 0, sizeof(*data->property_post_process_id));
-    memset(&data->property_camera[index], 0, sizeof(*data->property_camera));
-  }
-
-  return true;
+  return 0;
 }
 
 
 bool
-camera_data_erase(Camera_data *data, const util::generic_id key)
+camera_remove(Camera_data *data, const uint32_t key)
 {
-  // Param check
-  assert(data && key);
+  size_t index_to_erase = 0;
 
-  size_t index_to_erase;
-
-  if(camera_data_exists(data, key, &index_to_erase))
+  if(camera_exists(data, key, &index_to_erase))
   {
     assert(index_to_erase < data->size);
 
@@ -240,63 +199,13 @@ camera_data_erase(Camera_data *data, const util::generic_id key)
 
     --(data->size);
 
-    // Shuffle the memory down.
-    memmove(&data->camera_id[index_to_erase], &data->camera_id[start_index], size_to_end * sizeof(*data->camera_id));
-    memmove(&data->property_entity_id[index_to_erase], &data->property_entity_id[start_index], size_to_end * sizeof(*data->property_entity_id));
-    memmove(&data->property_priority[index_to_erase], &data->property_priority[start_index], size_to_end * sizeof(*data->property_priority));
-    memmove(&data->property_texture_id[index_to_erase], &data->property_texture_id[start_index], size_to_end * sizeof(*data->property_texture_id));
-    memmove(&data->property_post_process_id[index_to_erase], &data->property_post_process_id[start_index], size_to_end * sizeof(*data->property_post_process_id));
-    memmove(&data->property_camera[index_to_erase], &data->property_camera[start_index], size_to_end * sizeof(*data->property_camera));
-  }
-  else
-  {
-    LOG_ERROR(Error_string::entity_not_found());
-    assert(false);
-
-    return false;
-  }
-
-  return true;
-}
-
-
-bool
-camera_data_insert(Camera_data *data, const util::generic_id key, const size_t insert_index)
-{
-  assert(data && key);
-
-  // If we are past the end of the size
-  // Use push back.
-  if(insert_index > data->size)
-  {
-    return camera_data_push_back(data, key);
-  }
-
-  // Check that we have capacity
-  if(data->size >= data->capacity)
-  {
-    LOG_ERROR(Error_string::no_free_space())
-    return false;
-  }
-
-  // Check we are inserting in bounds, then insert
-  if(insert_index < data->capacity)
-  {
-    const size_t dest_index = insert_index + 1;
-    const size_t size_to_end = data->size - insert_index;
-
-    ++(data->size);
-
-    // Shuffle the memory up.
-    memmove(&data->camera_id[dest_index], &data->camera_id[insert_index], size_to_end * sizeof(*data->camera_id));
-    memmove(&data->property_entity_id[dest_index], &data->property_entity_id[insert_index], size_to_end * sizeof(*data->property_entity_id));
-    memmove(&data->property_priority[dest_index], &data->property_priority[insert_index], size_to_end * sizeof(*data->property_priority));
-    memmove(&data->property_texture_id[dest_index], &data->property_texture_id[insert_index], size_to_end * sizeof(*data->property_texture_id));
-    memmove(&data->property_post_process_id[dest_index], &data->property_post_process_id[insert_index], size_to_end * sizeof(*data->property_post_process_id));
-    memmove(&data->property_camera[dest_index], &data->property_camera[insert_index], size_to_end * sizeof(*data->property_camera));
-
-    // Add key to new entry.
-    data->camera_id[insert_index] = key;
+    // Shuffle the data down
+    memmove(&data->keys[index_to_erase], &data->keys[start_index], size_to_end * sizeof(*data->keys));
+    memmove(&data->field_entity_id[index_to_erase * 1], &data->field_entity_id[start_index * 1], size_to_end * sizeof(*data->field_entity_id) * 1);
+    memmove(&data->field_priority[index_to_erase * 1], &data->field_priority[start_index * 1], size_to_end * sizeof(*data->field_priority) * 1);
+    memmove(&data->field_properties[index_to_erase * 1], &data->field_properties[start_index * 1], size_to_end * sizeof(*data->field_properties) * 1);
+    memmove(&data->field_texture_id[index_to_erase * 1], &data->field_texture_id[start_index * 1], size_to_end * sizeof(*data->field_texture_id) * 1);
+    memmove(&data->field_post_process_id[index_to_erase * 1], &data->field_post_process_id[start_index * 1], size_to_end * sizeof(*data->field_post_process_id) * 1);
 
     return true;
   }
@@ -306,244 +215,546 @@ camera_data_insert(Camera_data *data, const util::generic_id key, const size_t i
 
 
 bool
-camera_data_exists(const Camera_data *data, const util::generic_id key, size_t *out_index)
+camera_exists(const Camera_data *data, const uint32_t key, size_t *out_index)
 {
-  assert(data && key);
+  assert(data);
+  assert(data != 0);
 
-  if(data->size == 0)
+  for(size_t i = 0; i < data->size; ++i)
   {
-    return false;
+    if(data->keys[i] == key)
+    {
+      if(out_index)
+      {
+        *out_index = i;
+      }
+
+      return true;
+    }
   }
 
-  bool found = false;
+  return false;
+}
 
-  size_t no_index;
-  if(!out_index) { out_index = &no_index; }
 
-  found = util::generic_id_search_linear(out_index, key, data->camera_id, data->size);
+void
+camera_clear(Camera_data *data)
+{
+  assert(data);
 
-  return found;
+  data->size = 0;
 }
 
 
 bool
-camera_data_get_property_entity_id(const Camera_data *data, const util::generic_id key, util::generic_id *out_value)
+camera_is_empty(const Camera_data *data, const size_t size_hint)
 {
-  size_t index;
+  assert(data);
 
-  if(camera_data_exists(data, key, &index))
-  {
-    *out_value = data->property_entity_id[index];
-  }
-  else
-  {
-    LOG_ERROR(Error_string::entity_not_found());
-    assert(false);
+  if(!data) { return false; }
 
+  return !!data->size;
+}
+
+
+size_t
+camera_get_size(const Camera_data *data)
+{
+  assert(data);
+
+  if(!data) { return 0; }
+
+  return data->size;
+}
+
+
+size_t
+camera_get_capacity(const Camera_data *data)
+{
+  assert(data);
+
+  if(!data) { return 0; }
+
+  return data->capacity;
+}
+
+
+bool
+camera_resize_capacity(Camera_data *data, const size_t size_hint)
+{
+  assert(data);
+  assert(size_hint > data->size); // Will slice data
+
+  // Create new data.
+  Camera_data new_data;
+  const bool created_new = camera_create(&new_data, size_hint);
+
+  // Failed to resize.
+  if(!created_new)
+  {
+    camera_destroy(&new_data);
     return false;
   }
+
+  // Copy over data
+  {
+    memcpy(new_data.keys, data->keys, sizeof(uint32_t) * data->size);
+    memcpy(new_data.field_entity_id, data->field_entity_id, sizeof(uint32_t) * data->size * 1);
+    memcpy(new_data.field_priority, data->field_priority, sizeof(uint32_t) * data->size * 1);
+    memcpy(new_data.field_properties, data->field_properties, sizeof(Camera::Camera_properties) * data->size * 1);
+    memcpy(new_data.field_texture_id, data->field_texture_id, sizeof(util::generic_id) * data->size * 1);
+    memcpy(new_data.field_post_process_id, data->field_post_process_id, sizeof(util::generic_id) * data->size * 1);
+  }
+
+  // Swap ptrs
+  {
+    uint32_t *old_keys = data->keys;
+    data->keys = new_data.keys;
+    new_data.keys = old_keys;
+
+    uint32_t *old_entity_id = data->field_entity_id;
+    data->field_entity_id = new_data.field_entity_id;
+    new_data.field_entity_id = old_entity_id;
+
+    uint32_t *old_priority = data->field_priority;
+    data->field_priority = new_data.field_priority;
+    new_data.field_priority = old_priority;
+
+    Camera::Camera_properties *old_properties = data->field_properties;
+    data->field_properties = new_data.field_properties;
+    new_data.field_properties = old_properties;
+
+    util::generic_id *old_texture_id = data->field_texture_id;
+    data->field_texture_id = new_data.field_texture_id;
+    new_data.field_texture_id = old_texture_id;
+
+    util::generic_id *old_post_process_id = data->field_post_process_id;
+    data->field_post_process_id = new_data.field_post_process_id;
+    new_data.field_post_process_id = old_post_process_id;
+  }
+
+  // Set the Capacity
+  {
+    size_t *capacity = const_cast<size_t*>(&data->capacity);
+    *capacity = new_data.capacity;
+  }
+
+  // Destroy new data
+  camera_destroy(&new_data);
 
   return true;
 }
 
 
-bool
-camera_data_set_property_entity_id(Camera_data *data,  const util::generic_id key, const util::generic_id value)
+
+// ===================== //
+// DATA GETTER FUNCTIONS //
+// ===================== //
+
+
+const uint32_t*
+camera_get_const_entity_id_data(const Camera_data *data)
 {
-  assert(data && key);
+  assert(data);
+  assert(data->field_entity_id);
 
-  size_t index;
+  return data->field_entity_id;
+}
 
-  if(camera_data_exists(data, key, &index))
+
+uint32_t*
+camera_get_entity_id_data(Camera_data *data)
+{
+  assert(data);
+  assert(data->field_entity_id);
+
+  return data->field_entity_id;
+}
+
+
+const uint32_t*
+camera_get_const_priority_data(const Camera_data *data)
+{
+  assert(data);
+  assert(data->field_priority);
+
+  return data->field_priority;
+}
+
+
+uint32_t*
+camera_get_priority_data(Camera_data *data)
+{
+  assert(data);
+  assert(data->field_priority);
+
+  return data->field_priority;
+}
+
+
+const Camera::Camera_properties*
+camera_get_const_properties_data(const Camera_data *data)
+{
+  assert(data);
+  assert(data->field_properties);
+
+  return data->field_properties;
+}
+
+
+Camera::Camera_properties*
+camera_get_properties_data(Camera_data *data)
+{
+  assert(data);
+  assert(data->field_properties);
+
+  return data->field_properties;
+}
+
+
+const util::generic_id*
+camera_get_const_texture_id_data(const Camera_data *data)
+{
+  assert(data);
+  assert(data->field_texture_id);
+
+  return data->field_texture_id;
+}
+
+
+util::generic_id*
+camera_get_texture_id_data(Camera_data *data)
+{
+  assert(data);
+  assert(data->field_texture_id);
+
+  return data->field_texture_id;
+}
+
+
+const util::generic_id*
+camera_get_const_post_process_id_data(const Camera_data *data)
+{
+  assert(data);
+  assert(data->field_post_process_id);
+
+  return data->field_post_process_id;
+}
+
+
+util::generic_id*
+camera_get_post_process_id_data(Camera_data *data)
+{
+  assert(data);
+  assert(data->field_post_process_id);
+
+  return data->field_post_process_id;
+}
+
+
+// =============== //
+// FIELD FUNCTIONS //
+// =============== //
+
+
+bool
+camera_get_entity_id(const Camera_data *data, const uint32_t key, uint32_t *return_value)
+{
+  assert(data);
+  assert(key != 0);
+  assert(data->field_entity_id);
+  assert(return_value);
+
+  // Search for its index.
+  // If we find it we can return the value.
+
+  size_t index = 0;
+
+  if(camera_exists(data, key, &index))
   {
-    data->property_entity_id[index] = value;
-  }
-  else
-  {
-    LOG_ERROR(Error_string::entity_not_found());
-    assert(false);
+    assert(index < data->size);
 
-    return false;
+    if(index < data->size)
+    {
+      *return_value = data->field_entity_id[index];
+
+      return true;
+    }
   }
 
-  return true;
+  return false;
 }
 
 
 bool
-camera_data_get_property_priority(const Camera_data *data, const util::generic_id key, uint32_t *out_value)
+camera_set_entity_id(const Camera_data *data, const uint32_t key, const uint32_t *set_value)
 {
-  size_t index;
+  assert(data);
+  assert(key != 0);
+  assert(data->field_entity_id);
+  assert(set_value);
 
-  if(camera_data_exists(data, key, &index))
+  // Search for its index.
+  // If we find it we can set the value.
+
+  size_t index = 0;
+
+  if(camera_exists(data, key, &index))
+
+  index = index * 1;
+
   {
-    *out_value = data->property_priority[index];
-  }
-  else
-  {
-    LOG_ERROR(Error_string::entity_not_found());
-    assert(false);
+    assert(index < data->size);
+    if(index < data->size)
+    {
+      data->field_entity_id[index] = *set_value;
 
-    return false;
+      return true;
+    }
   }
 
-  return true;
+  return false;
 }
 
 
 bool
-camera_data_set_property_priority(Camera_data *data,  const util::generic_id key, const uint32_t value)
+camera_get_priority(const Camera_data *data, const uint32_t key, uint32_t *return_value)
 {
-  assert(data && key);
+  assert(data);
+  assert(key != 0);
+  assert(data->field_priority);
+  assert(return_value);
 
-  size_t index;
+  // Search for its index.
+  // If we find it we can return the value.
 
-  if(camera_data_exists(data, key, &index))
+  size_t index = 0;
+
+  if(camera_exists(data, key, &index))
   {
-    data->property_priority[index] = value;
-  }
-  else
-  {
-    LOG_ERROR(Error_string::entity_not_found());
-    assert(false);
+    assert(index < data->size);
 
-    return false;
+    if(index < data->size)
+    {
+      *return_value = data->field_priority[index];
+
+      return true;
+    }
   }
 
-  return true;
+  return false;
 }
 
 
 bool
-camera_data_get_property_texture_id(const Camera_data *data, const util::generic_id key, util::generic_id *out_value)
+camera_set_priority(const Camera_data *data, const uint32_t key, const uint32_t *set_value)
 {
-  size_t index;
+  assert(data);
+  assert(key != 0);
+  assert(data->field_priority);
+  assert(set_value);
 
-  if(camera_data_exists(data, key, &index))
+  // Search for its index.
+  // If we find it we can set the value.
+
+  size_t index = 0;
+
+  if(camera_exists(data, key, &index))
+
+  index = index * 1;
+
   {
-    *out_value = data->property_texture_id[index];
-  }
-  else
-  {
-    LOG_ERROR(Error_string::entity_not_found());
-    assert(false);
+    assert(index < data->size);
+    if(index < data->size)
+    {
+      data->field_priority[index] = *set_value;
 
-    return false;
+      return true;
+    }
   }
 
-  return true;
+  return false;
 }
 
 
 bool
-camera_data_set_property_texture_id(Camera_data *data,  const util::generic_id key, const util::generic_id value)
+camera_get_properties(const Camera_data *data, const uint32_t key, Camera::Camera_properties *return_value)
 {
-  assert(data && key);
+  assert(data);
+  assert(key != 0);
+  assert(data->field_properties);
+  assert(return_value);
 
-  size_t index;
+  // Search for its index.
+  // If we find it we can return the value.
 
-  if(camera_data_exists(data, key, &index))
+  size_t index = 0;
+
+  if(camera_exists(data, key, &index))
   {
-    data->property_texture_id[index] = value;
-  }
-  else
-  {
-    LOG_ERROR(Error_string::entity_not_found());
-    assert(false);
+    assert(index < data->size);
 
-    return false;
+    if(index < data->size)
+    {
+      *return_value = data->field_properties[index];
+
+      return true;
+    }
   }
 
-  return true;
+  return false;
 }
 
 
 bool
-camera_data_get_property_post_process_id(const Camera_data *data, const util::generic_id key, util::generic_id *out_value)
+camera_set_properties(const Camera_data *data, const uint32_t key, const Camera::Camera_properties *set_value)
 {
-  size_t index;
+  assert(data);
+  assert(key != 0);
+  assert(data->field_properties);
+  assert(set_value);
 
-  if(camera_data_exists(data, key, &index))
+  // Search for its index.
+  // If we find it we can set the value.
+
+  size_t index = 0;
+
+  if(camera_exists(data, key, &index))
+
+  index = index * 1;
+
   {
-    *out_value = data->property_post_process_id[index];
-  }
-  else
-  {
-    LOG_ERROR(Error_string::entity_not_found());
-    assert(false);
+    assert(index < data->size);
+    if(index < data->size)
+    {
+      data->field_properties[index] = *set_value;
 
-    return false;
+      return true;
+    }
   }
 
-  return true;
+  return false;
 }
 
 
 bool
-camera_data_set_property_post_process_id(Camera_data *data,  const util::generic_id key, const util::generic_id value)
+camera_get_texture_id(const Camera_data *data, const uint32_t key, util::generic_id *return_value)
 {
-  assert(data && key);
+  assert(data);
+  assert(key != 0);
+  assert(data->field_texture_id);
+  assert(return_value);
 
-  size_t index;
+  // Search for its index.
+  // If we find it we can return the value.
 
-  if(camera_data_exists(data, key, &index))
+  size_t index = 0;
+
+  if(camera_exists(data, key, &index))
   {
-    data->property_post_process_id[index] = value;
-  }
-  else
-  {
-    LOG_ERROR(Error_string::entity_not_found());
-    assert(false);
+    assert(index < data->size);
 
-    return false;
+    if(index < data->size)
+    {
+      *return_value = data->field_texture_id[index];
+
+      return true;
+    }
   }
 
-  return true;
+  return false;
 }
 
 
 bool
-camera_data_get_property_camera(const Camera_data *data, const util::generic_id key, Camera::Camera_properties *out_value)
+camera_set_texture_id(const Camera_data *data, const uint32_t key, const util::generic_id *set_value)
 {
-  size_t index;
+  assert(data);
+  assert(key != 0);
+  assert(data->field_texture_id);
+  assert(set_value);
 
-  if(camera_data_exists(data, key, &index))
+  // Search for its index.
+  // If we find it we can set the value.
+
+  size_t index = 0;
+
+  if(camera_exists(data, key, &index))
+
+  index = index * 1;
+
   {
-    *out_value = data->property_camera[index];
-  }
-  else
-  {
-    LOG_ERROR(Error_string::entity_not_found());
-    assert(false);
+    assert(index < data->size);
+    if(index < data->size)
+    {
+      data->field_texture_id[index] = *set_value;
 
-    return false;
+      return true;
+    }
   }
 
-  return true;
+  return false;
 }
 
 
 bool
-camera_data_set_property_camera(Camera_data *data,  const util::generic_id key, const Camera::Camera_properties value)
+camera_get_post_process_id(const Camera_data *data, const uint32_t key, util::generic_id *return_value)
 {
-  assert(data && key);
+  assert(data);
+  assert(key != 0);
+  assert(data->field_post_process_id);
+  assert(return_value);
 
-  size_t index;
+  // Search for its index.
+  // If we find it we can return the value.
 
-  if(camera_data_exists(data, key, &index))
+  size_t index = 0;
+
+  if(camera_exists(data, key, &index))
   {
-    data->property_camera[index] = value;
-  }
-  else
-  {
-    LOG_ERROR(Error_string::entity_not_found());
-    assert(false);
+    assert(index < data->size);
 
-    return false;
+    if(index < data->size)
+    {
+      *return_value = data->field_post_process_id[index];
+
+      return true;
+    }
   }
 
-  return true;
+  return false;
 }
 
 
-} // ns
+bool
+camera_set_post_process_id(const Camera_data *data, const uint32_t key, const util::generic_id *set_value)
+{
+  assert(data);
+  assert(key != 0);
+  assert(data->field_post_process_id);
+  assert(set_value);
+
+  // Search for its index.
+  // If we find it we can set the value.
+
+  size_t index = 0;
+
+  if(camera_exists(data, key, &index))
+
+  index = index * 1;
+
+  {
+    assert(index < data->size);
+    if(index < data->size)
+    {
+      data->field_post_process_id[index] = *set_value;
+
+      return true;
+    }
+  }
+
+  return false;
+}
+
+
+} // Data ns
