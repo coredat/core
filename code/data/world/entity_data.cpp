@@ -534,7 +534,7 @@ entity_set_name(const Entity_data *data, const uint32_t key, const char *set_val
   index = index * 32;
 
   {
-    assert(index < data->size);
+    assert(index / 32 < data->size);
     if(index < data->size * 32)
     {
       memcpy(&data->field_name[index], set_value, sizeof(char) * size);
