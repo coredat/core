@@ -11,6 +11,7 @@
 
 
 #include <3rdparty/imgui/imgui.h>
+#include <data/world/entity_data.hpp>
 #include "debug_ui_entity_data.hpp"
 
 

@@ -1,4 +1,10 @@
 #include <debug_gui/data_capacities.hpp>
+#include <data/world/camera_data.hpp>
+#include <data/world/entity_data.hpp>
+#include <data/world/rigidbody_data.hpp>
+#include <data/world/mesh_draw_call_data.hpp>
+#include <data/world/text_draw_call_data.hpp>
+#include <data/world/transform_data.hpp>
 #include <3rdparty/imgui/imgui.h>
 
 

@@ -14,7 +14,7 @@
 #define DEBUG_UI_ENTITY_DATA_INCLUDED_55B46E75_1184_471E_BAC5_71617F91174E
 
 
-#include <data/world/entity_data.hpp>
+#include <data/fwd_dec_data.hpp>
 
 
 namespace Debug_menu {

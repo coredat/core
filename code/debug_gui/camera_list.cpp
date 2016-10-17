@@ -1,4 +1,5 @@
 #include <debug_gui/camera_list.hpp>
+#include <data/world/camera_data.hpp>
 #include <3rdparty/imgui/imgui.h>
 #include <stdio.h>
 

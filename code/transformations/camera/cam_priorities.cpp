@@ -1,5 +1,7 @@
 #include <transformations/camera/cam_priorities.hpp>
 #include <core/transform/transform.hpp>
+#include <data/world/transform_data.hpp>
+#include <data/world/camera_data.hpp>
 #include <math/transform/transform.hpp>
 
 

@@ -4,6 +4,7 @@
 #include <data/global_data/memory_data.hpp>
 #include <data/world_data.hpp>
 #include <data/world/entity_data.hpp>
+#include <data/world/camera_data.hpp>
 
 #include <renderer/debug_line_renderer/debug_line_renderer_node.hpp>
 #include <renderer/debug_line_renderer/debug_line_renderer.hpp>

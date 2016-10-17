@@ -1,4 +1,5 @@
 #include <transformations/entity/entity_common.hpp>
+#include <data/fwd_dec_data.hpp>
 #include <data/world/pending_entity_removal_data.hpp>
 #include <data/world/entity_data.hpp>
 #include <common/error_strings.hpp>
