@@ -109,7 +109,7 @@ pending_entity_removal_destroy(Pending_entity_removal_data *data)
 
 
 uint32_t
-pending_entity_removal_insert(Pending_entity_removal_data *data)
+pending_entity_removal_push(Pending_entity_removal_data *data)
 {
   assert(data);
   assert(data->keys);
@@ -120,7 +120,7 @@ pending_entity_removal_insert(Pending_entity_removal_data *data)
     pending_entity_removal_resize_capacity(data, data->capacity << 1);
   }
 
-  // Insert key at the back
+  // Push key at the back
   {
     const uint32_t new_key = ++pending_entity_removal_model_key_instance_number;
     data->keys[data->size++] = new_key;
@@ -131,6 +131,7 @@ pending_entity_removal_insert(Pending_entity_removal_data *data)
 
   return 0;
 }
+
 
 
 bool
@@ -349,7 +350,7 @@ pending_entity_removal_set_deleted_entity(const Pending_entity_removal_data *dat
 
   {
     assert(index < data->size);
-    if(index < data->size)
+    if(index < data->size * 1)
     {
       data->field_deleted_entity[index] = *set_value;
 

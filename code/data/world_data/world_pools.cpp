@@ -1,10 +1,9 @@
 #include "world_pools.hpp"
-#include "renderer_mesh_data.hpp"
 #include "rigidbody_data.hpp"
 #include "pending_entity_removal.hpp"
 #include "camera_data.hpp"
 #include "transform_data.hpp"
-#include "renderer_mesh_data.hpp"
+#include "mesh_draw_call_data.hpp"
 #include "renderer_text_draw_calls_data.hpp"
 #include "entity_data.hpp"
 #include "transform.hpp"
@@ -30,8 +29,8 @@ World::World(const uint32_t entity_hint)
   Data::Rigidbody_data* rb_data = new Data::Rigidbody_data;
   Data::rigidbody_create(rb_data, entity_hint);
   
-  Renderer_mesh_data *mesh_data = new Renderer_mesh_data;
-  renderer_mesh_data_init(mesh_data, entity_hint);
+  Data::Mesh_draw_call_data *mesh_data = new Data::Mesh_draw_call_data;
+  Data::mesh_draw_call_create(mesh_data, entity_hint);
   
   Data::Transform_data *transform_data = new Data::Transform_data;
   Data::transform_create(transform_data, entity_hint);
@@ -123,9 +122,9 @@ world_update_scene_graph_changes(World_data::World *world_data,
     entity_remove(world_data->entity, id);
     transform_remove(world_data->transform, id);
     
-    if(renderer_mesh_data_exists(world_data->mesh_data, id))
+    if(Data::mesh_draw_call_exists(world_data->mesh_data, id))
     {
-      renderer_mesh_data_erase(world_data->mesh_data, id);
+      Data::mesh_draw_call_remove(world_data->mesh_data, id);
     }
     
     {

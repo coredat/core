@@ -6,8 +6,8 @@
 */
 
 
-#ifndef CAMERA_INCLUDED_6FA189B7_08E2_4F6D_9280_652AF07446C7
-#define CAMERA_INCLUDED_6FA189B7_08E2_4F6D_9280_652AF07446C7
+#ifndef CAMERA_INCLUDED_D981A7E5_79C2_4171_86A2_7152A74AED03
+#define CAMERA_INCLUDED_D981A7E5_79C2_4171_86A2_7152A74AED03
 
 
 #include <stdint.h>
@@ -68,7 +68,11 @@ camera_destroy(Camera_data *data);
 
 
 uint32_t
-camera_insert(Camera_data *data);
+camera_push(Camera_data *data, const uint32_t key);
+
+
+bool
+camera_insert(Camera_data *data, const uint32_t key, const size_t insert_point);
 
 
 bool

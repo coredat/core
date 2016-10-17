@@ -155,7 +155,7 @@ entity_destroy(Entity_data *data)
 
 
 uint32_t
-entity_insert(Entity_data *data, const uint32_t key)
+entity_push(Entity_data *data, const uint32_t key)
 {
   assert(data);
   assert(data->keys);
@@ -166,7 +166,7 @@ entity_insert(Entity_data *data, const uint32_t key)
     entity_resize_capacity(data, data->capacity << 1);
   }
 
-  // Insert key at the back
+  // Push key at the back
   {
     const uint32_t new_key = key;
     data->keys[data->size++] = new_key;
@@ -177,6 +177,7 @@ entity_insert(Entity_data *data, const uint32_t key)
 
   return 0;
 }
+
 
 
 bool
@@ -498,8 +499,8 @@ entity_set_name(const Entity_data *data, const uint32_t key, const char *set_val
   index = index * 32;
 
   {
-    assert(index < data->size * 32);
-    if(index < data->size)
+    assert((index / 32) < data->size);
+    if(index < data->size * 32)
     {
       memcpy(&data->field_name[index], set_value, sizeof(char) * size);
 
@@ -559,7 +560,7 @@ entity_set_tags(const Entity_data *data, const uint32_t key, const uint32_t *set
 
   {
     assert(index < data->size);
-    if(index < data->size)
+    if(index < data->size * 1)
     {
       data->field_tags[index] = *set_value;
 
@@ -619,7 +620,7 @@ entity_set_components(const Entity_data *data, const uint32_t key, const uint32_
 
   {
     assert(index < data->size);
-    if(index < data->size)
+    if(index < data->size * 1)
     {
       data->field_components[index] = *set_value;
 
@@ -679,7 +680,7 @@ entity_set_renderer(const Entity_data *data, const uint32_t key, const uint32_t 
 
   {
     assert(index < data->size);
-    if(index < data->size)
+    if(index < data->size * 1)
     {
       data->field_renderer[index] = *set_value;
 
@@ -739,7 +740,7 @@ entity_set_user_data(const Entity_data *data, const uint32_t key, const uintptr_
 
   {
     assert(index < data->size);
-    if(index < data->size)
+    if(index < data->size * 1)
     {
       data->field_user_data[index] = *set_value;
 

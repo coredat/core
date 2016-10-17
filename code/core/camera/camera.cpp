@@ -60,7 +60,8 @@ create_new_camera(Data::Camera_data *cam_data)
   Data::data_lock(cam_data);
   
   // Push and set the defaults.
-  const util::generic_id id = Data::camera_insert(cam_data);
+  const util::generic_id id = cam_data->size + 1;
+  Data::camera_push(cam_data, id);
 
   if(id)
   {
@@ -327,22 +328,22 @@ Camera::set_priority(const uint32_t priority)
     Data::camera_get_post_process_id(cam_data, cam_id, &post_id);
     
     // Remove old data.
-//    Data::camera_erase(cam_data, cam_id);
-//  
-//    // Insert the new data
-//    const size_t insert_at = Camera_utils::find_insert_point_based_on_priority(priority, cam_data->field_priority, cam_data->size);
-//    if(Data::camera_insert(cam_data, cam_id, insert_at))
-//    {
-//      Data::camera_set_properties(cam_data, cam_id, &props);
-//      Data::camera_set_entity_id(cam_data, cam_id, &attached_entity);
-//      Data::camera_set_priority(cam_data, cam_id, &priority);
-//      Data::camera_set_post_process_id(cam_data, cam_id, &post_id);
-//      Data::camera_set_texture_id(cam_data, cam_id, &texture_id);
-//    }
-//    else
-//    {
-//      LOG_ERROR(Error_string::failed_to_create_resource());
-//    }
+    Data::camera_remove(cam_data, cam_id);
+  
+    // Insert the new data
+    const size_t insert_at = Camera_utils::find_insert_point_based_on_priority(priority, cam_data->field_priority, cam_data->size);
+    if(Data::camera_insert(cam_data, cam_id, insert_at))
+    {
+      Data::camera_set_properties(cam_data, cam_id, &props);
+      Data::camera_set_entity_id(cam_data, cam_id, &attached_entity);
+      Data::camera_set_priority(cam_data, cam_id, &priority);
+      Data::camera_set_post_process_id(cam_data, cam_id, &post_id);
+      Data::camera_set_texture_id(cam_data, cam_id, &texture_id);
+    }
+    else
+    {
+      LOG_ERROR(Error_string::failed_to_create_resource());
+    }
     LOG_FATAL("Setting priority disabled.");
   }
   

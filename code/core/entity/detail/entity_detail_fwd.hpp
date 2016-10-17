@@ -23,7 +23,7 @@ namespace Entity_detail {
 Core::Renderer
 get_renderer(const util::generic_id this_id,
              Data::Entity_data *entity_data,
-             World_data::Renderer_mesh_data *renderer_material);
+             Data::Mesh_draw_call_data *renderer_material);
 
 
 } // ns

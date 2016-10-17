@@ -20,7 +20,7 @@ struct World
   Data::Pending_entity_removal_data   *entity_removal = nullptr;
   Data::Camera_data                       *camera_data          = nullptr;
   Data::Rigidbody_data                      *rigidbody_data         = nullptr;
-  Renderer_mesh_data                *mesh_data            = nullptr;
+  Data::Mesh_draw_call_data                *mesh_data            = nullptr;
   Renderer_text_draw_calls_data     *text_data            = nullptr;
   
   // RB

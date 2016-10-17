@@ -18,12 +18,6 @@ namespace Data {
 // COMMON MODEL FUNCTIONS //
 // ====================== //
 
-namespace {
-
-// Key our keys unique.
-uint32_t camera_model_key_instance_number{0};
-
-} // anon ns
 
 
 void
@@ -161,7 +155,7 @@ camera_destroy(Camera_data *data)
 
 
 uint32_t
-camera_insert(Camera_data *data)
+camera_push(Camera_data *data, const uint32_t key)
 {
   assert(data);
   assert(data->keys);
@@ -172,9 +166,9 @@ camera_insert(Camera_data *data)
     camera_resize_capacity(data, data->capacity << 1);
   }
 
-  // Insert key at the back
+  // Push key at the back
   {
-    const uint32_t new_key = ++camera_model_key_instance_number;
+    const uint32_t new_key = key;
     data->keys[data->size++] = new_key;
 
     return new_key;
@@ -182,6 +176,41 @@ camera_insert(Camera_data *data)
 
 
   return 0;
+}
+
+bool
+camera_insert(Camera_data *data, const uint32_t key, const size_t insert_point)
+{
+  assert(data);
+  assert(data->keys);
+  assert(key);
+
+  // Do we need to resize?
+  if(data->size >= data->capacity)
+  {
+    camera_resize_capacity(data, data->capacity << 1);
+  }
+
+  // Shuffle memory up
+  {
+    const size_t start_index = insert_point + 1;
+    const size_t size_to_end = data->size - insert_point;
+
+    // Shuffle the data down
+    memmove(&data->keys[insert_point], &data->keys[start_index], size_to_end * sizeof(*data->keys));
+    memmove(&data->field_entity_id[insert_point * 1], &data->field_entity_id[start_index * 1], size_to_end * sizeof(*data->field_entity_id) * 1);
+    memmove(&data->field_priority[insert_point * 1], &data->field_priority[start_index * 1], size_to_end * sizeof(*data->field_priority) * 1);
+    memmove(&data->field_properties[insert_point * 1], &data->field_properties[start_index * 1], size_to_end * sizeof(*data->field_properties) * 1);
+    memmove(&data->field_texture_id[insert_point * 1], &data->field_texture_id[start_index * 1], size_to_end * sizeof(*data->field_texture_id) * 1);
+    memmove(&data->field_post_process_id[insert_point * 1], &data->field_post_process_id[start_index * 1], size_to_end * sizeof(*data->field_post_process_id) * 1);
+  }
+
+  // Insert new data
+  {
+    data->keys[data->size++] = key;
+  }
+
+  return true;
 }
 
 
@@ -505,7 +534,7 @@ camera_set_entity_id(const Camera_data *data, const uint32_t key, const uint32_t
 
   {
     assert(index < data->size);
-    if(index < data->size)
+    if(index < data->size * 1)
     {
       data->field_entity_id[index] = *set_value;
 
@@ -565,7 +594,7 @@ camera_set_priority(const Camera_data *data, const uint32_t key, const uint32_t 
 
   {
     assert(index < data->size);
-    if(index < data->size)
+    if(index < data->size * 1)
     {
       data->field_priority[index] = *set_value;
 
@@ -625,7 +654,7 @@ camera_set_properties(const Camera_data *data, const uint32_t key, const Camera:
 
   {
     assert(index < data->size);
-    if(index < data->size)
+    if(index < data->size * 1)
     {
       data->field_properties[index] = *set_value;
 
@@ -685,7 +714,7 @@ camera_set_texture_id(const Camera_data *data, const uint32_t key, const util::g
 
   {
     assert(index < data->size);
-    if(index < data->size)
+    if(index < data->size * 1)
     {
       data->field_texture_id[index] = *set_value;
 
@@ -745,7 +774,7 @@ camera_set_post_process_id(const Camera_data *data, const uint32_t key, const ut
 
   {
     assert(index < data->size);
-    if(index < data->size)
+    if(index < data->size * 1)
     {
       data->field_post_process_id[index] = *set_value;
 

@@ -6,8 +6,8 @@
 */
 
 
-#ifndef PENDING_ENTITY_REMOVAL_INCLUDED_7635124B_A1E9_496C_BD1D_D813A704075E
-#define PENDING_ENTITY_REMOVAL_INCLUDED_7635124B_A1E9_496C_BD1D_D813A704075E
+#ifndef PENDING_ENTITY_REMOVAL_INCLUDED_B0BD9DC2_5401_431D_8BE8_5F2F55A0113E
+#define PENDING_ENTITY_REMOVAL_INCLUDED_B0BD9DC2_5401_431D_8BE8_5F2F55A0113E
 
 
 #include <stdint.h>
@@ -54,7 +54,7 @@ pending_entity_removal_destroy(Pending_entity_removal_data *data);
 
 
 uint32_t
-pending_entity_removal_insert(Pending_entity_removal_data *data);
+pending_entity_removal_push(Pending_entity_removal_data *data);
 
 
 bool

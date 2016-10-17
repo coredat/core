@@ -14,7 +14,7 @@ material_renderer(const math::mat4 &view_mat,
                   const float total_time,
                   const Resource_data::Material_data *material_data,
                   const uint32_t camera_cull_mask,                  
-                  const World_data::Renderer_mesh_data *mesh_renderer_data,
+                  const Data::Mesh_draw_call_data *mesh_renderer_data,
                   const Material_renderer::Draw_call *draw_calls,
                   const uint32_t number_of_draw_calls)
 {
@@ -45,7 +45,7 @@ material_renderer(const math::mat4 &view_mat,
     if(mesh_renderer_data->size)
     {
       *curr_run = Draw_run{};
-      curr_run->material_id = mesh_renderer_data->property_material_id[0];
+      curr_run->material_id = mesh_renderer_data->field_material_id[0];
       curr_run->start_point = 0;
     }
   
@@ -53,7 +53,7 @@ material_renderer(const math::mat4 &view_mat,
     // We start from one as we've already got that above.
     for(uint32_t i = 1; i < mesh_renderer_data->size; ++i)
     {
-      if(curr_run->material_id != mesh_renderer_data->property_material_id[i])
+      if(curr_run->material_id != mesh_renderer_data->field_material_id[i])
       {
         curr_run->size = i - curr_run->start_point;
         ++number_of_runs;
@@ -67,7 +67,7 @@ material_renderer(const math::mat4 &view_mat,
         curr_run = &runs[number_of_runs];
         
         *curr_run = Draw_run{};
-        curr_run->material_id = mesh_renderer_data->property_material_id[i];
+        curr_run->material_id = mesh_renderer_data->field_material_id[i];
         curr_run->start_point = i;
       }
     }

@@ -51,7 +51,7 @@ destroy(const util::generic_id this_id,
   // Add entity to the destruction list.
   Data::data_lock(scene_graph_changes);
   
-  const uint32_t removal_id = Data::pending_entity_removal_insert(scene_graph_changes);
+  const uint32_t removal_id = Data::pending_entity_removal_push(scene_graph_changes);
   Data::pending_entity_removal_set_deleted_entity(scene_graph_changes, removal_id, &this_id);
   
   Data::data_unlock(scene_graph_changes);

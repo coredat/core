@@ -72,7 +72,7 @@ set_collider(const util::generic_id this_id,
               Data::data_lock(rb_data);
               
               // Add the collider box
-              if(Data::rigidbody_insert(rb_data, this_id))
+              if(Data::rigidbody_push(rb_data, this_id))
               {
                 Data::rigidbody_set_aabb_collider(rb_data, this_id, &collider_box);
               }

@@ -9,7 +9,6 @@ namespace World_data {
 
 
 struct World;
-struct Renderer_mesh_data;
 struct Renderer_text_draw_calls_data;
 
 
@@ -19,6 +18,7 @@ struct Renderer_text_draw_calls_data;
 namespace Data {
 
 
+struct Mesh_draw_call_data;
 struct Transform_data;
 struct Pending_entity_removal_data;
 struct Rigidbody_data;

@@ -116,7 +116,7 @@ transform_destroy(Transform_data *data)
 
 
 uint32_t
-transform_insert(Transform_data *data, const uint32_t key)
+transform_push(Transform_data *data, const uint32_t key)
 {
   assert(data);
   assert(data->keys);
@@ -127,7 +127,7 @@ transform_insert(Transform_data *data, const uint32_t key)
     transform_resize_capacity(data, data->capacity << 1);
   }
 
-  // Insert key at the back
+  // Push key at the back
   {
     const uint32_t new_key = key;
     data->keys[data->size++] = new_key;
@@ -138,6 +138,7 @@ transform_insert(Transform_data *data, const uint32_t key)
 
   return 0;
 }
+
 
 
 bool
@@ -186,6 +187,15 @@ transform_exists(const Transform_data *data, const uint32_t key, size_t *out_ind
   }
 
   return false;
+}
+
+
+void
+transform_clear(Transform_data *data)
+{
+  assert(data);
+
+  data->size = 0;
 }
 
 
@@ -373,7 +383,7 @@ transform_set_transform(const Transform_data *data, const uint32_t key, const ma
 
   {
     assert(index < data->size);
-    if(index < data->size)
+    if(index < data->size * 1)
     {
       data->field_transform[index] = *set_value;
 
@@ -433,7 +443,7 @@ transform_set_aabb(const Transform_data *data, const uint32_t key, const math::a
 
   {
     assert(index < data->size);
-    if(index < data->size)
+    if(index < data->size * 1)
     {
       data->field_aabb[index] = *set_value;
 

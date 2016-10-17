@@ -3,7 +3,7 @@
 
 
 #include <data/global_data/material_data.hpp>
-#include <data/world_data/renderer_mesh_data.hpp>
+#include <data/world_data/mesh_draw_call_data.hpp>
 #include <systems/renderer_material/material.hpp>
 #include <systems/renderer_material/material_renderer.hpp>
 #include <math/mat/mat_types.hpp>
@@ -31,7 +31,7 @@ material_renderer(const math::mat4 &view_mat,
                   const float total_time,
                   const Resource_data::Material_data *material_data,
                   const uint32_t camera_cull_mask,
-                  const World_data::Renderer_mesh_data *mesh_renderer_data,
+                  const Data::Mesh_draw_call_data *mesh_renderer_data,
                   const ::Material_renderer::Draw_call *draw_calls,
                   const uint32_t number_of_draw_calls);
 

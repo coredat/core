@@ -6,8 +6,8 @@
 */
 
 
-#ifndef RIGIDBODY_INCLUDED_F57A7291_6187_4EDC_84CA_C47EB04C2CA4
-#define RIGIDBODY_INCLUDED_F57A7291_6187_4EDC_84CA_C47EB04C2CA4
+#ifndef RIGIDBODY_INCLUDED_849CCAC6_051D_47B3_8C4D_A7BCCC511270
+#define RIGIDBODY_INCLUDED_849CCAC6_051D_47B3_8C4D_A7BCCC511270
 
 
 #include <stdint.h>
@@ -69,7 +69,7 @@ rigidbody_destroy(Rigidbody_data *data);
 
 
 uint32_t
-rigidbody_insert(Rigidbody_data *data, const uint32_t key);
+rigidbody_push(Rigidbody_data *data, const uint32_t key);
 
 
 bool

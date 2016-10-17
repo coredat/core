@@ -13,7 +13,7 @@
 #include <data/world_data/world_pools.hpp>
 #include <data/world_data/entity_data.hpp>
 #include <data/world_data/transform_data.hpp>
-#include <data/world_data/renderer_mesh_data.hpp>
+#include <data/world_data/mesh_draw_call_data.hpp>
 
 #include <transformations/entity/entity_common.hpp>
 #include <transformations/entity/entity_data.hpp>
@@ -89,7 +89,7 @@ Entity_interface::Entity_interface(Core::World &world)
       const uint32_t id = Core_detail::entity_id_to_uint(entity_id);
       m_impl->id = entity_id;
       
-      const bool added = Data::entity_insert(entity_data, id);
+      const bool added = Data::entity_push(entity_data, id);
       
       if(added && success)
       {
@@ -119,7 +119,7 @@ Entity_interface::Entity_interface(Core::World &world)
       
       const util::generic_id entity_id = Core_detail::entity_id_to_uint(m_impl->id);
     
-      if(Data::transform_insert(transform_data, entity_id))
+      if(Data::transform_push(transform_data, entity_id))
       {
         const math::transform trans{};
         Data::transform_set_transform(transform_data, entity_id, &trans);
@@ -139,13 +139,13 @@ Entity_interface::Entity_interface(Core::World &world)
     {
       auto mesh_data = m_impl->world->mesh_data;
       
-      World_data::data_lock(mesh_data);
+      Data::data_lock(mesh_data);
       
 //      if(World_data::renderer_mesh_data_insert(mesh_data, id, 0) && success)
       {
       }
       
-      World_data::data_unlock(mesh_data);
+      Data::data_unlock(mesh_data);
     }
     
     // If we failed then destroy the entity.

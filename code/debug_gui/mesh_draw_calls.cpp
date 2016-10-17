@@ -7,7 +7,7 @@ namespace Debug_menu {
 
 
 void
-display_mesh_draw_calls(World_data::Renderer_mesh_data *data)
+display_mesh_draw_calls(Data::Mesh_draw_call_data *data)
 {
   ImGui::Begin("Mesh Renderer Draw Calls");
   {
@@ -21,8 +21,8 @@ display_mesh_draw_calls(World_data::Renderer_mesh_data *data)
         
     for(uint32_t i = 0; i < data->size; ++i)
     {
-      ImGui::Text("%u", data->renderer_mesh_id[i]); ImGui::NextColumn();
-      ImGui::Text("%u", data->property_material_id[i]); ImGui::NextColumn();
+      ImGui::Text("%u", data->keys[i]); ImGui::NextColumn();
+      ImGui::Text("%u", data->field_material_id[i]); ImGui::NextColumn();
     }
     
     ImGui::Columns(1);

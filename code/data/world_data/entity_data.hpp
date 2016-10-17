@@ -6,8 +6,8 @@
 */
 
 
-#ifndef ENTITY_INCLUDED_18687684_EE0D_42BB_A000_D73617F41A63
-#define ENTITY_INCLUDED_18687684_EE0D_42BB_A000_D73617F41A63
+#ifndef ENTITY_INCLUDED_151DE5FE_86D6_486B_9B0D_83B2C210A361
+#define ENTITY_INCLUDED_151DE5FE_86D6_486B_9B0D_83B2C210A361
 
 
 #include <stdint.h>
@@ -73,7 +73,7 @@ entity_destroy(Entity_data *data);
 
 
 uint32_t
-entity_insert(Entity_data *data, const uint32_t key);
+entity_push(Entity_data *data, const uint32_t key);
 
 
 bool

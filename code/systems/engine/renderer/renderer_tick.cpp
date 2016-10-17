@@ -106,7 +106,7 @@ think(std::shared_ptr<World_data::World> world,
     for(uint32_t i = 0; i < world->mesh_data->size; ++i)
     {
       // Draw call from the data.
-      const World_data::Mesh_renderer_draw_call *draw_call_data = &world->mesh_data->property_draw_call[i];
+      const Data::Mesh_renderer_draw_call *draw_call_data = &world->mesh_data->field_draw_call[i];
 
       // No model? keep moving.
       if(!draw_call_data->model_id)
@@ -124,7 +124,7 @@ think(std::shared_ptr<World_data::World> world,
       
       // Get cull mask.
       // This isn't particularly nice. We should already have this data to save us looking for it.
-      const util::generic_id entity_id = world->mesh_data->renderer_mesh_id[i];
+      const util::generic_id entity_id = world->mesh_data->keys[i];
       Data::entity_get_tags(world->entity, entity_id, &draw_calls[i].cull_mask);
     }
   }

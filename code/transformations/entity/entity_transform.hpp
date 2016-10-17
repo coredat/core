@@ -23,7 +23,7 @@ set_transform(const util::generic_id this_id,
               Data::Entity_data *entity_data,
               Data::Transform_data *transform_data,
               Data::Rigidbody_data *rb_data,
-              World_data::Renderer_mesh_data *mesh_data,
+              Data::Mesh_draw_call_data *mesh_data,
               World_data::Renderer_text_draw_calls_data *text_data,
               const Core::Transform &transform,
               bool inform_phys_engine = true);

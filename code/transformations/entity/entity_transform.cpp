@@ -3,7 +3,7 @@
 #include <transformations/entity/entity_rigidbody.hpp>
 #include <core/transform/transform.hpp>
 #include <data/world_data/world_pools.hpp>
-#include <data/world_data/renderer_mesh_data.hpp>
+#include <data/world_data/mesh_draw_call_data.hpp>
 #include <data/world_data/renderer_text_draw_calls_data.hpp>
 #include <data/world_data/transform_data.hpp>
 #include <common/error_strings.hpp>
@@ -35,22 +35,22 @@ update_transform(const util::generic_id this_id,
 
 inline void
 update_mesh_renderer(const util::generic_id this_id,
-                     World_data::Renderer_mesh_data *mesh_data,
+                     Data::Mesh_draw_call_data *mesh_data,
                      const math::transform *transform)
 {
   // Update mesh renderer data
   {
-    World_data::data_lock(mesh_data);
+    Data::data_lock(mesh_data);
   
     size_t mesh_index;
 
-    if(World_data::renderer_mesh_data_exists(mesh_data, this_id, &mesh_index))
+    if(Data::mesh_draw_call_exists(mesh_data, this_id, &mesh_index))
     {
       const math::mat4 world_mat = math::transform_get_world_matrix(*transform);
-      memcpy(mesh_data->property_draw_call[mesh_index].world_matrix, &world_mat, sizeof(world_mat));
+      memcpy(mesh_data->field_draw_call[mesh_index].world_matrix, &world_mat, sizeof(world_mat));
     }
     
-    World_data::data_unlock(mesh_data);
+    Data::data_unlock(mesh_data);
   }
 }
 
@@ -87,7 +87,7 @@ set_transform(const util::generic_id this_id,
               Data::Entity_data *entity_data,
               Data::Transform_data *transform_data,
               Data::Rigidbody_data *rb_data,
-              World_data::Renderer_mesh_data *mesh_data,
+              Data::Mesh_draw_call_data *mesh_data,
               World_data::Renderer_text_draw_calls_data *text_data,
               const Core::Transform &set_transform,
               bool inform_phys_engine)

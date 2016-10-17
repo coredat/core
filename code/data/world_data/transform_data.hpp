@@ -6,8 +6,8 @@
 */
 
 
-#ifndef TRANSFORM_INCLUDED_5BAB0010_6B7D_4F17_9024_48E218CFB339
-#define TRANSFORM_INCLUDED_5BAB0010_6B7D_4F17_9024_48E218CFB339
+#ifndef TRANSFORM_INCLUDED_AC991C4B_AB65_4B45_8354_6D5246D789E5
+#define TRANSFORM_INCLUDED_AC991C4B_AB65_4B45_8354_6D5246D789E5
 
 
 #include <stdint.h>
@@ -59,7 +59,7 @@ transform_destroy(Transform_data *data);
 
 
 uint32_t
-transform_insert(Transform_data *data, const uint32_t key);
+transform_push(Transform_data *data, const uint32_t key);
 
 
 bool
@@ -68,6 +68,10 @@ transform_remove(Transform_data *data, const uint32_t key);
 
 bool
 transform_exists(const Transform_data *data, const uint32_t key, size_t *out_index = nullptr);
+
+
+void
+transform_clear(Transform_data *data);
 
 
 bool
