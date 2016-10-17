@@ -1,7 +1,7 @@
 #include <transformations/rendering/render_scene.hpp>
 #include <data/global_data/memory_data.hpp>
-#include <data/world_data/renderer_text_draw_calls_data.hpp>
-#include <data/world_data/mesh_draw_call_data.hpp>
+#include <data/world/text_draw_call_data.hpp>
+#include <data/world/mesh_draw_call_data.hpp>
 #include <systems/renderer_material/material.hpp>
 #include <systems/renderer_post/post_process.hpp>
 #include <systems/renderer_post/post_shader.hpp>
@@ -23,7 +23,7 @@ render_main_scene(const float delta_time,
                   const float total_time,
                   const uint32_t viewport_x,
                   const uint32_t viewport_y,                  
-                  const World_data::World                *world,
+                  const Data::World                      *world,
                   const Resource_data::Material_data     *material_data,
                   const Resource_data::Post_process_data *post_data,
                   const Camera_utils::Cam_run            cam_runs[],
@@ -103,7 +103,7 @@ render_main_scene(const float delta_time,
       
         number_of_draw_calls += Text_renderer::render(view_proj,
                                                       cam->cull_mask,
-                                                      world->text_data->property_draw_call,
+                                                      world->text_data->field_draw_call,
                                                       world->text_data->size);
       }
       

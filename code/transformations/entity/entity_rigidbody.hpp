@@ -3,7 +3,7 @@
 
 
 #include <transformations/entity/entity_common.hpp>
-#include <data/world_data/rigidbody_data.hpp>
+#include <data/world/rigidbody_data.hpp>
 #include <math/transform/transform_fwd.hpp>
 #include <math/geometry/geometry_fwd.hpp>
 
@@ -13,18 +13,18 @@ namespace Entity_detail {
 
 void
 set_collider(const util::generic_id this_id,
-             World_data::World *world,
+             Data::World *world,
              const Core::Collider &collider);
 
 
 Core::Collider
 get_collider(const util::generic_id this_id,
-             World_data::World *world);
+             Data::World *world);
 
 
 void
 set_rigidbody(const util::generic_id this_id,
-              World_data::World *world,
+              Data::World *world,
               const Core::Rigidbody &rigidbody);
   
 

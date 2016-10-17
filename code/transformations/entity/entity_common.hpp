@@ -4,7 +4,7 @@
 
 #include <utilities/generic_id.hpp>
 #include <core/common/core_fwd.hpp>
-#include <data/world_data/world_data_fwd.hpp>
+#include <data/world_data.hpp>
 #include <stdint.h>
 
 

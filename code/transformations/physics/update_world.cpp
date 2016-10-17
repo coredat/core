@@ -1,5 +1,5 @@
 #include <transformations/physics/update_world.hpp>
-#include <data/world_data/rigidbody_data.hpp>
+#include <data/world/rigidbody_data.hpp>
 #include <core/entity/detail/entity_id.hpp>
 #include <core/physics/collision.hpp>
 #include <core/common/collision.hpp>
@@ -15,7 +15,7 @@ namespace
   uint32_t number_of_callbacks = 0;
   atomic_bool is_listening(false);
   Core::Collision_pair *collisions = nullptr;
-  std::shared_ptr<World_data::World> world; // this is a bad bad hack to smuggle world into the callback.
+  std::shared_ptr<Data::World> world; // this is a bad bad hack to smuggle world into the callback.
 }
 
 
@@ -35,7 +35,7 @@ namespace Physics_transform {
 
 
 void
-update_world(std::shared_ptr<World_data::World> curr_world,
+update_world(std::shared_ptr<Data::World> curr_world,
              Core::Collision_pair *out_collisions[],
              uint32_t *out_number_of_collisions)
 {

@@ -10,9 +10,11 @@
 #include <core/model/mesh.hpp>
 #include <data/global_data/resource_data.hpp>
 #include <data/global_data/memory_data.hpp>
-#include <data/world_data/world_data.hpp>
-#include <data/world_data/entity_data.hpp>
-#include <data/world_data/transform_data.hpp>
+#include <data/world_data.hpp>
+#include <data/world/entity_data.hpp>
+#include <data/world/transform_data.hpp>
+#include <data/world/mesh_draw_call_data.hpp>
+#include <data/world/text_draw_call_data.hpp>
 #include <common/error_strings.hpp>
 #include <graphics_api/vertex_format.hpp>
 #include <graphics_api/utils/geometry.hpp>
@@ -43,7 +45,7 @@ set_renderer(const util::generic_id this_id,
              Data::Entity_data *entity_data,
              Data::Transform_data *transform_data,
              Data::Mesh_draw_call_data *renderer_material,
-             World_data::Renderer_text_draw_calls_data *text_data,
+             Data::Text_draw_call_data *text_data,
              const Core::Renderer &renderer)
 {
   // Check valid
@@ -359,7 +361,7 @@ void
 set_renderer_text(const util::generic_id this_id,
                   Data::Entity_data *entity_data,
                   Data::Transform_data *transform_data,
-                  World_data::Renderer_text_draw_calls_data *text_data,
+                  Data::Text_draw_call_data *text_data,
                   const util::generic_id font_id,
                   const util::generic_id model_id)
 {
@@ -621,18 +623,18 @@ set_renderer_text(const util::generic_id this_id,
   {
     assert(text_data);
     
-    World_data::data_lock(text_data);
+    Data::data_lock(text_data);
     
     const math::transform transform = Entity_detail::get_transform(this_id, entity_data, transform_data);
     const math::mat4 world_mat = math::transform_get_world_matrix(transform);
     
     // If we don't have a draw call insert one.
-    if(!World_data::renderer_text_draw_calls_data_exists(text_data, this_id))
+    if(!Data::text_draw_call_exists(text_data, this_id))
     {
-      World_data::renderer_text_draw_calls_data_push_back(text_data, this_id);
+      Data::text_draw_call_push(text_data, this_id);
     }
     
-    if(World_data::renderer_text_draw_calls_data_exists(text_data, this_id))
+    if(Data::text_draw_call_exists(text_data, this_id))
     {
       ::Text_renderer::Draw_call dc;
       dc.texture = glyph_texture;
@@ -641,16 +643,16 @@ set_renderer_text(const util::generic_id this_id,
 
       dc.mesh = mesh;
 
-      World_data::renderer_text_draw_calls_data_set_property_draw_call(text_data, this_id, &dc);
+      Data::text_draw_call_set_draw_call(text_data, this_id, &dc);
     }
 
-    World_data::data_unlock(text_data);
+    Data::data_unlock(text_data);
   }
   
   // Update aabb
   math::aabb return_aabb;
   {
-    Resource_data::Mesh_data *mesh_data = Resource_data::get_resources()->mesh_data;
+    Resource_data::Mesh_data *mesh_data = Resource_data::get_resource_data()->mesh_data;
     assert(mesh_data);
     
     Resource_data::data_lock(mesh_data);

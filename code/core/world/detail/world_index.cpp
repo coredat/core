@@ -9,9 +9,9 @@ namespace {
 
 constexpr uint32_t max_worlds = 1 << Core_detail::entity_detail_world_bits();
 
-std::atomic<uint32_t>               world_instance_id(0);
-std::shared_ptr<World_data::World>  worlds[max_worlds];
-uint32_t                            world_ids[max_worlds] = {0};
+std::atomic<uint32_t>         world_instance_id(0);
+std::shared_ptr<Data::World>  worlds[max_worlds];
+uint32_t                      world_ids[max_worlds] = {0};
 
 
 } // anon ns
@@ -30,7 +30,7 @@ world_index_add_world_data(const uint32_t entity_size_hint)
     {
       world_instance_id++;
       world_ids[i] = world_instance_id;
-      worlds[i] = std::make_shared<World_data::World>(entity_size_hint);
+      worlds[i] = std::make_shared<Data::World>(entity_size_hint);
       return world_instance_id;
     }
   }
@@ -39,7 +39,7 @@ world_index_add_world_data(const uint32_t entity_size_hint)
 }
 
 
-std::shared_ptr<World_data::World>
+std::shared_ptr<Data::World>
 world_index_get_world_data(const uint32_t id)
 {
   for(uint32_t i = 0; i < max_worlds; ++i)

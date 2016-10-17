@@ -9,11 +9,11 @@
 #include <core/world/world.hpp>
 #include <core/world/detail/world_index.hpp>
 
-#include <data/world_data/pending_entity_removal.hpp>
-#include <data/world_data/world_pools.hpp>
-#include <data/world_data/entity_data.hpp>
-#include <data/world_data/transform_data.hpp>
-#include <data/world_data/mesh_draw_call_data.hpp>
+#include <data/world/pending_entity_removal_data.hpp>
+#include <data/world_data.hpp>
+#include <data/world/entity_data.hpp>
+#include <data/world/transform_data.hpp>
+#include <data/world/mesh_draw_call_data.hpp>
 
 #include <transformations/entity/entity_common.hpp>
 #include <transformations/entity/entity_data.hpp>
@@ -38,7 +38,7 @@ struct Entity_interface::Impl
 {
 //  util::generic_id id;
   Core_detail::Entity_id id;
-  mutable std::shared_ptr<World_data::World> world;
+  mutable std::shared_ptr<Data::World> world;
 };
 
 

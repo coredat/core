@@ -1,0 +1,36 @@
+
+
+#ifndef {{name.upcase}}_INCLUDED_{{guid}}
+#define {{name.upcase}}_INCLUDED_{{guid}}
+
+
+{{header_includes}}
+
+
+{{ns_start}}
+
+
+/*!
+  {{name.capitalize}} Model
+*/
+struct {{type}}
+{
+  // key //
+  {{key_type}} *{{key_var}} = nullptr;
+
+% fields.each do |f|
+%   if f[:is_sentinal]
+  // {{f[:name]}} sentinal field data //
+  {{f[:type]}} *{{f[:var]}} = nullptr;
+  size_t {{f[:var]}}_size = 0;
+  const size_t {{f[:var]}}_capacity = 0;
+%   else
+  // {{f[:name]}} field data //
+  {{f[:type]}} *{{f[:var]}} = nullptr;
+%   end
+
+% end
+  // size //
+  size_t size = 0;
+  const size_t capacity = 0;
+}; // {{name.capitalize}} Model

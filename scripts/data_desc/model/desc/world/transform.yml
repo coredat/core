@@ -1,0 +1,13 @@
+data:
+
+  key:
+    auto_generated_id: false;
+
+  fields:
+    - name: transform
+      type: math::transform
+      include: <math/transform/transform.hpp>
+
+    - name: aabb
+      type: math::aabb
+      include: <math/geometry/aabb.hpp>

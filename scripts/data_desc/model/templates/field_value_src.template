@@ -1,0 +1,76 @@
+
+
+bool
+% if count == 1
+{{model_name}}_get_{{name}}(const {{model_type}} *data, const {{key_type}} key, {{type}} *return_value)
+% else
+{{model_name}}_get_{{name}}(const {{model_type}} *data, const {{key_type}} key, const {{type}} **return_value)
+% end
+{
+  assert(data);
+  assert(key != {{key_invalid}});
+  assert(data->{{var}});
+  assert(return_value);
+
+  // Search for its index.
+  // If we find it we can return the value.
+
+  size_t index = 0;
+
+  if({{model_name}}_exists(data, key, &index))
+  {
+    assert(index < data->size);
+
+    if(index < data->size)
+    {
+      % if count == 1
+      *return_value = data->{{var}}[index];
+      % else
+      *return_value = &data->{{var}}[index];
+      % end
+
+      return true;
+    }
+  }
+
+  return false;
+}
+
+
+bool
+% if count == 1
+{{model_name}}_set_{{name}}(const {{model_type}} *data, const {{key_type}} key, const {{type}} *set_value)
+% else
+{{model_name}}_set_{{name}}(const {{model_type}} *data, const {{key_type}} key, const {{type}} *set_value, const size_t size)
+% end
+{
+  assert(data);
+  assert(key != {{key_invalid}});
+  assert(data->{{var}});
+  assert(set_value);
+
+  // Search for its index.
+  // If we find it we can set the value.
+
+  size_t index = 0;
+
+  if({{model_name}}_exists(data, key, &index))
+
+  index = index * {{count}};
+
+  {
+    assert(index < data->size);
+    if(index < data->size * {{count}})
+    {
+      % if count == 1
+      data->{{var}}[index] = *set_value;
+      % else
+      memcpy(&data->{{var}}[index], set_value, sizeof({{type}}) * size);
+      % end
+
+      return true;
+    }
+  }
+
+  return false;
+}

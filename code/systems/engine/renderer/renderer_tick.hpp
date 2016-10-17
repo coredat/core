@@ -3,7 +3,7 @@
 
 
 #include "../tick_information.hpp"
-#include <data/world_data/world_data.hpp>
+#include <data/world_data.hpp> // fwd
 #include <data/global_data/resource_data.hpp>
 
 
@@ -16,7 +16,7 @@ initialize();
 
 
 void
-think(std::shared_ptr<World_data::World> world,
+think(std::shared_ptr<Data::World> world,
       std::shared_ptr<Resource_data::Resources> resources,
       const float dt,
       const float running_time,

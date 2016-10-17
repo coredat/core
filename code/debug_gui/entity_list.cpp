@@ -1,5 +1,5 @@
 #include <debug_gui/entity_list.hpp>
-#include <data/world_data/entity_data.hpp>
+#include <data/world/entity_data.hpp>
 #include <3rdparty/imgui/imgui.h>
 #include <core/renderer/renderer.hpp>
 

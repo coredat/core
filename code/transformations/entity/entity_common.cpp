@@ -1,6 +1,6 @@
 #include <transformations/entity/entity_common.hpp>
-#include <data/world_data/pending_entity_removal.hpp>
-#include <data/world_data/entity_data.hpp>
+#include <data/world/pending_entity_removal_data.hpp>
+#include <data/world/entity_data.hpp>
 #include <common/error_strings.hpp>
 #include <utilities/logging.hpp>
 

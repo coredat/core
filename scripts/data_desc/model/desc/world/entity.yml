@@ -1,0 +1,26 @@
+data:
+
+  key:
+    auto_generated_id: false;
+
+  fields:
+    - name: name
+      type: char
+      count: 32
+
+    - name: tags
+      type: uint32_t
+      include: <stdint.h>
+
+    - name: components
+      type: uint32_t
+      include: <stdint.h>
+
+    - name: renderer
+      type: uint32_t
+      include: <stdint.h>
+
+    - name: user_data
+      type: uintptr_t
+      data_type: void*
+      include: <stddef.h>

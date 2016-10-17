@@ -6,13 +6,14 @@
 #include <core/physics/rigidbody.hpp>
 #include <core/transform/transform.hpp>
 #include <data/global_data/resource_data.hpp>
-#include <data/world_data/world_data.hpp>
-#include <data/world_data/entity_data.hpp>
-#include <data/world_data/transform_data.hpp>
+#include <data/world_data.hpp>
+#include <data/world/entity_data.hpp>
+#include <data/world/transform_data.hpp>
 #include <common/error_strings.hpp>
 #include <utilities/logging.hpp>
 #include <transformations/physics/core_to_qu3e.hpp>
 #include <transformations/physics/q3_math_extensions.hpp>
+#include <utilities/bits.hpp>
 #include <assert.h>
 
 
@@ -21,7 +22,7 @@ namespace Entity_detail {
 
 void
 set_collider(const util::generic_id this_id,
-             World_data::World *world,
+             Data::World *world,
              const Core::Collider &collider)
 {
   if(!is_valid(this_id, world->entity))
@@ -110,7 +111,7 @@ set_collider(const util::generic_id this_id,
 
 Core::Collider
 get_collider(const util::generic_id this_id,
-             World_data::World *world)
+             Data::World *world)
 {
   LOG_DEPRECATED_ONCE("get rb should do this now.");
   
@@ -122,7 +123,7 @@ get_collider(const util::generic_id this_id,
 
 void
 set_rigidbody(const util::generic_id this_id,
-              World_data::World *world,
+              Data::World *world,
               const Core::Rigidbody &rigidbody)
 {
   set_collider(this_id, world, rigidbody.get_collider());

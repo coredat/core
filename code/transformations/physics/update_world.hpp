@@ -3,7 +3,7 @@
 
 
 #include <core/physics/physics_fwd.hpp>
-#include <data/world_data/world_pools.hpp>
+#include <data/world_data.hpp>
 #include <memory>
 #include <stdint.h>
 
@@ -12,7 +12,7 @@ namespace Physics_transform {
 
 
 void
-update_world(std::shared_ptr<World_data::World> world,
+update_world(std::shared_ptr<Data::World> world,
              Core::Collision_pair *out_collisions[] = nullptr,
              uint32_t *out_number_of_collisions = nullptr);
 

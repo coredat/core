@@ -3,11 +3,11 @@
 
 
 #include <transformations/entity/entity_common.hpp>
-#include <data/world_data/entity_data.hpp>
+#include <data/world/entity_data.hpp>
 
 // Fwd Dec these
-#include <data/world_data/transform_data.hpp>
-#include <data/world_data/rigidbody_data.hpp>
+#include <data/world/transform_data.hpp>
+#include <data/world/rigidbody_data.hpp>
 
 
 namespace Entity_detail {
@@ -24,7 +24,7 @@ set_transform(const util::generic_id this_id,
               Data::Transform_data *transform_data,
               Data::Rigidbody_data *rb_data,
               Data::Mesh_draw_call_data *mesh_data,
-              World_data::Renderer_text_draw_calls_data *text_data,
+              Data::Text_draw_call_data *text_data,
               const Core::Transform &transform,
               bool inform_phys_engine = true);
 

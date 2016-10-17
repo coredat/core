@@ -6,7 +6,7 @@
 #include <core/context/detail/context_detail.hpp>
 #include <core/physics/collision.hpp>
 #include <core/common/ray.hpp>
-#include <data/world_data/entity_data.hpp>
+#include <data/world/entity_data.hpp>
 #include <data/context_data/input_pool.hpp>
 #include <core/context/detail/context_data.hpp>
 #include <transformations/physics/q3_math_extensions.hpp>
@@ -219,7 +219,7 @@ World::find_entity_by_ray(const Ray ray) const
       return hit_entity;
     }
     
-    std::shared_ptr<const World_data::World> data;
+    std::shared_ptr<const Data::World> data;
     Entity_ref hit_entity = Entity_ref();
     math::vec3 hit_pos    = math::vec3_zero();
     math::vec3 hit_normal = math::vec3_zero();
@@ -363,7 +363,7 @@ World::get_id() const
 }
 
 
-std::shared_ptr<const World_data::World>
+std::shared_ptr<const Data::World>
 World::get_world_data() const
 {
   assert(m_impl && m_impl->world_instance_id);
@@ -373,7 +373,7 @@ World::get_world_data() const
 }
 
 
-std::shared_ptr<World_data::World>
+std::shared_ptr<Data::World>
 World::get_world_data()
 {
   assert(m_impl && m_impl->world_instance_id);

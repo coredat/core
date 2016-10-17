@@ -3,7 +3,7 @@
 
 
 #include "../tick_information.hpp"
-#include <data/world_data/world_data.hpp>
+#include <data/world_data.hpp>
 
 
 namespace Engine {
@@ -15,7 +15,7 @@ initialize();
 
 
 void
-think(std::shared_ptr<World_data::World> world, Tick_information *tick_info = nullptr);
+think(std::shared_ptr<Data::World> world, Tick_information *tick_info = nullptr);
 
 
 void

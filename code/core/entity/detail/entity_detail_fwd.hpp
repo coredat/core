@@ -3,7 +3,7 @@
 
 
 #include <core/renderer/renderer_fwd.hpp>
-#include <data/world_data/world_data_fwd.hpp>
+#include <data/fwd_dec_data.hpp>
 
 
 namespace Core_detail {

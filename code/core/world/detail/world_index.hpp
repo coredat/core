@@ -3,7 +3,7 @@
 
 
 #include <core/common/core_types.hpp>
-#include <data/world_data/world_data.hpp>
+#include <data/world_data.hpp>
 
 
 /*
@@ -17,7 +17,7 @@ uint32_t
 world_index_add_world_data(const uint32_t entity_size_hint);
 
 
-std::shared_ptr<World_data::World>
+std::shared_ptr<Data::World>
 world_index_get_world_data(const uint32_t id);
 
 

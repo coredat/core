@@ -1,0 +1,66 @@
+#ifndef WORLD_POOLS_INCLUDED_2B096887_2423_4C5D_A56C_2F59C3FBFBBC
+#define WORLD_POOLS_INCLUDED_2B096887_2423_4C5D_A56C_2F59C3FBFBBC
+
+
+#include <data/fwd_dec_data.hpp>
+#include <utilities/generic_id.hpp>
+#include <core/entity/entity_fwd.hpp>
+#include <3rdparty/qu3e/q3.h>
+#include <stdint.h>
+
+
+namespace Data {
+
+
+struct World
+{
+  Data::Transform_data                *transform       = nullptr;
+  Data::Entity_data                   *entity          = nullptr;
+  Data::Pending_entity_removal_data   *entity_removal  = nullptr;
+  Data::Camera_data                   *camera_data     = nullptr;
+  Data::Rigidbody_data                *rigidbody_data  = nullptr;
+  Data::Mesh_draw_call_data           *mesh_data       = nullptr;
+  Data::Text_draw_call_data           *text_data       = nullptr;
+  
+  // RB
+//  q3Scene scene = q3Scene(1.f/60.f); // Should this be here?
+  q3Scene *scene;// = q3Scene(1.f/60.f); // Should this be here?
+  
+  explicit World(const uint32_t size_hint);
+  ~World();
+  
+}; // struct
+
+
+
+/*!
+  Search for an entity that has a corrisponding tag.
+  \param world_data is the world to search.
+  \param tag the tag to find.
+  \param out_entities_for_tag number of entities we found.
+  \param out_ids[] where to place results.
+  \param size_of_out size of the result array.
+*/
+void
+world_find_entities_with_tag(World *world_data,
+                             const uint32_t tag,
+                             uint32_t *out_entities_for_tag,
+                             util::generic_id out_ids[],
+                             const uint32_t size_of_out);
+  
+  
+/*!
+  Updates the world data based on scene graph changes.
+  \param world_data the world to update.
+  \param The graph changes.
+*/
+void
+world_update_scene_graph_changes(World *world_data,
+                                 const Data::Pending_entity_removal_data *graph_changes);
+
+
+} // ns
+
+
+
+#endif // inc guard

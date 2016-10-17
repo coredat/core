@@ -4,8 +4,8 @@
 
 #include <data/global_data/material_data.hpp>
 #include <data/global_data/post_process_data.hpp>
-#include <data/world_data/mesh_draw_call_data.hpp>
-#include <data/world_data/world_pools.hpp>
+#include <data/world/mesh_draw_call_data.hpp>
+#include <data/world_data.hpp>
 #include <transformations/camera/cam_priorities.hpp>
 #include <systems/renderer_material/material_renderer.hpp>
 #include <stdint.h>
@@ -22,7 +22,7 @@ render_main_scene(const float delta_time,
                   const float total_time,
                   const uint32_t viewport_x,
                   const uint32_t viewport_y,
-                  const World_data::World                *world,
+                  const Data::World                      *world,
                   const Resource_data::Material_data     *material_data,
                   const Resource_data::Post_process_data *post_data,
                   const Camera_utils::Cam_run            cam_runs[],

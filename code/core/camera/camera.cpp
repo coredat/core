@@ -9,8 +9,8 @@
 #include <core/camera/camera_properties.hpp>
 #include <core/camera/post_process.hpp>
 #include <transformations/camera/cam_priorities.hpp>
-#include <data/world_data/world_pools.hpp>
-#include <data/world_data/camera_data.hpp>
+#include <data/world_data.hpp>
+#include <data/world/camera_data.hpp>
 #include <systems/camera/camera_properties.hpp>
 #include <systems/renderer_post/post_shader.hpp>
 #include <common/error_strings.hpp>
@@ -40,7 +40,7 @@ struct Camera::Impl
 {
   util::generic_id camera_id;
   ::Camera::Camera_properties properties;
-  std::shared_ptr<World_data::World> world;
+  std::shared_ptr<Data::World> world;
 };
 
 

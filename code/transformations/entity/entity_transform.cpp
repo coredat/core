@@ -2,10 +2,10 @@
 #include <transformations/entity/entity_common.hpp>
 #include <transformations/entity/entity_rigidbody.hpp>
 #include <core/transform/transform.hpp>
-#include <data/world_data/world_pools.hpp>
-#include <data/world_data/mesh_draw_call_data.hpp>
-#include <data/world_data/renderer_text_draw_calls_data.hpp>
-#include <data/world_data/transform_data.hpp>
+#include <data/world_data.hpp>
+#include <data/world/mesh_draw_call_data.hpp>
+#include <data/world/text_draw_call_data.hpp>
+#include <data/world/transform_data.hpp>
 #include <common/error_strings.hpp>
 #include <utilities/logging.hpp>
 #include <assert.h>
@@ -57,24 +57,24 @@ update_mesh_renderer(const util::generic_id this_id,
 
 inline void
 udpate_text_renderer(const util::generic_id this_id,
-                     World_data::Renderer_text_draw_calls_data *text_data,
+                     Data::Text_draw_call_data *text_data,
                      const math::transform *transform)
 {
   assert(text_data);
 
   // Update mesh renderer data
   {
-    World_data::data_lock(text_data);
+    Data::data_lock(text_data);
   
     size_t index;
 
-    if(World_data::renderer_text_draw_calls_data_exists(text_data, this_id, &index))
+    if(Data::text_draw_call_exists(text_data, this_id, &index))
     {
       const math::mat4 world_mat = math::transform_get_world_matrix(*transform);
-      memcpy(text_data->property_draw_call[index].world_matrix, &world_mat, sizeof(world_mat));
+      memcpy(text_data->field_draw_call[index].world_matrix, &world_mat, sizeof(world_mat));
     }
     
-    World_data::data_unlock(text_data);
+    Data::data_unlock(text_data);
   }
 }
 
@@ -88,7 +88,7 @@ set_transform(const util::generic_id this_id,
               Data::Transform_data *transform_data,
               Data::Rigidbody_data *rb_data,
               Data::Mesh_draw_call_data *mesh_data,
-              World_data::Renderer_text_draw_calls_data *text_data,
+              Data::Text_draw_call_data *text_data,
               const Core::Transform &set_transform,
               bool inform_phys_engine)
 {

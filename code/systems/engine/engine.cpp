@@ -26,7 +26,7 @@ initialize()
 
 
 void
-think(const std::shared_ptr<World_data::World> world_data,
+think(const std::shared_ptr<Data::World> world_data,
       const std::shared_ptr<Resource_data::Resources> resource_data,
       const float dt,
       const float running_time,

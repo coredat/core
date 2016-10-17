@@ -15,7 +15,7 @@
 
 #include <data/global_data/resource_data.hpp>
 #include <data/global_data/memory_data.hpp>
-#include <data/world_data/world_pools.hpp>
+#include <data/world_data.hpp>
 #include <data/context_data/input_pool.hpp>
 
 #include <3rdparty/imgui/imgui.h>
@@ -97,7 +97,7 @@ namespace
 
 
 void
-display_world_data_menu(World_data::World *world_data,
+display_world_data_menu(Data::World *world_data,
                         const float dt,
                         const float dt_mul,
                         const uint32_t number_of_rbs,
@@ -132,7 +132,7 @@ display_world_data_menu(World_data::World *world_data,
   if(show_camera_list)     { display_camera_data(world_data->camera_data);                              }
   if(show_world_stats)     { display_world_stats(dt, dt_mul, draw_calls, render_passes, number_of_rbs); }
   
-  auto global_data = Resource_data::get_resources();
+  auto global_data = Resource_data::get_resource_data();
 
   if(!global_data)
   {

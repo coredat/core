@@ -1,0 +1,25 @@
+data:
+
+  key:
+    auto_generated_id: false;
+
+  fields:
+    - name: transform
+      type: math::transform
+      include: <math/transform/transform.hpp>
+
+    - name: aabb_collider
+      type: math::aabb
+      include: <math/geometry/aabb.hpp>
+
+    - name: transformed_aabb_collider
+      type: math::aabb
+      include: <math/geometry/aabb.hpp>
+
+    - name: collision_id
+      type: uint64_t
+      include: <stdint.h>
+
+    - name: rigidbody
+      type: uintptr_t
+      include: <3rdparty/qu3e/q3.h>

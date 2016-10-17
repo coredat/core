@@ -1,0 +1,12 @@
+data:
+  
+  key:
+    auto_generated_id: false;
+
+  fields:
+    - name: draw_call
+      type: Mesh_renderer_draw_call
+
+    - name: material_id
+      type: util::generic_id
+      include: <utilities/generic_id.hpp>

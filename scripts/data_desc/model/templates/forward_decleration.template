@@ -1,0 +1,17 @@
+
+#ifndef FWD_DEC_INCLUDED_{{guid}}
+#define FWD_DEC_INCLUDED_{{guid}}
+
+% groups.keys.each do |group|
+
+namespace {{group}} {
+
+% groups[group].each do |c|
+struct {{c}};
+% end
+
+} // {{group}} ns
+
+% end
+
+#endif // inc guard

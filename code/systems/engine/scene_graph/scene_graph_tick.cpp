@@ -3,6 +3,7 @@
 #include <graphics_api/initialize.hpp>
 #include <graphics_api/clear.hpp>
 #include <graphics_api/command_buffer.hpp>
+#include <data/world/pending_entity_removal_data.hpp>
 
 
 
@@ -17,7 +18,7 @@ initialize()
 
 
 void
-think(std::shared_ptr<World_data::World> world, Tick_information *tick_info)
+think(std::shared_ptr<Data::World> world, Tick_information *tick_info)
 {
   // Otherwise we might process things that the calling code as already removed.
   {
@@ -25,7 +26,7 @@ think(std::shared_ptr<World_data::World> world, Tick_information *tick_info)
     auto graph_changes = world->entity_removal;
 
     // Push in new phy entities.
-    World_data::world_update_scene_graph_changes(world.get(), graph_changes);
+    Data::world_update_scene_graph_changes(world.get(), graph_changes);
     
     // Reset the entity pool for new chandges.
     Data::pending_entity_removal_clear(graph_changes);

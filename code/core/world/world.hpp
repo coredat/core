@@ -4,7 +4,8 @@
 
 #include <core/common/core_fwd.hpp>
 #include <core/common/core_types.hpp>
-#include <data/world_data/world_data_fwd.hpp>
+#include <data/fwd_dec_data.hpp>
+#include <data/world_data.hpp>
 #include <core/world/world_setup.hpp>
 
 
@@ -71,8 +72,8 @@ private:
   friend class Core::Ray;
 
   uint32_t                                 get_id() const;
-  std::shared_ptr<const World_data::World> get_world_data() const;
-  std::shared_ptr<World_data::World>       get_world_data();
+  std::shared_ptr<const Data::World> get_world_data() const;
+  std::shared_ptr<Data::World>       get_world_data();
 
 private:
 

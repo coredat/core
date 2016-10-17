@@ -5,7 +5,7 @@
 #include <core/common/core_fwd.hpp>
 #include <core/common/core_types.hpp>
 #include <core/entity/detail/entity_detail_fwd.hpp>
-#include <data/world_data/world_data_fwd.hpp>
+#include <data/fwd_dec_data.hpp>
 
 
 namespace Core {

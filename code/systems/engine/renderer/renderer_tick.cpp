@@ -2,8 +2,8 @@
 
 #include <data/global_data/resource_data.hpp>
 #include <data/global_data/memory_data.hpp>
-#include <data/world_data/world_data.hpp>
-#include <data/world_data/entity_data.hpp>
+#include <data/world_data.hpp>
+#include <data/world/entity_data.hpp>
 
 #include <renderer/debug_line_renderer/debug_line_renderer_node.hpp>
 #include <renderer/debug_line_renderer/debug_line_renderer.hpp>
@@ -42,7 +42,7 @@ initialize()
 
 
 void
-think(std::shared_ptr<World_data::World> world,
+think(std::shared_ptr<Data::World> world,
       std::shared_ptr<Resource_data::Resources> resources,
       const float dt,
       const float running_time,

@@ -1,0 +1,18 @@
+data:
+
+  key:
+    auto_generated_id: false;
+
+  # Text needs a massive refactor.
+  fields:
+    - name: text
+      type: char
+      count: 32
+
+    - name: draw_call
+      type: Text_renderer::Draw_call
+      include: <systems/renderer_text/text_draw_call.hpp>
+
+    - name: model_id
+      type: util::generic_id
+      include: <utilities/generic_id.hpp>

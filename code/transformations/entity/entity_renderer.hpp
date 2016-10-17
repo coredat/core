@@ -18,7 +18,7 @@ set_renderer(const util::generic_id this_id,
              Data::Entity_data *entity_data,
              Data::Transform_data *transform_data,
              Data::Mesh_draw_call_data *mesh_data,
-             World_data::Renderer_text_draw_calls_data *text_data,
+             Data::Text_draw_call_data *text_data,
              const Core::Renderer &renderer);
   
   
@@ -48,7 +48,7 @@ void
 set_renderer_text(const util::generic_id this_id,
                   Data::Entity_data *entity_data,
                   Data::Transform_data *transform_data,
-                  World_data::Renderer_text_draw_calls_data *text_data,
+                  Data::Text_draw_call_data *text_data,
                   const util::generic_id font_id,
                   const util::generic_id model_id);
 

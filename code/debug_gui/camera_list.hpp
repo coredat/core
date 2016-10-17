@@ -2,7 +2,7 @@
 #define CAMERA_LIST_INCLUDED_A668CCE5_9B04_41F6_A4A2_FE57C3BF40BF
 
 
-#include <data/world_data/camera_data.hpp> // fwd
+#include <data/world/camera_data.hpp> // fwd
 
 
 namespace Debug_menu {

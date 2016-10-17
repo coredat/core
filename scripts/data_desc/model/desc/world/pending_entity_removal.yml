@@ -1,0 +1,5 @@
+data:
+
+  fields:
+    - name: deleted_entity
+      type: uint32_t
