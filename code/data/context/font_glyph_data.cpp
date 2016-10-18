@@ -370,12 +370,9 @@ font_glyph_set_character(const Font_glyph_data *data, const uint32_t key, const 
   size_t index = 0;
 
   if(font_glyph_exists(data, key, &index))
-
-  index = index * 1;
-
   {
     assert(index < data->size);
-    if(index < data->size * 1)
+    if(index < data->size)
     {
       data->field_character[index] = *set_value;
 

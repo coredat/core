@@ -530,12 +530,9 @@ rigidbody_set_transform(const Rigidbody_data *data, const uint32_t key, const ma
   size_t index = 0;
 
   if(rigidbody_exists(data, key, &index))
-
-  index = index * 1;
-
   {
     assert(index < data->size);
-    if(index < data->size * 1)
+    if(index < data->size)
     {
       data->field_transform[index] = *set_value;
 
@@ -590,12 +587,9 @@ rigidbody_set_aabb_collider(const Rigidbody_data *data, const uint32_t key, cons
   size_t index = 0;
 
   if(rigidbody_exists(data, key, &index))
-
-  index = index * 1;
-
   {
     assert(index < data->size);
-    if(index < data->size * 1)
+    if(index < data->size)
     {
       data->field_aabb_collider[index] = *set_value;
 
@@ -650,12 +644,9 @@ rigidbody_set_transformed_aabb_collider(const Rigidbody_data *data, const uint32
   size_t index = 0;
 
   if(rigidbody_exists(data, key, &index))
-
-  index = index * 1;
-
   {
     assert(index < data->size);
-    if(index < data->size * 1)
+    if(index < data->size)
     {
       data->field_transformed_aabb_collider[index] = *set_value;
 
@@ -710,12 +701,9 @@ rigidbody_set_collision_id(const Rigidbody_data *data, const uint32_t key, const
   size_t index = 0;
 
   if(rigidbody_exists(data, key, &index))
-
-  index = index * 1;
-
   {
     assert(index < data->size);
-    if(index < data->size * 1)
+    if(index < data->size)
     {
       data->field_collision_id[index] = *set_value;
 
@@ -770,12 +758,9 @@ rigidbody_set_rigidbody(const Rigidbody_data *data, const uint32_t key, const ui
   size_t index = 0;
 
   if(rigidbody_exists(data, key, &index))
-
-  index = index * 1;
-
   {
     assert(index < data->size);
-    if(index < data->size * 1)
+    if(index < data->size)
     {
       data->field_rigidbody[index] = *set_value;
 

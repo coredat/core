@@ -360,7 +360,7 @@ shader_get_name(const Shader_data *data, const uint32_t key, const char **return
 
     if(index < data->size)
     {
-      *return_value = &data->field_name[index];
+      *return_value = &data->field_name[index * 32];
 
       return true;
     }
@@ -384,14 +384,11 @@ shader_set_name(const Shader_data *data, const uint32_t key, const char *set_val
   size_t index = 0;
 
   if(shader_exists(data, key, &index))
-
-  index = index * 32;
-
   {
     assert(index < data->size);
-    if(index < data->size * 32)
+    if(index < data->size)
     {
-      memcpy(&data->field_name[index], set_value, sizeof(char) * size);
+      memcpy(&data->field_name[index * 32], set_value, sizeof(char) * size);
 
       return true;
     }
@@ -444,12 +441,9 @@ shader_set_shader(const Shader_data *data, const uint32_t key, const Ogl::Shader
   size_t index = 0;
 
   if(shader_exists(data, key, &index))
-
-  index = index * 1;
-
   {
     assert(index < data->size);
-    if(index < data->size * 1)
+    if(index < data->size)
     {
       data->field_shader[index] = *set_value;
 

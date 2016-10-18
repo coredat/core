@@ -426,7 +426,7 @@ text_draw_call_get_text(const Text_draw_call_data *data, const uint32_t key, con
 
     if(index < data->size)
     {
-      *return_value = &data->field_text[index];
+      *return_value = &data->field_text[index * 32];
 
       return true;
     }
@@ -450,14 +450,11 @@ text_draw_call_set_text(const Text_draw_call_data *data, const uint32_t key, con
   size_t index = 0;
 
   if(text_draw_call_exists(data, key, &index))
-
-  index = index * 32;
-
   {
     assert(index < data->size);
-    if(index < data->size * 32)
+    if(index < data->size)
     {
-      memcpy(&data->field_text[index], set_value, sizeof(char) * size);
+      memcpy(&data->field_text[index * 32], set_value, sizeof(char) * size);
 
       return true;
     }
@@ -510,12 +507,9 @@ text_draw_call_set_draw_call(const Text_draw_call_data *data, const uint32_t key
   size_t index = 0;
 
   if(text_draw_call_exists(data, key, &index))
-
-  index = index * 1;
-
   {
     assert(index < data->size);
-    if(index < data->size * 1)
+    if(index < data->size)
     {
       data->field_draw_call[index] = *set_value;
 
@@ -570,12 +564,9 @@ text_draw_call_set_model_id(const Text_draw_call_data *data, const uint32_t key,
   size_t index = 0;
 
   if(text_draw_call_exists(data, key, &index))
-
-  index = index * 1;
-
   {
     assert(index < data->size);
-    if(index < data->size * 1)
+    if(index < data->size)
     {
       data->field_model_id[index] = *set_value;
 

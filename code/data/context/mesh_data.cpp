@@ -399,7 +399,7 @@ mesh_get_name(const Mesh_data *data, const uint32_t key, const char **return_val
 
     if(index < data->size)
     {
-      *return_value = &data->field_name[index];
+      *return_value = &data->field_name[index * 32];
 
       return true;
     }
@@ -423,14 +423,11 @@ mesh_set_name(const Mesh_data *data, const uint32_t key, const char *set_value, 
   size_t index = 0;
 
   if(mesh_exists(data, key, &index))
-
-  index = index * 32;
-
   {
     assert(index < data->size);
-    if(index < data->size * 32)
+    if(index < data->size)
     {
-      memcpy(&data->field_name[index], set_value, sizeof(char) * size);
+      memcpy(&data->field_name[index * 32], set_value, sizeof(char) * size);
 
       return true;
     }
@@ -483,12 +480,9 @@ mesh_set_mesh(const Mesh_data *data, const uint32_t key, const Graphics_api::Mes
   size_t index = 0;
 
   if(mesh_exists(data, key, &index))
-
-  index = index * 1;
-
   {
     assert(index < data->size);
-    if(index < data->size * 1)
+    if(index < data->size)
     {
       data->field_mesh[index] = *set_value;
 
@@ -543,12 +537,9 @@ mesh_set_aabb(const Mesh_data *data, const uint32_t key, const math::aabb *set_v
   size_t index = 0;
 
   if(mesh_exists(data, key, &index))
-
-  index = index * 1;
-
   {
     assert(index < data->size);
-    if(index < data->size * 1)
+    if(index < data->size)
     {
       data->field_aabb[index] = *set_value;
 

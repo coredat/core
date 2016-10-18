@@ -139,8 +139,8 @@ update_world(std::shared_ptr<Data::World> curr_world,
     *out_collisions = collisions;
   }
   
-//  is_listening = false;
-//  world.reset();
+  is_listening = false;
+  world.reset();
 }
 
 

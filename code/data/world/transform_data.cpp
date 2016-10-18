@@ -410,12 +410,9 @@ transform_set_transform(const Transform_data *data, const uint32_t key, const ma
   size_t index = 0;
 
   if(transform_exists(data, key, &index))
-
-  index = index * 1;
-
   {
     assert(index < data->size);
-    if(index < data->size * 1)
+    if(index < data->size)
     {
       data->field_transform[index] = *set_value;
 
@@ -470,12 +467,9 @@ transform_set_aabb(const Transform_data *data, const uint32_t key, const math::a
   size_t index = 0;
 
   if(transform_exists(data, key, &index))
-
-  index = index * 1;
-
   {
     assert(index < data->size);
-    if(index < data->size * 1)
+    if(index < data->size)
     {
       data->field_aabb[index] = *set_value;
 

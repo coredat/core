@@ -360,7 +360,7 @@ post_process_get_name(const Post_process_data *data, const uint32_t key, const c
 
     if(index < data->size)
     {
-      *return_value = &data->field_name[index];
+      *return_value = &data->field_name[index * 32];
 
       return true;
     }
@@ -384,14 +384,11 @@ post_process_set_name(const Post_process_data *data, const uint32_t key, const c
   size_t index = 0;
 
   if(post_process_exists(data, key, &index))
-
-  index = index * 32;
-
   {
     assert(index < data->size);
-    if(index < data->size * 32)
+    if(index < data->size)
     {
-      memcpy(&data->field_name[index], set_value, sizeof(char) * size);
+      memcpy(&data->field_name[index * 32], set_value, sizeof(char) * size);
 
       return true;
     }
@@ -444,12 +441,9 @@ post_process_set_post_shader(const Post_process_data *data, const uint32_t key, 
   size_t index = 0;
 
   if(post_process_exists(data, key, &index))
-
-  index = index * 1;
-
   {
     assert(index < data->size);
-    if(index < data->size * 1)
+    if(index < data->size)
     {
       data->field_post_shader[index] = *set_value;
 

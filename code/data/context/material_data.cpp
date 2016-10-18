@@ -399,7 +399,7 @@ material_get_name(const Material_data *data, const uint32_t key, const char **re
 
     if(index < data->size)
     {
-      *return_value = &data->field_name[index];
+      *return_value = &data->field_name[index * 32];
 
       return true;
     }
@@ -423,14 +423,11 @@ material_set_name(const Material_data *data, const uint32_t key, const char *set
   size_t index = 0;
 
   if(material_exists(data, key, &index))
-
-  index = index * 32;
-
   {
-    assert(index / 32 < data->size);
-    if(index < data->size * 32)
+    assert(index < data->size);
+    if(index < data->size)
     {
-      memcpy(&data->field_name[index], set_value, sizeof(char) * size);
+      memcpy(&data->field_name[index * 32], set_value, sizeof(char) * size);
 
       return true;
     }
@@ -483,12 +480,9 @@ material_set_material_hash(const Material_data *data, const uint32_t key, const 
   size_t index = 0;
 
   if(material_exists(data, key, &index))
-
-  index = index * 1;
-
   {
     assert(index < data->size);
-    if(index < data->size * 1)
+    if(index < data->size)
     {
       data->field_material_hash[index] = *set_value;
 
@@ -543,12 +537,9 @@ material_set_material(const Material_data *data, const uint32_t key, const Mater
   size_t index = 0;
 
   if(material_exists(data, key, &index))
-
-  index = index * 1;
-
   {
     assert(index < data->size);
-    if(index < data->size * 1)
+    if(index < data->size)
     {
       data->field_material[index] = *set_value;
 

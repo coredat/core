@@ -345,12 +345,9 @@ pending_entity_removal_set_deleted_entity(const Pending_entity_removal_data *dat
   size_t index = 0;
 
   if(pending_entity_removal_exists(data, key, &index))
-
-  index = index * 1;
-
   {
     assert(index < data->size);
-    if(index < data->size * 1)
+    if(index < data->size)
     {
       data->field_deleted_entity[index] = *set_value;
 

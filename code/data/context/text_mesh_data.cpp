@@ -438,7 +438,7 @@ text_mesh_get_text(const Text_mesh_data *data, const uint32_t key, const char **
 
     if(index < data->size)
     {
-      *return_value = &data->field_text[index];
+      *return_value = &data->field_text[index * 32];
 
       return true;
     }
@@ -462,14 +462,11 @@ text_mesh_set_text(const Text_mesh_data *data, const uint32_t key, const char *s
   size_t index = 0;
 
   if(text_mesh_exists(data, key, &index))
-
-  index = index * 32;
-
   {
     assert(index < data->size);
-    if(index < data->size * 32)
+    if(index < data->size)
     {
-      memcpy(&data->field_text[index], set_value, sizeof(char) * size);
+      memcpy(&data->field_text[index * 32], set_value, sizeof(char) * size);
 
       return true;
     }
@@ -522,12 +519,9 @@ text_mesh_set_text_size(const Text_mesh_data *data, const uint32_t key, const ui
   size_t index = 0;
 
   if(text_mesh_exists(data, key, &index))
-
-  index = index * 1;
-
   {
     assert(index < data->size);
-    if(index < data->size * 1)
+    if(index < data->size)
     {
       data->field_text_size[index] = *set_value;
 
@@ -582,12 +576,9 @@ text_mesh_set_font_id(const Text_mesh_data *data, const uint32_t key, const util
   size_t index = 0;
 
   if(text_mesh_exists(data, key, &index))
-
-  index = index * 1;
-
   {
     assert(index < data->size);
-    if(index < data->size * 1)
+    if(index < data->size)
     {
       data->field_font_id[index] = *set_value;
 
@@ -642,12 +633,9 @@ text_mesh_set_mesh(const Text_mesh_data *data, const uint32_t key, const Graphic
   size_t index = 0;
 
   if(text_mesh_exists(data, key, &index))
-
-  index = index * 1;
-
   {
     assert(index < data->size);
-    if(index < data->size * 1)
+    if(index < data->size)
     {
       data->field_mesh[index] = *set_value;
 

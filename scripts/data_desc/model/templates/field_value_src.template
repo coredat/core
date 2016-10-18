@@ -26,7 +26,7 @@ bool
       % if count == 1
       *return_value = data->{{var}}[index];
       % else
-      *return_value = &data->{{var}}[index];
+      *return_value = &data->{{var}}[index * {{count}}];
       % end
 
       return true;
@@ -55,17 +55,14 @@ bool
   size_t index = 0;
 
   if({{model_name}}_exists(data, key, &index))
-
-  index = index * {{count}};
-
   {
     assert(index < data->size);
-    if(index < data->size * {{count}})
+    if(index < data->size)
     {
       % if count == 1
       data->{{var}}[index] = *set_value;
       % else
-      memcpy(&data->{{var}}[index], set_value, sizeof({{type}}) * size);
+      memcpy(&data->{{var}}[index * {{count}}], set_value, sizeof({{type}}) * size);
       % end
 
       return true;

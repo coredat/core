@@ -410,12 +410,9 @@ mesh_draw_call_set_draw_call(const Mesh_draw_call_data *data, const uint32_t key
   size_t index = 0;
 
   if(mesh_draw_call_exists(data, key, &index))
-
-  index = index * 1;
-
   {
     assert(index < data->size);
-    if(index < data->size * 1)
+    if(index < data->size)
     {
       data->field_draw_call[index] = *set_value;
 
@@ -470,12 +467,9 @@ mesh_draw_call_set_material_id(const Mesh_draw_call_data *data, const uint32_t k
   size_t index = 0;
 
   if(mesh_draw_call_exists(data, key, &index))
-
-  index = index * 1;
-
   {
     assert(index < data->size);
-    if(index < data->size * 1)
+    if(index < data->size)
     {
       data->field_material_id[index] = *set_value;
 

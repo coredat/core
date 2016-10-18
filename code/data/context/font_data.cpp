@@ -438,7 +438,7 @@ font_get_name(const Font_data *data, const uint32_t key, const char **return_val
 
     if(index < data->size)
     {
-      *return_value = &data->field_name[index];
+      *return_value = &data->field_name[index * 32];
 
       return true;
     }
@@ -462,14 +462,11 @@ font_set_name(const Font_data *data, const uint32_t key, const char *set_value, 
   size_t index = 0;
 
   if(font_exists(data, key, &index))
-
-  index = index * 32;
-
   {
     assert(index < data->size);
-    if(index < data->size * 32)
+    if(index < data->size)
     {
-      memcpy(&data->field_name[index], set_value, sizeof(char) * size);
+      memcpy(&data->field_name[index * 32], set_value, sizeof(char) * size);
 
       return true;
     }
@@ -522,12 +519,9 @@ font_set_font_face(const Font_data *data, const uint32_t key, const stbtt_fontin
   size_t index = 0;
 
   if(font_exists(data, key, &index))
-
-  index = index * 1;
-
   {
     assert(index < data->size);
-    if(index < data->size * 1)
+    if(index < data->size)
     {
       data->field_font_face[index] = *set_value;
 
@@ -582,12 +576,9 @@ font_set_font_bitmap(const Font_data *data, const uint32_t key, const Text::Font
   size_t index = 0;
 
   if(font_exists(data, key, &index))
-
-  index = index * 1;
-
   {
     assert(index < data->size);
-    if(index < data->size * 1)
+    if(index < data->size)
     {
       data->field_font_bitmap[index] = *set_value;
 
@@ -642,12 +633,9 @@ font_set_texture_id(const Font_data *data, const uint32_t key, const util::gener
   size_t index = 0;
 
   if(font_exists(data, key, &index))
-
-  index = index * 1;
-
   {
     assert(index < data->size);
-    if(index < data->size * 1)
+    if(index < data->size)
     {
       data->field_texture_id[index] = *set_value;
 

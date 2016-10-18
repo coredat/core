@@ -530,12 +530,9 @@ camera_set_entity_id(const Camera_data *data, const uint32_t key, const uint32_t
   size_t index = 0;
 
   if(camera_exists(data, key, &index))
-
-  index = index * 1;
-
   {
     assert(index < data->size);
-    if(index < data->size * 1)
+    if(index < data->size)
     {
       data->field_entity_id[index] = *set_value;
 
@@ -590,12 +587,9 @@ camera_set_priority(const Camera_data *data, const uint32_t key, const uint32_t 
   size_t index = 0;
 
   if(camera_exists(data, key, &index))
-
-  index = index * 1;
-
   {
     assert(index < data->size);
-    if(index < data->size * 1)
+    if(index < data->size)
     {
       data->field_priority[index] = *set_value;
 
@@ -650,12 +644,9 @@ camera_set_properties(const Camera_data *data, const uint32_t key, const Camera:
   size_t index = 0;
 
   if(camera_exists(data, key, &index))
-
-  index = index * 1;
-
   {
     assert(index < data->size);
-    if(index < data->size * 1)
+    if(index < data->size)
     {
       data->field_properties[index] = *set_value;
 
@@ -710,12 +701,9 @@ camera_set_texture_id(const Camera_data *data, const uint32_t key, const util::g
   size_t index = 0;
 
   if(camera_exists(data, key, &index))
-
-  index = index * 1;
-
   {
     assert(index < data->size);
-    if(index < data->size * 1)
+    if(index < data->size)
     {
       data->field_texture_id[index] = *set_value;
 
@@ -770,12 +758,9 @@ camera_set_post_process_id(const Camera_data *data, const uint32_t key, const ut
   size_t index = 0;
 
   if(camera_exists(data, key, &index))
-
-  index = index * 1;
-
   {
     assert(index < data->size);
-    if(index < data->size * 1)
+    if(index < data->size)
     {
       data->field_post_process_id[index] = *set_value;
 

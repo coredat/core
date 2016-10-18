@@ -506,7 +506,7 @@ entity_get_name(const Entity_data *data, const uint32_t key, const char **return
 
     if(index < data->size)
     {
-      *return_value = &data->field_name[index];
+      *return_value = &data->field_name[index * 32];
 
       return true;
     }
@@ -530,14 +530,11 @@ entity_set_name(const Entity_data *data, const uint32_t key, const char *set_val
   size_t index = 0;
 
   if(entity_exists(data, key, &index))
-
-  index = index * 32;
-
   {
-    assert(index / 32 < data->size);
-    if(index < data->size * 32)
+    assert(index < data->size);
+    if(index < data->size)
     {
-      memcpy(&data->field_name[index], set_value, sizeof(char) * size);
+      memcpy(&data->field_name[index * 32], set_value, sizeof(char) * size);
 
       return true;
     }
@@ -590,12 +587,9 @@ entity_set_tags(const Entity_data *data, const uint32_t key, const uint32_t *set
   size_t index = 0;
 
   if(entity_exists(data, key, &index))
-
-  index = index * 1;
-
   {
     assert(index < data->size);
-    if(index < data->size * 1)
+    if(index < data->size)
     {
       data->field_tags[index] = *set_value;
 
@@ -650,12 +644,9 @@ entity_set_components(const Entity_data *data, const uint32_t key, const uint32_
   size_t index = 0;
 
   if(entity_exists(data, key, &index))
-
-  index = index * 1;
-
   {
     assert(index < data->size);
-    if(index < data->size * 1)
+    if(index < data->size)
     {
       data->field_components[index] = *set_value;
 
@@ -710,12 +701,9 @@ entity_set_renderer(const Entity_data *data, const uint32_t key, const uint32_t 
   size_t index = 0;
 
   if(entity_exists(data, key, &index))
-
-  index = index * 1;
-
   {
     assert(index < data->size);
-    if(index < data->size * 1)
+    if(index < data->size)
     {
       data->field_renderer[index] = *set_value;
 
@@ -770,12 +758,9 @@ entity_set_user_data(const Entity_data *data, const uint32_t key, const uintptr_
   size_t index = 0;
 
   if(entity_exists(data, key, &index))
-
-  index = index * 1;
-
   {
     assert(index < data->size);
-    if(index < data->size * 1)
+    if(index < data->size)
     {
       data->field_user_data[index] = *set_value;
 
