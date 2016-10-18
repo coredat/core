@@ -37,34 +37,39 @@ Material::Material(const util::generic_id id)
 Material::Material(const char *name)
 : m_impl(new Impl())
 {
+  m_impl->material_id = 0;
+  
+  if(strcmp(name, "") == 0 || name == nullptr)
+  {
+    return;
+  }
+
   // If we have a name, then add the material.
   if(strcmp(name, ""))
   {
-    assert(m_impl && name);
-
     auto resources = Data::get_context_data();
     assert(resources);
     
-    auto data = resources->material_data;
-    assert(data);
+    Data::Material_data *mat_data = resources->material_data;
+    assert(mat_data);
     
-    Data::data_lock(data);
+    Data::data_lock(mat_data);
     
-    const util::generic_id id = Data::material_push(data);
-    Data::material_set_name(data, id, name, strlen(name));
+    const util::generic_id id = Data::material_push(mat_data);
+    Data::material_set_name(mat_data, id, name, strlen(name));
     
     // Set instance id in the hash key
     {
       ::Material_renderer::Material_id priority_key;
-      Data::material_get_material_hash(data, id, &priority_key);
+      Data::material_get_material_hash(mat_data, id, &priority_key);
       
-      priority_key.material_instance = data->size;
-      Data::material_set_material_hash(data, id, &priority_key);
+      priority_key.material_instance = mat_data->size;
+      Data::material_set_material_hash(mat_data, id, &priority_key);
     }
     
     m_impl->material_id = id;
     
-    Data::data_unlock(data);
+    Data::data_unlock(mat_data);
     
     assert(m_impl->material_id);
   }

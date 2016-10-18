@@ -4,6 +4,7 @@
 #include <graphics_api/clear.hpp>
 #include <graphics_api/ogl/ogl_common.hpp>
 #include <data/memory/memory_data.hpp>
+#include <data/context_data.hpp>
 #include <utilities/logging.hpp>
 #include <utilities/conversion.hpp>
 #include <utilities/threading.hpp>
@@ -94,6 +95,10 @@ Context::Context(const uint32_t width,
   ImGui_ImplSdlGL3_NewFrame(m_impl->impl_context.get_sdl_window());
   #endif
   
+  // After all HW has been init, init the context data.
+  {
+    Data::init_context_data(Data::Context_data_setup{});
+  }
 }
 
 
