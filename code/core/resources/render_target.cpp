@@ -4,7 +4,7 @@
 #include <graphics_api/ogl/ogl_pixel_format.hpp>
 #include <graphics_api/ogl/ogl_frame_buffer.hpp>
 #include <data/context/texture_data.hpp>
-#include <data/global_data/resource_data.hpp>
+#include <data/context_data.hpp>
 
 
 namespace Core {
@@ -27,7 +27,7 @@ Render_target::Render_target(const uint32_t width,
                              const Graphics_api::Pixel_format fmt)
 : m_impl(new Impl)
 {
-  auto texture_data = Resource_data::get_resource_data()->texture_data;
+  auto texture_data = Data::get_context_data()->texture_data;
   
   // Create the resources
   Ogl::Frame_buffer fbo;

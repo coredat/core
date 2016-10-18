@@ -1,6 +1,6 @@
 #include <core/common/directory.hpp>
 #include <core/common/core_types.hpp>
-#include <data/global_data/memory_data.hpp>
+#include <data/memory/memory_data.hpp>
 #include <utilities/directory.hpp>
 #include <utilities/file.hpp>
 #include <utilities/string_helpers.hpp>

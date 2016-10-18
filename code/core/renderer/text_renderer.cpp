@@ -2,7 +2,7 @@
 #include <core/renderer/renderer.hpp>
 #include <core/font/font.hpp>
 #include <data/context/text_mesh_data.hpp>
-#include <data/global_data/resource_data.hpp>
+#include <data/context_data.hpp>
 #include <systems/text/character.hpp>
 
 #include <graphics_api/utils/geometry.hpp>
@@ -40,7 +40,7 @@ Text_renderer::set_font(const Font &font)
   // but only if it exists.
   if(m_text_id)
   {
-    auto resources = Resource_data::get_resource_data();
+    auto resources = Data::get_context_data();
     assert(resources);
     
     auto text_mesh_data = resources->text_mesh_data;
@@ -64,7 +64,7 @@ Text_renderer::get_font() const
 void
 Text_renderer::set_text(const char *str)
 {
-  auto resources = Resource_data::get_resource_data();
+  auto resources = Data::get_context_data();
   assert(resources);
   
   auto text_mesh_data = resources->text_mesh_data;

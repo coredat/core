@@ -1,6 +1,6 @@
 #include <core/font/font.hpp>
-#include <data/global_data/resource_data.hpp>
-#include <data/global_data/memory_data.hpp>
+#include <data/context_data.hpp>
+#include <data/memory/memory_data.hpp>
 #include <data/context/font_data.hpp>
 #include <data/context/texture_data.hpp>
 #include <utilities/string_helpers.hpp>
@@ -21,7 +21,7 @@ namespace Core {
 
 Font::Font(const char *filename)
 {
-  auto resources = Resource_data::get_resource_data();
+  auto resources = Data::get_context_data();
   assert(resources);
   
   auto font_data = resources->font_data;

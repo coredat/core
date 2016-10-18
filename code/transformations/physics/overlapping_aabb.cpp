@@ -1,5 +1,5 @@
 #include <transformations/physics/overlapping_aabb.hpp>
-#include <data/global_data/memory_data.hpp>
+#include <data/memory/memory_data.hpp>
 #include <math/geometry/aabb.hpp>
 #include <math/transform/transform.hpp>
 #include <systems/physics_engine/broadphase/sweep.hpp>

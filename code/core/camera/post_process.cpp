@@ -5,7 +5,7 @@
 #include <data/context/post_process_data.hpp>
 #include <data/context/shader_data.hpp>
 #include <data/context/texture_data.hpp>
-#include <data/global_data/resource_data.hpp>
+#include <data/context_data.hpp>
 #include <common/error_strings.hpp>
 #include <utilities/logging.hpp>
 
@@ -22,7 +22,7 @@ struct Post_process::Impl
 Post_process::Post_process(const char *name)
 : m_impl(new Impl{})
 {
-  auto post_data = Resource_data::get_resource_data()->post_data;
+  auto post_data = Data::get_context_data()->post_process_data;
   
   // Search to see if it exists
   {
@@ -102,8 +102,8 @@ void
 Post_process::set_shader(const Core::Shader &core_shader)
 {
 
-  auto post_data = Resource_data::get_resource_data()->post_data;
-  auto shd_data = Resource_data::get_resource_data()->shader_data;
+  auto post_data = Data::get_context_data()->post_process_data;
+  auto shd_data = Data::get_context_data()->shader_data;
   
   // Update
   { 
@@ -127,8 +127,8 @@ Post_process::set_shader(const Core::Shader &core_shader)
 void
 Post_process::set_input_01(const Texture &core_texture)
 {
-  auto post_data = Resource_data::get_resource_data()->post_data;
-  auto tex_data = Resource_data::get_resource_data()->texture_data;
+  auto post_data = Data::get_context_data()->post_process_data;
+  auto tex_data = Data::get_context_data()->texture_data;
   
   {
     Data::data_lock(post_data);
@@ -150,8 +150,8 @@ Post_process::set_input_01(const Texture &core_texture)
 void
 Post_process::set_input_02(const Texture &core_texture)
 {
-  auto post_data = Resource_data::get_resource_data()->post_data;
-  auto tex_data = Resource_data::get_resource_data()->texture_data;
+  auto post_data = Data::get_context_data()->post_process_data;
+  auto tex_data = Data::get_context_data()->texture_data;
   
   {
     Data::data_lock(post_data);
@@ -173,8 +173,8 @@ Post_process::set_input_02(const Texture &core_texture)
 void
 Post_process::set_input_03(const Texture &core_texture)
 {
-  auto post_data = Resource_data::get_resource_data()->post_data;
-  auto tex_data = Resource_data::get_resource_data()->texture_data;
+  auto post_data = Data::get_context_data()->post_process_data;
+  auto tex_data = Data::get_context_data()->texture_data;
   
   {
     Data::data_lock(post_data);

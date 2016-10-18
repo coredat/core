@@ -1,5 +1,5 @@
 #include <transformations/rendering/render_scene.hpp>
-#include <data/global_data/memory_data.hpp>
+#include <data/memory/memory_data.hpp>
 #include <data/context/material_data.hpp>
 #include <data/context/post_process_data.hpp>
 #include <data/world/text_draw_call_data.hpp>

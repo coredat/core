@@ -1,4 +1,4 @@
-#include <data/global_data/memory_data.hpp>
+#include <data/memory/memory_data.hpp>
 #include <utilities/memory.hpp>
 #include <assert.h>
 

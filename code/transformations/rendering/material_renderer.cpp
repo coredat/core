@@ -3,7 +3,7 @@
 #include <data/world/mesh_draw_call_data.hpp>
 #include <data/world/transform_data.hpp>
 #include <data/context/material_data.hpp>
-#include <data/global_data/memory_data.hpp>
+#include <data/memory/memory_data.hpp>
 
 
 namespace Rendering {

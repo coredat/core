@@ -5,7 +5,7 @@
 #include <core/color/color_utils.hpp>
 #include <systems/renderer_material/material.hpp>
 #include <common/error_strings.hpp>
-#include <data/global_data/resource_data.hpp>
+#include <data/context_data.hpp>
 #include <data/context/texture_data.hpp>
 #include <data/context/shader_data.hpp>
 #include <data/context/material_data.hpp>
@@ -42,7 +42,7 @@ Material::Material(const char *name)
   {
     assert(m_impl && name);
 
-    auto resources = Resource_data::get_resource_data();
+    auto resources = Data::get_context_data();
     assert(resources);
     
     auto data = resources->material_data;
@@ -118,7 +118,7 @@ Material::set_shader(const Shader &shader)
 
   if(exists())
   {
-    auto resource = Resource_data::get_resource_data();
+    auto resource = Data::get_context_data();
     assert(resource);
   
     auto mat_data = resource->material_data;
@@ -187,7 +187,7 @@ Material::set_map_01(const Texture &texture)
 
   if(exists())
   {
-    auto resource = Resource_data::get_resource_data();
+    auto resource = Data::get_context_data();
     assert(resource);
   
     auto mat_data = resource->material_data;
@@ -249,7 +249,7 @@ Material::get_map_01() const
     return Core::Texture();
   }
 
-  auto resource = Resource_data::get_resource_data();
+  auto resource = Data::get_context_data();
   assert(resource);
 
   auto mat_data = resource->material_data;
@@ -280,7 +280,7 @@ Material::set_color(const Color color)
 
   if(exists())
   {
-    auto resource = Resource_data::get_resource_data();
+    auto resource = Data::get_context_data();
     assert(resource);
   
     auto mat_data = resource->material_data;
@@ -313,7 +313,7 @@ Material::get_name() const
 {
   assert(m_impl);
   
-  auto data = Resource_data::get_resource_data()->material_data;
+  auto data = Data::get_context_data()->material_data;
   assert(data);
 
   const char *name = "";

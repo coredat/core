@@ -1,6 +1,5 @@
 #include <core/audio/sample.hpp>
-#include <data/global_data/resource_data.hpp>
-#include <data/global_data/audio_pool.hpp>
+#include <data/context_data.hpp>
 
 
 namespace Core {
@@ -21,8 +20,8 @@ Sample::Sample()
 Sample::Sample(const char *filename)
 : m_impl(new Impl)
 {
-  auto pool = Resource_data::get_resource_data()->audio_pool;
-Resource_data::audio_pool_add_new_sample(pool, filename);
+//  auto pool = Data::get_context_data()->audio_pool;
+//Resource_data::audio_pool_add_new_sample(pool, filename);
 }
 
 
@@ -60,8 +59,8 @@ Sample::~Sample()
 void
 Sample::play()
 {
-  auto pool = Resource_data::get_resource_data()->audio_pool;
-Resource_data::audio_pool_play_sample(pool);
+//  auto pool = Data::get_context_data()->audio_pool;
+//Resource_data::audio_pool_play_sample(pool);
 }
 
 

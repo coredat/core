@@ -14,8 +14,8 @@
 #include <debug_gui/input_data.hpp>
 
 #include <data/world_data.hpp>
-#include <data/global_data/resource_data.hpp>
-#include <data/global_data/memory_data.hpp>
+#include <data/context_data.hpp>
+#include <data/memory/memory_data.hpp>
 #include <data/world_data.hpp>
 #include <data/context_data/input_pool.hpp>
 
@@ -46,7 +46,7 @@ void
 display_global_data_menu(const Context_data::Input_pool *input_data)
 {
   #ifdef CORE_DEBUG_MENU
-  auto global_data = Resource_data::get_resource_data();
+  auto global_data = Data::get_context_data();
 
   if(!global_data)
   {
@@ -77,7 +77,7 @@ display_global_data_menu(const Context_data::Input_pool *input_data)
   if(show_shader_list)    { display_shader_list(global_data->shader_data);          }
   if(show_memory_view)    { display_memory_useage(Memory::_get_pool());             }
   if(show_material_list)  { display_material_list(global_data->material_data);      }
-  if(show_post_list)      { display_post_process_list(global_data->post_data);      }
+  if(show_post_list)      { display_post_process_list(global_data->post_process_data);      }
   if(show_text_mesh_list) { display_text_mesh_list((global_data->text_mesh_data));  }
   if(show_input_data)     { display_input_data(input_data);                         }
   #endif
@@ -133,7 +133,7 @@ display_world_data_menu(Data::World *world_data,
   if(show_camera_list)     { display_camera_data(world_data->camera_data);                              }
   if(show_world_stats)     { display_world_stats(dt, dt_mul, draw_calls, render_passes, number_of_rbs); }
   
-  auto global_data = Resource_data::get_resource_data();
+  auto global_data = Data::get_context_data();
 
   if(!global_data)
   {
@@ -145,7 +145,7 @@ display_world_data_menu(Data::World *world_data,
     display_capacities(global_data->text_mesh_data,
                        global_data->material_data,
                        global_data->mesh_data,
-                       global_data->post_data,
+                       global_data->post_process_data,
                        global_data->shader_data,
                        global_data->texture_data,
                        

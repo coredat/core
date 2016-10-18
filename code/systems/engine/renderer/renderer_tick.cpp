@@ -1,8 +1,8 @@
 #include "renderer_tick.hpp"
 
 #include <data/world_data.hpp>
-#include <data/global_data/resource_data.hpp>
-#include <data/global_data/memory_data.hpp>
+#include <data/context_data.hpp>
+#include <data/memory/memory_data.hpp>
 #include <data/context/mesh_data.hpp>
 #include <data/world_data.hpp>
 #include <data/world/entity_data.hpp>
@@ -47,7 +47,7 @@ initialize()
 
 void
 think(std::shared_ptr<Data::World> world,
-      std::shared_ptr<Resource_data::Resources> resources,
+      std::shared_ptr<Data::Context> resources,
       const float dt,
       const float running_time,
       const uint32_t width,
@@ -152,7 +152,7 @@ think(std::shared_ptr<Data::World> world,
                                height,
                                world.get(),
                                resources->material_data,
-                               resources->post_data,
+                               resources->post_process_data,
                                cam_runs,
                                number_of_cam_runs,
                                draw_calls,

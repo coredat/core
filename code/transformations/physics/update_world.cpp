@@ -3,7 +3,7 @@
 #include <core/entity/detail/entity_id.hpp>
 #include <core/physics/collision.hpp>
 #include <core/common/collision.hpp>
-#include <data/global_data/memory_data.hpp>
+#include <data/memory/memory_data.hpp>
 #include <utilities/logging.hpp>
 #include <utilities/threading.hpp>
 #include <3rdparty/qu3e/dynamics/q3Contact.h>

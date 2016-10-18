@@ -1,6 +1,6 @@
 #include <core/resources/shader.hpp>
 #include <common/error_strings.hpp>
-#include <data/global_data/resource_data.hpp>
+#include <data/context_data.hpp>
 #include <data/context/shader_data.hpp>
 #include <utilities/generic_id.hpp>
 #include <utilities/string_helpers.hpp>
@@ -40,7 +40,7 @@ namespace
   {
     assert(vs_code && gs_code && shader_name);
   
-    auto data = Resource_data::get_resource_data();
+    auto data = Data::get_context_data();
     assert(data);
   
     util::generic_id return_id = util::generic_id_invalid();
@@ -150,7 +150,7 @@ Shader::Shader(const char *filename)
 Shader::Shader(const char *name, const char *vs, const char *gs, const char *ps)
 : m_impl(new Impl)
 {
-  auto shader_data = Resource_data::get_resource_data()->shader_data;
+  auto shader_data = Data::get_context_data()->shader_data;
   assert(shader_data);
   
   m_impl->id = push_new_shader(name, vs, gs, ps);

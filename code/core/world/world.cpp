@@ -6,6 +6,7 @@
 #include <core/context/detail/context_detail.hpp>
 #include <core/physics/collision.hpp>
 #include <core/common/ray.hpp>
+#include <data/context_data.hpp>
 #include <data/world/entity_data.hpp>
 #include <data/context_data/input_pool.hpp>
 #include <core/context/detail/context_data.hpp>
@@ -103,7 +104,7 @@ World::think()
   // Engine Think
   Engine::Tick_information tick_info;
   {
-    auto resources = Resource_data::get_resource_data();
+    auto resources = Data::get_context_data();
     auto world = Core_detail::world_index_get_world_data(m_impl->world_instance_id);
 
     Engine::think(world,

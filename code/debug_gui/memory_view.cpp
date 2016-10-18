@@ -1,7 +1,7 @@
 #include <debug_gui/memory_view.hpp>
 #include <3rdparty/imgui/imgui.h>
 #include <math/general/general.hpp>
-#include <data/global_data/memory_data.hpp>
+#include <data/memory/memory_data.hpp>
 
 
 namespace Debug_menu {

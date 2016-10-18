@@ -2,7 +2,7 @@
 #include <core/model/mesh.hpp>
 #include <common/error_strings.hpp>
 #include <data/world_data.hpp>
-#include <data/global_data/resource_data.hpp>
+#include <data/context_data.hpp>
 #include <data/context/mesh_data.hpp>
 #include <math/geometry/aabb.hpp>
 #include <utilities/file.hpp>
@@ -37,7 +37,7 @@ Model::Model(const uint32_t id)
 
   // Check id is valid, if not null it
   {
-    auto resources = Resource_data::get_resource_data();
+    auto resources = Data::get_context_data();
     assert(resources);
     
     Data::Mesh_data *mesh_data = resources->mesh_data;
@@ -68,7 +68,7 @@ Model::Model(const char *filename)
     return;
   }
 
-  auto resources = Resource_data::get_resource_data();
+  auto resources = Data::get_context_data();
   assert(resources);
   
   Data::Mesh_data *mesh_data = resources->mesh_data;
@@ -238,7 +238,7 @@ Model::get_model_aabb() const
 
   math::aabb return_aabb;
   
-  Data::Mesh_data *mesh_data = Resource_data::get_resource_data()->mesh_data;
+  Data::Mesh_data *mesh_data = Data::get_context_data()->mesh_data;
   assert(mesh_data);
   
   Data::data_lock(mesh_data);

@@ -4,7 +4,7 @@
 
 #include "../tick_information.hpp"
 #include <data/fwd_dec_collections.hpp>
-#include <data/global_data/resource_data.hpp>
+#include <data/context_data.hpp>
 
 
 namespace Engine {
@@ -17,7 +17,7 @@ initialize();
 
 void
 think(std::shared_ptr<Data::World> world,
-      std::shared_ptr<Resource_data::Resources> resources,
+      std::shared_ptr<Data::Context> resources,
       const float dt,
       const float running_time,
       const uint32_t width,

@@ -8,8 +8,8 @@
 #include <core/resources/material.hpp>
 #include <core/model/model.hpp>
 #include <core/model/mesh.hpp>
-#include <data/global_data/resource_data.hpp>
-#include <data/global_data/memory_data.hpp>
+#include <data/context_data.hpp>
+#include <data/memory/memory_data.hpp>
 #include <data/context/font_glyph_data.hpp>
 #include <data/context/font_data.hpp>
 #include <data/context/material_data.hpp>
@@ -244,7 +244,7 @@ set_renderer_material(const util::generic_id this_id,
   // We need to find the material remove it.
   // Then insert it with draw calls with the same id.
   {
-    const auto mat_data = Resource_data::get_resource_data()->material_data;
+    const auto mat_data = Data::get_context_data()->material_data;
     assert(mat_data);
   
     Data::data_lock(mesh_data);
@@ -321,7 +321,7 @@ set_renderer_material(const util::generic_id this_id,
   // Update aabb
   math::aabb return_aabb;
   {
-    Data::Mesh_data *mesh_data = Resource_data::get_resource_data()->mesh_data;
+    Data::Mesh_data *mesh_data = Data::get_context_data()->mesh_data;
     assert(mesh_data);
     
     Data::data_lock(mesh_data);
@@ -405,7 +405,7 @@ set_renderer_text(const util::generic_id this_id,
   
   LOG_TODO_ONCE("Are all these resources required? - locking up a large portion of data!");
   
-  auto resources = Resource_data::get_resource_data();
+  auto resources = Data::get_context_data();
   assert(resources);
   
   auto text_mesh_data = resources->text_mesh_data;
@@ -418,7 +418,7 @@ set_renderer_text(const util::generic_id this_id,
   auto texture_data = resources->texture_data;
   assert(texture_data);
   
-  auto glyph_data = resources->glyphs_data;
+  auto glyph_data = resources->font_glyph_data;
   assert(glyph_data);
   
   Data::data_lock(font_data);
@@ -661,7 +661,7 @@ set_renderer_text(const util::generic_id this_id,
   // Update aabb
   math::aabb return_aabb;
   {
-    Data::Mesh_data *mesh_data = Resource_data::get_resource_data()->mesh_data;
+    Data::Mesh_data *mesh_data = Data::get_context_data()->mesh_data;
     assert(mesh_data);
     
     Data::data_lock(mesh_data);

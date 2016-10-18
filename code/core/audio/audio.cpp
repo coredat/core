@@ -1,6 +1,5 @@
 #include "audio.hpp"
 #include <core/context/context.hpp>
-#include <data/global_data/audio_pool.hpp>
 
 
 namespace Core {

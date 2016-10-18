@@ -3,7 +3,7 @@
 #include <graphics_api/initialize.hpp>
 #include <graphics_api/clear.hpp>
 #include <graphics_api/ogl/ogl_common.hpp>
-#include <data/global_data/memory_data.hpp>
+#include <data/memory/memory_data.hpp>
 #include <utilities/logging.hpp>
 #include <utilities/conversion.hpp>
 #include <utilities/threading.hpp>

@@ -5,7 +5,7 @@
 #include <core/physics/box_collider_utils.hpp>
 #include <core/physics/collider_utils.hpp>
 #include <core/transform/transform.hpp>
-#include <data/global_data/memory_data.hpp>
+#include <data/memory/memory_data.hpp>
 #include <utilities/logging.hpp>
 
 

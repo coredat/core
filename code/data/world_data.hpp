@@ -22,7 +22,10 @@ struct World
   Mesh_draw_call_data           *mesh_data       = nullptr;
   Text_draw_call_data           *text_data       = nullptr;
   
-  q3Scene *scene;
+  q3Scene                       *scene           = nullptr;
+  
+  World(const World&) = delete;
+  World& operator=(const World&) = delete;
   
   explicit World(const uint32_t size_hint);
   ~World();
