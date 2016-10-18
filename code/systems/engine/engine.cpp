@@ -2,6 +2,8 @@
 #include "physics/physics_tick.hpp"
 #include "renderer/renderer_tick.hpp"
 #include "scene_graph/scene_graph_tick.hpp"
+#include <data/world_data.hpp>
+#include <utilities/logging.hpp>
 
 
 namespace {

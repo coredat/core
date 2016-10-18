@@ -1,0 +1,11 @@
+data:
+
+  fields:
+
+    - name: name
+      type: char
+      count: 32
+
+    - name: shader
+      type: Ogl::Shader
+      include: <graphics_api/ogl/ogl_shader.hpp>

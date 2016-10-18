@@ -10,11 +10,18 @@
 #include <core/model/mesh.hpp>
 #include <data/global_data/resource_data.hpp>
 #include <data/global_data/memory_data.hpp>
+#include <data/context/font_glyph_data.hpp>
+#include <data/context/font_data.hpp>
+#include <data/context/material_data.hpp>
+#include <data/context/texture_data.hpp>
+#include <data/context/text_mesh_data.hpp>
 #include <data/world_data.hpp>
 #include <data/world/entity_data.hpp>
 #include <data/world/transform_data.hpp>
 #include <data/world/mesh_draw_call_data.hpp>
 #include <data/world/text_draw_call_data.hpp>
+#include <data/context/material_data.hpp>
+#include <data/context/mesh_data.hpp>
 #include <common/error_strings.hpp>
 #include <graphics_api/vertex_format.hpp>
 #include <graphics_api/utils/geometry.hpp>
@@ -164,10 +171,10 @@ get_renderer(const util::generic_id this_id,
           util::generic_id mat_id = util::generic_id_invalid();
           Data::mesh_draw_call_set_material_id(renderer_material, this_id, &mat_id);
           
-          Data::Mesh_renderer_draw_call *draw_call = nullptr;
-          Data::mesh_draw_call_get_draw_call(renderer_material, this_id, draw_call);
+          Data::Mesh_renderer_draw_call draw_call;
+          Data::mesh_draw_call_get_draw_call(renderer_material, this_id, &draw_call);
           
-          return_renderer = Core::Material_renderer(mat_id, draw_call->model_id);
+          return_renderer = Core::Material_renderer(mat_id, draw_call.model_id);
 
           break;
         }
@@ -241,7 +248,7 @@ set_renderer_material(const util::generic_id this_id,
     assert(mat_data);
   
     Data::data_lock(mesh_data);
-    Resource_data::data_lock(mat_data);
+    Data::data_lock(mat_data);
   
     size_t find_index;
     Data::Mesh_renderer_draw_call *draw;
@@ -260,13 +267,13 @@ set_renderer_material(const util::generic_id this_id,
       size_t insert_point = mesh_data->size;
     
       ::Material_renderer::Material_id this_key;
-      Resource_data::material_data_get_property_material_hash_id(mat_data, material_id, &this_key);
+      Data::material_get_material_hash(mat_data, material_id, &this_key);
     
       // Loop through and find insert point
       for(size_t i = 0; i < mesh_data->size; ++i)
       {
         ::Material_renderer::Material_id other_key;
-        Resource_data::material_data_get_property_material_hash_id(mat_data, mesh_data->field_material_id[i], &other_key);
+        Data::material_get_material_hash(mat_data, mesh_data->field_material_id[i], &other_key);
 
         if(this_key > other_key)
         {
@@ -287,7 +294,7 @@ set_renderer_material(const util::generic_id this_id,
       Data::mesh_draw_call_set_draw_call(mesh_data, this_id, &copy);
     }
     
-    Resource_data::data_unlock(mat_data);
+    Data::data_unlock(mat_data);
     Data::data_unlock(mesh_data);
   }
   
@@ -314,12 +321,12 @@ set_renderer_material(const util::generic_id this_id,
   // Update aabb
   math::aabb return_aabb;
   {
-    Resource_data::Mesh_data *mesh_data = Resource_data::get_resource_data()->mesh_data;
+    Data::Mesh_data *mesh_data = Resource_data::get_resource_data()->mesh_data;
     assert(mesh_data);
     
-    Resource_data::data_lock(mesh_data);
-    Resource_data::mesh_data_get_property_aabb(mesh_data, model_id, &return_aabb);
-    Resource_data::data_unlock(mesh_data);
+    Data::data_lock(mesh_data);
+    Data::mesh_get_aabb(mesh_data, model_id, &return_aabb);
+    Data::data_unlock(mesh_data);
   }
   
   {
@@ -398,7 +405,7 @@ set_renderer_text(const util::generic_id this_id,
   
   LOG_TODO_ONCE("Are all these resources required? - locking up a large portion of data!");
   
-  auto resources = Resource_data::get_resources();
+  auto resources = Resource_data::get_resource_data();
   assert(resources);
   
   auto text_mesh_data = resources->text_mesh_data;
@@ -414,19 +421,19 @@ set_renderer_text(const util::generic_id this_id,
   auto glyph_data = resources->glyphs_data;
   assert(glyph_data);
   
-  Resource_data::data_lock(font_data);
-  Resource_data::data_lock(texture_data);
-  Resource_data::data_lock(text_mesh_data);
-  Resource_data::data_lock(glyph_data);
+  Data::data_lock(font_data);
+  Data::data_lock(texture_data);
+  Data::data_lock(text_mesh_data);
+  Data::data_lock(glyph_data);
   
   uint32_t texture_id = 0;
   stbtt_fontinfo info;
   
-  Resource_data::font_data_get_property_font_face(font_data, font_id, &info);
-  Resource_data::font_data_get_property_texture_id(font_data, font_id, &texture_id);
+  Data::font_get_font_face(font_data, font_id, &info);
+  Data::font_get_texture_id(font_data, font_id, &texture_id);
   
   Ogl::Texture glyph_texture;
-  Resource_data::texture_data_get_property_texture(texture_data, texture_id, &glyph_texture);
+  Data::texture_get_texture(texture_data, texture_id, &glyph_texture);
   
   const int bitmap_width  = glyph_texture.width; /* bitmap width */
   const int bitmap_height = glyph_texture.height; /* bitmap height */
@@ -450,7 +457,7 @@ set_renderer_text(const util::generic_id this_id,
   descent *= scale;
   
   Text::Font_bitmap font_bitmap;
-  Resource_data::font_data_get_property_font_bitmap(font_data, font_id, &font_bitmap);
+  Data::font_get_font_bitmap(font_data, font_id, &font_bitmap);
   font_bitmap.line_height = ascent + math::abs(descent);
   font_bitmap.bitmap_size[0] = glyph_texture.width;
   font_bitmap.bitmap_size[1] = glyph_texture.height;
@@ -461,7 +468,7 @@ set_renderer_text(const util::generic_id this_id,
   // Generate missing glyphs
   {
     const char *str;
-    Resource_data::text_mesh_data_get_property_text(text_mesh_data, model_id, &str);
+    Data::text_mesh_get_text(text_mesh_data, model_id, &str);
     
     glyph_info = SCRATCH_ALIGNED_ALLOC(Text::Character, strlen(str) * sizeof(Text::Character));
   
@@ -472,11 +479,11 @@ set_renderer_text(const util::generic_id this_id,
       // If code point exists skip
       const uint32_t glyph_id = Text::create_glyph_id(font_id, codepoint);
       
-      if(Resource_data::rasterized_glyphs_data_exists(glyph_data, glyph_id))
+      if(Data::font_glyph_exists(glyph_data, glyph_id))
       {
-        Resource_data::rasterized_glyphs_data_get_property_character(glyph_data,
-                                                                     glyph_id,
-                                                                     &glyph_info[glyph_info_count]);
+        Data::font_glyph_get_character(glyph_data,
+                                       glyph_id,
+                                       &glyph_info[glyph_info_count]);
         ++glyph_info_count;
         
         continue;
@@ -546,8 +553,10 @@ set_renderer_text(const util::generic_id this_id,
       font_bitmap.bitmap_offset[0] += bitmap_advance + 2;
       
       // Add glyph info
-      Resource_data::rasterized_glyphs_data_push_back(glyph_data, glyph_id);
-      Resource_data::rasterized_glyphs_data_set_property_character(glyph_data, glyph_id, char_info);
+      Data::font_glyph_push(glyph_data, glyph_id);
+      assert(false); // This is broken
+      
+      Data::font_glyph_set_character(glyph_data, glyph_id, &char_info);
       
       // Also add it to the glyph info array.
       glyph_info[glyph_info_count++] = char_info;
@@ -555,7 +564,7 @@ set_renderer_text(const util::generic_id this_id,
   } // gen missing glyphs
   
   // Update the bitmap information.
-  Resource_data::font_data_set_property_font_bitmap(font_data, font_id, font_bitmap);
+  Data::font_set_font_bitmap(font_data, font_id, &font_bitmap);
   
   // Generate the text mesh here.
   // bunch of quads
@@ -613,9 +622,9 @@ set_renderer_text(const util::generic_id this_id,
   auto mesh = Graphics_api::create_quads(&v_fmt, quad_info, glyph_info_count);
   assert(Ogl::vertex_buffer_is_valid(mesh.vbo));
   
-  auto text_mesh_id = Resource_data::text_mesh_data_push_back(text_mesh_data);
+  auto text_mesh_id = Data::text_mesh_push(text_mesh_data);
   
-  Resource_data::text_mesh_data_set_property_mesh(text_mesh_data, text_mesh_id, mesh);
+  Data::text_mesh_set_mesh(text_mesh_data, text_mesh_id, &mesh);
   
   /*
     Add this to the text draw calls
@@ -652,12 +661,12 @@ set_renderer_text(const util::generic_id this_id,
   // Update aabb
   math::aabb return_aabb;
   {
-    Resource_data::Mesh_data *mesh_data = Resource_data::get_resource_data()->mesh_data;
+    Data::Mesh_data *mesh_data = Resource_data::get_resource_data()->mesh_data;
     assert(mesh_data);
     
-    Resource_data::data_lock(mesh_data);
-    Resource_data::mesh_data_get_property_aabb(mesh_data, model_id, &return_aabb);
-    Resource_data::data_unlock(mesh_data);
+    Data::data_lock(mesh_data);
+    Data::mesh_get_aabb(mesh_data, model_id, &return_aabb);
+    Data::data_unlock(mesh_data);
   }
   
   {
@@ -666,10 +675,10 @@ set_renderer_text(const util::generic_id this_id,
     Data::data_unlock(transform_data);
   }  
   
-  Resource_data::data_unlock(glyph_data);
-  Resource_data::data_unlock(text_mesh_data);
-  Resource_data::data_unlock(texture_data);
-  Resource_data::data_unlock(font_data);
+  Data::data_unlock(glyph_data);
+  Data::data_unlock(text_mesh_data);
+  Data::data_unlock(texture_data);
+  Data::data_unlock(font_data);
 }
 
 

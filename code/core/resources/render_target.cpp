@@ -3,7 +3,7 @@
 #include <graphics_api/pixel_format.cpp>
 #include <graphics_api/ogl/ogl_pixel_format.hpp>
 #include <graphics_api/ogl/ogl_frame_buffer.hpp>
-#include <data/global_data/texture_data.hpp>
+#include <data/context/texture_data.hpp>
 #include <data/global_data/resource_data.hpp>
 
 
@@ -27,7 +27,7 @@ Render_target::Render_target(const uint32_t width,
                              const Graphics_api::Pixel_format fmt)
 : m_impl(new Impl)
 {
-  auto texture_data = Resource_data::get_resources()->texture_data;
+  auto texture_data = Resource_data::get_resource_data()->texture_data;
   
   // Create the resources
   Ogl::Frame_buffer fbo;
@@ -45,16 +45,16 @@ Render_target::Render_target(const uint32_t width,
 
   // Add them to the pool
   {
-    Resource_data::data_lock(texture_data);
+    Data::data_lock(texture_data);
     
-    const util::generic_id id = Resource_data::texture_data_push_back(texture_data);
-    Resource_data::texture_data_set_property_name(texture_data, id, "Render Target");
-    Resource_data::texture_data_set_property_render_target(texture_data, id, fbo);
-    Resource_data::texture_data_set_property_texture(texture_data, id, fbo.color_buffer[0]);
+    const util::generic_id id = Data::texture_push(texture_data);
+    Data::texture_set_name(texture_data, id, "Render Target", strlen("Render Target"));
+    Data::texture_set_render_target(texture_data, id, &fbo);
+    Data::texture_set_texture(texture_data, id, &fbo.color_buffer[0]);
     
     m_impl->texture_id = id;
     
-    Resource_data::data_unlock(texture_data);
+    Data::data_unlock(texture_data);
   }
 }
 

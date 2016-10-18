@@ -2,8 +2,7 @@
 #define ENTITY_LIST_INCLUDED_9FBFEE8E_310C_41A2_95F2_8B81C1E2CF58
 
 
-#include <data/world/entity_data.hpp>
-
+#include <data/fwd_dec_data.hpp>
 
 
 namespace Debug_menu {

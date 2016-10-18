@@ -3,9 +3,8 @@
 
 
 #include "../tick_information.hpp"
-#include <data/world_data.hpp> // fwd
-
-#include <core/world/world.hpp> // for collision callback haack
+#include <core/world/world.hpp> // for collision callback haackx
+#include <data/fwd_dec_collections.hpp>
 
 
 namespace Engine {

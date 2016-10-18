@@ -4,25 +4,17 @@
 
 #include <data/fwd_dec_data.hpp>
 
-#include <data/global_data/text_mesh_data.hpp>
-#include <data/global_data/material_data.hpp>
-#include <data/global_data/mesh_data.hpp>
-#include <data/global_data/post_process_data.hpp>
-#include <data/global_data/shader_data.hpp>
-#include <data/global_data/texture_data.hpp>
-
-
 
 namespace Debug_menu {
 
 
 void
-display_capacities(Resource_data::Text_mesh_data *text_mesh_data,
-                   Resource_data::Material_data *material_data,
-                   Resource_data::Mesh_data *mesh_data,
-                   Resource_data::Post_process_data *post_process_data,
-                   Resource_data::Shader_data *shader_data,
-                   Resource_data::Texture_data *texture_data,
+display_capacities(Data::Text_mesh_data *text_mesh_data,
+                   Data::Material_data *material_data,
+                   Data::Mesh_data *mesh_data,
+                   Data::Post_process_data *post_process_data,
+                   Data::Shader_data *shader_data,
+                   Data::Texture_data *texture_data,
                    
                    Data::Camera_data *camera_data,
                    Data::Entity_data *entity_data,

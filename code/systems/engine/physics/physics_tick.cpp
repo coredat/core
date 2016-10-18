@@ -17,6 +17,8 @@
 #include <core/entity/detail/entity_id.hpp>
 #include <core/physics/collision.hpp>
 
+#include <data/world_data.hpp>
+
 
 namespace {
 

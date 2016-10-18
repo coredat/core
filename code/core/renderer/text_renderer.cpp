@@ -1,7 +1,7 @@
 #include <core/renderer/text_renderer.hpp>
 #include <core/renderer/renderer.hpp>
 #include <core/font/font.hpp>
-#include <data/global_data/text_mesh_data.hpp>
+#include <data/context/text_mesh_data.hpp>
 #include <data/global_data/resource_data.hpp>
 #include <systems/text/character.hpp>
 
@@ -40,15 +40,15 @@ Text_renderer::set_font(const Font &font)
   // but only if it exists.
   if(m_text_id)
   {
-    auto resources = Resource_data::get_resources();
+    auto resources = Resource_data::get_resource_data();
     assert(resources);
     
     auto text_mesh_data = resources->text_mesh_data;
     assert(text_mesh_data);
   
-    Resource_data::data_lock(text_mesh_data);
-    Resource_data::text_mesh_data_set_property_font_id(text_mesh_data, m_text_id, m_font_id);
-    Resource_data::data_unlock(text_mesh_data);
+    Data::data_lock(text_mesh_data);
+    Data::text_mesh_set_font_id(text_mesh_data, m_text_id, &m_font_id);
+    Data::data_unlock(text_mesh_data);
   }
 }
 
@@ -64,7 +64,7 @@ Text_renderer::get_font() const
 void
 Text_renderer::set_text(const char *str)
 {
-  auto resources = Resource_data::get_resources();
+  auto resources = Resource_data::get_resource_data();
   assert(resources);
   
   auto text_mesh_data = resources->text_mesh_data;
@@ -73,18 +73,42 @@ Text_renderer::set_text(const char *str)
   // Set the text resource
   // But don't build the mesh
   {
-    Resource_data::data_lock(text_mesh_data);
+    Data::data_lock(text_mesh_data);
+    
+    auto
+    search_name = [](const auto *data, const char *value, util::generic_id *out_key) -> bool
+    {
+      LOG_TODO_ONCE("This is a hack solve it.");
+      bool found = false;
+
+      for(size_t i = 0; i < data->size; ++i)
+      {
+        if(!strcmp(value, &data->field_text[i * 32]))
+        {
+          found = true;
+
+          if(out_key)
+          {
+            *out_key = data->keys[i];
+          }
+
+          break;
+        }
+      }
+
+      return found;
+    };
     
     // Search for text, if it doesn't exist then add it.    
-    if(!Resource_data::text_mesh_data_search_property_text(text_mesh_data, str, &m_text_id))
+    if(!search_name(text_mesh_data, str, &m_text_id))
     {
-      m_text_id = Resource_data::text_mesh_data_push_back(text_mesh_data);
+      m_text_id = Data::text_mesh_push(text_mesh_data);
     }
     
-    Resource_data::text_mesh_data_set_property_text(text_mesh_data, m_text_id, str);
-    Resource_data::text_mesh_data_set_property_font_id(text_mesh_data, m_text_id, m_font_id);
+    Data::text_mesh_set_text(text_mesh_data, m_text_id, str, strlen(str));
+    Data::text_mesh_set_font_id(text_mesh_data, m_text_id, &m_font_id);
     
-    Resource_data::data_unlock(text_mesh_data);
+    Data::data_unlock(text_mesh_data);
   }
 }
 

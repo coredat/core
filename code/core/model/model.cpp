@@ -3,6 +3,7 @@
 #include <common/error_strings.hpp>
 #include <data/world_data.hpp>
 #include <data/global_data/resource_data.hpp>
+#include <data/context/mesh_data.hpp>
 #include <math/geometry/aabb.hpp>
 #include <utilities/file.hpp>
 #include <utilities/obj_model_loader.hpp>
@@ -36,21 +37,21 @@ Model::Model(const uint32_t id)
 
   // Check id is valid, if not null it
   {
-    Resource_data::Resources *resources = Resource_data::get_resources();
+    auto resources = Resource_data::get_resource_data();
     assert(resources);
     
-    Resource_data::Mesh_data *mesh_data = resources->mesh_data;
+    Data::Mesh_data *mesh_data = resources->mesh_data;
     assert(mesh_data);
 
-    Resource_data::data_lock(mesh_data);
+    Data::data_lock(mesh_data);
     
-    if(!Resource_data::mesh_data_exists(mesh_data, id))
+    if(!Data::mesh_exists(mesh_data, id))
     {
       LOG_WARNING(Error_string::resource_is_invalid());
       m_impl->mesh_id = util::generic_id_invalid();
     }
 
-    Resource_data::data_unlock(mesh_data);
+    Data::data_unlock(mesh_data);
   }
 }
 
@@ -67,19 +68,43 @@ Model::Model(const char *filename)
     return;
   }
 
-  Resource_data::Resources *resources = Resource_data::get_resources();
+  auto resources = Resource_data::get_resource_data();
   assert(resources);
   
-  Resource_data::Mesh_data *mesh_data = resources->mesh_data;
+  Data::Mesh_data *mesh_data = resources->mesh_data;
   assert(mesh_data);
 
   // Check if id already exists, avoid loading the mesh again.
   {
-    Resource_data::data_lock(mesh_data);
+    Data::data_lock(mesh_data);
     
     util::generic_id search_id = util::generic_id_invalid();
+    
+    auto
+    search_name = [](const auto *data, const char *value, util::generic_id *out_key) -> bool
+    {
+      LOG_TODO_ONCE("This is a hack solve it.");
+      bool found = false;
+
+      for(size_t i = 0; i < data->size; ++i)
+      {
+        if(!strcmp(value, &data->field_name[i * 32]))
+        {
+          found = true;
+
+          if(out_key)
+          {
+            *out_key = data->keys[i];
+          }
+
+          break;
+        }
+      }
+
+      return found;
+    };
   
-    if(Resource_data::mesh_data_search_property_name(mesh_data, name.c_str(), &search_id))
+    if(search_name(mesh_data, name.c_str(), &search_id))
     {
       #ifdef LOG_DOUBLE_RESOURCE_INITIALIZE
       LOG_WARNING(Error_string::resource_already_exists());
@@ -88,7 +113,7 @@ Model::Model(const char *filename)
       m_impl->mesh_id = search_id;
     }
     
-    Resource_data::data_unlock(mesh_data);
+    Data::data_unlock(mesh_data);
     
     if(search_id)
     {
@@ -125,16 +150,16 @@ Model::Model(const char *filename)
       
       const math::aabb model_aabb = math::aabb_init_from_xyz_data(model.meshes.at(0).positions.data(), model.meshes.at(0).positions.size());
       
-      Resource_data::data_lock(mesh_data);
+      Data::data_lock(mesh_data);
       
-      const util::generic_id id = Resource_data::mesh_data_push_back(mesh_data);
-      Resource_data::mesh_data_set_property_mesh(mesh_data, id, mesh);
-      Resource_data::mesh_data_set_property_aabb(mesh_data, id, model_aabb);
-      Resource_data::mesh_data_set_property_name(mesh_data, id, name.c_str());
+      const util::generic_id id = Data::mesh_push(mesh_data);
+      Data::mesh_set_mesh(mesh_data, id, &mesh);
+      Data::mesh_set_aabb(mesh_data, id, &model_aabb);
+      Data::mesh_set_name(mesh_data, id, name.c_str(), strlen(name.c_str()));
       
       m_impl->mesh_id = id;
 
-      Resource_data::data_unlock(mesh_data);
+      Data::data_unlock(mesh_data);
     }
     
   }
@@ -213,12 +238,12 @@ Model::get_model_aabb() const
 
   math::aabb return_aabb;
   
-  Resource_data::Mesh_data *mesh_data = Resource_data::get_resources()->mesh_data;
+  Data::Mesh_data *mesh_data = Resource_data::get_resource_data()->mesh_data;
   assert(mesh_data);
   
-  Resource_data::data_lock(mesh_data);
-  Resource_data::mesh_data_get_property_aabb(mesh_data, m_impl->mesh_id, &return_aabb);
-  Resource_data::data_unlock(mesh_data);
+  Data::data_lock(mesh_data);
+  Data::mesh_get_aabb(mesh_data, m_impl->mesh_id, &return_aabb);
+  Data::data_unlock(mesh_data);
     
   return return_aabb;
 }

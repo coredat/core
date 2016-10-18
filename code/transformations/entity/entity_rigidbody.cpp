@@ -9,6 +9,7 @@
 #include <data/world_data.hpp>
 #include <data/world/entity_data.hpp>
 #include <data/world/transform_data.hpp>
+#include <data/world/rigidbody_data.hpp>
 #include <common/error_strings.hpp>
 #include <utilities/logging.hpp>
 #include <transformations/physics/core_to_qu3e.hpp>

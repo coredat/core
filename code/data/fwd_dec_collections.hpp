@@ -1,0 +1,15 @@
+#ifndef FWD_DEC_COLLECTIONS_INCLUDED_B8E637F7_D6EB_4250_8EA5_A66206E51B81
+#define FWD_DEC_COLLECTIONS_INCLUDED_B8E637F7_D6EB_4250_8EA5_A66206E51B81
+
+
+namespace Data {
+
+
+struct World;
+struct Context;
+
+
+} // ns
+
+
+#endif // inc guard

@@ -3,7 +3,7 @@
 
 
 #include "tick_information.hpp"
-#include <data/world_data.hpp>
+#include <data/fwd_dec_collections.hpp>
 #include <data/global_data/resource_data.hpp>
 
 #include <core/world/world.hpp> // Kill

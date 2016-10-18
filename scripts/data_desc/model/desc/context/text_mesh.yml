@@ -1,0 +1,19 @@
+data:
+
+  fields:
+
+    - name: text
+      type: char
+      count: 32
+
+    - name: text_size
+      type: uint32_t
+      include: <stdint.h>
+
+    - name: font_id
+      type: util::generic_id
+      include: <utilities/generic_id.hpp>
+
+    - name: mesh
+      type: Graphics_api::Mesh
+      include: <graphics_api/mesh.hpp>

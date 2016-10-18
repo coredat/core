@@ -1,4 +1,12 @@
 #include <data/global_data/resource_data.hpp>
+#include <data/context/texture_data.hpp>
+#include <data/context/mesh_data.hpp>
+#include <data/context/shader_data.hpp>
+#include <data/context/material_data.hpp>
+#include <data/context/post_process_data.hpp>
+#include <data/context/text_mesh_data.hpp>
+#include <data/context/font_data.cpp>
+#include <data/context/font_glyph_data.hpp>
 #include <graphics_api/initialize.hpp>
 #include <assert.h>
 
@@ -26,36 +34,36 @@ resources_init()
   audio_pool_init(&audio);
   data->audio_pool = &audio;
   
-  static Texture_data texture;
-  texture_data_init(&texture, 256);
+  static Data::Texture_data texture;
+  Data::texture_create(&texture, 256);
   data->texture_data = &texture;
   
-  static Mesh_data model;
-  mesh_data_init(&model, 256);
+  static Data::Mesh_data model;
+  Data::mesh_create(&model, 256);
   data->mesh_data = &model;
   
-  static Shader_data shaders;
-  shader_data_init(&shaders, 128);
+  static Data::Shader_data shaders;
+  Data::shader_create(&shaders, 128);
   data->shader_data = &shaders;
   
-  static Material_data materials;
-  material_data_init(&materials, 256);
+  static Data::Material_data materials;
+  Data::material_create(&materials, 256);
   data->material_data = &materials;
   
-  static Post_process_data post_data;
-  post_process_data_init(&post_data, 32);
+  static Data::Post_process_data post_data;
+  Data::post_process_create(&post_data, 32);
   data->post_data = &post_data;
   
-  static Text_mesh_data text_mesh_data;
-  text_mesh_data_init(&text_mesh_data, 1024);
+  static Data::Text_mesh_data text_mesh_data;
+  Data::text_mesh_create(&text_mesh_data, 1024);
   data->text_mesh_data = &text_mesh_data;
   
-  static Font_data font_data;
-  font_data_init(&font_data, 32);
+  static Data::Font_data font_data;
+  Data::font_create(&font_data, 32);
   data->font_data = &font_data;
   
-  static Rasterized_glyphs_data glyphs;
-  rasterized_glyphs_data_init(&glyphs, 2048);
+  static Data::Font_glyph_data glyphs;
+  Data::font_glyph_create(&glyphs, 2048);
   data->glyphs_data = &glyphs;
 }
 
@@ -75,6 +83,11 @@ get_resources()
 std::shared_ptr<Resource_data::Resources>
 get_resource_data()
 {
+  if(!data)
+  {
+    resources_init();
+  }
+  
   return data;
 }
 

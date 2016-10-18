@@ -5,7 +5,6 @@
 #include <systems/camera/camera_properties.hpp>
 #include <core/transform/transform_fwd.hpp>
 #include <data/fwd_dec_data.hpp>
-#include <data/global_data/texture_data.hpp> // fwd
 #include <graphics_api/ogl/ogl_frame_buffer.hpp>
 #include <math/mat/mat4.hpp>
 #include <utilities/generic_id.hpp>
@@ -46,7 +45,7 @@ struct Cam_run
 */
 void
 calculate_camera_runs(const Data::Camera_data *cam_data,
-                      const Resource_data::Texture_data *texture_data,
+                      const Data::Texture_data *texture_data,
                       const Core::Transform transforms[],
                       Cam_run out_runs[],
                       const uint32_t count);

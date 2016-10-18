@@ -2,12 +2,10 @@
 #define RENDER_SCENE_INCLUDED_3E7A0E7E_BC80_47F5_9A8F_2F35E0FE88AB
 
 
-#include <data/global_data/material_data.hpp>
-#include <data/global_data/post_process_data.hpp>
-#include <data/world/mesh_draw_call_data.hpp>
-#include <data/world_data.hpp>
 #include <transformations/camera/cam_priorities.hpp>
 #include <systems/renderer_material/material_renderer.hpp>
+#include <data/fwd_dec_collections.hpp>
+#include <data/fwd_dec_data.hpp>
 #include <stdint.h>
 
 
@@ -23,8 +21,8 @@ render_main_scene(const float delta_time,
                   const uint32_t viewport_x,
                   const uint32_t viewport_y,
                   const Data::World                      *world,
-                  const Resource_data::Material_data     *material_data,
-                  const Resource_data::Post_process_data *post_data,
+                  const Data::Material_data     *material_data,
+                  const Data::Post_process_data *post_data,
                   const Camera_utils::Cam_run            cam_runs[],
                   const uint32_t                         number_of_cam_runs,
                   const Material_renderer::Draw_call     draw_calls[],

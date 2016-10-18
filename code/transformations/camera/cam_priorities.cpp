@@ -2,6 +2,7 @@
 #include <core/transform/transform.hpp>
 #include <data/world/transform_data.hpp>
 #include <data/world/camera_data.hpp>
+#include <data/context/texture_data.hpp>
 #include <math/transform/transform.hpp>
 
 
@@ -46,7 +47,7 @@ find_insert_point_based_on_priority(const uint32_t priority,
 
 void
 calculate_camera_runs(const Data::Camera_data *cam_data,
-                      const Resource_data::Texture_data *tex_data,
+                      const Data::Texture_data *tex_data,
                       const Core::Transform transforms[],
                       Cam_run out_runs[],
                       const uint32_t count)
@@ -58,7 +59,7 @@ calculate_camera_runs(const Data::Camera_data *cam_data,
     
     if(tex_id)
     {
-      Resource_data::texture_data_get_property_render_target(tex_data, tex_id, &out_runs[i].fbo);
+      Data::texture_get_render_target(tex_data, tex_id, &out_runs[i].fbo);
     }
     else
     {

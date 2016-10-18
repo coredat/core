@@ -1,0 +1,15 @@
+data:
+
+  fields:
+
+    - name: name
+      type: char
+      count: 32
+
+    - name: material_hash
+      type: Material_renderer::Material_id
+      include: <systems/renderer_material/material.hpp>
+
+    - name: material
+      type: Material_renderer::Material
+      include: <systems/renderer_material/material.hpp>

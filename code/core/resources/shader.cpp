@@ -1,7 +1,7 @@
 #include <core/resources/shader.hpp>
 #include <common/error_strings.hpp>
 #include <data/global_data/resource_data.hpp>
-#include <data/global_data/shader_data.hpp>
+#include <data/context/shader_data.hpp>
 #include <utilities/generic_id.hpp>
 #include <utilities/string_helpers.hpp>
 #include <graphics_api/utils/shader_utils.hpp>
@@ -40,19 +40,43 @@ namespace
   {
     assert(vs_code && gs_code && shader_name);
   
-    auto data = Resource_data::get_resources();
+    auto data = Resource_data::get_resource_data();
     assert(data);
   
     util::generic_id return_id = util::generic_id_invalid();
 
     // Check if shader already exists.
     {
-      Resource_data::data_lock(data->shader_data);
+      Data::data_lock(data->shader_data);
+      
+      auto
+      search_name = [](const auto *data, const char *value, util::generic_id *out_key) -> bool
+      {
+        LOG_TODO_ONCE("This is a hack solve it.");
+        bool found = false;
+
+        for(size_t i = 0; i < data->size; ++i)
+        {
+          if(!strcmp(value, &data->field_name[i * 32]))
+          {
+            found = true;
+
+            if(out_key)
+            {
+              *out_key = data->keys[i];
+            }
+
+            break;
+          }
+        }
+
+        return found;
+      };
       
       util::generic_id search_id = util::generic_id_invalid();
-      Resource_data::shader_data_search_property_name(data->shader_data, shader_name, &search_id);
+      search_name(data->shader_data, shader_name, &search_id);
       
-      Resource_data::data_unlock(data->shader_data);
+      Data::data_unlock(data->shader_data);
     
       if(search_id)
       {
@@ -80,15 +104,15 @@ namespace
     // Add the new shader
     if(Ogl::shader_is_valid(&shader));
     {
-      Resource_data::data_lock(data->shader_data);
+      Data::data_lock(data->shader_data);
       
-      const util::generic_id id = Resource_data::shader_data_push_back(data->shader_data);
-      Resource_data::shader_data_set_property_name(data->shader_data, id, shader_name);
-      Resource_data::shader_data_set_property_shader(data->shader_data, id, shader);
+      const util::generic_id id = Data::shader_push(data->shader_data);
+      Data::shader_set_name(data->shader_data, id, shader_name, strlen(shader_name));
+      Data::shader_set_shader(data->shader_data, id, &shader);
       
       return_id = id;
       
-      Resource_data::data_unlock(data->shader_data);
+      Data::data_unlock(data->shader_data);
     }
     
     return return_id;
@@ -126,7 +150,7 @@ Shader::Shader(const char *filename)
 Shader::Shader(const char *name, const char *vs, const char *gs, const char *ps)
 : m_impl(new Impl)
 {
-  auto shader_data = Resource_data::get_resources()->shader_data;
+  auto shader_data = Resource_data::get_resource_data()->shader_data;
   assert(shader_data);
   
   m_impl->id = push_new_shader(name, vs, gs, ps);

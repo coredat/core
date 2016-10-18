@@ -4,7 +4,8 @@
 
 #include <utilities/generic_id.hpp>
 #include <core/common/core_fwd.hpp>
-#include <data/world_data.hpp>
+#include <data/fwd_dec_collections.hpp>
+#include <data/fwd_dec_data.hpp>
 #include <stdint.h>
 
 

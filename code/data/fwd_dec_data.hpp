@@ -5,12 +5,20 @@
   This file is auto generated changes here may be overwritten.
 */
 
-#ifndef FWD_DEC_INCLUDED_3DC95536_A22D_4945_8214_A8AED1BAA788
-#define FWD_DEC_INCLUDED_3DC95536_A22D_4945_8214_A8AED1BAA788
+#ifndef FWD_DEC_INCLUDED_273722B7_F57A_460A_9EEC_79E4AC618320
+#define FWD_DEC_INCLUDED_273722B7_F57A_460A_9EEC_79E4AC618320
 
 
 namespace Data {
 
+struct Font_data;
+struct Font_glyph_data;
+struct Material_data;
+struct Mesh_data;
+struct Post_process_data;
+struct Shader_data;
+struct Text_mesh_data;
+struct Texture_data;
 struct Camera_data;
 struct Entity_data;
 struct Mesh_draw_call_data;

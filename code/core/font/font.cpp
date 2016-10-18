@@ -1,11 +1,13 @@
 #include <core/font/font.hpp>
 #include <data/global_data/resource_data.hpp>
-#include <data/global_data/font_data.hpp>
 #include <data/global_data/memory_data.hpp>
+#include <data/context/font_data.hpp>
+#include <data/context/texture_data.hpp>
+#include <utilities/string_helpers.hpp>
+#include <3rdparty/stb/stb_truetype.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <3rdparty/stb/stb_truetype.h>
-#include <utilities/string_helpers.hpp>
+
 
 
 namespace
@@ -19,7 +21,7 @@ namespace Core {
 
 Font::Font(const char *filename)
 {
-  auto resources = Resource_data::get_resources();
+  auto resources = Resource_data::get_resource_data();
   assert(resources);
   
   auto font_data = resources->font_data;
@@ -28,13 +30,36 @@ Font::Font(const char *filename)
   auto texture_data = resources->texture_data;
   assert(texture_data);
   
-  Resource_data::data_lock(font_data);
-  Resource_data::data_lock(texture_data);
+  Data::data_lock(font_data);
+  Data::data_lock(texture_data);
 
   auto get_name = util::get_filename_from_path(filename);
   
+  auto
+  search_name = [](const auto *data, const char *value, util::generic_id *out_key) -> bool
+  {
+    LOG_TODO_ONCE("This is a hack solve it.");
+    bool found = false;
+
+    for(size_t i = 0; i < data->size; ++i)
+    {
+      if(!strcmp(value, &data->field_name[i * 32]))
+      {
+        found = true;
+
+        if(out_key)
+        {
+          *out_key = data->keys[i];
+        }
+
+        break;
+      }
+    }
+
+    return found;
+  };
   
-  if(font_data_search_property_font_name(font_data, get_name.c_str(), &m_font_id))
+  if(search_name(font_data, get_name.c_str(), &m_font_id))
   {
     return;
   }
@@ -69,14 +94,13 @@ Font::Font(const char *filename)
   
   Ogl::texture_create_2d(&texture_glyphs, 512, 512, GL_RED, true, tex_data);
   
-  auto texture_id = Resource_data::texture_data_push_back(texture_data);
+  const uint32_t texture_id = Data::texture_push(texture_data);
   
-  Resource_data::texture_data_set_property_texture(texture_data, texture_id, texture_glyphs);
+  Data::texture_set_texture(texture_data, texture_id, &texture_glyphs);
 
-  auto font_id = font_data->size + 1;
-  Resource_data::font_data_push_back(font_data, font_id);
+  const uint32_t font_id = Data::font_push(font_data);
   
-  Resource_data::font_data_set_property_font_name(font_data, font_id, get_name.c_str());
+  Data::font_set_name(font_data, font_id, get_name.c_str(), strlen(get_name.c_str()));
   
   Text::Font_bitmap font_bitmap;
   font_bitmap.bitmap_channels  = 1;
@@ -85,12 +109,12 @@ Font::Font(const char *filename)
   font_bitmap.bitmap_offset[0] = 0;
   font_bitmap.bitmap_offset[1] = 0;
   
-  Resource_data::font_data_set_property_font_bitmap(font_data, font_id, font_bitmap);
-  Resource_data::font_data_set_property_font_face(font_data, font_id, info);
-  Resource_data::font_data_set_property_texture_id(font_data, font_id, texture_id);
+  Data::font_set_font_bitmap(font_data, font_id, &font_bitmap);
+  Data::font_set_font_face(font_data, font_id, &info);
+  Data::font_set_texture_id(font_data, font_id, &texture_id);
   
-  Resource_data::data_unlock(texture_data);
-  Resource_data::data_unlock(font_data);
+  Data::data_unlock(texture_data);
+  Data::data_unlock(font_data);
   
   m_font_id = font_id;
 }

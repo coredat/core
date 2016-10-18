@@ -1,5 +1,5 @@
 #include <debug_gui/shader_list.hpp>
-#include <data/global_data/mesh_data.hpp>
+#include <data/context/mesh_data.hpp>
 #include <3rdparty/imgui/imgui.h>
 
 
@@ -7,7 +7,7 @@ namespace Debug_menu {
 
 
 void
-display_mesh_list(Resource_data::Mesh_data *data)
+display_mesh_list(Data::Mesh_data *data)
 {
   ImGui::Begin("Mesh List");
   {
@@ -25,17 +25,17 @@ display_mesh_list(Resource_data::Mesh_data *data)
     for(uint32_t i = 0; i < data->size; ++i)
     {
       char id[4];
-      sprintf(id, "%02d", data->mesh_id[i]);
+      sprintf(id, "%02d", data->keys[i]);
     
       ImGui::Selectable(id, selected == i, ImGuiSelectableFlags_SpanAllColumns);
       ImGui::NextColumn();
       const char *name;
       
-      Resource_data::mesh_data_get_property_name(data, data->mesh_id[i], &name);
+      Data::mesh_get_name(data, data->keys[i], &name);
       ImGui::Text("%s", name); ImGui::NextColumn();
       
       Graphics_api::Mesh mesh;
-      Resource_data::mesh_data_get_property_mesh(data, data->mesh_id[i], &mesh);
+      Data::mesh_get_mesh(data, data->keys[i], &mesh);
       ImGui::Text("%d", mesh.vbo.number_of_entries); ImGui::NextColumn();
     }
     

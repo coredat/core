@@ -21,8 +21,8 @@ Sample::Sample()
 Sample::Sample(const char *filename)
 : m_impl(new Impl)
 {
-  auto pool = Resource_data::get_resources()->audio_pool;
-  Resource_data::audio_pool_add_new_sample(pool, filename);
+  auto pool = Resource_data::get_resource_data()->audio_pool;
+Resource_data::audio_pool_add_new_sample(pool, filename);
 }
 
 
@@ -60,8 +60,8 @@ Sample::~Sample()
 void
 Sample::play()
 {
-  auto pool = Resource_data::get_resources()->audio_pool;
-  Resource_data::audio_pool_play_sample(pool);
+  auto pool = Resource_data::get_resource_data()->audio_pool;
+Resource_data::audio_pool_play_sample(pool);
 }
 
 

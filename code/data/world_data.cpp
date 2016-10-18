@@ -52,6 +52,11 @@ World::World(const uint32_t entity_hint)
 
 World::~World()
 {
+  if(this->scene)
+  {
+    delete this->scene;
+  }
+
   if(this->entity_removal)
   {
     Data::pending_entity_removal_destroy(entity_removal);
@@ -70,44 +75,29 @@ World::~World()
     delete this->transform;
   }
   
-  delete this->mesh_data;
-  delete this->camera_data;
-  delete this->entity;
-  delete this->text_data;
-}
-
-
-void
-world_find_entities_with_tag(World *world_data,
-                             const uint32_t tag,
-                             uint32_t *out_entities_for_tag,
-                             util::generic_id out_ids[],
-                             const uint32_t size_of_out)
-{
-  assert(world_data);
-  
-  auto entity_data = world_data->entity;
-  
-  uint32_t number_found(0);
-  
-  for(uint32_t i = 0; i < entity_data->size; ++i)
+  if(this->mesh_data)
   {
-    auto tags = Data::entity_get_tags_data(entity_data)[i];
-    
-    if(tags & tag)
-    {
-      if(size_of_out > number_found)
-      {
-        out_ids[number_found++] = entity_data->keys[i];
-      }
-      else
-      {
-        break;
-      }
-    }
+    Data::mesh_draw_call_destroy(mesh_data);
+    delete this->mesh_data;
   }
   
-  (*out_entities_for_tag) = number_found;
+  if(this->camera_data)
+  {
+    Data::camera_destroy(camera_data);
+    delete this->camera_data;
+  }
+  
+  if(this->entity)
+  {
+    Data::entity_destroy(entity);
+    delete this->entity;
+  }
+  
+  if(this->text_data)
+  {
+    Data::text_draw_call_destroy(text_data);
+    delete this->text_data;
+  }
 }
 
 

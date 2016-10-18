@@ -1,6 +1,8 @@
 #include <transformations/rendering/material_renderer.hpp>
 #include <systems/renderer_material/material_renderer.hpp>
+#include <data/world/mesh_draw_call_data.hpp>
 #include <data/world/transform_data.hpp>
+#include <data/context/material_data.hpp>
 #include <data/global_data/memory_data.hpp>
 
 
@@ -12,7 +14,7 @@ material_renderer(const math::mat4 &view_mat,
                   const math::mat4 &proj_mat,
                   const float delta_time,
                   const float total_time,
-                  const Resource_data::Material_data *material_data,
+                  const Data::Material_data *material_data,
                   const uint32_t camera_cull_mask,                  
                   const Data::Mesh_draw_call_data *mesh_renderer_data,
                   const Material_renderer::Draw_call *draw_calls,
@@ -111,8 +113,8 @@ material_renderer(const math::mat4 &view_mat,
   {
     for(uint32_t r = 0; r < number_of_runs; ++r)
     {
-      Material_renderer::Material *material_to_render;
-      Resource_data::material_data_get_property_material(material_data, runs[r].material_id, &material_to_render);
+      Material_renderer::Material material_to_render;
+      Data::material_get_material(material_data, runs[r].material_id, &material_to_render);
       
       const size_t start = runs[r].start_point;
       const size_t count = runs[r].size;
@@ -122,7 +124,7 @@ material_renderer(const math::mat4 &view_mat,
       number_of_draws += Material_renderer::render(view_proj_mat,
                                                    delta_time,
                                                    total_time,
-                                                   material_to_render,
+                                                   &material_to_render,
                                                    camera_cull_mask,
                                                    &draw_calls[start],
                                                    count);

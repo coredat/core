@@ -3,7 +3,7 @@
 
 
 #include <transformations/entity/entity_common.hpp>
-#include <data/world/rigidbody_data.hpp>
+#include <data/fwd_dec_data.hpp>
 #include <math/transform/transform_fwd.hpp>
 #include <math/geometry/geometry_fwd.hpp>
 

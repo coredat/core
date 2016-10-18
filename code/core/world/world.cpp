@@ -257,7 +257,7 @@ World::find_entity_by_name(const char *name) const
   data_lock(data);
   
   auto
-  entity_data_search_property_name = [](const Data::Entity_data *data, const char *value, util::generic_id *out_key) -> bool
+  entity_data_search_property_name = [](const auto *data, const char *value, util::generic_id *out_key) -> bool
   {
     LOG_TODO_ONCE("This is a hack solve it.");
     bool found = false;

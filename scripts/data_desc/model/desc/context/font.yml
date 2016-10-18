@@ -1,0 +1,19 @@
+data:
+
+  fields:
+
+    - name: name
+      type: char
+      count: 32
+
+    - name: font_face
+      type: stbtt_fontinfo
+      include: <3rdparty/stb/stb_truetype.h>
+
+    - name: font_bitmap
+      type: Text::Font_bitmap
+      include: <systems/text/font_bitmap.hpp>
+
+    - name: texture_id
+      type: util::generic_id
+      include: <utilities/generic_id.hpp>

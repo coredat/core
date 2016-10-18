@@ -1,7 +1,11 @@
 #include <transformations/rendering/render_scene.hpp>
 #include <data/global_data/memory_data.hpp>
+#include <data/context/material_data.hpp>
+#include <data/context/post_process_data.hpp>
 #include <data/world/text_draw_call_data.hpp>
 #include <data/world/mesh_draw_call_data.hpp>
+#include <data/world/mesh_draw_call_data.hpp>
+#include <data/world_data.hpp>
 #include <systems/renderer_material/material.hpp>
 #include <systems/renderer_post/post_process.hpp>
 #include <systems/renderer_post/post_shader.hpp>
@@ -24,8 +28,8 @@ render_main_scene(const float delta_time,
                   const uint32_t viewport_x,
                   const uint32_t viewport_y,                  
                   const Data::World                      *world,
-                  const Resource_data::Material_data     *material_data,
-                  const Resource_data::Post_process_data *post_data,
+                  const Data::Material_data     *material_data,
+                  const Data::Post_process_data *post_data,
                   const Camera_utils::Cam_run            cam_runs[],
                   const uint32_t                         number_of_cam_runs,
                   const Material_renderer::Draw_call     draw_calls[],
@@ -127,18 +131,18 @@ render_main_scene(const float delta_time,
     // Post process rendering
     {
       // Get post process details
-      Post_renderer::Post_shader *post_shd;
-      Resource_data::post_process_data_get_property_post_shader(post_data,
-                                                                cam->post_process_id,
-                                                                &post_shd);
+      Post_renderer::Post_shader post_shd;
+      Data::post_process_get_post_shader(post_data,
+                                          cam->post_process_id,
+                                          &post_shd);
       
       // Add some extra param to the shd.
-      post_shd->delta_time = delta_time;
-      post_shd->current_time = total_time;
+      post_shd.delta_time = delta_time;
+      post_shd.current_time = total_time;
       
       
       // Render
-      Post_renderer::render(post_shd);
+      Post_renderer::render(&post_shd);
       
       ++number_of_draw_calls;
     }

@@ -1,0 +1,10 @@
+data:
+
+  key:
+    auto_generated_id: false;
+
+  fields:
+
+    - name: character
+      type: Text::Character
+      include: <systems/text/character.hpp>

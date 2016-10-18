@@ -2,8 +2,7 @@
 #define MATERIAL_RENDERER_INCLUDED_40B58250_DD62_4792_9DE7_554E728832C5
 
 
-#include <data/global_data/material_data.hpp>
-#include <data/world/mesh_draw_call_data.hpp>
+#include <data/fwd_dec_data.hpp>
 #include <systems/renderer_material/material.hpp>
 #include <systems/renderer_material/material_renderer.hpp>
 #include <math/mat/mat_types.hpp>
@@ -29,7 +28,7 @@ material_renderer(const math::mat4 &view_mat,
                   const math::mat4 &proj_mat,
                   const float delta_time,
                   const float total_time,
-                  const Resource_data::Material_data *material_data,
+                  const Data::Material_data *material_data,
                   const uint32_t camera_cull_mask,
                   const Data::Mesh_draw_call_data *mesh_renderer_data,
                   const ::Material_renderer::Draw_call *draw_calls,

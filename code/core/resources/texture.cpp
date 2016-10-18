@@ -1,5 +1,6 @@
 #include <core/resources/texture.hpp>
 #include <data/global_data/resource_data.hpp>
+#include <data/context/texture_data.hpp>
 #include <common/error_strings.hpp>
 #include <transformations/texture/create_texture.hpp>
 #include <utilities/logging.hpp>
@@ -32,21 +33,21 @@ Texture::Texture(const util::generic_id id)
 
   // Check the id is valid, null it if it isn't
   {
-    Resource_data::Resources *resources = Resource_data::get_resources();
+    auto resources = Resource_data::get_resource_data();
     assert(resources);
     
-    Resource_data::Texture_data *texture_data = resources->texture_data;
+    Data::Texture_data *texture_data = resources->texture_data;
     assert(texture_data);
 
-    Resource_data::data_lock(texture_data);
+    Data::data_lock(texture_data);
     
-    if(!Resource_data::texture_data_exists(texture_data, id))
+    if(!Data::texture_exists(texture_data, id))
     {
       LOG_WARNING(Error_string::resource_is_invalid());
       m_impl->texture_id = util::generic_id_invalid();
     }
 
-    Resource_data::data_unlock(texture_data);
+    Data::data_unlock(texture_data);
   }
 }
 
@@ -63,19 +64,43 @@ Texture::Texture(const char *filepath)
     return;
   }
 
-  Resource_data::Resources *resources = Resource_data::get_resources();
+  auto resources = Resource_data::get_resource_data();
   assert(resources);
 
-  auto tex_data = Resource_data::get_resources()->texture_data;
+  auto tex_data = Resource_data::get_resource_data()->texture_data;
   assert(tex_data);
   
   // Search to see if we have already loaded the texture.
   {
-    Resource_data::data_lock(tex_data);
+    Data::data_lock(tex_data);
     
     util::generic_id search_id = util::generic_id_invalid();
     
-    if(Resource_data::texture_data_search_property_name(tex_data, name.c_str(), &search_id))
+    auto
+    search_name = [](const auto *data, const char *value, util::generic_id *out_key) -> bool
+    {
+      LOG_TODO_ONCE("This is a hack solve it.");
+      bool found = false;
+
+      for(size_t i = 0; i < data->size; ++i)
+      {
+        if(!strcmp(value, &data->field_name[i * 32]))
+        {
+          found = true;
+
+          if(out_key)
+          {
+            *out_key = data->keys[i];
+          }
+
+          break;
+        }
+      }
+
+      return found;
+    };
+    
+    if(search_name(tex_data, name.c_str(), &search_id))
     {
       #ifdef LOG_DOUBLE_RESOURCE_INITIALIZE
       LOG_WARNING(Error_string::resource_already_exists());
@@ -84,7 +109,7 @@ Texture::Texture(const char *filepath)
       m_impl->texture_id = search_id;
     }
     
-    Resource_data::data_unlock(tex_data);
+    Data::data_unlock(tex_data);
     
     if(search_id)
     {
@@ -100,15 +125,15 @@ Texture::Texture(const char *filepath)
     // Add to pool
     if(Ogl::texture_is_valid(&new_texture))
     {
-      Resource_data::data_lock(tex_data);
+      Data::data_lock(tex_data);
       
-      const util::generic_id id = Resource_data::texture_data_push_back(tex_data);
-      Resource_data::texture_data_set_property_name(tex_data, id, name.c_str());
-      Resource_data::texture_data_set_property_texture(tex_data, id, new_texture);
+      const util::generic_id id = Data::texture_push(tex_data);
+      Data::texture_set_name(tex_data, id, name.c_str(), strlen(name.c_str()));
+      Data::texture_set_texture(tex_data, id, &new_texture);
       
       m_impl->texture_id = id;
       
-      Resource_data::data_unlock(tex_data);
+      Data::data_unlock(tex_data);
     }
     else
     {
@@ -128,21 +153,21 @@ Texture::Texture(const uint32_t width,
     Ogl::Texture new_texture;
     Ogl::texture_create_2d(&new_texture, width, height, GL_RGBA, false, data);
    
-    auto tex_data = Resource_data::get_resources()->texture_data;
+    auto tex_data = Resource_data::get_resource_data()->texture_data;
     assert(tex_data);
    
     // Add to pool
     if(Ogl::texture_is_valid(&new_texture))
     {
-      Resource_data::data_lock(tex_data);
+      Data::data_lock(tex_data);
       
-      const util::generic_id id = Resource_data::texture_data_push_back(tex_data);
-      Resource_data::texture_data_set_property_name(tex_data, id, "user_defined");
-      Resource_data::texture_data_set_property_texture(tex_data, id, new_texture);
+      const util::generic_id id = Data::texture_push(tex_data);
+      Data::texture_set_name(tex_data, id, "user_defined", strlen("user_defined"));
+      Data::texture_set_texture(tex_data, id, &new_texture);
       
       m_impl->texture_id = id;
       
-      Resource_data::data_unlock(tex_data);
+      Data::data_unlock(tex_data);
     }
     else
     {
@@ -192,17 +217,17 @@ namespace
   Ogl::Texture
   get_texture_data(const util::generic_id id)
   {
-    Resource_data::Resources *resources = Resource_data::get_resources();
+    auto resources = Resource_data::get_resource_data();
     assert(resources);
 
-    auto tex_data = Resource_data::get_resources()->texture_data;
+    auto tex_data = Resource_data::get_resource_data()->texture_data;
     assert(tex_data);
 
     Ogl::Texture tex;
     
-    Resource_data::data_lock(tex_data);
-    Resource_data::texture_data_get_property_texture(tex_data, id, &tex);
-    Resource_data::data_unlock(tex_data);
+    Data::data_lock(tex_data);
+    Data::texture_get_texture(tex_data, id, &tex);
+    Data::data_unlock(tex_data);
     
     return tex;
   }

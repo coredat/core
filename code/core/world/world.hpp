@@ -71,7 +71,7 @@ private:
   friend class Core::Camera;
   friend class Core::Ray;
 
-  uint32_t                                 get_id() const;
+  uint32_t                           get_id() const;
   std::shared_ptr<const Data::World> get_world_data() const;
   std::shared_ptr<Data::World>       get_world_data();
 

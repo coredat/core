@@ -3,6 +3,7 @@
 #include <transformations/entity/entity_rigidbody.hpp>
 #include <core/transform/transform.hpp>
 #include <data/world_data.hpp>
+#include <data/world/entity_data.hpp>
 #include <data/world/mesh_draw_call_data.hpp>
 #include <data/world/text_draw_call_data.hpp>
 #include <data/world/transform_data.hpp>

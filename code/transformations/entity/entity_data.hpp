@@ -3,7 +3,7 @@
 
 
 #include <transformations/entity/entity_common.hpp>
-#include <data/world/entity_data.hpp>
+#include <data/fwd_dec_data.hpp>
 
 
 namespace Entity_detail {

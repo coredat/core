@@ -2,7 +2,7 @@
 #define DEBUG_GUI_INCLUDED_F55C49F8_D3FD_4F82_A875_A1313D1F54E3
 
 
-#include <data/world_data.hpp> // fwd
+#include <data/fwd_dec_collections.hpp>
 #include <data/context_data/context_data_fwd.hpp>
 #include <stdint.h>
 

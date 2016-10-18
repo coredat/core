@@ -13,6 +13,7 @@
 #include <debug_gui/data_capacities.hpp>
 #include <debug_gui/input_data.hpp>
 
+#include <data/world_data.hpp>
 #include <data/global_data/resource_data.hpp>
 #include <data/global_data/memory_data.hpp>
 #include <data/world_data.hpp>
@@ -45,7 +46,7 @@ void
 display_global_data_menu(const Context_data::Input_pool *input_data)
 {
   #ifdef CORE_DEBUG_MENU
-  auto global_data = Resource_data::get_resources();
+  auto global_data = Resource_data::get_resource_data();
 
   if(!global_data)
   {

@@ -6,6 +6,9 @@
 #include <systems/renderer_material/material.hpp>
 #include <common/error_strings.hpp>
 #include <data/global_data/resource_data.hpp>
+#include <data/context/texture_data.hpp>
+#include <data/context/shader_data.hpp>
+#include <data/context/material_data.hpp>
 #include <graphics_api/ogl/ogl_shader_uniform.hpp>
 #include <assert.h>
 
@@ -39,29 +42,29 @@ Material::Material(const char *name)
   {
     assert(m_impl && name);
 
-    auto resources = Resource_data::get_resources();
+    auto resources = Resource_data::get_resource_data();
     assert(resources);
     
     auto data = resources->material_data;
     assert(data);
     
-    Resource_data::data_lock(data);
+    Data::data_lock(data);
     
-    const util::generic_id id = Resource_data::material_data_push_back(data);
-    Resource_data::material_data_set_property_name(data, id, name);
+    const util::generic_id id = Data::material_push(data);
+    Data::material_set_name(data, id, name, strlen(name));
     
     // Set instance id in the hash key
     {
       ::Material_renderer::Material_id priority_key;
-      Resource_data::material_data_get_property_material_hash_id(data, id, &priority_key);
+      Data::material_get_material_hash(data, id, &priority_key);
       
       priority_key.material_instance = data->size;
-      Resource_data::material_data_set_property_material_hash_id(data, id, priority_key);
+      Data::material_set_material_hash(data, id, &priority_key);
     }
     
     m_impl->material_id = id;
     
-    Resource_data::data_unlock(data);
+    Data::data_unlock(data);
     
     assert(m_impl->material_id);
   }
@@ -115,7 +118,7 @@ Material::set_shader(const Shader &shader)
 
   if(exists())
   {
-    auto resource = Resource_data::get_resources();
+    auto resource = Resource_data::get_resource_data();
     assert(resource);
   
     auto mat_data = resource->material_data;
@@ -127,36 +130,36 @@ Material::set_shader(const Shader &shader)
     Ogl::Shader_uniforms uniforms;
     Ogl::Shader shd;
     {
-      Resource_data::data_lock(shd_data);
+      Data::data_lock(shd_data);
       
-      Resource_data::shader_data_get_property_shader(shd_data, shader.get_id(), &shd);
+      Data::shader_get_shader(shd_data, shader.get_id(), &shd);
       
       Ogl::shader_uniforms_retrive(&uniforms, &shd);
       
-      Resource_data::data_unlock(shd_data);
+      Data::data_unlock(shd_data);
     }
     
     // Setup Material
     {
-      Resource_data::data_lock(mat_data);
+      Data::data_lock(mat_data);
       
       // Create and add the shader part of the material
       {
-        ::Material_renderer::Material *material;
-        Resource_data::material_data_get_property_material(mat_data, m_impl->material_id, &material);
-        ::Material_renderer::create_material(material, &shd);
-        Resource_data::material_data_set_property_material(mat_data, m_impl->material_id, material);
+        ::Material_renderer::Material material;
+        Data::material_get_material(mat_data, m_impl->material_id, &material);
+        ::Material_renderer::create_material(&material, &shd);
+        Data::material_set_material(mat_data, m_impl->material_id, &material);
       }
       
       // Update the hash key
       {
         ::Material_renderer::Material_id material_hash;
-        Resource_data::material_data_get_property_material_hash_id(mat_data, m_impl->material_id, &material_hash);
+        Data::material_get_material_hash(mat_data, m_impl->material_id, &material_hash);
         material_hash.shader_id = shader.get_id();
-        Resource_data::material_data_set_property_material_hash_id(mat_data, m_impl->material_id, material_hash);
+        Data::material_set_material_hash(mat_data, m_impl->material_id, &material_hash);
       }
       
-      Resource_data::data_unlock(mat_data);
+      Data::data_unlock(mat_data);
     }
 
   }
@@ -184,7 +187,7 @@ Material::set_map_01(const Texture &texture)
 
   if(exists())
   {
-    auto resource = Resource_data::get_resources();
+    auto resource = Resource_data::get_resource_data();
     assert(resource);
   
     auto mat_data = resource->material_data;
@@ -196,34 +199,34 @@ Material::set_map_01(const Texture &texture)
     // Get texture
     Ogl::Texture out_texture;
     {
-      Resource_data::data_lock(tex_data);
+      Data::data_lock(tex_data);
       
-      const bool found_texture = Resource_data::texture_data_get_property_texture(tex_data, texture.get_id(), &out_texture);
+      const bool found_texture = Data::texture_get_texture(tex_data, texture.get_id(), &out_texture);
       assert(found_texture);
       
-      Resource_data::data_unlock(tex_data);
+      Data::data_unlock(tex_data);
     }
     
     // Update material
     {
-      Resource_data::data_lock(mat_data);
+      Data::data_lock(mat_data);
       
-      ::Material_renderer::Material *out_material;
-      Resource_data::material_data_get_property_material(mat_data, m_impl->material_id, &out_material);
+      ::Material_renderer::Material out_material;
+      Data::material_get_material(mat_data, m_impl->material_id, &out_material);
       
-      out_material->map_01 = out_texture;
-      out_material->map_01_id = texture.get_id();
-      Resource_data::material_data_set_property_material(mat_data, m_impl->material_id, out_material);
+      out_material.map_01 = out_texture;
+      out_material.map_01_id = texture.get_id();
+      Data::material_set_material(mat_data, m_impl->material_id, &out_material);
 
-      Resource_data::data_unlock(mat_data);
+      Data::data_unlock(mat_data);
     }
     
     // Update the hash key
     {
       ::Material_renderer::Material_id material_hash;
-      Resource_data::material_data_get_property_material_hash_id(mat_data, m_impl->material_id, &material_hash);
+      Data::material_get_material_hash(mat_data, m_impl->material_id, &material_hash);
       material_hash.texture_map_01_id = texture.get_id();
-      Resource_data::material_data_set_property_material_hash_id(mat_data, m_impl->material_id, material_hash);
+      Data::material_set_material_hash(mat_data, m_impl->material_id, &material_hash);
     }
   }
   else
@@ -246,7 +249,7 @@ Material::get_map_01() const
     return Core::Texture();
   }
 
-  auto resource = Resource_data::get_resources();
+  auto resource = Resource_data::get_resource_data();
   assert(resource);
 
   auto mat_data = resource->material_data;
@@ -255,16 +258,16 @@ Material::get_map_01() const
   auto tex_data = resource->texture_data;
   assert(tex_data);
   
-  Resource_data::data_lock(mat_data);
-  Resource_data::data_lock(tex_data);
+  Data::data_lock(mat_data);
+  Data::data_lock(tex_data);
   
-  ::Material_renderer::Material *mat = nullptr;
-  Resource_data::material_data_get_property_material(mat_data, m_impl->material_id, &mat);
+  ::Material_renderer::Material mat;
+  Data::material_get_material(mat_data, m_impl->material_id, &mat);
   
-  const util::generic_id map_id = mat->map_01_id;
+  const util::generic_id map_id = mat.map_01_id;
   
-  Resource_data::data_unlock(mat_data);
-  Resource_data::data_unlock(tex_data);
+  Data::data_unlock(mat_data);
+  Data::data_unlock(tex_data);
   
   return Core::Texture(map_id);
 }
@@ -277,7 +280,7 @@ Material::set_color(const Color color)
 
   if(exists())
   {
-    auto resource = Resource_data::get_resources();
+    auto resource = Resource_data::get_resource_data();
     assert(resource);
   
     auto mat_data = resource->material_data;
@@ -285,15 +288,15 @@ Material::set_color(const Color color)
     
     // Update material
     {
-      Resource_data::data_lock(mat_data);
+      Data::data_lock(mat_data);
       
-      ::Material_renderer::Material *out_material;
-      Resource_data::material_data_get_property_material(mat_data, m_impl->material_id, &out_material);
+      ::Material_renderer::Material out_material;
+      Data::material_get_material(mat_data, m_impl->material_id, &out_material);
       
-      Core::Color_utils::to_float_array(color, out_material->color_data);
-      Resource_data::material_data_set_property_material(mat_data, m_impl->material_id, out_material);
+      Core::Color_utils::to_float_array(color, out_material.color_data);
+      Data::material_set_material(mat_data, m_impl->material_id, &out_material);
 
-      Resource_data::data_unlock(mat_data);
+      Data::data_unlock(mat_data);
     }
   }
   else
@@ -310,12 +313,12 @@ Material::get_name() const
 {
   assert(m_impl);
   
-  auto data = Resource_data::get_resources()->material_data;
+  auto data = Resource_data::get_resource_data()->material_data;
   assert(data);
 
   const char *name = "";
   
-  Resource_data::material_data_get_property_name(data, m_impl->material_id, &name);
+  Data::material_get_name(data, m_impl->material_id, &name);
   
   return name;
 }
