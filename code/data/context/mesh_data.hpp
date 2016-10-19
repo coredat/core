@@ -6,8 +6,8 @@
 */
 
 
-#ifndef MESH_INCLUDED_42591A6D_4B79_4F5B_963C_DD111DF19DFD
-#define MESH_INCLUDED_42591A6D_4B79_4F5B_963C_DD111DF19DFD
+#ifndef MESH_INCLUDED_C87F6EF4_16C8_41EA_A3C4_72E4B5CFC277
+#define MESH_INCLUDED_C87F6EF4_16C8_41EA_A3C4_72E4B5CFC277
 
 
 #include <stdint.h>
@@ -136,6 +136,10 @@ bool
 mesh_set_name(const Mesh_data *data, const uint32_t key, const char *set_value, const size_t size);
 
 
+constexpr size_t
+mesh_get_name_stride() { return 32; }
+
+
 bool
 mesh_get_mesh(const Mesh_data *data, const uint32_t key, Graphics_api::Mesh *return_value);
 
@@ -144,12 +148,16 @@ bool
 mesh_set_mesh(const Mesh_data *data, const uint32_t key, const Graphics_api::Mesh *set_value);
 
 
+
+
 bool
 mesh_get_aabb(const Mesh_data *data, const uint32_t key, math::aabb *return_value);
 
 
 bool
 mesh_set_aabb(const Mesh_data *data, const uint32_t key, const math::aabb *set_value);
+
+
 
 
 } // Data ns

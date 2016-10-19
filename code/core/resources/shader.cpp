@@ -1,5 +1,6 @@
 #include <core/resources/shader.hpp>
 #include <common/error_strings.hpp>
+#include <common/fixed_string_search.hpp>
 #include <data/context_data.hpp>
 #include <data/context/shader_data.hpp>
 #include <utilities/generic_id.hpp>
@@ -42,75 +43,51 @@ namespace
   
     auto data = Data::get_context_data();
     assert(data);
+    
+    auto shd_data = data->shader_data;
+    assert(shd_data);
   
     util::generic_id return_id = util::generic_id_invalid();
 
     // Check if shader already exists.
     {
-      Data::data_lock(data->shader_data);
+      Data::data_lock(shd_data);
       
-      auto
-      search_name = [](const auto *data, const char *value, util::generic_id *out_key) -> bool
+      size_t search_index(0);
+      
+      if(Common::fixed_string_search(shader_name,
+                                     Data::shader_get_name_data(shd_data),
+                                     Data::shader_get_name_stride(),
+                                     Data::shader_get_size(shd_data),
+                                     &search_index))
       {
-        LOG_TODO_ONCE("This is a hack solve it.");
-        bool found = false;
-
-        for(size_t i = 0; i < data->size; ++i)
+        return_id = shd_data->keys[search_index];
+      }
+      else
+      {
+        Ogl::Shader shader;
+        Ogl::shader_create(&shader,
+                           vs_code,
+                           gs_code,
+                           ps_code);
+        
+        assert(Ogl::shader_is_valid(&shader));
+        
+        // Add the new shader
+        if(Ogl::shader_is_valid(&shader));
         {
-          if(!strcmp(value, &data->field_name[i * 32]))
-          {
-            found = true;
-
-            if(out_key)
-            {
-              *out_key = data->keys[i];
-            }
-
-            break;
-          }
+          Data::data_lock(data->shader_data);
+          
+          const util::generic_id id = Data::shader_push(data->shader_data);
+          Data::shader_set_name(data->shader_data, id, shader_name, strlen(shader_name));
+          Data::shader_set_shader(data->shader_data, id, &shader);
+          
+          Data::data_unlock(data->shader_data);
+          
+          return_id = id;
         }
 
-        return found;
-      };
-      
-      util::generic_id search_id = util::generic_id_invalid();
-      search_name(data->shader_data, shader_name, &search_id);
-      
-      Data::data_unlock(data->shader_data);
-    
-      if(search_id)
-      {
-        return_id = search_id;
-        return return_id;
       }
-    }
-    
-  const auto errd = glGetError();
-  
-  if(errd)
-  {
-    int i = 0;
-  }
-    
-    
-    Ogl::Shader shader;
-    Ogl::shader_create(&shader,
-                       vs_code,
-                       gs_code,
-                       ps_code);
-    
-    assert(Ogl::shader_is_valid(&shader));
-    
-    // Add the new shader
-    if(Ogl::shader_is_valid(&shader));
-    {
-      Data::data_lock(data->shader_data);
-      
-      const util::generic_id id = Data::shader_push(data->shader_data);
-      Data::shader_set_name(data->shader_data, id, shader_name, strlen(shader_name));
-      Data::shader_set_shader(data->shader_data, id, &shader);
-      
-      return_id = id;
       
       Data::data_unlock(data->shader_data);
     }

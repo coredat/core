@@ -1,6 +1,7 @@
 #include <core/renderer/text_renderer.hpp>
 #include <core/renderer/renderer.hpp>
 #include <core/font/font.hpp>
+#include <common/fixed_string_search.hpp>
 #include <data/context/text_mesh_data.hpp>
 #include <data/context_data.hpp>
 #include <systems/text/character.hpp>
@@ -75,32 +76,11 @@ Text_renderer::set_text(const char *str)
   {
     Data::data_lock(text_mesh_data);
     
-    auto
-    search_name = [](const auto *data, const char *value, util::generic_id *out_key) -> bool
-    {
-      LOG_TODO_ONCE("This is a hack solve it.");
-      bool found = false;
-
-      for(size_t i = 0; i < data->size; ++i)
-      {
-        if(!strcmp(value, &data->field_text[i * 32]))
-        {
-          found = true;
-
-          if(out_key)
-          {
-            *out_key = data->keys[i];
-          }
-
-          break;
-        }
-      }
-
-      return found;
-    };
-    
-    // Search for text, if it doesn't exist then add it.    
-    if(!search_name(text_mesh_data, str, &m_text_id))
+    // Search for text, if it doesn't exist then add it.
+    if(!Common::fixed_string_search(str,
+                                    Data::text_mesh_get_text_data(text_mesh_data),
+                                    Data::text_mesh_get_text_stride(),
+                                    Data::text_mesh_get_size(text_mesh_data)))
     {
       m_text_id = Data::text_mesh_push(text_mesh_data);
     }

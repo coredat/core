@@ -6,8 +6,8 @@
 */
 
 
-#ifndef TEXT_MESH_INCLUDED_922D6376_AEAD_4A0E_9B91_2B74C6197944
-#define TEXT_MESH_INCLUDED_922D6376_AEAD_4A0E_9B91_2B74C6197944
+#ifndef TEXT_MESH_INCLUDED_EA8E0AE7_3035_4E7D_82E4_B2980FEE7FE7
+#define TEXT_MESH_INCLUDED_EA8E0AE7_3035_4E7D_82E4_B2980FEE7FE7
 
 
 #include <stdint.h>
@@ -147,12 +147,18 @@ bool
 text_mesh_set_text(const Text_mesh_data *data, const uint32_t key, const char *set_value, const size_t size);
 
 
+constexpr size_t
+text_mesh_get_text_stride() { return 32; }
+
+
 bool
 text_mesh_get_text_size(const Text_mesh_data *data, const uint32_t key, uint32_t *return_value);
 
 
 bool
 text_mesh_set_text_size(const Text_mesh_data *data, const uint32_t key, const uint32_t *set_value);
+
+
 
 
 bool
@@ -163,12 +169,16 @@ bool
 text_mesh_set_font_id(const Text_mesh_data *data, const uint32_t key, const util::generic_id *set_value);
 
 
+
+
 bool
 text_mesh_get_mesh(const Text_mesh_data *data, const uint32_t key, Graphics_api::Mesh *return_value);
 
 
 bool
 text_mesh_set_mesh(const Text_mesh_data *data, const uint32_t key, const Graphics_api::Mesh *set_value);
+
+
 
 
 } // Data ns

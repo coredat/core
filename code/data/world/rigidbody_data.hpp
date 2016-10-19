@@ -6,8 +6,8 @@
 */
 
 
-#ifndef RIGIDBODY_INCLUDED_31007CDE_5785_4F89_9D9E_D64A6F100F1F
-#define RIGIDBODY_INCLUDED_31007CDE_5785_4F89_9D9E_D64A6F100F1F
+#ifndef RIGIDBODY_INCLUDED_D5CC2A8C_DEB7_40E1_85F1_B0DF467EEA93
+#define RIGIDBODY_INCLUDED_D5CC2A8C_DEB7_40E1_85F1_B0DF467EEA93
 
 
 #include <stdint.h>
@@ -163,12 +163,16 @@ bool
 rigidbody_set_transform(const Rigidbody_data *data, const uint32_t key, const math::transform *set_value);
 
 
+
+
 bool
 rigidbody_get_aabb_collider(const Rigidbody_data *data, const uint32_t key, math::aabb *return_value);
 
 
 bool
 rigidbody_set_aabb_collider(const Rigidbody_data *data, const uint32_t key, const math::aabb *set_value);
+
+
 
 
 bool
@@ -179,6 +183,8 @@ bool
 rigidbody_set_transformed_aabb_collider(const Rigidbody_data *data, const uint32_t key, const math::aabb *set_value);
 
 
+
+
 bool
 rigidbody_get_collision_id(const Rigidbody_data *data, const uint32_t key, uint64_t *return_value);
 
@@ -187,12 +193,16 @@ bool
 rigidbody_set_collision_id(const Rigidbody_data *data, const uint32_t key, const uint64_t *set_value);
 
 
+
+
 bool
 rigidbody_get_rigidbody(const Rigidbody_data *data, const uint32_t key, uintptr_t *return_value);
 
 
 bool
 rigidbody_set_rigidbody(const Rigidbody_data *data, const uint32_t key, const uintptr_t *set_value);
+
+
 
 
 } // Data ns

@@ -6,8 +6,8 @@
 */
 
 
-#ifndef CAMERA_INCLUDED_E15A61CA_7279_481C_94CC_34A7CEE0221F
-#define CAMERA_INCLUDED_E15A61CA_7279_481C_94CC_34A7CEE0221F
+#ifndef CAMERA_INCLUDED_6FB1C017_A23D_4327_8ECC_07AC1C94CDD2
+#define CAMERA_INCLUDED_6FB1C017_A23D_4327_8ECC_07AC1C94CDD2
 
 
 #include <stdint.h>
@@ -162,12 +162,16 @@ bool
 camera_set_entity_id(const Camera_data *data, const uint32_t key, const uint32_t *set_value);
 
 
+
+
 bool
 camera_get_priority(const Camera_data *data, const uint32_t key, uint32_t *return_value);
 
 
 bool
 camera_set_priority(const Camera_data *data, const uint32_t key, const uint32_t *set_value);
+
+
 
 
 bool
@@ -178,6 +182,8 @@ bool
 camera_set_properties(const Camera_data *data, const uint32_t key, const Camera::Camera_properties *set_value);
 
 
+
+
 bool
 camera_get_texture_id(const Camera_data *data, const uint32_t key, util::generic_id *return_value);
 
@@ -186,12 +192,16 @@ bool
 camera_set_texture_id(const Camera_data *data, const uint32_t key, const util::generic_id *set_value);
 
 
+
+
 bool
 camera_get_post_process_id(const Camera_data *data, const uint32_t key, util::generic_id *return_value);
 
 
 bool
 camera_set_post_process_id(const Camera_data *data, const uint32_t key, const util::generic_id *set_value);
+
+
 
 
 } // Data ns

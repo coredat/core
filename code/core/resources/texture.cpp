@@ -1,6 +1,7 @@
 #include <core/resources/texture.hpp>
 #include <data/context_data.hpp>
 #include <data/context/texture_data.hpp>
+#include <common/fixed_string_search.hpp>
 #include <common/error_strings.hpp>
 #include <transformations/texture/create_texture.hpp>
 #include <utilities/logging.hpp>
@@ -74,71 +75,45 @@ Texture::Texture(const char *filepath)
   {
     Data::data_lock(tex_data);
     
-    util::generic_id search_id = util::generic_id_invalid();
+    size_t search_index = 0;
     
-    auto
-    search_name = [](const auto *data, const char *value, util::generic_id *out_key) -> bool
-    {
-      LOG_TODO_ONCE("This is a hack solve it.");
-      bool found = false;
-
-      for(size_t i = 0; i < data->size; ++i)
-      {
-        if(!strcmp(value, &data->field_name[i * 32]))
-        {
-          found = true;
-
-          if(out_key)
-          {
-            *out_key = data->keys[i];
-          }
-
-          break;
-        }
-      }
-
-      return found;
-    };
-    
-    if(search_name(tex_data, name.c_str(), &search_id))
+    if(Common::fixed_string_search(name.c_str(),
+                                   Data::texture_get_name_data(tex_data),
+                                   Data::texture_get_name_stride(),
+                                   Data::texture_get_size(tex_data),
+                                   &search_index))
     {
       #ifdef LOG_DOUBLE_RESOURCE_INITIALIZE
       LOG_WARNING(Error_string::resource_already_exists());
       #endif
       
-      m_impl->texture_id = search_id;
-    }
-    
-    Data::data_unlock(tex_data);
-    
-    if(search_id)
-    {
-      return;
-    }
-  }
-  
-  // Load up a new texture
-  {
-    Ogl::Texture new_texture;
-    Texture_utils::create_texture_from_file(filepath, &new_texture);
-   
-    // Add to pool
-    if(Ogl::texture_is_valid(&new_texture))
-    {
-      Data::data_lock(tex_data);
-      
-      const util::generic_id id = Data::texture_push(tex_data);
-      Data::texture_set_name(tex_data, id, name.c_str(), strlen(name.c_str()));
-      Data::texture_set_texture(tex_data, id, &new_texture);
-      
-      m_impl->texture_id = id;
-      
-      Data::data_unlock(tex_data);
+      m_impl->texture_id = tex_data->keys[search_index];
     }
     else
     {
-      LOG_ERROR(Error_string::failed_to_create_resource());
+      Ogl::Texture new_texture;
+      Texture_utils::create_texture_from_file(filepath, &new_texture);
+     
+      // Add to pool
+      if(Ogl::texture_is_valid(&new_texture))
+      {
+        Data::data_lock(tex_data);
+        
+        const util::generic_id id = Data::texture_push(tex_data);
+        Data::texture_set_name(tex_data, id, name.c_str(), strlen(name.c_str()));
+        Data::texture_set_texture(tex_data, id, &new_texture);
+        
+        m_impl->texture_id = id;
+        
+        Data::data_unlock(tex_data);
+      }
+      else
+      {
+        LOG_ERROR(Error_string::failed_to_create_resource());
+      }
     }
+    
+    Data::data_unlock(tex_data);
   }
 }
 

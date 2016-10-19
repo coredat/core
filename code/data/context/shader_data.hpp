@@ -6,8 +6,8 @@
 */
 
 
-#ifndef SHADER_INCLUDED_DBDD37EC_A88E_4D39_B271_5A4251BE4F28
-#define SHADER_INCLUDED_DBDD37EC_A88E_4D39_B271_5A4251BE4F28
+#ifndef SHADER_INCLUDED_E578EC96_263C_4645_B699_D0A0C287A721
+#define SHADER_INCLUDED_E578EC96_263C_4645_B699_D0A0C287A721
 
 
 #include <stdint.h>
@@ -124,12 +124,18 @@ bool
 shader_set_name(const Shader_data *data, const uint32_t key, const char *set_value, const size_t size);
 
 
+constexpr size_t
+shader_get_name_stride() { return 32; }
+
+
 bool
 shader_get_shader(const Shader_data *data, const uint32_t key, Ogl::Shader *return_value);
 
 
 bool
 shader_set_shader(const Shader_data *data, const uint32_t key, const Ogl::Shader *set_value);
+
+
 
 
 } // Data ns

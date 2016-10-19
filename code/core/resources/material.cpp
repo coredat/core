@@ -10,6 +10,7 @@
 #include <data/context/shader_data.hpp>
 #include <data/context/material_data.hpp>
 #include <graphics_api/ogl/ogl_shader_uniform.hpp>
+#include <common/fixed_string_search.hpp>
 #include <assert.h>
 
 
@@ -55,19 +56,32 @@ Material::Material(const char *name)
     
     Data::data_lock(mat_data);
     
-    const util::generic_id id = Data::material_push(mat_data);
-    Data::material_set_name(mat_data, id, name, strlen(name));
-    
-    // Set instance id in the hash key
+    // Check to see if string exists.
+    size_t search_id = 0;
+    if(Common::fixed_string_search(name,
+                                   Data::material_get_name_data(mat_data),
+                                   Data::material_get_name_stride(),
+                                   Data::material_get_size(mat_data),
+                                   &search_id))
     {
-      ::Material_renderer::Material_id priority_key;
-      Data::material_get_material_hash(mat_data, id, &priority_key);
-      
-      priority_key.material_instance = mat_data->size;
-      Data::material_set_material_hash(mat_data, id, &priority_key);
+      m_impl->material_id = mat_data->keys[search_id];
     }
-    
-    m_impl->material_id = id;
+    else
+    {
+      const util::generic_id id = Data::material_push(mat_data);
+      Data::material_set_name(mat_data, id, name, strlen(name));
+      
+      // Set instance id in the hash key
+      {
+        ::Material_renderer::Material_id priority_key;
+        Data::material_get_material_hash(mat_data, id, &priority_key);
+        
+        priority_key.material_instance = mat_data->size;
+        Data::material_set_material_hash(mat_data, id, &priority_key);
+      }
+      
+      m_impl->material_id = id;
+    }
     
     Data::data_unlock(mat_data);
     

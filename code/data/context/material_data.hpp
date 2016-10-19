@@ -6,8 +6,8 @@
 */
 
 
-#ifndef MATERIAL_INCLUDED_C7F16DB5_8D80_47C4_A031_C76535B84205
-#define MATERIAL_INCLUDED_C7F16DB5_8D80_47C4_A031_C76535B84205
+#ifndef MATERIAL_INCLUDED_779D5B74_2297_4F04_ACB8_BA742E5D23E5
+#define MATERIAL_INCLUDED_779D5B74_2297_4F04_ACB8_BA742E5D23E5
 
 
 #include <stdint.h>
@@ -135,6 +135,10 @@ bool
 material_set_name(const Material_data *data, const uint32_t key, const char *set_value, const size_t size);
 
 
+constexpr size_t
+material_get_name_stride() { return 32; }
+
+
 bool
 material_get_material_hash(const Material_data *data, const uint32_t key, Material_renderer::Material_id *return_value);
 
@@ -143,12 +147,16 @@ bool
 material_set_material_hash(const Material_data *data, const uint32_t key, const Material_renderer::Material_id *set_value);
 
 
+
+
 bool
 material_get_material(const Material_data *data, const uint32_t key, Material_renderer::Material *return_value);
 
 
 bool
 material_set_material(const Material_data *data, const uint32_t key, const Material_renderer::Material *set_value);
+
+
 
 
 } // Data ns

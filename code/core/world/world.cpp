@@ -10,6 +10,7 @@
 #include <data/world/entity_data.hpp>
 #include <data/context_data/input_pool.hpp>
 #include <core/context/detail/context_data.hpp>
+#include <common/fixed_string_search.hpp>
 #include <transformations/physics/q3_math_extensions.hpp>
 #include <systems/engine/engine.hpp>
 #include <systems/engine/tick_information.hpp>
@@ -251,47 +252,32 @@ Entity_ref
 World::find_entity_by_name(const char *name) const
 {
   assert(m_impl && m_impl->world_instance_id);
+
   auto world = Core_detail::world_index_get_world_data(m_impl->world_instance_id);
+  assert(world);
 
-  auto data = world->entity;
+  Data::Entity_data *ent_data = world->entity;
+  assert(ent_data);
   
-  data_lock(data);
+  Entity_ref return_ref;
   
-  auto
-  entity_data_search_property_name = [](const auto *data, const char *value, util::generic_id *out_key) -> bool
+  Data::data_lock(ent_data);
+  
+  size_t search_index = 0;
+  if(Common::fixed_string_search(name,
+                                 Data::entity_get_name_data(ent_data),
+                                 Data::entity_get_name_stride(),
+                                 Data::entity_get_size(ent_data),
+                                 &search_index))
   {
-    LOG_TODO_ONCE("This is a hack solve it.");
-    bool found = false;
-
-    for(size_t i = 0; i < data->size; ++i)
-    {
-      if(!strcmp(value, &data->field_name[i * 32]))
-      {
-        found = true;
-
-        if(out_key)
-        {
-          *out_key = data->keys[i];
-        }
-
-        break;
-      }
-    }
-
-    return found;
-  };
-  
-  util::generic_id id;
-  const bool found = entity_data_search_property_name(data, name, &id);
-  
-  data_unlock(data);
-  
-  if(found)
-  {
-    return Entity_ref(Core_detail::entity_id_from_uint(id));
+    return_ref = Entity_ref(
+                  Core_detail::entity_id_from_uint(
+                    ent_data->keys[search_index]));
   }
   
-  return Entity_ref();
+  Data::data_unlock(ent_data);
+  
+  return return_ref;
 }
 
 
@@ -311,35 +297,14 @@ World::find_entities_by_name(const char *name,
   // Loop through entity data and find entities.
   auto data = world->entity;
   
-  data_lock(data);
-  
-  auto
-  entity_data_search_property_name = [](const Data::Entity_data *data, const char *value, util::generic_id *out_key) -> bool
-  {
-    LOG_TODO_ONCE("This is a hack solve it.");
-    bool found = false;
-
-    for(size_t i = 0; i < data->size; ++i)
-    {
-      if(!strcmp(value, &data->field_name[i * 32]))
-      {
-        found = true;
-
-        if(out_key)
-        {
-          *out_key = data->keys[i];
-        }
-
-        break;
-      }
-    }
-
-    return found;
-  };
+  Data::data_lock(data);
   
   for(uint32_t i = 0; i < data->size; ++i)
   {
-    const bool found = entity_data_search_property_name(data, name, &data->keys[i]);
+    const char *test_name;
+    Data::entity_get_name(data, data->keys[i], &test_name);
+    
+    const bool found = strcmp(name, test_name) == 0;
 
     if(found)
     {
@@ -348,7 +313,7 @@ World::find_entities_by_name(const char *name,
     }
   }
   
-  data_unlock(data);
+  Data::data_unlock(data);
   
   *out_array = found_ents;
   *out_array_size = count;

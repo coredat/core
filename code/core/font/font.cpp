@@ -3,6 +3,7 @@
 #include <data/memory/memory_data.hpp>
 #include <data/context/font_data.hpp>
 #include <data/context/texture_data.hpp>
+#include <common/fixed_string_search.hpp>
 #include <utilities/string_helpers.hpp>
 #include <3rdparty/stb/stb_truetype.h>
 #include <stdio.h>
@@ -33,37 +34,18 @@ Font::Font(const char *filename)
   Data::data_lock(font_data);
   Data::data_lock(texture_data);
 
-  auto get_name = util::get_filename_from_path(filename);
+  const std::string get_name = util::get_filename_from_path(filename);
   
-  auto
-  search_name = [](const auto *data, const char *value, util::generic_id *out_key) -> bool
+  size_t search_id = 0;
+  if(Common::fixed_string_search(get_name.c_str(),
+                                 Data::font_get_name_data(font_data),
+                                 Data::font_get_name_stride(),
+                                 Data::font_get_size(font_data),
+                                 &search_id))
   {
-    LOG_TODO_ONCE("This is a hack solve it.");
-    bool found = false;
-
-    for(size_t i = 0; i < data->size; ++i)
-    {
-      if(!strcmp(value, &data->field_name[i * 32]))
-      {
-        found = true;
-
-        if(out_key)
-        {
-          *out_key = data->keys[i];
-        }
-
-        break;
-      }
-    }
-
-    return found;
-  };
-  
-  if(search_name(font_data, get_name.c_str(), &m_font_id))
-  {
+    // File already loaded.
     return;
   }
-
 
   long size;
   unsigned char* fontBuffer;

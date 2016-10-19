@@ -6,8 +6,8 @@
 */
 
 
-#ifndef ENTITY_INCLUDED_CE0021C6_62E3_4930_9016_26FA2FCA778C
-#define ENTITY_INCLUDED_CE0021C6_62E3_4930_9016_26FA2FCA778C
+#ifndef ENTITY_INCLUDED_CAC51220_9178_463D_B4BF_FC22343F690F
+#define ENTITY_INCLUDED_CAC51220_9178_463D_B4BF_FC22343F690F
 
 
 #include <stdint.h>
@@ -161,12 +161,18 @@ bool
 entity_set_name(const Entity_data *data, const uint32_t key, const char *set_value, const size_t size);
 
 
+constexpr size_t
+entity_get_name_stride() { return 32; }
+
+
 bool
 entity_get_tags(const Entity_data *data, const uint32_t key, uint32_t *return_value);
 
 
 bool
 entity_set_tags(const Entity_data *data, const uint32_t key, const uint32_t *set_value);
+
+
 
 
 bool
@@ -177,6 +183,8 @@ bool
 entity_set_components(const Entity_data *data, const uint32_t key, const uint32_t *set_value);
 
 
+
+
 bool
 entity_get_renderer(const Entity_data *data, const uint32_t key, uint32_t *return_value);
 
@@ -185,12 +193,16 @@ bool
 entity_set_renderer(const Entity_data *data, const uint32_t key, const uint32_t *set_value);
 
 
+
+
 bool
 entity_get_user_data(const Entity_data *data, const uint32_t key, uintptr_t *return_value);
 
 
 bool
 entity_set_user_data(const Entity_data *data, const uint32_t key, const uintptr_t *set_value);
+
+
 
 
 } // Data ns

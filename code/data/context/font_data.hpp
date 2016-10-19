@@ -6,8 +6,8 @@
 */
 
 
-#ifndef FONT_INCLUDED_4F9FD72F_37CB_4A27_9CA2_D715F88FDD54
-#define FONT_INCLUDED_4F9FD72F_37CB_4A27_9CA2_D715F88FDD54
+#ifndef FONT_INCLUDED_60EF4953_7EE6_4E4F_A7A8_6C3265422720
+#define FONT_INCLUDED_60EF4953_7EE6_4E4F_A7A8_6C3265422720
 
 
 #include <stdint.h>
@@ -148,12 +148,18 @@ bool
 font_set_name(const Font_data *data, const uint32_t key, const char *set_value, const size_t size);
 
 
+constexpr size_t
+font_get_name_stride() { return 32; }
+
+
 bool
 font_get_font_face(const Font_data *data, const uint32_t key, stbtt_fontinfo *return_value);
 
 
 bool
 font_set_font_face(const Font_data *data, const uint32_t key, const stbtt_fontinfo *set_value);
+
+
 
 
 bool
@@ -164,12 +170,16 @@ bool
 font_set_font_bitmap(const Font_data *data, const uint32_t key, const Text::Font_bitmap *set_value);
 
 
+
+
 bool
 font_get_texture_id(const Font_data *data, const uint32_t key, util::generic_id *return_value);
 
 
 bool
 font_set_texture_id(const Font_data *data, const uint32_t key, const util::generic_id *set_value);
+
+
 
 
 } // Data ns

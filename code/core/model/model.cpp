@@ -1,6 +1,7 @@
 #include <core/model/model.hpp>
 #include <core/model/mesh.hpp>
 #include <common/error_strings.hpp>
+#include <common/fixed_string_search.hpp>
 #include <data/world_data.hpp>
 #include <data/context_data.hpp>
 #include <data/context/mesh_data.hpp>
@@ -80,31 +81,11 @@ Model::Model(const char *filename)
     
     util::generic_id search_id = util::generic_id_invalid();
     
-    auto
-    search_name = [](const auto *data, const char *value, util::generic_id *out_key) -> bool
-    {
-      LOG_TODO_ONCE("This is a hack solve it.");
-      bool found = false;
-
-      for(size_t i = 0; i < data->size; ++i)
-      {
-        if(!strcmp(value, &data->field_name[i * 32]))
-        {
-          found = true;
-
-          if(out_key)
-          {
-            *out_key = data->keys[i];
-          }
-
-          break;
-        }
-      }
-
-      return found;
-    };
-  
-    if(search_name(mesh_data, name.c_str(), &search_id))
+    if(Common::fixed_string_search(name.c_str(),
+                                   Data::mesh_get_name_data(mesh_data),
+                                   Data::mesh_get_name_stride(),
+                                   Data::mesh_get_size(mesh_data)),
+                                   &search_id)
     {
       #ifdef LOG_DOUBLE_RESOURCE_INITIALIZE
       LOG_WARNING(Error_string::resource_already_exists());

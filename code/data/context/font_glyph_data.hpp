@@ -6,8 +6,8 @@
 */
 
 
-#ifndef FONT_GLYPH_INCLUDED_725B482E_3906_4857_B731_53F73427CB82
-#define FONT_GLYPH_INCLUDED_725B482E_3906_4857_B731_53F73427CB82
+#ifndef FONT_GLYPH_INCLUDED_9D975A32_2F75_4068_B428_A15F5FB007BD
+#define FONT_GLYPH_INCLUDED_9D975A32_2F75_4068_B428_A15F5FB007BD
 
 
 #include <stdint.h>
@@ -115,6 +115,8 @@ font_glyph_get_character(const Font_glyph_data *data, const uint32_t key, Text::
 
 bool
 font_glyph_set_character(const Font_glyph_data *data, const uint32_t key, const Text::Character *set_value);
+
+
 
 
 } // Data ns

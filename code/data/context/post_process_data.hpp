@@ -6,8 +6,8 @@
 */
 
 
-#ifndef POST_PROCESS_INCLUDED_AA09AFF3_A429_4551_A566_EC90C37BA854
-#define POST_PROCESS_INCLUDED_AA09AFF3_A429_4551_A566_EC90C37BA854
+#ifndef POST_PROCESS_INCLUDED_FEC35322_9094_4CD5_91FB_30BD538E3593
+#define POST_PROCESS_INCLUDED_FEC35322_9094_4CD5_91FB_30BD538E3593
 
 
 #include <stdint.h>
@@ -124,12 +124,18 @@ bool
 post_process_set_name(const Post_process_data *data, const uint32_t key, const char *set_value, const size_t size);
 
 
+constexpr size_t
+post_process_get_name_stride() { return 32; }
+
+
 bool
 post_process_get_post_shader(const Post_process_data *data, const uint32_t key, Post_renderer::Post_shader *return_value);
 
 
 bool
 post_process_set_post_shader(const Post_process_data *data, const uint32_t key, const Post_renderer::Post_shader *set_value);
+
+
 
 
 } // Data ns

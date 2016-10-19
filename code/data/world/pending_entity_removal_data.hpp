@@ -6,8 +6,8 @@
 */
 
 
-#ifndef PENDING_ENTITY_REMOVAL_INCLUDED_B7ABFE73_2A20_4FFE_A211_873217C82A0C
-#define PENDING_ENTITY_REMOVAL_INCLUDED_B7ABFE73_2A20_4FFE_A211_873217C82A0C
+#ifndef PENDING_ENTITY_REMOVAL_INCLUDED_96BC4688_1C97_4F11_8D69_689AEB0A840E
+#define PENDING_ENTITY_REMOVAL_INCLUDED_96BC4688_1C97_4F11_8D69_689AEB0A840E
 
 
 #include <stdint.h>
@@ -110,6 +110,8 @@ pending_entity_removal_get_deleted_entity(const Pending_entity_removal_data *dat
 
 bool
 pending_entity_removal_set_deleted_entity(const Pending_entity_removal_data *data, const uint32_t key, const uint32_t *set_value);
+
+
 
 
 } // Data ns

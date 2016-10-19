@@ -6,8 +6,8 @@
 */
 
 
-#ifndef TEXTURE_INCLUDED_67763631_F566_4F4A_878F_B3AB382B6844
-#define TEXTURE_INCLUDED_67763631_F566_4F4A_878F_B3AB382B6844
+#ifndef TEXTURE_INCLUDED_EE3A3766_4A32_4641_84BA_1AD2C613ABE2
+#define TEXTURE_INCLUDED_EE3A3766_4A32_4641_84BA_1AD2C613ABE2
 
 
 #include <stdint.h>
@@ -136,6 +136,10 @@ bool
 texture_set_name(const Texture_data *data, const uint32_t key, const char *set_value, const size_t size);
 
 
+constexpr size_t
+texture_get_name_stride() { return 32; }
+
+
 bool
 texture_get_texture(const Texture_data *data, const uint32_t key, Ogl::Texture *return_value);
 
@@ -144,12 +148,16 @@ bool
 texture_set_texture(const Texture_data *data, const uint32_t key, const Ogl::Texture *set_value);
 
 
+
+
 bool
 texture_get_render_target(const Texture_data *data, const uint32_t key, Ogl::Frame_buffer *return_value);
 
 
 bool
 texture_set_render_target(const Texture_data *data, const uint32_t key, const Ogl::Frame_buffer *set_value);
+
+
 
 
 } // Data ns

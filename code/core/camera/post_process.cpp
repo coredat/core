@@ -7,6 +7,7 @@
 #include <data/context/texture_data.hpp>
 #include <data/context_data.hpp>
 #include <common/error_strings.hpp>
+#include <common/fixed_string_search.hpp>
 #include <utilities/logging.hpp>
 
 
@@ -22,56 +23,25 @@ struct Post_process::Impl
 Post_process::Post_process(const char *name)
 : m_impl(new Impl{})
 {
+  // Search to see if it exists, else add a new one.
   auto post_data = Data::get_context_data()->post_process_data;
   
-  // Search to see if it exists
+  util::generic_id search_id = util::generic_id_invalid();
+  Data::data_lock(post_data);
+  
+  if(Common::fixed_string_search(name,
+                                 Data::post_process_get_name_data(post_data),
+                                 Data::post_process_get_name_stride(),
+                                 Data::post_process_get_size(post_data)),
+                                 &search_id)
   {
-    util::generic_id id = util::generic_id_invalid();
-  
-    auto
-    data_search_name = [](const auto *data, const char *value, util::generic_id *out_key) -> bool
-    {
-      LOG_TODO_ONCE("This is a hack solve it.");
-      bool found = false;
-
-      for(size_t i = 0; i < data->size; ++i)
-      {
-        if(!strcmp(value, &data->field_name[i * 32]))
-        {
-          found = true;
-
-          if(out_key)
-          {
-            *out_key = data->keys[i];
-          }
-
-          break;
-        }
-      }
-
-      return found;
-    };
-  
-    Data::data_lock(post_data);
-
-    if(data_search_name(post_data, name, nullptr))
-    {
-      m_impl->id = id;
-    }
-    Data::data_lock(post_data);
-    
-    if(id)
-    {
-      return;
-    }
+    m_impl->id = search_id;
   }
-  
-  // Insert a new
+  else
   {
-    Data::data_lock(post_data);
-    
+    // Add a new record.
     m_impl->id = Data::post_process_push(post_data);
-    
+  
     if(m_impl->id)
     {
       Data::post_process_set_name(post_data, m_impl->id, name, strlen(name));
@@ -81,9 +51,9 @@ Post_process::Post_process(const char *name)
       assert(false);
       LOG_ERROR(Error_string::no_free_space());
     }
-    
-    Data::data_unlock(post_data);
   }
+  
+  Data::data_unlock(post_data);
 }
 
 

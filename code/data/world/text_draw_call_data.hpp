@@ -6,8 +6,8 @@
 */
 
 
-#ifndef TEXT_DRAW_CALL_INCLUDED_A1519936_D31F_46BC_8045_DD76EE19A51E
-#define TEXT_DRAW_CALL_INCLUDED_A1519936_D31F_46BC_8045_DD76EE19A51E
+#ifndef TEXT_DRAW_CALL_INCLUDED_AAD3827B_0B00_4C4D_97CF_0B464869FB5C
+#define TEXT_DRAW_CALL_INCLUDED_AAD3827B_0B00_4C4D_97CF_0B464869FB5C
 
 
 #include <stdint.h>
@@ -140,6 +140,10 @@ bool
 text_draw_call_set_text(const Text_draw_call_data *data, const uint32_t key, const char *set_value, const size_t size);
 
 
+constexpr size_t
+text_draw_call_get_text_stride() { return 32; }
+
+
 bool
 text_draw_call_get_draw_call(const Text_draw_call_data *data, const uint32_t key, Text_renderer::Draw_call *return_value);
 
@@ -148,12 +152,16 @@ bool
 text_draw_call_set_draw_call(const Text_draw_call_data *data, const uint32_t key, const Text_renderer::Draw_call *set_value);
 
 
+
+
 bool
 text_draw_call_get_model_id(const Text_draw_call_data *data, const uint32_t key, util::generic_id *return_value);
 
 
 bool
 text_draw_call_set_model_id(const Text_draw_call_data *data, const uint32_t key, const util::generic_id *set_value);
+
+
 
 
 } // Data ns

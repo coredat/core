@@ -14,3 +14,9 @@ bool
 % else
 {{model_name}}_set_{{name}}(const {{model_type}} *data, const {{key_type}} key, const {{type}} *set_value, const size_t size);
 % end
+
+
+% if count > 1
+constexpr size_t
+{{model_name}}_get_{{name}}_stride() { return {{count}}; }
+% end
