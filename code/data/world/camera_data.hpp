@@ -31,7 +31,7 @@ struct Camera_data
   uint32_t *field_priority = nullptr;
 
   // properties field data //
-  Camera::Camera_properties *field_properties = nullptr;
+  Camera_util::Camera_properties *field_properties = nullptr;
 
   // texture_id field data //
   util::generic_id *field_texture_id = nullptr;
@@ -114,11 +114,11 @@ uint32_t*
 camera_get_priority_data(Camera_data *data);
 
 
-const Camera::Camera_properties*
+const Camera_util::Camera_properties*
 camera_get_const_properties_data(const Camera_data *data);
 
 
-Camera::Camera_properties*
+Camera_util::Camera_properties*
 camera_get_properties_data(Camera_data *data);
 
 
@@ -154,11 +154,11 @@ camera_set_priority(const Camera_data *data, const uint32_t key, const uint32_t 
 
 
 bool
-camera_get_properties(const Camera_data *data, const uint32_t key, Camera::Camera_properties *return_value);
+camera_get_properties(const Camera_data *data, const uint32_t key, Camera_util::Camera_properties *return_value);
 
 
 bool
-camera_set_properties(const Camera_data *data, const uint32_t key, const Camera::Camera_properties *set_value);
+camera_set_properties(const Camera_data *data, const uint32_t key, const Camera_util::Camera_properties *set_value);
 
 
 

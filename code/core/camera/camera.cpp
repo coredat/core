@@ -1,37 +1,9 @@
 #include <core/camera/camera.hpp>
-#include <core/entity/detail/entity_id.hpp>
-#include <core/world/detail/world_index.hpp>
-#include <core/world/world.hpp>
 #include <core/color/color.hpp>
-#include <core/entity/entity.hpp>
-#include <core/entity/entity_ref.hpp>
 #include <core/resources/render_target.hpp>
 #include <core/camera/post_process.hpp>
-#include <transformations/camera/cam_priorities.hpp>
-#include <data/world_data.hpp>
-#include <data/world/camera_data.hpp>
-#include <data/world/entity_data.hpp>
-#include <systems/camera/camera_properties.hpp>
 #include <systems/renderer_post/post_shader.hpp>
-#include <common/error_strings.hpp>
-#include <common/data_types.hpp>
-#include <math/mat/mat4.hpp>
 #include <utilities/logging.hpp>
-
-
-
-/*
-  <TODO>
-    Splitting out the type of rendering would be good.
-    like attaching a renderer to an entity. You could attach a 
-    renderer to a camera. my_camera.set_renderer(post_process_renderer);
-    This would elinate settings that only happen in certain modes.
-    ie. only_render_tags() would only work for mesh_rendering.
-    We can also use it to enable debug rendinering.
-    my_camera.set_renderer(collider_renderer).
-    my_camera.set_renderer(overdraw_renderer).
-  </TODO>
-*/
 
 
 namespace Core {

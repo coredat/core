@@ -70,7 +70,7 @@ calculate_camera_runs(const Data::Camera_data *cam_data,
   // Get the properties.
   for(uint32_t i = 0; i < count; ++i)
   {
-    const Camera::Camera_properties *prop = &cam_data->field_properties[i];
+    const Camera_util::Camera_properties *prop = &cam_data->field_properties[i];
   
     if(prop->type == Core::Camera_type::perspective)
     {

@@ -70,10 +70,10 @@ camera_create(Camera_data *data, const size_t size_hint)
     // Alloc space for properties
     if(all_alloc)
     {
-      data->field_properties = new Camera::Camera_properties[size_hint * 1];
+      data->field_properties = new Camera_util::Camera_properties[size_hint * 1];
       assert(data->field_properties);
       if(!data->field_properties) { all_alloc = false; }
-      else { memset(data->field_properties, 0, sizeof(Camera::Camera_properties) * size_hint * 1); }
+      else { memset(data->field_properties, 0, sizeof(Camera_util::Camera_properties) * size_hint * 1); }
     }
 
     // Alloc space for texture_id
@@ -315,7 +315,7 @@ camera_resize_capacity(Camera_data *data, const size_t size_hint)
   {
     memcpy(new_data.keys, data->keys, sizeof(uint32_t) * data->size);
     memcpy(new_data.field_priority, data->field_priority, sizeof(uint32_t) * data->size * 1);
-    memcpy(new_data.field_properties, data->field_properties, sizeof(Camera::Camera_properties) * data->size * 1);
+    memcpy(new_data.field_properties, data->field_properties, sizeof(Camera_util::Camera_properties) * data->size * 1);
     memcpy(new_data.field_texture_id, data->field_texture_id, sizeof(util::generic_id) * data->size * 1);
     memcpy(new_data.field_post_process_id, data->field_post_process_id, sizeof(util::generic_id) * data->size * 1);
   }
@@ -330,7 +330,7 @@ camera_resize_capacity(Camera_data *data, const size_t size_hint)
     data->field_priority = new_data.field_priority;
     new_data.field_priority = old_priority;
 
-    Camera::Camera_properties *old_properties = data->field_properties;
+    Camera_util::Camera_properties *old_properties = data->field_properties;
     data->field_properties = new_data.field_properties;
     new_data.field_properties = old_properties;
 
@@ -382,7 +382,7 @@ camera_get_priority_data(Camera_data *data)
 }
 
 
-const Camera::Camera_properties*
+const Camera_util::Camera_properties*
 camera_get_const_properties_data(const Camera_data *data)
 {
   assert(data);
@@ -392,7 +392,7 @@ camera_get_const_properties_data(const Camera_data *data)
 }
 
 
-Camera::Camera_properties*
+Camera_util::Camera_properties*
 camera_get_properties_data(Camera_data *data)
 {
   assert(data);
@@ -505,7 +505,7 @@ camera_set_priority(const Camera_data *data, const uint32_t key, const uint32_t 
 
 
 bool
-camera_get_properties(const Camera_data *data, const uint32_t key, Camera::Camera_properties *return_value)
+camera_get_properties(const Camera_data *data, const uint32_t key, Camera_util::Camera_properties *return_value)
 {
   assert(data);
   assert(key != 0);
@@ -534,7 +534,7 @@ camera_get_properties(const Camera_data *data, const uint32_t key, Camera::Camer
 
 
 bool
-camera_set_properties(const Camera_data *data, const uint32_t key, const Camera::Camera_properties *set_value)
+camera_set_properties(const Camera_data *data, const uint32_t key, const Camera_util::Camera_properties *set_value)
 {
   assert(data);
   assert(key != 0);

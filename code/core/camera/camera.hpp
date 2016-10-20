@@ -30,8 +30,8 @@ class Camera final
 public:
 
   explicit              Camera();
-  explicit              Camera(const uint32_t width = 800,
-                               const uint32_t height = 600,
+  explicit              Camera(const uint32_t width,
+                               const uint32_t height,
                                const float near_plane = 0.1f,
                                const float far_plane = 100.f,
                                const float fov = math::quart_tau() * 0.5f);
@@ -43,9 +43,6 @@ public:
   
   void                  set_post_process(const Post_process &post);
   Post_process          get_post_process() const;
-  
-  void                  set_attached_entity(Entity_ref entity);           //!< Attach to an entity to give the camera transform in the world.
-  Entity_ref            get_attached_entity() const;                      //!< Returns the attached entity.
   
   void                  set_render_target(const Render_target &target);   //!< Sets the render target for the ouput.
   Render_target         get_render_target() const;                        //!< Returns the render target for the ouput.

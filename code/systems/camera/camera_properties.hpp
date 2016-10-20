@@ -6,7 +6,7 @@
 #include <core/camera/camera.hpp>
 
 
-namespace Camera {
+namespace Camera_util {
 
 
 // TODO: Reduce the size of this struct.

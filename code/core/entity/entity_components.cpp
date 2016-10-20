@@ -7,18 +7,21 @@
 #include <data/world/entity_data.hpp>
 #include <data/world/camera_data.hpp>
 #include <common/data_types.hpp>
+#include <common/error_strings.hpp>
 #include <utilities/logging.hpp>
 
 
 namespace Core {
-namespace Entity_utils {
+namespace Entity_component {
 
 
 bool
-set_camera_component(const Core::Entity_ref &ref, const Core::Camera &camera)
+set_camera(const Core::Entity_ref &ref,
+           const Core::Camera &camera)
 {
   if(!ref)
   {
+    LOG_ERROR(Error_string::entity_is_invalid());
     return false;
   }
 
@@ -62,7 +65,7 @@ set_camera_component(const Core::Entity_ref &ref, const Core::Camera &camera)
     
     // Set data
     {
-      ::Camera::Camera_properties properties;
+      Camera_util::Camera_properties properties;
       Data::camera_get_properties(cam_data, entity_uint_id, &properties);
       
       properties.clear_color     = camera.get_clear_color().get_color();
@@ -93,10 +96,78 @@ set_camera_component(const Core::Entity_ref &ref, const Core::Camera &camera)
 
 
 Core::Camera
-get_camera_component(const Core::Entity_ref &ref)
+get_camera(const Core::Entity_ref &ref)
 {
-  assert(false);
-  // Get and build a Core::Camera.
+  if(!ref)
+  {
+    LOG_ERROR(Error_string::entity_is_invalid());
+    return Core::Camera();
+  }
+  
+  const uint32_t entity_uint_id(ref.get_id());
+  const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(entity_uint_id);
+
+  Core::Camera return_camera;
+
+  auto world_data(Core_detail::world_index_get_world_data(entity_id.world_instance));
+  assert(world_data);
+
+  Data::Camera_data *cam_data(world_data->camera_data);
+  assert(cam_data);
+  
+  Data::data_lock(cam_data);
+  
+  if(Data::camera_exists(cam_data, entity_uint_id))
+  {
+    Camera_util::Camera_properties props;
+    Data::camera_get_properties(cam_data, entity_uint_id, &props);
+    
+    return_camera.set_clear_color(Core::Color(props.clear_color));
+    return_camera.set_clear_flags(props.clear_flags);
+    return_camera.set_far_plane(props.far_plane);
+    return_camera.set_near_plane(props.near_plane);
+    return_camera.set_tags_to_render(props.cull_mask);
+    return_camera.set_width(props.viewport_width);
+    return_camera.set_height(props.viewport_height);
+    return_camera.set_type(props.type);
+    return_camera.set_feild_of_view(props.fov);
+  }
+  else
+  {
+    LOG_ERROR(Error_string::resource_not_found());
+  }
+  
+  Data::data_unlock(cam_data);
+  
+  return Core::Camera();
+}
+
+
+bool
+has_camera(const Core::Entity_ref &ref)
+{
+  if(!ref)
+  {
+    LOG_ERROR(Error_string::entity_is_invalid());
+    return false;
+  }
+
+  const uint32_t entity_uint_id(ref.get_id());
+  const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(entity_uint_id);
+
+  auto world_data(Core_detail::world_index_get_world_data(entity_id.world_instance));
+  assert(world_data);
+
+  Data::Camera_data *cam_data(world_data->camera_data);
+  assert(cam_data);
+  
+  Data::data_lock(cam_data);
+  
+  const bool has_camera = Data::camera_exists(cam_data, entity_uint_id);
+  
+  Data::data_unlock(cam_data);
+  
+  return has_camera;
 }
 
 

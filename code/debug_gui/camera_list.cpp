@@ -46,7 +46,7 @@ display_camera_data(Data::Camera_data *data)
       ImGui::Text("%d", *reinterpret_cast<uint32_t*>(&data->field_priority[i]));
       ImGui::NextColumn();
       
-      ::Camera::Camera_properties props;
+      Camera_util::Camera_properties props;
       Data::camera_get_properties(data, data->keys[i], &props);
 
       ImGui::Text("%d",           props.clear_flags);                                                  ImGui::NextColumn();
