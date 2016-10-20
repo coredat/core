@@ -24,27 +24,46 @@ namespace Core {
 
 struct World::Impl
 {
-  uint32_t world_instance_id;
-  
-  Core::Context *context = nullptr;
-  util::timer dt_timer;
-  float       dt           = 0.f;
-  float       dt_mul       = 1.f;
-  float       running_time = 0.f;
+  uint32_t           world_instance_id  = 0;
+  Core::Context      *context           = nullptr;
+  util::timer        dt_timer;
+  float              dt                 = 0.f;
+  float              dt_mul             = 1.f;
+  float              running_time       = 0.f;
   Collision_callback collision_callback = nullptr;
+  
+  void
+  move(World::Impl *this_one, World::Impl *that_one)
+  {
+    this_one->world_instance_id  = that_one->world_instance_id;
+    that_one->world_instance_id  = 0;
+    
+    this_one->context            = that_one->context;
+    that_one->context            = nullptr;
+    
+    this_one->dt_timer           = that_one->dt_timer;
+    that_one->dt_timer           = util::timer();
+    
+    this_one->dt                 = that_one->dt;
+    that_one->dt                 = 0.f;
+    
+    this_one->dt_mul             = that_one->dt_mul;
+    that_one->dt_mul             = 1.f;
+    
+    this_one->running_time       = that_one->running_time;
+    that_one->running_time       = 0.f;
+    
+    this_one->collision_callback = that_one->collision_callback;
+    that_one->collision_callback = nullptr;
+  }
 };
 
 
 World::World(Context &ctx, const World_setup setup)
 : m_impl(new World::Impl)
 {
-  LOG_TODO_ONCE("World should be 'moveable'");
-  
   m_impl->world_instance_id = Core_detail::world_index_add_world_data(setup.entity_pool_size);
-  
-//  m_impl->world_data = std::make_shared<World_data::World>(setup.entity_pool_size);
   m_impl->context = &ctx;
-  
   m_impl->dt_timer.start();
   
   Engine::initialize();
@@ -54,6 +73,20 @@ World::World(Context &ctx, const World_setup setup)
 World::~World()
 {
   Core_detail::world_index_release_world_data(m_impl->world_instance_id);
+}
+
+
+World::World(World &&other)
+{
+  m_impl->move(m_impl.get(), other.m_impl.get());
+}
+
+
+World&
+World::operator=(World &&other)
+{
+  m_impl->move(m_impl.get(), other.m_impl.get());
+  return *this;
 }
 
 
@@ -106,7 +139,10 @@ World::think()
   Engine::Tick_information tick_info;
   {
     auto resources = Data::get_context_data();
+    assert(resources);
+    
     auto world = Core_detail::world_index_get_world_data(m_impl->world_instance_id);
+    assert(world);
 
     Engine::think(world,
                   resources,

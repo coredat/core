@@ -25,7 +25,6 @@ struct Context
   Text_mesh_data      *text_mesh_data     = nullptr;
   Texture_data        *texture_data       = nullptr;
   
-  
   Context(const Context&) = delete;
   Context& operator=(const Context&) = delete;
   

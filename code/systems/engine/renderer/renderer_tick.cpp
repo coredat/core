@@ -79,7 +79,7 @@ think(std::shared_ptr<Data::World> world,
       Core::Transform *cam_transforms = SCRATCH_ALIGNED_ALLOC(Core::Transform, cam_data->size);
       
       Camera_utils::get_camera_transforms(world->transform,
-                                          cam_data->field_entity_id,
+                                          cam_data->keys,
                                           cam_transforms,
                                           cam_data->size);
       

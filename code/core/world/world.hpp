@@ -39,12 +39,13 @@ public:
                               const World_setup setup = World_setup{});
   
                         ~World();
+  
+                        World(World &&other);
+  World&                operator=(World &&other);
 
   float                 get_delta_time() const;
-  
   void                  set_delta_time_multiplier(const float multiplier);
   float                 get_delta_time_multiplier() const;
-  
   uint32_t              get_time_running() const;
 
   void                  think();

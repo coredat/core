@@ -58,15 +58,6 @@ camera_create(Camera_data *data, const size_t size_hint)
       else { memset(data->keys, 0, sizeof(uint32_t) * size_hint); }
     }
 
-    // Alloc space for entity_id
-    if(all_alloc)
-    {
-      data->field_entity_id = new uint32_t[size_hint * 1];
-      assert(data->field_entity_id);
-      if(!data->field_entity_id) { all_alloc = false; }
-      else { memset(data->field_entity_id, 0, sizeof(uint32_t) * size_hint * 1); }
-    }
-
     // Alloc space for priority
     if(all_alloc)
     {
@@ -122,10 +113,6 @@ camera_destroy(Camera_data *data)
     // Remove keys
     if(data->keys) { delete[] data->keys; }
     data->keys = nullptr;
-
-    // Remove entity_id
-    if(data->field_entity_id) { delete[] data->field_entity_id; }
-    data->field_entity_id = nullptr;
 
     // Remove priority
     if(data->field_priority) { delete[] data->field_priority; }
@@ -199,7 +186,6 @@ camera_insert(Camera_data *data, const uint32_t key, const size_t insert_point)
 
     // Shuffle the data down
     memmove(&data->keys[insert_point], &data->keys[start_index], size_to_end * sizeof(*data->keys));
-    memmove(&data->field_entity_id[insert_point * 1], &data->field_entity_id[start_index * 1], size_to_end * sizeof(*data->field_entity_id) * 1);
     memmove(&data->field_priority[insert_point * 1], &data->field_priority[start_index * 1], size_to_end * sizeof(*data->field_priority) * 1);
     memmove(&data->field_properties[insert_point * 1], &data->field_properties[start_index * 1], size_to_end * sizeof(*data->field_properties) * 1);
     memmove(&data->field_texture_id[insert_point * 1], &data->field_texture_id[start_index * 1], size_to_end * sizeof(*data->field_texture_id) * 1);
@@ -231,7 +217,6 @@ camera_remove(Camera_data *data, const uint32_t key)
 
     // Shuffle the data down
     memmove(&data->keys[index_to_erase], &data->keys[start_index], size_to_end * sizeof(*data->keys));
-    memmove(&data->field_entity_id[index_to_erase * 1], &data->field_entity_id[start_index * 1], size_to_end * sizeof(*data->field_entity_id) * 1);
     memmove(&data->field_priority[index_to_erase * 1], &data->field_priority[start_index * 1], size_to_end * sizeof(*data->field_priority) * 1);
     memmove(&data->field_properties[index_to_erase * 1], &data->field_properties[start_index * 1], size_to_end * sizeof(*data->field_properties) * 1);
     memmove(&data->field_texture_id[index_to_erase * 1], &data->field_texture_id[start_index * 1], size_to_end * sizeof(*data->field_texture_id) * 1);
@@ -329,7 +314,6 @@ camera_resize_capacity(Camera_data *data, const size_t size_hint)
   // Copy over data
   {
     memcpy(new_data.keys, data->keys, sizeof(uint32_t) * data->size);
-    memcpy(new_data.field_entity_id, data->field_entity_id, sizeof(uint32_t) * data->size * 1);
     memcpy(new_data.field_priority, data->field_priority, sizeof(uint32_t) * data->size * 1);
     memcpy(new_data.field_properties, data->field_properties, sizeof(Camera::Camera_properties) * data->size * 1);
     memcpy(new_data.field_texture_id, data->field_texture_id, sizeof(util::generic_id) * data->size * 1);
@@ -341,10 +325,6 @@ camera_resize_capacity(Camera_data *data, const size_t size_hint)
     uint32_t *old_keys = data->keys;
     data->keys = new_data.keys;
     new_data.keys = old_keys;
-
-    uint32_t *old_entity_id = data->field_entity_id;
-    data->field_entity_id = new_data.field_entity_id;
-    new_data.field_entity_id = old_entity_id;
 
     uint32_t *old_priority = data->field_priority;
     data->field_priority = new_data.field_priority;
@@ -380,26 +360,6 @@ camera_resize_capacity(Camera_data *data, const size_t size_hint)
 // ===================== //
 // DATA GETTER FUNCTIONS //
 // ===================== //
-
-
-const uint32_t*
-camera_get_const_entity_id_data(const Camera_data *data)
-{
-  assert(data);
-  assert(data->field_entity_id);
-
-  return data->field_entity_id;
-}
-
-
-uint32_t*
-camera_get_entity_id_data(Camera_data *data)
-{
-  assert(data);
-  assert(data->field_entity_id);
-
-  return data->field_entity_id;
-}
 
 
 const uint32_t*
@@ -485,63 +445,6 @@ camera_get_post_process_id_data(Camera_data *data)
 // =============== //
 // FIELD FUNCTIONS //
 // =============== //
-
-
-bool
-camera_get_entity_id(const Camera_data *data, const uint32_t key, uint32_t *return_value)
-{
-  assert(data);
-  assert(key != 0);
-  assert(data->field_entity_id);
-  assert(return_value);
-
-  // Search for its index.
-  // If we find it we can return the value.
-
-  size_t index = 0;
-
-  if(camera_exists(data, key, &index))
-  {
-    assert(index < data->size);
-
-    if(index < data->size)
-    {
-      *return_value = data->field_entity_id[index];
-
-      return true;
-    }
-  }
-
-  return false;
-}
-
-
-bool
-camera_set_entity_id(const Camera_data *data, const uint32_t key, const uint32_t *set_value)
-{
-  assert(data);
-  assert(key != 0);
-  assert(data->field_entity_id);
-  assert(set_value);
-
-  // Search for its index.
-  // If we find it we can set the value.
-
-  size_t index = 0;
-
-  if(camera_exists(data, key, &index))
-  {
-    assert(index < data->size);
-    if(index < data->size)
-    {
-      data->field_entity_id[index] = *set_value;
-
-      return true;
-    }
-  }
-
-  return false;
-}
 
 
 bool

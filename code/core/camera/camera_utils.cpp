@@ -1,6 +1,5 @@
 #include <core/camera/camera_utils.hpp>
 #include <core/camera/camera.hpp>
-#include <core/camera/camera_properties.hpp>
 #include <core/input/axis.hpp>
 #include <core/common/ray.hpp>
 #include <core/common/plane.hpp>

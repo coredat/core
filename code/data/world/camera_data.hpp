@@ -6,8 +6,8 @@
 */
 
 
-#ifndef CAMERA_INCLUDED_6FB1C017_A23D_4327_8ECC_07AC1C94CDD2
-#define CAMERA_INCLUDED_6FB1C017_A23D_4327_8ECC_07AC1C94CDD2
+#ifndef CAMERA_INCLUDED_C1928E19_93B3_4731_B6A1_658C46390D45
+#define CAMERA_INCLUDED_C1928E19_93B3_4731_B6A1_658C46390D45
 
 
 #include <stdint.h>
@@ -26,9 +26,6 @@ struct Camera_data
 {
   // key //
   uint32_t *keys = nullptr;
-
-  // entity_id field data //
-  uint32_t *field_entity_id = nullptr;
 
   // priority field data //
   uint32_t *field_priority = nullptr;
@@ -110,14 +107,6 @@ camera_resize_capacity(Camera_data *data, const size_t size_hint);
 
 
 const uint32_t*
-camera_get_const_entity_id_data(const Camera_data *data);
-
-
-uint32_t*
-camera_get_entity_id_data(Camera_data *data);
-
-
-const uint32_t*
 camera_get_const_priority_data(const Camera_data *data);
 
 
@@ -152,16 +141,6 @@ camera_get_post_process_id_data(Camera_data *data);
 // =============== //
 // FIELD FUNCTIONS //
 // =============== //
-
-
-bool
-camera_get_entity_id(const Camera_data *data, const uint32_t key, uint32_t *return_value);
-
-
-bool
-camera_set_entity_id(const Camera_data *data, const uint32_t key, const uint32_t *set_value);
-
-
 
 
 bool

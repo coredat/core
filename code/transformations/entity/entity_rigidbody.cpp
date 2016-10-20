@@ -11,6 +11,7 @@
 #include <data/world/transform_data.hpp>
 #include <data/world/rigidbody_data.hpp>
 #include <common/error_strings.hpp>
+#include <common/data_types.hpp>
 #include <utilities/logging.hpp>
 #include <transformations/physics/core_to_qu3e.hpp>
 #include <transformations/physics/q3_math_extensions.hpp>
@@ -44,7 +45,7 @@ set_collider(const util::generic_id this_id,
     if(Data::transform_exists(transform_data, this_id, &index))
     {
       //TODO: This can be async
-      update_component(this_id, world->entity, Data::Entity_component::has_physics);
+      update_component(this_id, world->entity, Common::Data_type::rigidbody);
     
       switch(collider.get_type())
       {
@@ -208,7 +209,7 @@ update_collider(const util::generic_id this_id,
     assert(phys_data);
   
     // Update the physics stuff.
-    if(components & Data::Entity_component::has_physics)
+    if(components & Common::Data_type::rigidbody)
     {
       Data::data_lock(phys_data);
       

@@ -39,7 +39,7 @@ display_camera_data(Data::Camera_data *data)
       ImGui::Selectable(id, selected == i, ImGuiSelectableFlags_SpanAllColumns);
       ImGui::NextColumn();
       
-      ImGui::Text("%04d", data->field_entity_id[i]);       ImGui::NextColumn();
+//      ImGui::Text("%04d", data->field_entity_id[i]);       ImGui::NextColumn();
       ImGui::Text("%02d", data->field_post_process_id[i]); ImGui::NextColumn();
       ImGui::Text("%02d", data->field_texture_id[i]);      ImGui::NextColumn();
       

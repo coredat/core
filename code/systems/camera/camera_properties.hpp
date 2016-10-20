@@ -3,7 +3,7 @@
 
 
 #include <stdint.h>
-#include <core/camera/camera_properties.hpp>
+#include <core/camera/camera.hpp>
 
 
 namespace Camera {

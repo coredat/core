@@ -15,6 +15,8 @@
 #include <data/world/transform_data.hpp>
 #include <data/world/mesh_draw_call_data.hpp>
 
+#include <common/data_types.hpp>
+
 #include <transformations/entity/entity_common.hpp>
 #include <transformations/entity/entity_data.hpp>
 #include <transformations/entity/entity_transform.hpp>
@@ -36,14 +38,12 @@ namespace Core {
 
 struct Entity_interface::Impl
 {
-//  util::generic_id id;
   Core_detail::Entity_id id;
-  mutable std::shared_ptr<Data::World> world;
 };
 
 
 Entity_interface::Entity_interface()
-: m_impl(new Impl{Core_detail::entity_id_invalid(), nullptr})
+: m_impl(new Impl{Core_detail::entity_id_invalid()})
 {
 }
 
@@ -62,22 +62,22 @@ Entity_interface::Entity_interface(Entity_interface &&other)
 }
 
 Entity_interface::Entity_interface(const Core_detail::Entity_id id)
-: m_impl(new Impl{id, Core_detail::world_index_get_world_data(id.world_instance)})
+: m_impl(new Impl{id})
 {
 }
 
 Entity_interface::Entity_interface(Core::World &world)
-: m_impl(new Impl{Core_detail::entity_id_invalid(), nullptr})
+: m_impl(new Impl{Core_detail::entity_id_invalid()})
 {
-  m_impl->world = world.get_world_data();
-  
   bool success = true;
  
-  if(m_impl->world)
+  auto world_data = Core_detail::world_index_get_world_data(world.get_id());
+ 
+  if(world_data)
   {
     // Create Entity record
     {
-      auto entity_data = m_impl->world->entity;
+      auto entity_data = world_data->entity;
       
       Data::data_lock(entity_data);
       
@@ -94,8 +94,10 @@ Entity_interface::Entity_interface(Core::World &world)
       if(added && success)
       {
         // Zero the data.
+        const uint32_t has_transform(Common::Data_type::transform);
         const uint32_t zero(0);
-        Data::entity_set_components(entity_data, id, &zero);
+        
+        Data::entity_set_components(entity_data, id, &has_transform);
         Data::entity_set_tags(entity_data, id, &zero);
         Data::entity_set_renderer(entity_data, id, &zero);
         
@@ -113,7 +115,7 @@ Entity_interface::Entity_interface(Core::World &world)
     // Create Transform record
     if(success)
     {
-      auto transform_data = m_impl->world->transform;
+      auto transform_data = world_data->transform;
       
       Data::data_lock(transform_data);
       
@@ -133,19 +135,6 @@ Entity_interface::Entity_interface(Core::World &world)
       }
       
       Data::data_unlock(transform_data);
-    }
-    
-    // Create Mesh record
-    {
-      auto mesh_data = m_impl->world->mesh_data;
-      
-      Data::data_lock(mesh_data);
-      
-//      if(World_data::renderer_mesh_data_insert(mesh_data, id, 0) && success)
-      {
-      }
-      
-      Data::data_unlock(mesh_data);
     }
     
     // If we failed then destroy the entity.
@@ -174,14 +163,16 @@ Entity_interface::~Entity_interface()
 void
 Entity_interface::destroy()
 {
-  if(!m_impl || !m_impl->world)
+  if(!m_impl || m_impl->id.entity_instance == 0)
   {
     return;
   }
   
+  auto world_data = Core_detail::world_index_get_world_data(m_impl->id.world_instance);
+  
   Entity_detail::destroy(Core_detail::entity_id_to_uint(m_impl->id),
-                         m_impl->world->entity,
-                         m_impl->world->entity_removal);
+                         world_data->entity,
+                         world_data->entity_removal);
   
   m_impl->id = Core_detail::entity_id_invalid();
 }
@@ -190,12 +181,14 @@ Entity_interface::destroy()
 bool
 Entity_interface::is_valid() const
 {
-  if(!m_impl || !Core_detail::entity_id_to_uint(m_impl->id) || !m_impl->world)
+  if(!m_impl || !Core_detail::entity_id_to_uint(m_impl->id))
   {
     return false;
   }
-
-  return Entity_detail::is_valid(Core_detail::entity_id_to_uint(m_impl->id), m_impl->world->entity);
+  
+  auto world_data = Core_detail::world_index_get_world_data(m_impl->id.world_instance);
+  
+  return Entity_detail::is_valid(Core_detail::entity_id_to_uint(m_impl->id), world_data->entity);
 }
 
 
@@ -211,16 +204,20 @@ Entity_interface::operator bool() const
 uint32_t
 Entity_interface::get_tags() const
 {
+  auto world_data = Core_detail::world_index_get_world_data(m_impl->id.world_instance);
+  
   return Entity_detail::get_tags(Core_detail::entity_id_to_uint(m_impl->id),
-                                 m_impl->world->entity);
+                                 world_data->entity);
 }
 
 
 void
 Entity_interface::set_user_data(const uintptr_t user_data)
 {
+  auto world_data = Core_detail::world_index_get_world_data(m_impl->id.world_instance);
+  
   Entity_detail::set_user_data(Core_detail::entity_id_to_uint(m_impl->id),
-                               m_impl->world->entity,
+                               world_data->entity,
                                user_data);
 }
 
@@ -228,16 +225,20 @@ Entity_interface::set_user_data(const uintptr_t user_data)
 uintptr_t
 Entity_interface::get_user_data() const
 {
+  auto world_data = Core_detail::world_index_get_world_data(m_impl->id.world_instance);
+  
   return Entity_detail::get_user_data(Core_detail::entity_id_to_uint(m_impl->id),
-                                      m_impl->world->entity);
+                                      world_data->entity);
 }
 
 
 bool
 Entity_interface::has_tag(const uint32_t tag_id) const
 {
+  auto world_data = Core_detail::world_index_get_world_data(m_impl->id.world_instance);
+  
   return Entity_detail::has_tag(Core_detail::entity_id_to_uint(m_impl->id),
-                                m_impl->world->entity,
+                                world_data->entity,
                                 tag_id);
 }
 
@@ -245,8 +246,10 @@ Entity_interface::has_tag(const uint32_t tag_id) const
 void
 Entity_interface::set_tags(const uint32_t set_tags)
 {
+  auto world_data = Core_detail::world_index_get_world_data(m_impl->id.world_instance);
+  
   Entity_detail::set_tags(Core_detail::entity_id_to_uint(m_impl->id),
-                          m_impl->world->entity,
+                          world_data->entity,
                           set_tags);
 }
 
@@ -254,8 +257,10 @@ Entity_interface::set_tags(const uint32_t set_tags)
 void
 Entity_interface::add_tag(const uint32_t add_tag)
 {
+  auto world_data = Core_detail::world_index_get_world_data(m_impl->id.world_instance);
+  
   Entity_detail::add_tag(Core_detail::entity_id_to_uint(m_impl->id),
-                         m_impl->world->entity,
+                         world_data->entity,
                          add_tag);
 }
 
@@ -263,17 +268,21 @@ Entity_interface::add_tag(const uint32_t add_tag)
 void
 Entity_interface::remove_tag(const uint32_t tag)
 {
+  auto world_data = Core_detail::world_index_get_world_data(m_impl->id.world_instance);
+  
   Entity_detail::remove_tag(Core_detail::entity_id_to_uint(m_impl->id),
-                            m_impl->world->entity,
+                            world_data->entity,
                             tag);
 }
 
 
 void
-Entity_interface::set_name(const char* set_name)
+Entity_interface::set_name(const char *set_name)
 {
+  auto world_data = Core_detail::world_index_get_world_data(m_impl->id.world_instance);
+  
   Entity_detail::set_name(Core_detail::entity_id_to_uint(m_impl->id),
-                          m_impl->world->entity,
+                          world_data->entity,
                           set_name);
 }
 
@@ -281,20 +290,24 @@ Entity_interface::set_name(const char* set_name)
 const char*
 Entity_interface::get_name() const
 {
+  auto world_data = Core_detail::world_index_get_world_data(m_impl->id.world_instance);
+  
   return Entity_detail::get_name(Core_detail::entity_id_to_uint(m_impl->id),
-                                 m_impl->world->entity);
+                                 world_data->entity);
 }
 
 
 void
 Entity_interface::set_transform(const Transform &transform)
 {
+  auto world_data = Core_detail::world_index_get_world_data(m_impl->id.world_instance);
+  
   Entity_detail::set_transform(Core_detail::entity_id_to_uint(m_impl->id),
-                               m_impl->world->entity,
-                               m_impl->world->transform,
-                               m_impl->world->rigidbody_data,
-                               m_impl->world->mesh_data,
-                               m_impl->world->text_data,
+                               world_data->entity,
+                               world_data->transform,
+                               world_data->rigidbody_data,
+                               world_data->mesh_data,
+                               world_data->text_data,
                                transform);
 }
 
@@ -302,20 +315,24 @@ Entity_interface::set_transform(const Transform &transform)
 Transform
 Entity_interface::get_transform() const
 {
+  auto world_data = Core_detail::world_index_get_world_data(m_impl->id.world_instance);
+
   return Entity_detail::get_core_transform(Core_detail::entity_id_to_uint(m_impl->id),
-                                           m_impl->world->entity,
-                                           m_impl->world->transform);
+                                           world_data->entity,
+                                           world_data->transform);
 }
 
 
 void
 Entity_interface::set_renderer(const Core::Renderer &renderer)
 {
+  auto world_data = Core_detail::world_index_get_world_data(m_impl->id.world_instance);
+
   Entity_detail::set_renderer(Core_detail::entity_id_to_uint(m_impl->id),
-                              m_impl->world->entity,
-                              m_impl->world->transform,
-                              m_impl->world->mesh_data,
-                              m_impl->world->text_data,
+                              world_data->entity,
+                              world_data->transform,
+                              world_data->mesh_data,
+                              world_data->text_data,
                               renderer);
 }
 
@@ -323,14 +340,22 @@ Entity_interface::set_renderer(const Core::Renderer &renderer)
 Renderer
 Entity_interface::get_renderer() const
 {
-  return Entity_detail::get_renderer(Core_detail::entity_id_to_uint(m_impl->id), m_impl->world->entity, m_impl->world->mesh_data);
+  auto world_data = Core_detail::world_index_get_world_data(m_impl->id.world_instance);
+
+  return Entity_detail::get_renderer(Core_detail::entity_id_to_uint(m_impl->id),
+                                     world_data->entity,
+                                     world_data->mesh_data);
 }
 
 
 void
 Entity_interface::set_rigidbody(const Rigidbody &rigidbody)
 {
-  Entity_detail::set_rigidbody(Core_detail::entity_id_to_uint(m_impl->id), m_impl->world.get(), rigidbody);
+  auto world_data = Core_detail::world_index_get_world_data(m_impl->id.world_instance);
+  
+  Entity_detail::set_rigidbody(Core_detail::entity_id_to_uint(m_impl->id),
+                               world_data.get(),
+                               rigidbody);
 }
 
 
@@ -373,9 +398,8 @@ void
 Entity_interface::copy(const Entity_interface &other)
 {
   const Core_detail::Entity_id id = Core_detail::entity_id_from_uint(other.get_id());
-  auto world_data = Core_detail::world_index_get_world_data(id.world_instance);
   
-  m_impl.reset(new Impl{id, world_data});
+  m_impl.reset(new Impl{id});
 }
 
 
@@ -386,6 +410,5 @@ Entity_interface::move(Entity_interface &other)
   
   other.m_impl.reset();
 }
-
 
 } // ns

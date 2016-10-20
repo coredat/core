@@ -9,18 +9,28 @@
 namespace Core {
 
 
+enum class Camera_type : uint32_t
+{
+  perspective,
+  orthographic,
+};
+
+
+namespace Camera_clear {
+enum ENUM : uint32_t
+{
+  color = 1 << 0,
+  depth = 1 << 1,
+};
+} // ns
+
+
 class Camera final
 {
-
-                        Camera(const Camera&) = delete;
-  Camera&               operator=(const Camera&) = delete;
-
 public:
 
   explicit              Camera();
-  explicit              Camera(Core::World &world);
-  explicit              Camera(Core::Entity_ref attach_entity,
-                               const uint32_t width = 800,
+  explicit              Camera(const uint32_t width = 800,
                                const uint32_t height = 600,
                                const float near_plane = 0.1f,
                                const float far_plane = 100.f,
@@ -28,9 +38,6 @@ public:
   
                         ~Camera();
   
-                        Camera(Camera &&);
-  Camera&               operator=(Camera&&);
-
   void                  set_tags_to_render(const uint32_t);               //!< If the bitfield is set, the camera will only render entities with those tags.
   uint32_t              get_tags_to_render() const;                       //!< Returns the bit field of rendering tags.
   
@@ -72,8 +79,16 @@ public:
   
 private:
 
-  struct Impl;
-  std::unique_ptr<Impl> m_impl;
+  Camera_type         m_camera_type       = Camera_type::perspective;
+  uint32_t            m_viewport_width    = 800;
+  uint32_t            m_viewport_height   = 600;
+  float               m_fov               = 0.7855f; // 45 degs
+  float               m_near_plane        = 0.1f;
+  float               m_far_plane         = 1000.f;
+  uint32_t            m_clear_flags       = Camera_clear::color | Camera_clear::depth;
+  uint32_t            m_clear_color       = 0;
+  uint32_t            m_cull_mask         = -1;
+  uint32_t            m_priority          = 1;
 
 };
 

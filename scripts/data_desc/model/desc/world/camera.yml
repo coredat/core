@@ -4,8 +4,8 @@ data:
     auto_generated_id: false;
 
   fields:
-    - name: entity_id
-      type: uint32_t
+    # - name: entity_id
+    #   type: uint32_t
 
     - name: priority
       type: uint32_t
