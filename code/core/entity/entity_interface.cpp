@@ -99,7 +99,6 @@ Entity_interface::Entity_interface(Core::World &world)
         
         Data::entity_set_components(entity_data, id, &has_transform);
         Data::entity_set_tags(entity_data, id, &zero);
-        Data::entity_set_renderer(entity_data, id, &zero);
         
         const char *nilstr = "";
         Data::entity_set_name(entity_data, id, nilstr, 0);

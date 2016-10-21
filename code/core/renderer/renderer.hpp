@@ -29,7 +29,7 @@ class Renderer final
   friend class Text_renderer;
   friend Core::Renderer Entity_detail::get_renderer(const util::generic_id, Data::Entity_data *,Data::Mesh_draw_call_data *);
   
-  explicit                  Renderer(const Renderer_type renderer_type,
+  explicit                  Renderer(const uint32_t renderer_type,
                                      const util::generic_id arg_01 = util::generic_id_invalid(),
                                      const util::generic_id arg_02 = util::generic_id_invalid(),
                                      const util::generic_id arg_03 = util::generic_id_invalid());
@@ -39,7 +39,7 @@ public:
 
   Renderer&                 operator=(const Renderer &other);
   
-  Renderer_type             get_type() const;
+  uint32_t                  get_type() const;
   const char *              get_type_name() const; // free function
   
                             operator bool() const;
@@ -60,7 +60,7 @@ private:
   
 private:
 
-  Renderer_type     m_renderer_type = Renderer_type::unknown;
+  uint32_t          m_renderer_type = Renderer_type::unknown;
   util::generic_id  m_arg_01        = util::generic_id_invalid();
   util::generic_id  m_arg_02        = util::generic_id_invalid();
   util::generic_id  m_arg_03        = util::generic_id_invalid();

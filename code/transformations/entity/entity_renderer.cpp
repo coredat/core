@@ -23,6 +23,7 @@
 #include <data/context/material_data.hpp>
 #include <data/context/mesh_data.hpp>
 #include <common/error_strings.hpp>
+#include <common/data_types.hpp>
 #include <graphics_api/vertex_format.hpp>
 #include <graphics_api/utils/geometry.hpp>
 #include <utilities/logging.hpp>
@@ -38,8 +39,10 @@ has_renderer(const util::generic_id this_id,
 {
   Data::data_lock(entity_data);
   
-  uint32_t renderer_type(0);
-  Data::entity_get_renderer(entity_data, this_id, &renderer_type);
+  uint32_t components(0);
+  Data::entity_get_components(entity_data, this_id, &components);
+  
+  const uint32_t renderer_type = Common::Data_type::get_renderer_type(components);
   
   Data::data_unlock(entity_data);
 
@@ -73,13 +76,19 @@ set_renderer(const util::generic_id this_id,
     
     Data::data_lock(entity_data);
     
-    uint32_t renderer_type = 0;
-    Data::entity_get_renderer(entity_data, this_id, &renderer_type);
+    uint32_t components = 0;
+    Data::entity_get_components(entity_data, this_id, &components);
+    
+    const uint32_t renderer_type = Common::Data_type::get_renderer_type(components);
     
     // If exists destroy old renderer
     if(renderer_type != 0)
     {
-      switch((Core::Renderer_type)renderer_type)
+      // Remove component
+      components &= ~renderer_type;
+      Data::entity_set_components(entity_data, this_id, &components);
+    
+      switch(renderer_type)
       {
         case(Core::Renderer_type::material):
           Data::data_lock(renderer_material);
@@ -103,6 +112,19 @@ set_renderer(const util::generic_id this_id,
   }
   
   // Set or update renderer
+  {
+    Data::data_lock(entity_data);
+    
+    uint32_t components = 0;
+    Data::entity_get_components(entity_data, this_id, &components);
+    
+    components |= renderer.get_type();
+    Data::entity_set_components(entity_data, this_id, &components);
+    
+    Data::data_unlock(entity_data);
+  }
+  
+  // Set renderer
   switch(renderer.get_type())
   {
     case(Core::Renderer_type::material):
@@ -158,13 +180,15 @@ get_renderer(const util::generic_id this_id,
     Data::data_lock(renderer_material);
     Data::data_lock(entity_data);
     
-    uint32_t renderer_type = 0;
-    Data::entity_get_renderer(entity_data, this_id, &renderer_type);
+    uint32_t components = 0;
+    Data::entity_get_components(entity_data, this_id, &components);
+    
+    const uint32_t renderer_type = Common::Data_type::get_renderer_type(components);
     
     // What type of renderer?
     if(renderer_type != 0)
     {
-      switch((Core::Renderer_type)renderer_type)
+      switch(renderer_type)
       {
         case(Core::Renderer_type::material):
         {
@@ -215,29 +239,6 @@ set_renderer_material(const util::generic_id this_id,
     assert(false); return;
   }
   
-  // Check to see entity has a renderer.
-  // If not then set it.
-  {
-    assert(entity_data);
-    
-    Data::data_lock(entity_data);
-    
-    uint32_t renderer_type(0);
-    Data::entity_get_renderer(entity_data, this_id, &renderer_type);
-    
-    if(renderer_type != 0 && (Core::Renderer_type)renderer_type != Core::Renderer_type::material)
-    {
-      LOG_ERROR(Error_string::no_implimentation()); // Currently no mechanism to change a renderer type.
-      return;
-    }
-    else
-    {
-      auto renderer = (uint32_t)Core::Renderer_type::material;
-      Data::entity_set_renderer(entity_data, this_id, &renderer);
-    }
-    
-    Data::data_unlock(entity_data);
-  }
   
   assert(mesh_data);
 
@@ -375,32 +376,6 @@ set_renderer_text(const util::generic_id this_id,
   // Check valid
   if(!is_valid(this_id, entity_data, true)) {
     assert(false); return;
-  }
-  
-  // Check to see entity has a renderer.
-  // If not then set it.
-  {
-    LOG_TODO_ONCE("This is duplicated - unduplicate it")
-  
-    assert(entity_data);
-    
-    const uint32_t renderer_type = has_renderer(this_id, entity_data);
-    
-    Data::data_lock(entity_data);
-  
-    if(renderer_type != 0 && (Core::Renderer_type)renderer_type != Core::Renderer_type::material)
-    {
-      // Currently no mechanism to change a renderer type.
-      LOG_ERROR(Error_string::no_implimentation());
-      return;
-    }
-    else
-    {
-      auto renderer = (uint32_t)Core::Renderer_type::text;
-      Data::entity_set_renderer(entity_data, this_id, &renderer);
-    }
-    
-    Data::data_unlock(entity_data);
   }
   
   LOG_TODO_ONCE("Are all these resources required? - locking up a large portion of data!");

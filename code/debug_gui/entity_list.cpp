@@ -25,7 +25,6 @@ display_entity_list(Data::Entity_data *data)
       ImGui::Text("%s", name);
       ImGui::Text("%d", data->field_tags[i]);
       ImGui::Text("%p", (void*)data->field_user_data[i]);
-      ImGui::Text("%d", data->field_renderer[i]);
       
       ImGui::Separator();
     }

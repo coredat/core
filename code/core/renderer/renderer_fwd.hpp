@@ -12,8 +12,6 @@ class Renderer;
 class Text_renderer;
 class Material_renderer;
 
-enum class Renderer_type : uint32_t;
-
 
 } // ns
 

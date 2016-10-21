@@ -6,8 +6,8 @@
 */
 
 
-#ifndef ENTITY_INCLUDED_4602A17C_4B5A_4F84_9FAA_52B598BACB1D
-#define ENTITY_INCLUDED_4602A17C_4B5A_4F84_9FAA_52B598BACB1D
+#ifndef ENTITY_INCLUDED_C1E0EA40_EE50_42E8_A1D9_6475532FAAAE
+#define ENTITY_INCLUDED_C1E0EA40_EE50_42E8_A1D9_6475532FAAAE
 
 
 #include <stdint.h>
@@ -33,9 +33,6 @@ struct Entity_data
 
   // components field data //
   uint32_t *field_components = nullptr;
-
-  // renderer field data //
-  uint32_t *field_renderer = nullptr;
 
   // user_data field data //
   uintptr_t *field_user_data = nullptr;
@@ -131,14 +128,6 @@ uint32_t*
 entity_get_components_data(Entity_data *data);
 
 
-const uint32_t*
-entity_get_const_renderer_data(const Entity_data *data);
-
-
-uint32_t*
-entity_get_renderer_data(Entity_data *data);
-
-
 const void**
 entity_get_const_user_data_data(const Entity_data *data);
 
@@ -180,16 +169,6 @@ entity_get_components(const Entity_data *data, const uint32_t key, uint32_t *ret
 
 bool
 entity_set_components(const Entity_data *data, const uint32_t key, const uint32_t *set_value);
-
-
-
-
-bool
-entity_get_renderer(const Entity_data *data, const uint32_t key, uint32_t *return_value);
-
-
-bool
-entity_set_renderer(const Entity_data *data, const uint32_t key, const uint32_t *set_value);
 
 
 

@@ -85,15 +85,6 @@ entity_create(Entity_data *data, const size_t size_hint)
       else { memset(data->field_components, 0, sizeof(uint32_t) * size_hint * 1); }
     }
 
-    // Alloc space for renderer
-    if(all_alloc)
-    {
-      data->field_renderer = new uint32_t[size_hint * 1];
-      assert(data->field_renderer);
-      if(!data->field_renderer) { all_alloc = false; }
-      else { memset(data->field_renderer, 0, sizeof(uint32_t) * size_hint * 1); }
-    }
-
     // Alloc space for user_data
     if(all_alloc)
     {
@@ -134,10 +125,6 @@ entity_destroy(Entity_data *data)
     // Remove components
     if(data->field_components) { delete[] data->field_components; }
     data->field_components = nullptr;
-
-    // Remove renderer
-    if(data->field_renderer) { delete[] data->field_renderer; }
-    data->field_renderer = nullptr;
 
     // Remove user_data
     if(data->field_user_data) { delete[] data->field_user_data; }
@@ -202,7 +189,6 @@ entity_insert(Entity_data *data, const uint32_t key, const size_t insert_point)
     memmove(&data->field_name[insert_point * 32], &data->field_name[start_index * 32], size_to_end * sizeof(*data->field_name) * 32);
     memmove(&data->field_tags[insert_point * 1], &data->field_tags[start_index * 1], size_to_end * sizeof(*data->field_tags) * 1);
     memmove(&data->field_components[insert_point * 1], &data->field_components[start_index * 1], size_to_end * sizeof(*data->field_components) * 1);
-    memmove(&data->field_renderer[insert_point * 1], &data->field_renderer[start_index * 1], size_to_end * sizeof(*data->field_renderer) * 1);
     memmove(&data->field_user_data[insert_point * 1], &data->field_user_data[start_index * 1], size_to_end * sizeof(*data->field_user_data) * 1);
   }
 
@@ -234,7 +220,6 @@ entity_remove(Entity_data *data, const uint32_t key)
     memmove(&data->field_name[index_to_erase * 32], &data->field_name[start_index * 32], size_to_end * sizeof(*data->field_name) * 32);
     memmove(&data->field_tags[index_to_erase * 1], &data->field_tags[start_index * 1], size_to_end * sizeof(*data->field_tags) * 1);
     memmove(&data->field_components[index_to_erase * 1], &data->field_components[start_index * 1], size_to_end * sizeof(*data->field_components) * 1);
-    memmove(&data->field_renderer[index_to_erase * 1], &data->field_renderer[start_index * 1], size_to_end * sizeof(*data->field_renderer) * 1);
     memmove(&data->field_user_data[index_to_erase * 1], &data->field_user_data[start_index * 1], size_to_end * sizeof(*data->field_user_data) * 1);
 
     return true;
@@ -332,7 +317,6 @@ entity_resize_capacity(Entity_data *data, const size_t size_hint)
     memcpy(new_data.field_name, data->field_name, sizeof(char) * data->size * 32);
     memcpy(new_data.field_tags, data->field_tags, sizeof(uint32_t) * data->size * 1);
     memcpy(new_data.field_components, data->field_components, sizeof(uint32_t) * data->size * 1);
-    memcpy(new_data.field_renderer, data->field_renderer, sizeof(uint32_t) * data->size * 1);
     memcpy(new_data.field_user_data, data->field_user_data, sizeof(uintptr_t) * data->size * 1);
   }
 
@@ -353,10 +337,6 @@ entity_resize_capacity(Entity_data *data, const size_t size_hint)
     uint32_t *old_components = data->field_components;
     data->field_components = new_data.field_components;
     new_data.field_components = old_components;
-
-    uint32_t *old_renderer = data->field_renderer;
-    data->field_renderer = new_data.field_renderer;
-    new_data.field_renderer = old_renderer;
 
     uintptr_t *old_user_data = data->field_user_data;
     data->field_user_data = new_data.field_user_data;
@@ -439,26 +419,6 @@ entity_get_components_data(Entity_data *data)
   assert(data->field_components);
 
   return data->field_components;
-}
-
-
-const uint32_t*
-entity_get_const_renderer_data(const Entity_data *data)
-{
-  assert(data);
-  assert(data->field_renderer);
-
-  return data->field_renderer;
-}
-
-
-uint32_t*
-entity_get_renderer_data(Entity_data *data)
-{
-  assert(data);
-  assert(data->field_renderer);
-
-  return data->field_renderer;
 }
 
 
@@ -649,63 +609,6 @@ entity_set_components(const Entity_data *data, const uint32_t key, const uint32_
     if(index < data->size)
     {
       data->field_components[index] = *set_value;
-
-      return true;
-    }
-  }
-
-  return false;
-}
-
-
-bool
-entity_get_renderer(const Entity_data *data, const uint32_t key, uint32_t *return_value)
-{
-  assert(data);
-  assert(key != 0);
-  assert(data->field_renderer);
-  assert(return_value);
-
-  // Search for its index.
-  // If we find it we can return the value.
-
-  size_t index = 0;
-
-  if(entity_exists(data, key, &index))
-  {
-    assert(index < data->size);
-
-    if(index < data->size)
-    {
-      *return_value = data->field_renderer[index];
-
-      return true;
-    }
-  }
-
-  return false;
-}
-
-
-bool
-entity_set_renderer(const Entity_data *data, const uint32_t key, const uint32_t *set_value)
-{
-  assert(data);
-  assert(key != 0);
-  assert(data->field_renderer);
-  assert(set_value);
-
-  // Search for its index.
-  // If we find it we can set the value.
-
-  size_t index = 0;
-
-  if(entity_exists(data, key, &index))
-  {
-    assert(index < data->size);
-    if(index < data->size)
-    {
-      data->field_renderer[index] = *set_value;
 
       return true;
     }

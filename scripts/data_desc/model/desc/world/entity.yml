@@ -16,10 +16,6 @@ data:
       type: uint32_t
       include: <stdint.h>
 
-    - name: renderer
-      type: uint32_t
-      include: <stdint.h>
-
     - name: user_data
       type: uintptr_t
       data_type: void*

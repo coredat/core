@@ -3,19 +3,20 @@
 
 
 #include <stdint.h>
+#include <common/data_types.hpp>
 
 
 namespace Core {
+namespace Renderer_type {
 
-
-enum class Renderer_type : uint32_t
+enum ENUM : uint32_t
 {
-  unknown = 0,
-  material,
-  text,
+  unknown   = 0,
+  material  = Common::Data_type::renderer_mesh,
+  text      = Common::Data_type::renderer_text,
 };
 
-
+} // ns
 } // ns
 
 

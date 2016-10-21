@@ -130,9 +130,12 @@ set_rigidbody(const util::generic_id this_id,
 {
   set_collider(this_id, world, rigidbody.get_collider());
 
+  auto entity_data = world->entity;
+  assert(entity_data);
+  
   auto phys_pool = world->rigidbody_data;
   assert(phys_pool);
-
+  
   if (phys_pool)
   {
     // Set rb masking

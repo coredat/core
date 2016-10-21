@@ -58,13 +58,6 @@ display_entity_data(const Data::Entity_data *data)
       Data::entity_get_user_data(data, data->keys[i], &property_user_data_value);
       ImGui::Text("User data: %p", (void*)property_user_data_value);
 
-
-      // Get property renderer
-      uint32_t property_renderer_value;
-      Data::entity_get_renderer(data, data->keys[i], &property_renderer_value);
-      ImGui::Text("Renderer: %d", property_renderer_value);
-
-
       // End of data
       ImGui::Separator();
     }

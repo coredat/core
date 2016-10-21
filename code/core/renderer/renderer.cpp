@@ -15,7 +15,7 @@ Renderer::Renderer()
 }
 
 
-Renderer::Renderer(const Renderer_type renderer_type,
+Renderer::Renderer(const uint32_t renderer_type,
                    const util::generic_id arg_01,
                    const util::generic_id arg_02,
                    const util::generic_id arg_03)
@@ -27,7 +27,7 @@ Renderer::Renderer(const Renderer_type renderer_type,
 }
 
 
-Renderer_type
+uint32_t
 Renderer::get_type() const
 {
   return m_renderer_type;

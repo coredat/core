@@ -41,6 +41,15 @@ bool
 is_renderable(const uint32_t data_types);
 
 
+/*
+  Sugar method to get the active renderer
+  This works on the assumption that there can only be 1
+  renderer attached.
+*/
+uint32_t
+get_renderer_type(const uint32_t data_types);
+
+
 } // ns
 } // ns
 
