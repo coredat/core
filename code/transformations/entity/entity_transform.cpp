@@ -7,6 +7,8 @@
 #include <data/world/mesh_draw_call_data.hpp>
 #include <data/world/text_draw_call_data.hpp>
 #include <data/world/transform_data.hpp>
+#include <data/world/transform_data.hpp>
+#include <data/world/rigidbody_data.hpp>
 #include <common/error_strings.hpp>
 #include <utilities/logging.hpp>
 #include <assert.h>

@@ -15,9 +15,11 @@
 #include <core/common/collision.hpp>
 #include <core/transform/transform.hpp>
 #include <core/entity/detail/entity_id.hpp>
+#include <core/entity/entity_components.hpp>
 #include <core/physics/collision.hpp>
 
 #include <data/world_data.hpp>
+#include <data/world/rigidbody_data.hpp>
 
 
 namespace {
@@ -166,7 +168,7 @@ think(std::shared_ptr<Data::World> world, const float dt, Tick_information *out_
         const uint32_t entity_id(rb_data->keys[i]);
         const Core::Entity_ref ref(Core_detail::entity_id_from_uint(entity_id));
         
-        const Core::Transform old_trans(ref.get_transform());
+        const Core::Transform old_trans(Core::Entity_component::get_transform(ref));
         
         Core::Transform new_trans(to_core_trans(trans));
         new_trans.set_scale(old_trans.get_scale());

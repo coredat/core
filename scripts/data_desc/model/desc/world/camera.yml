@@ -4,14 +4,12 @@ data:
     auto_generated_id: false;
 
   fields:
-    # - name: entity_id
-    #   type: uint32_t
 
     - name: priority
       type: uint32_t
 
     - name: properties
-      type: Camera::Camera_properties
+      type: Camera_util::Camera_properties
       include: <systems/camera/camera_properties.hpp>
 
     - name: texture_id

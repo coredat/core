@@ -4,10 +4,7 @@
 
 #include <transformations/entity/entity_common.hpp>
 #include <data/fwd_dec_data.hpp>
-
-// Fwd Dec these
-#include <data/world/transform_data.hpp>
-#include <data/world/rigidbody_data.hpp>
+#include <utilities/generic_id.hpp>
 
 
 namespace Entity_detail {
@@ -15,8 +12,8 @@ namespace Entity_detail {
 
 /*
   Sets a transform.
-  This method will update all the transformation information
-  everywhere.
+  This needs to change to only deal with transform data, and the calling
+  code will need to check if the rigidbody needs updating.
 */
 void
 set_transform(const util::generic_id this_id,

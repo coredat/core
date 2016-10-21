@@ -46,9 +46,6 @@ public:
   
   void                          set_name(const char* set_name);               //!< Set the name of object.
   const char*                   get_name() const;                             //!< Returns a volatile pointer to the name.
-
-  void                          set_transform(const Transform &transform);    //!< Set the transform for the entity.
-  Transform                     get_transform() const;                        //!< Gets a copy of the current transform.
   
   void                          set_renderer(const Renderer &renderer);       //!< Set the entities renderer, an entity may only have one renderer.
   Renderer                      get_renderer() const;                         //!< Get the entities renderer.

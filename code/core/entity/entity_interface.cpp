@@ -298,32 +298,6 @@ Entity_interface::get_name() const
 
 
 void
-Entity_interface::set_transform(const Transform &transform)
-{
-  auto world_data = Core_detail::world_index_get_world_data(m_impl->id.world_instance);
-  
-  Entity_detail::set_transform(Core_detail::entity_id_to_uint(m_impl->id),
-                               world_data->entity,
-                               world_data->transform,
-                               world_data->rigidbody_data,
-                               world_data->mesh_data,
-                               world_data->text_data,
-                               transform);
-}
-
-
-Transform
-Entity_interface::get_transform() const
-{
-  auto world_data = Core_detail::world_index_get_world_data(m_impl->id.world_instance);
-
-  return Entity_detail::get_core_transform(Core_detail::entity_id_to_uint(m_impl->id),
-                                           world_data->entity,
-                                           world_data->transform);
-}
-
-
-void
 Entity_interface::set_renderer(const Core::Renderer &renderer)
 {
   auto world_data = Core_detail::world_index_get_world_data(m_impl->id.world_instance);
