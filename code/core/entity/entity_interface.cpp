@@ -297,54 +297,10 @@ Entity_interface::get_name() const
 }
 
 
-void
-Entity_interface::set_renderer(const Core::Renderer &renderer)
-{
-  auto world_data = Core_detail::world_index_get_world_data(m_impl->id.world_instance);
-
-  Entity_detail::set_renderer(Core_detail::entity_id_to_uint(m_impl->id),
-                              world_data->entity,
-                              world_data->transform,
-                              world_data->mesh_data,
-                              world_data->text_data,
-                              renderer);
-}
-
-
-Renderer
-Entity_interface::get_renderer() const
-{
-  auto world_data = Core_detail::world_index_get_world_data(m_impl->id.world_instance);
-
-  return Entity_detail::get_renderer(Core_detail::entity_id_to_uint(m_impl->id),
-                                     world_data->entity,
-                                     world_data->mesh_data);
-}
-
-
-void
-Entity_interface::set_rigidbody(const Rigidbody &rigidbody)
-{
-  auto world_data = Core_detail::world_index_get_world_data(m_impl->id.world_instance);
-  
-  Entity_detail::set_rigidbody(Core_detail::entity_id_to_uint(m_impl->id),
-                               world_data.get(),
-                               rigidbody);
-}
-
-
-Rigidbody
-Entity_interface::get_rigidbody() const
-{
-  return Entity_detail::get_rigidbody(Core_detail::entity_id_to_uint(m_impl->id));
-}
-
-
 uint32_t
 Entity_interface::get_id() const
 {
   return Core_detail::entity_id_to_uint(m_impl->id);
-//  return Entity_detail::get_id(Core_detail::entity_id_to_uint(m_impl->id), m_impl->world->entity);
 }
 
 

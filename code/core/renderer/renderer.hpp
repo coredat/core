@@ -29,11 +29,13 @@ class Renderer final
   friend class Text_renderer;
   friend Core::Renderer Entity_detail::get_renderer(const util::generic_id, Data::Entity_data *,Data::Mesh_draw_call_data *);
   
-  explicit                  Renderer(const Renderer_type renderer_type = Renderer_type::unknown,
+  explicit                  Renderer(const Renderer_type renderer_type,
                                      const util::generic_id arg_01 = util::generic_id_invalid(),
                                      const util::generic_id arg_02 = util::generic_id_invalid(),
                                      const util::generic_id arg_03 = util::generic_id_invalid());
 public:
+
+  explicit                  Renderer();
 
   Renderer&                 operator=(const Renderer &other);
   

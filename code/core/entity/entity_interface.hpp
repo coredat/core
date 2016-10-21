@@ -47,13 +47,6 @@ public:
   void                          set_name(const char* set_name);               //!< Set the name of object.
   const char*                   get_name() const;                             //!< Returns a volatile pointer to the name.
   
-  void                          set_renderer(const Renderer &renderer);       //!< Set the entities renderer, an entity may only have one renderer.
-  Renderer                      get_renderer() const;                         //!< Get the entities renderer.
-  
-  void                          set_rigidbody(const Rigidbody &rigidbody);    //!< Set the rigidbody for the entity.
-  Rigidbody                     get_rigidbody() const;                        //!< Get the rigidbody for the entity. Returns by type.
-  
-  
   // ** Equality ** //
   bool                          operator ==(const Entity_interface &other) const;
   bool                          operator !=(const Entity_interface &other) const;

@@ -9,6 +9,12 @@
 namespace Core {
 
 
+Renderer::Renderer()
+: Renderer(Renderer_type::unknown)
+{
+}
+
+
 Renderer::Renderer(const Renderer_type renderer_type,
                    const util::generic_id arg_01,
                    const util::generic_id arg_02,

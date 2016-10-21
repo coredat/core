@@ -5,6 +5,8 @@
 #include <core/color/color.hpp>
 #include <core/world/detail/world_index.hpp>
 #include <core/transform/transform.hpp>
+#include <core/physics/rigidbody.hpp>
+#include <core/renderer/renderer.hpp>
 #include <data/world/entity_data.hpp>
 #include <data/world/camera_data.hpp>
 #include <common/data_types.hpp>
@@ -12,6 +14,8 @@
 #include <utilities/logging.hpp>
 #include <transformations/entity/entity_camera.hpp>
 #include <transformations/entity/entity_transform.hpp>
+#include <transformations/entity/entity_renderer.hpp>
+#include <transformations/entity/entity_rigidbody.hpp>
 
 
 namespace Core {
@@ -76,6 +80,137 @@ has_transform(const Core::Entity_ref &ref)
 {
   // You cannot remove a transform from an entity.
   return true;
+}
+
+
+// Renderer Component //
+
+bool
+set_renderer(const Core::Entity_ref &ref,
+             const Core::Renderer &renderer)
+{
+  if(!ref)
+  {
+    LOG_ERROR(Error_string::entity_is_invalid());
+    return false;
+  }
+
+  const uint32_t entity_uint_id(ref.get_id());
+  const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(entity_uint_id);
+
+  auto world_data(Core_detail::world_index_get_world_data(entity_id.world_instance));
+  assert(world_data);
+  
+  Entity_detail::set_renderer(entity_uint_id,
+                              world_data->entity,
+                              world_data->transform,
+                              world_data->mesh_data,
+                              world_data->text_data,
+                              renderer);
+  
+  return true;
+}
+  
+
+Core::Renderer
+get_renderer(const Core::Entity_ref &ref)
+{
+  if(!ref)
+  {
+    LOG_ERROR(Error_string::entity_is_invalid());
+    return Core::Renderer();
+  }
+
+  const uint32_t entity_uint_id(ref.get_id());
+  const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(entity_uint_id);
+
+  auto world_data(Core_detail::world_index_get_world_data(entity_id.world_instance));
+  assert(world_data);
+  
+  return Entity_detail::get_renderer(entity_uint_id,
+                                     world_data->entity,
+                                     world_data->mesh_data);
+}
+
+
+void
+remove_renderer(const Core::Entity_ref &renderer)
+{
+  assert(false); // not impl because churn going on here.
+}
+
+
+bool
+has_renderer(const Core::Entity_ref &ref)
+{
+  assert(false); // churn
+  return false;
+}
+
+
+/*
+  Rigidbody Component
+  --
+  Attaching a rigidbody will use the use physics
+  engine to update the entities transform.
+*/
+
+bool
+set_rigidbody(const Core::Entity_ref &ref,
+              const Core::Rigidbody &rigidbody)
+{
+  if(!ref)
+  {
+    LOG_ERROR(Error_string::entity_is_invalid());
+    return false;
+  }
+
+  const uint32_t entity_uint_id(ref.get_id());
+  const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(entity_uint_id);
+
+  auto world_data(Core_detail::world_index_get_world_data(entity_id.world_instance));
+  assert(world_data);
+  
+  Entity_detail::set_rigidbody(entity_uint_id,
+                               world_data.get(),
+                               rigidbody);
+  
+  return true;
+}
+  
+
+Core::Rigidbody
+get_rigidbody(const Core::Entity_ref &ref)
+{
+  if(!ref)
+  {
+    LOG_ERROR(Error_string::entity_is_invalid());
+    return Core::Rigidbody();
+  }
+
+  const uint32_t entity_uint_id(ref.get_id());
+  const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(entity_uint_id);
+
+  auto world_data(Core_detail::world_index_get_world_data(entity_id.world_instance));
+  assert(world_data);
+  
+  // Finish this.
+  return Entity_detail::get_rigidbody(entity_uint_id);
+}
+
+
+void
+remove_rigidbody(const Core::Entity_ref &rigidbody)
+{
+  assert(false); // churn alert
+}
+
+
+bool
+has_rigidbody(const Core::Entity_ref &ref)
+{
+  assert(false); // churn alert.
+  return false;
 }
 
 
