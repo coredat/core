@@ -9,6 +9,15 @@ void
 initialize()
 {
   Ogl::vao_init();
+  Ogl::default_state();
+}
+
+
+void
+reset()
+{
+  Ogl::vao_init();
+  Ogl::default_state();
 }
 
 

@@ -34,8 +34,9 @@ vao_init()
   if (!vao)
   {
     glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
   }
+  
+  glBindVertexArray(vao);
 }
 
 

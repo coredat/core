@@ -19,6 +19,23 @@
 #include <core/context/detail/context_sdl_impl.hpp>
 
 
+#define NK_INCLUDE_FIXED_TYPES
+#define NK_INCLUDE_STANDARD_IO
+#define NK_INCLUDE_STANDARD_VARARGS
+#define NK_INCLUDE_DEFAULT_ALLOCATOR
+#define NK_INCLUDE_VERTEX_BUFFER_OUTPUT
+#define NK_INCLUDE_FONT_BAKING
+#define NK_INCLUDE_DEFAULT_FONT
+#define NK_IMPLEMENTATION
+#define NK_SDL_GL3_IMPLEMENTATION
+#include <3rdparty/nuklear/nuklear.h>
+#include <3rdparty/nuklear/nuklear_sdl_gl3.h>
+
+#define MAX_VERTEX_MEMORY 512 * 1024
+#define MAX_ELEMENT_MEMORY 128 * 1024
+
+
+
 namespace {
   
   // only one instance allowed in an application lifetime.
@@ -41,6 +58,8 @@ Context::Impl
 {
   std::shared_ptr<Context_detail::Data> context_data;
   Core_detail::Sdl_context impl_context;
+  
+  struct nk_context *ctx;
 };
 
 
@@ -93,6 +112,12 @@ Context::Context(const uint32_t width,
   #ifdef CORE_DEBUG_MENU
   ImGui_ImplSdlGL3_Init(m_impl->impl_context.get_sdl_window());
   ImGui_ImplSdlGL3_NewFrame(m_impl->impl_context.get_sdl_window());
+  
+  m_impl->ctx = nk_sdl_init(m_impl->impl_context.get_sdl_window());
+
+  struct nk_font_atlas *atlas;
+  nk_sdl_font_stash_begin(&atlas);
+  nk_sdl_font_stash_end();
   #endif
   
   // After all HW has been init, init the context data.
@@ -200,7 +225,74 @@ Context::is_open() const
 
   assert(m_impl);
   #ifdef CORE_DEBUG_MENU
-  ImGui::Render();
+//  ImGui::Render();
+
+  static int mcheck = nk_true;
+  
+  auto ctx = m_impl->ctx;
+
+  struct nk_panel layout;
+  nk_begin(m_impl->ctx, &layout, "Demo", nk_rect(200, 200, 210, 250),
+              NK_WINDOW_BORDER|NK_WINDOW_MOVABLE|NK_WINDOW_SCALABLE|
+            NK_WINDOW_MINIMIZABLE|NK_WINDOW_TITLE);
+  
+  nk_menubar_begin(m_impl->ctx);
+
+  nk_checkbox_label(m_impl->ctx, "check", &mcheck);
+  nk_checkbox_label(m_impl->ctx, "check", &mcheck);
+  
+  static char text[9][64];
+  static int text_len[9];
+  static const float ratio[] = {120, 150};
+  
+//  nk_layout_row(ctx, NK_STATIC, 25, 2, ratio);
+//  nk_layout_row_static(ctx, 30, 2, 2);
+  nk_layout_row_dynamic(ctx, 30, 2);
+  nk_label(ctx, "Default:", NK_TEXT_LEFT);
+  nk_edit_string(ctx, NK_EDIT_FIELD, text[0], &text_len[0], 64, nk_filter_default);
+  
+  if(nk_tree_push(ctx, NK_TREE_TAB, "Transform", NK_MINIMIZED))
+  {
+    nk_checkbox_label(m_impl->ctx, "check", &mcheck);
+    nk_checkbox_label(m_impl->ctx, "check", &mcheck);
+    
+    nk_tree_pop(ctx);
+  }
+  
+  if(nk_tree_push(ctx, NK_TREE_TAB, "Rigidbody", NK_MINIMIZED))
+  {
+    nk_checkbox_label(m_impl->ctx, "check", &mcheck);
+    nk_checkbox_label(m_impl->ctx, "check", &mcheck);
+    
+    nk_tree_pop(ctx);
+  }
+  
+  if(nk_tree_push(ctx, NK_TREE_TAB, "Renderer", NK_MINIMIZED))
+  {
+    nk_checkbox_label(m_impl->ctx, "check", &mcheck);
+    nk_checkbox_label(m_impl->ctx, "check", &mcheck);
+    
+    nk_tree_pop(ctx);
+  }
+    
+
+  
+  nk_layout_row_dynamic(m_impl->ctx, 30, 2);
+  nk_checkbox_label(m_impl->ctx, "check", &mcheck);
+//  nk_layout_row_push(m_impl->ctx, 70);
+//  nk_menu_item_label(m_impl->ctx, "About", NK_TEXT_LEFT);
+//      show_app_about = nk_true;
+
+  nk_menubar_end(m_impl->ctx);
+  
+//  nk_tree_push(ctx, NK_TREE_TAB, "Widgets", NK_MINIMIZED);
+//  nk_tree_pop(ctx);  
+  
+  nk_end(m_impl->ctx);
+
+  nk_sdl_render(NK_ANTI_ALIASING_ON, MAX_VERTEX_MEMORY, MAX_ELEMENT_MEMORY);
+  
+  Graphics_api::reset();
   #endif
   
   ImGui_ImplSdlGL3_NewFrame(m_impl->impl_context.get_sdl_window());
@@ -210,7 +302,9 @@ Context::is_open() const
   // Reset the memory pool.
   Memory::scratch_reset();
   
+  nk_input_begin(m_impl->ctx);
   return m_impl->impl_context.process();
+  nk_input_end(m_impl->ctx);
 }
 
 

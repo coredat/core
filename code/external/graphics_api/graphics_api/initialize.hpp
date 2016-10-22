@@ -12,6 +12,13 @@ void
 initialize();
 
 
+/*
+  Resets to default states.
+*/
+void
+reset();
+
+
 } // ns
 
 

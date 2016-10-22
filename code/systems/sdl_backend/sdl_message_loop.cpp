@@ -1,9 +1,20 @@
 #include "sdl_message_loop.hpp"
 #include <stdint.h>
 #include <assert.h>
-#include <3rdparty/imgui/imgui.h>
-#include <3rdparty/imgui/imgui_impl_sdl_gl3.h>
 #include <utilities/logging.hpp>
+
+//#define NK_SDL_GL3_IMPLEMENTATION
+#define NK_INCLUDE_FIXED_TYPES
+#define NK_INCLUDE_STANDARD_IO
+#define NK_INCLUDE_STANDARD_VARARGS
+#define NK_INCLUDE_DEFAULT_ALLOCATOR
+#define NK_INCLUDE_VERTEX_BUFFER_OUTPUT
+#define NK_INCLUDE_FONT_BAKING
+#define NK_INCLUDE_DEFAULT_FONT
+#define NK_API
+
+#include <3rdparty/nuklear/nuklear.h>
+#include <3rdparty/nuklear/nuklear_sdl_gl3.h>
 
 
 namespace
@@ -46,10 +57,7 @@ event_process()
     for(uint32_t cb = 0; cb < max_sdl_callbacks; ++cb)
     {
       #ifdef CORE_DEBUG_MENU
-//      if(ImGui_ImplSdlGL3_ProcessEvent(&evt))
-      {
-//        continue;
-      }
+      nk_sdl_handle_event(&evt);
       #endif
       
       if(callbacks[cb])
