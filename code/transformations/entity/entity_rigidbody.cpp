@@ -17,6 +17,7 @@
 #include <transformations/physics/q3_math_extensions.hpp>
 #include <utilities/bits.hpp>
 #include <assert.h>
+#include <btBulletDynamicsCommon.h>
 
 
 namespace Entity_detail {
@@ -153,16 +154,39 @@ set_rigidbody(const util::generic_id this_id,
     Data::data_lock(phys_pool);
     
     const Core::Transform transform = get_core_transform(this_id, world->entity, world->transform);
+    const Core::Box_collider box = Core::Collider_utis::cast_to_box_collider(rigidbody.get_collider());
     
-    q3Body *body = nullptr;
-    Physics_transform::convert_core_rb_to_qu3e(&this_id,
-                                               &rigidbody,
-                                               &transform,
-                                               &body,
-                                               world->scene,
-                                               1);
     
-    const uintptr_t body_property(reinterpret_cast<uintptr_t>(body));
+    btCollisionShape* box_shape = new btBoxShape(btVector3(box.get_x_half_extent() * math::get_x(transform.get_scale()),
+                                                           box.get_y_half_extent() * math::get_y(transform.get_scale()),
+                                                           box.get_z_half_extent() * math::get_z(transform.get_scale())));
+    
+    
+    btDefaultMotionState* motion_state = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(math::get_x(transform.get_position()), math::get_y(transform.get_position()), math::get_z(transform.get_position()))));
+
+    
+    btScalar mass = rigidbody.get_mass();
+    btVector3 iniertia(0, 0, 0);
+    
+    box_shape->calculateLocalInertia(mass, iniertia);
+    btRigidBody::btRigidBodyConstructionInfo rb_ci(mass, motion_state, box_shape, iniertia);
+    
+    btRigidBody* rb = new btRigidBody(rb_ci);
+    
+    world->dynamicsWorld->addRigidBody(rb);
+
+//    dynamicsWorld->addRigidBody(fallRigidBody);
+    
+    
+//    q3Body *body = nullptr;
+//    Physics_transform::convert_core_rb_to_qu3e(&this_id,
+//                                               &rigidbody,
+//                                               &transform,
+//                                               &body,
+//                                               world->scene,
+//                                               1);
+    
+    const uintptr_t body_property(reinterpret_cast<uintptr_t>(rb));
     Data::rigidbody_set_rigidbody(phys_pool, this_id, &body_property);
     
     Data::data_unlock(phys_pool);

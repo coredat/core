@@ -136,9 +136,17 @@ think(std::shared_ptr<Data::World> world, const float dt, Tick_information *out_
     Core::Collision_pair *collisions_arr = nullptr;
     uint32_t number_of_collisions = 0;
     
-    Physics_transform::update_world(world,
-                                    &collisions_arr,
-                                    &number_of_collisions);
+    {
+              world->dynamicsWorld->stepSimulation(1 / 60.f, 10);
+
+//              btTransform trans;
+//              fallRigidBody->getMotionState()->getWorldTransform(trans);
+
+    }
+    
+//    Physics_transform::update_world(world,
+//                                    &collisions_arr,
+//                                    &number_of_collisions);
     
     if(number_of_collisions && callback_hack)
     {
@@ -163,15 +171,21 @@ think(std::shared_ptr<Data::World> world, const float dt, Tick_information *out_
       
       if(rb_ptr)
       {
-        const q3Transform trans(reinterpret_cast<q3Body*>(rb_ptr)->GetTransform());
+//        const q3Transform trans(reinterpret_cast<q3Body*>(rb_ptr)->GetTransform());
+        btTransform trans;
+        reinterpret_cast<btRigidBody*>(rb_ptr)->getMotionState()->getWorldTransform(trans);
         
+        Core::Transform core_trans;
+        core_trans.set_position(math::vec3_init(trans.getOrigin().x(), trans.getOrigin().y(), trans.getOrigin().z()));
+
         const uint32_t entity_id(rb_data->keys[i]);
         const Core::Entity_ref ref(Core_detail::entity_id_from_uint(entity_id));
         
         const Core::Transform old_trans(Core::Entity_component::get_transform(ref));
         
-        Core::Transform new_trans(to_core_trans(trans));
-        new_trans.set_scale(old_trans.get_scale());
+//        Core::Transform new_trans(to_core_trans(trans));
+        core_trans.set_scale(old_trans.get_scale());
+
         
         Entity_detail::set_transform(entity_id,
                                      world->entity,
@@ -179,7 +193,7 @@ think(std::shared_ptr<Data::World> world, const float dt, Tick_information *out_
                                      world->rigidbody_data,
                                      world->mesh_data,
                                      world->text_data,
-                                     new_trans,
+                                     core_trans,
                                      false);
       }
     }

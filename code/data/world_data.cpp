@@ -41,6 +41,13 @@ World::World(const uint32_t entity_hint)
   Data::Text_draw_call_data *text_draw_calls = new Data::Text_draw_call_data;
   Data::text_draw_call_create(text_draw_calls, entity_hint);
   
+  broadphase = new btDbvtBroadphase();
+  collisionConfiguration = new btDefaultCollisionConfiguration();
+  dispatcher = new btCollisionDispatcher(collisionConfiguration);
+  btGImpactCollisionAlgorithm::registerAlgorithm(dispatcher);
+  dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
+  dynamicsWorld->setGravity(btVector3(0, -10, 0));  
+  
   this->entity_removal       = graph_changes;
   this->rigidbody_data       = rb_data;
   this->mesh_data            = mesh_data;
@@ -134,11 +141,12 @@ world_update_scene_graph_changes(Data::World *world_data,
         uintptr_t body_ptr = 0;
         Data::rigidbody_get_rigidbody(rb_data, id, &body_ptr);
         
-        q3Body *body = reinterpret_cast<q3Body*>(body_ptr);
+        btRigidBody *body = reinterpret_cast<btRigidBody*>(body_ptr);
         
         if(body)
         {
-          world_data->scene->RemoveBody(body);
+          world_data->dynamicsWorld->removeRigidBody(body);
+//          world_data->scene->RemoveBody(body);
         }
         
         Data::rigidbody_remove(rb_data, id);

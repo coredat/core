@@ -6,6 +6,10 @@
 #include <data/fwd_dec_data.hpp>
 #include <utilities/generic_id.hpp>
 #include <3rdparty/qu3e/q3.h>
+
+#include <btBulletDynamicsCommon.h>
+#include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
+
 #include <stdint.h>
 
 
@@ -23,6 +27,13 @@ struct World
   Text_draw_call_data           *text_data       = nullptr;
   
   q3Scene                       *scene           = nullptr;
+  
+  btBroadphaseInterface* broadphase = nullptr;
+  btDefaultCollisionConfiguration* collisionConfiguration = nullptr;
+  btCollisionDispatcher* dispatcher = nullptr;
+  btSequentialImpulseConstraintSolver* solver = nullptr;
+  btDiscreteDynamicsWorld* dynamicsWorld = nullptr;
+  
   
   World(const World&) = delete;
   World& operator=(const World&) = delete;

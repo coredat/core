@@ -41,6 +41,7 @@ core_project_data = {
   inc_dirs_macosx = {
     "/usr/local/include/",
     "/usr/local/include/freetype2/",
+    "/usr/local/include/bullet",
   },
 
   lib_dirs_windows = {
@@ -66,5 +67,8 @@ core_project_data = {
     "-lsdl2",
     "-lsdl2_mixer",
     "-lfreetype",
+    "-lBulletCollision",
+    "-lBulletDynamics",
+    "-lLinearMath",
   },
 }
