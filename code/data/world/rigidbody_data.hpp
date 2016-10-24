@@ -14,7 +14,6 @@
 #include <stddef.h>
 #include <math/transform/transform.hpp>
 #include <math/geometry/aabb.hpp>
-#include <3rdparty/qu3e/q3.h>
 
 
 namespace Data {

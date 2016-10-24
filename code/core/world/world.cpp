@@ -11,10 +11,10 @@
 #include <data/context_data/input_pool.hpp>
 #include <core/context/detail/context_data.hpp>
 #include <common/fixed_string_search.hpp>
-#include <transformations/physics/q3_math_extensions.hpp>
 #include <systems/engine/engine.hpp>
 #include <systems/engine/tick_information.hpp>
 #include <debug_gui/debug_menu.hpp>
+#include <transformations/physics/bullet/find_by_ray.hpp>
 #include <utilities/timer.hpp>
 #include <utilities/logging.hpp>
 
@@ -66,7 +66,7 @@ World::World(Context &ctx, const World_setup setup)
   m_impl->context = &ctx;
   m_impl->dt_timer.start();
   
-  Engine::initialize();
+  Engine::initialize(Core_detail::world_index_get_world_data(m_impl->world_instance_id));
 }
 
 
@@ -166,7 +166,7 @@ World::think()
     Debug_menu::display_world_data_menu(world.get(),
                                         m_impl->dt,
                                         m_impl->dt_mul,
-                                        world->scene->GetBodyCount(),
+                                        12345,
                                         tick_info.number_of_draw_calls,
                                         tick_info.camera_runs);
   }
@@ -239,48 +239,10 @@ World::find_entities_by_tag(const uint32_t tag_id,
 Collision
 World::find_entity_by_ray(const Ray ray) const
 {
-  struct Raycast : public q3QueryCallback
-  {
-    bool ReportShape(q3Box *shape)
-    {
-      if(distance > ray_data.toi)
-      {
-        distance = ray_data.toi;
-        auto parent = shape->body;
-        auto user_data = util::generic_id_from_ptr(parent->GetUserData());
-        
-        hit_entity = Entity_ref(Core_detail::entity_id_from_uint(user_data));
-        hit_normal = math::vec3_from_q3vec(ray_data.normal);
-        hit_pos    = math::vec3_from_q3vec(ray_data.GetImpactPoint());
-      }
-      
-      return hit_entity;
-    }
-    
-    std::shared_ptr<const Data::World> data;
-    Entity_ref hit_entity = Entity_ref();
-    math::vec3 hit_pos    = math::vec3_zero();
-    math::vec3 hit_normal = math::vec3_zero();
-    q3RaycastData ray_data;
-    float distance = FLT_MAX;
-  };
-  
   assert(m_impl && m_impl->world_instance_id);
   auto world = Core_detail::world_index_get_world_data(m_impl->world_instance_id);
   
-  Raycast raycast;
-  
-  raycast.data           = get_world_data();
-  raycast.ray_data.start = math::vec3_to_q3vec(ray.get_origin());
-  raycast.ray_data.dir   = math::vec3_to_q3vec(math::vec3_normalize(ray.get_direction()));
-  raycast.ray_data.t     = FLT_MAX;
-  raycast.ray_data.toi   = raycast.ray_data.t;
-  
-  world->scene->RayCast(&raycast, raycast.ray_data);
-  
-  const Contact contact(raycast.hit_pos, raycast.hit_normal, 0.f);
-  
-  return Collision(raycast.hit_entity, &contact, 1);
+  return Physics_transform::find_entity_from_ray(ray, world->dynamicsWorld);
 }
 
 

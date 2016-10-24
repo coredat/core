@@ -17,12 +17,12 @@ namespace Engine {
 
 
 void
-initialize()
+initialize(std::shared_ptr<Data::World> world)
 {
   init = true;
 
   Scene_graph_tick::initialize();
-  Physics_tick::initialize();
+  Physics_tick::initialize(world);
   Renderer_tick::initialize();
 }
 

@@ -232,62 +232,64 @@ Context::is_open() const
   auto ctx = m_impl->ctx;
 
   struct nk_panel layout;
-  nk_begin(m_impl->ctx, &layout, "Demo", nk_rect(200, 200, 210, 250),
+  if(nk_begin(m_impl->ctx, &layout, "Demo", nk_rect(200, 200, 210, 250),
               NK_WINDOW_BORDER|NK_WINDOW_MOVABLE|NK_WINDOW_SCALABLE|
-            NK_WINDOW_MINIMIZABLE|NK_WINDOW_TITLE);
-  
-  nk_menubar_begin(m_impl->ctx);
-
-  nk_checkbox_label(m_impl->ctx, "check", &mcheck);
-  nk_checkbox_label(m_impl->ctx, "check", &mcheck);
-  
-  static char text[9][64];
-  static int text_len[9];
-  static const float ratio[] = {120, 150};
-  
-//  nk_layout_row(ctx, NK_STATIC, 25, 2, ratio);
-//  nk_layout_row_static(ctx, 30, 2, 2);
-  nk_layout_row_dynamic(ctx, 30, 2);
-  nk_label(ctx, "Default:", NK_TEXT_LEFT);
-  nk_edit_string(ctx, NK_EDIT_FIELD, text[0], &text_len[0], 64, nk_filter_default);
-  
-  if(nk_tree_push(ctx, NK_TREE_TAB, "Transform", NK_MINIMIZED))
+            NK_WINDOW_MINIMIZABLE|NK_WINDOW_TITLE))
   {
-    nk_checkbox_label(m_impl->ctx, "check", &mcheck);
-    nk_checkbox_label(m_impl->ctx, "check", &mcheck);
-    
-    nk_tree_pop(ctx);
-  }
   
-  if(nk_tree_push(ctx, NK_TREE_TAB, "Rigidbody", NK_MINIMIZED))
-  {
-    nk_checkbox_label(m_impl->ctx, "check", &mcheck);
-    nk_checkbox_label(m_impl->ctx, "check", &mcheck);
-    
-    nk_tree_pop(ctx);
-  }
-  
-  if(nk_tree_push(ctx, NK_TREE_TAB, "Renderer", NK_MINIMIZED))
-  {
-    nk_checkbox_label(m_impl->ctx, "check", &mcheck);
-    nk_checkbox_label(m_impl->ctx, "check", &mcheck);
-    
-    nk_tree_pop(ctx);
-  }
-    
+    nk_menubar_begin(m_impl->ctx);
 
-  
-  nk_layout_row_dynamic(m_impl->ctx, 30, 2);
-  nk_checkbox_label(m_impl->ctx, "check", &mcheck);
-//  nk_layout_row_push(m_impl->ctx, 70);
-//  nk_menu_item_label(m_impl->ctx, "About", NK_TEXT_LEFT);
-//      show_app_about = nk_true;
+    nk_checkbox_label(m_impl->ctx, "check", &mcheck);
+    nk_checkbox_label(m_impl->ctx, "check", &mcheck);
+    
+    static char text[9][64];
+    static int text_len[9];
+    static const float ratio[] = {120, 150};
+    
+  //  nk_layout_row(ctx, NK_STATIC, 25, 2, ratio);
+  //  nk_layout_row_static(ctx, 30, 2, 2);
+    nk_layout_row_dynamic(ctx, 30, 2);
+    nk_label(ctx, "Default:", NK_TEXT_LEFT);
+    nk_edit_string(ctx, NK_EDIT_FIELD, text[0], &text_len[0], 64, nk_filter_default);
+    
+    if(nk_tree_push(ctx, NK_TREE_TAB, "Transform", NK_MINIMIZED))
+    {
+      nk_checkbox_label(m_impl->ctx, "check", &mcheck);
+      nk_checkbox_label(m_impl->ctx, "check", &mcheck);
+      
+      nk_tree_pop(ctx);
+    }
+    
+    if(nk_tree_push(ctx, NK_TREE_TAB, "Rigidbody", NK_MINIMIZED))
+    {
+      nk_checkbox_label(m_impl->ctx, "check", &mcheck);
+      nk_checkbox_label(m_impl->ctx, "check", &mcheck);
+      
+      nk_tree_pop(ctx);
+    }
+    
+    if(nk_tree_push(ctx, NK_TREE_TAB, "Renderer", NK_MINIMIZED))
+    {
+      nk_checkbox_label(m_impl->ctx, "check", &mcheck);
+      nk_checkbox_label(m_impl->ctx, "check", &mcheck);
+      
+      nk_tree_pop(ctx);
+    }
+      
 
-  nk_menubar_end(m_impl->ctx);
+    
+    nk_layout_row_dynamic(m_impl->ctx, 30, 2);
+    nk_checkbox_label(m_impl->ctx, "check", &mcheck);
+  //  nk_layout_row_push(m_impl->ctx, 70);
+  //  nk_menu_item_label(m_impl->ctx, "About", NK_TEXT_LEFT);
+  //      show_app_about = nk_true;
+
+    nk_menubar_end(m_impl->ctx);
+    
+  //  nk_tree_push(ctx, NK_TREE_TAB, "Widgets", NK_MINIMIZED);
+  //  nk_tree_pop(ctx);  
   
-//  nk_tree_push(ctx, NK_TREE_TAB, "Widgets", NK_MINIMIZED);
-//  nk_tree_pop(ctx);  
-  
+  }
   nk_end(m_impl->ctx);
 
   nk_sdl_render(NK_ANTI_ALIASING_ON, MAX_VERTEX_MEMORY, MAX_ELEMENT_MEMORY);

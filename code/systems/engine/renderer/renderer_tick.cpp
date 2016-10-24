@@ -21,8 +21,6 @@
 #include <transformations/camera/cam_priorities.hpp>
 #include <transformations/rendering/render_scene.hpp>
 
-#include <3rdparty/qu3e/scene/q3Scene.h>
-
 // Remove
 #include <core/transform/transform.hpp>
 

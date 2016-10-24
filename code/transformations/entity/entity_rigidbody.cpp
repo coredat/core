@@ -13,8 +13,8 @@
 #include <common/error_strings.hpp>
 #include <common/data_types.hpp>
 #include <utilities/logging.hpp>
-#include <transformations/physics/core_to_qu3e.hpp>
-#include <transformations/physics/q3_math_extensions.hpp>
+#include <transformations/physics/bullet/core_rb_to_bullet_rb.hpp>
+#include <transformations/physics/bullet/bullet_math_extensions.hpp>
 #include <utilities/bits.hpp>
 #include <assert.h>
 #include <btBulletDynamicsCommon.h>
@@ -83,11 +83,11 @@ set_collider(const util::generic_id this_id,
               
               Data::data_unlock(rb_data);
               
-              update_collider(this_id,
-                              world->entity,
-                              world->rigidbody_data,
-                              &curr_transform,
-                              &entity_aabb);
+//              update_collider(this_id,
+//                              world->entity,
+//                              world->rigidbody_data,
+//                              &curr_transform,
+//                              &entity_aabb);
             }
           }
           break;
@@ -147,46 +147,23 @@ set_rigidbody(const util::generic_id this_id,
     Data::rigidbody_set_collision_id(phys_pool, this_id, &mask);
     
     Data::data_unlock(phys_pool);
+    
   }
   
-  LOG_TODO_ONCE("This is scratch code to get rbs working")
   {
     Data::data_lock(phys_pool);
     
-    const Core::Transform transform = get_core_transform(this_id, world->entity, world->transform);
-    const Core::Box_collider box = Core::Collider_utis::cast_to_box_collider(rigidbody.get_collider());
+    const Core::Transform core_transform(get_core_transform(this_id, world->entity, world->transform));
+    const Core::Collider core_collider(rigidbody.get_collider());
     
+    btCollisionShape *shape(Physics_transform::convert_core_collider_to_bullet_collider(&core_collider, &core_transform, this_id));
     
-    btCollisionShape* box_shape = new btBoxShape(btVector3(box.get_x_half_extent() * math::get_x(transform.get_scale()),
-                                                           box.get_y_half_extent() * math::get_y(transform.get_scale()),
-                                                           box.get_z_half_extent() * math::get_z(transform.get_scale())));
+    const btTransform transform(math::transform_to_bt(core_transform));
+    btRigidBody *bt_rb(Physics_transform::convert_core_rb_to_bullet_rb(&rigidbody, shape, &transform));
     
+    world->dynamicsWorld->addRigidBody(bt_rb);
     
-    btDefaultMotionState* motion_state = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(math::get_x(transform.get_position()), math::get_y(transform.get_position()), math::get_z(transform.get_position()))));
-
-    
-    btScalar mass = rigidbody.get_mass();
-    btVector3 iniertia(0, 0, 0);
-    
-    box_shape->calculateLocalInertia(mass, iniertia);
-    btRigidBody::btRigidBodyConstructionInfo rb_ci(mass, motion_state, box_shape, iniertia);
-    
-    btRigidBody* rb = new btRigidBody(rb_ci);
-    
-    world->dynamicsWorld->addRigidBody(rb);
-
-//    dynamicsWorld->addRigidBody(fallRigidBody);
-    
-    
-//    q3Body *body = nullptr;
-//    Physics_transform::convert_core_rb_to_qu3e(&this_id,
-//                                               &rigidbody,
-//                                               &transform,
-//                                               &body,
-//                                               world->scene,
-//                                               1);
-    
-    const uintptr_t body_property(reinterpret_cast<uintptr_t>(rb));
+    const uintptr_t body_property(reinterpret_cast<uintptr_t>(bt_rb));
     Data::rigidbody_set_rigidbody(phys_pool, this_id, &body_property);
     
     Data::data_unlock(phys_pool);
@@ -212,73 +189,73 @@ update_collider(const util::generic_id this_id,
                 const math::aabb *model_aabb,
                 const bool inform_phys_engine)
 {
-  // Check valid
-  if(!is_valid(this_id, entity_data, true)) {
-    assert(false); return;
-  }
-  
-  // Find the components
-  uint32_t components = 0;
-  {
-    assert(entity_data);
-    
-    Data::data_lock(entity_data);
-  
-    Data::entity_get_components(entity_data,
-                                this_id,
-                                &components);
-    
-    Data::data_unlock(entity_data);
-  }
-  
-  // If this is a physics object then update it.
-  {
-    assert(phys_data);
-  
-    // Update the physics stuff.
-    if(components & Common::Data_type::rigidbody)
-    {
-      Data::data_lock(phys_data);
-      
-      math::aabb collider_box;
-      Data::rigidbody_get_aabb_collider(phys_data, this_id, &collider_box);
-      
-      const math::vec3 collider_scale  = math::aabb_get_extents(collider_box);
-      const math::vec3 transform_scale = transform->scale;
-      const math::vec3 total_scale     = math::vec3_multiply(collider_scale, transform_scale);
-
-      // Order is important here! Scale then shift origin.
-      math::aabb_scale(collider_box, total_scale);
-      math::aabb_set_origin(collider_box, transform->position);
-      
-      Data::rigidbody_set_transform(phys_data, this_id, transform);
-      Data::rigidbody_set_transformed_aabb_collider(phys_data, this_id, &collider_box);
-      
-      if(inform_phys_engine)
-      {
-        uintptr_t body = 0;
-        Data::rigidbody_get_rigidbody(phys_data, this_id, &body);
-        
-        if(body)
-        {
-          q3Vec3 pos;
-          q3Vec3 axis;
-          f32 angle;
-          
-          math::transform_to_q3(transform, &angle, &axis, &pos);
-          
-          reinterpret_cast<q3Body*>(body)->SetTransform(pos, axis, angle);
-        }
-      }
-      
-      Data::data_unlock(phys_data);
-    }
-    else
-    {
-//      assert(false);
-      LOG_TODO_ONCE("We should be able to check components before getting this far I think.");
-    }
-  } // if phys component
+//  // Check valid
+//  if(!is_valid(this_id, entity_data, true)) {
+//    assert(false); return;
+//  }
+//  
+//  // Find the components
+//  uint32_t components = 0;
+//  {
+//    assert(entity_data);
+//    
+//    Data::data_lock(entity_data);
+//  
+//    Data::entity_get_components(entity_data,
+//                                this_id,
+//                                &components);
+//    
+//    Data::data_unlock(entity_data);
+//  }
+//  
+//  // If this is a physics object then update it.
+//  {
+//    assert(phys_data);
+//  
+//    // Update the physics stuff.
+//    if(components & Common::Data_type::rigidbody)
+//    {
+//      Data::data_lock(phys_data);
+//      
+//      math::aabb collider_box;
+//      Data::rigidbody_get_aabb_collider(phys_data, this_id, &collider_box);
+//      
+//      const math::vec3 collider_scale  = math::aabb_get_extents(collider_box);
+//      const math::vec3 transform_scale = transform->scale;
+//      const math::vec3 total_scale     = math::vec3_multiply(collider_scale, transform_scale);
+//
+//      // Order is important here! Scale then shift origin.
+//      math::aabb_scale(collider_box, total_scale);
+//      math::aabb_set_origin(collider_box, transform->position);
+//      
+//      Data::rigidbody_set_transform(phys_data, this_id, transform);
+//      Data::rigidbody_set_transformed_aabb_collider(phys_data, this_id, &collider_box);
+//      
+//      if(inform_phys_engine)
+//      {
+//        uintptr_t body = 0;
+//        Data::rigidbody_get_rigidbody(phys_data, this_id, &body);
+//        
+//        if(body)
+//        {
+//          q3Vec3 pos;
+//          q3Vec3 axis;
+//          f32 angle;
+//          
+//          math::transform_to_q3(transform, &angle, &axis, &pos);
+//          
+//          reinterpret_cast<q3Body*>(body)->SetTransform(pos, axis, angle);
+//        }
+//      }
+//      
+//      Data::data_unlock(phys_data);
+//    }
+//    else
+//    {
+////      assert(false);
+//      LOG_TODO_ONCE("We should be able to check components before getting this far I think.");
+//    }
+//  } // if phys component
   
 }
 

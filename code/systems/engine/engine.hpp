@@ -11,7 +11,7 @@ namespace Engine {
 
 
 void
-initialize();
+initialize(std::shared_ptr<Data::World> world);
 
 
 void

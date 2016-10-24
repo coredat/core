@@ -1,15 +1,12 @@
 #include "physics_tick.hpp"
 
-#include <3rdparty/qu3e/q3.h>
-#include <transformations/physics/q3_math_extensions.hpp>
-
-#include <3rdparty/qu3e/debug/q3Render.h>
-#include <transformations/physics/q3_math_extensions.hpp>
-#include <transformations/physics/update_world.hpp>
 #include <transformations/entity/entity_transform.hpp>
 
 #include <renderer/debug_line_renderer/debug_line_renderer_node.hpp>
 #include <renderer/debug_line_renderer/debug_line_renderer.hpp>
+#include <transformations/physics/bullet/bullet_math_extensions.hpp>
+
+#include <BulletCollision/CollisionDispatch/btGhostObject.h>
 
 // Don't want core here!
 #include <core/common/collision.hpp>
@@ -24,81 +21,111 @@
 
 namespace {
 
-struct Debug_renderer : public q3Render
-{
-  math::vec3 pen_pos = math::vec3_zero();
-  math::vec3 pen_color = math::vec3_zero();
-  math::vec3 scale = math::vec3_one();
-
-  void SetPenColor( f32 r, f32 g, f32 b, f32 a = 1.0f ) override
-  {
-    pen_color = math::vec3_init(r, g, b);
-  }
-  
-  
-	void SetPenPosition( f32 x, f32 y, f32 z ) override
-  {
-    pen_pos = math::vec3_from_q3vec(q3Vec3(x, y, z));
-  }
-  
-  
-	void SetScale( f32 sx, f32 sy, f32 sz ) override
-  {
-    scale = math::vec3_init(sx, sy, sz);
-  }
-
-	// Render a line from pen position to this point.
-	// Sets the pen position to the new point.
-	void Line( f32 x, f32 y, f32 z ) override
-  {
-    math::vec3 pos = math::vec3_from_q3vec(q3Vec3(x, y, z));
-  
-    Debug_line_renderer::Line_node node;
-    node.color[0] = math::get_x(pen_color);
-    node.color[1] = math::get_y(pen_color);
-    node.color[2] = math::get_z(pen_color);
-    
-    node.position_from[0] = math::get_x(pen_pos);
-    node.position_from[1] = math::get_y(pen_pos);
-    node.position_from[2] = math::get_z(pen_pos);
-    
-    node.position_to[0] = math::get_x(pos);
-    node.position_to[1] = math::get_y(pos);
-    node.position_to[2] = math::get_z(pos);
-    
-    Debug_line_renderer::add_lines(&node, 1);
-  }
-  
-
-	void SetTriNormal( f32 x, f32 y, f32 z ) override {}
-
-	// Render a triangle with the normal set by SetTriNormal.
-	void Triangle(
-		f32 x1, f32 y1, f32 z1,
-		f32 x2, f32 y2, f32 z2,
-		f32 x3, f32 y3, f32 z3
-		) override
-  {
-    const math::vec3 old_pos = pen_pos;
-  
-    pen_pos = math::vec3_init(x3, y3, z3);
-    Line(x1, y1, z1);
-    
-    pen_pos = math::vec3_init(x1, y1, z1);
-    Line(x2, y2, z2);
-    
-    pen_pos = math::vec3_init(x2, y2, z2);
-    Line(x3, y3, z3);
-    
-    pen_pos = old_pos;
-  }
-
-	// Draw a point with the scale from SetScale
-	void Point( ) override {}
-} debug_renderer;
+//struct Debug_renderer : public q3Render
+//{
+//  math::vec3 pen_pos = math::vec3_zero();
+//  math::vec3 pen_color = math::vec3_zero();
+//  math::vec3 scale = math::vec3_one();
+//
+//  void SetPenColor( f32 r, f32 g, f32 b, f32 a = 1.0f ) override
+//  {
+//    pen_color = math::vec3_init(r, g, b);
+//  }
+//  
+//  
+//	void SetPenPosition( f32 x, f32 y, f32 z ) override
+//  {
+//    pen_pos = math::vec3_from_q3vec(q3Vec3(x, y, z));
+//  }
+//  
+//  
+//	void SetScale( f32 sx, f32 sy, f32 sz ) override
+//  {
+//    scale = math::vec3_init(sx, sy, sz);
+//  }
+//
+//	// Render a line from pen position to this point.
+//	// Sets the pen position to the new point.
+//	void Line( f32 x, f32 y, f32 z ) override
+//  {
+//    math::vec3 pos = math::vec3_from_q3vec(q3Vec3(x, y, z));
+//  
+//    Debug_line_renderer::Line_node node;
+//    node.color[0] = math::get_x(pen_color);
+//    node.color[1] = math::get_y(pen_color);
+//    node.color[2] = math::get_z(pen_color);
+//    
+//    node.position_from[0] = math::get_x(pen_pos);
+//    node.position_from[1] = math::get_y(pen_pos);
+//    node.position_from[2] = math::get_z(pen_pos);
+//    
+//    node.position_to[0] = math::get_x(pos);
+//    node.position_to[1] = math::get_y(pos);
+//    node.position_to[2] = math::get_z(pos);
+//    
+//    Debug_line_renderer::add_lines(&node, 1);
+//  }
+//  
+//
+//	void SetTriNormal( f32 x, f32 y, f32 z ) override {}
+//
+//	// Render a triangle with the normal set by SetTriNormal.
+//	void Triangle(
+//		f32 x1, f32 y1, f32 z1,
+//		f32 x2, f32 y2, f32 z2,
+//		f32 x3, f32 y3, f32 z3
+//		) override
+//  {
+//    const math::vec3 old_pos = pen_pos;
+//  
+//    pen_pos = math::vec3_init(x3, y3, z3);
+//    Line(x1, y1, z1);
+//    
+//    pen_pos = math::vec3_init(x1, y1, z1);
+//    Line(x2, y2, z2);
+//    
+//    pen_pos = math::vec3_init(x2, y2, z2);
+//    Line(x3, y3, z3);
+//    
+//    pen_pos = old_pos;
+//  }
+//
+//	// Draw a point with the scale from SetScale
+//	void Point( ) override {}
+//} debug_renderer;
 
   // This state needs to go because its accross worlds
   Core::Collision_callback callback_hack;
+  
+  btPairCachingGhostObject *ghostObject;
+  btManifoldArray manifoldArray;
+  
+  void ghost_callback(btDynamicsWorld *world, btScalar timeStep)
+  {
+    manifoldArray.clear();
+    
+    auto pair_cache = ghostObject->getOverlappingPairCache();
+    auto num_pairs  = pair_cache->getNumOverlappingPairs();
+    
+    for(decltype(num_pairs) i = 0; i < num_pairs; ++i)
+    {
+      
+    }
+    
+  
+  
+    for(int i = 0; i < ghostObject->getNumOverlappingObjects(); i++)
+    {
+      btRigidBody *pRigidBody = static_cast<btRigidBody *>(ghostObject->getOverlappingObject(i));
+      
+      uintptr_t user_data = (uintptr_t)pRigidBody->getCollisionShape()->getUserPointer();
+      
+      Core::Entity_ref entity_ref(Core_detail::entity_id_from_uint(user_data));
+      const char *name = entity_ref.get_name();
+      
+      printf("name: %s", name);
+    }
+  }
 
 } // anon ns
 
@@ -108,8 +135,20 @@ namespace Physics_tick {
 
 
 void
-initialize()
+initialize(std::shared_ptr<Data::World> world)
 {
+  ghostObject = new btGhostObject();
+  ghostObject->setCollisionShape(new btBoxShape(btVector3(btScalar(50.),btScalar(50.),btScalar(50.))));
+  
+  btTransform transform;
+  transform.setIdentity();
+  
+  ghostObject->setWorldTransform(transform);
+  
+  world->dynamicsWorld->addCollisionObject(ghostObject);
+  world->dynamicsWorld->getBroadphase()->getOverlappingPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
+  
+  world->dynamicsWorld->setInternalTickCallback(ghost_callback, 0, true);
 }
 
 
@@ -135,18 +174,9 @@ think(std::shared_ptr<Data::World> world, const float dt, Tick_information *out_
   {
     Core::Collision_pair *collisions_arr = nullptr;
     uint32_t number_of_collisions = 0;
-    
     {
-              world->dynamicsWorld->stepSimulation(1 / 60.f, 10);
-
-//              btTransform trans;
-//              fallRigidBody->getMotionState()->getWorldTransform(trans);
-
+      world->dynamicsWorld->stepSimulation(1 / 60.f, 10);
     }
-    
-//    Physics_transform::update_world(world,
-//                                    &collisions_arr,
-//                                    &number_of_collisions);
     
     if(number_of_collisions && callback_hack)
     {
@@ -156,12 +186,6 @@ think(std::shared_ptr<Data::World> world, const float dt, Tick_information *out_
       }
     }
     
-    auto to_core_trans = [](const q3Transform &other)
-    {
-      math::transform trans = math::transform_init_from_q3(other);
-      return Core::Transform(trans.position, trans.scale, trans.rotation);
-    };
-  
     // Set transforms.
     Data::Rigidbody_data *rb_data = world->rigidbody_data;
     
@@ -175,8 +199,7 @@ think(std::shared_ptr<Data::World> world, const float dt, Tick_information *out_
         btTransform trans;
         reinterpret_cast<btRigidBody*>(rb_ptr)->getMotionState()->getWorldTransform(trans);
         
-        Core::Transform core_trans;
-        core_trans.set_position(math::vec3_init(trans.getOrigin().x(), trans.getOrigin().y(), trans.getOrigin().z()));
+        Core::Transform core_trans = math::transform_from_bt(trans);
 
         const uint32_t entity_id(rb_data->keys[i]);
         const Core::Entity_ref ref(Core_detail::entity_id_from_uint(entity_id));

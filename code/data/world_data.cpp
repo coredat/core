@@ -18,8 +18,6 @@ namespace Data {
 
 World::World(const uint32_t entity_hint)
 {
-  this->scene = new q3Scene(1.f / 60.f);
-
   Data::Pending_entity_removal_data *graph_changes = new Data::Pending_entity_removal_data();
   Data::pending_entity_removal_create(graph_changes, entity_hint);
   
@@ -59,11 +57,6 @@ World::World(const uint32_t entity_hint)
 
 World::~World()
 {
-  if(this->scene)
-  {
-    delete this->scene;
-  }
-
   if(this->entity_removal)
   {
     Data::pending_entity_removal_destroy(entity_removal);
@@ -146,7 +139,10 @@ world_update_scene_graph_changes(Data::World *world_data,
         if(body)
         {
           world_data->dynamicsWorld->removeRigidBody(body);
-//          world_data->scene->RemoveBody(body);
+          
+          delete body->getMotionState();
+          delete body->getCollisionShape();
+          delete body;
         }
         
         Data::rigidbody_remove(rb_data, id);

@@ -11,9 +11,12 @@ Ray::Ray()
 }
 
 
-Ray::Ray(const math::vec3 origin, const math::vec3 direction)
+Ray::Ray(const math::vec3 origin,
+         const math::vec3 direction,
+         const float distance)
 : m_origin(origin)
 , m_direction(math::vec3_normalize(direction))
+, m_distance(distance)
 {
 }
 
@@ -29,6 +32,13 @@ math::vec3
 Ray::get_origin() const
 {
   return m_origin;
+}
+
+
+float
+Ray::get_distance() const
+{
+  return m_distance;
 }
 
 

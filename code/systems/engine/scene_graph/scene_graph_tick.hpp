@@ -4,6 +4,7 @@
 
 #include "../tick_information.hpp"
 #include <data/world_data.hpp>
+#include <memory>
 
 
 namespace Engine {
