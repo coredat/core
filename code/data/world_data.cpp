@@ -7,16 +7,20 @@
 #include <data/world/text_draw_call_data.hpp>
 #include <data/world/entity_data.hpp>
 #include <data/world/transform_data.hpp>
+#include <data/world/trigger_data.hpp>
+#include <data/world/collision_data.hpp>
 #include <core/entity/entity.hpp>
 #include <core/entity/entity_ref.hpp>
 #include <utilities/logging.hpp>
 #include <atomic>
+#include <BulletCollision/CollisionDispatch/btGhostObject.h>
 
 
 namespace Data {
 
 
-World::World(const uint32_t entity_hint)
+World::World(const util::generic_id instance_id, const uint32_t entity_hint)
+: world_instance_id(instance_id)
 {
   Data::Pending_entity_removal_data *graph_changes = new Data::Pending_entity_removal_data();
   Data::pending_entity_removal_create(graph_changes, entity_hint);
@@ -26,6 +30,9 @@ World::World(const uint32_t entity_hint)
     
   Data::Rigidbody_data* rb_data = new Data::Rigidbody_data;
   Data::rigidbody_create(rb_data, entity_hint);
+  
+  Data::Trigger_data *trigger_data = new Data::Trigger_data;
+  Data::trigger_create(trigger_data, entity_hint);
   
   Data::Mesh_draw_call_data *mesh_data = new Data::Mesh_draw_call_data;
   Data::mesh_draw_call_create(mesh_data, entity_hint);
@@ -39,20 +46,26 @@ World::World(const uint32_t entity_hint)
   Data::Text_draw_call_data *text_draw_calls = new Data::Text_draw_call_data;
   Data::text_draw_call_create(text_draw_calls, entity_hint);
   
+  Data::Collision_data *collision_data = new Data::Collision_data;
+  Data::collision_create(collision_data, entity_hint);
+  
   broadphase = new btDbvtBroadphase();
+  solver = new btSequentialImpulseConstraintSolver;
   collisionConfiguration = new btDefaultCollisionConfiguration();
   dispatcher = new btCollisionDispatcher(collisionConfiguration);
   btGImpactCollisionAlgorithm::registerAlgorithm(dispatcher);
   dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
   dynamicsWorld->setGravity(btVector3(0, -10, 0));  
   
-  this->entity_removal       = graph_changes;
-  this->rigidbody_data       = rb_data;
-  this->mesh_data            = mesh_data;
-  this->camera_data          = camera_data;
-  this->transform            = transform_data;
-  this->entity               = entity_data;
-  this->text_data            = text_draw_calls;
+  this->entity_removal = graph_changes;
+  this->rigidbody_data = rb_data;
+  this->mesh_data      = mesh_data;
+  this->camera_data    = camera_data;
+  this->transform      = transform_data;
+  this->entity         = entity_data;
+  this->text_data      = text_draw_calls;
+  this->trigger_data   = trigger_data;
+  this->collision_data = collision_data;
 }
 
 World::~World()
@@ -97,6 +110,12 @@ World::~World()
   {
     Data::text_draw_call_destroy(text_data);
     delete this->text_data;
+  }
+  
+  if(this->trigger_data)
+  {
+    Data::trigger_destroy(trigger_data);
+    delete this->trigger_data;
   }
 }
 
@@ -149,6 +168,30 @@ world_update_scene_graph_changes(Data::World *world_data,
       }
       
       Data::data_unlock(rb_data);
+    }
+    
+    // Remove Trigger
+    {
+      Data::Trigger_data *trigger_data = world_data->trigger_data;
+      Data::data_lock(trigger_data);
+      
+      if(Data::trigger_exists(trigger_data, id))
+      {
+        uintptr_t trigger_ptr = 0;
+        Data::trigger_get_trigger(trigger_data, id, &trigger_ptr);
+        
+        btGhostObject *ghost = reinterpret_cast<btGhostObject*>(trigger_ptr);
+        
+        if(ghost)
+        {
+          world_data->dynamicsWorld->removeCollisionObject(ghost);
+        
+          delete ghost->getCollisionShape();
+          delete ghost;
+        }
+      }
+      
+      Data::data_unlock(trigger_data);
     }
   }
 }

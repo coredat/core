@@ -1,0 +1,18 @@
+data:
+
+  fields:
+
+    - name: entity_pair
+      type: uint64_t
+      include: <stdint.h>
+
+    - name: penitration
+      type: float
+
+    - name: position
+      type: math::vec3
+      include: <math/vec/vec_types.hpp>
+
+    - name: normal
+      type: math::vec3
+      include: <math/vec/vec_types.hpp>

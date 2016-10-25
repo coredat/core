@@ -10,6 +10,7 @@
 #include <data/world/entity_data.hpp>
 #include <data/world/transform_data.hpp>
 #include <data/world/rigidbody_data.hpp>
+#include <data/world/trigger_data.hpp>
 #include <common/error_strings.hpp>
 #include <common/data_types.hpp>
 #include <utilities/logging.hpp>
@@ -18,6 +19,7 @@
 #include <utilities/bits.hpp>
 #include <assert.h>
 #include <btBulletDynamicsCommon.h>
+#include <BulletCollision/CollisionDispatch/btGhostObject.h>
 
 
 namespace Entity_detail {
@@ -78,7 +80,7 @@ set_collider(const util::generic_id this_id,
               // Add the collider box
               if(Data::rigidbody_push(rb_data, this_id))
               {
-                Data::rigidbody_set_aabb_collider(rb_data, this_id, &collider_box);
+//                Data::rigidbody_set_aabb_collider(rb_data, this_id, &collider_box);
               }
               
               Data::data_unlock(rb_data);
@@ -129,45 +131,98 @@ set_rigidbody(const util::generic_id this_id,
               Data::World *world,
               const Core::Rigidbody &rigidbody)
 {
-  set_collider(this_id, world, rigidbody.get_collider());
+  // Check and add component flag
+  {
+    Data::Entity_data *entity_data(world->entity);
+    assert(entity_data);
+    
+    bool has_physics_component = false;
+    
+    if(entity_data)
+    {
+      Data::data_lock(entity_data);
+      
+      uint32_t components(0);
+      Data::entity_get_components(entity_data, this_id, &components);
+      
+      if(Common::Data_type::is_collidable(components))
+      {
+        has_physics_component = true;
+      }
+      else
+      {
+        components |= rigidbody.is_trigger() ? Common::Data_type::trigger : Common::Data_type::rigidbody;
+        Data::entity_set_components(entity_data, this_id, &components);
+      }
+      
+      Data::data_unlock(entity_data);
+    }
+    
+    if(has_physics_component)
+    {
+      assert(false);
+      LOG_ERROR("Entity already has a physics component");
+      return;
+    }
+  }
 
-  auto entity_data = world->entity;
-  assert(entity_data);
-  
-  auto phys_pool = world->rigidbody_data;
-  assert(phys_pool);
-  
-  if (phys_pool)
+  // Common to trigger and rigidbody.
+  const Core::Transform core_transform(get_core_transform(this_id, world->entity, world->transform));
+  const Core::Collider core_collider(rigidbody.get_collider());
+  const btTransform transform(math::transform_to_bt(core_transform));
+  btCollisionShape *shape(Physics_transform::convert_core_collider_to_bullet_collider(&core_collider, &core_transform, this_id));
+
+  // Add rigidbody
+  if(!rigidbody.is_trigger())
   {
-    // Set rb masking
-    Data::data_lock(phys_pool);
+    auto rb_data = world->rigidbody_data;
+    assert(rb_data);
     
-    const uint64_t mask = util::bits_pack(rigidbody.get_rb_id(), rigidbody.get_rb_mask());
-    
-    Data::rigidbody_set_collision_id(phys_pool, this_id, &mask);
-    
-    Data::data_unlock(phys_pool);
-    
+    if(rb_data)
+    {
+      // Set rb masking
+      Data::data_lock(rb_data);
+      
+      Data::rigidbody_push(rb_data, this_id);
+      
+      const uint64_t mask = util::bits_pack(rigidbody.get_rb_id(), rigidbody.get_rb_mask());
+      
+      Data::rigidbody_set_collision_id(rb_data, this_id, &mask);
+      
+      btRigidBody *bt_rb(Physics_transform::convert_core_rb_to_bullet_rb(&rigidbody, shape, &transform));
+      
+      world->dynamicsWorld->addRigidBody(bt_rb);
+      
+      const uintptr_t body_property(reinterpret_cast<uintptr_t>(bt_rb));
+      Data::rigidbody_set_rigidbody(rb_data, this_id, &body_property);
+      
+      Data::data_unlock(rb_data);
+    }
   }
   
+  // Add trigger
+  else
   {
-    Data::data_lock(phys_pool);
+    auto trigger_data = world->trigger_data;
+    assert(trigger_data);
     
-    const Core::Transform core_transform(get_core_transform(this_id, world->entity, world->transform));
-    const Core::Collider core_collider(rigidbody.get_collider());
-    
-    btCollisionShape *shape(Physics_transform::convert_core_collider_to_bullet_collider(&core_collider, &core_transform, this_id));
-    
-    const btTransform transform(math::transform_to_bt(core_transform));
-    btRigidBody *bt_rb(Physics_transform::convert_core_rb_to_bullet_rb(&rigidbody, shape, &transform));
-    
-    world->dynamicsWorld->addRigidBody(bt_rb);
-    
-    const uintptr_t body_property(reinterpret_cast<uintptr_t>(bt_rb));
-    Data::rigidbody_set_rigidbody(phys_pool, this_id, &body_property);
-    
-    Data::data_unlock(phys_pool);
+    if(trigger_data)
+    {
+      Data::data_lock(trigger_data);
+      
+      Data::trigger_push(trigger_data, this_id);
+      
+      btGhostObject *bt_ghost(Physics_transform::convert_core_rb_to_bullet_trigger(&rigidbody, shape, &transform));
+      
+      world->dynamicsWorld->addCollisionObject(bt_ghost);
+      
+      const uintptr_t trigger_property(reinterpret_cast<uintptr_t>(bt_ghost));
+      Data::trigger_set_trigger(trigger_data, this_id, &trigger_property);
+      
+      Data::data_unlock(trigger_data);
+    }
   }
+  
 }
 
 
@@ -178,6 +233,64 @@ get_rigidbody(const util::generic_id this_id)
   assert(false);
 
   return Core::Rigidbody();
+}
+
+
+void
+set_phy_transform(const util::generic_id this_id,
+                  const Core::Transform *transform,
+                  Data::Entity_data *entity_data,
+                  Data::Rigidbody_data *rb_data,
+                  Data::Trigger_data *trigger_data)
+{
+  // Param Check
+  assert(this_id);
+  assert(transform);
+  assert(entity_data);
+  assert(rb_data);
+  assert(trigger_data);
+  
+  // Check if trigger or rigidbody
+  bool is_trigger = false;
+  bool is_rigidbody = false;
+  {
+    Data::data_lock(entity_data);
+    
+    uint32_t components(0);
+    Data::entity_get_components(entity_data, this_id, &components);
+    
+    Data::data_unlock(entity_data);
+    
+    is_trigger    = (components & Common::Data_type::trigger);
+    is_rigidbody  = (components & Common::Data_type::rigidbody);
+  }
+  
+  if(is_trigger == is_rigidbody)
+  {
+    LOG_ERROR("Can't set rigidbody/trigger transform");
+    return;
+  }
+  
+  if(is_trigger)
+  {
+    Data::data_lock(trigger_data);
+  
+    uintptr_t trigger(0);
+    Data::trigger_get_trigger(trigger_data, this_id, &trigger);
+    
+    btPairCachingGhostObject *bt_trigger(reinterpret_cast<btPairCachingGhostObject*>(trigger));
+    
+    btTransform trans = math::transform_to_bt(*transform);
+    
+    Physics_transform::update_trigger_transform(bt_trigger, &trans);
+    
+    Data::data_unlock(trigger_data);
+  }
+  
+  if(is_rigidbody)
+  {
+
+  }
 }
 
 

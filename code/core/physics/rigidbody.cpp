@@ -96,7 +96,7 @@ Rigidbody::set_mass(const float mass)
 
 
 bool
-Rigidbody::is_dynamic() const
+Rigidbody::is_kinematic() const
 {
   assert(m_impl);
   return m_impl->is_dynamic;
@@ -104,7 +104,7 @@ Rigidbody::is_dynamic() const
 
 
 void
-Rigidbody::set_is_dynamic(const bool set)
+Rigidbody::set_is_kinematic(const bool set)
 {
   assert(m_impl);
   m_impl->is_dynamic = set;

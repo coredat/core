@@ -22,8 +22,8 @@ public:
   uint32_t      get_rb_mask() const;
   void          set_collision_mask(const uint32_t rb_id, const uint32_t rb_collides_with_ids);
   
-  bool          is_dynamic() const;
-  void          set_is_dynamic(const bool set);
+  bool          is_kinematic() const;
+  void          set_is_kinematic(const bool set);
   
   bool          is_trigger() const;
   void          set_is_trigger(const bool set);

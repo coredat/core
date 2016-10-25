@@ -24,6 +24,14 @@ get_collider(const util::generic_id this_id,
 
 
 void
+set_phy_transform(const util::generic_id this_id,
+                  const Core::Transform *transform,
+                  Data::Entity_data *entity_data,
+                  Data::Rigidbody_data *rb_data,
+                  Data::Trigger_data *trigger_data);
+
+
+void
 set_rigidbody(const util::generic_id this_id,
               Data::World *world,
               const Core::Rigidbody &rigidbody);

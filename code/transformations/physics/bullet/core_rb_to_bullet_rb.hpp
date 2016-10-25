@@ -5,6 +5,8 @@
 #include <core/common/core_fwd.hpp>
 
 class btRigidBody;
+class btPairCachingGhostObject;
+class btDynamicsWorld;
 class btTransform;
 class btCollisionShape;
 
@@ -18,6 +20,21 @@ convert_core_rb_to_bullet_rb(const Core::Rigidbody *core_rb,
                              const btTransform *transform);
   
   
+btPairCachingGhostObject*
+convert_core_rb_to_bullet_trigger(const Core::Rigidbody *core_rb,
+                                  btCollisionShape *collider,
+                                  const btTransform *transform);
+
+void
+update_trigger_transform(btPairCachingGhostObject *trigger,
+                         const btTransform *transform);
+
+
+void
+update_rigidbody_transform(btRigidBody *rb,
+                           const btTransform *transform);
+
+
 btCollisionShape*
 convert_core_collider_to_bullet_collider(const Core::Collider *collider,
                                          const Core::Transform *transform,

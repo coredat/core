@@ -19,7 +19,9 @@ find_entity_from_ray(const Core::Ray ray,
   assert(phy_world);
 
   const btVector3 start_pos(math::vec3_to_bt(ray.get_origin()));
-  const btVector3 end_pos(math::vec3_to_bt(math::vec3_add(ray.get_origin(), math::vec3_scale(ray.get_direction(), ray.get_distance()))));
+  const btVector3 end_pos(math::vec3_to_bt(math::vec3_add(ray.get_origin(),
+                                           math::vec3_scale(ray.get_direction(),
+                                           btScalar(ray.get_distance())))));
   
   btCollisionWorld::ClosestRayResultCallback ray_callback(start_pos, end_pos);
   

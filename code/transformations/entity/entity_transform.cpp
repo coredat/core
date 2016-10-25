@@ -90,6 +90,7 @@ set_transform(const util::generic_id this_id,
               Data::Entity_data *entity_data,
               Data::Transform_data *transform_data,
               Data::Rigidbody_data *rb_data,
+              Data::Trigger_data *trigger_data,
               Data::Mesh_draw_call_data *mesh_data,
               Data::Text_draw_call_data *text_data,
               const Core::Transform &set_transform,
@@ -124,7 +125,9 @@ set_transform(const util::generic_id this_id,
                                                                set_transform.get_rotation());
     
     update_transform(this_id, transform_data, &new_transform);
-    update_collider(this_id, entity_data, rb_data, &new_transform, &curr_aabb, inform_phys_engine);
+
+    Entity_detail::set_phy_transform(this_id, &set_transform, entity_data, rb_data, trigger_data);
+
     update_mesh_renderer(this_id, mesh_data, &new_transform);
     udpate_text_renderer(this_id, text_data, &new_transform);
   }

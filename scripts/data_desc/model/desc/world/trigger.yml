@@ -9,6 +9,6 @@ data:
       type: uint64_t
       include: <stdint.h>
 
-    - name: rigidbody
+    - name: trigger
       type: uintptr_t
       include: <stdint.h>

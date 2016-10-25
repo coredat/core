@@ -6,14 +6,12 @@
 */
 
 
-#ifndef RIGIDBODY_INCLUDED_097182F1_851D_4CEF_B215_85290A5DDF45
-#define RIGIDBODY_INCLUDED_097182F1_851D_4CEF_B215_85290A5DDF45
+#ifndef RIGIDBODY_INCLUDED_C11AF082_3860_43E1_B459_E2B16266F369
+#define RIGIDBODY_INCLUDED_C11AF082_3860_43E1_B459_E2B16266F369
 
 
 #include <stdint.h>
 #include <stddef.h>
-#include <math/transform/transform.hpp>
-#include <math/geometry/aabb.hpp>
 
 
 namespace Data {
@@ -26,15 +24,6 @@ struct Rigidbody_data
 {
   // key //
   uint32_t *keys = nullptr;
-
-  // transform field data //
-  math::transform *field_transform = nullptr;
-
-  // aabb_collider field data //
-  math::aabb *field_aabb_collider = nullptr;
-
-  // transformed_aabb_collider field data //
-  math::aabb *field_transformed_aabb_collider = nullptr;
 
   // collision_id field data //
   uint64_t *field_collision_id = nullptr;
@@ -109,30 +98,6 @@ rigidbody_resize_capacity(Rigidbody_data *data, const size_t size_hint);
 // ===================== //
 
 
-const math::transform*
-rigidbody_get_const_transform_data(const Rigidbody_data *data);
-
-
-math::transform*
-rigidbody_get_transform_data(Rigidbody_data *data);
-
-
-const math::aabb*
-rigidbody_get_const_aabb_collider_data(const Rigidbody_data *data);
-
-
-math::aabb*
-rigidbody_get_aabb_collider_data(Rigidbody_data *data);
-
-
-const math::aabb*
-rigidbody_get_const_transformed_aabb_collider_data(const Rigidbody_data *data);
-
-
-math::aabb*
-rigidbody_get_transformed_aabb_collider_data(Rigidbody_data *data);
-
-
 const uint64_t*
 rigidbody_get_const_collision_id_data(const Rigidbody_data *data);
 
@@ -152,36 +117,6 @@ rigidbody_get_rigidbody_data(Rigidbody_data *data);
 // =============== //
 // FIELD FUNCTIONS //
 // =============== //
-
-
-bool
-rigidbody_get_transform(const Rigidbody_data *data, const uint32_t key, math::transform *return_value);
-
-
-bool
-rigidbody_set_transform(const Rigidbody_data *data, const uint32_t key, const math::transform *set_value);
-
-
-
-
-bool
-rigidbody_get_aabb_collider(const Rigidbody_data *data, const uint32_t key, math::aabb *return_value);
-
-
-bool
-rigidbody_set_aabb_collider(const Rigidbody_data *data, const uint32_t key, const math::aabb *set_value);
-
-
-
-
-bool
-rigidbody_get_transformed_aabb_collider(const Rigidbody_data *data, const uint32_t key, math::aabb *return_value);
-
-
-bool
-rigidbody_set_transformed_aabb_collider(const Rigidbody_data *data, const uint32_t key, const math::aabb *set_value);
-
-
 
 
 bool

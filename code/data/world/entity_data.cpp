@@ -208,6 +208,11 @@ entity_remove(Entity_data *data, const uint32_t key)
 
   if(entity_exists(data, key, &index_to_erase))
   {
+    if(data->keys[index_to_erase] == 257)
+    {
+      assert(false);
+    }
+  
     assert(index_to_erase < data->size);
 
     const size_t start_index = index_to_erase + 1;

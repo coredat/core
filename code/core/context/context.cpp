@@ -232,8 +232,8 @@ Context::is_open() const
   auto ctx = m_impl->ctx;
 
   struct nk_panel layout;
-  if(nk_begin(m_impl->ctx, &layout, "Demo", nk_rect(200, 200, 210, 250),
-              NK_WINDOW_BORDER|NK_WINDOW_MOVABLE|NK_WINDOW_SCALABLE|
+  if(nk_begin(m_impl->ctx, &layout, get_title(), nk_rect(0, 0, 210, get_height()),
+              
             NK_WINDOW_MINIMIZABLE|NK_WINDOW_TITLE))
   {
   

@@ -9,7 +9,7 @@
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 
-#include <stdint.h>
+#include <utilities/generic_id.hpp>
 
 
 namespace Data {
@@ -22,8 +22,10 @@ struct World
   Pending_entity_removal_data   *entity_removal  = nullptr;
   Camera_data                   *camera_data     = nullptr;
   Rigidbody_data                *rigidbody_data  = nullptr;
+  Trigger_data                  *trigger_data    = nullptr;
   Mesh_draw_call_data           *mesh_data       = nullptr;
   Text_draw_call_data           *text_data       = nullptr;
+  Collision_data                *collision_data  = nullptr;
   
   btBroadphaseInterface               *broadphase             = nullptr;
   btDefaultCollisionConfiguration     *collisionConfiguration = nullptr;
@@ -31,10 +33,12 @@ struct World
   btSequentialImpulseConstraintSolver *solver                 = nullptr;
   btDiscreteDynamicsWorld             *dynamicsWorld          = nullptr;
   
+  util::generic_id world_instance_id = 0;
+  
   World(const World&) = delete;
   World& operator=(const World&) = delete;
   
-  explicit World(const uint32_t size_hint);
+  explicit World(const util::generic_id world_instance_id, const uint32_t size_hint);
   ~World();
   
 }; // struct

@@ -6,7 +6,7 @@
 */
 
 
-#include "rigidbody_data.hpp"
+#include "trigger_data.hpp"
 #include <assert.h>
 #include <cstring>
 
@@ -21,21 +21,21 @@ namespace Data {
 
 
 void
-data_lock(const Rigidbody_data *data)
+data_lock(const Trigger_data *data)
 {
   // Not yet impl.
 }
 
 
 void
-data_unlock(const Rigidbody_data *data)
+data_unlock(const Trigger_data *data)
 {
   // Not yet impl.
 }
 
 
 bool
-rigidbody_create(Rigidbody_data *data, const size_t size_hint)
+trigger_create(Trigger_data *data, const size_t size_hint)
 {
   assert(data);
   assert(size_hint);
@@ -67,20 +67,20 @@ rigidbody_create(Rigidbody_data *data, const size_t size_hint)
       else { memset(data->field_collision_id, 0, sizeof(uint64_t) * size_hint * 1); }
     }
 
-    // Alloc space for rigidbody
+    // Alloc space for trigger
     if(all_alloc)
     {
-      data->field_rigidbody = new uintptr_t[size_hint * 1];
-      assert(data->field_rigidbody);
-      if(!data->field_rigidbody) { all_alloc = false; }
-      else { memset(data->field_rigidbody, 0, sizeof(uintptr_t) * size_hint * 1); }
+      data->field_trigger = new uintptr_t[size_hint * 1];
+      assert(data->field_trigger);
+      if(!data->field_trigger) { all_alloc = false; }
+      else { memset(data->field_trigger, 0, sizeof(uintptr_t) * size_hint * 1); }
     }
   }
 
   // Failed so clean up.
   if(!all_alloc)
   {
-    rigidbody_destroy(data);
+    trigger_destroy(data);
   }
 
   return all_alloc;
@@ -88,7 +88,7 @@ rigidbody_create(Rigidbody_data *data, const size_t size_hint)
 
 
 void
-rigidbody_destroy(Rigidbody_data *data)
+trigger_destroy(Trigger_data *data)
 {
   // Free up the memory.
   {
@@ -100,9 +100,9 @@ rigidbody_destroy(Rigidbody_data *data)
     if(data->field_collision_id) { delete[] data->field_collision_id; }
     data->field_collision_id = nullptr;
 
-    // Remove rigidbody
-    if(data->field_rigidbody) { delete[] data->field_rigidbody; }
-    data->field_rigidbody = nullptr;
+    // Remove trigger
+    if(data->field_trigger) { delete[] data->field_trigger; }
+    data->field_trigger = nullptr;
   }
 
   // Zero capacity and size
@@ -116,7 +116,7 @@ rigidbody_destroy(Rigidbody_data *data)
 
 
 uint32_t
-rigidbody_push(Rigidbody_data *data, const uint32_t key)
+trigger_push(Trigger_data *data, const uint32_t key)
 {
   assert(data);
   assert(data->keys);
@@ -124,7 +124,7 @@ rigidbody_push(Rigidbody_data *data, const uint32_t key)
   // Do we need to resize?
   if(data->size >= data->capacity)
   {
-    rigidbody_resize_capacity(data, data->capacity << 1);
+    trigger_resize_capacity(data, data->capacity << 1);
   }
 
   // Push key at the back
@@ -140,7 +140,7 @@ rigidbody_push(Rigidbody_data *data, const uint32_t key)
 }
 
 bool
-rigidbody_insert(Rigidbody_data *data, const uint32_t key, const size_t insert_point)
+trigger_insert(Trigger_data *data, const uint32_t key, const size_t insert_point)
 {
   assert(data);
   assert(data->keys);
@@ -149,7 +149,7 @@ rigidbody_insert(Rigidbody_data *data, const uint32_t key, const size_t insert_p
   // Do we need to resize?
   if(data->size >= data->capacity)
   {
-    rigidbody_resize_capacity(data, data->capacity << 1);
+    trigger_resize_capacity(data, data->capacity << 1);
   }
 
   // Shuffle memory up
@@ -161,7 +161,7 @@ rigidbody_insert(Rigidbody_data *data, const uint32_t key, const size_t insert_p
     // Shuffle the data down
     memmove(&data->keys[insert_point], &data->keys[start_index], size_to_end * sizeof(*data->keys));
     memmove(&data->field_collision_id[insert_point * 1], &data->field_collision_id[start_index * 1], size_to_end * sizeof(*data->field_collision_id) * 1);
-    memmove(&data->field_rigidbody[insert_point * 1], &data->field_rigidbody[start_index * 1], size_to_end * sizeof(*data->field_rigidbody) * 1);
+    memmove(&data->field_trigger[insert_point * 1], &data->field_trigger[start_index * 1], size_to_end * sizeof(*data->field_trigger) * 1);
   }
 
   // Insert new data
@@ -174,11 +174,11 @@ rigidbody_insert(Rigidbody_data *data, const uint32_t key, const size_t insert_p
 
 
 bool
-rigidbody_remove(Rigidbody_data *data, const uint32_t key)
+trigger_remove(Trigger_data *data, const uint32_t key)
 {
   size_t index_to_erase = 0;
 
-  if(rigidbody_exists(data, key, &index_to_erase))
+  if(trigger_exists(data, key, &index_to_erase))
   {
     assert(index_to_erase < data->size);
 
@@ -190,7 +190,7 @@ rigidbody_remove(Rigidbody_data *data, const uint32_t key)
     // Shuffle the data down
     memmove(&data->keys[index_to_erase], &data->keys[start_index], size_to_end * sizeof(*data->keys));
     memmove(&data->field_collision_id[index_to_erase * 1], &data->field_collision_id[start_index * 1], size_to_end * sizeof(*data->field_collision_id) * 1);
-    memmove(&data->field_rigidbody[index_to_erase * 1], &data->field_rigidbody[start_index * 1], size_to_end * sizeof(*data->field_rigidbody) * 1);
+    memmove(&data->field_trigger[index_to_erase * 1], &data->field_trigger[start_index * 1], size_to_end * sizeof(*data->field_trigger) * 1);
 
     return true;
   }
@@ -200,7 +200,7 @@ rigidbody_remove(Rigidbody_data *data, const uint32_t key)
 
 
 bool
-rigidbody_exists(const Rigidbody_data *data, const uint32_t key, size_t *out_index)
+trigger_exists(const Trigger_data *data, const uint32_t key, size_t *out_index)
 {
   assert(data);
   assert(data != 0);
@@ -223,7 +223,7 @@ rigidbody_exists(const Rigidbody_data *data, const uint32_t key, size_t *out_ind
 
 
 void
-rigidbody_clear(Rigidbody_data *data)
+trigger_clear(Trigger_data *data)
 {
   assert(data);
 
@@ -232,7 +232,7 @@ rigidbody_clear(Rigidbody_data *data)
 
 
 bool
-rigidbody_is_empty(const Rigidbody_data *data, const size_t size_hint)
+trigger_is_empty(const Trigger_data *data, const size_t size_hint)
 {
   assert(data);
 
@@ -243,7 +243,7 @@ rigidbody_is_empty(const Rigidbody_data *data, const size_t size_hint)
 
 
 size_t
-rigidbody_get_size(const Rigidbody_data *data)
+trigger_get_size(const Trigger_data *data)
 {
   assert(data);
 
@@ -254,7 +254,7 @@ rigidbody_get_size(const Rigidbody_data *data)
 
 
 size_t
-rigidbody_get_capacity(const Rigidbody_data *data)
+trigger_get_capacity(const Trigger_data *data)
 {
   assert(data);
 
@@ -265,19 +265,19 @@ rigidbody_get_capacity(const Rigidbody_data *data)
 
 
 bool
-rigidbody_resize_capacity(Rigidbody_data *data, const size_t size_hint)
+trigger_resize_capacity(Trigger_data *data, const size_t size_hint)
 {
   assert(data);
   assert(size_hint > data->size); // Will slice data
 
   // Create new data.
-  Rigidbody_data new_data;
-  const bool created_new = rigidbody_create(&new_data, size_hint);
+  Trigger_data new_data;
+  const bool created_new = trigger_create(&new_data, size_hint);
 
   // Failed to resize.
   if(!created_new)
   {
-    rigidbody_destroy(&new_data);
+    trigger_destroy(&new_data);
     return false;
   }
 
@@ -285,7 +285,7 @@ rigidbody_resize_capacity(Rigidbody_data *data, const size_t size_hint)
   {
     memcpy(new_data.keys, data->keys, sizeof(uint32_t) * data->size);
     memcpy(new_data.field_collision_id, data->field_collision_id, sizeof(uint64_t) * data->size * 1);
-    memcpy(new_data.field_rigidbody, data->field_rigidbody, sizeof(uintptr_t) * data->size * 1);
+    memcpy(new_data.field_trigger, data->field_trigger, sizeof(uintptr_t) * data->size * 1);
   }
 
   // Swap ptrs
@@ -298,9 +298,9 @@ rigidbody_resize_capacity(Rigidbody_data *data, const size_t size_hint)
     data->field_collision_id = new_data.field_collision_id;
     new_data.field_collision_id = old_collision_id;
 
-    uintptr_t *old_rigidbody = data->field_rigidbody;
-    data->field_rigidbody = new_data.field_rigidbody;
-    new_data.field_rigidbody = old_rigidbody;
+    uintptr_t *old_trigger = data->field_trigger;
+    data->field_trigger = new_data.field_trigger;
+    new_data.field_trigger = old_trigger;
   }
 
   // Set the Capacity
@@ -310,7 +310,7 @@ rigidbody_resize_capacity(Rigidbody_data *data, const size_t size_hint)
   }
 
   // Destroy new data
-  rigidbody_destroy(&new_data);
+  trigger_destroy(&new_data);
 
   return true;
 }
@@ -323,7 +323,7 @@ rigidbody_resize_capacity(Rigidbody_data *data, const size_t size_hint)
 
 
 const uint64_t*
-rigidbody_get_const_collision_id_data(const Rigidbody_data *data)
+trigger_get_const_collision_id_data(const Trigger_data *data)
 {
   assert(data);
   assert(data->field_collision_id);
@@ -333,7 +333,7 @@ rigidbody_get_const_collision_id_data(const Rigidbody_data *data)
 
 
 uint64_t*
-rigidbody_get_collision_id_data(Rigidbody_data *data)
+trigger_get_collision_id_data(Trigger_data *data)
 {
   assert(data);
   assert(data->field_collision_id);
@@ -343,22 +343,22 @@ rigidbody_get_collision_id_data(Rigidbody_data *data)
 
 
 const uintptr_t*
-rigidbody_get_const_rigidbody_data(const Rigidbody_data *data)
+trigger_get_const_trigger_data(const Trigger_data *data)
 {
   assert(data);
-  assert(data->field_rigidbody);
+  assert(data->field_trigger);
 
-  return data->field_rigidbody;
+  return data->field_trigger;
 }
 
 
 uintptr_t*
-rigidbody_get_rigidbody_data(Rigidbody_data *data)
+trigger_get_trigger_data(Trigger_data *data)
 {
   assert(data);
-  assert(data->field_rigidbody);
+  assert(data->field_trigger);
 
-  return data->field_rigidbody;
+  return data->field_trigger;
 }
 
 
@@ -368,7 +368,7 @@ rigidbody_get_rigidbody_data(Rigidbody_data *data)
 
 
 bool
-rigidbody_get_collision_id(const Rigidbody_data *data, const uint32_t key, uint64_t *return_value)
+trigger_get_collision_id(const Trigger_data *data, const uint32_t key, uint64_t *return_value)
 {
   assert(data);
   assert(key != 0);
@@ -380,7 +380,7 @@ rigidbody_get_collision_id(const Rigidbody_data *data, const uint32_t key, uint6
 
   size_t index = 0;
 
-  if(rigidbody_exists(data, key, &index))
+  if(trigger_exists(data, key, &index))
   {
     assert(index < data->size);
 
@@ -397,7 +397,7 @@ rigidbody_get_collision_id(const Rigidbody_data *data, const uint32_t key, uint6
 
 
 bool
-rigidbody_set_collision_id(const Rigidbody_data *data, const uint32_t key, const uint64_t *set_value)
+trigger_set_collision_id(const Trigger_data *data, const uint32_t key, const uint64_t *set_value)
 {
   assert(data);
   assert(key != 0);
@@ -409,7 +409,7 @@ rigidbody_set_collision_id(const Rigidbody_data *data, const uint32_t key, const
 
   size_t index = 0;
 
-  if(rigidbody_exists(data, key, &index))
+  if(trigger_exists(data, key, &index))
   {
     assert(index < data->size);
     if(index < data->size)
@@ -425,11 +425,11 @@ rigidbody_set_collision_id(const Rigidbody_data *data, const uint32_t key, const
 
 
 bool
-rigidbody_get_rigidbody(const Rigidbody_data *data, const uint32_t key, uintptr_t *return_value)
+trigger_get_trigger(const Trigger_data *data, const uint32_t key, uintptr_t *return_value)
 {
   assert(data);
   assert(key != 0);
-  assert(data->field_rigidbody);
+  assert(data->field_trigger);
   assert(return_value);
 
   // Search for its index.
@@ -437,13 +437,13 @@ rigidbody_get_rigidbody(const Rigidbody_data *data, const uint32_t key, uintptr_
 
   size_t index = 0;
 
-  if(rigidbody_exists(data, key, &index))
+  if(trigger_exists(data, key, &index))
   {
     assert(index < data->size);
 
     if(index < data->size)
     {
-      *return_value = data->field_rigidbody[index];
+      *return_value = data->field_trigger[index];
 
       return true;
     }
@@ -454,11 +454,11 @@ rigidbody_get_rigidbody(const Rigidbody_data *data, const uint32_t key, uintptr_
 
 
 bool
-rigidbody_set_rigidbody(const Rigidbody_data *data, const uint32_t key, const uintptr_t *set_value)
+trigger_set_trigger(const Trigger_data *data, const uint32_t key, const uintptr_t *set_value)
 {
   assert(data);
   assert(key != 0);
-  assert(data->field_rigidbody);
+  assert(data->field_trigger);
   assert(set_value);
 
   // Search for its index.
@@ -466,12 +466,12 @@ rigidbody_set_rigidbody(const Rigidbody_data *data, const uint32_t key, const ui
 
   size_t index = 0;
 
-  if(rigidbody_exists(data, key, &index))
+  if(trigger_exists(data, key, &index))
   {
     assert(index < data->size);
     if(index < data->size)
     {
-      data->field_rigidbody[index] = *set_value;
+      data->field_trigger[index] = *set_value;
 
       return true;
     }

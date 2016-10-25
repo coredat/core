@@ -19,7 +19,9 @@ vec3_from_bt(const btVector3 &bt_vec)
 btVector3
 vec3_to_bt(const math::vec3 vec)
 {
-  return btVector3(math::get_x(vec), math::get_y(vec), math::get_z(vec));
+  return btVector3(btScalar(math::get_x(vec)),
+                   btScalar(math::get_y(vec)),
+                   btScalar(math::get_z(vec)));
 }
 
 
@@ -36,7 +38,10 @@ transform_to_bt(const Core::Transform &core_trans)
     
     const math::quat bt_rot = math::quat_init_with_mat3(rot_mat_tr);
     
-    trans.setRotation(btQuaternion(math::get_x(bt_rot), math::get_y(bt_rot), math::get_z(bt_rot), math::get_w(bt_rot)));
+    trans.setRotation(btQuaternion(btScalar(math::get_x(bt_rot)),
+                                   btScalar(math::get_y(bt_rot)),
+                                   btScalar(math::get_z(bt_rot)),
+                                   btScalar(math::get_w(bt_rot))));
   }
   
   // Position

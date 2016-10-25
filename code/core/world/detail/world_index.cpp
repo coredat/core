@@ -30,7 +30,7 @@ world_index_add_world_data(const uint32_t entity_size_hint)
     {
       world_instance_id++;
       world_ids[i] = world_instance_id;
-      worlds[i] = std::make_shared<Data::World>(entity_size_hint);
+      worlds[i] = std::make_shared<Data::World>(world_ids[i], entity_size_hint);
       return world_instance_id;
     }
   }
