@@ -6,15 +6,17 @@ namespace Core {
 
 
 Collision::Collision()
-: Collision(Core::Entity_ref(), nullptr, 0)
+: Collision(Core::Entity_ref(),
+            nullptr,
+            0)
 {
 }
 
 
-Collision::Collision(const Entity_ref ref,
+Collision::Collision(const Entity_ref this_entity,
                      const Contact contact[],
                      const size_t number_of_contacts)
-: m_object(ref)
+: m_this_entity(this_entity)
 , m_contacts
   {
     number_of_contacts > 0 ? contact[0] : Contact(),
@@ -33,9 +35,9 @@ Collision::Collision(const Entity_ref ref,
 
 
 Entity_ref
-Collision::get_entity() const
+Collision::get_this_entity() const
 {
-  return m_object;
+  return m_this_entity;
 }
 
 
@@ -75,7 +77,7 @@ Collision::end() const
 bool
 Collision::has_hit() const
 {
-  return !!m_object;
+  return !!m_this_entity;
 }
 
 

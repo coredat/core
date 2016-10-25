@@ -6,13 +6,6 @@ data:
       type: uint64_t
       include: <stdint.h>
 
-    - name: penitration
-      type: float
-
-    - name: position
-      type: math::vec3
-      include: <math/vec/vec_types.hpp>
-
-    - name: normal
-      type: math::vec3
-      include: <math/vec/vec_types.hpp>
+    - name: collision_point
+      type: Physics_transform::Collision_point
+      include: <transformations/physics/collision_point.hpp>

@@ -19,7 +19,7 @@ enum class Collision_type
 };
 
 
-typedef void (*Collision_callback)(const Collision_type type, const Core::Collision_pair &collision);
+typedef void (*Collision_callback)(const Collision_type type, const Core::Collision &collision);
 
 
 /*!
@@ -55,7 +55,7 @@ public:
   void                  set_collision_callback(Collision_callback callback);
 
   Entity_ref            find_entity_by_id(const util::generic_id id) const;
-  Collision             find_entity_by_ray(const Ray ray) const;
+  Contact               find_entity_by_ray(const Ray ray) const;
   Entity_ref            find_entity_by_name(const char *name) const;
 
   void                  find_entities_by_tag(const uint32_t tag_id,

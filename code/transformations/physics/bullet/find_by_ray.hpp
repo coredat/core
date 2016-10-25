@@ -14,7 +14,7 @@ namespace Physics_transform {
 /*
   Find an entity from a given ray.
 */
-Core::Collision
+Core::Contact
 find_entity_from_ray(const Core::Ray ray,
                      btDiscreteDynamicsWorld *phy_world);
 

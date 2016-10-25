@@ -11,7 +11,7 @@
 namespace Physics_transform {
 
 
-Core::Collision
+Core::Contact
 find_entity_from_ray(const Core::Ray ray,
                      btDiscreteDynamicsWorld *phy_world)
 {
@@ -27,7 +27,6 @@ find_entity_from_ray(const Core::Ray ray,
   
   phy_world->rayTest(start_pos, end_pos, ray_callback);
   
-  Core::Collision collision;
   Core::Contact contact;
 
   if(ray_callback.hasHit())
@@ -35,15 +34,15 @@ find_entity_from_ray(const Core::Ray ray,
     // Rays shouldn't pen, so we can default it.
     constexpr float penitration_depth(0.f);
   
-    contact = Core::Contact(math::vec3_from_bt(ray_callback.m_hitPointWorld),
-                                               math::vec3_from_bt(ray_callback.m_hitNormalWorld),
-                                               penitration_depth);
-    
     const uintptr_t user_data = (uintptr_t)ray_callback.m_collisionObject->getCollisionShape()->getUserPointer();
-    collision = Core::Collision(Core::Entity_ref(Core_detail::entity_id_from_uint(user_data)), &contact, 1);
+    
+    contact = Core::Contact(Core::Entity_ref(Core_detail::entity_id_from_uint(user_data)),
+                            math::vec3_from_bt(ray_callback.m_hitPointWorld),
+                            math::vec3_from_bt(ray_callback.m_hitNormalWorld),
+                            penitration_depth);
   }
   
-  return collision;
+  return contact;
 }
 
 

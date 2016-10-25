@@ -279,8 +279,7 @@ set_phy_transform(const util::generic_id this_id,
     Data::trigger_get_trigger(trigger_data, this_id, &trigger);
     
     btPairCachingGhostObject *bt_trigger(reinterpret_cast<btPairCachingGhostObject*>(trigger));
-    
-    btTransform trans = math::transform_to_bt(*transform);
+    btTransform               trans(math::transform_to_bt(*transform));
     
     Physics_transform::update_trigger_transform(bt_trigger, &trans);
     
@@ -289,7 +288,17 @@ set_phy_transform(const util::generic_id this_id,
   
   if(is_rigidbody)
   {
-
+    Data::data_lock(rb_data);
+  
+    uintptr_t rigidbody(0);
+    Data::rigidbody_get_rigidbody(rb_data, this_id, &rigidbody);
+    
+    btRigidBody *bt_rigidbody(reinterpret_cast<btRigidBody*>(rigidbody));
+    btTransform  trans(math::transform_to_bt(*transform));
+    
+    Physics_transform::update_rigidbody_transform(bt_rigidbody, &trans);
+    
+    Data::data_unlock(rb_data);
   }
 }
 

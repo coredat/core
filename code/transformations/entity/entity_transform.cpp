@@ -10,6 +10,7 @@
 #include <data/world/transform_data.hpp>
 #include <data/world/rigidbody_data.hpp>
 #include <common/error_strings.hpp>
+#include <common/data_types.hpp>
 #include <utilities/logging.hpp>
 #include <assert.h>
 
@@ -107,6 +108,13 @@ set_transform(const util::generic_id this_id,
     assert(false); return;
   }
   
+  uint32_t components(0);
+  {
+    Data::data_lock(entity_data);
+    Data::entity_get_components(entity_data, this_id, &components);
+    Data::data_unlock(entity_data);
+  }
+  
   // Get aabb
   math::aabb curr_aabb;
   {
@@ -126,7 +134,10 @@ set_transform(const util::generic_id this_id,
     
     update_transform(this_id, transform_data, &new_transform);
 
-    Entity_detail::set_phy_transform(this_id, &set_transform, entity_data, rb_data, trigger_data);
+    if(inform_phys_engine && Common::Data_type::is_collidable(components))
+    {
+      Entity_detail::set_phy_transform(this_id, &set_transform, entity_data, rb_data, trigger_data);
+    }
 
     update_mesh_renderer(this_id, mesh_data, &new_transform);
     udpate_text_renderer(this_id, text_data, &new_transform);

@@ -19,11 +19,11 @@ class Collision
 public:
 
   explicit        Collision();
-  explicit        Collision(const Entity_ref ref,
+  explicit        Collision(const Entity_ref this_entity,
                             const Contact contact[],
                             const size_t number_of_contacts);
   
-  Entity_ref      get_entity() const;
+  Entity_ref      get_this_entity() const;
   
   size_t          get_number_of_contacts() const;
   Contact         get_contact(const size_t i) const;
@@ -36,7 +36,7 @@ public:
 
 private:
 
-  Entity_ref  m_object;
+  Entity_ref  m_this_entity;
   Contact     m_contacts[Collision_detail::get_max_contacts()];
   size_t      m_number_of_contacts;
 

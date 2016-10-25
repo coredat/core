@@ -14,8 +14,12 @@ class Contact
 public:
 
   explicit        Contact();
-  explicit        Contact(const math::vec3 pos, const math::vec3 norm, const float pen_depth);
+  explicit        Contact(const Entity_ref contact_object,
+                          const math::vec3 pos,
+                          const math::vec3 norm,
+                          const float pen_depth);
 
+  Entity_ref      get_object() const;
   math::vec3      get_position() const;
   math::vec3      get_normal() const;
   float           get_penetration_depth() const;
@@ -24,6 +28,7 @@ public:
 
 private:
 
+  Entity_ref  m_contact_object;
   math::vec3  m_position;
   math::vec3  m_normal;
   float       m_penetration_depth;

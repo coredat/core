@@ -6,13 +6,13 @@
 */
 
 
-#ifndef COLLISION_INCLUDED_9E45E9A1_D0C1_43C8_9ACE_A3BC2F9FC7CF
-#define COLLISION_INCLUDED_9E45E9A1_D0C1_43C8_9ACE_A3BC2F9FC7CF
+#ifndef COLLISION_INCLUDED_E9010D46_9A2A_4930_9B9C_4C784B112235
+#define COLLISION_INCLUDED_E9010D46_9A2A_4930_9B9C_4C784B112235
 
 
 #include <stdint.h>
 #include <stddef.h>
-#include <math/vec/vec_types.hpp>
+#include <transformations/physics/collision_point.hpp>
 
 
 namespace Data {
@@ -29,14 +29,8 @@ struct Collision_data
   // entity_pair field data //
   uint64_t *field_entity_pair = nullptr;
 
-  // penitration field data //
-  float *field_penitration = nullptr;
-
-  // position field data //
-  math::vec3 *field_position = nullptr;
-
-  // normal field data //
-  math::vec3 *field_normal = nullptr;
+  // collision_point field data //
+  Physics_transform::Collision_point *field_collision_point = nullptr;
 
   // size //
   size_t size = 0;
@@ -109,28 +103,12 @@ uint64_t*
 collision_get_entity_pair_data(Collision_data *data);
 
 
-const float*
-collision_get_const_penitration_data(const Collision_data *data);
+const Physics_transform::Collision_point*
+collision_get_const_collision_point_data(const Collision_data *data);
 
 
-float*
-collision_get_penitration_data(Collision_data *data);
-
-
-const math::vec3*
-collision_get_const_position_data(const Collision_data *data);
-
-
-math::vec3*
-collision_get_position_data(Collision_data *data);
-
-
-const math::vec3*
-collision_get_const_normal_data(const Collision_data *data);
-
-
-math::vec3*
-collision_get_normal_data(Collision_data *data);
+Physics_transform::Collision_point*
+collision_get_collision_point_data(Collision_data *data);
 
 
 // =============== //
@@ -149,31 +127,11 @@ collision_set_entity_pair(const Collision_data *data, const uint32_t key, const 
 
 
 bool
-collision_get_penitration(const Collision_data *data, const uint32_t key, float *return_value);
+collision_get_collision_point(const Collision_data *data, const uint32_t key, Physics_transform::Collision_point *return_value);
 
 
 bool
-collision_set_penitration(const Collision_data *data, const uint32_t key, const float *set_value);
-
-
-
-
-bool
-collision_get_position(const Collision_data *data, const uint32_t key, math::vec3 *return_value);
-
-
-bool
-collision_set_position(const Collision_data *data, const uint32_t key, const math::vec3 *set_value);
-
-
-
-
-bool
-collision_get_normal(const Collision_data *data, const uint32_t key, math::vec3 *return_value);
-
-
-bool
-collision_set_normal(const Collision_data *data, const uint32_t key, const math::vec3 *set_value);
+collision_set_collision_point(const Collision_data *data, const uint32_t key, const Physics_transform::Collision_point *set_value);
 
 
 

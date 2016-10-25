@@ -13,11 +13,7 @@ namespace Core {
 /*
   Pair of entities that collided with each other.
 */
-struct Collision_pair
-{
-  Collision with_this;
-  Collision with_that;
-};
+
 
 
 } // ns

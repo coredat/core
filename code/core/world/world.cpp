@@ -236,7 +236,7 @@ World::find_entities_by_tag(const uint32_t tag_id,
 }
 
 
-Collision
+Contact
 World::find_entity_by_ray(const Ray ray) const
 {
   assert(m_impl && m_impl->world_instance_id);

@@ -10,12 +10,11 @@
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
 #include <BulletCollision/CollisionDispatch/btCollisionObject.h>
 
-// Don't want core here!
+// Don't want core here! - Callback???
 #include <core/common/collision.hpp>
 #include <core/transform/transform.hpp>
 #include <core/entity/detail/entity_id.hpp>
 #include <core/entity/entity_components.hpp>
-#include <core/physics/collision.hpp>
 
 #include <data/world_data.hpp>
 #include <data/world/rigidbody_data.hpp>
@@ -133,15 +132,64 @@ think(std::shared_ptr<Data::World> world, const float dt, Tick_information *out_
     Also don't like the callback here. World think should check if any collisions then fire its own callback.
   */
   {
-//      uint32_t number_of_collisions = 0;
-//      Core::Collision_pair *collisions_arr = nullptr;
-//    if(number_of_collisions && callback_hack)
-//    {
-//      for(uint32_t i = 0; i < number_of_collisions; ++i)
-//      {
-//        callback_hack(Core::Collision_type::enter, collisions_arr[i]);
-//      }
-//    }
+    Data::Collision_data *collision_data(world->collision_data);
+    Data::data_lock(collision_data);
+  
+    const uint32_t number_of_collisions(Data::collision_get_size(collision_data));
+    
+    if(number_of_collisions && callback_hack)
+    {
+      uint32_t curr_contact = 0;
+      Core::Contact contacts[Core::Collision_detail::get_max_contacts()];
+    
+      while(curr_contact < number_of_collisions)
+      {
+        uint32_t contact_count = 0;
+        const uint64_t curr_pair(collision_data->field_entity_pair[curr_contact]);
+        
+        const Core::Entity_ref entity_a(Core_detail::entity_id_from_uint(util::bits_lower(curr_pair)));
+        const Core::Entity_ref entity_b(Core_detail::entity_id_from_uint(util::bits_upper(curr_pair)));
+       
+        // How many collisions for this pair
+        while(true)
+        {
+          ++contact_count;
+          if(collision_data->field_entity_pair[curr_contact + contact_count] != curr_pair)
+          {
+            break;
+          }
+        }
+        
+        // Generate Contact data
+        const uint32_t contacts_to_gen = math::min(Core::Collision_detail::get_max_contacts(), contact_count);
+        
+        #ifndef NDEBUG
+        if(contact_count < contacts_to_gen)
+        {
+          LOG_WARNING("Contacts have maxed out!");
+        }
+        #endif
+        
+        for(uint32_t c = 0; c < contacts_to_gen; ++c)
+        {
+          Physics_transform::Collision_point collision_pt(Data::collision_get_collision_point_data(collision_data)[curr_contact + c]);
+        
+          contacts[c] = Core::Contact(entity_b,
+                                      collision_pt.point,
+                                      collision_pt.normal,
+                                      collision_pt.penitration);
+        }
+
+        Core::Collision collision(entity_a, contacts, contacts_to_gen);
+        
+        callback_hack(Core::Collision_type::enter, collision);
+        
+        curr_contact += contacts;
+      }
+    }
+    
+    Data::collision_clear(collision_data);
+    Data::data_unlock(collision_data);
   }
   
   /*

@@ -16,6 +16,7 @@
 #include <data/world_data.hpp>
 #include <utilities/logging.hpp>
 #include <utilities/generic_id.hpp>
+#include <utilities/bits.hpp>
 
 
 namespace Physics_transform {
@@ -115,7 +116,7 @@ trigger_callback(btDynamicsWorld *dynamicsWorld,
           const btScalar direction(is_first_body ? -1.0 : 1.0);
           
           const int contact_count(manifold->getNumContacts());
-          
+
           for(int p = 0; p < contact_count; ++p)
           {
             const btManifoldPoint &pt(manifold->getContactPoint(p));
@@ -125,10 +126,20 @@ trigger_callback(btDynamicsWorld *dynamicsWorld,
             {
               Core::Entity_ref ref_a(Core_detail::entity_id_from_uint(entity_id_a));
               Core::Entity_ref ref_b(Core_detail::entity_id_from_uint(entity_id_b));
-            
-              const btVector3& ptA = pt.getPositionWorldOnA();
-              const btVector3& ptB = pt.getPositionWorldOnB();
-              const btVector3& normalOnB = pt.m_normalWorldOnB;
+              
+              const auto collision_id = Data::collision_push(collision_data);
+              
+              Physics_transform::Collision_point contact
+              {
+                penitration * direction,
+                math::vec3_from_bt(pt.getPositionWorldOnA()),
+                math::vec3_from_bt(pt.m_normalWorldOnB)
+              };
+              
+              Data::collision_set_collision_point(collision_data, collision_id, &contact);
+              
+              uint64_t entity_pair = util::bits_pack(entity_id_a, entity_id_b);
+              Data::collision_set_entity_pair(collision_data, collision_id, &entity_pair);
             }
           }
         }
