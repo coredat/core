@@ -2,7 +2,6 @@
 #define TEXTURE_INCLUDED_6B294778_F9E5_4AB0_8266_239C14EF972D
 
 
-#include <stdint.h>
 #include "gfx_common.hpp"
 #include "pixel_format.hpp"
 #include "dimention.hpp"

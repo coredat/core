@@ -1,8 +1,6 @@
 #include "ogl_vertex_buffer.hpp"
 #include "ogl_vertex_format.hpp"
 #include "ogl_shader.hpp"
-#include <assert.h>
-#include <iostream>
 
 
 namespace Ogl {
@@ -28,7 +26,14 @@ vertex_buffer_load(Vertex_buffer *out_vbo,
   }
 
   assert(vertex_buffer_is_valid(*out_vbo));
-  Ogl::error_check("Loading vbo", &std::cout);
+  
+  #ifdef OGL_EXTRA_ERROR_CHECKS
+  const GLenum err_code = glGetError();
+  if(err_code != GL_NO_ERROR)
+  {
+    LOG_GL_ERROR(err_code, "Loading VBO");
+  }
+  #endif
 }
 
 
@@ -40,11 +45,18 @@ vertex_buffer_bind(const Vertex_buffer vbo,
   assert(vertex_buffer_is_valid(vbo));
 
   glBindBuffer(GL_ARRAY_BUFFER, vbo.vertex_buffer_id);
-  Ogl::error_check("Bind vertex buffer", &std::cout);
+
+  #ifdef OGL_EXTRA_ERROR_CHECKS
+  const GLenum err_code = glGetError();
+  if(err_code != GL_NO_ERROR)
+  {
+    LOG_GL_ERROR(err_code, "Binding VBO");
+  }
+  #endif
   
   // Vertex Format
   {
-    for(std::uint32_t i = 0; i < vert_fmt->number_of_attributes; ++i)
+    for(uint32_t i = 0; i < vert_fmt->number_of_attributes; ++i)
     {
       const GLint NOT_USED = -1;
       const Attribute *attrib = &vert_fmt->attributes[i];
@@ -61,7 +73,13 @@ vertex_buffer_bind(const Vertex_buffer vbo,
                               vert_fmt->stride,
                               (void*)attrib->pointer);
 
-        Ogl::error_check("Applying vertex format", &std::cout);
+        #ifdef OGL_EXTRA_ERROR_CHECKS
+        const GLenum err_code = glGetError();
+        if(err_code != GL_NO_ERROR)
+        {
+          LOG_GL_ERROR(err_code, "Applying vertex format");
+        }
+        #endif
       }
     }
   }

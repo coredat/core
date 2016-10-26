@@ -3,9 +3,6 @@
 
 
 #include "ogl_common.hpp"
-#include <stdint.h>
-#include <stddef.h>
-#include <assert.h>
 
 
 #define MAX_NUMBER_OF_ATTRS 8
@@ -42,7 +39,7 @@ struct Attribute
   char          name[32];
   GLenum        type    = GL_NONE;
   uint32_t      size    = 0;
-  uint32_t      pointer = 0;
+  uintptr_t     pointer = 0;
 };
 
 
@@ -75,7 +72,7 @@ vertex_format_load(Vertex_format *out_format,
   \return true if the format is valid.
 */
 inline bool
-vertex_format_is_valid(Vertex_format *vert_fmt)
+vertex_format_is_valid(const Vertex_format *vert_fmt)
 {
   assert(vert_fmt);
   return vert_fmt->stride > 0;

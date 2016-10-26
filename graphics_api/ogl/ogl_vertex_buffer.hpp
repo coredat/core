@@ -4,7 +4,6 @@
 
 #include "ogl_common.hpp"
 #include "ogl_fwd.hpp"
-#include <stdint.h>
 
 
 namespace Ogl {

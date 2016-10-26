@@ -27,25 +27,34 @@ frame_buffer_create(Frame_buffer *out_frame_buffer,
     out_frame_buffer->color_buffer[out] = output_textures[out];
   }
   
-  // Attach depth if it exists.
-  if(depth_buffer)
-  {
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depth_buffer->texture_id, 0);
-    out_frame_buffer->depth_buffer = *depth_buffer;
-  }
-  
-  // Attach stencil if it exists.
-  if(stencil_buffer)
-  {
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, stencil_buffer->texture_id, 0);
-    out_frame_buffer->stencil_buffer = *stencil_buffer;
-  }
+////   Attach depth if it exists.
+//  if(depth_buffer)
+//  {
+//    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depth_buffer->texture_id, 0);
+//    out_frame_buffer->depth_buffer = *depth_buffer;
+//  }
+//  
+//  // Attach stencil if it exists.
+//  if(stencil_buffer)
+//  {
+//    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, stencil_buffer->texture_id, 0);
+//    out_frame_buffer->stencil_buffer = *stencil_buffer;
+//  }
+
+  LOG_TODO_ONCE("Work around to get depth component working for fbos");
+  GLuint rboDepthStencil;
+  glGenRenderbuffers(1, &rboDepthStencil);
+  glBindRenderbuffer(GL_RENDERBUFFER, rboDepthStencil);
+  glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, depth_buffer->width, depth_buffer->height);
+  glFramebufferRenderbuffer(
+    GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rboDepthStencil
+  );
   
   // Check the framebuffer.
   const GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
   if (status != GL_FRAMEBUFFER_COMPLETE)
   {
-    assert(false); // this shoudl be logging of some sort.
+    assert(false); // this should be logging of some sort.
   }
 
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -54,7 +63,7 @@ frame_buffer_create(Frame_buffer *out_frame_buffer,
 
 
 void
-frame_buffer_bind(Frame_buffer *fbo)
+frame_buffer_bind(const Frame_buffer *fbo)
 {
   glBindFramebuffer(GL_FRAMEBUFFER, fbo->fbo_id);
 }
@@ -68,8 +77,13 @@ frame_buffer_unbind()
 
 
 bool
-frame_buffer_is_valid(Frame_buffer *fbo)
+frame_buffer_is_valid(const Frame_buffer *fbo)
 {
+  if(fbo->fbo_id == 0)
+  {
+    return false;
+  }
+
   glBindFramebuffer(GL_FRAMEBUFFER, fbo->fbo_id);
   const GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
   glBindFramebuffer(GL_FRAMEBUFFER, 0);

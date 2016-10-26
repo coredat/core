@@ -4,7 +4,6 @@
 
 #include "../texture_filtering.hpp"
 #include "ogl_common.hpp"
-#include <stdint.h>
 
 
 namespace Ogl {

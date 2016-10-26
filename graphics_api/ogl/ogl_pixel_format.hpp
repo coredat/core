@@ -5,7 +5,6 @@
 #include "ogl_common.hpp"
 #include "../pixel_format.hpp"
 #include <utilities/optimizations.hpp>
-#include <assert.h>
 
 
 namespace Ogl {
@@ -43,18 +42,19 @@ pixel_format_get_format(const GLenum format)
 {
   switch(format)
   {
+  case(GL_RED):
   case(GL_R32F):
+  case(GL_DEPTH24_STENCIL8): // unsure about this.
     return GL_RED;
   
   case(GL_RGB):
-    return GL_RGB:
+    return GL_RGB;
   
   case(GL_RGBA):
   case(GL_RGBA32F):
     return GL_RGBA;
 
   default:
-    UNREACHABLE;
     assert(false); // Yikes.
     return GL_RGBA;
   }
@@ -68,18 +68,40 @@ pixel_format_get_type(const GLenum format)
 {
   switch(format)
   {
+  case(GL_RED):
   case(GL_RGB):
   case(GL_RGBA):
+  case(GL_DEPTH24_STENCIL8): // unsure about this.
     return GL_UNSIGNED_BYTE;
-    
+
   case(GL_R32F):
   case(GL_RGBA32F):
     return GL_FLOAT;
 
   default:
-    UNREACHABLE;
     assert(false); // Yikes.
     return GL_UNSIGNED_BYTE;
+  }
+
+  UNREACHABLE;
+}
+
+
+inline const char*
+pixel_format_get_name(const GLenum format)
+{
+  switch(format)
+  {
+  case(GL_RED): return "GL_RED";
+  case(GL_RGB): return "GL_RGB";
+  case(GL_RGBA): return "GL_RGBA";
+  case(GL_DEPTH24_STENCIL8): return "GL_DEPTH_24_STENCIL8";
+  case(GL_R32F): return "GL_R32F";
+  case(GL_RGBA32F): return "GL_RGBA32F";
+
+  default:
+    assert(false); // Yikes.
+    return "Unknown";
   }
 
   UNREACHABLE;

@@ -73,6 +73,7 @@ pixel_format_blue_bits(const Pixel_format fmt)
   return 0;
 }
 
+
 uint32_t
 pixel_format_alpha_bits(const Pixel_format fmt)
 {
@@ -95,5 +96,29 @@ pixel_format_alpha_bits(const Pixel_format fmt)
   return 0;
 }
 
+
+const char*
+pixel_format_component_name(const Pixel_format fmt)
+{
+  switch(fmt)
+  {
+    case(Pixel_format::rgb8):
+      return "RGB8";
+    case(Pixel_format::r32f):
+      return "R32F";
+    case(Pixel_format::rgba8):
+      return "RGBA8";
+    case(Pixel_format::unknown):
+      return "UNKNOWN";
+    case(Pixel_format::rgba32f):
+      return "RGBA32F";
+    default:
+      UNREACHABLE;
+      assert(false);    
+      return 0;
+  }
+  UNREACHABLE;
+  return 0;
+}
 
 } // ns

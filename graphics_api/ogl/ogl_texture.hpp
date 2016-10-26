@@ -3,8 +3,6 @@
 
 
 #include "ogl_common.hpp"
-#include <stdint.h>
-#include <assert.h>
 
 
 namespace Ogl {
@@ -22,6 +20,7 @@ struct Texture
   uint32_t        width       = 0;
   uint32_t        height      = 0;
   uint32_t        depth       = 0;
+  bool            has_mips    = false;
 }; // struct
 
 
@@ -39,8 +38,8 @@ texture_create_2d(Texture *out_texture,
                   const uint32_t width,
                   const uint32_t height,
                   const GLenum format,
-                  const void *data,
-                  std::ostream *log = nullptr);
+                  const bool has_mips,
+                  const void *data);
 
 
 
@@ -60,8 +59,7 @@ texture_update_texture_2d(Texture *update_texture,
                           const uint32_t offset_y,
                           const uint32_t width,
                           const uint32_t height,
-                          const void *data,
-                          std::ostream *log = nullptr);
+                          const void *data);
 
 /*!
   Simplisitc sugar method that just checks it has a

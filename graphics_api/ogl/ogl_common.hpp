@@ -2,8 +2,14 @@
 #define COMMON_INCLUDED_57928899_C288_49E0_8694_6E85E36592EA
 
 
-#include <ostream>
+// Use these alot so to keep includes down
+// I've included very comment headers here.
+#include <stdint.h>
+#include <stddef.h>
+#include <assert.h>
+#include <cstring>
 
+  
 #ifdef _WIN32
 #include <GL/glew.h>
 #else
@@ -11,10 +17,19 @@
 #include <OpenGL/gl3ext.h>
 #endif
 
-#define LOG_GL_ERROR(msg)
-
-#include <iostream> // for error stream this needs to change.
 #include <utilities/logging.hpp>
+
+#define LOG_GL_ERROR(err_code, msg) \
+LOG_TODO("Need to be able to pass params into logging") \
+LOG_ERROR(msg) \
+
+#define LOG_GL_WARNING(msg) LOG_WARNING(msg)
+#define LOG_GL_PARAM_ERROR(msg) LOG_ERROR(msg)
+
+#ifndef NDEBUG
+#define OGL_EXTRA_ERROR_CHECKS
+#define OGL_EXTRA_PARAM_CHECKS
+#endif
 
 namespace Ogl {
 
@@ -51,17 +66,6 @@ clear(const bool color, const bool depth);
 void
 vao_init();
 
-
-/*!
-  Checks glGetError, if an error is found it will push it out
-  in the stream that was provided.
-*/
-void
-error_check(const char* msg, std::ostream *stream);
-
-
-void
-error_output(const char *msg);
 
 /*!
   Clears any pending error.

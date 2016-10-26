@@ -2,7 +2,7 @@
 #define DIMENTION_INCLUDED_227A2E45_2F28_4372_8EF3_5F7097E49D13
 
 
-#include <stdint.h>
+#include "gfx_common.hpp"
 
 
 namespace Graphics_api {
