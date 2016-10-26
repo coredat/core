@@ -1,6 +1,7 @@
 #ifdef __APPLE__
 
 #include "directory.hpp"
+#include "file.hpp"
 #import <dirent.h>
 #import <Foundation/Foundation.h>
 
@@ -8,30 +9,37 @@
 namespace util {
 
 
-std::string
-get_resource_path()
+namespace dir {
+
+
+const char *
+resource_path()
 {
-  static std::string path;
+  static char buffer_path[MAX_FILE_PATH_SIZE] = "\0";
   
-  if(path.empty())
+  if(strcmp(buffer_path, "") == 0)
   {
     NSBundle *bundle = [NSBundle mainBundle];
     
-    if(bundle == nil) {
+    if(bundle == nil)
+    {
       return "";
     }
     else
     {
-      NSString *rPath = [bundle resourcePath];
-      path = [rPath UTF8String] + std::string("/");
+      NSString *r_path = [bundle resourcePath];
+      
+      strcat(buffer_path, [r_path UTF8String]);
+      strcat(buffer_path, "/");
     }
   }
   
-  return path;
+  return buffer_path;
 }
-  
-  
-} // namespace
+
+
+} // ns
+} // ns
 
 
 #endif

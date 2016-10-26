@@ -7,7 +7,7 @@
 #include <iterator>
 #include <string.h>
 #include <stddef.h>
-#include "file_helpers.hpp"
+#include "file.hpp"
 
 
 namespace util {
@@ -68,7 +68,11 @@ hash_include_string(const std::string &string_to_search, const std::vector<std::
     // Search for file in given directories.
     for(const auto &dir : dirs_to_search)
     {
-      const std::string contents  = file::get_contents_from_file(dir + filename);
+      const std::string path = dir + filename;
+      std::string contents;
+      contents.resize(file::bytes_in_file(path.c_str()));
+      
+      file::get_contents_from_file(path.c_str(), &contents[0], contents.size());
       const std::size_t find      = result.find(include);
 
       if(find != std::string::npos)
@@ -85,7 +89,7 @@ hash_include_string(const std::string &string_to_search, const std::vector<std::
 } // ns
 
 
-#ifdef _WIN32
+#if defined(_MSC_VER) || defined(__GNUC__)
 
 /*	$OpenBSD: strlcpy.c,v 1.11 2006/05/05 15:27:38 millert Exp $	*/
 
