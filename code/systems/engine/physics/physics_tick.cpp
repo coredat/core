@@ -33,57 +33,6 @@ namespace {
 // This state needs to go because its accross worlds
 Core::Collision_callback callback_hack;
 
-btPairCachingGhostObject *ghostObject;
-btManifoldArray manifoldArray;
-
-void ghost_callback(btDynamicsWorld *dynamicsWorld,
-                    btScalar timeStep)
-{
-  btBroadphasePairArray& pairArray =
-      ghostObject->getOverlappingPairCache()->getOverlappingPairArray();
-  int numPairs = pairArray.size();
-  
-  for(int i = 0; i < numPairs; ++i)
-  {
-    const btBroadphasePair& pair = pairArray[i];
-
-    btBroadphasePair* collisionPair =
-        dynamicsWorld->getPairCache()->findPair(
-            pair.m_pProxy0,pair.m_pProxy1);
-
-    if (!collisionPair) continue;
-
-    if (collisionPair->m_algorithm)
-        collisionPair->m_algorithm->getAllContactManifolds(manifoldArray);
-
-    for (int j=0;j<manifoldArray.size();j++)
-    {
-      btPersistentManifold* manifold = manifoldArray[j];
-      auto ptr1 = (uintptr_t)manifold->getBody0()->getCollisionShape()->getUserPointer();
-      auto ptr2 = (uintptr_t)manifold->getBody1()->getCollisionShape()->getUserPointer();
-
-      bool isFirstBody = manifold->getBody0() == ghostObject;
-
-      btScalar direction = isFirstBody ? btScalar(-1.0) : btScalar(1.0);
-
-      for (int p = 0; p < manifold->getNumContacts(); ++p)
-      {
-        const btManifoldPoint&pt = manifold->getContactPoint(p);
-        float pen = pt.getDistance();
-      
-        if (pen < 0.f)
-        {
-          const btVector3& ptA = pt.getPositionWorldOnA();
-          const btVector3& ptB = pt.getPositionWorldOnB();
-          const btVector3& normalOnB = pt.m_normalWorldOnB;
-
-          // handle collisions here
-        }
-      }
-    }
-  }
-}
-
 } // anon ns
 
 
@@ -94,20 +43,11 @@ namespace Physics_tick {
 void
 initialize(std::shared_ptr<Data::World> world)
 {
-//  ghostObject = new btPairCachingGhostObject();
-//  ghostObject->setCollisionShape(new btBoxShape(btVector3(btScalar(50.),btScalar(50.),btScalar(50.))));
-//  ghostObject->setCollisionFlags(btGhostObject::CF_NO_CONTACT_RESPONSE);
-//  ghostObject->getCollisionShape()->setUserPointer(ghostObject);
-  
-//  btTransform transform;
-//  transform.setIdentity();
-//  
-//  ghostObject->setWorldTransform(transform);
-  
-//  world->dynamicsWorld->addCollisionObject(ghostObject);
   world->dynamicsWorld->getBroadphase()->getOverlappingPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
   
-  world->dynamicsWorld->setInternalTickCallback(Physics_transform::trigger_callback, util::generic_id_to_ptr(world->world_instance_id), true);
+  world->dynamicsWorld->setInternalTickCallback(Physics_transform::trigger_callback,
+                                                util::generic_id_to_ptr(world->world_instance_id),
+                                                true);
 }
 
 
@@ -194,7 +134,6 @@ think(std::shared_ptr<Data::World> world, const float dt, Tick_information *out_
         curr_contact += contacts;
       }
     }
-    
     Data::collision_clear(collision_data);
     Data::data_unlock(collision_data);
   }

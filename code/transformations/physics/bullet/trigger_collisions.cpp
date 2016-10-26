@@ -1,9 +1,6 @@
 #include <transformations/physics/bullet/trigger_collisions.hpp>
 #include <transformations/physics/bullet/bullet_math_extensions.hpp>
-#include <btBulletDynamicsCommon.h>
-#include <BulletDynamics/btBulletDynamicsCommon.h>
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
-#include <BulletCollision/CollisionDispatch/btCollisionObject.h>
 
 #include <core/world/detail/world_index.hpp>
 #include <core/entity/detail/entity_id.hpp>
@@ -14,7 +11,6 @@
 #include <utilities/logging.hpp>
 #include <utilities/generic_id.hpp>
 #include <utilities/bits.hpp>
-
 
 //#define EXTRA_DEBUG_INFO_TRIGGER_CALLBACK
 

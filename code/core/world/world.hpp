@@ -15,7 +15,6 @@ namespace Core {
 enum class Collision_type
 {
   enter,
-  exit,
 };
 
 

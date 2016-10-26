@@ -11,7 +11,7 @@ class btDiscreteDynamicsWorld;
 namespace Physics_transform {
 
 
-/*
+/*!
   Find an entity from a given ray.
 */
 Core::Contact
