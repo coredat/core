@@ -6,18 +6,25 @@
 #include <renderer/debug_line_renderer/debug_line_renderer.hpp>
 #include <transformations/physics/bullet/bullet_math_extensions.hpp>
 #include <transformations/physics/bullet/trigger_collisions.hpp>
+#include <transformations/physics/collision_point.hpp>
 
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
 #include <BulletCollision/CollisionDispatch/btCollisionObject.h>
+#include <utilities/bits.hpp>
+#include <utilities/logging.hpp>
 
 // Don't want core here! - Callback???
 #include <core/common/collision.hpp>
 #include <core/transform/transform.hpp>
 #include <core/entity/detail/entity_id.hpp>
+#include <core/entity/entity_ref.hpp>
 #include <core/entity/entity_components.hpp>
 
 #include <data/world_data.hpp>
 #include <data/world/rigidbody_data.hpp>
+#include <data/world/collision_data.hpp>
+
+
 
 
 namespace {
@@ -139,7 +146,7 @@ think(std::shared_ptr<Data::World> world, const float dt, Tick_information *out_
     
     if(number_of_collisions && callback_hack)
     {
-      uint32_t curr_contact = 0;
+      uint32_t curr_contact(0);
       Core::Contact contacts[Core::Collision_detail::get_max_contacts()];
     
       while(curr_contact < number_of_collisions)
@@ -218,7 +225,6 @@ think(std::shared_ptr<Data::World> world, const float dt, Tick_information *out_
         
         const Core::Transform old_trans(Core::Entity_component::get_transform(ref));
         
-//        Core::Transform new_trans(to_core_trans(trans));
         core_trans.set_scale(old_trans.get_scale());
 
         
