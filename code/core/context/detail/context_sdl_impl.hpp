@@ -13,7 +13,6 @@ namespace Core_detail {
 
 class Sdl_context
 {
-
   Sdl_context(const Sdl_context &) = delete;
   Sdl_context& operator=(const Sdl_context &) = delete;
 

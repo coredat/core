@@ -48,7 +48,7 @@ entity_id_from_uint(const uint32_t int_id)
 {
   Entity_id id;
   
-  id.entity_instance = (int_id >> entity_detail_world_bits()) & 0xFFFF;
+  id.entity_instance = int_id >> entity_detail_world_bits();
   id.world_instance = int_id & 0xFF;
   
   return id;

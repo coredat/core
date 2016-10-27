@@ -4,6 +4,7 @@
 
 #include <data/context_data/context_data_fwd.hpp>
 
+struct nk_context;
 
 namespace Core {
 namespace Context_detail {
@@ -12,6 +13,7 @@ namespace Context_detail {
 struct Data
 {
   Context_data::Input_pool   *input_pool = nullptr;
+  nk_context *ctx = nullptr;
 };
 
 

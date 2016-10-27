@@ -7449,7 +7449,7 @@ nk_convert(struct nk_context *ctx, struct nk_buffer *cmds,
         case NK_COMMAND_NOP: break;
         case NK_COMMAND_SCISSOR: {
             const struct nk_command_scissor *s = (const struct nk_command_scissor*)cmd;
-            nk_draw_list_add_clip(&ctx->draw_list, nk_rect(s->x, s->y, s->w, s->h));
+//            nk_draw_list_add_clip(&ctx->draw_list, nk_rect(s->x, s->y, s->w, s->h));
         } break;
         case NK_COMMAND_LINE: {
             const struct nk_command_line *l = (const struct nk_command_line*)cmd;
@@ -17360,7 +17360,11 @@ nk_window_show(struct nk_context *ctx, const char *name, enum nk_show_states s)
     if (!win) return;
     if (s == NK_HIDDEN)
         win->flags |= NK_WINDOW_HIDDEN;
-    else win->flags &= ~(nk_flags)NK_WINDOW_HIDDEN;
+    else
+    {
+      win->flags &= ~(nk_flags)NK_WINDOW_HIDDEN;
+//      win->flags &= ~(nk_flags)NK_WINDOW_CLOSED;
+    }
 }
 
 NK_API void

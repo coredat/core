@@ -4,6 +4,7 @@
 
 #include "tick_information.hpp"
 #include <data/fwd_dec_collections.hpp>
+#include <3rdparty/nuklear/nuklear.h>
 
 #include <core/world/world.hpp> // Kill
 
@@ -17,6 +18,7 @@ initialize(std::shared_ptr<Data::World> world);
 void
 think(const std::shared_ptr<Data::World> world_data,
       const std::shared_ptr<Data::Context> resource_data,
+      nk_context *ctx,
       const float dt,
       const float running_time,
       const uint32_t width,

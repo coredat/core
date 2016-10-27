@@ -1,6 +1,7 @@
 #include "engine.hpp"
 #include "physics/physics_tick.hpp"
 #include "renderer/renderer_tick.hpp"
+#include "renderer/renderer_debug_tick.hpp"
 #include "scene_graph/scene_graph_tick.hpp"
 #include <data/world_data.hpp>
 #include <utilities/logging.hpp>
@@ -24,12 +25,14 @@ initialize(std::shared_ptr<Data::World> world)
   Scene_graph_tick::initialize();
   Physics_tick::initialize(world);
   Renderer_tick::initialize();
+  Renderer_debug_tick::initialize();
 }
 
 
 void
 think(const std::shared_ptr<Data::World> world_data,
       const std::shared_ptr<Data::Context> resource_data,
+      nk_context *ctx,
       const float dt,
       const float running_time,
       const uint32_t width,
@@ -49,6 +52,7 @@ think(const std::shared_ptr<Data::World> world_data,
   */
   Physics_tick::think(world_data, dt, out_tick_info);
   Renderer_tick::think(world_data, resource_data, dt, running_time, width, height, out_tick_info);
+  Renderer_debug_tick::think(world_data, resource_data, ctx, dt, running_time, width, height);
 }
 
 

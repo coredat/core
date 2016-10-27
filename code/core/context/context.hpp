@@ -54,6 +54,8 @@ public:
   
   void                close();                                  //!< Closes the context. is_open will return false;
   
+  void*               get_device_context();                     //!< Internal use only.
+  
 private:
 
   friend class Core::Controller;

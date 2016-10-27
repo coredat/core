@@ -31,6 +31,7 @@ set_transform(const Core::Entity_ref &ref,
   if(!ref)
   {
     LOG_ERROR(Error_string::entity_is_invalid());
+    assert(false);
     return false;
   }
 
@@ -59,6 +60,7 @@ get_transform(const Core::Entity_ref &ref)
   if(!ref)
   {
     LOG_ERROR(Error_string::entity_is_invalid());
+    assert(false);
     return Core::Transform();
   }
 
@@ -93,6 +95,7 @@ set_renderer(const Core::Entity_ref &ref,
   if(!ref)
   {
     LOG_ERROR(Error_string::entity_is_invalid());
+    assert(false);
     return false;
   }
 
@@ -119,6 +122,7 @@ get_renderer(const Core::Entity_ref &ref)
   if(!ref)
   {
     LOG_ERROR(Error_string::entity_is_invalid());
+    assert(false);
     return Core::Renderer();
   }
 
@@ -163,6 +167,7 @@ set_rigidbody(const Core::Entity_ref &ref,
   if(!ref)
   {
     LOG_ERROR(Error_string::entity_is_invalid());
+    assert(false);
     return false;
   }
 
@@ -186,6 +191,7 @@ get_rigidbody(const Core::Entity_ref &ref)
   if(!ref)
   {
     LOG_ERROR(Error_string::entity_is_invalid());
+    assert(false);
     return Core::Rigidbody();
   }
 
@@ -224,6 +230,7 @@ set_camera(const Core::Entity_ref &ref,
   if(!ref)
   {
     LOG_ERROR(Error_string::entity_is_invalid());
+    assert(false);
     return false;
   }
 
@@ -251,6 +258,7 @@ get_camera(const Core::Entity_ref &ref)
   if(!ref)
   {
     LOG_ERROR(Error_string::entity_is_invalid());
+    assert(false);
     return Core::Camera();
   }
   
@@ -277,6 +285,7 @@ remove_camera(const Core::Entity_ref &ref)
   if(!ref)
   {
     LOG_ERROR(Error_string::entity_is_invalid());
+    assert(false);
     return;
   }
   
@@ -302,6 +311,7 @@ has_camera(const Core::Entity_ref &ref)
   if(!ref)
   {
     LOG_ERROR(Error_string::entity_is_invalid());
+    assert(false);
     return false;
   }
 
