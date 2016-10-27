@@ -3,9 +3,6 @@
 #include <assert.h>
 #include <utilities/logging.hpp>
 
-#include <3rdparty/nuklear/nuklear.h>
-#include <3rdparty/nuklear/nuklear_sdl_gl3.h>
-
 
 namespace
 {
@@ -45,11 +42,7 @@ event_process()
   while (SDL_PollEvent(&evt))
   {
     for(uint32_t cb = 0; cb < max_sdl_callbacks; ++cb)
-    {
-      #ifdef CORE_DEBUG_MENU
-      nk_sdl_handle_event(&evt);
-      #endif
-      
+    {      
       if(callbacks[cb])
       {
         void *self = (void*)user_data[cb];

@@ -32,7 +32,6 @@ initialize(std::shared_ptr<Data::World> world)
 void
 think(const std::shared_ptr<Data::World> world_data,
       const std::shared_ptr<Data::Context> resource_data,
-      nk_context *ctx,
       const float dt,
       const float running_time,
       const uint32_t width,
@@ -52,7 +51,7 @@ think(const std::shared_ptr<Data::World> world_data,
   */
   Physics_tick::think(world_data, dt, out_tick_info);
   Renderer_tick::think(world_data, resource_data, dt, running_time, width, height, out_tick_info);
-  Renderer_debug_tick::think(world_data, resource_data, ctx, dt, running_time, width, height);
+  Renderer_debug_tick::think(world_data, resource_data, dt, running_time, width, height);
 }
 
 

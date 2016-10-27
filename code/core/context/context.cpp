@@ -19,21 +19,6 @@
 #ifdef CORE_DEBUG_MENU
 #include <3rdparty/imgui/imgui.h>
 #include <3rdparty/imgui/imgui_impl_sdl_gl3.h>
-
-#define NK_INCLUDE_FIXED_TYPES
-#define NK_INCLUDE_STANDARD_IO
-#define NK_INCLUDE_STANDARD_VARARGS
-#define NK_INCLUDE_DEFAULT_ALLOCATOR
-#define NK_INCLUDE_VERTEX_BUFFER_OUTPUT
-#define NK_INCLUDE_FONT_BAKING
-#define NK_INCLUDE_DEFAULT_FONT
-#define NK_IMPLEMENTATION
-#define NK_SDL_GL3_IMPLEMENTATION
-#include <3rdparty/nuklear/nuklear.h>
-#include <3rdparty/nuklear/nuklear_sdl_gl3.h>
-
-#define MAX_VERTEX_MEMORY 512 * 1024
-#define MAX_ELEMENT_MEMORY 128 * 1024
 #endif
 
 
@@ -110,15 +95,6 @@ Context::Context(const uint32_t width,
   #ifdef CORE_DEBUG_MENU
   ImGui_ImplSdlGL3_Init(m_impl->impl_context.get_sdl_window());
   ImGui_ImplSdlGL3_NewFrame(m_impl->impl_context.get_sdl_window());
-  
-  if(!m_impl->context_data->ctx)
-  {
-    m_impl->context_data->ctx = nk_sdl_init(m_impl->impl_context.get_sdl_window());
-    
-    struct nk_font_atlas *atlas;
-    nk_sdl_font_stash_begin(&atlas);
-    nk_sdl_font_stash_end();
-  }
   #endif
   
   // After all HW has been init, init the context data.
@@ -227,24 +203,19 @@ Context::is_open() const
   assert(m_impl);
   #ifdef CORE_DEBUG_MENU
   ImGui::Render();
-  Graphics_api::reset();
-  
-  
-  nk_sdl_render(NK_ANTI_ALIASING_OFF, MAX_VERTEX_MEMORY, MAX_ELEMENT_MEMORY);
+  ImGui_ImplSdlGL3_NewFrame(m_impl->impl_context.get_sdl_window());
 
   Graphics_api::reset();
   #endif
-  
-  ImGui_ImplSdlGL3_NewFrame(m_impl->impl_context.get_sdl_window());
   
   Input_utils::update_input_state(m_impl->context_data->input_pool);
   
   // Reset the memory pool.
   Memory::scratch_reset();
   
-  nk_input_begin(m_impl->context_data->ctx);
-  return m_impl->impl_context.process();
-  nk_input_end(m_impl->context_data->ctx);
+  m_impl->impl_context.process();
+  
+  return true;
 }
 
 

@@ -4,7 +4,6 @@
 
 #include <data/fwd_dec_collections.hpp>
 #include <data/context_data.hpp>
-#include <3rdparty/nuklear/nuklear.h>
 
 
 namespace Engine {
@@ -18,7 +17,6 @@ initialize();
 void
 think(std::shared_ptr<Data::World> world,
       std::shared_ptr<Data::Context> resources,
-      nk_context *ctx,
       const float dt,
       const float running_time,
       const uint32_t width,

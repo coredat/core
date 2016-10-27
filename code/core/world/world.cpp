@@ -146,7 +146,6 @@ World::think()
 
     Engine::think(world,
                   resources,
-                  reinterpret_cast<nk_context*>(m_impl->context->get_device_context()),
                   m_impl->dt,
                   m_impl->running_time,
                   m_impl->context->get_width(),
