@@ -1,0 +1,10 @@
+
+  // Setup rigidbody
+  {
+    Core::Rigidbody rb;
+    rb.set_mass({{rb_mass}});
+    rb.set_is_dynamic({{rb_is_dynamic}});
+    rb.set_is_trigger({{rb_is_trigger}});
+
+    Core::Entity_component::set_rigidbody(entity, rb);
+  }

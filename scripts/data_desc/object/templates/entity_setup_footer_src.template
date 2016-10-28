@@ -1,0 +1,5 @@
+
+  return entity;
+} // {{name.downcase}}_create function
+
+} // ns

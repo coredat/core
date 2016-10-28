@@ -1,0 +1,7 @@
+
+  // Setup Renderer
+  {
+    Core::Material_renderer mat_renderer;
+
+    Core::Entity_component::set_renderer(entity, mat_renderer);
+  }

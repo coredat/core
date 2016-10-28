@@ -1,0 +1,36 @@
+#include \"object_factory.hpp\"
+#include <core/entity/entity.hpp>
+% objects.each do |o|
+#include \"{{o.data[:subdir]}}{{o.data[:name].downcase}}.hpp\"
+% end
+#include <assert.h>
+
+
+namespace Factory_entity {
+
+
+Core::Entity
+create(const uint32_t id, Core::World &world, Core::Transform *transform)
+{
+  switch(id)
+  {
+    case(0):
+      assert(false); // no entity, perhaps we can make a dummy entity in future.
+      return Core::Entity();    
+    % i = 1
+    % objects.each do |o|
+    case({{i}}):
+      return {{o.data[:name].downcase}}_create(world, transform);
+    % i += 1
+    % end
+    default:
+      assert(false); // no entity.
+      return Core::Entity();
+  }
+
+  // Unreachable
+}
+
+
+
+} // ns

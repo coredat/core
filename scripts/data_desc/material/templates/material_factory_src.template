@@ -1,0 +1,31 @@
+#include \"material_factory.hpp\"
+#include <core/resources/materia.hpp>
+
+
+namespace Factory_material {
+
+
+Core::Material
+create(const uint32_t id, const Core::Context &ctx)
+{
+  switch(id)
+  { 
+    case(0):
+      assert(false); // no material, perhaps we can make a dummy material in future.
+      return Core::Material();
+    % i = 1
+    % materials.each do |m|
+    case({{i}}):
+      return {{m.data[:name].downcase}}_create(ctx);
+    %   i += 1
+    % end
+    default:
+      assert(false); // no material
+      return Core::Material();
+  }
+
+  // Unreachable
+}
+
+
+} // ns

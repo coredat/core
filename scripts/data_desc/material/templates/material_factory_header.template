@@ -1,0 +1,40 @@
+#ifndef MATERIAL_FACTORY_INCLUDED_{{guid}}
+#define MATERIAL_FACTORY_INCLUDED_{{guid}}
+
+
+#include <core/common/core_fwd.hpp>
+
+
+namespace Factory_material {
+
+
+/*!
+  Generic Material Factory method.
+*/
+Core::Material
+create(const uint32_t id, Core::Context &ctx);
+
+
+constexpr bool
+str_compare(const char *left, const char *right) { return false; }
+
+
+constexpr uint32_t
+get_id(const char *name)
+{
+  return 
+
+  % i = 1
+  % materials.each do |m|
+  str_compare(name, \"{{m.data[:name]}}\") ? {{i}} :
+  %   i += 1
+  % end
+
+  0;
+}
+
+
+} // ns
+
+
+#endif // inc guard

@@ -1,0 +1,32 @@
+#ifndef OBJECT_TAGS_INCLUDED_{{guid}}
+#define OBJECT_TAGS_INCLUDED_{{guid}}
+
+
+/*
+  These object tags are used in the entity factory.
+*/
+
+
+#include <stdint.h>
+
+
+namespace Object_tag {
+
+
+enum ENUM {
+
+% tag_list = tags.collect{|x| "#{x.data[:name]}_tag = #{x.data[:value]}," }.uniq
+% tag_list.each do |t|
+  {{t}}
+% end
+
+}; // enum
+
+
+constexpr uint32_t number_of_tags() { return {{tag_list.length}}; }
+
+
+} // ns
+
+
+#endif // inc guard

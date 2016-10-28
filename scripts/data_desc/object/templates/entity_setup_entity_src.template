@@ -1,0 +1,21 @@
+
+
+Core::Entity
+{{name.downcase}}_create(Core::World &world, const Core::Transform *override_transform)
+{
+  // Create Entity
+  Core::Entity entity(world);
+
+  // Setup entity
+  {
+    entity.set_name(\"{{name}}\");
+
+    % if tags
+    // Set tags
+    %   tags.each do |t|
+    constexpr uint32_t tag_{{t.data[:name]}} = {{t.data[:value]}};
+    %   end
+    % tag_list = tags.collect{|t| 'tag_' + t.data[:name]}.join(' | ')
+    entity.set_tags({{tag_list}});
+    % end
+  }
