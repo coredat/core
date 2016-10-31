@@ -15,6 +15,8 @@
 #include <core/resources/material.hpp>
 #include <core/renderer/renderer.hpp>
 #include <core/renderer/material_renderer.hpp>
+#include <core/physics/collider.hpp>
+#include <core/physics/box_collider.hpp>
 #include <utilities/logging.hpp>
 #include <assert.h>
 

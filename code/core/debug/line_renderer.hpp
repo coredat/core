@@ -18,6 +18,10 @@ void
 debug_line(const math::vec3 start, const math::vec3 end, const Core::Color color);
 
 
+void
+debug_line(const Core::Ray ray, const Core::Color color);
+
+
 } // ns
 } // ns
 

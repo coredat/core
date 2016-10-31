@@ -35,8 +35,7 @@ transform_to_bt(const Core::Transform &core_trans)
   {
     const math::mat3 rot_mat    = math::quat_get_rotation_matrix(core_trans.get_rotation());
     const math::mat3 rot_mat_tr = math::mat3_get_transpose(rot_mat);
-    
-    const math::quat bt_rot = math::quat_init_with_mat3(rot_mat_tr);
+    const math::quat bt_rot     = math::quat_init_with_mat3(rot_mat_tr);
     
     trans.setRotation(btQuaternion(btScalar(math::get_x(bt_rot)),
                                    btScalar(math::get_y(bt_rot)),

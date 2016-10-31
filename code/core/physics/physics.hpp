@@ -2,10 +2,21 @@
 #define PHYSICS_INCLUDED_1D1EF33A_9D5D_483E_853F_E7640773D08B
 
 
-#include "rigidbody.hpp"
-#include "collider.hpp"
-#include "box_collider.hpp"
-#include "ray.hpp"
+#include <core/common/core_fwd.hpp>
+
+
+namespace Core {
+namespace Physics {
+
+
+void
+apply_force(Core::Entity_ref ref,
+            const math::vec3 world_direction,
+            const float force);
+
+
+} // ns
+} // ns
 
 
 #endif // inc guard

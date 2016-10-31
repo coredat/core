@@ -33,7 +33,6 @@ public:
   
   float         get_mass() const;
   void          set_mass(const float mass);
-  
       
 private:
 

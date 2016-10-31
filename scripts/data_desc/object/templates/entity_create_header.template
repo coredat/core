@@ -42,6 +42,13 @@ constexpr const char* {{name.downcase}}_default_name() { return \"{{name}}\"; }
 constexpr uint32_t {{name.downcase}}_default_tags() { return {{combined_tags}}; }
 
 
+/*
+  Default tranfsorm components.
+*/
+const math::vec3 {{name.downcase}}_default_position();
+const math::vec3 {{name.downcase}}_default_scale();
+
+
 } // ns
 
 

@@ -16,6 +16,7 @@
 #include <utilities/logging.hpp>
 #include <transformations/physics/bullet/core_rb_to_bullet_rb.hpp>
 #include <transformations/physics/bullet/bullet_math_extensions.hpp>
+#include <transformations/physics/bullet/apply_force.hpp>
 #include <utilities/bits.hpp>
 #include <assert.h>
 #include <btBulletDynamicsCommon.h>
@@ -379,6 +380,38 @@ update_collider(const util::generic_id this_id,
 //    }
 //  } // if phys component
   
+}
+
+
+void
+apply_force(const util::generic_id this_id,
+            Data::Rigidbody_data *rb_data,
+            const math::vec3 direction,
+            const float power)
+{
+  assert(this_id);
+  assert(math::vec3_length(direction) > 0.f);
+  
+  Data::data_lock(rb_data);
+  {
+    uintptr_t bt_data(0);
+    Data::rigidbody_get_rigidbody(rb_data, this_id, &bt_data);
+    
+    if(bt_data)
+    {
+      btRigidBody *bt_rb = reinterpret_cast<btRigidBody*>(bt_data);
+      
+      Physics_transform::apply_world_force(bt_rb,
+                                           math::vec3_to_bt(direction),
+                                           btScalar(power));
+    }
+    else
+    {
+      LOG_ERROR("No RB Found to apply force to");
+    }
+
+  }
+  Data::data_unlock(rb_data);
 }
 
 

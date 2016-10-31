@@ -1,10 +1,13 @@
 
   // Setup rigidbody
   {
+    Core::Box_collider collider({{rb_collider_args}});
+
     Core::Rigidbody rb;
     rb.set_mass({{rb_mass}});
-    rb.set_is_dynamic({{rb_is_dynamic}});
+    rb.set_is_kinematic({{rb_is_kinematic}});
     rb.set_is_trigger({{rb_is_trigger}});
+    rb.set_collider(collider);
 
     Core::Entity_component::set_rigidbody(entity, rb);
   }

@@ -2,4 +2,9 @@
   return entity;
 } // {{name.downcase}}_create function
 
+
+const math::vec3 {{name.downcase}}_default_position() { return math::vec3_init({{trans_position}}); }
+const math::vec3 {{name.downcase}}_default_scale() { return math::vec3_init({{trans_scale}}); }
+
+
 } // ns

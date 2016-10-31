@@ -57,9 +57,17 @@ module CoreObjectGen
 
       if yml['rigidbody'] then
         @data[:has_rb] = true
-        @data[:rb_is_dynamic] = if !yml['rigidbody']['is_dynamic'].nil? then yml['rigidbody']['is_dynamic'].to_s else "true"  end
-        @data[:rb_mass]       = if !yml['rigidbody']['mass'].nil?       then yml['rigidbody']['mass'].to_s       else "1"     end
-        @data[:rb_is_trigger] = if !yml['rigidbody']['is_trigger'].nil? then yml['rigidbody']['is_trigger'].to_s else "false" end
+        @data[:rb_is_kinematic] = if !yml['rigidbody']['rb_is_kinematic'].nil? then yml['rigidbody']['rb_is_kinematic'].to_s else "false" end
+        @data[:rb_mass]         = if !yml['rigidbody']['mass'].nil?            then yml['rigidbody']['mass'].to_s            else "1"     end
+        @data[:rb_is_trigger]   = if !yml['rigidbody']['is_trigger'].nil?      then yml['rigidbody']['is_trigger'].to_s      else "false" end
+      end
+
+      @data[:has_collider] = false
+      @data[:rb_collider_args] = "0.5, 0.5, 0.5"
+
+      if yml['collider'] then
+        @data[:has_collider] = true
+        @data[:rb_collider_args] = if !yml['collider']['box'].nil? then yml['collider']['box'] else "0.5, 0.5, 0.5" end
       end
 
       @data[:has_renderer] = false
