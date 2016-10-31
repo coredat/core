@@ -1,0 +1,18 @@
+#ifndef {{name.upcase}}_INCLUDED_{{guid}}
+#define {{name.upcase}}_INCLUDED_{{guid}}
+
+
+#include <core/common/core_fwd.hpp>
+
+
+namespace Factory_material {
+
+
+Core::Material
+{{name}}_create();
+
+
+} // ns
+
+
+#endif // inc guard

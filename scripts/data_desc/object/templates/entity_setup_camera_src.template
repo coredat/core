@@ -1,0 +1,10 @@
+
+  // Setup Camera
+  {
+    Core::Camera camera;
+
+    Core::Entity_component::set_camera(
+      entity,
+      camera
+    );
+  }

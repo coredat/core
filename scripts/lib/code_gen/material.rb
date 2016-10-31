@@ -11,7 +11,7 @@ module CoreMaterialGen
 
     attr_reader :data
 
-    def initialize(yml, name)
+    def initialize(yml, shd_path, tex_path)
       @data = {}
 
       @data[:guid] = SecureRandom.uuid.upcase.gsub("-", "_")
@@ -21,6 +21,9 @@ module CoreMaterialGen
       @data[:map_01] = yml['map_01']
       @data[:color] = yml['color']
 
+      @data[:shader_path] = shd_path
+      @data[:texture_path] = tex_path
+
     end
 
   end
@@ -29,18 +32,57 @@ module CoreMaterialGen
 
     def initialize(desc_dir, out_dir, template_dir)
 
+      @materials = []
 
+      descs = Dir["#{desc_dir}**/*.yml"]
 
+      descs.each do |desc|
+        yml_desc = YAML.load_file(desc)
+
+        yml_desc['material']['name'] = File.basename(desc, ".yml").downcase
+        yml_desc['material']['subdir'] = File.dirname(desc.gsub(desc_dir, ""))
+
+        @materials << Material.new(yml_desc['material'], "", "")
+
+      end
+
+      @materials.each do |material|
+
+        header_code = []
+        src_code = []
+
+        # Autogen warning
+        header_code << parse_template(File.read("#{template_dir}/autogen_warning.template"))
+        src_code    << parse_template(File.read("#{template_dir}/autogen_warning.template"))
+
+        header_code << parse_template(File.read("#{template_dir}/material_header.template"), material.data)
+        src_code    << parse_template(File.read("#{template_dir}/material_src.template"), material.data)
+
+        # Write out the files
+        output_path = "#{out_dir}#{material.data[:subdir]}"
+        Dir.mkdir(output_path) unless File.exists?(output_path)
+
+        File.write("#{output_path}#{material.data[:name].downcase}.cpp", src_code.join(""))
+        File.write("#{output_path}#{material.data[:name].downcase}.hpp", header_code.join(""))
+      end
+
+      material_data             = {}
+      material_data[:guid]      = SecureRandom.uuid.upcase.gsub("-", "_")
+      material_data[:materials] = @materials
+
+      material_factory_header_code = []
+      material_factory_src_code    = []
+
+      material_factory_header_code << parse_template(File.read("#{template_dir}/autogen_warning.template"))
+      material_factory_src_code    << parse_template(File.read("#{template_dir}/autogen_warning.template"))
+
+      material_factory_header_code << parse_template(File.read("#{template_dir}/material_factory_header.template"), material_data)
+      material_factory_src_code    << parse_template(File.read("#{template_dir}/material_factory_src.template"), material_data)
+
+      File.write("#{out_dir}material_factory.hpp", material_factory_header_code.join(""))
+      File.write("#{out_dir}material_factory.cpp", material_factory_src_code.join(""))
     end
 
   end
 
 end
-
-#Test Dirs
-DESC_DIR     = "./domain/materials/desc/"
-OUT_DIR      = "./domain/materials/output/"
-TEMPLATE_DIR = "scripts/data_desc/materials/templates/"
-
-puts "Generating Materials"
-CoreMaterialGen::MaterialGen.new(DESC_DIR, OUT_DIR, TEMPLAT_DIR)

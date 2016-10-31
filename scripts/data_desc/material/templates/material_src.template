@@ -1,0 +1,46 @@
+#include \"{{name}}.hpp\"
+#include <core/resources/material.hpp>
+#include <core/resources/shader.hpp>
+#include <core/resources/texture.hpp>
+#include <core/common/directory.hpp>
+
+
+namespace Factory_material {
+
+
+Core::Material
+{{name}}_create()
+{
+  static bool set_once = false;
+  static Core::Material material(\"{{name}}\");
+
+  if(!set_once)
+  {
+    char filepath[2048];
+    memset(filepath, 0, sizeof(filepath));
+
+    % unless shader.nil? then
+    Core::Directory::resource_path(filepath);
+    strcat(filepath, \"{{shader_path}}{{shader}}\");
+
+    material.set_shader(Core::Shader(filepath));
+
+    memset(filepath, 0, sizeof(filepath));
+    % end
+    % unless map_01.nil? then
+    Core::Directory::resource_path(filepath);
+    strcat(filepath, \"{{texture_path}}{{map_01}}\");
+
+    material.set_map_01(Core::Texture(filepath));
+
+    memset(filepath, 0, sizeof(filepath));
+    % end
+
+    set_once = true;
+  }
+
+  return material;
+}
+
+
+} // ns

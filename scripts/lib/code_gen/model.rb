@@ -144,7 +144,7 @@ module CoreDataGen
 
           # puts out_dir
 
-          models << Model.new(yml_desc['data'])
+          @models << Model.new(yml_desc['data'])
         end
       end
 
@@ -221,9 +221,9 @@ end
 # Test directories
 # --
 # From the outter mose Rake this coould be improved.
-# DESC_DIR     = "scripts/data_desc/model/desc/"
-# OUT_DIR      = "code/data/"
-# TEMPLATE_DIR = "scripts/data_desc/model/templates/"
+DESC_DIR     = "scripts/data_desc/model/desc/"
+OUT_DIR      = "code/data/"
+TEMPLATE_DIR = "scripts/data_desc/model/templates/"
 
 # Generate Models
 # puts "Generating Models"

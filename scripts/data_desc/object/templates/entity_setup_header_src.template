@@ -1,11 +1,18 @@
 #include \"{{name.downcase}}.hpp\"
+% unless material_factory.nil? then
+#include {{material_factory}}
+% end
 #include <core/world/world.hpp>
+#include <core/common/directory.hpp>
+#include <core/camera/camera.hpp>
 #include <core/entity/entity.hpp>
 #include <core/entity/entity_ref.hpp>
 #include <core/entity/entity_components.hpp>
 #include <core/transform/transform.hpp>
 #include <core/renderer/renderer.hpp>
 #include <core/physics/rigidbody.hpp>
+#include <core/model/model.hpp>
+#include <core/resources/material.hpp>
 #include <core/renderer/renderer.hpp>
 #include <core/renderer/material_renderer.hpp>
 #include <utilities/logging.hpp>

@@ -12,20 +12,23 @@ namespace Factory_material {
   Generic Material Factory method.
 */
 Core::Material
-create(const uint32_t id, Core::Context &ctx);
+create(const uint32_t id);
 
 
 constexpr bool
-str_compare(const char *left, const char *right) { return false; }
+str_compare(char const *left, char const *right)
+{
+  return (*left && *right) ? (*left == *right && str_compare(left + 1, right + 1)) : (!*left && !*right);
+}
 
 
 constexpr uint32_t
 get_id(const char *name)
 {
-  return 
+  return
 
   % i = 1
-  % materials.each do |m|
+  %   materials.each do |m|
   str_compare(name, \"{{m.data[:name]}}\") ? {{i}} :
   %   i += 1
   % end

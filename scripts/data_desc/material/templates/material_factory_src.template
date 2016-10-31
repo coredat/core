@@ -1,22 +1,26 @@
 #include \"material_factory.hpp\"
-#include <core/resources/materia.hpp>
+#include <core/resources/material.hpp>
+% materials.each do |m|
+#include \"{{m.data[:subdir]}}{{m.data[:name]}}.hpp\"
+% end
 
 
 namespace Factory_material {
 
 
 Core::Material
-create(const uint32_t id, const Core::Context &ctx)
+create(const uint32_t id)
 {
+  // TODO: An array of funtion ptrs would be much faster.
   switch(id)
-  { 
+  {
     case(0):
       assert(false); // no material, perhaps we can make a dummy material in future.
       return Core::Material();
     % i = 1
     % materials.each do |m|
     case({{i}}):
-      return {{m.data[:name].downcase}}_create(ctx);
+      return {{m.data[:name].downcase}}_create();
     %   i += 1
     % end
     default:

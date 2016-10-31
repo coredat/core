@@ -31,25 +31,33 @@ module CoreObjectGen
 
     attr_reader :data
 
-    def initialize(yml, object_name)
+    def initialize(yml, object_name, material_factory)
       @data = {}
 
       @data[:guid]   = SecureRandom.uuid.upcase.gsub("-", "_")
       @data[:subdir] = if yml['subdir'] then "#{yml['subdir']}/" else "" end
 
-      @data[:name]          = yml['name']
-      @data[:tags]          = if yml['tags'] then yml['tags'].split(' ').collect{|t| Tag.new(t)} else Array.new() end
-      @data[:combined_tags] = @data[:tags].collect{|t| t.data[:value]}.inject(0, :+)
+      @data[:name]             = yml['name']
+      @data[:tags]             = if yml['tags'] then yml['tags'].split(' ').collect{|t| Tag.new(t)} else Array.new() end
+      @data[:combined_tags]    = @data[:tags].collect{|t| t.data[:value]}.inject(0, :+)
+      @data[:material_factory] = material_factory;
 
-      @data[:trans_position] = "0, 0, 0"
-      @data[:trans_scale]    = "1, 1, 1"
-      @data[:trans_rot]      = "0, 0, 0"
+      @data[:has_transform] = true # because we just default to it
+
+      # because its
+      if yml['transform'].nil? then yml['transform'] = "" end
+
+      if yml['transform'] then
+        @data[:trans_position] = if !yml['transform']['position'].nil? then yml['transform']['position'].to_s else "0, 0, 0" end
+        @data[:trans_scale]    = if !yml['transform']['scale'].nil?    then yml['transform']['scale'].to_s    else "1, 1, 1" end
+        @data[:trans_rot]      = if !yml['transform']['rotation'].nil? then yml['transform']['rotation'].to_s else ""        end
+      end
 
       @data[:has_rb] = false
 
       if yml['rigidbody'] then
         @data[:has_rb] = true
-        @data[:rb_is_dynamic] = if !yml['rigidbody']['is_dynamic'].nil? then yml['rigidbody']['is_dynamic'].to_s else "true" end
+        @data[:rb_is_dynamic] = if !yml['rigidbody']['is_dynamic'].nil? then yml['rigidbody']['is_dynamic'].to_s else "true"  end
         @data[:rb_mass]       = if !yml['rigidbody']['mass'].nil?       then yml['rigidbody']['mass'].to_s       else "1"     end
         @data[:rb_is_trigger] = if !yml['rigidbody']['is_trigger'].nil? then yml['rigidbody']['is_trigger'].to_s else "false" end
       end
@@ -57,11 +65,18 @@ module CoreObjectGen
       @data[:has_renderer] = false
 
       if yml['renderer'] then
-        @data[:has_renderer] = true
-        @data[:renderer_type]       = "Material"
-        @data[:renderer_mat_shader] = "fullbright"
-        @data[:renderer_mat_map_01] = "dev_squares"
+        @data[:has_renderer]      = true
+        @data[:renderer_type]     = "Material"
+        @data[:renderer_mat_name] = if !yml['renderer']['material'].nil? then yml['renderer']['material'] else "" end
       end
+
+      @data[:has_camera] = false
+
+      if yml['camera'] then
+        @data[:has_camera] = true
+      end
+
+      @data[:mesh_file] = if !yml['mesh'].nil? then yml['mesh'] else "unit_cube.obj" end
     end
 
   end
@@ -70,7 +85,7 @@ module CoreObjectGen
 
     attr_reader :objects
 
-    def initialize(desc_dir, out_dir, template_dir)
+    def initialize(desc_dir, out_dir, full_template_dir, material_factory)
 
       @objects = []
 
@@ -82,10 +97,11 @@ module CoreObjectGen
         yml_desc = YAML.load_file(desc)
 
         if(yml_desc['object']) then
+          puts material_factory
 
           yml_desc['object']['subdir'] = File.dirname(desc.gsub(desc_dir, ""))
 
-          objects << Object.new(yml_desc['object'], File.basename(desc, "yml").downcase)
+          objects << Object.new(yml_desc['object'], File.basename(desc, "yml").downcase, material_factory)
 
         end
 
@@ -93,8 +109,6 @@ module CoreObjectGen
 
       tags = {}
       tags[:tags] = []
-
-      full_template_dir = "#{Dir.pwd}/#{template_dir}"
 
       # Generate Data
       @objects.each do |object|
@@ -118,6 +132,11 @@ module CoreObjectGen
 
         if(object.data[:has_renderer]) then
           src_code << parse_template(File.read("#{full_template_dir}entity_setup_renderer_src.template"),  object.data)
+        end
+
+        if(object.data[:has_camera]) then
+          puts "Camera"
+          src_code << parse_template(File.read("#{full_template_dir}entity_setup_camera_src.template"),  object.data)
         end
 
         src_code    << parse_template(File.read("#{full_template_dir}entity_setup_footer_src.template"),    object.data)
@@ -144,8 +163,8 @@ module CoreObjectGen
       factory_header_code = []
       factory_source_code = []
 
-      factory = {}
-      factory[:guid] = SecureRandom.uuid.upcase.gsub("-", "_")
+      factory           = {}
+      factory[:guid]    = SecureRandom.uuid.upcase.gsub("-", "_")
       factory[:objects] = @objects;
 
       factory_header_code << parse_template(File.read("#{full_template_dir}autogen_warning.template"), factory)
@@ -159,11 +178,3 @@ module CoreObjectGen
   end
 
 end
-
-# Test Dirs
-# DESC_DIR     = "./domain/objects/desc/"
-# OUT_DIR      = "./domain/objects/output/"
-# TEMPLATE_DIR = "scripts/data_desc/object/templates/"
-
-# puts "Generating Objects"
-# CoreObjectGen::ObjectGen.new(ARGV[0], ARGV[1], TEMPLATE_DIR)

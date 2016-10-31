@@ -1,7 +1,20 @@
 
   // Setup Renderer
   {
-    Core::Material_renderer mat_renderer;
+    char filepath[2048];
+    memset(filepath, 0, sizeof(filepath));
+    Core::Directory::resource_path(filepath);
+    strcat(filepath, \"{{mesh_file}}\");
 
-    Core::Entity_component::set_renderer(entity, mat_renderer);
+    Core::Material_renderer renderer(
+      Factory_material::create(
+        Factory_material::get_id(\"{{renderer_mat_name}}\")
+      ),
+      Core::Model(filepath)
+    );
+
+    Core::Entity_component::set_renderer(
+      entity,
+      renderer
+    );
   }

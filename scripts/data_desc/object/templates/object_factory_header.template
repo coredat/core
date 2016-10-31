@@ -30,9 +30,9 @@ get_id(const char *name)
 
   % i = 1;
   % objects.each do |o|
-  str_compare(name, \"{{o.data[:name]}}\") ? {{i}} : 
+  str_compare(name, \"{{o.data[:name]}}\") ? {{i}} :
   %   i += 1
-  % end 
+  % end
 
   0;
 }

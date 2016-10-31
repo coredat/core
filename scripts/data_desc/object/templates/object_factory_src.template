@@ -12,11 +12,12 @@ namespace Factory_entity {
 Core::Entity
 create(const uint32_t id, Core::World &world, Core::Transform *transform)
 {
+  // TODO: An array of funtion ptrs would be much faster.
   switch(id)
   {
     case(0):
       assert(false); // no entity, perhaps we can make a dummy entity in future.
-      return Core::Entity();    
+      return Core::Entity();
     % i = 1
     % objects.each do |o|
     case({{i}}):
