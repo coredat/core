@@ -77,6 +77,8 @@ Model::Model(const char *filename)
 
   // Check if id already exists, avoid loading the mesh again.
   {
+    m_impl->mesh_id = util::generic_id_invalid();
+  
     Data::data_lock(mesh_data);
     
     util::generic_id search_id = util::generic_id_invalid();
@@ -90,13 +92,13 @@ Model::Model(const char *filename)
       #ifdef LOG_DOUBLE_RESOURCE_INITIALIZE
       LOG_WARNING(Error_string::resource_already_exists());
       #endif
-    
-      m_impl->mesh_id = search_id;
+      
+      m_impl->mesh_id = mesh_data->keys[search_id];
     }
     
     Data::data_unlock(mesh_data);
     
-    if(search_id)
+    if(m_impl->mesh_id)
     {
       return;
     }

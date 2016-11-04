@@ -48,7 +48,6 @@ transform_to_bt(const Core::Transform &core_trans)
     trans.setOrigin(math::vec3_to_bt(core_trans.get_position()));
   }
 
-  
   return trans;
 }
 

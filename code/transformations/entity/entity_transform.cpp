@@ -91,17 +91,19 @@ set_transform(const util::generic_id this_id,
               Data::Entity_data *entity_data,
               Data::Transform_data *transform_data,
               Data::Rigidbody_data *rb_data,
+              btDynamicsWorld *world,
               Data::Trigger_data *trigger_data,
               Data::Mesh_draw_call_data *mesh_data,
               Data::Text_draw_call_data *text_data,
               const Core::Transform &set_transform,
               bool inform_phys_engine)
 {
-  assert(entity_data);
-  assert(transform_data);
-  assert(rb_data);
-  assert(mesh_data);
-  assert(text_data);
+  LOG_TODO_ONCE("asserts need to be conditional depending on what transforms are betings set.")
+//  assert(entity_data);
+//  assert(transform_data);
+//  assert(rb_data);
+//  assert(mesh_data);
+//  assert(text_data);
 
   // Check valid
   if(!is_valid(this_id, entity_data, true)) {
@@ -136,7 +138,7 @@ set_transform(const util::generic_id this_id,
 
     if(inform_phys_engine && Common::Data_type::is_collidable(components))
     {
-      Entity_detail::set_phy_transform(this_id, &set_transform, entity_data, rb_data, trigger_data);
+      Entity_detail::set_phy_transform(this_id, &set_transform, entity_data, rb_data, world, trigger_data);
     }
 
     update_mesh_renderer(this_id, mesh_data, &new_transform);

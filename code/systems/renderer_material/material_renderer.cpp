@@ -184,9 +184,12 @@ render(const math::mat4 &view_proj_mat,
     // Or vbo if we don't.
     else
     {
-      const GLsizei count = call.mesh.vbo.number_of_entries / mat_renderer_vertex_format.number_of_attributes;
-      glDrawArrays(GL_TRIANGLES, 0, count);
-      ++draw_calls_count;
+      if(mat_renderer_vertex_format.number_of_attributes)
+      {
+        const GLsizei count = call.mesh.vbo.number_of_entries / mat_renderer_vertex_format.number_of_attributes;
+        glDrawArrays(GL_TRIANGLES, 0, count);
+        ++draw_calls_count;
+      }
     }
   }
   

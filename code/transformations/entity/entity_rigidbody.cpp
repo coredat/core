@@ -190,7 +190,7 @@ set_rigidbody(const util::generic_id this_id,
       
       Data::rigidbody_set_collision_id(rb_data, this_id, &mask);
       
-      btRigidBody *bt_rb(Physics_transform::convert_core_rb_to_bullet_rb(&rigidbody, shape, &transform));
+      btRigidBody *bt_rb(Physics_transform::convert_core_rb_to_bullet_rb(&rigidbody, shape, &transform, this_id));
       
       world->dynamicsWorld->addRigidBody(bt_rb);
       
@@ -242,6 +242,7 @@ set_phy_transform(const util::generic_id this_id,
                   const Core::Transform *transform,
                   Data::Entity_data *entity_data,
                   Data::Rigidbody_data *rb_data,
+                     btDynamicsWorld *world,
                   Data::Trigger_data *trigger_data)
 {
   // Param Check
@@ -297,7 +298,7 @@ set_phy_transform(const util::generic_id this_id,
     btRigidBody *bt_rigidbody(reinterpret_cast<btRigidBody*>(rigidbody));
     btTransform  trans(math::transform_to_bt(*transform));
     
-    Physics_transform::update_rigidbody_transform(bt_rigidbody, &trans);
+    Physics_transform::update_rigidbody_transform(bt_rigidbody, world, &trans, math::vec3_to_bt(transform->get_scale()));
     
     Data::data_unlock(rb_data);
   }

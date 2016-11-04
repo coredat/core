@@ -7,6 +7,7 @@
 #include <data/fwd_dec_collections.hpp>
 #include <math/transform/transform_fwd.hpp>
 #include <math/geometry/geometry_fwd.hpp>
+#include <btBulletDynamicsCommon.h>
 
 
 namespace Entity_detail {
@@ -28,6 +29,7 @@ set_phy_transform(const util::generic_id this_id,
                   const Core::Transform *transform,
                   Data::Entity_data *entity_data,
                   Data::Rigidbody_data *rb_data,
+                   btDynamicsWorld *world,
                   Data::Trigger_data *trigger_data);
 
 

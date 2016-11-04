@@ -71,4 +71,8 @@ core_project_data = {
     "-lBulletDynamics",
     "-lLinearMath",
   },
+
+  asset_dirs_dependencies = {
+    make.get_proj_root() .. "../assets/",
+  },
 }

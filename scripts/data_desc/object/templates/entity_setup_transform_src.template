@@ -6,8 +6,8 @@
       Core::Entity_component::set_transform(
         entity,
         Core::Transform(
-          math::vec3_init({{trans_position}}),
-          math::vec3_init({{trans_scale}}),
+          {{name.downcase}}_default_position(),
+          {{name.downcase}}_default_scale(),
           math::quat_init() // todo
         )
       );

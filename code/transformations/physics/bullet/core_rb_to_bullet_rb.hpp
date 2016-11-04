@@ -9,6 +9,7 @@ class btPairCachingGhostObject;
 class btDynamicsWorld;
 class btTransform;
 class btCollisionShape;
+class btVector3;
 
 
 namespace Physics_transform {
@@ -17,7 +18,8 @@ namespace Physics_transform {
 btRigidBody*
 convert_core_rb_to_bullet_rb(const Core::Rigidbody *core_rb,
                              btCollisionShape *collider,
-                             const btTransform *transform);
+                             const btTransform *transform,
+                             const uintptr_t user_data = 0);
   
   
 btPairCachingGhostObject*
@@ -32,7 +34,9 @@ update_trigger_transform(btPairCachingGhostObject *trigger,
 
 void
 update_rigidbody_transform(btRigidBody *rb,
-                           const btTransform *transform);
+                           btDynamicsWorld *world,
+                           const btTransform *transform,
+                           const btVector3 scale);
 
 
 btCollisionShape*

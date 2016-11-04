@@ -65,7 +65,7 @@ think(std::shared_ptr<Data::World> world, const float dt, Tick_information *out_
     Update the physics world
   */
     {
-      world->dynamicsWorld->stepSimulation(1 / 60.f, 10);
+      world->dynamicsWorld->stepSimulation(1 / 60.f, 500);
     }
 
 
@@ -144,40 +144,41 @@ think(std::shared_ptr<Data::World> world, const float dt, Tick_information *out_
     Now that we have shifted to bullet this should be done through the motion_states.
   */
   {
-    // Set transforms.
-    Data::Rigidbody_data *rb_data = world->rigidbody_data;
-    
-    for(size_t i = 0; i < Data::rigidbody_get_size(rb_data); ++i)
-    {
-      const uintptr_t rb_ptr = Data::rigidbody_get_rigidbody_data(rb_data)[i];
-      
-      if(rb_ptr)
-      {
-//        const q3Transform trans(reinterpret_cast<q3Body*>(rb_ptr)->GetTransform());
-        btTransform trans;
-        reinterpret_cast<btRigidBody*>(rb_ptr)->getMotionState()->getWorldTransform(trans);
-        
-        Core::Transform core_trans = math::transform_from_bt(trans);
-
-        const uint32_t entity_id(rb_data->keys[i]);
-        const Core::Entity_ref ref(Core_detail::entity_id_from_uint(entity_id));
-        
-        const Core::Transform old_trans(Core::Entity_component::get_transform(ref));
-        
-        core_trans.set_scale(old_trans.get_scale());
-
-        
-        Entity_detail::set_transform(entity_id,
-                                     world->entity,
-                                     world->transform,
-                                     world->rigidbody_data,
-                                     world->trigger_data,
-                                     world->mesh_data,
-                                     world->text_data,
-                                     core_trans,
-                                     false);
-      }
-    }
+//    // Set transforms.
+//    Data::Rigidbody_data *rb_data = world->rigidbody_data;
+//    
+//    for(size_t i = 0; i < Data::rigidbody_get_size(rb_data); ++i)
+//    {
+//      const uintptr_t rb_ptr = Data::rigidbody_get_rigidbody_data(rb_data)[i];
+//      
+//      if(rb_ptr)
+//      {
+////        const q3Transform trans(reinterpret_cast<q3Body*>(rb_ptr)->GetTransform());
+//        btTransform trans;
+//        reinterpret_cast<btRigidBody*>(rb_ptr)->getMotionState()->getWorldTransform(trans);
+//        
+//        Core::Transform core_trans = math::transform_from_bt(trans);
+//
+//        const uint32_t entity_id(rb_data->keys[i]);
+//        const Core::Entity_ref ref(Core_detail::entity_id_from_uint(entity_id));
+//        
+//        const Core::Transform old_trans(Core::Entity_component::get_transform(ref));
+//        
+//        core_trans.set_scale(old_trans.get_scale());
+//
+//        
+//        Entity_detail::set_transform(entity_id,
+//                                     world->entity,
+//                                     world->transform,
+//                                     world->rigidbody_data,
+//                                     world->dynamicsWorld,
+//                                     world->trigger_data,
+//                                     world->mesh_data,
+//                                     world->text_data,
+//                                     core_trans,
+//                                     false);
+//      }
+//    }
   }
 }
 

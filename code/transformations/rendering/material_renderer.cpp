@@ -33,6 +33,7 @@ material_renderer(const math::mat4 &view_mat,
   
   // Its unlikely we will ever have more than 128 runs.
   // If we do we will increase it for the _next_ frame.
+  LOG_TODO_ONCE("We did bust this limit!")
   static uint32_t runs_to_alloc_for = 128;
   
   Draw_run *runs = SCRATCH_ALIGNED_ALLOC(Draw_run, runs_to_alloc_for);
@@ -92,6 +93,7 @@ material_renderer(const math::mat4 &view_mat,
   // Do we need to increase the number of runs?
   if(number_of_runs >= runs_to_alloc_for)
   {
+    --number_of_runs;
     LOG_INFO("Increasing memory for material runs.");
     runs_to_alloc_for = runs_to_alloc_for << 1;
   }
@@ -114,7 +116,10 @@ material_renderer(const math::mat4 &view_mat,
     for(uint32_t r = 0; r < number_of_runs; ++r)
     {
       Material_renderer::Material material_to_render;
-      Data::material_get_material(material_data, runs[r].material_id, &material_to_render);
+      
+      Data::material_get_material(material_data,
+                                  runs[r].material_id,
+                                  &material_to_render);
       
       const size_t start = runs[r].start_point;
       const size_t count = runs[r].size;

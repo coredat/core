@@ -49,12 +49,13 @@ World::World(const util::generic_id instance_id, const uint32_t entity_hint)
   Data::Collision_data *collision_data = new Data::Collision_data;
   Data::collision_create(collision_data, entity_hint);
   
-  broadphase = new btDbvtBroadphase();
-  solver = new btSequentialImpulseConstraintSolver;
-  collisionConfiguration = new btDefaultCollisionConfiguration();
-  dispatcher = new btCollisionDispatcher(collisionConfiguration);
+  broadphase              = new btDbvtBroadphase();
+  solver                  = new btSequentialImpulseConstraintSolver;
+  collisionConfiguration  = new btDefaultCollisionConfiguration();
+  dispatcher              = new btCollisionDispatcher(collisionConfiguration);
+  dynamicsWorld           = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
+  
   btGImpactCollisionAlgorithm::registerAlgorithm(dispatcher);
-  dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
   dynamicsWorld->setGravity(btVector3(0, -10, 0));  
   
   this->entity_removal = graph_changes;
