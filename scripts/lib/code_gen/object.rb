@@ -63,7 +63,7 @@ module CoreObjectGen
       end
 
       @data[:has_collider] = false
-      @data[:rb_collider_args] = "0.5, 0.5, 0.5"
+      @data[:rb_collider_args] = "1.f, 1.f, 1.f"
 
       if yml['collider'] then
         @data[:has_collider] = true

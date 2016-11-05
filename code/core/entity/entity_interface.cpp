@@ -22,6 +22,7 @@
 #include <transformations/entity/entity_transform.hpp>
 #include <transformations/entity/entity_rigidbody.hpp>
 #include <transformations/entity/entity_renderer.hpp>
+#include <transformations/entity/entity_callback.hpp>
 
 #include <common/error_strings.hpp>
 #include <utilities/logging.hpp>
@@ -300,6 +301,20 @@ uint32_t
 Entity_interface::get_id() const
 {
   return Core_detail::entity_id_to_uint(m_impl->id);
+}
+
+
+// ** Callbacks ** //
+
+void
+Entity_interface::on_collision_callback(const uintptr_t user_data, const on_collision_callback_fn &callback)
+{
+  auto world_data = Core_detail::world_index_get_world_data(m_impl->id.world_instance);
+  
+  Entity_detail::set_entity_collision_callback(Core_detail::entity_id_to_uint(m_impl->id),
+                                               world_data->entity,
+                                               (uintptr_t)callback,
+                                               user_data);
 }
 
 

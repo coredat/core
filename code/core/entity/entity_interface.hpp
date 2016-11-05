@@ -11,6 +11,9 @@
 namespace Core {
 
 
+using on_collision_callback_fn = void(*)(const uintptr_t user_data, const Entity_ref ref, const Collision &collisions);
+
+
 class Entity_interface
 {
 protected:
@@ -46,6 +49,11 @@ public:
   
   void                          set_name(const char* set_name);               //!< Set the name of object.
   const char*                   get_name() const;                             //!< Returns a volatile pointer to the name.
+  
+  
+  // ** Callbacks ** //
+  void                          on_collision_callback(const uintptr_t user_data, const on_collision_callback_fn &callback);
+  
   
   // ** Equality ** //
   bool                          operator ==(const Entity_interface &other) const;

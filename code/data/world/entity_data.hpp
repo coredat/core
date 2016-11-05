@@ -6,8 +6,8 @@
 */
 
 
-#ifndef ENTITY_INCLUDED_36A92E43_07F2_4D7E_85AA_DB66054B483E
-#define ENTITY_INCLUDED_36A92E43_07F2_4D7E_85AA_DB66054B483E
+#ifndef ENTITY_INCLUDED_EAF51A7A_751C_492A_A147_19D0634B9FB1
+#define ENTITY_INCLUDED_EAF51A7A_751C_492A_A147_19D0634B9FB1
 
 
 #include <stdint.h>
@@ -27,6 +27,9 @@ struct Entity_data
 
   // name field data //
   char *field_name = nullptr;
+
+  // collision_callback field data //
+  uintptr_t *field_collision_callback = nullptr;
 
   // tags field data //
   uint32_t *field_tags = nullptr;
@@ -112,6 +115,14 @@ char*
 entity_get_name_data(Entity_data *data);
 
 
+const uintptr_t*
+entity_get_const_collision_callback_data(const Entity_data *data);
+
+
+uintptr_t*
+entity_get_collision_callback_data(Entity_data *data);
+
+
 const uint32_t*
 entity_get_const_tags_data(const Entity_data *data);
 
@@ -151,6 +162,16 @@ entity_set_name(const Entity_data *data, const uint32_t key, const char *set_val
 
 constexpr size_t
 entity_get_name_stride() { return 32; }
+
+
+bool
+entity_get_collision_callback(const Entity_data *data, const uint32_t key, uintptr_t *return_value);
+
+
+bool
+entity_set_collision_callback(const Entity_data *data, const uint32_t key, const uintptr_t *set_value);
+
+
 
 
 bool

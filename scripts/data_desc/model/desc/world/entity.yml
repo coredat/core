@@ -8,6 +8,10 @@ data:
       type: char
       count: 32
 
+    - name: collision_callback
+      type: uintptr_t
+      include: <stddef.h>
+
     - name: tags
       type: uint32_t
       include: <stdint.h>

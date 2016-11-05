@@ -7,10 +7,12 @@ desc "Generate Models"
 task :generate_models do |t, args|
 
   template_dir = "#{File.dirname(__FILE__)}/data_desc/model/templates/"
-  desc_dir     = "#{File.dirname(__FILE__)}/scripts/data_desc/model/desc/"
-  out_dir      = "#{File.dirname(__FILE__)}/code/data/"
+  desc_dir     = "#{File.dirname(__FILE__)}/data_desc/model/desc/"
+  out_dir      = "#{File.dirname(__FILE__)}/../code/data/"
 
   puts "Generating Models"
+  puts "desc: #{desc_dir}"
+  puts "output: #{out_dir}"
   CoreDataGen::DataGen.new(desc_dir, out_dir, template_dir)
 
 end

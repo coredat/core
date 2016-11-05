@@ -67,6 +67,15 @@ entity_create(Entity_data *data, const size_t size_hint)
       else { memset(data->field_name, 0, sizeof(char) * size_hint * 32); }
     }
 
+    // Alloc space for collision_callback
+    if(all_alloc)
+    {
+      data->field_collision_callback = new uintptr_t[size_hint * 1];
+      assert(data->field_collision_callback);
+      if(!data->field_collision_callback) { all_alloc = false; }
+      else { memset(data->field_collision_callback, 0, sizeof(uintptr_t) * size_hint * 1); }
+    }
+
     // Alloc space for tags
     if(all_alloc)
     {
@@ -117,6 +126,10 @@ entity_destroy(Entity_data *data)
     // Remove name
     if(data->field_name) { delete[] data->field_name; }
     data->field_name = nullptr;
+
+    // Remove collision_callback
+    if(data->field_collision_callback) { delete[] data->field_collision_callback; }
+    data->field_collision_callback = nullptr;
 
     // Remove tags
     if(data->field_tags) { delete[] data->field_tags; }
@@ -187,6 +200,7 @@ entity_insert(Entity_data *data, const uint32_t key, const size_t insert_point)
     // Shuffle the data down
     memmove(&data->keys[insert_point], &data->keys[start_index], size_to_end * sizeof(*data->keys));
     memmove(&data->field_name[insert_point * 32], &data->field_name[start_index * 32], size_to_end * sizeof(*data->field_name) * 32);
+    memmove(&data->field_collision_callback[insert_point * 1], &data->field_collision_callback[start_index * 1], size_to_end * sizeof(*data->field_collision_callback) * 1);
     memmove(&data->field_tags[insert_point * 1], &data->field_tags[start_index * 1], size_to_end * sizeof(*data->field_tags) * 1);
     memmove(&data->field_components[insert_point * 1], &data->field_components[start_index * 1], size_to_end * sizeof(*data->field_components) * 1);
     memmove(&data->field_user_data[insert_point * 1], &data->field_user_data[start_index * 1], size_to_end * sizeof(*data->field_user_data) * 1);
@@ -218,6 +232,7 @@ entity_remove(Entity_data *data, const uint32_t key)
     // Shuffle the data down
     memmove(&data->keys[index_to_erase], &data->keys[start_index], size_to_end * sizeof(*data->keys));
     memmove(&data->field_name[index_to_erase * 32], &data->field_name[start_index * 32], size_to_end * sizeof(*data->field_name) * 32);
+    memmove(&data->field_collision_callback[index_to_erase * 1], &data->field_collision_callback[start_index * 1], size_to_end * sizeof(*data->field_collision_callback) * 1);
     memmove(&data->field_tags[index_to_erase * 1], &data->field_tags[start_index * 1], size_to_end * sizeof(*data->field_tags) * 1);
     memmove(&data->field_components[index_to_erase * 1], &data->field_components[start_index * 1], size_to_end * sizeof(*data->field_components) * 1);
     memmove(&data->field_user_data[index_to_erase * 1], &data->field_user_data[start_index * 1], size_to_end * sizeof(*data->field_user_data) * 1);
@@ -315,6 +330,7 @@ entity_resize_capacity(Entity_data *data, const size_t size_hint)
   {
     memcpy(new_data.keys, data->keys, sizeof(uint32_t) * data->size);
     memcpy(new_data.field_name, data->field_name, sizeof(char) * data->size * 32);
+    memcpy(new_data.field_collision_callback, data->field_collision_callback, sizeof(uintptr_t) * data->size * 1);
     memcpy(new_data.field_tags, data->field_tags, sizeof(uint32_t) * data->size * 1);
     memcpy(new_data.field_components, data->field_components, sizeof(uint32_t) * data->size * 1);
     memcpy(new_data.field_user_data, data->field_user_data, sizeof(uintptr_t) * data->size * 1);
@@ -329,6 +345,10 @@ entity_resize_capacity(Entity_data *data, const size_t size_hint)
     char *old_name = data->field_name;
     data->field_name = new_data.field_name;
     new_data.field_name = old_name;
+
+    uintptr_t *old_collision_callback = data->field_collision_callback;
+    data->field_collision_callback = new_data.field_collision_callback;
+    new_data.field_collision_callback = old_collision_callback;
 
     uint32_t *old_tags = data->field_tags;
     data->field_tags = new_data.field_tags;
@@ -379,6 +399,26 @@ entity_get_name_data(Entity_data *data)
   assert(data->field_name);
 
   return data->field_name;
+}
+
+
+const uintptr_t*
+entity_get_const_collision_callback_data(const Entity_data *data)
+{
+  assert(data);
+  assert(data->field_collision_callback);
+
+  return data->field_collision_callback;
+}
+
+
+uintptr_t*
+entity_get_collision_callback_data(Entity_data *data)
+{
+  assert(data);
+  assert(data->field_collision_callback);
+
+  return data->field_collision_callback;
 }
 
 
@@ -495,6 +535,63 @@ entity_set_name(const Entity_data *data, const uint32_t key, const char *set_val
     if(index < data->size)
     {
       memcpy(&data->field_name[index * 32], set_value, sizeof(char) * size);
+
+      return true;
+    }
+  }
+
+  return false;
+}
+
+
+bool
+entity_get_collision_callback(const Entity_data *data, const uint32_t key, uintptr_t *return_value)
+{
+  assert(data);
+  assert(key != 0);
+  assert(data->field_collision_callback);
+  assert(return_value);
+
+  // Search for its index.
+  // If we find it we can return the value.
+
+  size_t index = 0;
+
+  if(entity_exists(data, key, &index))
+  {
+    assert(index < data->size);
+
+    if(index < data->size)
+    {
+      *return_value = data->field_collision_callback[index];
+
+      return true;
+    }
+  }
+
+  return false;
+}
+
+
+bool
+entity_set_collision_callback(const Entity_data *data, const uint32_t key, const uintptr_t *set_value)
+{
+  assert(data);
+  assert(key != 0);
+  assert(data->field_collision_callback);
+  assert(set_value);
+
+  // Search for its index.
+  // If we find it we can set the value.
+
+  size_t index = 0;
+
+  if(entity_exists(data, key, &index))
+  {
+    assert(index < data->size);
+    if(index < data->size)
+    {
+      data->field_collision_callback[index] = *set_value;
 
       return true;
     }

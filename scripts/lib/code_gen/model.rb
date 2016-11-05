@@ -155,41 +155,41 @@ module CoreDataGen
         src_code    = []
 
         # Autogen warning
-        header_code << parse_template(File.read("#{Dir.pwd}/#{template_dir}/autogen_warning.template"))
-        src_code    << parse_template(File.read("#{Dir.pwd}/#{template_dir}/autogen_warning.template"))
+        header_code << parse_template(File.read("#{template_dir}/autogen_warning.template"))
+        src_code    << parse_template(File.read("#{template_dir}/autogen_warning.template"))
 
         # Template headers
-        header_code << parse_template(File.read("#{Dir.pwd}/#{template_dir}/model_header_header.template"), model.data)
-        src_code    << parse_template(File.read("#{Dir.pwd}/#{template_dir}/model_header_src.template"), model.data)
+        header_code << parse_template(File.read("#{template_dir}/model_header_header.template"), model.data)
+        src_code    << parse_template(File.read("#{template_dir}/model_header_src.template"), model.data)
 
         # Template common functions
-        header_code << parse_template(File.read("#{Dir.pwd}/#{template_dir}/seperation_common.template"), model.data)
-        src_code    << parse_template(File.read("#{Dir.pwd}/#{template_dir}/seperation_common.template"), model.data)
+        header_code << parse_template(File.read("#{template_dir}/seperation_common.template"), model.data)
+        src_code    << parse_template(File.read("#{template_dir}/seperation_common.template"), model.data)
 
-        header_code << parse_template(File.read("#{Dir.pwd}/#{template_dir}/model_common_header.template"), model.data)
-        src_code    << parse_template(File.read("#{Dir.pwd}/#{template_dir}/model_common_src.template"), model.data)
+        header_code << parse_template(File.read("#{template_dir}/model_common_header.template"), model.data)
+        src_code    << parse_template(File.read("#{template_dir}/model_common_src.template"), model.data)
 
         # Generate data getters
-        header_code << parse_template(File.read("#{Dir.pwd}/#{template_dir}/seperation_data.template"), model.data)
-        src_code    << parse_template(File.read("#{Dir.pwd}/#{template_dir}/seperation_data.template"), model.data)
+        header_code << parse_template(File.read("#{template_dir}/seperation_data.template"), model.data)
+        src_code    << parse_template(File.read("#{template_dir}/seperation_data.template"), model.data)
 
         model.fields.each do |f|
-          header_code << parse_template(File.read("#{Dir.pwd}/#{template_dir}/field_data_header.template"), f.data)
-          src_code    << parse_template(File.read("#{Dir.pwd}/#{template_dir}/field_data_src.template"), f.data)
+          header_code << parse_template(File.read("#{template_dir}/field_data_header.template"), f.data)
+          src_code    << parse_template(File.read("#{template_dir}/field_data_src.template"), f.data)
         end
 
         # Generate field getter and setter methods
-        header_code << parse_template(File.read("#{Dir.pwd}/#{template_dir}/seperation_fields.template"), model.data)
-        src_code    << parse_template(File.read("#{Dir.pwd}/#{template_dir}/seperation_fields.template"), model.data)
+        header_code << parse_template(File.read("#{template_dir}/seperation_fields.template"), model.data)
+        src_code    << parse_template(File.read("#{template_dir}/seperation_fields.template"), model.data)
 
         model.fields.each do |f|
-          header_code << parse_template(File.read("#{Dir.pwd}/#{template_dir}/field_value_header.template"), f.data)
-          src_code    << parse_template(File.read("#{Dir.pwd}/#{template_dir}/field_value_src.template"), f.data)
+          header_code << parse_template(File.read("#{template_dir}/field_value_header.template"), f.data)
+          src_code    << parse_template(File.read("#{template_dir}/field_value_src.template"), f.data)
         end
 
         # Template footers
-        header_code << parse_template(File.read("#{Dir.pwd}/#{template_dir}/model_footer_header.template"), model.data)
-        src_code    << parse_template(File.read("#{Dir.pwd}/#{template_dir}/model_footer_src.template"), model.data)
+        header_code << parse_template(File.read("#{template_dir}/model_footer_header.template"), model.data)
+        src_code    << parse_template(File.read("#{template_dir}/model_footer_src.template"), model.data)
 
         # Write out the files
         output_path = "#{out_dir}#{model.data[:subdir]}"
@@ -208,8 +208,8 @@ module CoreDataGen
       @models.each{|x| fwd_dec_data[:groups][x.data[:group]] << x.data[:type]}
 
       fwd_code = []
-      fwd_code << parse_template(File.read("#{Dir.pwd}/#{template_dir}/autogen_warning.template"))
-      fwd_code << parse_template(File.read("#{Dir.pwd}/#{template_dir}/forward_decleration.template"), fwd_dec_data)
+      fwd_code << parse_template(File.read("#{template_dir}/autogen_warning.template"))
+      fwd_code << parse_template(File.read("#{template_dir}/forward_decleration.template"), fwd_dec_data)
 
       File.write("#{out_dir}fwd_dec_data.hpp", fwd_code.join(""))
     end # initialize
