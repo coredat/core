@@ -129,7 +129,7 @@ trigger_callback(btDynamicsWorld *dynamicsWorld,
               Core::Entity_ref ref_b(Core_detail::entity_id_from_uint(entity_id_b));
               #endif
               
-              const auto collision_id(Data::collision_push(collision_data));
+              const uint32_t collision_id(Data::collision_push(collision_data));
               
               Physics_transform::Collision_point contact
               {
@@ -148,6 +148,77 @@ trigger_callback(btDynamicsWorld *dynamicsWorld,
       } // for pair_count
     } // for trigger_count
     Data::data_unlock(trigger_data);
+    
+    /*
+      Non Trigger Collisions
+      --
+    */
+    {
+      const int manifold_count = dynamicsWorld->getDispatcher()->getNumManifolds();
+      
+      for(int i = 0; i < manifold_count; ++i)
+      {
+        const btPersistentManifold *contact_manifold = dynamicsWorld->getDispatcher()->getManifoldByIndexInternal(i);
+        const btCollisionObject* obj_a = static_cast<const btCollisionObject*>(contact_manifold->getBody0());
+        const btCollisionObject* obj_b = static_cast<const btCollisionObject*>(contact_manifold->getBody1());
+        
+        const uintptr_t entity_id_a((uintptr_t)obj_a->getCollisionShape()->getUserPointer());
+        const uintptr_t entity_id_b((uintptr_t)obj_b->getCollisionShape()->getUserPointer());
+
+        #ifdef EXTRA_DEBUG_INFO_OBJ_CALLBACK
+        Core::Entity_ref ref_a(Core_detail::entity_id_from_uint(entity_id_a));
+        Core::Entity_ref ref_b(Core_detail::entity_id_from_uint(entity_id_b));
+        #endif
+
+        int contact_count = contact_manifold->getNumContacts();
+        for (int j = 0; j < contact_count; j++)
+        {
+          const btManifoldPoint& pt = contact_manifold->getContactPoint(j);
+          const float penitration = pt.getDistance();
+          if(penitration < 0.f)
+          {
+            const uint32_t collision_id(Data::collision_push(collision_data));
+            math::vec3_from_bt(pt.getPositionWorldOnA()),
+            math::vec3_from_bt(pt.m_normalWorldOnB);
+            
+            Physics_transform::Collision_point contact
+            {
+              penitration,
+              math::vec3_from_bt(pt.getPositionWorldOnA()),
+              math::vec3_from_bt(pt.m_normalWorldOnB)
+            };
+            
+            Data::collision_set_collision_point(collision_data, collision_id, &contact);
+            
+            const uint64_t entity_pair(util::bits_pack(entity_id_a, entity_id_b));
+            Data::collision_set_entity_pair(collision_data, collision_id, &entity_pair);
+          }
+        }
+
+      }
+    }
+    
+    //int numManifolds = world->getDispatcher()->getNumManifolds();
+//    for (int i=0;i<numManifolds;i++)
+//    {
+//        btPersistentManifold* contactManifold =  world->getDispatcher()->getManifoldByIndexInternal(i);
+//        btCollisionObject* obA = static_cast<btCollisionObject*>(contactManifold->getBody0());
+//        btCollisionObject* obB = static_cast<btCollisionObject*>(contactManifold->getBody1());
+//
+//        int numContacts = contactManifold->getNumContacts();
+//        for (int j=0;j<numContacts;j++)
+//        {
+//            btManifoldPoint& pt = contactManifold->getContactPoint(j);
+//            if (pt.getDistance()<0.f)
+//            {
+//                const btVector3& ptA = pt.getPositionWorldOnA();
+//                const btVector3& ptB = pt.getPositionWorldOnB();
+//                const btVector3& normalOnB = pt.m_normalWorldOnB;
+//            }
+//        }
+//    }
+    
+    
     Data::data_unlock(collision_data);
   }
 }

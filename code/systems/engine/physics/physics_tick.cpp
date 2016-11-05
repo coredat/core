@@ -68,6 +68,14 @@ think(std::shared_ptr<Data::World> world, const float dt, Tick_information *out_
       world->dynamicsWorld->stepSimulation(1 / 60.f, 500);
     }
 
+  
+  /*
+    Check collisions
+  */
+  {
+  
+  }
+
 
   /*
     Collisions
@@ -138,48 +146,27 @@ think(std::shared_ptr<Data::World> world, const float dt, Tick_information *out_
     Data::data_unlock(collision_data);
   }
   
-  /*
-    Update transforms
-    --
-    Now that we have shifted to bullet this should be done through the motion_states.
-  */
-  {
-//    // Set transforms.
-//    Data::Rigidbody_data *rb_data = world->rigidbody_data;
-//    
-//    for(size_t i = 0; i < Data::rigidbody_get_size(rb_data); ++i)
+
+
+//int numManifolds = world->getDispatcher()->getNumManifolds();
+//    for (int i=0;i<numManifolds;i++)
 //    {
-//      const uintptr_t rb_ptr = Data::rigidbody_get_rigidbody_data(rb_data)[i];
-//      
-//      if(rb_ptr)
-//      {
-////        const q3Transform trans(reinterpret_cast<q3Body*>(rb_ptr)->GetTransform());
-//        btTransform trans;
-//        reinterpret_cast<btRigidBody*>(rb_ptr)->getMotionState()->getWorldTransform(trans);
-//        
-//        Core::Transform core_trans = math::transform_from_bt(trans);
+//        btPersistentManifold* contactManifold =  world->getDispatcher()->getManifoldByIndexInternal(i);
+//        btCollisionObject* obA = static_cast<btCollisionObject*>(contactManifold->getBody0());
+//        btCollisionObject* obB = static_cast<btCollisionObject*>(contactManifold->getBody1());
 //
-//        const uint32_t entity_id(rb_data->keys[i]);
-//        const Core::Entity_ref ref(Core_detail::entity_id_from_uint(entity_id));
-//        
-//        const Core::Transform old_trans(Core::Entity_component::get_transform(ref));
-//        
-//        core_trans.set_scale(old_trans.get_scale());
-//
-//        
-//        Entity_detail::set_transform(entity_id,
-//                                     world->entity,
-//                                     world->transform,
-//                                     world->rigidbody_data,
-//                                     world->dynamicsWorld,
-//                                     world->trigger_data,
-//                                     world->mesh_data,
-//                                     world->text_data,
-//                                     core_trans,
-//                                     false);
-//      }
+//        int numContacts = contactManifold->getNumContacts();
+//        for (int j=0;j<numContacts;j++)
+//        {
+//            btManifoldPoint& pt = contactManifold->getContactPoint(j);
+//            if (pt.getDistance()<0.f)
+//            {
+//                const btVector3& ptA = pt.getPositionWorldOnA();
+//                const btVector3& ptB = pt.getPositionWorldOnB();
+//                const btVector3& normalOnB = pt.m_normalWorldOnB;
+//            }
+//        }
 //    }
-  }
 }
 
 

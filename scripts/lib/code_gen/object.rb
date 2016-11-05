@@ -57,7 +57,7 @@ module CoreObjectGen
 
       if yml['rigidbody'] then
         @data[:has_rb] = true
-        @data[:rb_is_kinematic] = if !yml['rigidbody']['rb_is_kinematic'].nil? then yml['rigidbody']['rb_is_kinematic'].to_s else "false" end
+        @data[:rb_is_kinematic] = if !yml['rigidbody']['is_kinematic'].nil?    then yml['rigidbody']['is_kinematic'].to_s else "false" end
         @data[:rb_mass]         = if !yml['rigidbody']['mass'].nil?            then yml['rigidbody']['mass'].to_s            else "1"     end
         @data[:rb_is_trigger]   = if !yml['rigidbody']['is_trigger'].nil?      then yml['rigidbody']['is_trigger'].to_s      else "false" end
       end
