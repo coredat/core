@@ -223,7 +223,6 @@ set_rigidbody(const util::generic_id this_id,
       Data::data_unlock(trigger_data);
     }
   }
-  
 }
 
 
@@ -263,8 +262,8 @@ set_phy_transform(const util::generic_id this_id,
     
     Data::data_unlock(entity_data);
     
-    is_trigger    = (components & Common::Data_type::trigger);
-    is_rigidbody  = (components & Common::Data_type::rigidbody);
+    is_trigger   = (components & Common::Data_type::trigger);
+    is_rigidbody = (components & Common::Data_type::rigidbody);
   }
   
   if(is_trigger == is_rigidbody)

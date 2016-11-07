@@ -137,7 +137,7 @@ think(std::shared_ptr<Data::World> world, const float dt, Tick_information *out_
       // Then dispatch the callback.
       
       uint64_t next_pair(0);
-      if(i < number_of_collisions)
+      if((i + 1) < number_of_collisions)
       {
         next_pair = collision_data->field_entity_pair[i + 1];
       }
