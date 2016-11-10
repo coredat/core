@@ -155,21 +155,22 @@ rigidbody_insert(Rigidbody_data *data, const uint32_t key, const size_t insert_p
   // Shuffle memory up
   {
     const size_t insert_index = insert_point + 1;
-    const size_t start_index = insert_point;
     const size_t size_to_end = data->size - insert_point;
 
     // Shuffle the data down
-    memmove(&data->keys[insert_point], &data->keys[start_index], size_to_end * sizeof(*data->keys));
-    memmove(&data->field_collision_id[insert_point * 1], &data->field_collision_id[start_index * 1], size_to_end * sizeof(*data->field_collision_id) * 1);
-    memmove(&data->field_rigidbody[insert_point * 1], &data->field_rigidbody[start_index * 1], size_to_end * sizeof(*data->field_rigidbody) * 1);
+    memmove(&data->keys[insert_index], &data->keys[insert_point], size_to_end * sizeof(*data->keys));
+    memmove(&data->field_collision_id[insert_index * 1], &data->field_collision_id[insert_point * 1], size_to_end * sizeof(*data->field_collision_id) * 1);
+    memmove(&data->field_rigidbody[insert_index * 1], &data->field_rigidbody[insert_point * 1], size_to_end * sizeof(*data->field_rigidbody) * 1);
+
+    data->keys[insert_point] = key;
   }
 
   // Insert new data
   {
-    data->keys[data->size++] = key;
+    ++data->size;
   }
 
-  return false;
+  return true;
 }
 
 

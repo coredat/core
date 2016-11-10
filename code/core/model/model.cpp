@@ -81,13 +81,13 @@ Model::Model(const char *filename)
   
     Data::data_lock(mesh_data);
     
-    util::generic_id search_id = util::generic_id_invalid();
+    util::generic_id search_id = 0;
     
     if(Common::fixed_string_search(name.c_str(),
                                    Data::mesh_get_name_data(mesh_data),
                                    Data::mesh_get_name_stride(),
-                                   Data::mesh_get_size(mesh_data)),
-                                   &search_id)
+                                   Data::mesh_get_size(mesh_data)
+                                   &search_id))
     {
       #ifdef LOG_DOUBLE_RESOURCE_INITIALIZE
       LOG_WARNING(Error_string::resource_already_exists());

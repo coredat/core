@@ -33,7 +33,7 @@ initialize()
 {
 //  Graphics_api::command_buffer_create(&m_impl->graphcis_command_buffer, 1 << 17);
   
-  Simple_renderer::initialize(); // TODO: This can be removed I think, largely superceded by mat renderer
+//  Simple_renderer::initialize(); // TODO: This can be removed I think, largely superceded by mat renderer
   Debug_line_renderer::initialize();
   Aabb_renderer::initialize();
   

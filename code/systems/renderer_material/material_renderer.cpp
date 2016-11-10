@@ -83,7 +83,7 @@ render(const math::mat4 &view_proj_mat,
   // Bind material.
   {
     // Bind the program unless it is already bound.
-    if(material->shader.program_id != mat_renderer_last_program)
+//    if(material->shader.program_id != mat_renderer_last_program)
     {
       Ogl::shader_bind(&material->shader);
       mat_renderer_last_program = material->shader.program_id;

@@ -252,7 +252,7 @@ set_renderer_material(const util::generic_id this_id,
     Data::data_lock(mat_data);
   
     size_t find_index;
-    Data::Mesh_renderer_draw_call *draw;
+    Data::Mesh_renderer_draw_call *draw = nullptr;
     Data::Mesh_renderer_draw_call copy;
 
     // If it already exists. The data and erase the old info.
@@ -265,7 +265,7 @@ set_renderer_material(const util::generic_id this_id,
     
     // Insert new draw call in order of material_id
     {
-      size_t insert_point = mesh_data->size;
+      size_t insert_point = 0;
     
       ::Material_renderer::Material_id this_key;
       Data::material_get_material_hash(mat_data, material_id, &this_key);

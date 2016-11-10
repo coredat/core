@@ -181,23 +181,24 @@ camera_insert(Camera_data *data, const uint32_t key, const size_t insert_point)
   // Shuffle memory up
   {
     const size_t insert_index = insert_point + 1;
-    const size_t start_index = insert_point;
     const size_t size_to_end = data->size - insert_point;
 
     // Shuffle the data down
-    memmove(&data->keys[insert_point], &data->keys[start_index], size_to_end * sizeof(*data->keys));
-    memmove(&data->field_priority[insert_point * 1], &data->field_priority[start_index * 1], size_to_end * sizeof(*data->field_priority) * 1);
-    memmove(&data->field_properties[insert_point * 1], &data->field_properties[start_index * 1], size_to_end * sizeof(*data->field_properties) * 1);
-    memmove(&data->field_texture_id[insert_point * 1], &data->field_texture_id[start_index * 1], size_to_end * sizeof(*data->field_texture_id) * 1);
-    memmove(&data->field_post_process_id[insert_point * 1], &data->field_post_process_id[start_index * 1], size_to_end * sizeof(*data->field_post_process_id) * 1);
+    memmove(&data->keys[insert_index], &data->keys[insert_point], size_to_end * sizeof(*data->keys));
+    memmove(&data->field_priority[insert_index * 1], &data->field_priority[insert_point * 1], size_to_end * sizeof(*data->field_priority) * 1);
+    memmove(&data->field_properties[insert_index * 1], &data->field_properties[insert_point * 1], size_to_end * sizeof(*data->field_properties) * 1);
+    memmove(&data->field_texture_id[insert_index * 1], &data->field_texture_id[insert_point * 1], size_to_end * sizeof(*data->field_texture_id) * 1);
+    memmove(&data->field_post_process_id[insert_index * 1], &data->field_post_process_id[insert_point * 1], size_to_end * sizeof(*data->field_post_process_id) * 1);
+
+    data->keys[insert_point] = key;
   }
 
   // Insert new data
   {
-    data->keys[data->size++] = key;
+    ++data->size;
   }
 
-  return false;
+  return true;
 }
 
 

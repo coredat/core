@@ -16,7 +16,7 @@ initialize()
 void
 reset()
 {
-  Ogl::vao_init();
+//  Ogl::vao_init();
   Ogl::default_state();
 }
 

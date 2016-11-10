@@ -150,22 +150,23 @@ bool
   // Shuffle memory up
   {
     const size_t insert_index = insert_point + 1;
-    const size_t start_index = insert_point;
     const size_t size_to_end = data->size - insert_point;
 
     // Shuffle the data down
-    memmove(&data->{{key_var}}[insert_point], &data->{{key_var}}[start_index], size_to_end * sizeof(*data->{{key_var}}));
+    memmove(&data->{{key_var}}[insert_index], &data->{{key_var}}[insert_point], size_to_end * sizeof(*data->{{key_var}}));
 % fields.each do |f|
-    memmove(&data->{{f[:var]}}[insert_point * {{f[:count]}}], &data->{{f[:var]}}[start_index * {{f[:count]}}], size_to_end * sizeof(*data->{{f[:var]}}) * {{f[:count]}});
+    memmove(&data->{{f[:var]}}[insert_index * {{f[:count]}}], &data->{{f[:var]}}[insert_point * {{f[:count]}}], size_to_end * sizeof(*data->{{f[:var]}}) * {{f[:count]}});
 % end
+
+    data->{{key_var}}[insert_point] = key;
   }
 
   // Insert new data
   {
-    data->{{key_var}}[data->size++] = key;
+    ++data->size;
   }
 
-  return false;
+  return true;
 }
 % end
 

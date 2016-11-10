@@ -194,24 +194,25 @@ entity_insert(Entity_data *data, const uint32_t key, const size_t insert_point)
   // Shuffle memory up
   {
     const size_t insert_index = insert_point + 1;
-    const size_t start_index = insert_point;
     const size_t size_to_end = data->size - insert_point;
 
     // Shuffle the data down
-    memmove(&data->keys[insert_point], &data->keys[start_index], size_to_end * sizeof(*data->keys));
-    memmove(&data->field_name[insert_point * 32], &data->field_name[start_index * 32], size_to_end * sizeof(*data->field_name) * 32);
-    memmove(&data->field_collision_callback[insert_point * 1], &data->field_collision_callback[start_index * 1], size_to_end * sizeof(*data->field_collision_callback) * 1);
-    memmove(&data->field_tags[insert_point * 1], &data->field_tags[start_index * 1], size_to_end * sizeof(*data->field_tags) * 1);
-    memmove(&data->field_components[insert_point * 1], &data->field_components[start_index * 1], size_to_end * sizeof(*data->field_components) * 1);
-    memmove(&data->field_user_data[insert_point * 1], &data->field_user_data[start_index * 1], size_to_end * sizeof(*data->field_user_data) * 1);
+    memmove(&data->keys[insert_index], &data->keys[insert_point], size_to_end * sizeof(*data->keys));
+    memmove(&data->field_name[insert_index * 32], &data->field_name[insert_point * 32], size_to_end * sizeof(*data->field_name) * 32);
+    memmove(&data->field_collision_callback[insert_index * 1], &data->field_collision_callback[insert_point * 1], size_to_end * sizeof(*data->field_collision_callback) * 1);
+    memmove(&data->field_tags[insert_index * 1], &data->field_tags[insert_point * 1], size_to_end * sizeof(*data->field_tags) * 1);
+    memmove(&data->field_components[insert_index * 1], &data->field_components[insert_point * 1], size_to_end * sizeof(*data->field_components) * 1);
+    memmove(&data->field_user_data[insert_index * 1], &data->field_user_data[insert_point * 1], size_to_end * sizeof(*data->field_user_data) * 1);
+
+    data->keys[insert_point] = key;
   }
 
   // Insert new data
   {
-    data->keys[data->size++] = key;
+    ++data->size;
   }
 
-  return false;
+  return true;
 }
 
 

@@ -168,22 +168,23 @@ text_draw_call_insert(Text_draw_call_data *data, const uint32_t key, const size_
   // Shuffle memory up
   {
     const size_t insert_index = insert_point + 1;
-    const size_t start_index = insert_point;
     const size_t size_to_end = data->size - insert_point;
 
     // Shuffle the data down
-    memmove(&data->keys[insert_point], &data->keys[start_index], size_to_end * sizeof(*data->keys));
-    memmove(&data->field_text[insert_point * 32], &data->field_text[start_index * 32], size_to_end * sizeof(*data->field_text) * 32);
-    memmove(&data->field_draw_call[insert_point * 1], &data->field_draw_call[start_index * 1], size_to_end * sizeof(*data->field_draw_call) * 1);
-    memmove(&data->field_model_id[insert_point * 1], &data->field_model_id[start_index * 1], size_to_end * sizeof(*data->field_model_id) * 1);
+    memmove(&data->keys[insert_index], &data->keys[insert_point], size_to_end * sizeof(*data->keys));
+    memmove(&data->field_text[insert_index * 32], &data->field_text[insert_point * 32], size_to_end * sizeof(*data->field_text) * 32);
+    memmove(&data->field_draw_call[insert_index * 1], &data->field_draw_call[insert_point * 1], size_to_end * sizeof(*data->field_draw_call) * 1);
+    memmove(&data->field_model_id[insert_index * 1], &data->field_model_id[insert_point * 1], size_to_end * sizeof(*data->field_model_id) * 1);
+
+    data->keys[insert_point] = key;
   }
 
   // Insert new data
   {
-    data->keys[data->size++] = key;
+    ++data->size;
   }
 
-  return false;
+  return true;
 }
 
 

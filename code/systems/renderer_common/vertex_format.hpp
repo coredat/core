@@ -12,8 +12,8 @@ constexpr unsigned int vertex_attr_count = 3;
 constexpr Graphics_api::Vertex_attribute vertex_desc[vertex_attr_count] =
 {
   Graphics_api::Vertex_attribute::position_3d,
-  Graphics_api::Vertex_attribute::normal,
   Graphics_api::Vertex_attribute::texture_coord,
+  Graphics_api::Vertex_attribute::normal,  
 };
 
 
