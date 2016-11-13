@@ -56,10 +56,14 @@ public:
   Entity_ref            find_entity_by_id(const util::generic_id id) const;
   Contact               find_entity_by_ray(const Ray ray) const;
   Entity_ref            find_entity_by_name(const char *name) const;
-
+  
   void                  find_entities_by_tag(const uint32_t tag_id,
                                              Entity_ref **out_array,
                                              size_t *out_array_size);
+
+  void                  find_entities_by_ray(const Ray ray,
+                                             Contact **contacts,
+                                             size_t *out_array_size) const;
 
   void                  find_entities_by_name(const char *name,
                                               Entity_ref **out_array,

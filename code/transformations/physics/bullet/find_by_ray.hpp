@@ -17,6 +17,12 @@ namespace Physics_transform {
 Core::Contact
 find_entity_from_ray(const Core::Ray ray,
                      btDiscreteDynamicsWorld *phy_world);
+  
+void
+find_entities_from_ray(const Core::Ray ray,
+                       btDiscreteDynamicsWorld *phy_world,
+                       Core::Contact **volatile_contact_results,
+                       size_t *out_contact_count);
 
 
 } // ns

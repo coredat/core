@@ -280,6 +280,22 @@ World::find_entity_by_name(const char *name) const
 
 
 void
+World::find_entities_by_ray(const Ray ray,
+                            Contact **contacts,
+                            size_t *out_array_size) const
+{
+  assert(m_impl && m_impl->world_instance_id);
+  auto world = Core_detail::world_index_get_world_data(m_impl->world_instance_id);
+  
+  Physics_transform::find_entities_from_ray(
+    ray,
+    world->dynamicsWorld,
+    contacts,
+    out_array_size);
+}
+
+
+void
 World::find_entities_by_name(const char *name,
                              Entity_ref **out_array,
                              size_t *out_array_size)
