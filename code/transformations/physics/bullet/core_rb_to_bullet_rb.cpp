@@ -27,8 +27,8 @@ convert_core_rb_to_bullet_rb(const Core::Rigidbody *core_rb,
   assert(collider);
   assert(transform);
   
+  // Build flags
   uint32_t collision_flags(0);
-  
   if(core_rb->is_kinematic())   { collision_flags |= btRigidBody::CF_KINEMATIC_OBJECT; }
   if(core_rb->get_mass() == 0)  { collision_flags |= btRigidBody::CF_STATIC_OBJECT;    }
 
@@ -123,24 +123,42 @@ update_rigidbody_transform(btRigidBody *rb,
   // Update the transform and scale.
   if(rb && shape && world && transform)
   {
+    // Save out the current state of things that shouldn't change
     const btVector3 curr_lin = rb->getLinearVelocity();
     const btVector3 curr_ang = rb->getAngularVelocity();
   
-    rb->setWorldTransform(*transform);
-    rb->getCollisionShape()->setLocalScaling(scale);
-    
-    world->updateSingleAabb(rb);
-    
-    const btScalar mass = 1.0 / rb->getInvMass();
-    btVector3 inertia(0.f, 0.f, 0.f);
-    
-    rb->getCollisionShape()->calculateLocalInertia(mass, inertia);
-    rb->setMassProps(mass, inertia);
+    btCollisionShape *shape = rb->getCollisionShape();
 
-    rb->updateInertiaTensor();
+    // Update the transform
+    {
+      rb->setWorldTransform(*transform);
+      shape->setLocalScaling(scale);
+      world->updateSingleAabb(rb);
+    }
+    
+    // Update the mass / inertia
+    {
+      const btScalar mass = 1.0 / rb->getInvMass();
+      btVector3 inertia(0.f, 0.f, 0.f);
+      
+      shape->calculateLocalInertia(mass, inertia);
+      rb->setMassProps(mass, inertia);
+      rb->updateInertiaTensor();
+    }
+    
+    // Restore state that was saved.
     rb->setLinearVelocity(curr_lin);
     rb->setAngularVelocity(curr_ang);
   }
+}
+
+
+void
+update_rigidbody_mass(btRigidBody *rb,
+                      btDynamicsWorld *world,
+                      const float mass)
+{
+  assert(false); // not impl
 }
 
 

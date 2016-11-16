@@ -37,13 +37,18 @@ update_rigidbody_transform(btRigidBody *rb,
                            btDynamicsWorld *world,
                            const btTransform *transform,
                            const btVector3 scale);
+  
+
+void
+update_rigidbody_mass(btRigidBody *rb,
+                      btDynamicsWorld *world,
+                      const float mass);
 
 
 btCollisionShape*
 convert_core_collider_to_bullet_collider(const Core::Collider *collider,
                                          const Core::Transform *transform,
                                          const uintptr_t user_data = 0);
-
 
 } // ns
 
