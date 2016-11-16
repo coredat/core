@@ -70,10 +70,10 @@ entity_create(Entity_data *data, const size_t size_hint)
     // Alloc space for collision_callback
     if(all_alloc)
     {
-      data->field_collision_callback = new uintptr_t[size_hint * 1];
+      data->field_collision_callback = new Entity_detail::Callback_collision[size_hint * 1];
       assert(data->field_collision_callback);
       if(!data->field_collision_callback) { all_alloc = false; }
-      else { memset(data->field_collision_callback, 0, sizeof(uintptr_t) * size_hint * 1); }
+      else { memset(data->field_collision_callback, 0, sizeof(Entity_detail::Callback_collision) * size_hint * 1); }
     }
 
     // Alloc space for tags
@@ -331,7 +331,7 @@ entity_resize_capacity(Entity_data *data, const size_t size_hint)
   {
     memcpy(new_data.keys, data->keys, sizeof(uint32_t) * data->size);
     memcpy(new_data.field_name, data->field_name, sizeof(char) * data->size * 32);
-    memcpy(new_data.field_collision_callback, data->field_collision_callback, sizeof(uintptr_t) * data->size * 1);
+    memcpy(new_data.field_collision_callback, data->field_collision_callback, sizeof(Entity_detail::Callback_collision) * data->size * 1);
     memcpy(new_data.field_tags, data->field_tags, sizeof(uint32_t) * data->size * 1);
     memcpy(new_data.field_components, data->field_components, sizeof(uint32_t) * data->size * 1);
     memcpy(new_data.field_user_data, data->field_user_data, sizeof(uintptr_t) * data->size * 1);
@@ -347,7 +347,7 @@ entity_resize_capacity(Entity_data *data, const size_t size_hint)
     data->field_name = new_data.field_name;
     new_data.field_name = old_name;
 
-    uintptr_t *old_collision_callback = data->field_collision_callback;
+    Entity_detail::Callback_collision *old_collision_callback = data->field_collision_callback;
     data->field_collision_callback = new_data.field_collision_callback;
     new_data.field_collision_callback = old_collision_callback;
 
@@ -403,7 +403,7 @@ entity_get_name_data(Entity_data *data)
 }
 
 
-const uintptr_t*
+const Entity_detail::Callback_collision*
 entity_get_const_collision_callback_data(const Entity_data *data)
 {
   assert(data);
@@ -413,7 +413,7 @@ entity_get_const_collision_callback_data(const Entity_data *data)
 }
 
 
-uintptr_t*
+Entity_detail::Callback_collision*
 entity_get_collision_callback_data(Entity_data *data)
 {
   assert(data);
@@ -546,7 +546,7 @@ entity_set_name(const Entity_data *data, const uint32_t key, const char *set_val
 
 
 bool
-entity_get_collision_callback(const Entity_data *data, const uint32_t key, uintptr_t *return_value)
+entity_get_collision_callback(const Entity_data *data, const uint32_t key, Entity_detail::Callback_collision *return_value)
 {
   assert(data);
   assert(key != 0);
@@ -575,7 +575,7 @@ entity_get_collision_callback(const Entity_data *data, const uint32_t key, uintp
 
 
 bool
-entity_set_collision_callback(const Entity_data *data, const uint32_t key, const uintptr_t *set_value)
+entity_set_collision_callback(const Entity_data *data, const uint32_t key, const Entity_detail::Callback_collision *set_value)
 {
   assert(data);
   assert(key != 0);

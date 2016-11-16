@@ -9,8 +9,8 @@ data:
       count: 32
 
     - name: collision_callback
-      type: uintptr_t
-      include: <stddef.h>
+      type: Entity_detail::Callback_collision
+      include: <transformations/entity/entity_detail.hpp>
 
     - name: tags
       type: uint32_t

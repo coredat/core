@@ -13,8 +13,8 @@ namespace Entity_detail {
 void
 set_entity_collision_callback(const util::generic_id this_id,
                               Data::Entity_data *entity_data,
-                              uintptr_t callback_ptr,
-                              uintptr_t user_data);
+                              const uintptr_t callback_ptr,
+                              const uintptr_t user_data);
 
 
 } // ns

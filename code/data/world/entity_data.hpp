@@ -6,12 +6,13 @@
 */
 
 
-#ifndef ENTITY_INCLUDED_CF4BF229_3636_4C30_8E86_FEDB5926E651
-#define ENTITY_INCLUDED_CF4BF229_3636_4C30_8E86_FEDB5926E651
+#ifndef ENTITY_INCLUDED_94905D88_B943_4274_BAFF_4B313F623D23
+#define ENTITY_INCLUDED_94905D88_B943_4274_BAFF_4B313F623D23
 
 
 #include <stdint.h>
 #include <stddef.h>
+#include <transformations/entity/entity_detail.hpp>
 
 
 namespace Data {
@@ -29,7 +30,7 @@ struct Entity_data
   char *field_name = nullptr;
 
   // collision_callback field data //
-  uintptr_t *field_collision_callback = nullptr;
+  Entity_detail::Callback_collision *field_collision_callback = nullptr;
 
   // tags field data //
   uint32_t *field_tags = nullptr;
@@ -115,11 +116,11 @@ char*
 entity_get_name_data(Entity_data *data);
 
 
-const uintptr_t*
+const Entity_detail::Callback_collision*
 entity_get_const_collision_callback_data(const Entity_data *data);
 
 
-uintptr_t*
+Entity_detail::Callback_collision*
 entity_get_collision_callback_data(Entity_data *data);
 
 
@@ -165,11 +166,11 @@ entity_get_name_stride() { return 32; }
 
 
 bool
-entity_get_collision_callback(const Entity_data *data, const uint32_t key, uintptr_t *return_value);
+entity_get_collision_callback(const Entity_data *data, const uint32_t key, Entity_detail::Callback_collision *return_value);
 
 
 bool
-entity_set_collision_callback(const Entity_data *data, const uint32_t key, const uintptr_t *set_value);
+entity_set_collision_callback(const Entity_data *data, const uint32_t key, const Entity_detail::Callback_collision *set_value);
 
 
 

@@ -9,8 +9,8 @@ namespace Entity_detail {
 void
 set_entity_collision_callback(const util::generic_id this_id,
                               Data::Entity_data *entity_data,
-                              uintptr_t callback_ptr,
-                              uintptr_t user_data)
+                              const uintptr_t callback_ptr,
+                              const uintptr_t user_data)
 {
   // Param
   assert(this_id);
@@ -22,7 +22,13 @@ set_entity_collision_callback(const util::generic_id this_id,
     
     if(Data::entity_exists(entity_data, this_id))
     {
-      Data::entity_set_collision_callback(entity_data, this_id, &callback_ptr);
+      Callback_collision callback
+      {
+        user_data,
+        callback_ptr
+      };
+      
+      Data::entity_set_collision_callback(entity_data, this_id, &callback);
     }
     
     Data::data_unlock(entity_data);

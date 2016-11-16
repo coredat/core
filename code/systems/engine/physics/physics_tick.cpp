@@ -149,16 +149,16 @@ think(std::shared_ptr<Data::World> world, const float dt, Tick_information *out_
         {
           Core::Collision collision(entity_a, contacts, curr_contact);
           
-          uintptr_t collision_callback = 0;
+          Entity_detail::Callback_collision collision_callback;
           Data::entity_get_collision_callback(entity_data, util::bits_lower(this_pair), &collision_callback);
           
           #ifdef CORE_COLLISION_DEBUG_TEXT
           printf("Collision: %s -> %s \n", entity_a.get_name(), entity_b.get_name());
           #endif
           
-          if(collision_callback)
+          if(collision_callback.callback_fn)
           {
-            ((Core::on_collision_callback_fn)collision_callback)(0, entity_a, collision);
+            ((Core::on_collision_callback_fn)collision_callback.callback_fn)(collision_callback.user_data, entity_a, collision);
           }
           
           curr_contact = 0;
