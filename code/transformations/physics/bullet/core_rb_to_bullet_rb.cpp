@@ -123,9 +123,23 @@ update_rigidbody_transform(btRigidBody *rb,
   // Update the transform and scale.
   if(rb && shape && world && transform)
   {
+    const btVector3 curr_lin = rb->getLinearVelocity();
+    const btVector3 curr_ang = rb->getAngularVelocity();
+  
     rb->setWorldTransform(*transform);
     rb->getCollisionShape()->setLocalScaling(scale);
+    
     world->updateSingleAabb(rb);
+    
+    const btScalar mass = 1.0 / rb->getInvMass();
+    btVector3 inertia(0.f, 0.f, 0.f);
+    
+    rb->getCollisionShape()->calculateLocalInertia(mass, inertia);
+    rb->setMassProps(mass, inertia);
+
+    rb->updateInertiaTensor();
+    rb->setLinearVelocity(curr_lin);
+    rb->setAngularVelocity(curr_ang);
   }
 }
 
