@@ -16,6 +16,13 @@ struct Rigidbody
 };
 
 
+struct Trigger
+{
+  uintptr_t ghost_ptr;
+  uintptr_t shape_ptr;
+};
+
+
 } // ns
 
 

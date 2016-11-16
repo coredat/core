@@ -65,6 +65,40 @@ convert_core_rb_to_bullet_rb(const Core::Rigidbody *core_rb,
 }
 
 
+Core::Rigidbody
+convert_rb_to_core_rb(const btRigidBody *rb,
+                      const math::vec3 entity_global_scale)
+{
+  // Param check
+  assert(rb);
+
+  Core::Rigidbody core_rb;
+  
+  // Gather rb information.
+  {
+    core_rb.set_is_trigger(false);
+    core_rb.set_mass(1.f / rb->getInvMass());
+    core_rb.set_is_kinematic(rb->getFlags() & btRigidBody::CF_KINEMATIC_OBJECT);
+  }
+  
+  // Collider information
+  {
+    const btCollisionShape *shape = rb->getCollisionShape();
+    assert(shape);
+    
+    const math::vec3 local_scale = math::vec3_from_bt(shape->getLocalScaling());
+    const math::vec3 box_scale = math::vec3_divide(entity_global_scale, local_scale);
+//    const math::vec3 half_extent = math::vec3_scale(box_scale, 0.5f);
+    
+    Core::Box_collider collider(math::get_x(box_scale), math::get_y(box_scale), math::get_z(box_scale));
+    
+    core_rb.set_collider(collider);
+  }
+  
+  return core_rb;
+}
+
+
 btPairCachingGhostObject*
 convert_core_rb_to_bullet_trigger(const Core::Rigidbody *core_rb,
                                   btCollisionShape *collider,
@@ -128,6 +162,7 @@ update_rigidbody_transform(btRigidBody *rb,
     const btVector3 curr_ang = rb->getAngularVelocity();
   
     btCollisionShape *shape = rb->getCollisionShape();
+    assert(shape);
 
     // Update the transform
     {
@@ -150,15 +185,6 @@ update_rigidbody_transform(btRigidBody *rb,
     rb->setLinearVelocity(curr_lin);
     rb->setAngularVelocity(curr_ang);
   }
-}
-
-
-void
-update_rigidbody_mass(btRigidBody *rb,
-                      btDynamicsWorld *world,
-                      const float mass)
-{
-  assert(false); // not impl
 }
 
 

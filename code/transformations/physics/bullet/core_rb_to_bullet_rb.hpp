@@ -22,6 +22,11 @@ convert_core_rb_to_bullet_rb(const Core::Rigidbody *core_rb,
                              const uintptr_t user_data = 0);
   
   
+Core::Rigidbody
+convert_rb_to_core_rb(const btRigidBody *rb,
+                      const math::vec3 entity_global_scale);
+
+
 btPairCachingGhostObject*
 convert_core_rb_to_bullet_trigger(const Core::Rigidbody *core_rb,
                                   btCollisionShape *collider,
@@ -38,11 +43,6 @@ update_rigidbody_transform(btRigidBody *rb,
                            const btTransform *transform,
                            const btVector3 scale);
   
-
-void
-update_rigidbody_mass(btRigidBody *rb,
-                      btDynamicsWorld *world,
-                      const float mass);
 
 
 btCollisionShape*

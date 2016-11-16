@@ -4,6 +4,7 @@
 
 #include <core/common/core_fwd.hpp>
 #include <core/common/core_types.hpp>
+#include <core/physics/collider.hpp>
 
 
 namespace Core {
@@ -36,9 +37,15 @@ public:
       
 private:
 
-  struct Impl;
-  std::unique_ptr<Impl> m_impl;
-
+  Collider m_collider;
+  
+  bool m_is_dynamic = true;
+  bool m_is_trigger = false;
+  
+  uint32_t m_collision_id = -1;
+  uint32_t m_mask_id = -1; // combine these two please
+  
+  float m_mass = 1;
 };
 
 

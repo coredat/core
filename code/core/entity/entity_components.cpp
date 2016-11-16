@@ -202,8 +202,11 @@ get_rigidbody(const Core::Entity_ref &ref)
   auto world_data(Core_detail::world_index_get_world_data(entity_id.world_instance));
   assert(world_data);
   
-  // Finish this.
-  return Entity_detail::get_rigidbody(entity_uint_id);
+  return Entity_detail::get_rigidbody(entity_uint_id,
+                                      world_data->entity,
+                                      world_data->transform,
+                                      world_data->rigidbody_data,
+                                      world_data->trigger_data);
 }
 
 

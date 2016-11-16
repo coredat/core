@@ -10,5 +10,5 @@ data:
       include: <stdint.h>
 
     - name: trigger
-      type: uintptr_t
-      include: <stdint.h>
+      type: Bullet_data::Trigger
+      include: <transformations/physics/bullet_data.hpp>

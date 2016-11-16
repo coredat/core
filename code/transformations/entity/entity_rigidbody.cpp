@@ -132,13 +132,21 @@ set_rigidbody(const util::generic_id this_id,
               Data::World *world,
               const Core::Rigidbody &rigidbody)
 {
+  LOG_TODO_ONCE("These should be passed in");
+  
+  Data::Entity_data *entity_data(world->entity);
+  Data::Trigger_data *trigger_data(world->trigger_data);
+  Data::Rigidbody_data *rigidbody_data(world->rigidbody_data);
+  btDynamicsWorld *phy_world = world->dynamicsWorld;
+  
+  // Param check
+  assert(entity_data);
+  assert(trigger_data);
+  assert(rigidbody_data);
+  assert(phy_world);
+
   // Check and add component flag
   {
-    Data::Entity_data *entity_data(world->entity);
-    assert(entity_data);
-    
-    bool has_physics_component = false;
-    
     if(entity_data)
     {
       Data::data_lock(entity_data);
@@ -148,22 +156,54 @@ set_rigidbody(const util::generic_id this_id,
       
       if(Common::Data_type::is_collidable(components))
       {
-        has_physics_component = true;
+        // Remove old rigidbody / trigger
+        if(components & Common::Data_type::trigger)
+        {
+          Data::data_lock(trigger_data);
+          
+          uintptr_t trigger = 0;
+          Data::trigger_get_trigger(trigger_data, this_id, &trigger);
+          assert(trigger);
+          
+          btGhostObject *ghost = reinterpret_cast<btGhostObject*>(trigger);
+          assert(ghost);
+          
+          phy_world->removeCollisionObject(ghost);
+          
+          Data::trigger_remove(trigger_data, this_id);
+          
+          delete ghost;
+          
+          Data::data_unlock(trigger_data);
+        }
+        else if(components & Common::Data_type::rigidbody)
+        {
+          Data::data_lock(rigidbody_data);
+          
+          uintptr_t rigidbody = 0;
+          Data::rigidbody_get_rigidbody(rigidbody_data, this_id, &rigidbody);
+          assert(rigidbody);
+          
+          btRigidBody *rb = reinterpret_cast<btRigidBody*>(rigidbody);
+          assert(rb);
+          
+          phy_world->removeRigidBody(rb);
+          
+          Data::rigidbody_remove(rigidbody_data, this_id);
+          
+          delete rb;
+          
+          Data::data_unlock(rigidbody_data);
+        }
       }
-      else
+
+      // Reset flag as it might change between one or the other.
       {
         components |= rigidbody.is_trigger() ? Common::Data_type::trigger : Common::Data_type::rigidbody;
         Data::entity_set_components(entity_data, this_id, &components);
       }
       
       Data::data_unlock(entity_data);
-    }
-    
-    if(has_physics_component)
-    {
-      assert(false);
-      LOG_ERROR("Entity already has a physics component");
-      return;
     }
   }
 
@@ -227,12 +267,62 @@ set_rigidbody(const util::generic_id this_id,
 
 
 Core::Rigidbody
-get_rigidbody(const util::generic_id this_id)
+get_rigidbody(const util::generic_id this_id,
+              Data::Entity_data *entity,
+              Data::Transform_data *transforms,
+              Data::Rigidbody_data *rb_data,
+              Data::Trigger_data *trigger_data)
 {
-  LOG_TODO_ONCE("Get rb doesn't build the rb");
-  assert(false);
+  // Param check
+  assert(this_id);
+  assert(entity);
+  assert(transforms);
+  assert(rb_data);
+  assert(trigger_data);
+  
+  // Get component list
+  uint32_t components(0);
+  {
+    Data::data_lock(entity);
+    Data::entity_get_components(entity, this_id, &components);
+    Data::data_unlock(entity);
+  }
+  
+  // Get local scale
+  math::vec3 entity_scale = math::vec3_one();
+  {
+    Data::data_lock(transforms);
+    
+    math::transform transform;
+    Data::transform_get_transform(transforms, this_id, &transform);
+    
+    entity_scale = transform.scale;
+    
+    Data::data_unlock(transforms);
+  }
+  
+  Core::Rigidbody core_rb;
+  
+  if(components & Common::Data_type::rigidbody)
+  {
+    uintptr_t rigidbody;
+  
+    Data::data_lock(rb_data);
+    Data::rigidbody_get_rigidbody(rb_data, this_id, &rigidbody);
+  
+    const btRigidBody *rb = reinterpret_cast<btRigidBody*>(rigidbody);
+  
+    core_rb = Physics_transform::convert_rb_to_core_rb(rb, entity_scale);
+    
+    Data::data_unlock(rb_data);
+  }
+  
+  else if(components & Common::Data_type::trigger)
+  {
+    assert(false); // no impl;
+  }
 
-  return Core::Rigidbody();
+  return core_rb;
 }
 
 

@@ -40,7 +40,11 @@ set_rigidbody(const util::generic_id this_id,
   
 
 Core::Rigidbody
-get_rigidbody(const util::generic_id this_id);
+get_rigidbody(const util::generic_id this_id,
+              Data::Entity_data *entity,
+              Data::Transform_data *transforms,
+              Data::Rigidbody_data *rb_data,
+              Data::Trigger_data *trigger_data);
 
 
 void
