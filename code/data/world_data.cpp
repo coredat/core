@@ -154,16 +154,7 @@ world_update_scene_graph_changes(Data::World *world_data,
         Bullet_data::Rigidbody rigidbody;
         Data::rigidbody_get_rigidbody(rb_data, id, &rigidbody);
         
-        btRigidBody *body = reinterpret_cast<btRigidBody*>(rigidbody.rigidbody_ptr);
-        
-        if(body)
-        {
-          world_data->dynamicsWorld->removeRigidBody(body);
-          
-          delete body->getMotionState();
-          delete body->getCollisionShape();
-          delete body;
-        }
+        Bullet_data::remove_and_clear(&rigidbody, world_data->dynamicsWorld);
         
         Data::rigidbody_remove(rb_data, id);
       }
@@ -181,15 +172,7 @@ world_update_scene_graph_changes(Data::World *world_data,
         Bullet_data::Trigger trigger;
         Data::trigger_get_trigger(trigger_data, id, &trigger);
         
-        btGhostObject *ghost = reinterpret_cast<btGhostObject*>(trigger.ghost_ptr);
-        
-        if(ghost)
-        {
-          world_data->dynamicsWorld->removeCollisionObject(ghost);
-        
-          delete ghost->getCollisionShape();
-          delete ghost;
-        }
+        Bullet_data::remove_and_clear(&trigger, world_data->dynamicsWorld);
       }
       
       Data::data_unlock(trigger_data);
