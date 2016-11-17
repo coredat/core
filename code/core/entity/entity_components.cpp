@@ -45,7 +45,7 @@ set_transform(const Core::Entity_ref &ref,
                                world_data->entity,
                                world_data->transform,
                                world_data->rigidbody_data,
-                               world_data->physics_world.dynamics_world,
+                               &world_data->physics_world,
                                world_data->trigger_data,
                                world_data->mesh_data,
                                world_data->text_data,
@@ -179,7 +179,11 @@ set_rigidbody(const Core::Entity_ref &ref,
   assert(world_data);
   
   Entity_detail::set_rigidbody(entity_uint_id,
-                               world_data.get(),
+                               world_data->entity,
+                               world_data->transform,
+                               world_data->trigger_data,
+                               world_data->rigidbody_data,
+                               &world_data->physics_world,
                                rigidbody);
   
   return true;

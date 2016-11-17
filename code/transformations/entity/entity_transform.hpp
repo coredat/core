@@ -3,9 +3,8 @@
 
 
 #include <transformations/entity/entity_common.hpp>
+#include <transformations/physics/bullet/bullet_data.hpp>
 #include <data/fwd_dec_data.hpp>
-#include <utilities/generic_id.hpp>
-#include <btBulletDynamicsCommon.h>
 
 
 namespace Entity_detail {
@@ -21,7 +20,7 @@ set_transform(const util::generic_id this_id,
               Data::Entity_data *entity_data,
               Data::Transform_data *transform_data,
               Data::Rigidbody_data *rb_data,
-                            btDynamicsWorld *world,
+              Bullet_data::World *phy_world,
               Data::Trigger_data *trigger_data,
               Data::Mesh_draw_call_data *mesh_data,
               Data::Text_draw_call_data *text_data,

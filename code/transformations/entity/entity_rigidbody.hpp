@@ -3,25 +3,11 @@
 
 
 #include <transformations/entity/entity_common.hpp>
+#include <transformations/physics/bullet/bullet_fwd.hpp>
 #include <data/fwd_dec_data.hpp>
-#include <data/fwd_dec_collections.hpp>
-#include <math/transform/transform_fwd.hpp>
-#include <math/geometry/geometry_fwd.hpp>
-#include <btBulletDynamicsCommon.h>
 
 
 namespace Entity_detail {
-
-
-void
-set_collider(const util::generic_id this_id,
-             Data::World *world,
-             const Core::Collider &collider);
-
-
-Core::Collider
-get_collider(const util::generic_id this_id,
-             Data::World *world);
 
 
 void
@@ -29,13 +15,17 @@ set_phy_transform(const util::generic_id this_id,
                   const Core::Transform *transform,
                   Data::Entity_data *entity_data,
                   Data::Rigidbody_data *rb_data,
-                   btDynamicsWorld *world,
+                  Bullet_data::World *phy_world,
                   Data::Trigger_data *trigger_data);
 
 
 void
 set_rigidbody(const util::generic_id this_id,
-              Data::World *world,
+              Data::Entity_data *entity_data,
+              Data::Transform_data *transform_data,              
+              Data::Trigger_data *trigger_data,
+              Data::Rigidbody_data *rigidbody_data,
+              Bullet_data::World *physics_world,
               const Core::Rigidbody &rigidbody);
   
 
@@ -45,17 +35,8 @@ get_rigidbody(const util::generic_id this_id,
               Data::Transform_data *transforms,
               Data::Rigidbody_data *rb_data,
               Data::Trigger_data *trigger_data);
-
-
-void
-update_collider(const util::generic_id this_id,
-                Data::Entity_data *entity_data,
-                Data::Rigidbody_data *phys_data,
-                const math::transform *transform,
-                const math::aabb *model_aabb,
-                const bool inform_phys_engine = true);
   
-  
+
 void
 apply_force(const util::generic_id this_id,
             Data::Rigidbody_data *rb_data,

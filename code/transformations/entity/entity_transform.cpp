@@ -91,7 +91,7 @@ set_transform(const util::generic_id this_id,
               Data::Entity_data *entity_data,
               Data::Transform_data *transform_data,
               Data::Rigidbody_data *rb_data,
-              btDynamicsWorld *world,
+              Bullet_data::World *phy_world,
               Data::Trigger_data *trigger_data,
               Data::Mesh_draw_call_data *mesh_data,
               Data::Text_draw_call_data *text_data,
@@ -138,7 +138,7 @@ set_transform(const util::generic_id this_id,
 
     if(inform_phys_engine && Common::Data_type::is_collidable(components))
     {
-      Entity_detail::set_phy_transform(this_id, &set_transform, entity_data, rb_data, world, trigger_data);
+      Entity_detail::set_phy_transform(this_id, &set_transform, entity_data, rb_data, phy_world, trigger_data);
     }
 
     update_mesh_renderer(this_id, mesh_data, &new_transform);

@@ -76,7 +76,7 @@ update_trigger_transform(btPairCachingGhostObject *trigger,
 
 /*!
   Updates the transform of a rigidbody. The function
-  will try and preserve the velocities already in motion.
+  will try and preserve the angular/linear velocities.
 */
 void
 update_rigidbody_transform(btRigidBody *rb,

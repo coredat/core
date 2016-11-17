@@ -1,5 +1,8 @@
 #include <transformations/entity/entity_rigidbody.hpp>
 #include <transformations/entity/entity_transform.hpp>
+#include <transformations/physics/bullet/core_rb_to_bullet_rb.hpp>
+#include <transformations/physics/bullet/bullet_math_extensions.hpp>
+#include <transformations/physics/bullet/apply_force.hpp>
 #include <core/physics/collider.hpp>
 #include <core/physics/box_collider.hpp>
 #include <core/physics/box_collider_utils.hpp>
@@ -12,138 +15,44 @@
 #include <data/world/transform_data.hpp>
 #include <data/world/rigidbody_data.hpp>
 #include <data/world/trigger_data.hpp>
-#include <common/error_strings.hpp>
 #include <common/data_types.hpp>
 #include <utilities/logging.hpp>
-#include <transformations/physics/bullet/core_rb_to_bullet_rb.hpp>
-#include <transformations/physics/bullet/bullet_math_extensions.hpp>
-#include <transformations/physics/bullet/apply_force.hpp>
 #include <utilities/bits.hpp>
 #include <assert.h>
-#include <btBulletDynamicsCommon.h>
-#include <BulletCollision/CollisionDispatch/btGhostObject.h>
+
+
+namespace {
+  
+  
+constexpr const char* err_no_force_cant_find_rb() { return "Failed to apply force can't find rigidbody"; }
+constexpr const char* err_entity_has_rb_and_trigger() { return "Entity is both a trigger and rigidbody"; }
+  
+  
+} // anon ns
 
 
 namespace Entity_detail {
 
 
 void
-set_collider(const util::generic_id this_id,
-             Data::World *world,
-             const Core::Collider &collider)
-{
-  if(!is_valid(this_id, world->entity))
-  {
-    LOG_ERROR(Error_string::entity_is_invalid());
-    return;
-  }
-  
-  auto rb_data = world->rigidbody_data;
-  assert(rb_data);
-  
-  if(rb_data)
-  {
-    auto transform_data = world->transform;
-    assert(transform_data);
-  
-    size_t index;
-    if(Data::transform_exists(transform_data, this_id, &index))
-    {
-      //TODO: This can be async
-      update_component(this_id, world->entity, Common::Data_type::rigidbody);
-    
-      switch(collider.get_type())
-      {
-        case(Core::Collider::Type::box):
-        {
-          const Core::Box_collider box_collider = Core::Collider_utis::cast_to_box_collider(collider);
-          const math::vec3 box_scale = Core::Box_collider_utils::get_full_extents(box_collider);
-          
-          math::aabb collider_box = math::aabb_init(math::vec3_init(-0.5), math::vec3_init(+0.5));
-          math::aabb_scale(collider_box, box_scale);
-          
-          // Get the current components and add physics
-          {
-            math::aabb entity_aabb;
-            math::transform curr_transform;
-            {
-              Data::data_lock(world->transform);
-              Data::transform_get_aabb(world->transform, this_id, &entity_aabb);
-              Data::transform_get_transform(world->transform, this_id, &curr_transform);
-              Data::data_unlock(world->transform);
-            }
-          
-            // Set physics
-            {
-              Data::data_lock(rb_data);
-              
-              // Add the collider box
-              if(Data::rigidbody_push(rb_data, this_id))
-              {
-//                Data::rigidbody_set_aabb_collider(rb_data, this_id, &collider_box);
-              }
-              
-              Data::data_unlock(rb_data);
-              
-//              update_collider(this_id,
-//                              world->entity,
-//                              world->rigidbody_data,
-//                              &curr_transform,
-//                              &entity_aabb);
-            }
-          }
-          break;
-        }
-        
-        case(Core::Collider::Type::unknown):
-        default:
-          assert(false);
-          LOG_ERROR(Error_string::unknown_type());
-      }
-    }
-    else
-    {
-      LOG_ERROR(Error_string::entity_not_found());
-      return;
-    }
-  }
-  else
-  {
-    LOG_ERROR(Error_string::data_not_found());
-  }
-}
-
-
-Core::Collider
-get_collider(const util::generic_id this_id,
-             Data::World *world)
-{
-  LOG_DEPRECATED_ONCE("get rb should do this now.");
-  
-  assert(false);
-  LOG_ERROR(Error_string::no_implimentation());
-  return Core::Collider();
-}
-
-
-void
 set_rigidbody(const util::generic_id this_id,
-              Data::World *world,
+              Data::Entity_data *entity_data,
+              Data::Transform_data *transform_data,
+              Data::Trigger_data *trigger_data,
+              Data::Rigidbody_data *rb_data,
+              Bullet_data::World *physics_world,
               const Core::Rigidbody &rigidbody)
 {
-  LOG_TODO_ONCE("These should be passed in");
-  
-  Data::Entity_data *entity_data(world->entity);
-  Data::Trigger_data *trigger_data(world->trigger_data);
-  Data::Rigidbody_data *rigidbody_data(world->rigidbody_data);
-  btDynamicsWorld *phy_world = world->physics_world.dynamics_world;
-  
   // Param check
   assert(entity_data);
+  assert(transform_data);
   assert(trigger_data);
-  assert(rigidbody_data);
+  assert(rb_data);
+  assert(physics_world);
+  
+  btDynamicsWorld *phy_world = physics_world->dynamics_world;
   assert(phy_world);
-
+  
   // Check and add component flag
   {
     if(entity_data)
@@ -170,14 +79,14 @@ set_rigidbody(const util::generic_id this_id,
         }
         else if(components & Common::Data_type::rigidbody)
         {
-          Data::data_lock(rigidbody_data);
+          Data::data_lock(rb_data);
           
           Bullet_data::Rigidbody rigidbody;
-          Data::rigidbody_get_rigidbody(rigidbody_data, this_id, &rigidbody);
+          Data::rigidbody_get_rigidbody(rb_data, this_id, &rigidbody);
           Bullet_data::remove_and_clear(&rigidbody, phy_world);
-          Data::rigidbody_remove(rigidbody_data, this_id);
+          Data::rigidbody_remove(rb_data, this_id);
           
-          Data::data_unlock(rigidbody_data);
+          Data::data_unlock(rb_data);
         }
       }
 
@@ -192,12 +101,11 @@ set_rigidbody(const util::generic_id this_id,
   }
 
   // Common to trigger and rigidbody.
-  const Core::Transform core_transform(get_core_transform(this_id, world->entity, world->transform));
+  const Core::Transform core_transform(get_core_transform(this_id, entity_data, transform_data));
 
   // Add rigidbody
   if(!rigidbody.is_trigger())
   {
-    auto rb_data = world->rigidbody_data;
     assert(rb_data);
     
     if(rb_data)
@@ -212,7 +120,7 @@ set_rigidbody(const util::generic_id this_id,
       Data::rigidbody_set_collision_id(rb_data, this_id, &mask);
       
       Bullet_data::Rigidbody rb_details;
-      Physics_transform::create_rigidbody_from_core_rb(&core_transform, &rigidbody, &rb_details, world->physics_world.dynamics_world, this_id);
+      Physics_transform::create_rigidbody_from_core_rb(&core_transform, &rigidbody, &rb_details, phy_world, this_id);
 
       Data::rigidbody_set_rigidbody(rb_data, this_id, &rb_details);
       
@@ -223,7 +131,6 @@ set_rigidbody(const util::generic_id this_id,
   // Add trigger
   else
   {
-    auto trigger_data = world->trigger_data;
     assert(trigger_data);
     
     if(trigger_data)
@@ -232,7 +139,7 @@ set_rigidbody(const util::generic_id this_id,
       Data::trigger_push(trigger_data, this_id);
       
       Bullet_data::Trigger trigger_details;
-      Physics_transform::create_trigger_from_core_rb(&core_transform, &rigidbody, &trigger_details, world->physics_world.dynamics_world, this_id);
+      Physics_transform::create_trigger_from_core_rb(&core_transform, &rigidbody, &trigger_details, phy_world, this_id);
       Data::trigger_set_trigger(trigger_data, this_id, &trigger_details);
       
       Data::data_unlock(trigger_data);
@@ -291,7 +198,13 @@ get_rigidbody(const util::generic_id this_id,
   
   else if(components & Common::Data_type::trigger)
   {
-    assert(false); // no impl;
+    Data::data_lock(trigger_data);
+    
+    Bullet_data::Trigger trigger;
+    Data::trigger_get_trigger(trigger_data, this_id, &trigger);
+    Physics_transform::create_core_rb_from_trigger(&core_rb, entity_scale, &trigger);
+    
+    Data::data_unlock(trigger_data);
   }
 
   return core_rb;
@@ -303,7 +216,7 @@ set_phy_transform(const util::generic_id this_id,
                   const Core::Transform *transform,
                   Data::Entity_data *entity_data,
                   Data::Rigidbody_data *rb_data,
-                     btDynamicsWorld *world,
+                  Bullet_data::World *phy_world,
                   Data::Trigger_data *trigger_data)
 {
   // Param Check
@@ -312,6 +225,7 @@ set_phy_transform(const util::generic_id this_id,
   assert(entity_data);
   assert(rb_data);
   assert(trigger_data);
+  assert(phy_world);
   
   // Check if trigger or rigidbody
   bool is_trigger = false;
@@ -330,7 +244,7 @@ set_phy_transform(const util::generic_id this_id,
   
   if(is_trigger == is_rigidbody)
   {
-    LOG_ERROR("Can't set rigidbody/trigger transform");
+    LOG_FATAL(err_entity_has_rb_and_trigger());
     return;
   }
   
@@ -359,89 +273,10 @@ set_phy_transform(const util::generic_id this_id,
     btRigidBody *bt_rigidbody(reinterpret_cast<btRigidBody*>(rigidbody.rigidbody_ptr));
     btTransform  trans(math::transform_to_bt(*transform));
     
-    Physics_transform::update_rigidbody_transform(bt_rigidbody, world, &trans, math::vec3_to_bt(transform->get_scale()));
+    Physics_transform::update_rigidbody_transform(bt_rigidbody, phy_world->dynamics_world, &trans, math::vec3_to_bt(transform->get_scale()));
     
     Data::data_unlock(rb_data);
   }
-}
-
-
-void
-update_collider(const util::generic_id this_id,
-                Data::Entity_data *entity_data,
-                Data::Rigidbody_data *phys_data,
-                const math::transform *transform,
-                const math::aabb *model_aabb,
-                const bool inform_phys_engine)
-{
-//  // Check valid
-//  if(!is_valid(this_id, entity_data, true)) {
-//    assert(false); return;
-//  }
-//  
-//  // Find the components
-//  uint32_t components = 0;
-//  {
-//    assert(entity_data);
-//    
-//    Data::data_lock(entity_data);
-//  
-//    Data::entity_get_components(entity_data,
-//                                this_id,
-//                                &components);
-//    
-//    Data::data_unlock(entity_data);
-//  }
-//  
-//  // If this is a physics object then update it.
-//  {
-//    assert(phys_data);
-//  
-//    // Update the physics stuff.
-//    if(components & Common::Data_type::rigidbody)
-//    {
-//      Data::data_lock(phys_data);
-//      
-//      math::aabb collider_box;
-//      Data::rigidbody_get_aabb_collider(phys_data, this_id, &collider_box);
-//      
-//      const math::vec3 collider_scale  = math::aabb_get_extents(collider_box);
-//      const math::vec3 transform_scale = transform->scale;
-//      const math::vec3 total_scale     = math::vec3_multiply(collider_scale, transform_scale);
-//
-//      // Order is important here! Scale then shift origin.
-//      math::aabb_scale(collider_box, total_scale);
-//      math::aabb_set_origin(collider_box, transform->position);
-//      
-//      Data::rigidbody_set_transform(phys_data, this_id, transform);
-//      Data::rigidbody_set_transformed_aabb_collider(phys_data, this_id, &collider_box);
-//      
-//      if(inform_phys_engine)
-//      {
-//        uintptr_t body = 0;
-//        Data::rigidbody_get_rigidbody(phys_data, this_id, &body);
-//        
-//        if(body)
-//        {
-//          q3Vec3 pos;
-//          q3Vec3 axis;
-//          f32 angle;
-//          
-//          math::transform_to_q3(transform, &angle, &axis, &pos);
-//          
-//          reinterpret_cast<q3Body*>(body)->SetTransform(pos, axis, angle);
-//        }
-//      }
-//      
-//      Data::data_unlock(phys_data);
-//    }
-//    else
-//    {
-////      assert(false);
-//      LOG_TODO_ONCE("We should be able to check components before getting this far I think.");
-//    }
-//  } // if phys component
-  
 }
 
 
@@ -451,7 +286,9 @@ apply_force(const util::generic_id this_id,
             const math::vec3 direction,
             const float power)
 {
+  // Param check
   assert(this_id);
+  assert(rb_data);
   assert(math::vec3_length(direction) > 0.f);
   
   Data::data_lock(rb_data);
@@ -469,9 +306,8 @@ apply_force(const util::generic_id this_id,
     }
     else
     {
-      LOG_ERROR("No RB Found to apply force to");
+      LOG_ERROR(err_no_force_cant_find_rb());
     }
-
   }
   Data::data_unlock(rb_data);
 }
