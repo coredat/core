@@ -242,7 +242,7 @@ World::find_entity_by_ray(const Ray ray) const
   assert(m_impl && m_impl->world_instance_id);
   auto world = Core_detail::world_index_get_world_data(m_impl->world_instance_id);
   
-  return Physics_transform::find_entity_from_ray(ray, world->dynamicsWorld);
+  return Physics_transform::find_entity_from_ray(ray, world->physics_world.dynamics_world);
 }
 
 
@@ -289,7 +289,7 @@ World::find_entities_by_ray(const Ray ray,
   
   Physics_transform::find_entities_from_ray(
     ray,
-    world->dynamicsWorld,
+    world->physics_world.dynamics_world,
     contacts,
     out_array_size);
 }

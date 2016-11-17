@@ -136,7 +136,7 @@ set_rigidbody(const util::generic_id this_id,
   Data::Entity_data *entity_data(world->entity);
   Data::Trigger_data *trigger_data(world->trigger_data);
   Data::Rigidbody_data *rigidbody_data(world->rigidbody_data);
-  btDynamicsWorld *phy_world = world->dynamicsWorld;
+  btDynamicsWorld *phy_world = world->physics_world.dynamics_world;
   
   // Param check
   assert(entity_data);
@@ -212,7 +212,7 @@ set_rigidbody(const util::generic_id this_id,
       Data::rigidbody_set_collision_id(rb_data, this_id, &mask);
       
       Bullet_data::Rigidbody rb_details;
-      Physics_transform::create_rigidbody_from_core_rb(&core_transform, &rigidbody, &rb_details, world->dynamicsWorld, this_id);
+      Physics_transform::create_rigidbody_from_core_rb(&core_transform, &rigidbody, &rb_details, world->physics_world.dynamics_world, this_id);
 
       Data::rigidbody_set_rigidbody(rb_data, this_id, &rb_details);
       
@@ -232,7 +232,7 @@ set_rigidbody(const util::generic_id this_id,
       Data::trigger_push(trigger_data, this_id);
       
       Bullet_data::Trigger trigger_details;
-      Physics_transform::create_trigger_from_core_rb(&core_transform, &rigidbody, &trigger_details, world->dynamicsWorld, this_id);
+      Physics_transform::create_trigger_from_core_rb(&core_transform, &rigidbody, &trigger_details, world->physics_world.dynamics_world, this_id);
       Data::trigger_set_trigger(trigger_data, this_id, &trigger_details);
       
       Data::data_unlock(trigger_data);

@@ -4,11 +4,8 @@
 
 #include <core/entity/entity_fwd.hpp>
 #include <data/fwd_dec_data.hpp>
+#include <transformations/physics/bullet/bullet_data.hpp>
 #include <utilities/generic_id.hpp>
-
-#include <btBulletDynamicsCommon.h>
-#include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
-
 #include <utilities/generic_id.hpp>
 
 
@@ -27,11 +24,7 @@ struct World
   Text_draw_call_data           *text_data       = nullptr;
   Collision_data                *collision_data  = nullptr;
   
-  btBroadphaseInterface               *broadphase             = nullptr;
-  btDefaultCollisionConfiguration     *collisionConfiguration = nullptr;
-  btCollisionDispatcher               *dispatcher             = nullptr;
-  btSequentialImpulseConstraintSolver *solver                 = nullptr;
-  btDiscreteDynamicsWorld             *dynamicsWorld          = nullptr;
+  Bullet_data::World            physics_world;
   
   util::generic_id world_instance_id = 0;
   

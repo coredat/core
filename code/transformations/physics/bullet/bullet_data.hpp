@@ -3,6 +3,8 @@
 
 
 #include <stdint.h>
+#include <btBulletDynamicsCommon.h>
+#include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 
 
 class btDynamicsWorld;
@@ -42,6 +44,16 @@ struct Trigger
 };
 
 
+struct World
+{
+  btBroadphaseInterface               *broadphase       = nullptr;
+  btDefaultCollisionConfiguration     *collision_config = nullptr;
+  btCollisionDispatcher               *dispatcher       = nullptr;
+  btSequentialImpulseConstraintSolver *solver           = nullptr;
+  btDiscreteDynamicsWorld             *dynamics_world   = nullptr;
+};
+
+
 /*!
   Removes the rigidbody from the physics world, deletes the allocated resources.
   --
@@ -58,6 +70,21 @@ remove_and_clear(Rigidbody *rb, btDynamicsWorld *world);
 */
 void
 remove_and_clear(Trigger *trigger, btDynamicsWorld *world);
+
+
+/*!
+  Setup the the physics world
+*/
+void
+setup(World *world);
+
+
+/*!
+  Destroys the world
+*/
+void
+remove_and_clear(World *world);
+
 
 
 } // ns

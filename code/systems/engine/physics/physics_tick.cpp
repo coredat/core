@@ -44,9 +44,9 @@ namespace Physics_tick {
 void
 initialize(std::shared_ptr<Data::World> world)
 {
-  world->dynamicsWorld->getBroadphase()->getOverlappingPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
+  world->physics_world.dynamics_world->getBroadphase()->getOverlappingPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
   
-  world->dynamicsWorld->setInternalTickCallback(Physics_transform::trigger_callback,
+  world->physics_world.dynamics_world->setInternalTickCallback(Physics_transform::trigger_callback,
                                                 util::generic_id_to_ptr(world->world_instance_id),
                                                 true);
 }
@@ -66,7 +66,7 @@ think(std::shared_ptr<Data::World> world, const float dt, Tick_information *out_
     Update the physics world
   */
     {
-      world->dynamicsWorld->stepSimulation(1 / 60.f, 500);
+      world->physics_world.dynamics_world->stepSimulation(1 / 60.f, 500);
     }
 
   

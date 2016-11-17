@@ -79,5 +79,41 @@ remove_and_clear(Trigger *trigger,
 }
 
 
+void
+setup(World *world)
+{
+  // Param check
+  assert(world);
+
+  world->broadphase        = new btDbvtBroadphase();
+  world->solver            = new btSequentialImpulseConstraintSolver;
+  world->collision_config  = new btDefaultCollisionConfiguration();
+  world->dispatcher        = new btCollisionDispatcher(world->collision_config);
+  world->dynamics_world    = new btDiscreteDynamicsWorld(world->dispatcher,
+                                                         world->broadphase,
+                                                         world->solver,
+                                                         world->collision_config);
+  
+  btGImpactCollisionAlgorithm::registerAlgorithm(world->dispatcher);
+  world->dynamics_world->setGravity(btVector3(0, -10, 0));
+}
+
+
+void
+remove_and_clear(World *world)
+{
+  // Param check
+  assert(world);
+  
+  if(world->dynamics_world)   { delete world->dynamics_world;   }
+  if(world->dispatcher)       { delete world->dispatcher;       }
+  if(world->collision_config) { delete world->collision_config; }
+  if(world->solver)           { delete world->solver;           }
+  if(world->broadphase)       { delete world->broadphase;       }
+  
+  *world = World();
+}
+
+
 
 } // ns

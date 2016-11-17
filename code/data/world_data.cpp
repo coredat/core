@@ -49,14 +49,7 @@ World::World(const util::generic_id instance_id, const uint32_t entity_hint)
   Data::Collision_data *collision_data = new Data::Collision_data;
   Data::collision_create(collision_data, entity_hint);
   
-  broadphase              = new btDbvtBroadphase();
-  solver                  = new btSequentialImpulseConstraintSolver;
-  collisionConfiguration  = new btDefaultCollisionConfiguration();
-  dispatcher              = new btCollisionDispatcher(collisionConfiguration);
-  dynamicsWorld           = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
-  
-  btGImpactCollisionAlgorithm::registerAlgorithm(dispatcher);
-  dynamicsWorld->setGravity(btVector3(0, -10, 0));  
+  Bullet_data::setup(&physics_world);
   
   this->entity_removal = graph_changes;
   this->rigidbody_data = rb_data;
@@ -118,6 +111,8 @@ World::~World()
     Data::trigger_destroy(trigger_data);
     delete this->trigger_data;
   }
+  
+  Bullet_data::remove_and_clear(&physics_world);
 }
 
 
@@ -154,7 +149,7 @@ world_update_scene_graph_changes(Data::World *world_data,
         Bullet_data::Rigidbody rigidbody;
         Data::rigidbody_get_rigidbody(rb_data, id, &rigidbody);
         
-        Bullet_data::remove_and_clear(&rigidbody, world_data->dynamicsWorld);
+        Bullet_data::remove_and_clear(&rigidbody, world_data->physics_world.dynamics_world);
         
         Data::rigidbody_remove(rb_data, id);
       }
@@ -172,7 +167,7 @@ world_update_scene_graph_changes(Data::World *world_data,
         Bullet_data::Trigger trigger;
         Data::trigger_get_trigger(trigger_data, id, &trigger);
         
-        Bullet_data::remove_and_clear(&trigger, world_data->dynamicsWorld);
+        Bullet_data::remove_and_clear(&trigger, world_data->physics_world.dynamics_world);
       }
       
       Data::data_unlock(trigger_data);
