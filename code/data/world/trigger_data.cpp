@@ -70,10 +70,10 @@ trigger_create(Trigger_data *data, const size_t size_hint)
     // Alloc space for trigger
     if(all_alloc)
     {
-      data->field_trigger = new uintptr_t[size_hint * 1];
+      data->field_trigger = new Bullet_data::Trigger[size_hint * 1];
       assert(data->field_trigger);
       if(!data->field_trigger) { all_alloc = false; }
-      else { memset(data->field_trigger, 0, sizeof(uintptr_t) * size_hint * 1); }
+      else { memset(data->field_trigger, 0, sizeof(Bullet_data::Trigger) * size_hint * 1); }
     }
   }
 
@@ -286,7 +286,7 @@ trigger_resize_capacity(Trigger_data *data, const size_t size_hint)
   {
     memcpy(new_data.keys, data->keys, sizeof(uint32_t) * data->size);
     memcpy(new_data.field_collision_id, data->field_collision_id, sizeof(uint64_t) * data->size * 1);
-    memcpy(new_data.field_trigger, data->field_trigger, sizeof(uintptr_t) * data->size * 1);
+    memcpy(new_data.field_trigger, data->field_trigger, sizeof(Bullet_data::Trigger) * data->size * 1);
   }
 
   // Swap ptrs
@@ -299,7 +299,7 @@ trigger_resize_capacity(Trigger_data *data, const size_t size_hint)
     data->field_collision_id = new_data.field_collision_id;
     new_data.field_collision_id = old_collision_id;
 
-    uintptr_t *old_trigger = data->field_trigger;
+    Bullet_data::Trigger *old_trigger = data->field_trigger;
     data->field_trigger = new_data.field_trigger;
     new_data.field_trigger = old_trigger;
   }
@@ -343,7 +343,7 @@ trigger_get_collision_id_data(Trigger_data *data)
 }
 
 
-const uintptr_t*
+const Bullet_data::Trigger*
 trigger_get_const_trigger_data(const Trigger_data *data)
 {
   assert(data);
@@ -353,7 +353,7 @@ trigger_get_const_trigger_data(const Trigger_data *data)
 }
 
 
-uintptr_t*
+Bullet_data::Trigger*
 trigger_get_trigger_data(Trigger_data *data)
 {
   assert(data);
@@ -426,7 +426,7 @@ trigger_set_collision_id(const Trigger_data *data, const uint32_t key, const uin
 
 
 bool
-trigger_get_trigger(const Trigger_data *data, const uint32_t key, uintptr_t *return_value)
+trigger_get_trigger(const Trigger_data *data, const uint32_t key, Bullet_data::Trigger *return_value)
 {
   assert(data);
   assert(key != 0);
@@ -455,7 +455,7 @@ trigger_get_trigger(const Trigger_data *data, const uint32_t key, uintptr_t *ret
 
 
 bool
-trigger_set_trigger(const Trigger_data *data, const uint32_t key, const uintptr_t *set_value)
+trigger_set_trigger(const Trigger_data *data, const uint32_t key, const Bullet_data::Trigger *set_value)
 {
   assert(data);
   assert(key != 0);

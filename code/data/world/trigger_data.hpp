@@ -6,12 +6,13 @@
 */
 
 
-#ifndef TRIGGER_INCLUDED_1712D35D_CDDB_4E9D_83FF_033F8B9D7128
-#define TRIGGER_INCLUDED_1712D35D_CDDB_4E9D_83FF_033F8B9D7128
+#ifndef TRIGGER_INCLUDED_7860CFD2_DB02_41BB_BEAE_229471756C4E
+#define TRIGGER_INCLUDED_7860CFD2_DB02_41BB_BEAE_229471756C4E
 
 
 #include <stdint.h>
 #include <stddef.h>
+#include <transformations/physics/bullet/bullet_data.hpp>
 
 
 namespace Data {
@@ -29,7 +30,7 @@ struct Trigger_data
   uint64_t *field_collision_id = nullptr;
 
   // trigger field data //
-  uintptr_t *field_trigger = nullptr;
+  Bullet_data::Trigger *field_trigger = nullptr;
 
   // size //
   size_t size = 0;
@@ -106,11 +107,11 @@ uint64_t*
 trigger_get_collision_id_data(Trigger_data *data);
 
 
-const uintptr_t*
+const Bullet_data::Trigger*
 trigger_get_const_trigger_data(const Trigger_data *data);
 
 
-uintptr_t*
+Bullet_data::Trigger*
 trigger_get_trigger_data(Trigger_data *data);
 
 
@@ -130,11 +131,11 @@ trigger_set_collision_id(const Trigger_data *data, const uint32_t key, const uin
 
 
 bool
-trigger_get_trigger(const Trigger_data *data, const uint32_t key, uintptr_t *return_value);
+trigger_get_trigger(const Trigger_data *data, const uint32_t key, Bullet_data::Trigger *return_value);
 
 
 bool
-trigger_set_trigger(const Trigger_data *data, const uint32_t key, const uintptr_t *set_value);
+trigger_set_trigger(const Trigger_data *data, const uint32_t key, const Bullet_data::Trigger *set_value);
 
 
 

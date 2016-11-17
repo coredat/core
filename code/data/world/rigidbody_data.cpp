@@ -70,10 +70,10 @@ rigidbody_create(Rigidbody_data *data, const size_t size_hint)
     // Alloc space for rigidbody
     if(all_alloc)
     {
-      data->field_rigidbody = new uintptr_t[size_hint * 1];
+      data->field_rigidbody = new Bullet_data::Rigidbody[size_hint * 1];
       assert(data->field_rigidbody);
       if(!data->field_rigidbody) { all_alloc = false; }
-      else { memset(data->field_rigidbody, 0, sizeof(uintptr_t) * size_hint * 1); }
+      else { memset(data->field_rigidbody, 0, sizeof(Bullet_data::Rigidbody) * size_hint * 1); }
     }
   }
 
@@ -286,7 +286,7 @@ rigidbody_resize_capacity(Rigidbody_data *data, const size_t size_hint)
   {
     memcpy(new_data.keys, data->keys, sizeof(uint32_t) * data->size);
     memcpy(new_data.field_collision_id, data->field_collision_id, sizeof(uint64_t) * data->size * 1);
-    memcpy(new_data.field_rigidbody, data->field_rigidbody, sizeof(uintptr_t) * data->size * 1);
+    memcpy(new_data.field_rigidbody, data->field_rigidbody, sizeof(Bullet_data::Rigidbody) * data->size * 1);
   }
 
   // Swap ptrs
@@ -299,7 +299,7 @@ rigidbody_resize_capacity(Rigidbody_data *data, const size_t size_hint)
     data->field_collision_id = new_data.field_collision_id;
     new_data.field_collision_id = old_collision_id;
 
-    uintptr_t *old_rigidbody = data->field_rigidbody;
+    Bullet_data::Rigidbody *old_rigidbody = data->field_rigidbody;
     data->field_rigidbody = new_data.field_rigidbody;
     new_data.field_rigidbody = old_rigidbody;
   }
@@ -343,7 +343,7 @@ rigidbody_get_collision_id_data(Rigidbody_data *data)
 }
 
 
-const uintptr_t*
+const Bullet_data::Rigidbody*
 rigidbody_get_const_rigidbody_data(const Rigidbody_data *data)
 {
   assert(data);
@@ -353,7 +353,7 @@ rigidbody_get_const_rigidbody_data(const Rigidbody_data *data)
 }
 
 
-uintptr_t*
+Bullet_data::Rigidbody*
 rigidbody_get_rigidbody_data(Rigidbody_data *data)
 {
   assert(data);
@@ -426,7 +426,7 @@ rigidbody_set_collision_id(const Rigidbody_data *data, const uint32_t key, const
 
 
 bool
-rigidbody_get_rigidbody(const Rigidbody_data *data, const uint32_t key, uintptr_t *return_value)
+rigidbody_get_rigidbody(const Rigidbody_data *data, const uint32_t key, Bullet_data::Rigidbody *return_value)
 {
   assert(data);
   assert(key != 0);
@@ -455,7 +455,7 @@ rigidbody_get_rigidbody(const Rigidbody_data *data, const uint32_t key, uintptr_
 
 
 bool
-rigidbody_set_rigidbody(const Rigidbody_data *data, const uint32_t key, const uintptr_t *set_value)
+rigidbody_set_rigidbody(const Rigidbody_data *data, const uint32_t key, const Bullet_data::Rigidbody *set_value)
 {
   assert(data);
   assert(key != 0);

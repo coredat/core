@@ -151,10 +151,10 @@ world_update_scene_graph_changes(Data::World *world_data,
       
       if(Data::rigidbody_exists(rb_data, id))
       {
-        uintptr_t body_ptr = 0;
-        Data::rigidbody_get_rigidbody(rb_data, id, &body_ptr);
+        Bullet_data::Rigidbody rigidbody;
+        Data::rigidbody_get_rigidbody(rb_data, id, &rigidbody);
         
-        btRigidBody *body = reinterpret_cast<btRigidBody*>(body_ptr);
+        btRigidBody *body = reinterpret_cast<btRigidBody*>(rigidbody.rigidbody_ptr);
         
         if(body)
         {
@@ -178,10 +178,10 @@ world_update_scene_graph_changes(Data::World *world_data,
       
       if(Data::trigger_exists(trigger_data, id))
       {
-        uintptr_t trigger_ptr = 0;
-        Data::trigger_get_trigger(trigger_data, id, &trigger_ptr);
+        Bullet_data::Trigger trigger;
+        Data::trigger_get_trigger(trigger_data, id, &trigger);
         
-        btGhostObject *ghost = reinterpret_cast<btGhostObject*>(trigger_ptr);
+        btGhostObject *ghost = reinterpret_cast<btGhostObject*>(trigger.ghost_ptr);
         
         if(ghost)
         {

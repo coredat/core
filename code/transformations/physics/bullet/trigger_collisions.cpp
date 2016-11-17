@@ -62,7 +62,7 @@ trigger_callback(btDynamicsWorld *dynamicsWorld,
     
     for(size_t t = 0; t < trigger_count; ++t)
     {
-      uintptr_t ghost_trigger(Data::trigger_get_trigger_data(trigger_data)[t]);
+      uintptr_t ghost_trigger(Data::trigger_get_trigger_data(trigger_data)[t].ghost_ptr);
       
       btPairCachingGhostObject *ghost_object(reinterpret_cast<btPairCachingGhostObject*>(ghost_trigger));
       
@@ -147,7 +147,7 @@ trigger_callback(btDynamicsWorld *dynamicsWorld,
     for(size_t t = trigger_count; t < trigger_count; ++t)
 //    for(size_t t = 0; t < trigger_count; ++t)
     {
-      uintptr_t ghost_trigger(Data::trigger_get_trigger_data(trigger_data)[t]);
+      uintptr_t ghost_trigger(Data::trigger_get_trigger_data(trigger_data)[t].ghost_ptr);
       
       btPairCachingGhostObject *ghost_object(reinterpret_cast<btPairCachingGhostObject*>(ghost_trigger));
       

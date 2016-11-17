@@ -161,18 +161,11 @@ set_rigidbody(const util::generic_id this_id,
         {
           Data::data_lock(trigger_data);
           
-          uintptr_t trigger = 0;
+          Bullet_data::Trigger trigger;
           Data::trigger_get_trigger(trigger_data, this_id, &trigger);
-          assert(trigger);
-          
-          btGhostObject *ghost = reinterpret_cast<btGhostObject*>(trigger);
-          assert(ghost);
-          
-          phy_world->removeCollisionObject(ghost);
+          Bullet_data::remove_and_clear(&trigger, phy_world);
           
           Data::trigger_remove(trigger_data, this_id);
-          
-          delete ghost;
           
           Data::data_unlock(trigger_data);
         }
@@ -180,18 +173,10 @@ set_rigidbody(const util::generic_id this_id,
         {
           Data::data_lock(rigidbody_data);
           
-          uintptr_t rigidbody = 0;
+          Bullet_data::Rigidbody rigidbody;
           Data::rigidbody_get_rigidbody(rigidbody_data, this_id, &rigidbody);
-          assert(rigidbody);
-          
-          btRigidBody *rb = reinterpret_cast<btRigidBody*>(rigidbody);
-          assert(rb);
-          
-          phy_world->removeRigidBody(rb);
-          
+          Bullet_data::remove_and_clear(&rigidbody, phy_world);
           Data::rigidbody_remove(rigidbody_data, this_id);
-          
-          delete rb;
           
           Data::data_unlock(rigidbody_data);
         }
@@ -209,9 +194,6 @@ set_rigidbody(const util::generic_id this_id,
 
   // Common to trigger and rigidbody.
   const Core::Transform core_transform(get_core_transform(this_id, world->entity, world->transform));
-  const Core::Collider core_collider(rigidbody.get_collider());
-  const btTransform transform(math::transform_to_bt(core_transform));
-  btCollisionShape *shape(Physics_transform::convert_core_collider_to_bullet_collider(&core_collider, &core_transform, this_id));
 
   // Add rigidbody
   if(!rigidbody.is_trigger())
@@ -230,12 +212,10 @@ set_rigidbody(const util::generic_id this_id,
       
       Data::rigidbody_set_collision_id(rb_data, this_id, &mask);
       
-      btRigidBody *bt_rb(Physics_transform::convert_core_rb_to_bullet_rb(&rigidbody, shape, &transform, this_id));
-      
-      world->dynamicsWorld->addRigidBody(bt_rb);
-      
-      const uintptr_t body_property(reinterpret_cast<uintptr_t>(bt_rb));
-      Data::rigidbody_set_rigidbody(rb_data, this_id, &body_property);
+      Bullet_data::Rigidbody rb_details;
+      Physics_transform::create_rigidbody_from_core_rb(&core_transform, &rigidbody, &rb_details, world->dynamicsWorld, this_id);
+
+      Data::rigidbody_set_rigidbody(rb_data, this_id, &rb_details);
       
       Data::data_unlock(rb_data);
     }
@@ -250,15 +230,11 @@ set_rigidbody(const util::generic_id this_id,
     if(trigger_data)
     {
       Data::data_lock(trigger_data);
-      
       Data::trigger_push(trigger_data, this_id);
       
-      btGhostObject *bt_ghost(Physics_transform::convert_core_rb_to_bullet_trigger(&rigidbody, shape, &transform));
-      
-      world->dynamicsWorld->addCollisionObject(bt_ghost);
-      
-      const uintptr_t trigger_property(reinterpret_cast<uintptr_t>(bt_ghost));
-      Data::trigger_set_trigger(trigger_data, this_id, &trigger_property);
+      Bullet_data::Trigger trigger_details;
+      Physics_transform::create_trigger_from_core_rb(&core_transform, &rigidbody, &trigger_details, world->dynamicsWorld, this_id);
+      Data::trigger_set_trigger(trigger_data, this_id, &trigger_details);
       
       Data::data_unlock(trigger_data);
     }
@@ -305,14 +281,11 @@ get_rigidbody(const util::generic_id this_id,
   
   if(components & Common::Data_type::rigidbody)
   {
-    uintptr_t rigidbody;
-  
     Data::data_lock(rb_data);
+    
+    Bullet_data::Rigidbody rigidbody;
     Data::rigidbody_get_rigidbody(rb_data, this_id, &rigidbody);
-  
-    const btRigidBody *rb = reinterpret_cast<btRigidBody*>(rigidbody);
-  
-    core_rb = Physics_transform::convert_rb_to_core_rb(rb, entity_scale);
+    Physics_transform::create_core_rb_from_rigidbody(&core_rb, entity_scale, &rigidbody);
     
     Data::data_unlock(rb_data);
   }
@@ -366,10 +339,10 @@ set_phy_transform(const util::generic_id this_id,
   {
     Data::data_lock(trigger_data);
   
-    uintptr_t trigger(0);
+    Bullet_data::Trigger trigger;
     Data::trigger_get_trigger(trigger_data, this_id, &trigger);
     
-    btPairCachingGhostObject *bt_trigger(reinterpret_cast<btPairCachingGhostObject*>(trigger));
+    btPairCachingGhostObject *bt_trigger(reinterpret_cast<btPairCachingGhostObject*>(trigger.ghost_ptr));
     btTransform               trans(math::transform_to_bt(*transform));
     
     Physics_transform::update_trigger_transform(bt_trigger, &trans);
@@ -381,10 +354,10 @@ set_phy_transform(const util::generic_id this_id,
   {
     Data::data_lock(rb_data);
   
-    uintptr_t rigidbody(0);
+    Bullet_data::Rigidbody rigidbody;
     Data::rigidbody_get_rigidbody(rb_data, this_id, &rigidbody);
     
-    btRigidBody *bt_rigidbody(reinterpret_cast<btRigidBody*>(rigidbody));
+    btRigidBody *bt_rigidbody(reinterpret_cast<btRigidBody*>(rigidbody.rigidbody_ptr));
     btTransform  trans(math::transform_to_bt(*transform));
     
     Physics_transform::update_rigidbody_transform(bt_rigidbody, world, &trans, math::vec3_to_bt(transform->get_scale()));
@@ -484,12 +457,12 @@ apply_force(const util::generic_id this_id,
   
   Data::data_lock(rb_data);
   {
-    uintptr_t bt_data(0);
-    Data::rigidbody_get_rigidbody(rb_data, this_id, &bt_data);
+    Bullet_data::Rigidbody rigidbody;
+    Data::rigidbody_get_rigidbody(rb_data, this_id, &rigidbody);
     
-    if(bt_data)
+    if(rigidbody.rigidbody_ptr)
     {
-      btRigidBody *bt_rb = reinterpret_cast<btRigidBody*>(bt_data);
+      btRigidBody *bt_rb = reinterpret_cast<btRigidBody*>(rigidbody.rigidbody_ptr);
       
       Physics_transform::apply_world_force(bt_rb,
                                            math::vec3_to_bt(direction),

@@ -11,4 +11,4 @@ data:
 
     - name: rigidbody
       type: Bullet_data::Rigidbody
-      include: <transformations/physics/bullet_data.hpp>
+      include: <transformations/physics/bullet/bullet_data.hpp>

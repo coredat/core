@@ -11,4 +11,4 @@ data:
 
     - name: trigger
       type: Bullet_data::Trigger
-      include: <transformations/physics/bullet_data.hpp>
+      include: <transformations/physics/bullet/bullet_data.hpp>

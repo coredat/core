@@ -6,12 +6,13 @@
 */
 
 
-#ifndef RIGIDBODY_INCLUDED_992C2486_741B_417C_AA0B_73BE02E11522
-#define RIGIDBODY_INCLUDED_992C2486_741B_417C_AA0B_73BE02E11522
+#ifndef RIGIDBODY_INCLUDED_87ACB487_4B17_4233_88E7_39E67A1BEAD6
+#define RIGIDBODY_INCLUDED_87ACB487_4B17_4233_88E7_39E67A1BEAD6
 
 
 #include <stdint.h>
 #include <stddef.h>
+#include <transformations/physics/bullet/bullet_data.hpp>
 
 
 namespace Data {
@@ -29,7 +30,7 @@ struct Rigidbody_data
   uint64_t *field_collision_id = nullptr;
 
   // rigidbody field data //
-  uintptr_t *field_rigidbody = nullptr;
+  Bullet_data::Rigidbody *field_rigidbody = nullptr;
 
   // size //
   size_t size = 0;
@@ -106,11 +107,11 @@ uint64_t*
 rigidbody_get_collision_id_data(Rigidbody_data *data);
 
 
-const uintptr_t*
+const Bullet_data::Rigidbody*
 rigidbody_get_const_rigidbody_data(const Rigidbody_data *data);
 
 
-uintptr_t*
+Bullet_data::Rigidbody*
 rigidbody_get_rigidbody_data(Rigidbody_data *data);
 
 
@@ -130,11 +131,11 @@ rigidbody_set_collision_id(const Rigidbody_data *data, const uint32_t key, const
 
 
 bool
-rigidbody_get_rigidbody(const Rigidbody_data *data, const uint32_t key, uintptr_t *return_value);
+rigidbody_get_rigidbody(const Rigidbody_data *data, const uint32_t key, Bullet_data::Rigidbody *return_value);
 
 
 bool
-rigidbody_set_rigidbody(const Rigidbody_data *data, const uint32_t key, const uintptr_t *set_value);
+rigidbody_set_rigidbody(const Rigidbody_data *data, const uint32_t key, const Bullet_data::Rigidbody *set_value);
 
 
 

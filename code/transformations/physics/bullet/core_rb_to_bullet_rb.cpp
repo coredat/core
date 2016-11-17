@@ -12,7 +12,244 @@
 #include <assert.h>
 
 
+namespace {
+
+
+inline btCollisionShape*
+generate_collision_shape(const Core::Collider &collider,
+                         const uintptr_t user_data,
+                         const math::vec3 scale)
+{
+  switch(collider.get_type())
+  {
+    case(Core::Collider::Type::box):
+    {
+      btBoxShape *bt_collider = new btBoxShape(btVector3(0.5f, 0.5f, 0.5f));
+   
+      const Core::Box_collider core_box(Core::Collider_utis::cast_to_box_collider(collider));
+      const math::vec3 half_extents(
+        math::vec3_init(
+          core_box.get_x_half_extent(),
+          core_box.get_y_half_extent(),
+          core_box.get_z_half_extent()
+        )
+      );
+      const math::vec3 scaled_extents(math::vec3_multiply(half_extents, scale));
+      const btVector3 scale_vector = math::vec3_to_bt(scaled_extents);
+      
+      bt_collider->setLocalScaling(scale_vector);
+      bt_collider->setUserPointer((void*)user_data);
+    
+      return bt_collider;
+    
+      break;
+    }
+    
+    default:
+      assert(false);
+  };
+  
+  UNREACHABLE;
+  
+  return nullptr;
+}
+
+
+Core::Collider
+generate_collider(const btCollisionShape *shape,
+                  const math::vec3 entity_scale)
+{
+  const math::vec3 local_scale = math::vec3_from_bt(shape->getLocalScaling());
+  const math::vec3 extents = math::vec3_divide(entity_scale, local_scale);
+  
+  return Core::Box_collider(math::get_x(extents), math::get_y(extents), math::get_z(extents));
+}
+
+
+} // ns
+
+
 namespace Physics_transform {
+
+
+void
+create_core_rb_from_trigger(Core::Rigidbody *out_rb,
+                            const math::vec3 entity_scale,
+                            const Bullet_data::Trigger *trigger)
+{
+  // Param check
+  assert(out_rb);
+  assert(trigger);
+  
+  if(trigger->ghost_ptr)
+  {
+    out_rb->set_is_trigger(true);
+    out_rb->set_is_kinematic(true);
+    out_rb->set_mass(0);
+    
+    const btCollisionShape *shape = reinterpret_cast<btCollisionShape*>(trigger->shape_ptr);
+    assert(shape);
+    
+    out_rb->set_collider(generate_collider(shape, entity_scale));
+  }
+}
+
+
+void
+create_core_rb_from_rigidbody(Core::Rigidbody *out_rb,
+                              const math::vec3 entity_scale,
+                              const Bullet_data::Rigidbody *rigidbody)
+{
+  // Param check
+  assert(out_rb);
+  assert(rigidbody);
+  
+  if(rigidbody)
+  {
+    out_rb->set_is_trigger(false);
+    
+    const btRigidBody *rb = reinterpret_cast<btRigidBody*>(rigidbody->rigidbody_ptr);
+    assert(rb);
+    
+    out_rb->set_mass(1.f / rb->getInvMass());
+    out_rb->set_is_kinematic(rb->getFlags() & btRigidBody::CF_KINEMATIC_OBJECT);
+    
+    const btCollisionShape *shape = rb->getCollisionShape();
+    assert(shape);
+    
+    out_rb->set_collider(generate_collider(shape, entity_scale));
+  }
+}
+
+
+void
+create_trigger_from_core_rb(const Core::Transform *transform,
+                            const Core::Rigidbody *core_rb,
+                            Bullet_data::Trigger *out_trigger,
+                            btDynamicsWorld *phy_world,
+                            const uintptr_t user_data)
+{
+  // Param check
+  assert(transform);
+  assert(core_rb);
+  assert(out_trigger);
+  assert(phy_world);
+  
+  // Already exists? Then remove it
+  if(out_trigger->ghost_ptr)
+  {
+    Bullet_data::remove_and_clear(out_trigger, phy_world);
+  }
+  
+  // Create Collider
+  btCollisionShape *bt_collider = nullptr;
+  {
+    bt_collider = generate_collision_shape(core_rb->get_collider(), user_data, transform->get_scale());
+  }
+  
+  // Create Trigger
+  btPairCachingGhostObject *bt_trigger = nullptr;
+  {
+    bt_trigger = new btPairCachingGhostObject;
+    bt_trigger->setCollisionFlags(btGhostObject::CF_NO_CONTACT_RESPONSE);
+    bt_trigger->setWorldTransform(math::transform_to_bt(*transform));
+    bt_trigger->setCollisionShape(bt_collider);
+  }
+  
+  // Add to world
+  {
+    phy_world->addCollisionObject(bt_trigger);
+  }
+  
+  // Set the values
+  {
+    assert(!out_trigger->ghost_ptr);
+    out_trigger->ghost_ptr = (uintptr_t)bt_trigger;
+    
+    assert(!out_trigger->shape_ptr);
+    out_trigger->shape_ptr = (uintptr_t)bt_collider;
+  }
+}
+
+
+void
+create_rigidbody_from_core_rb(const Core::Transform *transform,
+                              const Core::Rigidbody *core_rb,
+                              Bullet_data::Rigidbody *out_rb,
+                              btDynamicsWorld *phy_world,
+                              const uintptr_t user_data)
+{
+  // Param Check
+  assert(transform);
+  assert(core_rb);
+  assert(out_rb);
+  assert(phy_world);
+
+  // Already exists? Then remove it
+  if(out_rb->rigidbody_ptr)
+  {    
+    Bullet_data::remove_and_clear(out_rb, phy_world);
+  }
+  
+  // Create Collider
+  btCollisionShape *bt_collider = nullptr;
+  {
+    bt_collider = generate_collision_shape(core_rb->get_collider(), user_data, transform->get_scale());
+  }
+  
+  // Create Rigidbody
+  btRigidBody   *bt_rb = nullptr;
+  btMotionState *bt_mt = nullptr;
+  {
+    uint32_t collision_flags(0);
+    if(core_rb->is_kinematic())   { collision_flags |= btRigidBody::CF_KINEMATIC_OBJECT; }
+    if(core_rb->get_mass() == 0)  { collision_flags |= btRigidBody::CF_STATIC_OBJECT;    }
+
+    // Create btRigidBody and return it.
+
+    // If we don't have user data we can't update
+    // transforms in core. The fallback here is unlikely to
+    // be used but have it as a fallback incase.
+    {
+      if(user_data)
+      {
+        bt_mt = new Core_motion_state(user_data, math::transform_to_bt(*transform));
+      }
+      else
+      {
+        bt_mt = new btDefaultMotionState(math::transform_to_bt(*transform));
+      }
+    }
+    
+    
+    const btScalar mass(core_rb->get_mass());
+    btVector3 inertia(0.f, 0.f, 0.f);
+    
+    bt_collider->calculateLocalInertia(mass, inertia);
+    btRigidBody::btRigidBodyConstructionInfo rb_ci(mass, bt_mt, bt_collider, inertia);
+    rb_ci.m_friction = 0.9;
+    rb_ci.m_restitution = 0;
+
+    bt_rb = new btRigidBody(rb_ci);
+  }
+  
+  // Add to the world
+  {
+    phy_world->addRigidBody(bt_rb);
+  }
+  
+  // Set the values
+  {
+    assert(!out_rb->rigidbody_ptr);
+    out_rb->rigidbody_ptr = (uintptr_t)bt_rb;
+    
+    assert(!out_rb->motion_state_ptr);
+    out_rb->motion_state_ptr = (uintptr_t)bt_mt;
+    
+    assert(!out_rb->shape_ptr);
+    out_rb->shape_ptr = (uintptr_t)bt_collider;
+  }
+}
 
 
 btRigidBody*
