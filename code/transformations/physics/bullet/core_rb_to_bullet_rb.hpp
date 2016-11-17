@@ -10,13 +10,19 @@ class btRigidBody;
 class btPairCachingGhostObject;
 class btDynamicsWorld;
 class btTransform;
-class btCollisionShape;
 class btVector3;
 
 
 namespace Physics_transform {
 
 
+/*!
+  Takes a core rigidbody definition and adds it to the
+  physics world as a rigidbody.
+  
+  This function will remove any rigidbody identififed in
+  out_rb.
+*/
 void
 create_rigidbody_from_core_rb(const Core::Transform *transform,
                               const Core::Rigidbody *core_rb,
@@ -24,7 +30,14 @@ create_rigidbody_from_core_rb(const Core::Transform *transform,
                               btDynamicsWorld *phy_world,
                               const uintptr_t user_data = 0);
   
+
+/*!
+  Takes a core rigidbody (trigger) definition and adds it to the
+  physics world as a trigger.
   
+  This function will remove any trigger identififed in
+  out_rb.
+*/
 void
 create_trigger_from_core_rb(const Core::Transform *transform,
                             const Core::Rigidbody *core_rb,
@@ -33,54 +46,44 @@ create_trigger_from_core_rb(const Core::Transform *transform,
                             const uintptr_t user_data = 0);
 
 
+/*!
+  Pulls the information from Bullet to convert it to a
+  Core::Rigidbody.
+*/
 void
 create_core_rb_from_trigger(Core::Rigidbody *out_rb,
                             const math::vec3 entity_scale,
                             const Bullet_data::Trigger *trigger);
   
   
+/*!
+  Pulls the information from Bullet to convert it to a
+  Core::Rigidbody.
+*/
 void
 create_core_rb_from_rigidbody(Core::Rigidbody *out_rb,
                               const math::vec3 entity_scale,
                               const Bullet_data::Rigidbody *rigidbody);
 
 
-
-//btRigidBody*
-//convert_core_rb_to_bullet_rb(const Core::Rigidbody *core_rb,
-//                             btCollisionShape *collider,
-//                             const btTransform *transform,
-//                             const uintptr_t user_data = 0);
-  
-  
-//Core::Rigidbody
-//convert_rb_to_core_rb(const btRigidBody *rb,
-//                      const math::vec3 entity_global_scale);
-//
-//
-//btPairCachingGhostObject*
-//convert_core_rb_to_bullet_trigger(const Core::Rigidbody *core_rb,
-//                                  btCollisionShape *collider,
-//                                  const btTransform *transform);
-
+/*!
+  Updates the transform of a trigger.
+*/
 void
 update_trigger_transform(btPairCachingGhostObject *trigger,
                          const btTransform *transform);
 
 
+/*!
+  Updates the transform of a rigidbody. The function
+  will try and preserve the velocities already in motion.
+*/
 void
 update_rigidbody_transform(btRigidBody *rb,
                            btDynamicsWorld *world,
                            const btTransform *transform,
                            const btVector3 scale);
   
-
-
-//btCollisionShape*
-//convert_core_collider_to_bullet_collider(const Core::Collider *collider,
-//                                         const Core::Transform *transform,
-//                                         const uintptr_t user_data = 0);
-
 } // ns
 
 

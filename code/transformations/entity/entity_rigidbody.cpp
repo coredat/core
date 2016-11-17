@@ -2,6 +2,7 @@
 #include <transformations/entity/entity_transform.hpp>
 #include <core/physics/collider.hpp>
 #include <core/physics/box_collider.hpp>
+#include <core/physics/box_collider_utils.hpp>
 #include <core/physics/collider_utils.hpp>
 #include <core/physics/rigidbody.hpp>
 #include <core/transform/transform.hpp>
@@ -56,9 +57,7 @@ set_collider(const util::generic_id this_id,
         case(Core::Collider::Type::box):
         {
           const Core::Box_collider box_collider = Core::Collider_utis::cast_to_box_collider(collider);
-          const math::vec3 box_scale = math::vec3_init(box_collider.get_x_half_extent() * 2.f,
-                                                       box_collider.get_y_half_extent() * 2.f,
-                                                       box_collider.get_z_half_extent() * 2.f);
+          const math::vec3 box_scale = Core::Box_collider_utils::get_full_extents(box_collider);
           
           math::aabb collider_box = math::aabb_init(math::vec3_init(-0.5), math::vec3_init(+0.5));
           math::aabb_scale(collider_box, box_scale);

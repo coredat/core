@@ -19,27 +19,26 @@ public:
     Constructor takes the half extent of the box.
   */
   constexpr explicit
-  Box_collider(const float x_half_extent,
-               const float y_half_extent,
-               const float z_half_extent)
-  : m_x_half_extent(x_half_extent)
-  , m_y_half_extent(y_half_extent)
-  , m_z_half_extent(z_half_extent)
+  Box_collider(const float x_extent,
+               const float y_extent,
+               const float z_extent)
+  : m_x_extents(x_extent)
+  , m_y_extents(y_extent)
+  , m_z_extents(z_extent)
   {
   }
   
-  float                 get_x_half_extent() const { return m_x_half_extent; }
-  float                 get_y_half_extent() const { return m_y_half_extent; }
-  float                 get_z_half_extent() const { return m_z_half_extent; }
-  
+  float                 get_x_extent() const { return m_x_extents; }
+  float                 get_y_extent() const { return m_y_extents; }
+  float                 get_z_extent() const { return m_z_extents; }
   
                         operator Collider() const;
   
 private:
 
-  const float           m_x_half_extent;
-  const float           m_y_half_extent;
-  const float           m_z_half_extent;
+  const float           m_x_extents;
+  const float           m_y_extents;
+  const float           m_z_extents;
 
 };
 
