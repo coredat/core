@@ -179,12 +179,12 @@ set_rigidbody(const Core::Entity_ref &ref,
   assert(world_data);
   
   Entity_detail::set_rigidbody(entity_uint_id,
-                               world_data->entity,
+                               rigidbody,
                                world_data->transform,
+                               world_data->entity,
                                world_data->trigger_data,
                                world_data->rigidbody_data,
-                               &world_data->physics_world,
-                               rigidbody);
+                               &world_data->physics_world);
   
   return true;
 }

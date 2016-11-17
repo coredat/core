@@ -25,8 +25,13 @@ namespace {
   
   
 // Errors
-constexpr const char* err_no_force_cant_find_rb()     { return "Failed to apply force can't find rigidbody"; }
-constexpr const char* err_entity_has_rb_and_trigger() { return "Entity is both a trigger and rigidbody";     }
+constexpr const char* err_no_force_cant_find_rb() {
+  return "Failed to apply force can't find rigidbody";
+}
+
+constexpr const char* err_entity_has_rb_and_trigger() {
+  return "Entity is both a trigger and rigidbody";
+  }
   
   
 } // anon ns
@@ -37,12 +42,12 @@ namespace Entity_detail {
 
 void
 set_rigidbody(const util::generic_id this_id,
-              Data::Entity_data *entity_data,
+              const Core::Rigidbody &rigidbody,
               const Data::Transform_data *transform_data,
+              Data::Entity_data *entity_data,
               Data::Trigger_data *trigger_data,
               Data::Rigidbody_data *rb_data,
-              Bullet_data::World *physics_world,
-              const Core::Rigidbody &rigidbody)
+              Bullet_data::World *physics_world)
 {
   // Param check
   assert(entity_data);

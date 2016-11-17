@@ -21,12 +21,12 @@ set_phy_transform(const util::generic_id this_id,
 
 void
 set_rigidbody(const util::generic_id this_id,
-              Data::Entity_data *entity_data,
+              const Core::Rigidbody &rigidbody,
               const Data::Transform_data *transform_data,
+              Data::Entity_data *entity_data,
               Data::Trigger_data *trigger_data,
               Data::Rigidbody_data *rigidbody_data,
-              Bullet_data::World *physics_world,
-              const Core::Rigidbody &rigidbody);
+              Bullet_data::World *physics_world);
   
 
 Core::Rigidbody
