@@ -245,24 +245,13 @@ set_phy_transform(const util::generic_id this_id,
   
   if(is_trigger == is_rigidbody)
   {
+    assert(false);
     LOG_FATAL(err_entity_has_rb_and_trigger());
     return;
   }
   
-  if(is_trigger)
-  {
-    Data::data_lock(trigger_data);
-  
-    Bullet_data::Trigger trigger;
-    Data::trigger_get_trigger(trigger_data, this_id, &trigger);
-    
-    btPairCachingGhostObject *bt_trigger(reinterpret_cast<btPairCachingGhostObject*>(trigger.ghost_ptr));
-    btTransform               trans(math::transform_to_bt(*transform));
-    
-    Physics_transform::update_trigger_transform(bt_trigger, &trans);
-    
-    Data::data_unlock(trigger_data);
-  }
+  // New transform.
+  const btTransform trans(math::transform_to_bt(*transform));
   
   if(is_rigidbody)
   {
@@ -271,12 +260,23 @@ set_phy_transform(const util::generic_id this_id,
     Bullet_data::Rigidbody rigidbody;
     Data::rigidbody_get_rigidbody(rb_data, this_id, &rigidbody);
     
-    btRigidBody *bt_rigidbody(reinterpret_cast<btRigidBody*>(rigidbody.rigidbody_ptr));
-    btTransform  trans(math::transform_to_bt(*transform));
-    
-    Physics_transform::update_rigidbody_transform(bt_rigidbody, phy_world->dynamics_world, &trans, math::vec3_to_bt(transform->get_scale()));
+    Physics_transform::update_rigidbody_transform(&rigidbody,
+                                                  phy_world,
+                                                  &trans,
+                                                  math::vec3_to_bt(transform->get_scale()));
     
     Data::data_unlock(rb_data);
+  }
+  else if(is_trigger)
+  {
+    Data::data_lock(trigger_data);
+  
+    Bullet_data::Trigger trigger;
+    Data::trigger_get_trigger(trigger_data, this_id, &trigger);
+    
+    Physics_transform::update_trigger_transform(&trigger, &trans);
+    
+    Data::data_unlock(trigger_data);
   }
 }
 

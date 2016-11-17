@@ -63,7 +63,7 @@ create_core_rb_from_rigidbody(Core::Rigidbody *out_rb,
   Updates the transform of a trigger.
 */
 void
-update_trigger_transform(btPairCachingGhostObject *trigger,
+update_trigger_transform(Bullet_data::Trigger *trigger,
                          const btTransform *transform);
 
 
@@ -72,8 +72,8 @@ update_trigger_transform(btPairCachingGhostObject *trigger,
   will try and preserve the angular/linear velocities.
 */
 void
-update_rigidbody_transform(btRigidBody *rb,
-                           btDynamicsWorld *world,
+update_rigidbody_transform(Bullet_data::Rigidbody *rigidbody,
+                           Bullet_data::World *world,
                            const btTransform *transform,
                            const btVector3 scale);
   

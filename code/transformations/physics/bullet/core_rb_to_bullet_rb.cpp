@@ -251,12 +251,14 @@ create_rigidbody_from_core_rb(const Core::Transform *transform,
 
 
 void
-update_trigger_transform(btPairCachingGhostObject *ghost,
+update_trigger_transform(Bullet_data::Trigger *trigger,
                          const btTransform *transform)
 {
   // Param Check
-  assert(ghost);
+  assert(trigger);
   assert(transform);
+  
+  btGhostObject *ghost = reinterpret_cast<btGhostObject*>(trigger->ghost_ptr);
   
   // Update Transform
   if(ghost && transform)
@@ -267,18 +269,19 @@ update_trigger_transform(btPairCachingGhostObject *ghost,
 
 
 void
-update_rigidbody_transform(btRigidBody *rb,
-                           btDynamicsWorld *world,
+update_rigidbody_transform(Bullet_data::Rigidbody *rigidbody,
+                           Bullet_data::World *phy_world,
                            const btTransform *transform,
                            const btVector3 scale)
 {
-  btCollisionShape *shape = rb->getCollisionShape();
-
   // Param Check
-  assert(rb);
-  assert(shape);
-  assert(world);
+  assert(rigidbody);
+  assert(phy_world);
   assert(transform);
+  
+  btDynamicsWorld  *world = phy_world->dynamics_world;
+  btRigidBody      *rb    = reinterpret_cast<btRigidBody*>(rigidbody->rigidbody_ptr);
+  btCollisionShape *shape = rb->getCollisionShape();
   
   // Update the transform and scale.
   if(rb && shape && world && transform)
