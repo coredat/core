@@ -150,7 +150,7 @@ set_transform(const util::generic_id this_id,
 Core::Transform
 get_core_transform(const util::generic_id this_id,
                    Data::Entity_data *entity_data,
-                   Data::Transform_data *transform_data)
+                   const Data::Transform_data *transform_data)
 {
   assert(entity_data);
   assert(transform_data);
@@ -169,7 +169,7 @@ get_core_transform(const util::generic_id this_id,
 math::transform
 get_transform(const util::generic_id this_id,
               Data::Entity_data *entity_data,
-              Data::Transform_data *transform_data)
+              const Data::Transform_data *transform_data)
 {
   assert(transform_data);
 

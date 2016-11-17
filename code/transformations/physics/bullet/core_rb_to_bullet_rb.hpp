@@ -3,14 +3,7 @@
 
 
 #include <core/common/core_fwd.hpp>
-#include <transformations/physics/bullet/bullet_data.hpp>
-
-
-class btRigidBody;
-class btPairCachingGhostObject;
-class btDynamicsWorld;
-class btTransform;
-class btVector3;
+#include <transformations/physics/bullet/bullet_fwd.hpp>
 
 
 namespace Physics_transform {

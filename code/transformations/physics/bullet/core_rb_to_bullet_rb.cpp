@@ -1,6 +1,7 @@
 #include <transformations/physics/bullet/core_rb_to_bullet_rb.hpp>
 #include <transformations/physics/bullet/bullet_math_extensions.hpp>
 #include <transformations/physics/bullet/motion_state.hpp>
+#include <transformations/physics/bullet/bullet_data.hpp>
 #include <core/transform/transform.hpp>
 #include <core/physics/rigidbody.hpp>
 #include <core/physics/collider.hpp>

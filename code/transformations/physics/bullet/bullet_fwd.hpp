@@ -7,6 +7,11 @@
   and Bullet_data
 */
 class btDynamicsWorld;
+class btRigidBody;
+class btPairCachingGhostObject;
+class btDynamicsWorld;
+class btTransform;
+class btVector3;
 
 
 namespace Bullet_data {

@@ -22,7 +22,7 @@ set_phy_transform(const util::generic_id this_id,
 void
 set_rigidbody(const util::generic_id this_id,
               Data::Entity_data *entity_data,
-              Data::Transform_data *transform_data,              
+              const Data::Transform_data *transform_data,
               Data::Trigger_data *trigger_data,
               Data::Rigidbody_data *rigidbody_data,
               Bullet_data::World *physics_world,
@@ -31,15 +31,15 @@ set_rigidbody(const util::generic_id this_id,
 
 Core::Rigidbody
 get_rigidbody(const util::generic_id this_id,
-              Data::Entity_data *entity,
-              Data::Transform_data *transforms,
-              Data::Rigidbody_data *rb_data,
-              Data::Trigger_data *trigger_data);
+              const Data::Entity_data *entity,
+              const Data::Transform_data *transforms,
+              const Data::Rigidbody_data *rb_data,
+              const Data::Trigger_data *trigger_data);
   
 
 void
 apply_force(const util::generic_id this_id,
-            Data::Rigidbody_data *rb_data,
+            const Data::Rigidbody_data *rb_data,
             const math::vec3 direction,
             const float power);
 

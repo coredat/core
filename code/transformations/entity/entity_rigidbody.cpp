@@ -24,8 +24,9 @@
 namespace {
   
   
-constexpr const char* err_no_force_cant_find_rb() { return "Failed to apply force can't find rigidbody"; }
-constexpr const char* err_entity_has_rb_and_trigger() { return "Entity is both a trigger and rigidbody"; }
+// Errors
+constexpr const char* err_no_force_cant_find_rb()     { return "Failed to apply force can't find rigidbody"; }
+constexpr const char* err_entity_has_rb_and_trigger() { return "Entity is both a trigger and rigidbody";     }
   
   
 } // anon ns
@@ -37,7 +38,7 @@ namespace Entity_detail {
 void
 set_rigidbody(const util::generic_id this_id,
               Data::Entity_data *entity_data,
-              Data::Transform_data *transform_data,
+              const Data::Transform_data *transform_data,
               Data::Trigger_data *trigger_data,
               Data::Rigidbody_data *rb_data,
               Bullet_data::World *physics_world,
@@ -150,10 +151,10 @@ set_rigidbody(const util::generic_id this_id,
 
 Core::Rigidbody
 get_rigidbody(const util::generic_id this_id,
-              Data::Entity_data *entity,
-              Data::Transform_data *transforms,
-              Data::Rigidbody_data *rb_data,
-              Data::Trigger_data *trigger_data)
+              const Data::Entity_data *entity,
+              const Data::Transform_data *transforms,
+              const Data::Rigidbody_data *rb_data,
+              const Data::Trigger_data *trigger_data)
 {
   // Param check
   assert(this_id);
@@ -282,7 +283,7 @@ set_phy_transform(const util::generic_id this_id,
 
 void
 apply_force(const util::generic_id this_id,
-            Data::Rigidbody_data *rb_data,
+            const Data::Rigidbody_data *rb_data,
             const math::vec3 direction,
             const float power)
 {
