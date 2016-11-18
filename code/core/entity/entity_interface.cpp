@@ -156,7 +156,7 @@ Entity_interface::destroy()
     return;
   }
   
-  Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(m_id);
+  const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(m_id);
   auto world_data = Core_detail::world_index_get_world_data(entity_id.world_instance);
   
   Entity_detail::destroy(m_id,
@@ -175,7 +175,7 @@ Entity_interface::is_valid() const
     return false;
   }
   
-  Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(m_id);
+  const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(m_id);
   auto world_data = Core_detail::world_index_get_world_data(entity_id.world_instance);
   
   return Entity_detail::is_valid(m_id, world_data->entity);
@@ -200,7 +200,7 @@ Entity_interface::get_tags() const
     return 0;
   }
 
-  Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(m_id);
+  const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(m_id);
   auto world_data = Core_detail::world_index_get_world_data(entity_id.world_instance);
   
   return Entity_detail::get_tags(m_id,
@@ -217,7 +217,7 @@ Entity_interface::set_user_data(const uintptr_t user_data)
     return;
   }
 
-  Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(m_id);
+  const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(m_id);
   auto world_data = Core_detail::world_index_get_world_data(entity_id.world_instance);
   
   Entity_detail::set_user_data(m_id,
@@ -235,7 +235,7 @@ Entity_interface::get_user_data() const
     return 0;
   }
 
-  Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(m_id);
+  const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(m_id);
   auto world_data = Core_detail::world_index_get_world_data(entity_id.world_instance);
   
   return Entity_detail::get_user_data(m_id,
@@ -252,7 +252,7 @@ Entity_interface::has_tag(const uint32_t tag_id) const
     return false;
   }
 
-  Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(m_id);
+  const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(m_id);
   auto world_data = Core_detail::world_index_get_world_data(entity_id.world_instance);
   
   return Entity_detail::has_tag(m_id,
@@ -270,7 +270,7 @@ Entity_interface::set_tags(const uint32_t set_tags)
     return;
   }
 
-  Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(m_id);
+  const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(m_id);
   auto world_data = Core_detail::world_index_get_world_data(entity_id.world_instance);
   
   Entity_detail::set_tags(m_id,
@@ -288,7 +288,7 @@ Entity_interface::add_tag(const uint32_t add_tag)
     return;
   }
 
-  Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(m_id);
+  const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(m_id);
   auto world_data = Core_detail::world_index_get_world_data(entity_id.world_instance);
   
   Entity_detail::add_tag(m_id,
@@ -306,7 +306,7 @@ Entity_interface::remove_tag(const uint32_t tag)
     return;
   }
 
-  Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(m_id);
+  const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(m_id);
   auto world_data = Core_detail::world_index_get_world_data(entity_id.world_instance);
   
   Entity_detail::remove_tag(m_id,
@@ -324,7 +324,7 @@ Entity_interface::set_name(const char *set_name)
     return;
   }
 
-  Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(m_id);
+  const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(m_id);
   auto world_data = Core_detail::world_index_get_world_data(entity_id.world_instance);
   
   Entity_detail::set_name(m_id,
@@ -342,7 +342,7 @@ Entity_interface::get_name() const
     return "";
   }
 
-  Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(m_id);
+  const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(m_id);
   auto world_data = Core_detail::world_index_get_world_data(entity_id.world_instance);
   
   return Entity_detail::get_name(m_id,
@@ -369,7 +369,7 @@ Entity_interface::on_collision_callback(const uintptr_t user_data, const on_coll
     return;
   }
 
-  Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(m_id);
+  const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(m_id);
   auto world_data = Core_detail::world_index_get_world_data(entity_id.world_instance);
   
   Entity_detail::set_entity_collision_callback(m_id,
