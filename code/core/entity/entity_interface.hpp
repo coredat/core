@@ -67,8 +67,10 @@ protected:
     
 private:
 
-  struct Impl;
-  std::unique_ptr<Impl> m_impl;
+//  struct Impl;
+//  std::unique_ptr<Impl> m_impl;
+
+  uint32_t m_id = 0;
 
 };
 
