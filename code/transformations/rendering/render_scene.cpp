@@ -100,7 +100,6 @@ render_main_scene(const float delta_time,
 
       const math::mat4 view_proj = math::mat4_multiply(cam->view, cam->proj);
     
-      
       if(c == 2)
       {
         LOG_TODO_ONCE("Complete hack! Draw calls need to be revisited, will deal with this then.");
@@ -124,7 +123,6 @@ render_main_scene(const float delta_time,
       const float pos2[3] = {3,3,3};
       memcpy(node.position_to, pos2, sizeof(pos2));
       
-//      ::Debug_line_renderer::add_lines(&node, 1);
       ::Debug_line_renderer::render(math::mat4_get_data(wvp));
     }
     else

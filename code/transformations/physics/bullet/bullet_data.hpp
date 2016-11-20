@@ -2,12 +2,10 @@
 #define BULLET_DATA_INCLUDED_84ABBDE9_4582_4635_89BC_3F40B09E03F6
 
 
-#include <stdint.h>
+#include <transformations/physics/bullet/bullet_data.hpp>
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
-
-
-class btDynamicsWorld;
+#include <stdint.h>
 
 
 namespace Bullet_data {

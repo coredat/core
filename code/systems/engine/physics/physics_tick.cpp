@@ -67,6 +67,7 @@ think(std::shared_ptr<Data::World> world, const float dt, Tick_information *out_
   */
     {
       world->physics_world.dynamics_world->stepSimulation(1 / 60.f, 500);
+      world->physics_world.dynamics_world->debugDrawWorld();
     }
 
   

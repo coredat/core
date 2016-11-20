@@ -15,8 +15,9 @@ namespace Debug {
   This may perform subpar, its only meaent as an aide for debugging.
 */
 void
-draw_point(const math::vec3 pos, const Core::Color color);
-
+draw_axis_cross(const math::vec3 pos,
+                const float size = 0.3f);
+  
 
 } // ns
 } // ns

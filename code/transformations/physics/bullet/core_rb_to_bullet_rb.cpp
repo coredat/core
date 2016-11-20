@@ -297,7 +297,6 @@ update_rigidbody_transform(Bullet_data::Rigidbody *rigidbody,
     {
       rb->setWorldTransform(*transform);
       shape->setLocalScaling(scale);
-      world->updateSingleAabb(rb);
     }
     
     // Update the mass / inertia
@@ -313,6 +312,8 @@ update_rigidbody_transform(Bullet_data::Rigidbody *rigidbody,
     // Restore state that was saved.
     rb->setLinearVelocity(curr_lin);
     rb->setAngularVelocity(curr_ang);
+    
+    world->updateSingleAabb(rb);
   }
 }
 

@@ -1,8 +1,13 @@
 #include <transformations/physics/bullet/bullet_data.hpp>
+#include <transformations/physics/bullet/bullet_math_extensions.hpp>
+#include <core/color/color.hpp>
+#include <core/debug/line_renderer.hpp>
+#include <core/debug/point_renderer.hpp>
 #include <btBulletCollisionCommon.h>
 #include <BulletDynamics/Dynamics/btRigidBody.h>
 #include <BulletDynamics/Dynamics/btDynamicsWorld.h>
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
+#include <LinearMath/btIDebugDraw.h>
 #include <assert.h>
 
 
@@ -82,6 +87,58 @@ remove_and_clear(Trigger *trigger,
 void
 setup(World *world)
 {
+  struct Debug_drawer : public btIDebugDraw
+  {
+    void
+    drawLine(const btVector3& from,
+             const btVector3& to,
+             const btVector3& color)
+    {
+      Core::Debug::debug_line(math::vec3_from_bt(from), math::vec3_from_bt(to), 0XFF0000FF);
+    }
+    
+    void
+    drawContactPoint(const btVector3& PointOnB,
+                     const btVector3& normalOnB,
+                     btScalar distance,
+                     int lifeTime,
+                     const btVector3& color)
+    {
+      Core::Debug::draw_axis_cross(math::vec3_from_bt(PointOnB));
+    }
+
+    void
+    reportErrorWarning(const char* warningString)
+    {
+    }
+
+    void
+    draw3dText(const btVector3& location,
+               const char* textString)
+    {
+    }
+    
+    void
+    setDebugMode(int mode)
+    {
+      debug_mode = mode;
+    }
+    
+    int
+    getDebugMode() const
+    {
+      return debug_mode;
+    }
+    
+      int debug_mode = 0
+             | btIDebugDraw::DBG_DrawContactPoints
+             | btIDebugDraw::DBG_DrawAabb
+//             | btIDebugDraw::DBG_DrawWireframe
+             ;
+  };
+  
+  static Debug_drawer debug_drawer;
+
   // Param check
   assert(world);
 
@@ -96,6 +153,7 @@ setup(World *world)
   
   btGImpactCollisionAlgorithm::registerAlgorithm(world->dispatcher);
   world->dynamics_world->setGravity(btVector3(0, -10, 0));
+  world->dynamics_world->setDebugDrawer(&debug_drawer);
 }
 
 

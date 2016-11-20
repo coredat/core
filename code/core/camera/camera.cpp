@@ -232,7 +232,7 @@ Camera::set_clear_color(const Core::Color color)
 Color
 Camera::get_clear_color() const
 {
-  return Color();
+  return Color(m_clear_color);
 }
 
 
