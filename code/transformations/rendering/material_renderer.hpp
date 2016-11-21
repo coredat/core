@@ -26,6 +26,7 @@ namespace Rendering {
 uint32_t
 material_renderer(const math::mat4 &view_mat,
                   const math::mat4 &proj_mat,
+                  const math::vec3 eye_pos,
                   const float delta_time,
                   const float total_time,
                   const Data::Material_data *material_data,

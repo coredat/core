@@ -31,6 +31,7 @@ struct Cam_run
   Ogl::Frame_buffer fbo;
   math::mat4 view;
   math::mat4 proj;
+  math::vec3 eye_pos;
   uint32_t width;
   uint32_t height;
   uint32_t clear_color;

@@ -28,11 +28,16 @@ struct Material
   util::generic_id map_04_id = 0;
   Ogl::Uniform map_04_index;
 
+  // Matrices
   Ogl::Uniform mat_world;
   Ogl::Uniform mat_proj;
   Ogl::Uniform mat_view_proj;
   Ogl::Uniform mat_world_view_proj;
   
+  // Lighting
+  Ogl::Uniform vec3_eye_position;
+  
+  // Time
   Ogl::Uniform uni_dt;
   float dt;
   

@@ -5,6 +5,7 @@
 #include <systems/renderer_material/material.hpp> // Can be fwd declared
 #include <graphics_api/mesh.hpp>
 #include <math/mat/mat_types.hpp>
+#include <math/vec/vec_types.hpp>
 #include <stdint.h>
 
 
@@ -43,6 +44,7 @@ reset();
 */
 uint32_t
 render(const math::mat4 &view_proj_mat,
+       const math::vec3 eye_pos,
        const float delta_time,
        const float total_time,
        const Material *material,

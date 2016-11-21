@@ -89,6 +89,7 @@ render_main_scene(const float delta_time,
     {
       number_of_draw_calls += Rendering::material_renderer(cam->view,
                                                            cam->proj,
+                                                           cam->eye_pos,
                                                            delta_time,
                                                            total_time,
                                                            material_data,

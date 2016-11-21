@@ -96,7 +96,7 @@ calculate_camera_runs(const Data::Camera_data *cam_data,
     out_runs[i].cull_mask   = prop->cull_mask;
   }
   
-  // View matrix
+  // View matrix and Eye position
   for(uint32_t i = 0; i < count; ++i)
   {
     const Core::Transform *trans = &transforms[i];
@@ -104,6 +104,7 @@ calculate_camera_runs(const Data::Camera_data *cam_data,
     out_runs[i].view = math::mat4_lookat(trans->get_position(),
                                          math::vec3_add(trans->get_position(), trans->get_forward()),
                                          trans->get_up());
+    out_runs[i].eye_pos = trans->get_position();
   }
   
   // Post process id

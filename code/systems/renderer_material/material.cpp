@@ -32,6 +32,11 @@ create_material(Material *out_mat, const Ogl::Shader *shader)
     Ogl::shader_uniforms_get_uniform_index(&out_mat->mat_world_view_proj, &uniforms, "uni_wvp_mat");
   }
   
+  // Lighting 
+  {
+    Ogl::shader_uniforms_get_uniform_index(&out_mat->vec3_eye_position, &uniforms, "uni_eye_position");
+  }
+  
   // Get the other uniforms
   {
     Ogl::shader_uniforms_get_uniform_index(&out_mat->color, &uniforms,          "uni_color");

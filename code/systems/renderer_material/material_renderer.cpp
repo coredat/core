@@ -58,6 +58,7 @@ reset()
 
 uint32_t
 render(const math::mat4 &view_proj_mat,
+       const math::vec3 eye_pos,
        const float delta_time,
        const float total_time,
        const Material *material,
@@ -83,7 +84,7 @@ render(const math::mat4 &view_proj_mat,
   // Bind material.
   {
     // Bind the program unless it is already bound.
-//    if(material->shader.program_id != mat_renderer_last_program)
+    if(material->shader.program_id != mat_renderer_last_program)
     {
       Ogl::shader_bind(&material->shader);
       mat_renderer_last_program = material->shader.program_id;
@@ -113,6 +114,11 @@ render(const math::mat4 &view_proj_mat,
     if(material->color.index >= 0)
     {
       Ogl::shader_uniforms_apply(material->color, (void*)material->color_data);
+    }
+    
+    // Lighting
+    {
+      Ogl::shader_uniforms_apply(material->vec3_eye_position, (void*)&eye_pos);
     }
     
     // Other stuff

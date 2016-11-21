@@ -12,6 +12,7 @@ namespace Rendering {
 uint32_t
 material_renderer(const math::mat4 &view_mat,
                   const math::mat4 &proj_mat,
+                  const math::vec3 eye_pos,
                   const float delta_time,
                   const float total_time,
                   const Data::Material_data *material_data,
@@ -127,6 +128,7 @@ material_renderer(const math::mat4 &view_mat,
       Ogl::error_clear();
       
       number_of_draws += Material_renderer::render(view_proj_mat,
+                                                   eye_pos,
                                                    delta_time,
                                                    total_time,
                                                    &material_to_render,
