@@ -19,7 +19,8 @@ public:
   
   void            set_ambient(const float amb);
   void            set_diffuse(const float diff);
-  void            set_attenuation(const float constant,
+  void            set_attenuation(const float range,
+                                  const float constant,
                                   const float linear,
                                   const float exponential);
   

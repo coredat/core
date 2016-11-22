@@ -73,47 +73,86 @@ think(std::shared_ptr<Data::World> world,
       
       Lighting::Light light;
       light.position[0] = 0;
-      light.position[1] = -10;
+      light.position[1] = -1;
       light.position[2] = 0;
       
       light.color[0] = 1;
       light.color[1] = 1;
       light.color[2] = 1;
       
-      light.ambient  = 0.5;
+      light.ambient  = 1.0;
       light.diffuse  = 1.0;
       light.specular = 1.0;
       
       light.atten_constant = 1.0;
-      light.atten_linear   = 0.027;
-      light.atten_exp      = 0.0028;
+      light.atten_linear   = 0.07;
+      light.atten_exp      = 0.017;
       
       Data::light_push(light_data, 1);
       Data::light_set_light(light_data, 1, &light);
       
       light.position[0] = 0;
-      light.position[1] = -10;
+      light.position[1] = -1;
       light.position[2] = -20;
       
       light.color[0] = 1;
       light.color[1] = 1;
       light.color[2] = 1;
       
-      light.ambient  = 0.5;
+      light.ambient  = 1.0;
       light.diffuse  = 1.0;
       light.specular = 1.0;
       
       light.atten_constant = 1.0;
-      light.atten_linear   = 0.027;
-      light.atten_exp      = 0.0028;
+      light.atten_linear   = 0.07;
+      light.atten_exp      = 0.017;
       
       Data::light_push(light_data, 2);
       Data::light_set_light(light_data, 2, &light);
+      
+      light.position[0] = 10;
+      light.position[1] = -1;
+      light.position[2] = 0;
+      
+      light.color[0] = 1;
+      light.color[1] = 1;
+      light.color[2] = 1;
+      
+      light.ambient  = 1.0;
+      light.diffuse  = 1.0;
+      light.specular = 1.0;
+      
+      light.atten_constant = 1.0;
+      light.atten_linear   = 0.07;
+      light.atten_exp      = 0.017;
+      
+      Data::light_push(light_data, 3);
+      Data::light_set_light(light_data, 3, &light);
+      
+      
+      light.position[0] = 10;
+      light.position[1] = -1;
+      light.position[2] = -20;
+      
+      light.color[0] = 1;
+      light.color[1] = 1;
+      light.color[2] = 1;
+      
+      light.ambient  = 1.0;
+      light.diffuse  = 1.0;
+      light.specular = 1.0;
+      
+      light.atten_constant = 1.0;
+      light.atten_linear   = 0.07;
+      light.atten_exp      = 0.017;
+      
+      Data::light_push(light_data, 4);
+      Data::light_set_light(light_data, 4, &light);
 
       Data::data_unlock(light_data);
       
       
-      Ogl::texture_create_1d(&light_texture, 6, GL_RGBA32F, light_data->field_light);
+      Ogl::texture_create_1d(&light_texture, 12, GL_RGBA32F, light_data->field_light);
       
       auto tex_data = resources->texture_data;
       Data::data_lock(tex_data);

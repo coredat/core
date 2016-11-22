@@ -17,6 +17,7 @@ enum ENUM : uint32_t
   camera          = 1 << 3,
   renderer_mesh   = 1 << 4,
   renderer_text   = 1 << 5,
+  light           = 1 << 6,
 }; // enum
 
 

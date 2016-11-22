@@ -101,6 +101,30 @@ bool
 has_camera(const Core::Entity_ref &ref);
 
 
+/*
+  Light Component
+  --
+  Attach a light to an entity and it will use its transform.
+  to position itself in the world.
+*/
+
+bool
+set_light(const Core::Entity_ref &ref,
+          const Core::Point_light &light);
+  
+  
+Core::Point_light
+get_light(const Core::Entity_ref &ref);
+
+
+void
+remove_light(const Core::Entity_ref &ref);
+
+
+bool
+has_light(const Core::Entity_ref &ref);
+
+
 } // ns
 } // ns
 

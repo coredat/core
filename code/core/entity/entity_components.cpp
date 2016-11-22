@@ -2,6 +2,7 @@
 #include <core/entity/entity_ref.hpp>
 #include <core/entity/detail/entity_id.hpp>
 #include <core/camera/camera.hpp>
+#include <core/lighting/point_light.hpp>
 #include <core/color/color.hpp>
 #include <core/world/detail/world_index.hpp>
 #include <core/transform/transform.hpp>
@@ -229,7 +230,10 @@ has_rigidbody(const Core::Entity_ref &ref)
 }
 
 
-// Camera Component //
+/*
+  Camera component
+*/
+
 
 bool
 set_camera(const Core::Entity_ref &ref,
@@ -333,6 +337,46 @@ has_camera(const Core::Entity_ref &ref)
   assert(cam_data);
   
   return Entity_detail::has_camera(entity_uint_id, cam_data);
+}
+
+
+/*
+  Light Component
+*/
+
+
+bool
+set_light(const Core::Entity_ref &ref,
+          const Core::Point_light &light)
+{
+  if(!ref)
+  {
+    LOG_ERROR(Error_string::entity_is_invalid());
+    assert(false);
+    return false;
+  }
+  
+  return false;
+}
+  
+  
+Core::Point_light
+get_light(const Core::Entity_ref &ref)
+{
+  return Core::Point_light();
+}
+
+
+void
+remove_light(const Core::Entity_ref &ref)
+{
+}
+
+
+bool
+has_light(const Core::Entity_ref &ref)
+{
+  return false;
 }
 
 

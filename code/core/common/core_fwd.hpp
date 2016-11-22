@@ -29,6 +29,7 @@
 #include <core/resources/resources_fwd.hpp>
 #include <core/transform/transform_fwd.hpp>
 #include <core/world/world_fwd.hpp>
+#include <core/lighting/light_fwd.hpp>
 
 
 #endif // inc guard
