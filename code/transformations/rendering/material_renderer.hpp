@@ -33,7 +33,8 @@ material_renderer(const math::mat4 &view_mat,
                   const uint32_t camera_cull_mask,
                   const Data::Mesh_draw_call_data *mesh_renderer_data,
                   const ::Material_renderer::Draw_call *draw_calls,
-                  const uint32_t number_of_draw_calls);
+                  const uint32_t number_of_draw_calls,
+                  Ogl::Texture light_texture);
 
 
 }

@@ -104,7 +104,7 @@ render(const math::mat4 &view_proj_mat,
       Graphics_api::Wrap_mode::wrap
     };
     
-    Ogl::filtering_apply(filter);
+    Ogl::filtering_apply(filter, Graphics_api::Dimention::two);
     
     const math::mat4 world_mat = math::mat4_init_with_array(calls[i].world_matrix);
     const math::mat4 wvp_mat = math::mat4_multiply(world_mat, view_proj_mat);

@@ -6,6 +6,49 @@ namespace Ogl {
 
 
 void
+texture_create_1d(Texture *out_texture,
+                  const uint32_t width,
+                  const GLenum format,
+                  const void *data)
+{
+  // Param check
+  assert(out_texture);
+  assert(width);
+  assert(format);
+  assert(data);
+  
+  // Set some arguments
+  out_texture->texture_id = 0;
+  out_texture->format     = format;
+  out_texture->width      = width;
+  out_texture->height     = 1;
+  out_texture->depth      = 0;
+  out_texture->dimention  = GL_TEXTURE_1D;
+  out_texture->has_mips   = false;
+  
+  const auto pixel_format      = pixel_format_get_format(format);
+  const auto pixel_format_type = pixel_format_get_type(format);
+  
+  // Open GL
+  glGenTextures(1, &out_texture->texture_id);
+  glBindTexture(GL_TEXTURE_1D, out_texture->texture_id);
+  glTexImage1D(GL_TEXTURE_1D,
+               0,
+               format,
+               width,
+               0,
+               pixel_format,
+               pixel_format_type,
+               data);
+  
+  if(out_texture->has_mips)
+  {
+    glGenerateMipmap(GL_TEXTURE_1D);
+  }
+}
+
+
+void
 texture_create_2d(Texture *out_texture,
                   const uint32_t width,
                   const uint32_t height,

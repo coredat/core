@@ -24,6 +24,13 @@ struct Texture
 }; // struct
 
 
+void
+texture_create_1d(Texture *out_texture,
+                  const uint32_t width,
+                  const GLenum format,
+                  const void *data);
+
+
 /*!
   Creates a texture from the given data.
   \param out_texture The texture to generate.

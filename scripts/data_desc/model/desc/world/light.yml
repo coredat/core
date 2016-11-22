@@ -1,0 +1,14 @@
+data:
+
+  key:
+    auto_generated_id: false;
+
+  fields:
+
+    - name: light
+      type: Lighting::Light
+      include: <transformations/lighting/light_data.hpp>
+
+    - name: bounding_box
+      type: math::aabb
+      include: <math/geometry/geometry_types.hpp>

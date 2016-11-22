@@ -34,6 +34,7 @@ render_main_scene(const float delta_time,
                   const uint32_t                         number_of_cam_runs,
                   const Material_renderer::Draw_call     draw_calls[],
                   const uint32_t                         number_of_draws,
+                  Ogl::Texture light_texture,
                   uint32_t *out_draw_calls)
 {
   LOG_TODO_ONCE("Pass the data not the containers here, This makes it difficult to use for other things Phil!")
@@ -96,7 +97,8 @@ render_main_scene(const float delta_time,
                                                            cam->cull_mask,
                                                            world->mesh_data,
                                                            draw_calls,
-                                                           world->mesh_data->size);
+                                                           world->mesh_data->size,
+                                                           light_texture);
       
 
       const math::mat4 view_proj = math::mat4_multiply(cam->view, cam->proj);

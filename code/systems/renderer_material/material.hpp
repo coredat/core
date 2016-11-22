@@ -28,6 +28,8 @@ struct Material
   util::generic_id map_04_id = 0;
   Ogl::Uniform map_04_index;
 
+  Ogl::Uniform light_array;
+
   // Matrices
   Ogl::Uniform mat_world;
   Ogl::Uniform mat_proj;

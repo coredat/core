@@ -149,7 +149,7 @@ render_gui_nodes(const Node nodes[],
     Ogl::shader_uniforms_apply(uni_scale, (void*)scale);
     Ogl::shader_uniforms_apply(uni_quad_color, (void*)curr_node->color);
     
-    Ogl::filtering_apply(texture_filtering);
+    Ogl::filtering_apply(texture_filtering, Graphics_api::Dimention::two);
     Ogl::vertex_buffer_bind(quad_vbo, &gui_vertex_format, &shader_gui);
     Ogl::index_buffer_draw(GL_TRIANGLES, quad_ibo);
   }

@@ -5,8 +5,8 @@
   This file is auto generated changes here may be overwritten.
 */
 
-#ifndef FWD_DEC_INCLUDED_0FDC6956_1B27_4332_9AF9_0D01FEC60EF2
-#define FWD_DEC_INCLUDED_0FDC6956_1B27_4332_9AF9_0D01FEC60EF2
+#ifndef FWD_DEC_INCLUDED_9B811454_07DD_4439_9803_8787E60814B8
+#define FWD_DEC_INCLUDED_9B811454_07DD_4439_9803_8787E60814B8
 
 
 namespace Data {
@@ -22,6 +22,7 @@ struct Texture_data;
 struct Camera_data;
 struct Collision_data;
 struct Entity_data;
+struct Light_data;
 struct Mesh_draw_call_data;
 struct Pending_entity_removal_data;
 struct Rigidbody_data;

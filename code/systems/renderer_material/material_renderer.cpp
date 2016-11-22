@@ -64,7 +64,8 @@ render(const math::mat4 &view_proj_mat,
        const Material *material,
        const uint32_t cull_mask,
        const Draw_call calls[],
-       const uint32_t number_of_calls)
+       const uint32_t number_of_calls,
+       Ogl::Texture light_texture)
 {
   uint32_t draw_calls_count = 0;
 
@@ -103,7 +104,7 @@ render(const math::mat4 &view_proj_mat,
           Graphics_api::Wrap_mode::wrap
         };
         
-        Ogl::filtering_apply(filter);
+        Ogl::filtering_apply(filter, Graphics_api::Dimention::two);
         Ogl::shader_uniforms_apply(material->map_01_index, (void*)&material->map_01.texture_id);
       }
       
@@ -119,6 +120,17 @@ render(const math::mat4 &view_proj_mat,
     // Lighting
     {
       Ogl::shader_uniforms_apply(material->vec3_eye_position, (void*)&eye_pos);
+      
+      // Move the filter selection into the material.
+      static Graphics_api::Texture_filtering filter =
+      {
+        Graphics_api::Filtering_mode::bilinear,
+        Graphics_api::Wrap_mode::clamp,
+        Graphics_api::Wrap_mode::clamp
+      };
+      
+      Ogl::filtering_apply(filter, Graphics_api::Dimention::one);
+      Ogl::shader_uniforms_apply(material->light_array, (void*)&light_texture.texture_id);
     }
     
     // Other stuff

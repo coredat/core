@@ -77,7 +77,7 @@ render(Post_renderer::Post_shader *shd)
       Graphics_api::Wrap_mode::wrap
     };
     
-    Ogl::filtering_apply(filter);
+    Ogl::filtering_apply(filter, Graphics_api::Dimention::two);
     if(shd->map_01_id.texture_id)
       Ogl::shader_uniforms_apply(shd->map_01, (void*)&shd->map_01_id.texture_id);
     

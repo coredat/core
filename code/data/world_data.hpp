@@ -23,6 +23,7 @@ struct World
   Mesh_draw_call_data           *mesh_data       = nullptr;
   Text_draw_call_data           *text_data       = nullptr;
   Collision_data                *collision_data  = nullptr;
+  Light_data                    *light_data      = nullptr;
   
   Bullet_data::World            physics_world;
   

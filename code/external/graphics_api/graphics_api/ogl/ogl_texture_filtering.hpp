@@ -3,6 +3,7 @@
 
 
 #include "../texture_filtering.hpp"
+#include "../dimention.hpp"
 #include "ogl_common.hpp"
 
 
@@ -13,7 +14,8 @@ namespace Ogl {
   Applies the texture filtering options that it was given.
 */
 void
-filtering_apply(const Graphics_api::Texture_filtering settings);
+filtering_apply(const Graphics_api::Texture_filtering settings,
+                const Graphics_api::Dimention dimentions);
 
 
 } // ns

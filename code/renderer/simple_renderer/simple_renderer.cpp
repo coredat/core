@@ -163,7 +163,7 @@ render_nodes_fullbright(const Node nodes[],
     
     if(curr_node->vbo.vertex_buffer_id)
     {
-      Ogl::filtering_apply(filtering);
+      Ogl::filtering_apply(filtering, Graphics_api::Dimention::two);
       Ogl::shader_uniforms_apply(uni_full_wvp, (void*)&curr_node->wvp);
       
       // Simplistic state change check.
@@ -213,7 +213,7 @@ render_nodes_directional_light(const Node nodes[],
     Ogl::shader_uniforms_apply(uni_dir_wvp, (void*)&curr_node->wvp);
     Ogl::shader_uniforms_apply(uni_dir_world, (void*)&curr_node->world_mat);
     Ogl::shader_uniforms_apply(uni_dir_diffuse_map, (void*)&curr_node->diffuse.texture_id);
-    Ogl::filtering_apply(filtering);
+    Ogl::filtering_apply(filtering, Graphics_api::Dimention::two);
     Ogl::vertex_buffer_bind(curr_node->vbo, &vertex_format, &shader_dir_light);
     
     const GLsizei count = curr_node->vbo.number_of_entries / vertex_format.number_of_attributes;

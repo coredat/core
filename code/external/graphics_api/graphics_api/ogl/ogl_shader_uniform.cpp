@@ -151,6 +151,15 @@ shader_uniforms_apply(const Uniform uniform_to_apply, void *data)
     case(GL_SAMPLER_1D_ARRAY):
     case(GL_SAMPLER_1D_ARRAY_SHADOW):
     case(GL_SAMPLER_1D_SHADOW):
+    {
+      // There are other samplers but do we need them?
+      GLint tex_id = *static_cast<GLint*>(data);
+      
+      glActiveTexture(GL_TEXTURE0 + uniform_to_apply.index);
+      glBindTexture(GL_TEXTURE_1D, tex_id);
+      return;
+    }
+
     case(GL_SAMPLER_2D):
     case(GL_SAMPLER_2D_ARRAY):
     case(GL_SAMPLER_2D_ARRAY_SHADOW):
@@ -159,13 +168,18 @@ shader_uniforms_apply(const Uniform uniform_to_apply, void *data)
     case(GL_SAMPLER_2D_RECT):
     case(GL_SAMPLER_2D_RECT_SHADOW):
     case(GL_SAMPLER_2D_SHADOW):
-    case(GL_SAMPLER_3D):
     {
       // There are other samplers but do we need them?
       GLint tex_id = *static_cast<GLint*>(data);
       
       glActiveTexture(GL_TEXTURE0 + uniform_to_apply.index);
       glBindTexture(GL_TEXTURE_2D, tex_id);
+      return;
+    }
+    
+    case(GL_SAMPLER_3D):
+    {
+      assert(false);
       return;
     }
 

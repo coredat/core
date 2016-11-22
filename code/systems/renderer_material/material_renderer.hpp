@@ -50,7 +50,8 @@ render(const math::mat4 &view_proj_mat,
        const Material *material,
        const uint32_t cull_mask,
        const Draw_call calls[],
-       const uint32_t number_of_calls);
+       const uint32_t number_of_calls,
+       Ogl::Texture light_texture);
 
 
 } // ns

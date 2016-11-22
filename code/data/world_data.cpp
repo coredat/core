@@ -9,6 +9,7 @@
 #include <data/world/transform_data.hpp>
 #include <data/world/trigger_data.hpp>
 #include <data/world/collision_data.hpp>
+#include <data/world/light_data.hpp>
 #include <core/entity/entity.hpp>
 #include <core/entity/entity_ref.hpp>
 #include <utilities/logging.hpp>
@@ -49,6 +50,9 @@ World::World(const util::generic_id instance_id, const uint32_t entity_hint)
   Data::Collision_data *collision_data = new Data::Collision_data;
   Data::collision_create(collision_data, entity_hint);
   
+  Data::Light_data *light_data = new Data::Light_data;
+  Data::light_create(light_data, entity_hint);
+  
   Bullet_data::setup(&physics_world);
   
   this->entity_removal = graph_changes;
@@ -60,6 +64,7 @@ World::World(const util::generic_id instance_id, const uint32_t entity_hint)
   this->text_data      = text_draw_calls;
   this->trigger_data   = trigger_data;
   this->collision_data = collision_data;
+  this->light_data     = light_data;
 }
 
 World::~World()

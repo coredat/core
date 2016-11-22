@@ -7,7 +7,9 @@
 #include <data/world_data.hpp>
 #include <data/world/entity_data.hpp>
 #include <data/world/camera_data.hpp>
+#include <data/world/light_data.hpp>
 #include <data/world/mesh_draw_call_data.hpp>
+#include <data/context/texture_data.hpp>
 
 #include <renderer/debug_line_renderer/debug_line_renderer_node.hpp>
 #include <renderer/debug_line_renderer/debug_line_renderer.hpp>
@@ -17,6 +19,8 @@
 #include <systems/renderer_text/text_renderer.hpp>
 #include <systems/renderer_post/post_process.hpp>
 #include <systems/renderer_material/material_renderer.hpp>
+
+#include <graphics_api/texture.hpp>
 
 #include <transformations/camera/cam_priorities.hpp>
 #include <transformations/rendering/render_scene.hpp>
@@ -52,6 +56,73 @@ think(std::shared_ptr<Data::World> world,
       const uint32_t height,
       Tick_information *out_tick_info)
 {
+  static Ogl::Texture light_texture;
+
+  /*
+    Lighting
+  */
+  {
+    static int loaded = 0;
+    
+    if(!loaded)
+    {
+      loaded = 1;
+      
+      Data::Light_data *light_data = world->light_data;
+      Data::data_lock(light_data);
+      
+      Lighting::Light light;
+      light.position[0] = 0;
+      light.position[1] = -10;
+      light.position[2] = 0;
+      
+      light.color[0] = 1;
+      light.color[1] = 1;
+      light.color[2] = 1;
+      
+      light.ambient  = 0.5;
+      light.diffuse  = 1.0;
+      light.specular = 1.0;
+      
+      light.atten_constant = 1.0;
+      light.atten_linear   = 0.027;
+      light.atten_exp      = 0.0028;
+      
+      Data::light_push(light_data, 1);
+      Data::light_set_light(light_data, 1, &light);
+      
+      light.position[0] = 0;
+      light.position[1] = -10;
+      light.position[2] = -20;
+      
+      light.color[0] = 1;
+      light.color[1] = 1;
+      light.color[2] = 1;
+      
+      light.ambient  = 0.5;
+      light.diffuse  = 1.0;
+      light.specular = 1.0;
+      
+      light.atten_constant = 1.0;
+      light.atten_linear   = 0.027;
+      light.atten_exp      = 0.0028;
+      
+      Data::light_push(light_data, 2);
+      Data::light_set_light(light_data, 2, &light);
+
+      Data::data_unlock(light_data);
+      
+      
+      Ogl::texture_create_1d(&light_texture, 6, GL_RGBA32F, light_data->field_light);
+      
+      auto tex_data = resources->texture_data;
+      Data::data_lock(tex_data);
+      auto id = Data::texture_push(tex_data);
+      Data::texture_set_texture(tex_data, id, &light_texture);
+      Data::data_unlock(tex_data);
+    }
+  }
+
   /*
     Camera Runs
     --
@@ -155,6 +226,7 @@ think(std::shared_ptr<Data::World> world,
                                number_of_cam_runs,
                                draw_calls,
                                world->mesh_data->size,
+                               light_texture,
                                &number_of_draw_calls);
   
   LOG_TODO_ONCE("Scratch code for text rendering");
@@ -167,7 +239,7 @@ think(std::shared_ptr<Data::World> world,
     {
       continue;
     }
-//    
+//
 //    const math::mat4 scale     = math::mat4_scale(math::vec3_init(1.f));
 //    const math::mat4 world     = math::mat4_multiply(math::mat4_id(), scale);
 //    const math::mat4 view_proj = math::mat4_multiply(cam_runs[i].view, cam_runs[i].proj);

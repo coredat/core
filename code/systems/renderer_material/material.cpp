@@ -35,6 +35,7 @@ create_material(Material *out_mat, const Ogl::Shader *shader)
   // Lighting 
   {
     Ogl::shader_uniforms_get_uniform_index(&out_mat->vec3_eye_position, &uniforms, "uni_eye_position");
+    Ogl::shader_uniforms_get_uniform_index(&out_mat->light_array, &uniforms, "uni_light_array");
   }
   
   // Get the other uniforms
