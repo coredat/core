@@ -17,6 +17,7 @@
 #include <transformations/entity/entity_transform.hpp>
 #include <transformations/entity/entity_renderer.hpp>
 #include <transformations/entity/entity_rigidbody.hpp>
+#include <transformations/entity/entity_light.hpp>
 
 
 namespace Core {
@@ -356,7 +357,24 @@ set_light(const Core::Entity_ref &ref,
     return false;
   }
   
-  return false;
+  const uint32_t entity_uint_id(ref.get_id());
+  const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(entity_uint_id);
+
+  auto world_data(Core_detail::world_index_get_world_data(entity_id.world_instance));
+  assert(world_data);
+  
+  Data::Entity_data *entity_data = world_data->entity;
+  assert(entity_data);
+  
+  Data::Light_data *light_data = world_data->light_data;
+  assert(light_data);
+  
+  Data::Transform_data *transform_data = world_data->transform;
+  assert(transform_data);
+
+  Entity_detail::set_light(entity_uint_id, entity_data, light_data, transform_data, &light);
+  
+  return true;
 }
   
   

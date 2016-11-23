@@ -43,7 +43,7 @@ public:
   
 private:
 
-  const uint32_t m_color;
+  uint32_t m_color;
 
 };
 

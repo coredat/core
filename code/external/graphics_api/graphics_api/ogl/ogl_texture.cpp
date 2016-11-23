@@ -111,6 +111,43 @@ texture_create_2d(Texture *out_texture,
 }
 
 
+void
+texture_update_texture_1d(Texture *update_texture,
+                          const uint32_t offset_x,
+                          const uint32_t width,
+                          const void *data)
+{
+  // Param Check
+  assert(update_texture);
+  assert(width);
+  assert(data);
+  
+  if(update_texture->format == GL_RED)
+  {
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+  }
+  
+  glBindTexture(GL_TEXTURE_1D, update_texture->texture_id);
+  glTexSubImage1D(GL_TEXTURE_1D,
+                  0,
+                  offset_x,
+                  width,
+                  pixel_format_get_format(update_texture->format),
+                  pixel_format_get_type(update_texture->format),
+                  data);
+  
+  if(update_texture->has_mips)
+  {
+    glGenerateMipmap(GL_TEXTURE_1D);
+  }
+  
+  // Put packing back to what it was.
+  if(update_texture->format == GL_RED)
+  {
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+  }
+}
+
 
 void
 texture_update_texture_2d(Texture *update_texture,

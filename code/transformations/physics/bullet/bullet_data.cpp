@@ -132,7 +132,7 @@ setup(World *world)
     
       int debug_mode = 0
              | btIDebugDraw::DBG_DrawContactPoints
-             | btIDebugDraw::DBG_DrawAabb
+//             | btIDebugDraw::DBG_DrawAabb
 //             | btIDebugDraw::DBG_DrawWireframe
              ;
   };

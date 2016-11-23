@@ -49,6 +49,12 @@ texture_create_2d(Texture *out_texture,
                   const void *data);
 
 
+void
+texture_update_texture_1d(Texture *update_texture,
+                          const uint32_t offset_x,
+                          const uint32_t width,
+                          const void *data);
+
 
 /*!
   Update the data in a texture.

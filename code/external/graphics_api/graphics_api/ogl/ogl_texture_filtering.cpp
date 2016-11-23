@@ -22,7 +22,7 @@ filtering_apply(const Graphics_api::Texture_filtering settings,
   glTexParameteri(tex_dimention, GL_TEXTURE_WRAP_S, wrap_s);
   
   if(dimentions != Graphics_api::Dimention::one)
-  {
+  {  
     const auto wrap_t = settings.wrap_mode_t == Gfx::Wrap_mode::clamp ? GL_CLAMP_TO_EDGE : GL_REPEAT;
     glTexParameteri(tex_dimention, GL_TEXTURE_WRAP_T, wrap_t);
   }
