@@ -67,8 +67,8 @@ think(std::shared_ptr<Data::World> world,
     if(!loaded)
     {
       loaded = 1;
-      const uint32_t max_lights = 1;
-      const uint32_t components_per_light = 3;
+      const uint32_t max_lights = 25;
+      const uint32_t components_per_light = 12;
       Ogl::texture_create_1d(&light_texture,
                              max_lights * components_per_light,
                              GL_RGBA32F,
@@ -169,10 +169,12 @@ think(std::shared_ptr<Data::World> world,
   
   // Update light texture
   {
+    auto light_data = world->light_data;
+  
     Ogl::texture_update_texture_1d(&light_texture,
                                    0,
                                    light_texture.width,
-                                   world->light_data->field_light);
+                                   light_data->field_light);
   }
 
   /*

@@ -92,7 +92,9 @@ render(const math::mat4 &view_proj_mat,
     }
     
     // Texture
-    if(material->map_01.texture_id != mat_renderer_last_map_01_texture)
+    // The way texture binding happens needs to change.
+    // Bind the light texture was messing up this cache.
+//    if(material->map_01.texture_id != mat_renderer_last_map_01_texture)
     {
       if(material->map_01_index.index != -1)
       {

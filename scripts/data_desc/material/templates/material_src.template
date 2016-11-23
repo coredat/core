@@ -3,6 +3,7 @@
 #include <core/resources/shader.hpp>
 #include <core/resources/texture.hpp>
 #include <core/common/directory.hpp>
+#include <core/color/color.hpp>
 
 
 namespace Factory_material {
@@ -34,6 +35,10 @@ Core::Material
     material.set_map_01(Core::Texture(filepath));
 
     memset(filepath, 0, sizeof(filepath));
+    % end
+    
+    % unless color.nil? then
+    material.set_color(Core::Color({{color}}));
     % end
 
     set_once = true;
