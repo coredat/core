@@ -503,7 +503,7 @@ set_renderer_text(const util::generic_id this_id,
                                      glyph_height,
                                      glyph_bitmap);
       
-       int kern;
+      int kern;
       kern = stbtt_GetCodepointKernAdvance(&info, codepoint, str[i + 1]);
       
       stbtt_FreeBitmap(glyph_bitmap, nullptr);
@@ -529,7 +529,7 @@ set_renderer_text(const util::generic_id this_id,
       
       // Add glyph info
       Data::font_glyph_push(glyph_data, glyph_id);
-      assert(false); // This is broken
+      //assert(false); // This is broken
       
       Data::font_glyph_set_character(glyph_data, glyph_id, &char_info);
       

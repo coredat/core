@@ -66,7 +66,6 @@ Font::Font(const char *filename)
     printf("failed\n");
   }
   
-  
   // Generate a texture for it
   Ogl::Texture texture_glyphs;
   
@@ -79,6 +78,7 @@ Font::Font(const char *filename)
   const uint32_t texture_id = Data::texture_push(texture_data);
   
   Data::texture_set_texture(texture_data, texture_id, &texture_glyphs);
+  Data::texture_set_name(texture_data, texture_id, "font1", strlen("font1"));
 
   const uint32_t font_id = Data::font_push(font_data);
   
