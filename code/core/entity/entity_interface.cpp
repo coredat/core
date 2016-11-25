@@ -178,6 +178,11 @@ Entity_interface::is_valid() const
   const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(m_id);
   auto world_data = Core_detail::world_index_get_world_data(entity_id.world_instance);
   
+  if(!world_data)
+  {
+    return false;
+  }
+  
   return Entity_detail::is_valid(m_id, world_data->entity);
 }
 
