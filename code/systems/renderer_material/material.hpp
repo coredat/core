@@ -29,6 +29,7 @@ struct Material
   Ogl::Uniform map_04_index;
 
   Ogl::Uniform light_array;
+  Ogl::Uniform light_count;
 
   // Matrices
   Ogl::Uniform mat_world;

@@ -27,7 +27,8 @@ render_main_scene(const float delta_time,
                   const uint32_t                         number_of_cam_runs,
                   const Material_renderer::Draw_call     draw_calls[],
                   const uint32_t                         number_of_draws,
-                  Ogl::Texture light_texture,                  
+                  Ogl::Texture light_texture,
+                  const size_t light_count,
                   uint32_t                               *out_draw_calls);
 
 

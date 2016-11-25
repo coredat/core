@@ -1,0 +1,11 @@
+
+// ** Leave space above this line ** //
+
+/*
+  Generic 3D mat4
+*/
+// Do I need to split these into vs and ps style mats?
+uniform mat4 uni_world_mat;
+uniform mat4 uni_proj_mat;
+uniform mat4 uni_wvp_mat;
+uniform mat4 uni_vp_mat;

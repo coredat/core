@@ -1,0 +1,9 @@
+
+// ** Leave space above this line ** //
+
+/*
+  Generic material settings
+*/
+uniform vec4 uni_color = vec4(0,0,0,0);
+uniform float uni_current_time = 0.0;
+uniform float uni_delta_time = 0.0;

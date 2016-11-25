@@ -20,7 +20,8 @@ material_renderer(const math::mat4 &view_mat,
                   const Data::Mesh_draw_call_data *mesh_renderer_data,
                   const Material_renderer::Draw_call *draw_calls,
                   const uint32_t number_of_draw_calls,
-                  Ogl::Texture light_texture)
+                  Ogl::Texture light_texture,
+                  const size_t light_count)
 {
   /*
     Sort the draw calls into runs.
@@ -136,7 +137,8 @@ material_renderer(const math::mat4 &view_mat,
                                                    camera_cull_mask,
                                                    &draw_calls[start],
                                                    count,
-                                                   light_texture);
+                                                   light_texture,
+                                                   light_count);
     }
   }
   

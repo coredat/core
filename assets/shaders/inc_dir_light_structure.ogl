@@ -1,0 +1,14 @@
+
+// ** Leave space above this line ** //
+
+/*
+  Directional light structure.
+*/
+
+struct Directional_light
+{
+  vec3  color;
+  vec3  direction;
+  float ambient;
+  float diffuse;
+};

@@ -1,0 +1,225 @@
+
+
+Basic Direction Light
+--
+Renders a scene with a single directional light.
+
+
+[VERTEX]
+#version 330 core
+
+
+/*
+  Inputs
+*/
+#include "inc_in_standard_vertex_format.ogl"
+
+
+/*
+  Uniforms
+*/
+#include "inc_uniform_standard_mats.ogl"
+
+
+/*
+  Outputs
+*/
+out vec2 in_ps_texcoord;
+out vec3 in_ps_normal;
+out vec3 in_ps_fragpos;
+
+
+/*
+  Program
+*/
+void
+main()
+{
+   in_ps_texcoord = in_vs_texture_coord;
+   in_ps_normal   = normalize(mat3(transpose(inverse(uni_world_mat))) * in_vs_normal);
+   in_ps_fragpos  = vec3(uni_world_mat * vec4(in_vs_position, 1.0));
+
+   gl_Position    = uni_wvp_mat * vec4(in_vs_position, 1.0);
+}
+[/VERTEX]
+
+
+
+[PIXEL]
+#version 330 core
+
+
+/*
+  Structures
+*/
+#include "inc_dir_light_structure.ogl"
+
+
+/*
+  Inputs
+*/
+in vec2 in_ps_texcoord;
+in vec3 in_ps_normal;
+in vec3 in_ps_fragpos;
+
+
+/*
+  Uniforms
+*/
+#include "inc_uniform_standard_material.ogl"
+#include "inc_uniform_standard_uniforms.ogl"
+
+
+/*
+  Outputs
+*/
+out vec4 out_ps_color;
+
+
+/*
+  Test Lighting
+*/
+uniform vec3 uni_eye_position;
+
+// Stores all lights
+// uniform sampler2D uni_light_array;
+uniform sampler1D uni_light_array;
+uniform int uni_light_count;
+
+
+struct Point_light
+{
+  vec3 position;
+  vec3 color;
+
+  float ambient;
+  float diffuse;
+  float specular;
+
+  float atten_constant;
+  float atten_linear;
+  float atten_exp;
+};
+
+
+Point_light light;
+
+
+float
+calculate_attenuation(vec3 light_pos,
+                      vec3 frag_pos,
+                      float atten_const,
+                      float atten_linear,
+                      float atten_quad)
+{
+  float distance        = length(light_pos - frag_pos);
+  float atten_lin_dist  = atten_linear * distance;
+  float atten_quad_dist = atten_quad * (distance * distance);
+  float attenuation     = 1.0 / (atten_const + atten_lin_dist + atten_quad_dist);
+
+  return attenuation;
+}
+
+
+float rand(vec2 co){
+    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+}
+
+
+vec3
+calculate_point_light(vec3 eye_position,
+                      vec3 surface_normal,
+                      vec3 light_position,
+                      vec3 light_color,
+                      vec3 frag_position,
+                      vec3 diffuse_color,
+                      float diffuse_intensity,
+                      vec3 specular_color,
+                      float specular_intensity,
+                      float ambient_itensity,
+                      float shininess)
+{
+  // ** Ambient ** //
+  vec3 ambient = (0.8 + ambient_itensity) * diffuse_color;
+
+  // ** Diffuse ** //
+  vec3 norm      = normalize(surface_normal);
+  vec3 light_dir = normalize(light_position - frag_position);
+  float diff     = max(dot(norm, light_dir), 0.0);
+  vec3 diffuse   = diffuse_intensity * diff * diffuse_color;
+
+  // ** Specular ** //
+  vec3 view_dir    = normalize(eye_position - frag_position);
+  vec3 reflect_dir = reflect(-light_dir, norm);
+  float spec       = pow(max(dot(view_dir, reflect_dir), 0.0), shininess);
+  vec3 specular    = min(vec3(diff, diff, diff), specular_intensity * spec);
+
+  // ** Accum the result ** //
+  return (ambient + diffuse + specular);
+}
+
+
+/*
+  Program
+*/
+void
+main()
+{
+  vec4 diffuse_map = texture(uni_map_01, in_ps_texcoord);
+
+  vec3 accum_color = vec3(0,0,0);
+
+  for(int i = 0; i < uni_light_count; ++i)
+  {
+    // Setup Light
+    // vec4 light_chunk_01 = texelFetch(uni_light_array, ivec2(0,0), 0);
+    // vec4 light_chunk_02 = texelFetch(uni_light_array, ivec2(1,0), 0);
+    // vec4 light_chunk_03 = texelFetch(uni_light_array, ivec2(2,0), 0);
+
+    int index = i * 3;
+
+    vec4 light_chunk_01 = texelFetch(uni_light_array, index + 0, 0);
+    vec4 light_chunk_02 = texelFetch(uni_light_array, index + 1, 0);
+    vec4 light_chunk_03 = texelFetch(uni_light_array, index + 2, 0);
+    {
+      light.position = light_chunk_01.rgb; //vec3(0,-10,0);
+      light.color    = vec3(light_chunk_01.a, light_chunk_02.rg);//vec3(1,1,1);
+
+      light.ambient  = light_chunk_02.b;
+      light.diffuse  = light_chunk_02.a; //1.0;
+      light.specular = light_chunk_03.r; //1.0;
+
+      light.atten_constant = light_chunk_03.g; //1.0;
+      light.atten_linear   = light_chunk_03.b; //0.027;
+      light.atten_exp      = light_chunk_03.a; //0.0028;
+    }
+
+    vec3 light_color = calculate_point_light(
+      uni_eye_position,
+      in_ps_normal,
+      light.position,
+      light.color,
+      in_ps_fragpos,
+      diffuse_map.rgb,
+      light.diffuse,
+      light.color,
+      light.specular,
+      light.ambient,
+      256
+    );
+
+    float attenuation = calculate_attenuation(
+      light.position,
+      in_ps_fragpos,
+      light.atten_constant,
+      light.atten_linear,
+      light.atten_exp
+    );
+
+    light_color *= attenuation;
+    accum_color += light_color;
+  }
+
+  out_ps_color = vec4(accum_color.rgb, 1.0);
+}
+[/PIXEL]

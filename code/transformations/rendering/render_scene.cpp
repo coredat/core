@@ -35,6 +35,7 @@ render_main_scene(const float delta_time,
                   const Material_renderer::Draw_call     draw_calls[],
                   const uint32_t                         number_of_draws,
                   Ogl::Texture light_texture,
+                  const size_t light_count,
                   uint32_t *out_draw_calls)
 {
   LOG_TODO_ONCE("Pass the data not the containers here, This makes it difficult to use for other things Phil!")
@@ -98,7 +99,8 @@ render_main_scene(const float delta_time,
                                                            world->mesh_data,
                                                            draw_calls,
                                                            world->mesh_data->size,
-                                                           light_texture);
+                                                           light_texture,
+                                                           light_count);
       
 
       const math::mat4 view_proj = math::mat4_multiply(cam->view, cam->proj);

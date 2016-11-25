@@ -1,0 +1,10 @@
+
+// ** Leave space above this line ** //
+
+/*
+  Standard material samplers
+*/
+uniform sampler2D uni_map_01; // Normally diffuse.
+uniform sampler2D uni_map_02; // Normally normal.
+uniform sampler2D uni_map_03; // Normally specular.
+uniform sampler2D uni_map_04; // Extra.

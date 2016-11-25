@@ -65,7 +65,8 @@ render(const math::mat4 &view_proj_mat,
        const uint32_t cull_mask,
        const Draw_call calls[],
        const uint32_t number_of_calls,
-       Ogl::Texture light_texture)
+       Ogl::Texture light_texture,
+       const size_t light_count)
 {
   uint32_t draw_calls_count = 0;
 
@@ -133,6 +134,8 @@ render(const math::mat4 &view_proj_mat,
       
       Ogl::filtering_apply(filter, Graphics_api::Dimention::one);
       Ogl::shader_uniforms_apply(material->light_array, (void*)&light_texture.texture_id);
+      
+      Ogl::shader_uniforms_apply(material->light_count, (void*)&light_count);
     }
     
     // Other stuff

@@ -1,0 +1,10 @@
+
+// ** Leave space above this line ** //
+
+/*
+  Standard vertex attribute.
+*/
+
+layout(location = 1) in vec3 in_vs_position;
+layout(location = 2) in vec2 in_vs_texture_coord;
+layout(location = 3) in vec3 in_vs_normal;

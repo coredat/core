@@ -51,7 +51,8 @@ render(const math::mat4 &view_proj_mat,
        const uint32_t cull_mask,
        const Draw_call calls[],
        const uint32_t number_of_calls,
-       Ogl::Texture light_texture);
+       Ogl::Texture light_texture,
+       const size_t light_count);
 
 
 } // ns

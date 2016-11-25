@@ -35,13 +35,14 @@ create_material(Material *out_mat, const Ogl::Shader *shader)
   // Lighting 
   {
     Ogl::shader_uniforms_get_uniform_index(&out_mat->vec3_eye_position, &uniforms, "uni_eye_position");
-    Ogl::shader_uniforms_get_uniform_index(&out_mat->light_array, &uniforms, "uni_light_array");
+    Ogl::shader_uniforms_get_uniform_index(&out_mat->light_array,       &uniforms, "uni_light_array");
+    Ogl::shader_uniforms_get_uniform_index(&out_mat->light_count,       &uniforms, "uni_light_count");
   }
   
   // Get the other uniforms
   {
-    Ogl::shader_uniforms_get_uniform_index(&out_mat->color, &uniforms,          "uni_color");
-    Ogl::shader_uniforms_get_uniform_index(&out_mat->uni_dt, &uniforms,         "uni_delta_time");
+    Ogl::shader_uniforms_get_uniform_index(&out_mat->color,          &uniforms, "uni_color");
+    Ogl::shader_uniforms_get_uniform_index(&out_mat->uni_dt,         &uniforms, "uni_delta_time");
     Ogl::shader_uniforms_get_uniform_index(&out_mat->uni_total_time, &uniforms, "uni_current_time");
   }
 }
