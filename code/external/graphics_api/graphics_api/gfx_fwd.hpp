@@ -14,6 +14,7 @@ struct Mesh;
 struct Vertex_format;
 struct Command_buffer;
 //struct Uniform;
+struct Texture_desc;
 
 enum class Pixel_format : uint8_t;
 enum class Dimention : uint8_t;

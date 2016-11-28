@@ -25,8 +25,18 @@
 #include <transformations/camera/cam_priorities.hpp>
 #include <transformations/rendering/render_scene.hpp>
 
+#include <graphics_api/context.hpp>
+#include <graphics_api/texture_desc.hpp>
+
 // Remove
 #include <core/transform/transform.hpp>
+
+
+namespace
+{
+  Graphics_api::Context gfx_context;
+}
+
 
 namespace Engine {
 namespace Renderer_tick {
@@ -57,6 +67,7 @@ think(std::shared_ptr<Data::World> world,
       Tick_information *out_tick_info)
 {
   static Ogl::Texture light_texture;
+  static Graphics_api::Texture_desc light_texture_desc;
   static size_t light_count = 0;
 
   /*
@@ -74,6 +85,12 @@ think(std::shared_ptr<Data::World> world,
                              max_lights * components_per_light,
                              GL_RGBA32F,
                              &loaded);
+      
+      light_texture_desc.pixel_format = Graphics_api::Pixel_format::rgba32f;
+      light_texture_desc.width = max_lights * components_per_light;
+      
+      gfx_context.texture_create(&light_texture_desc, &loaded);
+      gfx_context.exec();
     }
   }
   
@@ -85,6 +102,15 @@ think(std::shared_ptr<Data::World> world,
                                    0,
                                    light_texture.width,
                                    light_data->field_light);
+    
+    Graphics_api::Envelope env{0,0,0,light_texture.width, light_texture.width, light_texture.width};
+    
+    gfx_context.texture_update(
+      light_texture_desc.internal_handle,
+      &env,
+      light_data->field_light);
+    
+    light_texture.texture_id = light_texture_desc.platform_handle;
     
     light_count = light_data->size;
   }

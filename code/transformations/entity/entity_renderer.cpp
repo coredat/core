@@ -1,13 +1,16 @@
 #include <transformations/entity/entity_renderer.hpp>
 #include <transformations/entity/entity_transform.hpp>
 #include <transformations/text/rasterized_glyph_id.hpp>
+
 #include <systems/text/character.hpp>
+
 #include <core/renderer/renderer.hpp>
 #include <core/renderer/material_renderer.hpp>
 #include <core/renderer/text_renderer.hpp>
 #include <core/resources/material.hpp>
 #include <core/model/model.hpp>
 #include <core/model/mesh.hpp>
+
 #include <data/context_data.hpp>
 #include <data/memory/memory_data.hpp>
 #include <data/context/font_glyph_data.hpp>
@@ -22,8 +25,10 @@
 #include <data/world/text_draw_call_data.hpp>
 #include <data/context/material_data.hpp>
 #include <data/context/mesh_data.hpp>
+
 #include <common/error_strings.hpp>
 #include <common/data_types.hpp>
+
 #include <graphics_api/vertex_format.hpp>
 #include <graphics_api/utils/geometry.hpp>
 #include <utilities/logging.hpp>

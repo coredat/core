@@ -2,7 +2,6 @@
 
 #include <graphics_api/initialize.hpp>
 #include <graphics_api/clear.hpp>
-#include <graphics_api/command_buffer.hpp>
 #include <data/world/pending_entity_removal_data.hpp>
 
 

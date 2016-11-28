@@ -2,6 +2,7 @@
 #define OGL_TEXTURE_INCLUDED_530B56CF_2269_430E_ACC6_04D56756ACC4
 
 
+#include "../gfx_fwd.hpp"
 #include "ogl_common.hpp"
 
 
@@ -22,6 +23,22 @@ struct Texture
   uint32_t        depth       = 0;
   bool            has_mips    = false;
 }; // struct
+
+
+void
+texture_create(Graphics_api::Texture_desc *in_out_desc,
+               const void *data);
+
+
+void
+texture_update(const Graphics_api::Texture_desc *desc,
+               const uint32_t offset_x,
+               const uint32_t offset_y,
+               const uint32_t offset_z,
+               const uint32_t width,
+               const uint32_t height,
+               const uint32_t depth,
+               const void *data);
 
 
 void

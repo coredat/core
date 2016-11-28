@@ -43,6 +43,18 @@ enum ENUM {
 } // ns
 
 
+inline Texture_filtering
+filter_create(uint32_t filter_mode, uint32_t wrap_mode)
+{
+  Texture_filtering filter;
+  filter.filtering   = filter_mode;
+  filter.wrap_mode_s = wrap_mode;
+  filter.wrap_mode_t = wrap_mode;
+  
+  return filter;
+};
+
+
 } // ns
 
 

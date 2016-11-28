@@ -50,7 +50,7 @@ world_index_get_world_data(const uint32_t id)
     }
   }
   
-  LOG_ERROR("Can't find world");
+  LOG_WARNING("Can't find world");
   return nullptr;
 }
 

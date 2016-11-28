@@ -1,8 +1,173 @@
 #include "ogl_texture.hpp"
 #include "ogl_pixel_format.hpp"
+#include "ogl_dimentions.hpp"
+#include "../texture_desc.hpp"
+#include "../pixel_format.hpp"
 
 
 namespace Ogl {
+
+
+void
+texture_create(Graphics_api::Texture_desc *in_out_desc,
+               const void *data)
+{
+  // Param
+  assert(in_out_desc);
+  
+  /*
+    Pull out the information from the description.
+  */
+  const GLenum internal_fmt = pixel_format_get_gl_internal_format(in_out_desc->pixel_format);
+  const GLenum format       = pixel_format_get_format(internal_fmt);
+  const GLenum type         = pixel_format_get_type(internal_fmt);
+  const GLenum dimention    = dimention_to_gl_texture_dimention(in_out_desc->dimention);
+  
+  /*
+    Generate the texture
+  */
+  GLuint texture_id;
+  glGenTextures(1, &texture_id);
+  glBindTexture(dimention, texture_id);
+  
+  switch(dimention)
+  {
+    case(GL_TEXTURE_1D):
+    {
+      glTexImage1D(GL_TEXTURE_1D,
+                   0,
+                   internal_fmt,
+                   in_out_desc->width,
+                   0,
+                   format,
+                   type,
+                   data);
+      
+      break;
+    }
+    
+    case(GL_TEXTURE_2D):
+    {
+      glTexImage2D(GL_TEXTURE_2D,
+             0,
+             internal_fmt,
+             in_out_desc->width,
+             in_out_desc->height,
+             0,
+             format,
+             type,
+             data);
+      
+      break;
+    }
+    
+    case(GL_TEXTURE_3D):
+    {
+      // Not implimented.
+      assert(false);
+    
+      break;
+    }
+      
+  }
+  
+  /*
+    Generate Mips if requested.
+  */
+  if(in_out_desc->mips)
+  {
+    glGenerateMipmap(dimention);
+  }
+  
+  /*
+    Set some of the desc items.
+  */
+  in_out_desc->platform_handle = static_cast<uintptr_t>(texture_id);
+  in_out_desc->pixel_format    = pixel_format_get_gfx_api_format(format);
+  
+  /*
+    Remove any gl bindings.
+  */
+  glBindTexture(dimention, 0);
+}
+
+
+void
+texture_update(const Graphics_api::Texture_desc *desc,
+               const uint32_t offset_x,
+               const uint32_t offset_y,
+               const uint32_t offset_z,
+               const uint32_t width,
+               const uint32_t height,
+               const uint32_t depth,
+               const void *data)
+{
+  assert(desc);
+  
+  const GLenum dimention = dimention_to_gl_texture_dimention(desc->dimention);
+  const GLenum internal_fmt = pixel_format_get_gl_internal_format(desc->pixel_format);
+  const GLenum format       = pixel_format_get_format(internal_fmt);
+  const GLenum type         = pixel_format_get_type(format);
+  const GLuint texture_id   = static_cast<GLuint>(desc->platform_handle);
+
+  if(format == GL_RED)
+  {
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+  }
+  
+  glBindTexture(dimention, texture_id);
+  
+  switch(dimention)
+  {
+    case(GL_TEXTURE_1D):
+    {
+      glTexSubImage1D(GL_TEXTURE_1D,
+                      0,
+                      offset_x,
+                      width,
+                      format,
+                      type,
+                      data);
+      break;
+    }
+    
+    case(GL_TEXTURE_2D):
+    {
+      glTexSubImage2D(GL_TEXTURE_2D,
+                      0,
+                      offset_x,
+                      offset_y,
+                      width,
+                      height,
+                      format,
+                      type,
+                      data);
+    
+      break;
+    }
+    
+    case(GL_TEXTURE_3D):
+    {
+      // Not implimented.
+      assert(false);
+    }
+  }
+  
+  if(desc->mips)
+  {
+    glGenerateMipmap(dimention);
+  }
+  
+  // Put packing back to what it was.
+  if(format == GL_RED)
+  {
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+  }
+  
+  {
+    glBindTexture(dimention, 0);
+  }
+}
 
 
 void
