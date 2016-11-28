@@ -26,6 +26,7 @@
 #include <transformations/rendering/render_scene.hpp>
 
 #include <graphics_api/context.hpp>
+#include <graphics_api/buffer.hpp>
 #include <graphics_api/texture_desc.hpp>
 
 // Remove
@@ -35,6 +36,7 @@
 namespace
 {
   Graphics_api::Context gfx_context;
+  Graphics_api::Buffer gfx_buffer(&gfx_context);
 }
 
 
@@ -69,7 +71,7 @@ think(std::shared_ptr<Data::World> world,
   static Ogl::Texture light_texture;
   static Graphics_api::Texture_desc light_texture_desc;
   static size_t light_count = 0;
-
+  
   /*
     Lighting
   */
@@ -87,7 +89,8 @@ think(std::shared_ptr<Data::World> world,
                              &loaded);
       
       light_texture_desc.pixel_format = Graphics_api::Pixel_format::rgba32f;
-      light_texture_desc.width = max_lights * components_per_light;
+      light_texture_desc.width        = max_lights * components_per_light;
+      light_texture_desc.dimention    = Graphics_api::Dimention::one;
       
       gfx_context.texture_create(&light_texture_desc, &loaded);
       gfx_context.exec();

@@ -21,6 +21,16 @@ public:
   void                texture_update(const uint32_t texture_id, const Envelope *env, const void *data);
   void                texture_desc(const uint32_t texture_id, Texture_desc *out_desc);
   
+  // ** Geometry ** //
+  
+  uint32_t            mesh_create();
+  
+  // ** Shaders ** //
+  
+  // ** Rasterizer ** //
+  
+  // ** Vertex Format ** //
+  
   // ** Execute ** //
   
   void                exec();

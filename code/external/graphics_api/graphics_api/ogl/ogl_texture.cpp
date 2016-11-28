@@ -89,6 +89,17 @@ texture_create(Graphics_api::Texture_desc *in_out_desc,
     Remove any gl bindings.
   */
   glBindTexture(dimention, 0);
+  
+  /*
+    Check state
+  */
+  #ifndef GL_EXTRA_ERROR_CHECKS
+  const GLenum err_code = glGetError();
+  if(err_code != GL_NO_ERROR)
+  {
+    LOG_GL_ERROR(err_code, "Error creating texture.");
+  }
+  #endif
 }
 
 
@@ -104,7 +115,7 @@ texture_update(const Graphics_api::Texture_desc *desc,
 {
   assert(desc);
   
-  const GLenum dimention = dimention_to_gl_texture_dimention(desc->dimention);
+  const GLenum dimention    = dimention_to_gl_texture_dimention(desc->dimention);
   const GLenum internal_fmt = pixel_format_get_gl_internal_format(desc->pixel_format);
   const GLenum format       = pixel_format_get_format(internal_fmt);
   const GLenum type         = pixel_format_get_type(format);
@@ -164,9 +175,21 @@ texture_update(const Graphics_api::Texture_desc *desc,
     glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
   }
   
+  /*
+    Tidy up
+  */
+  glBindTexture(dimention, 0);
+  
+  /*
+    Check state
+  */
+  #ifndef GL_EXTRA_ERROR_CHECKS
+  const GLenum err_code = glGetError();
+  if(err_code != GL_NO_ERROR)
   {
-    glBindTexture(dimention, 0);
+    LOG_GL_ERROR(err_code, "Error updating texture.");
   }
+  #endif
 }
 
 

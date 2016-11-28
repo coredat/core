@@ -9,12 +9,17 @@ namespace Graphics_api {
 
 
 struct Texture;
-//struct Shader;
 struct Mesh;
+
 struct Vertex_format;
-struct Command_buffer;
-//struct Uniform;
+
+class Context;
+class Buffer;
+
 struct Texture_desc;
+struct Shader_desc;
+struct Mesh_desc;
+struct Vertex_format_desc;
 
 enum class Pixel_format : uint8_t;
 enum class Dimention : uint8_t;

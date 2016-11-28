@@ -5,6 +5,8 @@
 #define GL_IS_OGL
 #define API_TYPE Ogl
 
+#define GL_EXTRA_ERROR_CHECKS
+
 
 #include <stdint.h>
 #include <stddef.h>

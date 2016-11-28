@@ -66,7 +66,7 @@ void
 Context::texture_desc(const uint32_t texture_id,
                       Texture_desc *out_desc)
 {
-  out_desc = &m_impl->texture_descs[texture_id - 1];
+  memcpy(out_desc, &m_impl->texture_descs[texture_id - 1], sizeof(Texture_desc));
 }
 
 
