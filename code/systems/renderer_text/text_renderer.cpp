@@ -28,8 +28,8 @@ initialize()
     #version 150 core
 
     in vec3 in_vs_position;
-    in vec3 in_vs_normal;
     in vec2 in_vs_texture_coord;
+    in vec3 in_vs_normal;
 
     uniform mat4 uni_wvp_mat;
   
@@ -58,6 +58,7 @@ initialize()
     {
       vec4 tex_sample = texture(uni_map_01, in_ps_texture_coord);
       out_frag_color = vec4(uni_color, tex_sample.r);
+//      out_frag_color = vec4(in_ps_texture_coord * 10, 1, 1);
     }
   )";
   
@@ -94,9 +95,15 @@ render(const math::mat4 &view_proj_mat,
   
   for(uint32_t i = 0; i < number_of_calls; ++i)
   {
-    Ogl::vertex_buffer_bind(calls[i].mesh.vbo, &vert_fmt.format, &text_shader);
+    Ogl::vertex_buffer_bind(calls[i].mesh.vbo,
+                            &vert_fmt.format,
+                            &text_shader);
     
     // Move the filter selection into the material.
+    
+    const auto id = calls[i].texture.texture_id;
+    Ogl::shader_uniforms_apply(texture_uni, (void*)&id);
+    
     static Graphics_api::Texture_filtering filter =
     {
       Graphics_api::Filtering_mode::anisotropic,
@@ -110,7 +117,7 @@ render(const math::mat4 &view_proj_mat,
     const math::mat4 wvp_mat = math::mat4_multiply(world_mat, view_proj_mat);
     
     Ogl::shader_uniforms_apply(wvp_uni, (void*)&wvp_mat);
-    Ogl::shader_uniforms_apply(texture_uni, (void*)&calls[i].texture.texture_id);
+
     
     const GLsizei count = calls[i].mesh.vbo.number_of_entries / vert_fmt.format.number_of_attributes;
     glDrawArrays(GL_TRIANGLES, 0, count);

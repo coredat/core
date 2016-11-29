@@ -551,15 +551,15 @@ set_renderer_text(const util::generic_id this_id,
   
   Graphics_api::Vertex_attribute vertdesc[3] = {
     Graphics_api::Vertex_attribute::position_3d,
-    Graphics_api::Vertex_attribute::normal,
     Graphics_api::Vertex_attribute::texture_coord,
+    Graphics_api::Vertex_attribute::normal,    
   };
   
   Graphics_api::Vertex_format v_fmt = Graphics_api::vertex_format_create(vertdesc, 3);
   
   Graphics_api::Quad_info *quad_info = SCRATCH_ALLOC(Graphics_api::Quad_info, glyph_info_count);
   
-  const float some_scale = 1.f;
+  const float some_scale = 0.0005;
   
   // Get the dimentions of the text
   float string_width = 0;

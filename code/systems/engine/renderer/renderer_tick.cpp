@@ -10,6 +10,7 @@
 #include <data/world/light_data.hpp>
 #include <data/world/mesh_draw_call_data.hpp>
 #include <data/context/texture_data.hpp>
+#include <data/world/text_draw_call_data.hpp>
 
 #include <renderer/debug_line_renderer/debug_line_renderer_node.hpp>
 #include <renderer/debug_line_renderer/debug_line_renderer.hpp>
@@ -237,17 +238,17 @@ think(std::shared_ptr<Data::World> world,
     {
       continue;
     }
-//
-//    const math::mat4 scale     = math::mat4_scale(math::vec3_init(1.f));
-//    const math::mat4 world     = math::mat4_multiply(math::mat4_id(), scale);
-//    const math::mat4 view_proj = math::mat4_multiply(cam_runs[i].view, cam_runs[i].proj);
-//
-//    const GLsizei width  = m_impl->context->get_width(); //cam->fbo.color_buffer[0].width; // viewport_x ?
-//    const GLsizei height = m_impl->context->get_height(); //cam->fbo.color_buffer[0].height; // viewport_y ?
-//    
-//    glViewport(0, 0, width, height);
-//
-//    ::Text_renderer::render(view_proj, m_impl->world_data->text_data->property_draw_call, m_impl->world_data->text_data->size);
+
+    const math::mat4 scale     = math::mat4_scale(math::vec3_init(1.f));
+    const math::mat4 world_mat = math::mat4_multiply(math::mat4_id(), scale);
+    const math::mat4 view_proj = math::mat4_multiply(cam_runs[i].view, cam_runs[i].proj);
+
+    //const GLsizei width  = m_impl->context->get_width(); //cam->fbo.color_buffer[0].width; // viewport_x ?
+    //const GLsizei height = m_impl->context->get_height(); //cam->fbo.color_buffer[0].height; // viewport_y ?
+    
+    glViewport(0, 0, width, height);
+
+    ::Text_renderer::render(view_proj, -1, world->text_data->field_draw_call, world->text_data->size);
   }
   
   out_tick_info->number_of_draw_calls = number_of_draw_calls;

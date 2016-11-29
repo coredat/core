@@ -111,17 +111,17 @@ vertex_format_get_desc(const Vertex_format *fmt,
       }
     }
     
-    // Normal
-    else if(strcmp(fmt->format.attributes[i].name, VF_NORMAL_NAME) == 0)
-    {
-      out_desc[i] = Vertex_attribute::normal;
-    }
-    
     // If tex coord name
     else if(strcmp(fmt->format.attributes[i].name, VF_TEX_COORD_NAME) == 0)
     {
       out_desc[i] = Vertex_attribute::texture_coord;
     }
+    
+    // Normal
+    else if(strcmp(fmt->format.attributes[i].name, VF_NORMAL_NAME) == 0)
+    {
+      out_desc[i] = Vertex_attribute::normal;
+    }    
   }
 }
 
