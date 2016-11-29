@@ -2,10 +2,34 @@
 #define OGL_SHADER_INCLUDED_4A57DD2B_3994_4F0A_9AC8_B9374A867208
 
 
+#include "../shader_desc.hpp"
 #include "ogl_common.hpp"
 
 
 namespace Ogl {
+
+
+struct Internal_shader_uniform_data
+{
+  /* data */
+  
+};
+
+struct Internal_shader_data
+{
+  GLuint program_id;
+  GLuint vs_id;
+  
+  Internal_shader_uniform_data uniforms[];
+};
+
+
+void
+shader_create(Graphics_api::Shader_desc *in_out_desc,
+              const char *vs,
+              const char *gs,
+              const char *fs);
+  
 
 
 /*!

@@ -18,6 +18,7 @@ class Buffer;
 
 struct Texture_desc;
 struct Shader_desc;
+struct Data_desc;
 struct Mesh_desc;
 struct Vertex_format_desc;
 

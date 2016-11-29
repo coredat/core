@@ -3,6 +3,7 @@
 
 
 #include "debug_line_renderer_node.hpp"
+#include <graphics_api/gfx_fwd.hpp>
 #include <stdint.h>
 
 
@@ -20,7 +21,7 @@ namespace Debug_line_renderer {
   This needs to be called before you can start rendering things.
 */
 void
-initialize();
+initialize(Graphics_api::Context *ctx);
 
 
 /*!

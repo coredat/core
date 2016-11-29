@@ -18,6 +18,10 @@
 #include <graphics_api/uniform.hpp>
 #include <graphics_api/shader.hpp>
 
+#include <graphics_api/context.hpp>
+#include <graphics_api/buffer.hpp>
+#include <graphics_api/shader_desc.hpp>
+
 
 namespace
 {
@@ -40,7 +44,7 @@ namespace Debug_line_renderer {
 
 
 void
-initialize()
+initialize(Graphics_api::Context *ctx)
 {
   Ogl::error_clear();
 
@@ -49,11 +53,19 @@ initialize()
   
   strcat(debug_lines_shd_path, util::dir::resource_path());
   strcat(debug_lines_shd_path, "assets/shaders/debug_line.ogl");
-
+  
   auto debug_code = Graphics_api::Util::shader_code_from_tagged_file(debug_lines_shd_path);
+  
+  
+  Graphics_api::Shader_desc shd_desc;
+  ctx->shader_create(&shd_desc, debug_lines_shd_path);
+  
+  
   
   Ogl::shader_create(&debug_line_shader, debug_code.vs_code.c_str(), debug_code.gs_code.c_str(), debug_code.ps_code.c_str());
   assert(Ogl::shader_is_valid(&debug_line_shader));
+  
+  debug_line_shader.program_id = shd_desc.platform_handle;
 
   if(Ogl::shader_is_valid(&debug_line_shader))
   {

@@ -10,12 +10,12 @@ namespace Graphics_api {
 
 struct Shader_desc
 {
-  uint32_t  number_of_uniforms  = 0;
-  uint32_t  number_of_samplers  = 0;
-  bool      complete            = false;
+  uint32_t    number_of_uniforms  = 0;
+  uint32_t    number_of_samplers  = 0;
+  bool        complete            = false;
   
-  uintptr_t   platform_handle   = 0;
-  uintptr_t   internal_handle   = 0;
+  uintptr_t   platform_handle     = 0;
+  uintptr_t   internal_handle     = 0;
 };
 
 

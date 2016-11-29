@@ -2,11 +2,18 @@
 #define SHADER_UNIFORM_INCLUDED_824F6A90_7EB3_46BB_AEF3_4A9B3F01AD0A
 
 
+#include "../gfx_fwd.hpp"
 #include "ogl_fwd.hpp"
 #include "ogl_common.hpp"
 
 
 namespace Ogl {
+
+
+void
+shader_uniform_find(Graphics_api::Data_desc *data_desc,
+                    Graphics_api::Shader_desc *shader_desc,
+                    const char *uniform_name);
 
 
 /*!

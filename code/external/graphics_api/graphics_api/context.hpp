@@ -23,9 +23,16 @@ public:
   
   // ** Geometry ** //
   
-  uint32_t            mesh_create();
   
   // ** Shaders ** //
+  
+  uint32_t            shader_create(Shader_desc *desc, const char *filename);
+  uint32_t            shader_create(Shader_desc *desc, const char *vs_code, const char *gs_code, const char *fs_code);
+  void                shader_desc(const uint32_t shader_id, Shader_desc *desc);
+  
+  // ** Shader Uniforms ** //
+  
+  uint32_t            data_create(Data_desc *desc, const uint32_t shader_id, const char *name);
   
   // ** Rasterizer ** //
   

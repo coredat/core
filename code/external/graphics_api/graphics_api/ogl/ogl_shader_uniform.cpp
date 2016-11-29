@@ -2,8 +2,25 @@
 #include "ogl_shader.hpp"
 #include <utilities/optimizations.hpp>
 
+#include "../data_desc.hpp"
+#include "../shader_desc.hpp"
+
 
 namespace Ogl {
+
+
+void
+shader_uniform_find(Graphics_api::Data_desc *data_desc,
+                    Graphics_api::Shader_desc *shader_desc,
+                    const char *uniform_name)
+{
+  // Param Check
+  assert(data_desc);
+  assert(shader_desc);
+  
+  // Shd
+  
+}
 
 
 void
