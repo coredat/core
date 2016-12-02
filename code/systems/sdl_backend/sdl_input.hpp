@@ -28,6 +28,14 @@ is_mouse_captured();
 void
 process_input_messages(const SDL_Event *evt,
                        Context_data::Input_pool *input_data);
+  
+
+
+using Text_input_stream_fn = void(*)(const char *utf8);
+
+void
+get_text_input_stream(const Text_input_stream_fn &text_input_stream);
+
 
 } // ns
 

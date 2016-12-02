@@ -7,7 +7,10 @@
 
 namespace Text {
 
-
+/*
+  used for glsl so we need padd it out.
+  3 vec4's
+*/
 struct Character
 {
   float uv[2];
@@ -15,6 +18,8 @@ struct Character
   float size[2];
   float advance[2];
   float offset[2];
+  
+  float padding[2];
 };
 
 

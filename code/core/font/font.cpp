@@ -10,13 +10,6 @@
 #include <stdlib.h>
 
 
-
-namespace
-{
-  //FT_Library library = nullptr;
-}
-
-
 namespace Core {
 
 
@@ -68,17 +61,22 @@ Font::Font(const char *filename)
   
   // Generate a texture for it
   Ogl::Texture texture_glyphs;
+  Ogl::Texture texture_metrics;
   
   // Some empty data to zero the texture
   unsigned char *tex_data = SCRATCH_ALLOC(unsigned char, 512 * 512 * 1);
   memset(tex_data, 0, sizeof(unsigned char) * 512 * 512 * 1);
   
   Ogl::texture_create_2d(&texture_glyphs, 512, 512, GL_RED, true, tex_data);
+  Ogl::texture_create_1d(&texture_metrics, 512, GL_RED, tex_data);
   
-  const uint32_t texture_id = Data::texture_push(texture_data);
+  const uint32_t glyphs_texture_id = Data::texture_push(texture_data);
+  Data::texture_set_texture(texture_data, glyphs_texture_id, &texture_glyphs);
+  Data::texture_set_name(texture_data, glyphs_texture_id, "font1", strlen("font1"));
   
-  Data::texture_set_texture(texture_data, texture_id, &texture_glyphs);
-  Data::texture_set_name(texture_data, texture_id, "font1", strlen("font1"));
+  const uint32_t metrics_texture_id = Data::texture_push(texture_data);
+  Data::texture_set_texture(texture_data, metrics_texture_id, &texture_metrics);
+  Data::texture_set_name(texture_data, metrics_texture_id, "font1_metrics", strlen("font1_metrics"));
 
   const uint32_t font_id = Data::font_push(font_data);
   
@@ -93,7 +91,8 @@ Font::Font(const char *filename)
   
   Data::font_set_font_bitmap(font_data, font_id, &font_bitmap);
   Data::font_set_font_face(font_data, font_id, &info);
-  Data::font_set_texture_id(font_data, font_id, &texture_id);
+  Data::font_set_glyph_texture_id(font_data, font_id, &glyphs_texture_id);
+  Data::font_set_metric_texture_id(font_data, font_id, &metrics_texture_id);
   
   Data::data_unlock(texture_data);
   Data::data_unlock(font_data);

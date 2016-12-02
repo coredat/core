@@ -102,9 +102,9 @@ render(const math::mat4 &view_proj_mat,
         // Move the filter selection into the material.
         static Graphics_api::Texture_filtering filter =
         {
-          Graphics_api::Filtering_mode::anisotropic,
           Graphics_api::Wrap_mode::wrap,
-          Graphics_api::Wrap_mode::wrap
+          Graphics_api::Wrap_mode::wrap,
+          Graphics_api::Filtering_mode::anisotropic,
         };
         
         Ogl::filtering_apply(filter, Graphics_api::Dimention::two);
@@ -127,9 +127,9 @@ render(const math::mat4 &view_proj_mat,
       // Move the filter selection into the material.
       static Graphics_api::Texture_filtering filter =
       {
-        Graphics_api::Filtering_mode::bilinear,
         Graphics_api::Wrap_mode::clamp,
-        Graphics_api::Wrap_mode::clamp
+        Graphics_api::Wrap_mode::clamp,
+        Graphics_api::Filtering_mode::point,
       };
       
       Ogl::filtering_apply(filter, Graphics_api::Dimention::one);

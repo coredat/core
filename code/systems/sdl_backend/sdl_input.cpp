@@ -38,6 +38,16 @@ namespace
     
     return Core::Button_state::up_on_frame;
   };
+  
+  
+  Text_input_stream_fn input_stream_callback = nullptr;
+}
+
+
+void
+get_text_input_stream(const Text_input_stream_fn &text_input_stream)
+{
+  input_stream_callback = text_input_stream;
 }
 
 
@@ -322,7 +332,6 @@ process_input_messages(const SDL_Event *evt,
     /*
       Mouse Events
     */
-
     case(SDL_MOUSEMOTION):
     {
       const uint32_t mouse_id = 0;
@@ -398,6 +407,18 @@ process_input_messages(const SDL_Event *evt,
       break;
     } // SDL_KEYUP
     
+    /*
+      Text streaming
+    */
+    case(SDL_TEXTINPUT):
+    {
+      if(input_stream_callback)
+      {
+        input_stream_callback(evt->text.text);
+      }
+      
+      break;
+    }
     
     /*
       Gamepad events.

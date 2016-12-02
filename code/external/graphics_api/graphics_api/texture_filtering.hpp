@@ -22,7 +22,7 @@ struct Texture_filtering
 
 
 namespace Filtering_mode {
-enum ENUM {
+enum ENUM : uint8_t {
 
   point = 0,
   bilinear,
@@ -34,7 +34,7 @@ enum ENUM {
 
 
 namespace Wrap_mode {
-enum ENUM {
+enum ENUM : uint8_t {
 
   clamp = 0,
   wrap,

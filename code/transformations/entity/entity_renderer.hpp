@@ -25,7 +25,8 @@ set_renderer(const util::generic_id this_id,
 Core::Renderer
 get_renderer(const util::generic_id this_id,
              Data::Entity_data *entity_data,
-             Data::Mesh_draw_call_data *renderer_material);
+             Data::Mesh_draw_call_data *renderer_material,
+             Data::Text_draw_call_data *text_draw_call_data);
 
 
 void

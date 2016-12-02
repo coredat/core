@@ -32,6 +32,7 @@ initialize()
     in vec3 in_vs_normal;
 
     uniform mat4 uni_wvp_mat;
+    uniform sampler1D uni_metric_index;
   
     out vec2 in_ps_texture_coord;
 
@@ -49,6 +50,7 @@ initialize()
     in vec2 in_ps_texture_coord;
   
     uniform sampler2D uni_map_01;
+  
     uniform vec3 uni_color = vec3(1,1,1);
   
     out vec4 out_frag_color;
@@ -59,6 +61,7 @@ initialize()
       vec4 tex_sample = texture(uni_map_01, in_ps_texture_coord);
       out_frag_color = vec4(uni_color, tex_sample.r);
 //      out_frag_color = vec4(in_ps_texture_coord * 10, 1, 1);
+//      out_frag_color = vec4(1,1,1,1);
     }
   )";
   
@@ -106,9 +109,9 @@ render(const math::mat4 &view_proj_mat,
     
     static Graphics_api::Texture_filtering filter =
     {
-      Graphics_api::Filtering_mode::anisotropic,
       Graphics_api::Wrap_mode::wrap,
-      Graphics_api::Wrap_mode::wrap
+      Graphics_api::Wrap_mode::wrap,
+      Graphics_api::Filtering_mode::point,      
     };
     
     Ogl::filtering_apply(filter, Graphics_api::Dimention::two);

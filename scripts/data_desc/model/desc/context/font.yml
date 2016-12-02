@@ -14,6 +14,10 @@ data:
       type: Text::Font_bitmap
       include: <systems/text/font_bitmap.hpp>
 
-    - name: texture_id
+    - name: glyph_texture_id
+      type: util::generic_id
+      include: <utilities/generic_id.hpp>
+
+    - name: metric_texture_id
       type: util::generic_id
       include: <utilities/generic_id.hpp>

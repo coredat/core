@@ -167,7 +167,8 @@ set_renderer(const util::generic_id this_id,
 Core::Renderer
 get_renderer(const util::generic_id this_id,
              Data::Entity_data *entity_data,
-             Data::Mesh_draw_call_data *renderer_material)
+             Data::Mesh_draw_call_data *renderer_material,
+             Data::Text_draw_call_data *text_draw_call_data)
 {
   // Check valid
   if(!is_valid(this_id, entity_data, true)) {
@@ -198,7 +199,7 @@ get_renderer(const util::generic_id this_id,
         case(Core::Renderer_type::material):
         {
           util::generic_id mat_id = util::generic_id_invalid();
-          Data::mesh_draw_call_set_material_id(renderer_material, this_id, &mat_id);
+          Data::mesh_draw_call_get_material_id(renderer_material, this_id, &mat_id);
           
           Data::Mesh_renderer_draw_call draw_call;
           Data::mesh_draw_call_get_draw_call(renderer_material, this_id, &draw_call);
@@ -210,7 +211,12 @@ get_renderer(const util::generic_id this_id,
         
         case(Core::Renderer_type::text):
         {
-          assert(false);
+          util::generic_id font_id = util::generic_id_invalid();
+          
+          
+          
+          return_renderer = Core::Text_renderer();
+          
           break;
         }
           
@@ -410,7 +416,7 @@ set_renderer_text(const util::generic_id this_id,
   stbtt_fontinfo info;
   
   Data::font_get_font_face(font_data, font_id, &info);
-  Data::font_get_texture_id(font_data, font_id, &texture_id);
+  Data::font_get_glyph_texture_id(font_data, font_id, &texture_id);
   
   Ogl::Texture glyph_texture;
   Data::texture_get_texture(texture_data, texture_id, &glyph_texture);
@@ -546,6 +552,17 @@ set_renderer_text(const util::generic_id this_id,
   // Update the bitmap information.
   Data::font_set_font_bitmap(font_data, font_id, &font_bitmap);
   
+  // Update the metrics information
+  {
+    uint32_t metric_texture_id = 0;
+    Data::font_get_metric_texture_id(font_data, font_id, &metric_texture_id);
+    
+    Ogl::Texture metrics_texture;
+    Data::texture_get_texture(texture_data, metric_texture_id, &metrics_texture);
+  
+    Ogl::texture_update_texture_1d(&metrics_texture, 0, glyph_data->size * (sizeof(float) * 4) * 4, glyph_data->field_character);
+  }
+  
   // Generate the text mesh here.
   // bunch of quads
   
@@ -579,24 +596,43 @@ set_renderer_text(const util::generic_id this_id,
   {
     Text::Character *curr_glyph = &glyph_info[i];
     
-    quad_info[i].position[0] = (x_cursor + curr_glyph->offset[0]) * some_scale;
-    quad_info[i].position[1] = -(curr_glyph->size[1] + curr_glyph->offset[1]) * some_scale;
+//    quad_info[i].position[0] = (x_cursor + curr_glyph->offset[0]) * some_scale;
+//    quad_info[i].position[1] = -(curr_glyph->size[1] + curr_glyph->offset[1]) * some_scale;
+//    quad_info[i].position[2] = 0.f;
+//    
+//    quad_info[i].normal[0] = 0.f;
+//    quad_info[i].normal[1] = 1.f;
+//    quad_info[i].normal[2] = 0.f;
+//    
+//    quad_info[i].scale[0] = curr_glyph->size[0] * some_scale;
+//    quad_info[i].scale[1] = curr_glyph->size[1] * some_scale;
+//    
+//    quad_info[i].uv[0] = curr_glyph->uv[0];
+//    quad_info[i].uv[1] = curr_glyph->uv[1];
+//
+//    quad_info[i].st[0] = curr_glyph->st[0];
+//    quad_info[i].st[1] = curr_glyph->st[1];
+//    
+//    x_cursor += static_cast<float>(curr_glyph->advance[0]);
+    quad_info[i].position[0] = 0.f;
+    quad_info[i].position[1] = 0.f;
     quad_info[i].position[2] = 0.f;
     
     quad_info[i].normal[0] = 0.f;
     quad_info[i].normal[1] = 1.f;
     quad_info[i].normal[2] = 0.f;
     
-    quad_info[i].scale[0] = curr_glyph->size[0] * some_scale;
-    quad_info[i].scale[1] = curr_glyph->size[1] * some_scale;
+    quad_info[i].scale[0] = 1.f;
+    quad_info[i].scale[1] = 1.f;
     
-    quad_info[i].uv[0] = curr_glyph->uv[0];
-    quad_info[i].uv[1] = curr_glyph->uv[1];
+    quad_info[i].uv[0] = 0.f;
+    quad_info[i].uv[1] = 0.f;
 
-    quad_info[i].st[0] = curr_glyph->st[0];
-    quad_info[i].st[1] = curr_glyph->st[1];
+    quad_info[i].st[0] = 1.f;
+    quad_info[i].st[1] = 1.f;
     
     x_cursor += static_cast<float>(curr_glyph->advance[0]);
+
   }
   
   auto mesh = Graphics_api::create_quads(&v_fmt, quad_info, glyph_info_count);

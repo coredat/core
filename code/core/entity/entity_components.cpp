@@ -137,7 +137,8 @@ get_renderer(const Core::Entity_ref &ref)
   
   return Entity_detail::get_renderer(entity_uint_id,
                                      world_data->entity,
-                                     world_data->mesh_data);
+                                     world_data->mesh_data,
+                                     world_data->text_data);
 }
 
 

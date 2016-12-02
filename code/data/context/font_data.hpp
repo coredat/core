@@ -6,8 +6,8 @@
 */
 
 
-#ifndef FONT_INCLUDED_B8F329B6_2538_4D7B_AEA6_0E2BC1397656
-#define FONT_INCLUDED_B8F329B6_2538_4D7B_AEA6_0E2BC1397656
+#ifndef FONT_INCLUDED_6DA2009E_1EF0_475F_84A9_E68753B244D1
+#define FONT_INCLUDED_6DA2009E_1EF0_475F_84A9_E68753B244D1
 
 
 #include <stdint.h>
@@ -37,8 +37,11 @@ struct Font_data
   // font_bitmap field data //
   Text::Font_bitmap *field_font_bitmap = nullptr;
 
-  // texture_id field data //
-  util::generic_id *field_texture_id = nullptr;
+  // glyph_texture_id field data //
+  util::generic_id *field_glyph_texture_id = nullptr;
+
+  // metric_texture_id field data //
+  util::generic_id *field_metric_texture_id = nullptr;
 
   // size //
   size_t size = 0;
@@ -128,11 +131,19 @@ font_get_font_bitmap_data(Font_data *data);
 
 
 const util::generic_id*
-font_get_const_texture_id_data(const Font_data *data);
+font_get_const_glyph_texture_id_data(const Font_data *data);
 
 
 util::generic_id*
-font_get_texture_id_data(Font_data *data);
+font_get_glyph_texture_id_data(Font_data *data);
+
+
+const util::generic_id*
+font_get_const_metric_texture_id_data(const Font_data *data);
+
+
+util::generic_id*
+font_get_metric_texture_id_data(Font_data *data);
 
 
 // =============== //
@@ -173,11 +184,21 @@ font_set_font_bitmap(const Font_data *data, const uint32_t key, const Text::Font
 
 
 bool
-font_get_texture_id(const Font_data *data, const uint32_t key, util::generic_id *return_value);
+font_get_glyph_texture_id(const Font_data *data, const uint32_t key, util::generic_id *return_value);
 
 
 bool
-font_set_texture_id(const Font_data *data, const uint32_t key, const util::generic_id *set_value);
+font_set_glyph_texture_id(const Font_data *data, const uint32_t key, const util::generic_id *set_value);
+
+
+
+
+bool
+font_get_metric_texture_id(const Font_data *data, const uint32_t key, util::generic_id *return_value);
+
+
+bool
+font_set_metric_texture_id(const Font_data *data, const uint32_t key, const util::generic_id *set_value);
 
 
 
