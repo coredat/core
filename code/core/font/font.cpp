@@ -68,7 +68,7 @@ Font::Font(const char *filename)
   memset(tex_data, 0, sizeof(unsigned char) * 512 * 512 * 1);
   
   Ogl::texture_create_2d(&texture_glyphs, 512, 512, GL_RED, true, tex_data);
-  Ogl::texture_create_1d(&texture_metrics, 512, GL_RED, tex_data);
+  Ogl::texture_create_1d(&texture_metrics, 512, GL_RGBA32F, tex_data);
   
   const uint32_t glyphs_texture_id = Data::texture_push(texture_data);
   Data::texture_set_texture(texture_data, glyphs_texture_id, &texture_glyphs);

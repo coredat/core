@@ -413,13 +413,17 @@ set_renderer_text(const util::generic_id this_id,
   Data::data_lock(glyph_data);
   
   uint32_t texture_id = 0;
+  uint32_t glyph_metrics_texture_id = 0;
   stbtt_fontinfo info;
   
   Data::font_get_font_face(font_data, font_id, &info);
   Data::font_get_glyph_texture_id(font_data, font_id, &texture_id);
+  Data::font_get_metric_texture_id(font_data, font_id, &glyph_metrics_texture_id);
   
   Ogl::Texture glyph_texture;
+  Ogl::Texture glyph_metrics_texture;
   Data::texture_get_texture(texture_data, texture_id, &glyph_texture);
+  Data::texture_get_texture(texture_data, glyph_metrics_texture_id, &glyph_metrics_texture);
   
   const int bitmap_width  = glyph_texture.width; /* bitmap width */
   const int bitmap_height = glyph_texture.height; /* bitmap height */
@@ -544,6 +548,12 @@ set_renderer_text(const util::generic_id this_id,
       
       Data::font_glyph_set_character(glyph_data, glyph_id, &char_info);
       
+      Ogl::texture_update_texture_1d(&glyph_metrics_texture,
+                                     0,
+                                     resources->font_glyph_data->size * 5,
+                                     resources->font_glyph_data->field_character);
+      
+      
       // Also add it to the glyph info array.
       glyph_info[glyph_info_count++] = char_info;
     }
@@ -661,11 +671,21 @@ set_renderer_text(const util::generic_id this_id,
     
     if(Data::text_draw_call_exists(text_data, this_id))
     {
+      uint32_t index[12] = {
+        0, 1, 0, 0,
+        1, 2, 0, 0,
+        1, 3, 0, 0,
+      };
+    
+      Ogl::Texture string_texture;
+      Ogl::texture_create_1d(&string_texture, sizeof(uint32_t) * 12, GL_RGBA, &index);
+    
       ::Text_renderer::Draw_call dc;
-      dc.texture = glyph_texture;
-
       memcpy(dc.world_matrix, &world_mat, sizeof(world_mat));
-
+      
+      dc.texture = glyph_texture;
+      dc.glyph_metrics = glyph_metrics_texture;
+      dc.string_info = string_texture;
       dc.mesh = mesh;
 
       Data::text_draw_call_set_draw_call(text_data, this_id, &dc);
