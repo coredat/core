@@ -606,24 +606,6 @@ set_renderer_text(const util::generic_id this_id,
   {
     Text::Character *curr_glyph = &glyph_info[i];
     
-//    quad_info[i].position[0] = (x_cursor + curr_glyph->offset[0]) * some_scale;
-//    quad_info[i].position[1] = -(curr_glyph->size[1] + curr_glyph->offset[1]) * some_scale;
-//    quad_info[i].position[2] = 0.f;
-//    
-//    quad_info[i].normal[0] = 0.f;
-//    quad_info[i].normal[1] = 1.f;
-//    quad_info[i].normal[2] = 0.f;
-//    
-//    quad_info[i].scale[0] = curr_glyph->size[0] * some_scale;
-//    quad_info[i].scale[1] = curr_glyph->size[1] * some_scale;
-//    
-//    quad_info[i].uv[0] = curr_glyph->uv[0];
-//    quad_info[i].uv[1] = curr_glyph->uv[1];
-//
-//    quad_info[i].st[0] = curr_glyph->st[0];
-//    quad_info[i].st[1] = curr_glyph->st[1];
-//    
-//    x_cursor += static_cast<float>(curr_glyph->advance[0]);
     quad_info[i].position[0] = 0.f;
     quad_info[i].position[1] = 0.f;
     quad_info[i].position[2] = 0.f;
@@ -671,14 +653,21 @@ set_renderer_text(const util::generic_id this_id,
     
     if(Data::text_draw_call_exists(text_data, this_id))
     {
-      uint32_t index[12] = {
-        0, 1, 0, 0,
-        1, 2, 0, 0,
-        1, 3, 0, 0,
+      float index[24] {
+        0, 0, 0,
+        1, 1, 0,
+        1, 2, 0,
+        
+        2, 3, 0,
+        3, 0, -1,
+        4, 1, -1,
+        
+        5, 2, -1,
+        5, 3, -1,
       };
     
       Ogl::Texture string_texture;
-      Ogl::texture_create_1d(&string_texture, sizeof(uint32_t) * 12, GL_RGBA, &index);
+      Ogl::texture_create_1d(&string_texture, sizeof(index), GL_RGB32F, &index);
     
       ::Text_renderer::Draw_call dc;
       memcpy(dc.world_matrix, &world_mat, sizeof(world_mat));

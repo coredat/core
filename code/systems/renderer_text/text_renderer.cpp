@@ -29,49 +29,50 @@ initialize()
   const char *vs_shader = R"(
     #version 330 core
 
+    #define VERTS_IN_QUAD 6
+    #define DATA_STRIDE_METRIC_DATA 3
+
     in vec3 in_vs_position;
     in vec2 in_vs_texture_coord;
     in vec3 in_vs_normal;
 
     uniform mat4 uni_wvp_mat;
+  
     uniform sampler1D uni_metric_index;
     uniform sampler1D uni_string_detail;
   
     out vec2 in_ps_texture_coord;
-
+  
     void
     main()
     {
-      int data_chunks = 3;
-      int char_id = 0; // (0 / 4) * data_chunks * 4;
+      // Get Character ID
+      int char_id        = gl_VertexID / VERTS_IN_QUAD;
       
-      int str_id = (gl_VertexID / 4);
+      // Get String Data
+      vec4 char_data     = texelFetch(uni_string_detail, char_id, 0);
+      int char_index     = int(char_data.r) * DATA_STRIDE_METRIC_DATA;
       
-      char_id = str_id;
+      // Get Font Metrics Data
+      vec4 metrics_uv_st = texelFetch(uni_metric_index, char_index + 0, 0);
+      vec4 chunk_02      = texelFetch(uni_metric_index, char_index + 1, 0);
+      vec4 chunk_03      = texelFetch(uni_metric_index, char_index + 2, 0);
       
-      vec4 chunk_01 = texelFetch(uni_metric_index, char_id, 0);
-      vec4 chunk_02 = texelFetch(uni_metric_index, char_id + 1, 0);
-      vec4 chunk_03 = texelFetch(uni_metric_index, char_id + 2, 0);
+      // Position Tdhe vertex
+      vec3 scale = vec3(chunk_02.rg, 1) * 0.01;
+      vec3 scaled_pos = in_vs_position * scale;
       
-      vec2 uv       = chunk_01.xy;
-      vec2 st       = chunk_01.zw;
-      vec2 size     = chunk_02.rg;
-      vec2 advance  = chunk_02.ba;
-      vec2 offset   = chunk_03.rg;
-      
-      
-      vec4 str_detail = texelFetch(uni_string_detail, str_id, 0);
-      
-      
-      vec3 pos = vec3(str_detail.x + in_vs_position.x, str_detail.y + in_vs_position.y, in_vs_position.z);
-      
-      gl_Position =  uni_wvp_mat * vec4(pos, 1.0);
-      
+      float char_x_advance = char_data.y * 0.3;
+      float char_y_advance = char_data.z;
 
-      float u = mix(uv.x, st.x, in_vs_texture_coord.x);
-      float v = mix(uv.y, st.y, in_vs_texture_coord.y);
       
-      in_ps_texture_coord = vec2(u,v);
+      vec3 position_advanced = vec3(scaled_pos.x + char_x_advance, scaled_pos.y + char_y_advance, scaled_pos.z);
+      
+      
+      gl_Position            = uni_wvp_mat * vec4(position_advanced, 1.0);
+
+      // Texture Coords
+      in_ps_texture_coord = mix(metrics_uv_st.xy, metrics_uv_st.zw, in_vs_texture_coord);
     }
   )";
   

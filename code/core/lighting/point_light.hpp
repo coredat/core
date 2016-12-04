@@ -3,7 +3,6 @@
 
 
 #include <core/common/core_fwd.hpp>
-#include <core/color/color.hpp>
 
 
 namespace Core {
@@ -43,7 +42,7 @@ public:
   
 private:
 
-  Core::Color     m_color;
+  uint32_t        m_color;
   float           m_ambient;
   float           m_specular;
   float           m_diffuse;

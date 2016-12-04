@@ -72,6 +72,7 @@ pixel_format_get_format(const GLenum format)
     return GL_RED;
   
   case(GL_RGB):
+  case(GL_RGB32F):
     return GL_RGB;
   
   case(GL_RGBA):
@@ -99,6 +100,7 @@ pixel_format_get_type(const GLenum format)
     return GL_UNSIGNED_BYTE;
 
   case(GL_R32F):
+  case(GL_RGB32F):
   case(GL_RGBA32F):
     return GL_FLOAT;
 

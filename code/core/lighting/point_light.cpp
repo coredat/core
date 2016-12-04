@@ -1,11 +1,12 @@
 #include <core/lighting/point_light.hpp>
+#include <core/color/color.hpp>
 
 
 namespace Core {
 
 
 Point_light::Point_light()
-: Point_light(Core::Color(0xFFFFFFFF),
+: Point_light(0xFFFFFFFF,
               0.0f,     // amb
               1.0f,     // spec
               1.0f,     // diffuse
@@ -23,7 +24,7 @@ Point_light::Point_light(const Core::Color &color,
                          const float constant,
                          const float linear,
                          const float exponential)
-: m_color(color)
+: m_color(color.get_color())
 , m_ambient(ambient)
 , m_specular(specular)
 , m_diffuse(diffuse)
@@ -37,14 +38,14 @@ Point_light::Point_light(const Core::Color &color,
 void
 Point_light::set_color(const Core::Color &color)
 {
-  m_color = color;
+  m_color = color.get_color();
 }
 
 
 Core::Color
 Point_light::get_color() const
 {
-  return m_color;
+  return Core::Color(m_color);
 }
 
 

@@ -2,7 +2,7 @@
 #define COLOR_UTILS_INCLUDED_8DC54AB5_90F6_4A6B_B758_AE55942043C2
 
 
-#include <core/color/color.hpp>
+#include <core/common/core_fwd.hpp>
 #include <stdint.h>
 
 

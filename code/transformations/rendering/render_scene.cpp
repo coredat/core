@@ -12,6 +12,7 @@
 #include <systems/renderer_text/text_renderer.hpp>
 #include <renderer/debug_line_renderer/debug_line_renderer.hpp>
 #include <transformations/rendering/material_renderer.hpp>
+#include <core/color/color.hpp>
 #include <core/color/color_utils.hpp>
 #include <graphics_api/clear.hpp>
 

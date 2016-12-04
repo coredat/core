@@ -1,4 +1,5 @@
 #include <core/color/color_utils.hpp>
+#include <core/color/color.hpp>
 
 
 namespace

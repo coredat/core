@@ -2,6 +2,7 @@
 #include <transformations/lighting/light_data.hpp>
 #include <common/data_types.hpp>
 #include <math/transform/transform.hpp>
+#include <core/color/color.hpp>
 #include <core/color/color_utils.hpp>
 #include <core/lighting/point_light.hpp>
 #include <data/world/transform_data.hpp>
