@@ -1,0 +1,17 @@
+
+/*
+  Warning
+  --
+  This file is auto generated, changes here may be overwritten.
+*/
+
+#ifndef {{name}}_MODULE_{{guid}}
+#define {{name}}_MODULE_{{guid}}
+
+
+% models.each do |m|
+
+% end
+
+
+#endif // inc guard

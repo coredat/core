@@ -1,4 +1,5 @@
 #include <core/font/font.hpp>
+#include <transformations/font/font_resource.hpp>
 #include <data/context_data.hpp>
 #include <data/memory/memory_data.hpp>
 #include <data/context/font_data.hpp>
@@ -13,8 +14,20 @@
 namespace Core {
 
 
-Font::Font(const char *filename)
+Font::Font()
+: m_font_id(0)
 {
+}
+
+
+Font::Font(const char *filename)
+: Font::Font()
+{
+  /*
+    Check to see if the font name exists.
+    If it does we just use that id.
+    else we create and add a new one.
+  */
   auto resources = Data::get_context_data();
   assert(resources);
   
@@ -27,77 +40,27 @@ Font::Font(const char *filename)
   Data::data_lock(font_data);
   Data::data_lock(texture_data);
 
-  const std::string get_name = util::get_filename_from_path(filename);
+  char font_name[256];
+  memset(font_name, 0, sizeof(font_name));
+  util::filename_from_path(filename, font_name);
   
   size_t search_id = 0;
-  if(Common::fixed_string_search(get_name.c_str(),
+  if(Common::fixed_string_search(font_name,
                                  Data::font_get_name_data(font_data),
                                  Data::font_get_name_stride(),
                                  Data::font_get_size(font_data),
                                  &search_id))
   {
-    // File already loaded.
-    return;
+    m_font_id = font_data->keys[search_id];
   }
-
-  long size;
-  unsigned char* fontBuffer;
-  
-  FILE* fontFile = fopen(filename, "rb");
-  fseek(fontFile, 0, SEEK_END);
-  size = ftell(fontFile); /* how long is the file ? */
-  fseek(fontFile, 0, SEEK_SET); /* reset */
-  
-  fontBuffer = (unsigned char*)malloc(size);
-  
-  fread(fontBuffer, size, 1, fontFile);
-  fclose(fontFile);
-
-  stbtt_fontinfo info;
-  if (!stbtt_InitFont(&info, fontBuffer, 0))
-  {
-    printf("failed\n");
-  }
-  
-  // Generate a texture for it
-  Ogl::Texture texture_glyphs;
-  Ogl::Texture texture_metrics;
-  
-  // Some empty data to zero the texture
-  unsigned char *tex_data = SCRATCH_ALLOC(unsigned char, 512 * 512 * 1);
-  memset(tex_data, 0, sizeof(unsigned char) * 512 * 512 * 1);
-  
-  Ogl::texture_create_2d(&texture_glyphs, 512, 512, GL_RED, true, tex_data);
-  Ogl::texture_create_1d(&texture_metrics, 512, GL_RGBA32F, tex_data);
-  
-  const uint32_t glyphs_texture_id = Data::texture_push(texture_data);
-  Data::texture_set_texture(texture_data, glyphs_texture_id, &texture_glyphs);
-  Data::texture_set_name(texture_data, glyphs_texture_id, "font1", strlen("font1"));
-  
-  const uint32_t metrics_texture_id = Data::texture_push(texture_data);
-  Data::texture_set_texture(texture_data, metrics_texture_id, &texture_metrics);
-  Data::texture_set_name(texture_data, metrics_texture_id, "font1_metrics", strlen("font1_metrics"));
-
-  const uint32_t font_id = Data::font_push(font_data);
-  
-  Data::font_set_name(font_data, font_id, get_name.c_str(), strlen(get_name.c_str()));
-  
-  Text::Font_bitmap font_bitmap;
-  font_bitmap.bitmap_channels  = 1;
-  font_bitmap.bitmap_size[0]   = 512;
-  font_bitmap.bitmap_size[1]   = 512;
-  font_bitmap.bitmap_offset[0] = 0;
-  font_bitmap.bitmap_offset[1] = 0;
-  
-  Data::font_set_font_bitmap(font_data, font_id, &font_bitmap);
-  Data::font_set_font_face(font_data, font_id, &info);
-  Data::font_set_glyph_texture_id(font_data, font_id, &glyphs_texture_id);
-  Data::font_set_metric_texture_id(font_data, font_id, &metrics_texture_id);
   
   Data::data_unlock(texture_data);
   Data::data_unlock(font_data);
-  
-  m_font_id = font_id;
+
+  if(!m_font_id)
+  {
+    m_font_id = Font_resource::add_new_font(filename, font_data, texture_data);
+  }
 }
 
 

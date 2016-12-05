@@ -213,8 +213,6 @@ get_renderer(const util::generic_id this_id,
         {
           util::generic_id font_id = util::generic_id_invalid();
           
-          
-          
           return_renderer = Core::Text_renderer();
           
           break;
@@ -496,6 +494,9 @@ set_renderer_text(const util::generic_id this_id,
       int advance, left_side_bearing;
       stbtt_GetCodepointHMetrics(&info, codepoint, &advance, &left_side_bearing);
       
+      int ascent, decent, line_gap;
+      stbtt_GetFontVMetrics(&info, &ascent, &decent, &line_gap);
+      
       const int bitmap_advance = glyph_width; //math::max((int32_t)advance_ft, glyph_width);
       const int width_needed = bitmap_advance + glyph_width;
       
@@ -532,7 +533,9 @@ set_renderer_text(const util::generic_id this_id,
       char_info.offset[0] = x_offset;
       char_info.offset[1] = y_offset;
 
-      char_info.advance[0] = (advance * scale);
+      char_info.advance[0] = (math::to_float(advance) * scale) / math::to_float(font_bitmap.bitmap_size[0]);
+      char_info.advance[1] = (line_gap + decent) * scale;
+      
       char_info.uv[0] = math::to_float(font_bitmap.bitmap_offset[0]) / math::to_float(font_bitmap.bitmap_size[0]);
       char_info.uv[1] = math::to_float(font_bitmap.bitmap_offset[1]) / math::to_float(font_bitmap.bitmap_size[1]);
       
@@ -640,6 +643,32 @@ set_renderer_text(const util::generic_id this_id,
   {
     assert(text_data);
     
+    const char *str;
+    Data::text_mesh_get_text(text_mesh_data, model_id, &str);
+
+    float advance = 0;
+    float line = 0;
+    int data_ptr = 0;
+    
+    float str_tex_data[512];
+    memset(str_tex_data, 0, sizeof(str_tex_data));
+
+    for(int i = 0; i < strlen(str); ++i)
+    {
+      // Find advance
+      for(int j = 0; j < glyph_data->size; ++j)
+      {
+        if(str[i] == glyph_data->keys[j])
+        {
+          str_tex_data[data_ptr++] = j;
+          str_tex_data[data_ptr++] = advance;
+          str_tex_data[data_ptr++] = line;
+          
+          advance += glyph_data->field_character[j].advance[0];
+        }
+      }
+    }
+    
     Data::data_lock(text_data);
     
     const math::transform transform = Entity_detail::get_transform(this_id, entity_data, transform_data);
@@ -653,29 +682,16 @@ set_renderer_text(const util::generic_id this_id,
     
     if(Data::text_draw_call_exists(text_data, this_id))
     {
-      float index[24] {
-        0, 0, 0,
-        1, 1, 0,
-        1, 2, 0,
-        
-        2, 3, 0,
-        3, 0, -1,
-        4, 1, -1,
-        
-        5, 2, -1,
-        5, 3, -1,
-      };
-    
       Ogl::Texture string_texture;
-      Ogl::texture_create_1d(&string_texture, sizeof(index), GL_RGB32F, &index);
+      Ogl::texture_create_1d(&string_texture, sizeof(float) * data_ptr, GL_RGB32F, &str_tex_data);
     
       ::Text_renderer::Draw_call dc;
       memcpy(dc.world_matrix, &world_mat, sizeof(world_mat));
       
-      dc.texture = glyph_texture;
+      dc.texture       = glyph_texture;
       dc.glyph_metrics = glyph_metrics_texture;
-      dc.string_info = string_texture;
-      dc.mesh = mesh;
+      dc.string_info   = string_texture;
+      dc.mesh          = mesh;
 
       Data::text_draw_call_set_draw_call(text_data, this_id, &dc);
     }

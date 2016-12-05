@@ -12,13 +12,14 @@ class Font
 {
 public:
 
+  explicit          Font();
   explicit          Font(const char *filename);
   
   util::generic_id  get_id() const;
   
 private:
 
-  util::generic_id m_font_id;
+  util::generic_id m_font_id = 0;
 
 };
 

@@ -203,7 +203,7 @@ texture_create_1d(Texture *out_texture,
   assert(out_texture);
   assert(width);
   assert(format);
-  assert(data);
+//  assert(data);
   
   // Set some arguments
   out_texture->texture_id = 0;

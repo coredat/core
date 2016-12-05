@@ -58,11 +58,12 @@ initialize()
       vec4 chunk_02      = texelFetch(uni_metric_index, char_index + 1, 0);
       vec4 chunk_03      = texelFetch(uni_metric_index, char_index + 2, 0);
       
+      vec3 scale = vec3(vec2(metrics_uv_st.zw - metrics_uv_st.xy), 1.0);
+      
       // Position Tdhe vertex
-      vec3 scale = vec3(chunk_02.rg, 1) * 0.01;
       vec3 scaled_pos = in_vs_position * scale;
       
-      float char_x_advance = char_data.y * 0.3;
+      float char_x_advance = char_data.y;
       float char_y_advance = char_data.z;
 
       
@@ -143,7 +144,7 @@ render(const math::mat4 &view_proj_mat,
       {
         Graphics_api::Wrap_mode::wrap,
         Graphics_api::Wrap_mode::wrap,
-        Graphics_api::Filtering_mode::point,      
+        Graphics_api::Filtering_mode::point,
       };
       
       Ogl::filtering_apply(filter, Graphics_api::Dimention::two);
