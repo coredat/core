@@ -14,6 +14,9 @@ struct Font_bitmap
   uint32_t bitmap_size[2]; // The size of the bitmap.
   uint32_t bitmap_channels; // The number of channels a bitmap has;
   uint32_t line_height;
+  float scale;
+  float decsent;
+  float ascent;
 };
 
 

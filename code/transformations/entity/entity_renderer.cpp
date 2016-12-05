@@ -1,6 +1,7 @@
 #include <transformations/entity/entity_renderer.hpp>
 #include <transformations/entity/entity_transform.hpp>
 #include <transformations/text/rasterized_glyph_id.hpp>
+#include <transformations/font/font_resource.hpp>
 
 #include <systems/text/character.hpp>
 
@@ -405,165 +406,17 @@ set_renderer_text(const util::generic_id this_id,
   auto glyph_data = resources->font_glyph_data;
   assert(glyph_data);
   
+  const char * str = "foobar!!";
+  
+  // Find and add missing glyphs
+  Font_resource::add_glyphs(str, strlen(str), font_id, font_data, glyph_data, texture_data);
+  
+  // Generate the string data
   Data::data_lock(font_data);
   Data::data_lock(texture_data);
   Data::data_lock(text_mesh_data);
   Data::data_lock(glyph_data);
   
-  uint32_t texture_id = 0;
-  uint32_t glyph_metrics_texture_id = 0;
-  stbtt_fontinfo info;
-  
-  Data::font_get_font_face(font_data, font_id, &info);
-  Data::font_get_glyph_texture_id(font_data, font_id, &texture_id);
-  Data::font_get_metric_texture_id(font_data, font_id, &glyph_metrics_texture_id);
-  
-  Ogl::Texture glyph_texture;
-  Ogl::Texture glyph_metrics_texture;
-  Data::texture_get_texture(texture_data, texture_id, &glyph_texture);
-  Data::texture_get_texture(texture_data, glyph_metrics_texture_id, &glyph_metrics_texture);
-  
-  const int bitmap_width  = glyph_texture.width; /* bitmap width */
-  const int bitmap_height = glyph_texture.height; /* bitmap height */
-  int l_h = 64; /* line height */
-
-  /* create a bitmap for the phrase */
-  unsigned char* bitmap = (unsigned char*)malloc(bitmap_width * bitmap_height);
-  memset(bitmap, 0, sizeof(unsigned char) * (bitmap_width * bitmap_height));
-  
-  /* calculate font scaling */
-  const float scale = stbtt_ScaleForPixelHeight(&info, l_h);
-
-  int ascent, descent, lineGap;
-  stbtt_GetFontVMetrics(&info, &ascent, &descent, &lineGap);
-  
-//  Text::Character char_props;
-//  char_props.advance[0] = ascent;
-//  char_props.advance[1] = descent;
-  
-  ascent *= scale;
-  descent *= scale;
-  
-  Text::Font_bitmap font_bitmap;
-  Data::font_get_font_bitmap(font_data, font_id, &font_bitmap);
-  font_bitmap.line_height = ascent + math::abs(descent);
-  font_bitmap.bitmap_size[0] = glyph_texture.width;
-  font_bitmap.bitmap_size[1] = glyph_texture.height;
-  
-  Text::Character *glyph_info = nullptr;
-  uint32_t glyph_info_count = 0;
-  
-  // Generate missing glyphs
-  {
-    const char *str;
-    Data::text_mesh_get_text(text_mesh_data, model_id, &str);
-    
-    glyph_info = SCRATCH_ALIGNED_ALLOC(Text::Character, strlen(str) * sizeof(Text::Character));
-  
-    for(int i = 0; i < strlen(str); ++i)
-    {
-      const int codepoint = str[i];
-      
-      // If code point exists skip
-      const uint32_t glyph_id = Text::create_glyph_id(font_id, codepoint);
-      
-      if(Data::font_glyph_exists(glyph_data, glyph_id))
-      {
-        Data::font_glyph_get_character(glyph_data,
-                                       glyph_id,
-                                       &glyph_info[glyph_info_count]);
-        ++glyph_info_count;
-        
-        continue;
-      }
-      
-      int glyph_width, glyph_height;
-      int x_offset, y_offset;
-      
-      unsigned char * glyph_bitmap = stbtt_GetCodepointBitmap(&info,
-                                                              0,
-                                                              scale,
-                                                              codepoint,
-                                                              &glyph_width,
-                                                              &glyph_height,
-                                                              &x_offset,
-                                                              &y_offset);
-
-  //    const math::vec2 offset = math::vec2_init(bitmap_width * 0.5 + x_offset, -(bitmap_height * 0.5f + y_offset));
-
-      int advance, left_side_bearing;
-      stbtt_GetCodepointHMetrics(&info, codepoint, &advance, &left_side_bearing);
-      
-      int ascent, decent, line_gap;
-      stbtt_GetFontVMetrics(&info, &ascent, &decent, &line_gap);
-      
-      const int bitmap_advance = glyph_width; //math::max((int32_t)advance_ft, glyph_width);
-      const int width_needed = bitmap_advance + glyph_width;
-      
-      if(font_bitmap.bitmap_offset[0] + width_needed > bitmap_width)
-      {
-        if(font_bitmap.bitmap_offset[1] + font_bitmap.line_height > font_bitmap.bitmap_size[1])
-        {
-          LOG_WARNING("Font map is full.");
-          break;
-        }
-        
-        font_bitmap.bitmap_offset[0] = 0;
-        font_bitmap.bitmap_offset[1] += font_bitmap.line_height;
-      }
-      
-      Ogl::texture_update_texture_2d(&glyph_texture,
-                                     font_bitmap.bitmap_offset[0],
-                                     font_bitmap.bitmap_offset[1],
-                                     glyph_width,
-                                     glyph_height,
-                                     glyph_bitmap);
-      
-      int kern;
-      kern = stbtt_GetCodepointKernAdvance(&info, codepoint, str[i + 1]);
-      
-      stbtt_FreeBitmap(glyph_bitmap, nullptr);
-      
-      // Set the glyph properties.
-      Text::Character char_info;
-
-      char_info.size[0] = glyph_width;
-      char_info.size[1] = glyph_height;
-      
-      char_info.offset[0] = x_offset;
-      char_info.offset[1] = y_offset;
-
-      char_info.advance[0] = (math::to_float(advance) * scale) / math::to_float(font_bitmap.bitmap_size[0]);
-      char_info.advance[1] = (line_gap + decent) * scale;
-      
-      char_info.uv[0] = math::to_float(font_bitmap.bitmap_offset[0]) / math::to_float(font_bitmap.bitmap_size[0]);
-      char_info.uv[1] = math::to_float(font_bitmap.bitmap_offset[1]) / math::to_float(font_bitmap.bitmap_size[1]);
-      
-      char_info.st[0] = char_info.uv[0] + (math::to_float(glyph_width) / math::to_float(font_bitmap.bitmap_size[0]));
-      char_info.st[1] = char_info.uv[1] + (math::to_float(glyph_height) / math::to_float(font_bitmap.bitmap_size[1]));
-      
-      // We can now add the advance
-      font_bitmap.bitmap_offset[0] += bitmap_advance + 2;
-      
-      // Add glyph info
-      Data::font_glyph_push(glyph_data, glyph_id);
-      //assert(false); // This is broken
-      
-      Data::font_glyph_set_character(glyph_data, glyph_id, &char_info);
-      
-      Ogl::texture_update_texture_1d(&glyph_metrics_texture,
-                                     0,
-                                     resources->font_glyph_data->size * 5,
-                                     resources->font_glyph_data->field_character);
-      
-      
-      // Also add it to the glyph info array.
-      glyph_info[glyph_info_count++] = char_info;
-    }
-  } // gen missing glyphs
-  
-  // Update the bitmap information.
-  Data::font_set_font_bitmap(font_data, font_id, &font_bitmap);
   
   // Update the metrics information
   {
@@ -587,6 +440,7 @@ set_renderer_text(const util::generic_id this_id,
   
   Graphics_api::Vertex_format v_fmt = Graphics_api::vertex_format_create(vertdesc, 3);
   
+  uint32_t glyph_info_count = strlen(str);
   Graphics_api::Quad_info *quad_info = SCRATCH_ALLOC(Graphics_api::Quad_info, glyph_info_count);
   
   const float some_scale = 0.0005;
@@ -597,7 +451,7 @@ set_renderer_text(const util::generic_id this_id,
   
   for(uint32_t i = 0; i < glyph_info_count; ++i)
   {
-    Text::Character *curr_glyph = &glyph_info[i];
+    Text::Character *curr_glyph = &glyph_data->field_character[i];
     
     string_width += curr_glyph->advance[0];
     string_height += curr_glyph->size[1];
@@ -607,7 +461,7 @@ set_renderer_text(const util::generic_id this_id,
   
   for(uint32_t i = 0; i < glyph_info_count; ++i)
   {
-    Text::Character *curr_glyph = &glyph_info[i];
+    Text::Character *curr_glyph = &glyph_data->field_character[i];
     
     quad_info[i].position[0] = 0.f;
     quad_info[i].position[1] = 0.f;
@@ -643,8 +497,8 @@ set_renderer_text(const util::generic_id this_id,
   {
     assert(text_data);
     
-    const char *str;
-    Data::text_mesh_get_text(text_mesh_data, model_id, &str);
+//    const char *str;
+//    Data::text_mesh_get_text(text_mesh_data, model_id, &str);
 
     float advance = 0;
     float line = 0;
@@ -655,6 +509,8 @@ set_renderer_text(const util::generic_id this_id,
 
     for(int i = 0; i < strlen(str); ++i)
     {
+      char curr_char = str[i];
+    
       // Find advance
       for(int j = 0; j < glyph_data->size; ++j)
       {
@@ -670,6 +526,21 @@ set_renderer_text(const util::generic_id this_id,
     }
     
     Data::data_lock(text_data);
+    
+    Ogl::Texture glyph_texture;
+    Ogl::Texture glyph_metrics_texture;
+    stbtt_fontinfo info;
+    {
+      uint32_t texture_id = 0;
+      uint32_t glyph_metrics_texture_id = 0;
+      
+      Data::font_get_font_face(font_data, font_id, &info);
+      Data::font_get_glyph_texture_id(font_data, font_id, &texture_id);
+      Data::font_get_metric_texture_id(font_data, font_id, &glyph_metrics_texture_id);
+      
+      Data::texture_get_texture(texture_data, texture_id, &glyph_texture);
+      Data::texture_get_texture(texture_data, glyph_metrics_texture_id, &glyph_metrics_texture);
+    }
     
     const math::transform transform = Entity_detail::get_transform(this_id, entity_data, transform_data);
     const math::mat4 world_mat = math::transform_get_world_matrix(transform);
