@@ -13,10 +13,10 @@ namespace Text_renderer {
 struct Draw_call
 {
   float               world_matrix[16];
-  Graphics_api::Mesh  mesh;
   Ogl::Texture        texture;
   Ogl::Texture        glyph_metrics;
   Ogl::Texture        string_info;
+  uint32_t            string_size;
   uint32_t            cull_mask = -1;
 };
 

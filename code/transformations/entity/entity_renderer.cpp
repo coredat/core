@@ -249,7 +249,6 @@ set_renderer_material(const util::generic_id this_id,
     assert(false); return;
   }
   
-  
   assert(mesh_data);
 
   // We need to find the material remove it.
@@ -388,209 +387,35 @@ set_renderer_text(const util::generic_id this_id,
     assert(false); return;
   }
   
-  LOG_TODO_ONCE("Are all these resources required? - locking up a large portion of data!");
+  LOG_TODO_ONCE("Are all these resources required? - locking up a large portions of data!");
   
   auto resources = Data::get_context_data();
   assert(resources);
   
-  auto text_mesh_data = resources->text_mesh_data;
-  assert(text_mesh_data);
+  Data::Font_data       *font_data    = resources->font_data;
+  Data::Texture_data    *texture_data = resources->texture_data;
+  Data::Font_glyph_data *glyph_data   = resources->font_glyph_data;
   
-  // Set the renderer and build the mesh
-  auto font_data = resources->font_data;
   assert(font_data);
-  
-  auto texture_data = resources->texture_data;
   assert(texture_data);
-  
-  auto glyph_data = resources->font_glyph_data;
   assert(glyph_data);
   
-  const char * str = "foobar!!";
+  const char * str = "foo\nbar!!";
   
   // Find and add missing glyphs
   Font_resource::add_glyphs(str, strlen(str), font_id, font_data, glyph_data, texture_data);
   
-  // Generate the string data
-  Data::data_lock(font_data);
-  Data::data_lock(texture_data);
-  Data::data_lock(text_mesh_data);
-  Data::data_lock(glyph_data);
-  
-  
-  // Update the metrics information
-  {
-    uint32_t metric_texture_id = 0;
-    Data::font_get_metric_texture_id(font_data, font_id, &metric_texture_id);
-    
-    Ogl::Texture metrics_texture;
-    Data::texture_get_texture(texture_data, metric_texture_id, &metrics_texture);
-  
-    Ogl::texture_update_texture_1d(&metrics_texture, 0, glyph_data->size * (sizeof(float) * 4) * 4, glyph_data->field_character);
-  }
-  
-  // Generate the text mesh here.
-  // bunch of quads
-  
-  Graphics_api::Vertex_attribute vertdesc[3] = {
-    Graphics_api::Vertex_attribute::position_3d,
-    Graphics_api::Vertex_attribute::texture_coord,
-    Graphics_api::Vertex_attribute::normal,    
-  };
-  
-  Graphics_api::Vertex_format v_fmt = Graphics_api::vertex_format_create(vertdesc, 3);
-  
-  uint32_t glyph_info_count = strlen(str);
-  Graphics_api::Quad_info *quad_info = SCRATCH_ALLOC(Graphics_api::Quad_info, glyph_info_count);
-  
-  const float some_scale = 0.0005;
-  
-  // Get the dimentions of the text
-  float string_width = 0;
-  float string_height = 0;
-  
-  for(uint32_t i = 0; i < glyph_info_count; ++i)
-  {
-    Text::Character *curr_glyph = &glyph_data->field_character[i];
-    
-    string_width += curr_glyph->advance[0];
-    string_height += curr_glyph->size[1];
-  }
-  
-  float x_cursor = 0.f - (string_width / 2.f);
-  
-  for(uint32_t i = 0; i < glyph_info_count; ++i)
-  {
-    Text::Character *curr_glyph = &glyph_data->field_character[i];
-    
-    quad_info[i].position[0] = 0.f;
-    quad_info[i].position[1] = 0.f;
-    quad_info[i].position[2] = 0.f;
-    
-    quad_info[i].normal[0] = 0.f;
-    quad_info[i].normal[1] = 1.f;
-    quad_info[i].normal[2] = 0.f;
-    
-    quad_info[i].scale[0] = 1.f;
-    quad_info[i].scale[1] = 1.f;
-    
-    quad_info[i].uv[0] = 0.f;
-    quad_info[i].uv[1] = 0.f;
+  Font_resource::create_string_data(this_id,
+                                    str,
+                                    strlen(str),
+                                    font_id,
+                                    font_data,
+                                    glyph_data,
+                                    texture_data,
+                                    text_data,
+                                    transform_data,
+                                    entity_data);
 
-    quad_info[i].st[0] = 1.f;
-    quad_info[i].st[1] = 1.f;
-    
-    x_cursor += static_cast<float>(curr_glyph->advance[0]);
-
-  }
-  
-  auto mesh = Graphics_api::create_quads(&v_fmt, quad_info, glyph_info_count);
-  assert(Ogl::vertex_buffer_is_valid(mesh.vbo));
-  
-  auto text_mesh_id = Data::text_mesh_push(text_mesh_data);
-  
-  Data::text_mesh_set_mesh(text_mesh_data, text_mesh_id, &mesh);
-  
-  /*
-    Add this to the text draw calls
-  */
-  {
-    assert(text_data);
-    
-//    const char *str;
-//    Data::text_mesh_get_text(text_mesh_data, model_id, &str);
-
-    float advance = 0;
-    float line = 0;
-    int data_ptr = 0;
-    
-    float str_tex_data[512];
-    memset(str_tex_data, 0, sizeof(str_tex_data));
-
-    for(int i = 0; i < strlen(str); ++i)
-    {
-      char curr_char = str[i];
-    
-      // Find advance
-      for(int j = 0; j < glyph_data->size; ++j)
-      {
-        if(str[i] == glyph_data->keys[j])
-        {
-          str_tex_data[data_ptr++] = j;
-          str_tex_data[data_ptr++] = advance;
-          str_tex_data[data_ptr++] = line;
-          
-          advance += glyph_data->field_character[j].advance[0];
-        }
-      }
-    }
-    
-    Data::data_lock(text_data);
-    
-    Ogl::Texture glyph_texture;
-    Ogl::Texture glyph_metrics_texture;
-    stbtt_fontinfo info;
-    {
-      uint32_t texture_id = 0;
-      uint32_t glyph_metrics_texture_id = 0;
-      
-      Data::font_get_font_face(font_data, font_id, &info);
-      Data::font_get_glyph_texture_id(font_data, font_id, &texture_id);
-      Data::font_get_metric_texture_id(font_data, font_id, &glyph_metrics_texture_id);
-      
-      Data::texture_get_texture(texture_data, texture_id, &glyph_texture);
-      Data::texture_get_texture(texture_data, glyph_metrics_texture_id, &glyph_metrics_texture);
-    }
-    
-    const math::transform transform = Entity_detail::get_transform(this_id, entity_data, transform_data);
-    const math::mat4 world_mat = math::transform_get_world_matrix(transform);
-    
-    // If we don't have a draw call insert one.
-    if(!Data::text_draw_call_exists(text_data, this_id))
-    {
-      Data::text_draw_call_push(text_data, this_id);
-    }
-    
-    if(Data::text_draw_call_exists(text_data, this_id))
-    {
-      Ogl::Texture string_texture;
-      Ogl::texture_create_1d(&string_texture, sizeof(float) * data_ptr, GL_RGB32F, &str_tex_data);
-    
-      ::Text_renderer::Draw_call dc;
-      memcpy(dc.world_matrix, &world_mat, sizeof(world_mat));
-      
-      dc.texture       = glyph_texture;
-      dc.glyph_metrics = glyph_metrics_texture;
-      dc.string_info   = string_texture;
-      dc.mesh          = mesh;
-
-      Data::text_draw_call_set_draw_call(text_data, this_id, &dc);
-    }
-
-    Data::data_unlock(text_data);
-  }
-  
-  // Update aabb
-  math::aabb return_aabb;
-  {
-    Data::Mesh_data *mesh_data = Data::get_context_data()->mesh_data;
-    assert(mesh_data);
-    
-    Data::data_lock(mesh_data);
-    Data::mesh_get_aabb(mesh_data, model_id, &return_aabb);
-    Data::data_unlock(mesh_data);
-  }
-  
-  {
-    Data::data_lock(transform_data);
-    Data::transform_set_aabb(transform_data, this_id, &return_aabb);
-    Data::data_unlock(transform_data);
-  }  
-  
-  Data::data_unlock(glyph_data);
-  Data::data_unlock(text_mesh_data);
-  Data::data_unlock(texture_data);
-  Data::data_unlock(font_data);
 }
 
 
