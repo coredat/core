@@ -1,5 +1,6 @@
 #include "context_data.hpp"
 #include "../common/common.hpp"
+#include "../interface/resource_id_impl.hpp"
 
 #include "../api/ogl/descs/descs.hpp"
 
@@ -12,7 +13,7 @@ context_data::initial_reserve()
 {
   auto resource_alloc = [](const uint32_t init_count,
                            const uint32_t init_bytes,
-                           const allocation_cb alloc_cb,
+                           const auto alloc_cb,
                            const uintptr_t user_data,
                            auto out_resource_ptr,
                            size_t *out_set_capacity,
@@ -170,7 +171,7 @@ context_data::initial_reserve()
 }
 
 
-resource_id
+uint32_t
 context_data::add_shader()
 {
   // -- Member Check -- //
@@ -180,7 +181,7 @@ context_data::add_shader()
   // -- Full -- //
   if(shader_desc_size == shader_desc_capacity)
   {
-    return invalid_resource_id();
+    return 0;
   }
 
   // -- Generate Resource -- //
@@ -193,11 +194,11 @@ context_data::add_shader()
     sizeof(API::shader_desc)
   );
 
-  return resource_id{resource_type::SHADER, instance};
+  return op::generate_id(resource_type::SHADER, instance);
 }
 
 
-resource_id
+uint32_t
 context_data::add_texture()
 {
   // -- Member Check -- //
@@ -207,7 +208,7 @@ context_data::add_texture()
   // -- Full -- //
   if(texture_desc_size == texture_desc_capacity)
   {
-    return invalid_resource_id();
+    return 0;
   }
 
   // -- Generate Resource -- //
@@ -220,11 +221,11 @@ context_data::add_texture()
     sizeof(API::texture_desc)
   );
 
-  return resource_id{resource_type::TEXTURE, instance};
+  return op::generate_id(resource_type::TEXTURE, instance);
 }
 
 
-resource_id
+uint32_t
 context_data::add_texture_filter()
 {
   // -- Member Check -- //
@@ -234,7 +235,7 @@ context_data::add_texture_filter()
   // -- Full -- //
   if(texture_filtering_desc_size == texture_filtering_desc_capacity)
   {
-    return invalid_resource_id();
+    return 0;
   }
 
   // -- Generate Resource -- //
@@ -247,11 +248,11 @@ context_data::add_texture_filter()
     sizeof(API::texture_desc)
   );
 
-  return resource_id{resource_type::TEXTURE_FILTER, instance};
+  return op::generate_id(resource_type::TEXTURE_FILTER, instance);
 }
 
 
-resource_id
+uint32_t
 context_data::add_shader_data()
 {
   // -- Member Check -- //
@@ -261,7 +262,7 @@ context_data::add_shader_data()
   // -- Full -- //
   if(shader_data_desc_size == shader_data_desc_capacity)
   {
-    return invalid_resource_id();
+    return 0;
   }
 
   // -- Generate Resource -- //
@@ -274,11 +275,11 @@ context_data::add_shader_data()
     sizeof(API::shader_data_desc)
   );
 
-  return resource_id{resource_type::SHADER_DATA, instance};
+  return op::generate_id(resource_type::SHADER_DATA, instance);
 }
 
 
-resource_id
+uint32_t
 context_data::add_target()
 {
   // -- Member Check -- //
@@ -288,7 +289,7 @@ context_data::add_target()
   // -- Full -- //
   if(target_desc_size >= target_desc_capacity)
   {
-    return invalid_resource_id();
+    return 0;
   }
 
   // -- Generate Resource -- //
@@ -301,11 +302,11 @@ context_data::add_target()
     sizeof(API::target_desc)
   );
 
-  return resource_id{resource_type::TARGET, instance};
+  return op::generate_id(resource_type::TARGET, instance);
 }
 
 
-resource_id
+uint32_t
 context_data::add_geometry()
 {
   // -- Member Check -- //
@@ -315,7 +316,7 @@ context_data::add_geometry()
   // -- Full -- //
   if(geometry_desc_size >= geometry_desc_capacity)
   {
-    return invalid_resource_id();
+    return 0;
   }
 
   // -- Generate Resource -- //
@@ -328,11 +329,11 @@ context_data::add_geometry()
     sizeof(API::geometry_desc)
   );
 
-  return resource_id{resource_type::GEOMETRY, instance};
+  return op::generate_id(resource_type::GEOMETRY, instance);
 }
 
 
-resource_id
+uint32_t
 context_data::add_index()
 {
   // -- Member Check -- //
@@ -342,7 +343,7 @@ context_data::add_index()
   // -- Full -- //
   if(index_desc_size >= index_desc_capacity)
   {
-    return invalid_resource_id();
+    return 0;
   }
 
   // -- Generate Resource -- //
@@ -355,11 +356,11 @@ context_data::add_index()
     sizeof(API::index_internal_desc)
   );
 
-  return resource_id{resource_type::INDEX, instance};
+  return op::generate_id(resource_type::INDEX, instance);
 }
 
 
-resource_id
+uint32_t
 context_data::add_vertex_format()
 {
   // -- Member Check -- //
@@ -369,7 +370,7 @@ context_data::add_vertex_format()
   // -- Full -- //
   if(vertex_format_desc_size >= vertex_format_desc_capacity)
   {
-    return invalid_resource_id();
+    return 0;
   }
 
   // -- Generate Resource -- //
@@ -382,11 +383,11 @@ context_data::add_vertex_format()
     sizeof(API::vertex_format_desc)
   );
 
-  return resource_id{resource_type::VERTEX_FORMAT, instance};
+  return op::generate_id(resource_type::VERTEX_FORMAT, instance);
 }
 
 
-resource_id
+uint32_t
 context_data::add_rasterizer()
 {
   // -- Member Check -- //
@@ -396,7 +397,7 @@ context_data::add_rasterizer()
   // -- Full -- //
   if(rasterizer_desc_size >= rasterizer_desc_capacity)
   {
-    return invalid_resource_id();
+    return 0;
   }
 
   // -- Generate Resource -- //
@@ -409,7 +410,7 @@ context_data::add_rasterizer()
     sizeof(API::rasterizer_desc)
   );
 
-  return resource_id{resource_type::RASTERIZER, instance};
+  return op::generate_id(resource_type::RASTERIZER, instance);
 }
 
 

@@ -89,6 +89,7 @@ op_pixel_format_to_internal_format(const uint8_t format)
     case(opPixelFormat_RG32F):    return GL_RG32F;
     case(opPixelFormat_RGB32F):   return GL_RGB32F;
     case(opPixelFormat_RGBA32F):  return GL_RGBA32F;
+    case(opPixelFormat_UNKNOWN):  return GL_RGB8;
 
     default:
       assert(false);
@@ -103,6 +104,7 @@ op_pixel_format_to_internal_format(const uint8_t format)
     case(opPixelFormat_RG32F):    return GL_RGB;
     case(opPixelFormat_RGB32F):   return GL_RGB;
     case(opPixelFormat_RGBA32F):  return GL_RGBA;
+    case(opPixelFormat_UNKNOWN):  return GL_RGB;
 
     default:
       assert(false);

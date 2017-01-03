@@ -21,9 +21,33 @@
 
 #else
 
+// Get rid of this.
 #define API op::unsupported
 
 #endif
+
+namespace op {
+namespace resource_type {
+
+
+enum ENUM : uint8_t
+{
+  INVALID,
+  DEVICE,
+  VERTEX_FORMAT,
+  GEOMETRY,
+  INDEX,
+  SHADER,
+  SHADER_DATA,
+  TARGET,
+  TEXTURE,
+  TEXTURE_FILTER,
+  RASTERIZER,
+};
+
+
+} // ns
+} // ns
 
 
 #endif // inc guard

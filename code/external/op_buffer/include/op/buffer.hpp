@@ -7,12 +7,6 @@
 #include "common/resource_id.hpp"
 
 
-void        opBufferAllocCallback(const allocCallback cb);
-void        opBufferResizeCallback(const reallocCallback cb);
-void        opBufferDestroyCallback(const freeCallback cb);
-void        opBufferLogCallback(const uintptr_t callback_fn);
-void        opBufferUserData(const uintptr_t user_data);
-
             // -- Buffer Management -- //
 
 opBuffer*   opBufferCreate();

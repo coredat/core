@@ -2,16 +2,10 @@
 #include "../data/context_data.hpp"
 #include "../common/common.hpp"
 #include "context_impl.hpp"
+#include "common_impl.hpp"
 
 
-namespace {
-
-allocCallback alloc_cb     = nullptr;
-reallocCallback realloc_cb = nullptr;
-freeCallback free_cb       = nullptr;
-uintptr_t user_data = 0;
-
-} // anon ns
+// -- Context Management -- //
 
 
 opContext*
@@ -19,39 +13,85 @@ opContextCreate()
 {
   opContext *ctx = new opContext;
 
-  ctx->data.alloc_cb    = alloc_cb;
-  ctx->data.realloc_cb  = realloc_cb;
-  ctx->data.destroy_cb  = free_cb;
-  ctx->data.user_data   = user_data;
+  ctx->data.alloc_cb    = getCallbackAlloc();
+  ctx->data.realloc_cb  = getCallbackRealloc();
+  ctx->data.destroy_cb  = getCallbackFree();
+  ctx->data.user_data   = getCallbackUserData();;
+
   ctx->data.initial_reserve();
 
   return ctx;
 }
 
 
-void
-opContextAllocCallback(const allocCallback cb)
+// -- Context Support -- //
+
+
+uint8_t
+opContext1DTextureSupport(const opContext* ctx)
 {
-  alloc_cb = cb;
+  return 0;
 }
 
 
-void
-opContextResizeCallback(const reallocCallback cb)
+uint8_t
+opContext3DTextureSupport(const opContext* ctx)
 {
-  realloc_cb = cb;
+  return 0;
 }
 
 
-void
-opContextDestroyCallback(const freeCallback cb)
+uint32_t
+opContext1DTextureMaxWidth(const opContext* ctx)
 {
-  free_cb = cb;
+  return 0;
 }
 
 
-void
-opContextUserData(const uintptr_t ud)
+uint32_t
+opContext2DTextureMaxWidth(const opContext* ctx)
 {
-  user_data = ud;
+  return 0;
+}
+
+
+uint32_t
+opContext2DTextureMaxHeight(const opContext* ctx)
+{
+  return 0;
+}
+
+
+uint32_t
+opContext3DTextureMaxWidth(const opContext* ctx)
+{
+  return 0;
+}
+
+
+uint32_t
+opContext3DTextureMaxHeight(const opContext* ctx)
+{
+  return 0;
+}
+
+
+uint32_t
+opContext3DTextureMaxDepth(const opContext* ctx)
+{
+  return 0;
+}
+
+
+uint8_t
+opContextAnisotropicSupport(const opContext* ctx)
+{
+  return 0;
+}
+
+
+float
+opContextAnisotropicMax(const opContext* ctx)
+{
+  return 0.f;
 }

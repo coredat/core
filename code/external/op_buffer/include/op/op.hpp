@@ -4,6 +4,7 @@
 
 #include "buffer.hpp"
 #include "context.hpp"
+#include "common.hpp"
 #include "state.hpp"
 #include "desc.hpp"
 
