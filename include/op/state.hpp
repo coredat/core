@@ -14,15 +14,15 @@ constexpr uint8_t opStatus_INVALID  = 2;
 
 // -- Pixel Formats -- //
 
-constexpr uint8_t opPixelFormat_UNKNOW  = 0;
-constexpr uint8_t opPixelFormat_R8      = 1;
-constexpr uint8_t opPixelFormat_RG8     = 2;
-constexpr uint8_t opPixelFormat_RGB8    = 3;
-constexpr uint8_t opPixelFormat_RGBA8   = 4;
-constexpr uint8_t opPixelFormat_R32F    = 5;
-constexpr uint8_t opPixelFormat_RG32F   = 6;
-constexpr uint8_t opPixelFormat_RGB32F  = 7;
-constexpr uint8_t opPixelFormat_RGBA32F = 8;
+constexpr uint8_t opPixelFormat_UNKNOWN  = 0;
+constexpr uint8_t opPixelFormat_R8       = 1;
+constexpr uint8_t opPixelFormat_RG8      = 2;
+constexpr uint8_t opPixelFormat_RGB8     = 3;
+constexpr uint8_t opPixelFormat_RGBA8    = 4;
+constexpr uint8_t opPixelFormat_R32F     = 5;
+constexpr uint8_t opPixelFormat_RG32F    = 6;
+constexpr uint8_t opPixelFormat_RGB32F   = 7;
+constexpr uint8_t opPixelFormat_RGBA32F  = 8;
 
 // -- Dimentions -- //
 

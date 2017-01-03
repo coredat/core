@@ -7,12 +7,6 @@
 #include "common/resource_id.hpp"
 
 
-void        opBufferAllocCallback(const allocCallback cb);
-void        opBufferResizeCallback(const reallocCallback cb);
-void        opBufferDestroyCallback(const freeCallback cb);
-void        opBufferLogCallback(const uintptr_t callback_fn);
-void        opBufferUserData(const uintptr_t user_data);
-
             // -- Buffer Management -- //
 
 opBuffer*   opBufferCreate();
@@ -75,7 +69,7 @@ void        opBufferRasterizerBind(opBuffer *buf, const opID id);
             // -- Render -- //
 
 void        opBufferRender(opBuffer *buf);
-void        opBufferRenderSubset(opBuffer *buf);
+void        opBufferRenderSubset(opBuffer *buf, const uint32_t start_vert, const uint32_t end_vert);
 
             // -- Misc -- //
 

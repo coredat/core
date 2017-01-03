@@ -25,10 +25,4 @@ uint8_t     opContextAnisotropicSupport(const opContext* ctx);
 float       opContextAnisotropicMax(const opContext* ctx);
 
 
-void        opContextAllocCallback(const allocCallback cb);
-void        opContextResizeCallback(const reallocCallback cb);
-void        opContextDestroyCallback(const freeCallback cb);
-void        opContextUserData(const uintptr_t user_data);
-
-
 #endif // inc guard
