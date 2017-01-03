@@ -17,8 +17,8 @@ namespace Core {
 
 
 Text_renderer::Text_renderer()
-: m_font_id(util::generic_id_invalid())
-, m_text_id(util::generic_id_invalid())
+: Text_renderer(util::generic_id_invalid(),
+                util::generic_id_invalid())
 {
 }
 

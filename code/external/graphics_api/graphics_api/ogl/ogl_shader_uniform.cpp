@@ -34,7 +34,7 @@ shader_uniforms_retrive(Shader_uniforms *out_uniforms,
   }
 
   glUseProgram(shader->program_id);
-
+  
   // Get uniforms.
   GLint uniform_count, uniform_length;
   glGetProgramiv(shader->program_id, GL_ACTIVE_UNIFORMS, &uniform_count);

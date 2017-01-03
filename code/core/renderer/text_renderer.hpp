@@ -14,7 +14,8 @@ class Text_renderer final
 public:
 
   explicit            Text_renderer();
-  explicit            Text_renderer(const util::generic_id font_id, const util::generic_id text_id);
+  explicit            Text_renderer(const util::generic_id font_id,
+                                    const util::generic_id text_id);
 
   void                set_font(const Font &font);
   Font                get_font() const;
@@ -27,18 +28,13 @@ public:
 
                       operator Renderer() const;
 
-//private:
-//  
-//  friend class Entity;
-//  friend class Entity_ref;
-
-  util::generic_id        get_font_id() const;
-  util::generic_id        get_text_id() const;
+  util::generic_id    get_font_id() const;
+  util::generic_id    get_text_id() const;
   
 private:
 
-  util::generic_id m_font_id = util::generic_id_invalid();
-  util::generic_id m_text_id = util::generic_id_invalid();
+  util::generic_id    m_font_id = util::generic_id_invalid();
+  util::generic_id    m_text_id = util::generic_id_invalid();
   
 };
 

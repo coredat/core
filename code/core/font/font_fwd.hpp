@@ -6,6 +6,7 @@ namespace Core {
 
 
 class Font;
+class Text;
 
 
 } // ns

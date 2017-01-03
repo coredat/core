@@ -154,7 +154,7 @@ Sdl_context::Sdl_context(const uint32_t width,
     SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE,            Graphics_api::pixel_format_green_bits(settings.backbuffer_fmt));
     SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE,             Graphics_api::pixel_format_blue_bits(settings.backbuffer_fmt));
     SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE,            Graphics_api::pixel_format_alpha_bits(settings.backbuffer_fmt));
-    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE,            24);
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE,            16);
     SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE,          8);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER,          1);
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS,    0);

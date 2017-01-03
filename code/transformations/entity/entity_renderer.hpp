@@ -47,6 +47,7 @@ get_renderer_material(const util::generic_id this_id,
   
 void
 set_renderer_text(const util::generic_id this_id,
+                  const char *string,
                   Data::Entity_data *entity_data,
                   Data::Transform_data *transform_data,
                   Data::Text_draw_call_data *text_data,

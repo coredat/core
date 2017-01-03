@@ -149,6 +149,7 @@ set_renderer(const util::generic_id this_id,
     {
       const Core::Text_renderer text_renderer(renderer);
       set_renderer_text(this_id,
+                        "fooboo",
                         entity_data,
                         transform_data,
                         text_data,
@@ -213,6 +214,8 @@ get_renderer(const util::generic_id this_id,
         case(Core::Renderer_type::text):
         {
           util::generic_id font_id = util::generic_id_invalid();
+          
+          ::Text_renderer::Draw_call dc;
           
           return_renderer = Core::Text_renderer();
           
@@ -376,6 +379,7 @@ get_renderer_material(const util::generic_id this_id,
 
 void
 set_renderer_text(const util::generic_id this_id,
+                  const char *str,
                   Data::Entity_data *entity_data,
                   Data::Transform_data *transform_data,
                   Data::Text_draw_call_data *text_data,
@@ -400,7 +404,6 @@ set_renderer_text(const util::generic_id this_id,
   assert(texture_data);
   assert(glyph_data);
   
-  const char * str = "foo\nbar!!";
   
   // Find and add missing glyphs
   Font_resource::add_glyphs(str, strlen(str), font_id, font_data, glyph_data, texture_data);
