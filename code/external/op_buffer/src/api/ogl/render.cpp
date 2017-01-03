@@ -89,7 +89,28 @@ render_generic(context_data *context, void *data)
 void
 render_subset(context_data *context, void *data)
 {
+  // -- Param Check -- //
+  assert(context);
+  assert(data);
+  
+  // -- Get Data -- //
+  op::command::cmd_render_subset *cmd(
+    reinterpret_cast<op::command::cmd_render_subset*>(data)
+  );
 
+  // -- Render -- //
+  GLenum primitive = GL_POINTS;
+
+  if(context->rasterizer_currently_bound)
+  {
+    const ogl::rasterizer_desc *rasterizer_desc(
+      &context->rasterizer_descs[context->rasterizer_last_bind]
+    );
+
+    primitive = rasterizer_desc->primitive;
+  }
+
+  glDrawArrays(primitive, cmd->from, cmd->to);
 }
 
 

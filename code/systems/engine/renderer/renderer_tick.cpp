@@ -34,10 +34,18 @@
 #include <core/transform/transform.hpp>
 
 
+#include <op/op.hpp>
+
+
 namespace
 {
   Graphics_api::Context gfx_context;
   Graphics_api::Buffer gfx_buffer(&gfx_context);
+  
+  opContext *graphic_context;
+  
+  opBuffer *general_buffer;
+  opBuffer *debug_line_buffer;
 }
 
 
@@ -51,7 +59,25 @@ initialize()
 //  Graphics_api::command_buffer_create(&m_impl->graphcis_command_buffer, 1 << 17);
   
 //  Simple_renderer::initialize(); // TODO: This can be removed I think, largely superceded by mat renderer
-  Debug_line_renderer::initialize(&gfx_context);
+//  Debug_line_renderer::initialize(&gfx_context);
+
+  // Setup opBuffer
+  {
+    graphic_context   = opContextCreate();
+    general_buffer    = opBufferCreate();
+    debug_line_buffer = opBufferCreate();
+  }
+  
+  // Setup Context
+  
+  
+  opBufferDeviceCreate(graphic_context, general_buffer);
+  opBufferDeviceReset(general_buffer);
+  opBufferExec(graphic_context, general_buffer);
+  
+  opBufferDeviceCreate(graphic_context, debug_line_buffer);
+
+  Debug_line_renderer::initialize(graphic_context, debug_line_buffer);
   Aabb_renderer::initialize();
   
   ::Text_renderer::initialize();

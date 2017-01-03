@@ -609,6 +609,18 @@ opBufferRender(opBuffer *buf)
 }
 
 
+void
+opBufferRenderSubset(opBuffer *buf, const uint32_t start, const uint32_t end)
+{
+
+  op::command::cmd_render_subset cmd{};
+  cmd.from = start;
+  cmd.to   = end;
+  
+  buf->data.write_data((void*)&cmd, sizeof(cmd));
+}
+
+
 // -- Misc -- //
 
 

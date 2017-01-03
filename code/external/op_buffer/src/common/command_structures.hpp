@@ -250,6 +250,14 @@ struct cmd_render_generic {
 };
 
 
+struct cmd_render_subset {
+  uint8_t id = command::RENDER_SUBSET;
+  uint8_t size = sizeof(cmd_render_generic);
+  uint32_t from;
+  uint32_t to;
+};
+
+
 // -- Misc -- //
 
 struct cmd_viewport_bind {

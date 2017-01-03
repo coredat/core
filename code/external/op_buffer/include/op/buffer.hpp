@@ -75,7 +75,7 @@ void        opBufferRasterizerBind(opBuffer *buf, const opID id);
             // -- Render -- //
 
 void        opBufferRender(opBuffer *buf);
-void        opBufferRenderSubset(opBuffer *buf);
+void        opBufferRenderSubset(opBuffer *buf, const uint32_t start_vert, const uint32_t end_vert);
 
             // -- Misc -- //
 

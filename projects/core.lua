@@ -32,6 +32,7 @@ core_project_data = {
     make.get_proj_root() .. "../code/external/math/",
     make.get_proj_root() .. "../code/external/graphics_api/",
     make.get_proj_root() .. "../code/external/utilities/",
+    make.get_proj_root() .. "../code/external/op_buffer/include/",
     make.get_proj_root() .. "../3rdparty/sdl_mixer/include/",
     make.get_proj_root() .. "../3rdparty/sdl/include/",
     make.get_proj_root() .. "../3rdparty/glew/include/",
