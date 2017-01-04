@@ -1,53 +1,51 @@
 #include "debug_line_renderer.hpp"
-#include <graphics_api/ogl/ogl_common.hpp>
-#include <graphics_api/ogl/ogl_texture.hpp>
-#include <graphics_api/ogl/ogl_shader.hpp>
-#include <graphics_api/ogl/ogl_shader_uniform.hpp>
-#include <graphics_api/ogl/ogl_pixel_format.hpp>
-#include <graphics_api/pixel_format.hpp>
-#include <graphics_api/ogl/ogl_texture_filtering.hpp>
-#include <graphics_api/utils/shader_utils.hpp>
 #include <utilities/directory.hpp>
 #include <utilities/file.hpp>
-#include <algorithm>
+#include <utilities/string_helpers.hpp>
+#include <math/general/general.hpp>
 #include <assert.h>
 #include <stddef.h>
-
-
-#include <graphics_api/vertex_format.hpp>
-#include <graphics_api/uniform.hpp>
-#include <graphics_api/shader.hpp>
-
-#include <graphics_api/context.hpp>
-#include <graphics_api/buffer.hpp>
-#include <graphics_api/shader_desc.hpp>
 
 #include <op/op.hpp>
 
 
 namespace
 {
-  Ogl::Shader debug_line_shader;
-  Ogl::Uniform uni_wvp;
-  
   constexpr uint32_t number_of_lines = 32;
-  constexpr uint32_t number_of_components = 3;
-  constexpr uint32_t line_uniform_max = number_of_lines * number_of_components; // 64 lines, 3 components per line (start, end, color)
-  GLint uni_line[line_uniform_max];
+  constexpr uint32_t number_of_components = 3 * 3; // vec3 * (pos + pos + color)
   
-  constexpr uint32_t size_of_data_buffer = (1 << 20) * number_of_components; // Some big size * number of components (start, end, color)
-  float data[size_of_data_buffer];
+  // We render in batches of 'number_of_lines' so this can be quite big.
+  constexpr uint32_t size_of_data_buffer = (1 << 20) * number_of_components;
   
-  uint32_t data_ptr = 0; // Keeps a track of the data that we push in.
+  float line_data_01[size_of_data_buffer];
+  size_t line_count_01 = 0;
+  
+  float line_data_02[size_of_data_buffer];
+  size_t line_count_02 = 0;
+  
+  float *curr_line_data = nullptr;
+  size_t *curr_line_count = nullptr;
+  
+  uint32_t curr_line_counter = 0;
   
   opID line_shader_id;
   opID line_shader_wvp_id;
-  opID line_shader_data_id[line_uniform_max];
+  opID line_shader_data_id;
   opID line_rasterizer_id;
   
   // Temp Hack
   opContext *temp_ctx;
   opBuffer *temp_buffer;
+  
+  inline void
+  flip_line_data()
+  {
+    curr_line_data   = curr_line_counter % 2 ? line_data_02 : line_data_01;
+    curr_line_count  = curr_line_counter % 2 ? &line_count_02 : &line_count_01;
+    *curr_line_count = 0;
+    
+    ++curr_line_counter;
+  }
 }
 
 
@@ -55,25 +53,44 @@ namespace Debug_line_renderer {
 
 
 void
-//initialize(Graphics_api::Context *ctx)
 initialize(opContext *ctx, opBuffer *buf)
 {
   temp_ctx = ctx;
   temp_buffer = buf;
-
-  Ogl::error_clear();
+  
+  flip_line_data();
 
   char debug_lines_shd_path[MAX_FILE_PATH_SIZE];
-  memset(debug_lines_shd_path, 0, sizeof(debug_lines_shd_path));
+  {
+    memset(debug_lines_shd_path, 0, sizeof(debug_lines_shd_path));
+    strcat(debug_lines_shd_path, util::dir::resource_path());
+    strcat(debug_lines_shd_path, "assets/shaders/debug_line.ogl");
+  }
   
-  strcat(debug_lines_shd_path, util::dir::resource_path());
-  strcat(debug_lines_shd_path, "assets/shaders/debug_line.ogl");
+  char shader_code[2048];
+  {
+    memset(shader_code, 0, sizeof(shader_code));
+    util::file::get_contents_from_file(debug_lines_shd_path, shader_code, sizeof(shader_code));
+  }
   
-  auto debug_code = Graphics_api::Util::shader_code_from_tagged_file(debug_lines_shd_path);
+  char vs_code[1024];
+  {
+    memset(vs_code, 0, sizeof(vs_code));
+    util::get_text_between_tags("[VERTEX]", "[/VERTEX]", shader_code, vs_code, sizeof(vs_code));
+  }
+
+  char gs_code[1024];
+  {
+    memset(gs_code, 0, sizeof(gs_code));
+    util::get_text_between_tags("[GEOMETRY]", "[/GEOMETRY]", shader_code, gs_code, sizeof(gs_code));
+  }
   
+  char fs_code[1024];
+  {
+    memset(fs_code, 0, sizeof(fs_code));
+    util::get_text_between_tags("[PIXEL]", "[/PIXEL]", shader_code, fs_code, sizeof(fs_code));
+  }
   
-//  Graphics_api::Shader_desc shd_desc;
-//  ctx->shader_create(&shd_desc, debug_lines_shd_path);
   
   opShaderDesc shader_desc;
   
@@ -81,16 +98,12 @@ initialize(opContext *ctx, opBuffer *buf)
     ctx,
     buf,
     "Debug Line Shader",
-    debug_code.vs_code.c_str(),
-    debug_code.gs_code.c_str(),
-    debug_code.ps_code.c_str(),
+    vs_code,
+    gs_code,
+    fs_code,
     &shader_desc
   );
   
-//  Ogl::shader_create(&debug_line_shader, debug_code.vs_code.c_str(), debug_code.gs_code.c_str(), debug_code.ps_code.c_str());
-//  assert(Ogl::shader_is_valid(&debug_line_shader));
-//  
-//  debug_line_shader.program_id = shd_desc.platform_handle;
 
   opShaderDataDesc shader_data_desc;
   
@@ -101,29 +114,19 @@ initialize(opContext *ctx, opBuffer *buf)
     "uni_wvp_mat",
     &shader_data_desc
   );
-  
-  char name_buffer[128];
-  
-  for(uint32_t i = 0; i < line_uniform_max; ++i)
-  {
-    opShaderDataDesc shader_data_line_data;
-    
-    memset(name_buffer, 0, sizeof(name_buffer));
-    sprintf(name_buffer, "uni_line[%d]", i);
-    
-    line_shader_data_id[i] = opBufferShaderDataCreate(
-      ctx,
-      buf,
-      line_shader_id,
-      name_buffer,
-      &shader_data_line_data
-    );
-    
-    opBufferExec(ctx, buf); // We needed todo this because we can't hold on to  all the uniform names.
-  }
-  
+
+  opShaderDataDesc shader_data_line_data_desc;
+
+  line_shader_data_id = opBufferShaderDataCreate(
+    ctx,
+    buf,
+    line_shader_id,
+    "uni_line[0]",
+    &shader_data_line_data_desc
+  );
+
   opRasterizerDesc line_rasterizer_desc;
-  line_rasterizer_desc.cull_face     = opCullFace_NONE;
+  line_rasterizer_desc.cull_face     = opCullFace_BACK;
   line_rasterizer_desc.primitive     = opPrimitive_POINT;
   line_rasterizer_desc.winding_order = opWindingOrder_CCW;
   
@@ -133,52 +136,29 @@ initialize(opContext *ctx, opBuffer *buf)
     &line_rasterizer_desc
   );
   
+  // Build the resources.
   opBufferExec(ctx, buf);
-
-//  if(Ogl::shader_is_valid(&debug_line_shader))
-//  {
-//    Ogl::Shader_uniforms uniforms;
-//    Ogl::shader_uniforms_retrive(&uniforms, &debug_line_shader);
-//    Ogl::shader_uniforms_get_uniform_index(&uni_wvp, &uniforms, "uni_wvp_mat");
-//  
-//    for(uint32_t i = 0; i < line_uniform_max; ++i)
-//    {
-//      const std::string uni_name = "uni_line[" + std::to_string(i) + "]";
-//      uni_line[i] = glGetUniformLocation(debug_line_shader.program_id, uni_name.c_str());
-//    }
-//  }
-  
-  const GLenum err_code = glGetError();
-  if(err_code != GL_NO_ERROR)
-  {
-    LOG_GL_ERROR(err_code, "Setting up debug line renderer");
-  }
 }
 
 
 void
 add_lines(const Line_node nodes[], const std::uint32_t number_of_lines)
 {
-  // Shit - can do two memcpy's instead
   for(int32_t i = 0; i < number_of_lines; ++i)
   {
-    if(data_ptr >= size_of_data_buffer)
+    constexpr uint32_t maximum_lines = size_of_data_buffer / number_of_components;
+  
+    if(*curr_line_count >= maximum_lines)
     {
-     // assert(false); // trying to render more lines than we have capacity for.
+      // trying to render more lines than we have capacity for
+      assert(false);
       return;
     }
     
-    data[data_ptr++] = nodes[i].position_from[0];
-    data[data_ptr++] = nodes[i].position_from[1];
-    data[data_ptr++] = nodes[i].position_from[2];
+    const size_t ptr = *curr_line_count * number_of_components;
+    memcpy(&curr_line_data[ptr + 0], &nodes[i], sizeof(float) * number_of_components);
     
-    data[data_ptr++] = nodes[i].position_to[0];
-    data[data_ptr++] = nodes[i].position_to[1];
-    data[data_ptr++] = nodes[i].position_to[2];
-    
-    data[data_ptr++] = nodes[i].color[0];
-    data[data_ptr++] = nodes[i].color[1];
-    data[data_ptr++] = nodes[i].color[2];
+    *curr_line_count += 1;
   }
 }
 
@@ -186,57 +166,33 @@ add_lines(const Line_node nodes[], const std::uint32_t number_of_lines)
 void
 render(const float wvp_mat[16])
 {
-  opBuffer *buf = temp_buffer;
+  // These args should be sunk into here.
+  opBuffer *buf  = temp_buffer;
   opContext *ctx = temp_ctx;
 
+  opBufferDeviceReset(buf);
   opBufferShaderBind(buf, line_shader_id);
   opBufferRasterizerBind(buf, line_rasterizer_id);
-  opBufferShaderDataBind(buf, line_shader_wvp_id, &wvp_mat);
-
-  const uint32_t number_to_batch = (data_ptr / number_of_lines) + 1;
+  opBufferShaderDataBind(buf, line_shader_wvp_id, (void*)wvp_mat);
   
-  // Render
-//  Ogl::default_state();
+  uint32_t count = 0;
   
-  uint32_t data_get = 0; // counter to how many we have already draw from the buffer.
-  
-  //glUseProgram(debug_line_shader.program_id);
-//  Ogl::shader_bind(&debug_line_shader);
-//  Ogl::shader_uniforms_apply(uni_wvp, (void*)wvp_mat);
-  
-  for(uint32_t b = 0; b < number_to_batch; ++b)
+  while(*curr_line_count > 0)
   {
-    for(uint32_t l = 0; l < std::min<uint32_t>(number_of_lines, data_ptr); ++l)
-    {
-      const uint32_t uni = l * number_of_components;
-      
-      // TODO: If I stored the info in a 3x3 matrix would uploading be quicker?
-      opBufferShaderDataBind(buf, line_shader_data_id[uni + 0], &data[data_get + 0]);
-      opBufferShaderDataBind(buf, line_shader_data_id[uni + 1], &data[data_get + 3]);
-      opBufferShaderDataBind(buf, line_shader_data_id[uni + 2], &data[data_get + 6]);
-      
-//      glUniform3f(uni_line[uni + 0], data[data_get+ 0], data[data_get+ 1], data[data_get+2]);
-//      glUniform3f(uni_line[uni + 1], data[data_get+ 3], data[data_get+ 4], data[data_get+5]);
-//      glUniform3f(uni_line[uni + 2], data[data_get+ 6], data[data_get+ 7], data[data_get+8]);
-      
-      data_get += number_of_components * 3; // * 3 because we are doing 3 at a time.
-      data_ptr -= (number_of_components * 3);
-    }
+    uint32_t size = math::min(*curr_line_count, number_of_lines);
+  
+    opBufferShaderDataBind(buf, line_shader_data_id, (void*)&curr_line_data[count * number_of_components]);
+    opBufferRenderSubset(buf, 0, size);
     
-    
-//    glDrawArrays(GL_POINTS, 0, static_cast<GLsizei>(line_uniform_max));
-
-    opBufferRenderSubset(buf, 0, line_uniform_max);
-    opBufferExec(ctx, buf);
+    count += size;
+    *curr_line_count -= size;
   }
   
-  assert(data_ptr == 0); // We need to have drawn all the lines, if not somethings out of sync.
+  opBufferExec(ctx, buf);
+  
+  // This is double buffered because we woiuld like to defer the render beyond this function if we can.
+  flip_line_data();
+}
 
-  const GLenum err_code = glGetError();
-  if(err_code != GL_NO_ERROR)
-  {
-    LOG_GL_ERROR(err_code, "Rendering debug lines");
-  }}
-
-
+  
 } // ns

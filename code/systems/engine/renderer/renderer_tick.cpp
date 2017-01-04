@@ -63,6 +63,29 @@ initialize()
 
   // Setup opBuffer
   {
+  // -- Setup Buffer -- //
+  static uint32_t alloc_count = 0;
+
+  opCallbackAlloc([](size_t requested_size, uintptr_t user_data)
+  {
+    *reinterpret_cast<uint32_t*>(user_data) += 1;
+    return malloc(requested_size);
+  });
+
+  opCallbackResize([](size_t requested_size, void *old_data, uintptr_t user_data)
+  {
+    *reinterpret_cast<uint32_t*>(user_data) += 1;
+    return realloc(old_data, requested_size);
+  });
+
+  opCallbackDestroy([](void *data, uintptr_t user_data)
+  {
+    *reinterpret_cast<uint32_t*>(user_data) += 1;
+    free(data);
+  });
+
+  opCallbackUserData((uintptr_t)&alloc_count);
+  
     graphic_context   = opContextCreate();
     general_buffer    = opBufferCreate();
     debug_line_buffer = opBufferCreate();
