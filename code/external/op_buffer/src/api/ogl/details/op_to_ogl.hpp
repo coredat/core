@@ -260,8 +260,37 @@ element_count(const uint8_t element)
     case(opType_INT2):      return 2;
     case(opType_INT3):      return 3;
     case(opType_INT4):      return 4;
+    
+    case(opType_MAT2):      return 4;
+    case(opType_MAT3):      return 9;
+    case(opType_MAT4):      return 16;
 
     default:         return 0;
+  }
+}
+
+
+constexpr uint8_t
+ogl_type_to_op(const GLenum type)
+{
+  switch(type)
+  {
+    case(GL_FLOAT):           return opType_FLOAT;
+    case(GL_FLOAT_VEC2):      return opType_FLOAT2;
+    case(GL_FLOAT_VEC3):      return opType_FLOAT3;
+    case(GL_FLOAT_VEC4):      return opType_FLOAT4;
+
+    case(GL_INT):             return opType_INT;
+    case(GL_INT_VEC2):        return opType_INT2;
+    case(GL_INT_VEC3):        return opType_INT3;
+    case(GL_INT_VEC4):        return opType_INT4;
+    
+    case(GL_FLOAT_MAT2):      return opType_MAT2;
+    case(GL_FLOAT_MAT3):      return opType_MAT3;
+    case(GL_FLOAT_MAT4):      return opType_MAT4;
+  
+    default:
+      return 0;
   }
 }
 

@@ -75,5 +75,16 @@ void        opBufferRenderSubset(opBuffer *buf, const uint32_t start_vert, const
 
 void        opBufferViewport(opBuffer *buf, const size_t start_x, const size_t start_y, const size_t end_x, const size_t end_y);
 
+            // -- Debug -- //
+
+void        opBufferDebugMarkerPush(opBuffer *buf, const char *name);
+void        opBufferDebugMarkerPop(opBuffer *buf);
+
+            // -- Benchmark -- //
+
+opID        opBufferBenchmarkCreate(opContext *ctx, opBuffer *buf, void *desc);
+void        opBufferBenchmarkStart(opBuffer *buf, const opID id);
+void        opBufferBenchmarkEnd(opBuffer *buf, const opID id);
+
 
 #endif // inc guard

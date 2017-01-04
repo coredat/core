@@ -101,7 +101,7 @@ rasterizer_bind(context_data *context, void *data)
   if(context->rasterizer_currently_bound &&
      context->rasterizer_last_bind == cmd->rasterizer_id)
   {
-    return;
+//    return;
   }
 
   context->rasterizer_currently_bound = true;
