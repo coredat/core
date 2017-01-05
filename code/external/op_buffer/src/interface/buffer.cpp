@@ -620,6 +620,7 @@ opBufferRender(opBuffer *buf)
 void
 opBufferRenderSubset(opBuffer *buf, const uint32_t start, const uint32_t end)
 {
+  assert(buf);
 
   op::command::cmd_render_subset cmd {};
   cmd.from = start;
@@ -647,6 +648,34 @@ opBufferViewport(opBuffer *buf,
   cmd.start_y = start_y;
   cmd.end_x   = end_x;
   cmd.end_y   = end_y;
+
+  buf->data.write_data((void*)&cmd, sizeof(cmd));
+}
+
+
+// -- Debug -- //
+
+void
+opBufferDebugMarkerPush(opBuffer *buf, const char *name)
+{
+  // -- Param Check -- //
+  assert(buf);
+
+  op::command::cmd_debug_marker_push cmd {};
+
+  cmd.name = name;
+
+  buf->data.write_data((void*)&cmd, sizeof(cmd));
+}
+
+
+void
+opBufferDebugMarkerPop(opBuffer *buf)
+{
+  // -- Param Check -- //
+  assert(buf);
+
+  op::command::cmd_debug_marker_pop cmd {};
 
   buf->data.write_data((void*)&cmd, sizeof(cmd));
 }

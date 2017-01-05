@@ -111,6 +111,11 @@ enum ENUM : uint8_t
 
   VIEWPORT_BIND,
 
+  // -- Debug -- //
+
+  DEBUG_MARKER_PUSH,
+  DEBUG_MARKER_POP,
+
   // -- Experimental -- //
 
   BENCHMARK_CREATE,

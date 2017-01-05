@@ -7,6 +7,7 @@
 #include "index.hpp"
 #include "render.hpp"
 #include "geometry.hpp"
+#include "debug.hpp"
 #include "device.hpp"
 #include "target.hpp"
 #include "shader.hpp"
@@ -122,6 +123,11 @@ initialize(
   // -- Misc -- //
 
   api_array[op::command::VIEWPORT_BIND] = viewport_set;
+
+  // -- Debug -- //
+
+  api_array[op::command::DEBUG_MARKER_PUSH] = debug_marker_push;
+  api_array[op::command::DEBUG_MARKER_POP]  = debug_marker_pop;
 
 }
 
