@@ -1,12 +1,20 @@
 #include "debug_line_renderer.hpp"
+#include <op/op.hpp>
+#include <math/general/general.hpp>
 #include <utilities/directory.hpp>
 #include <utilities/file.hpp>
 #include <utilities/string_helpers.hpp>
-#include <math/general/general.hpp>
+#include <utilities/logging.hpp>
 #include <assert.h>
 #include <stddef.h>
 
-#include <op/op.hpp>
+/*
+  Debug line render
+  --
+  We double buffer the line data.
+  As rendering will be executed elsewhere
+  we need to be sure the data still exists.
+*/
 
 
 namespace
@@ -18,14 +26,13 @@ namespace
   constexpr uint32_t size_of_data_buffer = (1 << 20) * number_of_components;
   
   float line_data_01[size_of_data_buffer];
-  size_t line_count_01 = 0;
-  
   float line_data_02[size_of_data_buffer];
+  
+  size_t line_count_01 = 0;
   size_t line_count_02 = 0;
   
-  float *curr_line_data = nullptr;
-  size_t *curr_line_count = nullptr;
-  
+  float *curr_line_data      = nullptr;
+  size_t *curr_line_count    = nullptr;
   uint32_t curr_line_counter = 0;
   
   opID line_shader_id;
@@ -55,6 +62,10 @@ namespace Debug_line_renderer {
 void
 initialize(opContext *ctx, opBuffer *buf)
 {
+  LOG_TODO_ONCE("Debug Lines - Heap alloc buffers");
+  LOG_TODO_ONCE("Debug Lines - One first camera will have debug lines");
+  LOG_TODO_ONCE("Debug Lines - Deal with op hack");
+
   temp_ctx = ctx;
   temp_buffer = buf;
   
@@ -64,7 +75,7 @@ initialize(opContext *ctx, opBuffer *buf)
   {
     memset(debug_lines_shd_path, 0, sizeof(debug_lines_shd_path));
     strcat(debug_lines_shd_path, util::dir::resource_path());
-    strcat(debug_lines_shd_path, "assets/shaders/debug_line.ogl");
+    strcat(debug_lines_shd_path, "assets/shaders/core_debug_line.ogl");
   }
   
   char shader_code[2048];
@@ -76,21 +87,20 @@ initialize(opContext *ctx, opBuffer *buf)
   char vs_code[1024];
   {
     memset(vs_code, 0, sizeof(vs_code));
-    util::get_text_between_tags("[VERTEX]", "[/VERTEX]", shader_code, vs_code, sizeof(vs_code));
+    util::get_text_between_tags("/* VERT_SHD */", "/* VERT_SHD */", shader_code, vs_code, sizeof(vs_code));
   }
 
   char gs_code[1024];
   {
     memset(gs_code, 0, sizeof(gs_code));
-    util::get_text_between_tags("[GEOMETRY]", "[/GEOMETRY]", shader_code, gs_code, sizeof(gs_code));
+    util::get_text_between_tags("/* GEO_SHD */", "/* GEO_SHD */", shader_code, gs_code, sizeof(gs_code));
   }
   
   char fs_code[1024];
   {
     memset(fs_code, 0, sizeof(fs_code));
-    util::get_text_between_tags("[PIXEL]", "[/PIXEL]", shader_code, fs_code, sizeof(fs_code));
+    util::get_text_between_tags("/* FRAG_SHD */", "/* FRAG_SHD */", shader_code, fs_code, sizeof(fs_code));
   }
-  
   
   opShaderDesc shader_desc;
   
@@ -166,32 +176,35 @@ add_lines(const Line_node nodes[], const std::uint32_t number_of_lines)
 void
 render(const float wvp_mat[16])
 {
-  // These args should be sunk into here.
-  opBuffer *buf  = temp_buffer;
-  opContext *ctx = temp_ctx;
-
-  opBufferDeviceReset(buf);
-  opBufferShaderBind(buf, line_shader_id);
-  opBufferRasterizerBind(buf, line_rasterizer_id);
-  opBufferShaderDataBind(buf, line_shader_wvp_id, (void*)wvp_mat);
-  
-  uint32_t count = 0;
-  
-  while(*curr_line_count > 0)
+  if(*curr_line_count > 0)
   {
-    uint32_t size = math::min(*curr_line_count, number_of_lines);
-  
-    opBufferShaderDataBind(buf, line_shader_data_id, (void*)&curr_line_data[count * number_of_components]);
-    opBufferRenderSubset(buf, 0, size);
+    // These args should be sunk into here.
+    opBuffer *buf  = temp_buffer;
+    opContext *ctx = temp_ctx;
+
+    opBufferDeviceReset(buf);
+    opBufferShaderBind(buf, line_shader_id);
+    opBufferRasterizerBind(buf, line_rasterizer_id);
+    opBufferShaderDataBind(buf, line_shader_wvp_id, (void*)wvp_mat);
     
-    count += size;
-    *curr_line_count -= size;
+    uint32_t count = 0;
+    
+    while(*curr_line_count > 0)
+    {
+      uint32_t size = math::min(*curr_line_count, number_of_lines);
+    
+      opBufferShaderDataBind(buf, line_shader_data_id, (void*)&curr_line_data[count * number_of_components]);
+      opBufferRenderSubset(buf, 0, size);
+      
+      count += size;
+      *curr_line_count -= size;
+    }
+    
+    opBufferExec(ctx, buf);
+    
+    // This is double buffered because we woiuld like to defer the render beyond this function if we can.
+    flip_line_data();
   }
-  
-  opBufferExec(ctx, buf);
-  
-  // This is double buffered because we woiuld like to defer the render beyond this function if we can.
-  flip_line_data();
 }
 
   

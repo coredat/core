@@ -3,6 +3,7 @@
 
 
 #include <data/fwd_dec_data.hpp>
+#include <op/fwd.hpp>
 #include <memory>
 
 
@@ -25,10 +26,14 @@ struct Context
   Text_mesh_data      *text_mesh_data     = nullptr;
   Texture_data        *texture_data       = nullptr;
   
-  Context(const Context&) = delete;
-  Context& operator=(const Context&) = delete;
+  opContext           *op_context         = nullptr;
+  opBuffer            *op_buffer          = nullptr;
+  
+  Context(const Context&)                 = delete;
+  Context& operator=(const Context&)      = delete;
   
   explicit Context(const Context_data_setup &setup);
+  
   ~Context();
 };
 

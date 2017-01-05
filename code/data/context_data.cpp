@@ -7,12 +7,15 @@
 #include <data/context/shader_data.hpp>
 #include <data/context/text_mesh_data.hpp>
 #include <data/context/texture_data.hpp>
+#include <op/op.hpp>
 #include <utilities/logging.hpp>
 
 
 namespace {
 
+
 std::shared_ptr<Data::Context> context_data;
+
 
 } // anon ns
 
@@ -55,6 +58,9 @@ Context::Context(const Context_data_setup &setup)
   static Data::Font_glyph_data glyphs;
   Data::font_glyph_create(&glyphs, 2048);
   this->font_glyph_data = &glyphs;
+  
+  op_context = opContextCreate();
+  op_buffer  = opBufferCreate();
 }
 
 

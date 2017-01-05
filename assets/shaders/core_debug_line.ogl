@@ -1,9 +1,12 @@
 
-Debug line shader
---
-Renders lines via the geometry shader.
+/*
+  Debug line shader
+  --
+  Renders lines via the geometry shader.
+*/
 
-[VERTEX]
+/* VERT_SHD */
+
 #version 150 core
 
 /*
@@ -11,16 +14,21 @@ Renders lines via the geometry shader.
 */
 out int gs_in_vert_id;
 
+/*
+  Program
+*/
 void
 main()
 {
   gs_in_vert_id = gl_VertexID;
 }
-[/VERTEX]
 
+/* VERT_SHD */
 
+//====================================================================//
 
-[GEOMETRY]
+/* GEO_SHD */
+
 #version 330
 
 #define NUM_LINES 32
@@ -60,9 +68,9 @@ main()
   int end   = id + 1;
   int color = id + 2;
 
-  ps_in_color = uni_line[color];
-
   // Generate the primitive //
+
+  ps_in_color = uni_line[color];
 
   gl_Position = uni_wvp_mat * vec4(uni_line[start], 1);
   EmitVertex();
@@ -72,11 +80,13 @@ main()
 
   EndPrimitive();
 }
-[/GEOMETRY]
 
+/* GEO_SHD */
 
+//====================================================================//
 
-[PIXEL]
+/* FRAG_SHD */
+
 #version 150
 
 
@@ -100,4 +110,5 @@ main()
 {
   ps_out_color = vec4(ps_in_color, 1.0);
 }
-[/PIXEL]
+
+/* FRAG_SHD */

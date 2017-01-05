@@ -46,6 +46,7 @@ namespace
   
   opBuffer *general_buffer;
   opBuffer *debug_line_buffer;
+  opBuffer *text_buffer;
 }
 
 
@@ -89,6 +90,7 @@ initialize()
     graphic_context   = opContextCreate();
     general_buffer    = opBufferCreate();
     debug_line_buffer = opBufferCreate();
+    text_buffer       = opBufferCreate();
   }
   
   // Setup Context
@@ -103,7 +105,7 @@ initialize()
   Debug_line_renderer::initialize(graphic_context, debug_line_buffer);
   Aabb_renderer::initialize();
   
-  ::Text_renderer::initialize();
+  ::Text_renderer::initialize(graphic_context, text_buffer);
   ::Material_renderer::initialize();
   ::Post_renderer::initialize();
   
@@ -297,7 +299,7 @@ think(std::shared_ptr<Data::World> world,
     
     glViewport(0, 0, width, height);
 
-    ::Text_renderer::render(view_proj, -1, world->text_data->field_draw_call, world->text_data->size);
+    ::Text_renderer::render(view_proj, -1, world->text_data->field_draw_call, world->text_data->size, graphic_context, text_buffer);
   }
   
   out_tick_info->number_of_draw_calls = number_of_draw_calls;
