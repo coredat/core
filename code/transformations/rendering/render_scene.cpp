@@ -110,10 +110,10 @@ render_main_scene(const float delta_time,
       {
         LOG_TODO_ONCE("Complete hack! Draw calls need to be revisited, will deal with this then.");
       
-        number_of_draw_calls += Text_renderer::render(view_proj,
-                                                      cam->cull_mask,
-                                                      world->text_data->field_draw_call,
-                                                      world->text_data->size);
+//        number_of_draw_calls += Text_renderer::render(view_proj,
+//                                                      cam->cull_mask,
+//                                                      world->text_data->field_draw_call,
+//                                                      world->text_data->size);
       }
       
       math::mat4 wvp = math::mat4_multiply(cam->view, cam->proj);

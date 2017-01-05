@@ -12,6 +12,7 @@
 #include <math/math.hpp>
 #include <utilities/logging.hpp>
 #include <utilities/string_helpers.hpp>
+#include <op/op.hpp>
 #include <stdio.h>
 
 
@@ -278,7 +279,9 @@ create_string_data(const util::generic_id this_id,
                    Data::Texture_data *texture_data,
                    Data::Text_draw_call_data *text_draw_call,
                    Data::Transform_data *transform_data,
-                   Data::Entity_data *entity_data)
+                   Data::Entity_data *entity_data,
+                   opContext *ctx,
+                   opBuffer *buf)
 {
   // Generate the string data
   Data::data_lock(font_data);
@@ -323,10 +326,10 @@ create_string_data(const util::generic_id this_id,
       }
     }
     
-
-    
-    Ogl::Texture glyph_texture;
-    Ogl::Texture glyph_metrics_texture;
+//    Ogl::Texture glyph_texture;
+//    Ogl::Texture glyph_metrics_texture;
+    opID glyph_texture;
+    opID glyph_metrics_texture;
     stbtt_fontinfo info;
     {
       uint32_t texture_id = 0;
@@ -336,8 +339,8 @@ create_string_data(const util::generic_id this_id,
       Data::font_get_glyph_texture_id(font_data, font_id, &texture_id);
       Data::font_get_metric_texture_id(font_data, font_id, &glyph_metrics_texture_id);
       
-      Data::texture_get_texture(texture_data, texture_id, &glyph_texture);
-      Data::texture_get_texture(texture_data, glyph_metrics_texture_id, &glyph_metrics_texture);
+//      Data::texture_get_texture(texture_data, texture_id, &glyph_texture);
+//      Data::texture_get_texture(texture_data, glyph_metrics_texture_id, &glyph_metrics_texture);
     }
     
     const math::transform transform = Entity_detail::get_transform(this_id, entity_data, transform_data);
@@ -351,15 +354,23 @@ create_string_data(const util::generic_id this_id,
     
     if(Data::text_draw_call_exists(text_draw_call, this_id))
     {
-      Ogl::Texture string_texture;
-      Ogl::texture_create_1d(&string_texture, sizeof(float) * data_ptr, GL_RGB32F, &str_tex_data);
+      opTextureDesc desc;
+      desc.format = opPixelFormat_RGB32F;
+      desc.dimention = opDimention_ONE;
+      desc.width = data_ptr;
+      
+      const opID str_text_id = opBufferTextureCreate(ctx, buf, &str_tex_data, &desc);
+      opBufferExec(ctx, buf);
+    
+//      Ogl::Texture string_texture;
+//      Ogl::texture_create_1d(&string_texture, sizeof(float) * data_ptr, GL_RGB32F, &str_tex_data);
     
       ::Text_renderer::Draw_call dc;
       memcpy(dc.world_matrix, &world_mat, sizeof(world_mat));
       
       dc.texture       = glyph_texture;
       dc.glyph_metrics = glyph_metrics_texture;
-      dc.string_info   = string_texture;
+      dc.string_info   = str_text_id;
       dc.string_size   = strlen(glyph_arr);
 
       Data::text_draw_call_set_draw_call(text_draw_call, this_id, &dc);

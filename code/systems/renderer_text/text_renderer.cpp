@@ -41,10 +41,11 @@ initialize(opContext *ctx, opBuffer *buf)
     strcat(core_text_shd_path, "assets/shaders/core_text.ogl");
   }
   
-  char shader_code[2048];
+  char shader_code[1 << 12];
   {
     memset(shader_code, 0, sizeof(shader_code));
     util::file::get_contents_from_file(core_text_shd_path, shader_code, sizeof(shader_code));
+    assert(strlen(shader_code));
   }
   
   char vs_code[1024];
@@ -145,7 +146,7 @@ render(const math::mat4 &view_proj_mat,
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   
   opBufferRasterizerBind(buf, text_rasterizer);
-  opBufferShaderBind(buf, text_rasterizer);
+  opBufferShaderBind(buf, text_shader);
   
   for(uint32_t i = 0; i < number_of_calls; ++i)
   {

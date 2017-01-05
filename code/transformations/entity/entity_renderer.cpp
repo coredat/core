@@ -417,7 +417,9 @@ set_renderer_text(const util::generic_id this_id,
                                     texture_data,
                                     text_data,
                                     transform_data,
-                                    entity_data);
+                                    entity_data,
+                                    resources->op_context,
+                                    resources->op_buffer);
 
 }
 

@@ -46,20 +46,71 @@ texture_create(context_data *context, void *data)
     const GLenum format         = op_pixel_format_to_format(cmd->desc->format);
     const GLenum type           = op_pixel_format_to_type(cmd->desc->format);
 
-    glBindTexture(GL_TEXTURE_2D, texture);
-    glTexImage2D(GL_TEXTURE_2D,
-                 0,
-                 internal_format,
-                 width,
-                 height,
-                 0,
-                 format,
-                 type,
-                 cmd->data);
-
-    if(cmd->desc->mips)
+    switch(cmd->desc->dimention)
     {
-      glGenerateMipmap(GL_TEXTURE_2D);
+      case(opDimention_ONE):
+      {
+        glBindTexture(GL_TEXTURE_1D, texture);
+        glTexImage1D(GL_TEXTURE_1D,
+                     0,
+                     internal_format,
+                     width,
+                     0,
+                     format,
+                     type,
+                     cmd->data);
+            
+        if(cmd->desc->mips)
+        {
+          glGenerateMipmap(GL_TEXTURE_1D);
+        }
+        
+        break;
+      }
+    
+      case(opDimention_TWO):
+      {
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glTexImage2D(GL_TEXTURE_2D,
+                     0,
+                     internal_format,
+                     width,
+                     height,
+                     0,
+                     format,
+                     type,
+                     cmd->data);
+            
+        if(cmd->desc->mips)
+        {
+          glGenerateMipmap(GL_TEXTURE_2D);
+        }
+        
+        break;
+      }
+      
+      
+      case(opDimention_THREE):
+      {
+        glBindTexture(GL_TEXTURE_3D, texture);
+        glTexImage3D(GL_TEXTURE_3D,
+                     0,
+                     internal_format,
+                     width,
+                     height,
+                     depth,
+                     0,
+                     format,
+                     type,
+                     cmd->data);
+            
+        if(cmd->desc->mips)
+        {
+          glGenerateMipmap(GL_TEXTURE_3D);
+        }
+        
+        break;
+      }
     }
 
     // Update internal format
@@ -68,7 +119,7 @@ texture_create(context_data *context, void *data)
     internal_desc->texture_id      = texture;
     internal_desc->width           = width;
     internal_desc->height          = height;
-    internal_desc->depth           = 0;
+    internal_desc->depth           = depth;
 
     // -- Extra Logging -- //
     #ifdef OP_BUFFER_LOG_INFO

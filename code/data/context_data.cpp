@@ -59,6 +59,29 @@ Context::Context(const Context_data_setup &setup)
   Data::font_glyph_create(&glyphs, 2048);
   this->font_glyph_data = &glyphs;
   
+   // -- Setup Buffer -- //
+  static uint32_t alloc_count = 0;
+
+  opCallbackAlloc([](size_t requested_size, uintptr_t user_data)
+  {
+    *reinterpret_cast<uint32_t*>(user_data) += 1;
+    return malloc(requested_size);
+  });
+
+  opCallbackResize([](size_t requested_size, void *old_data, uintptr_t user_data)
+  {
+    *reinterpret_cast<uint32_t*>(user_data) += 1;
+    return realloc(old_data, requested_size);
+  });
+
+  opCallbackDestroy([](void *data, uintptr_t user_data)
+  {
+    *reinterpret_cast<uint32_t*>(user_data) += 1;
+    free(data);
+  });
+
+  opCallbackUserData((uintptr_t)&alloc_count); 
+  
   op_context = opContextCreate();
   op_buffer  = opBufferCreate();
 }
