@@ -179,6 +179,33 @@ op_pixel_format_to_type(const uint8_t format)
 
 
 /*
+  Texture Dimention
+*/
+inline GLenum
+op_dimention_to_texture(const uint8_t dimention)
+{
+  switch(dimention)
+  {
+    #ifdef OGL_HAS_TEXTURE_1D
+    case(opDimention_ONE):      return GL_TEXTURE_1D;
+    #else
+    case(opDimention_ONE):      return GL_TEXTURE_2D;
+    #endif
+
+    case(opDimention_TWO):      return GL_TEXTURE_2D;
+
+    #ifdef OGL_HAS_TEXTURE_3D
+    case(opDimention_THREE):    return GL_TEXTURE_3D;
+    #endif
+
+    default:
+      assert(false);
+      return GL_TEXTURE_2D;
+  }
+}
+
+
+/*
   Texture Filtering Wrap Mode
   CLAMP,
   REPEAT,
@@ -260,7 +287,7 @@ element_count(const uint8_t element)
     case(opType_INT2):      return 2;
     case(opType_INT3):      return 3;
     case(opType_INT4):      return 4;
-    
+
     case(opType_MAT2):      return 4;
     case(opType_MAT3):      return 9;
     case(opType_MAT4):      return 16;
@@ -284,11 +311,11 @@ ogl_type_to_op(const GLenum type)
     case(GL_INT_VEC2):        return opType_INT2;
     case(GL_INT_VEC3):        return opType_INT3;
     case(GL_INT_VEC4):        return opType_INT4;
-    
+
     case(GL_FLOAT_MAT2):      return opType_MAT2;
     case(GL_FLOAT_MAT3):      return opType_MAT3;
     case(GL_FLOAT_MAT4):      return opType_MAT4;
-  
+
     default:
       return 0;
   }

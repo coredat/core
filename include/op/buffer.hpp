@@ -54,6 +54,9 @@ void        opBufferTargetClear(opBuffer *buf, const opID id, const bool color, 
             // -- Texture -- //
 
 opID        opBufferTextureCreate(opContext *ctx, opBuffer *buf, void *data, opTextureDesc *in_out_desc);
+void        opBufferTextureUpdate(opContext *ctx, opBuffer *buf, const opID id, const size_t offset_x, const size_t width, void *data);
+void        opBufferTextureUpdate(opContext *ctx, opBuffer *buf, const opID id, const size_t offset_x, const size_t offset_y, const size_t width, const size_t height, void *data);
+void        opBufferTextureUpdate(opContext *ctx, opBuffer *buf, const opID id, const size_t offset_x, const size_t offset_y, const size_t offset_z, const size_t width, const size_t height, const size_t depth, void *data);
 void        opBufferTextureBind(opBuffer *buf, const opID id);
 
             // -- Texture Filter -- //

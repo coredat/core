@@ -115,6 +115,18 @@ struct cmd_texture_create {
   opTextureDesc *desc;
 };
 
+struct cmd_texture_update {
+  uint8_t id = command::TEXTURE_UPDATE;
+  uint8_t size = sizeof(cmd_texture_update);
+  uint32_t texture_id;
+  void *data;
+  size_t offset_x;
+  size_t offset_y;
+  size_t offset_z;
+  size_t width;
+  size_t height;
+  size_t depth;
+};
 
 struct cmd_texture_bind {
   uint8_t id = command::TEXTURE_BIND;
