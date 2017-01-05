@@ -6,6 +6,8 @@
 #include <stddef.h>
 
 
+using opID = uint32_t;
+
 // -- Callbacks -- //
 
 using allocCallback    = void*(*)(size_t requested_size, uintptr_t user_data);

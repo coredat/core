@@ -30,7 +30,7 @@ shader_data_create(context_data *context, void *data)
     &context->shader_data_descs[cmd->shader_data_id]
   );
   assert(internal_desc);
-
+  
   // Check we have a name to search for.
   if(cmd->name == nullptr || strlen(cmd->name) == 0)
   {
@@ -53,6 +53,11 @@ shader_data_create(context_data *context, void *data)
         internal_desc->index    = uni_desc->index;
         internal_desc->type     = uni_desc->type;
         internal_desc->count    = uni_desc->count;
+        
+        // Update In-out desc
+        opShaderDataDesc *in_out_desc = cmd->desc;
+        in_out_desc->count = internal_desc->count;
+        in_out_desc->data_type = ogl_type_to_op(internal_desc->type);
 
         // -- Extra Logging -- //
         #ifdef OP_BUFFER_LOG_INFO

@@ -67,7 +67,7 @@ context_data::initial_reserve()
   // Shader Data Descs //
   {
     log("Shader data desc alloc");
-    constexpr uint32_t default_shader_data_count = 64;
+    constexpr uint32_t default_shader_data_count = 512;
     resource_alloc(default_shader_data_count,
                    default_shader_data_count * sizeof(API::shader_data_desc),
                    alloc_cb,

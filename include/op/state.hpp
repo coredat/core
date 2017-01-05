@@ -69,11 +69,12 @@ constexpr uint8_t opType_INT        = 5;
 constexpr uint8_t opType_INT2       = 6;
 constexpr uint8_t opType_INT3       = 7;
 constexpr uint8_t opType_INT4       = 8;
-constexpr uint8_t opType_MAT3       = 9;
-constexpr uint8_t opType_MAT4       = 10;
-constexpr uint8_t opType_TEXTURE_1D = 11;
-constexpr uint8_t opType_TEXTURE_2D = 12;
-constexpr uint8_t opType_TEXTURE_3D = 13;
+constexpr uint8_t opType_MAT2       = 9;
+constexpr uint8_t opType_MAT3       = 10;
+constexpr uint8_t opType_MAT4       = 11;
+constexpr uint8_t opType_TEXTURE_1D = 12;
+constexpr uint8_t opType_TEXTURE_2D = 13;
+constexpr uint8_t opType_TEXTURE_3D = 14;
 
 // -- Wrap Mode -- //
 

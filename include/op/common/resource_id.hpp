@@ -3,9 +3,7 @@
 
 
 #include <stdint.h>
-
-
-using opID = uint32_t;
+#include "../fwd.hpp"
 
 
 bool      opIDIsValid(const opID id);

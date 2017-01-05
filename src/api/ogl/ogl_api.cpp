@@ -15,6 +15,7 @@
 #include "texture.hpp"
 #include "rasterizer.hpp"
 #include "texture_filter.hpp"
+#include "misc.hpp"
 #include "descs/descs.hpp"
 
 
@@ -42,7 +43,7 @@ initialize(
   api_array[op::command::NULL_CMD]        = nothing;
   api_array[op::command::SHADER_CREATE]   = shader_create;
   api_array[op::command::SHADER_BIND]     = shader_bind;
-  api_array[op::command::RENDER_GENERIC]  = render_generic;
+
 
   // -- Device -- //
 
@@ -118,8 +119,9 @@ initialize(
   api_array[op::command::RASTERIZER_DESTROY] = rasterizer_destroy;
   api_array[op::command::RASTERIZER_BIND]    = rasterizer_bind;
 
-
   // -- Misc -- //
+
+  api_array[op::command::VIEWPORT_BIND] = viewport_set;
 
 }
 

@@ -50,7 +50,8 @@ struct opTextureDesc
 struct opShaderDataDesc
 {
   uint8_t status;                 // OUT
-  uint8_t out_data_type;          // OUT
+  uint8_t data_type;              // OUT
+  uint16_t count;                 // OUT
 };
 
 
