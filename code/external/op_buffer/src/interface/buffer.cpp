@@ -387,11 +387,70 @@ opBufferTextureCreate(opContext *ctx,
     op::command::cmd_texture_create cmd {};
     cmd.data = data;
     cmd.desc = in_out_desc;
+    cmd.texture_id = op::instance_id(new_texture);
 
     buf->data.write_data((void*)&cmd, sizeof(cmd));
   }
 
   return new_texture;
+}
+
+void
+opBufferTextureUpdate(opContext *ctx,
+                      opBuffer *buf,
+                      const opID id,
+                      const size_t offset_x,
+                      const size_t width,
+                      void *data)
+{
+  opBufferTextureUpdate(ctx, buf, id, offset_x, 0, 0, width, 0, 0, data);
+}
+
+
+void
+opBufferTextureUpdate(opContext *ctx,
+                      opBuffer *buf,
+                      const opID id,
+                      const size_t offset_x,
+                      const size_t offset_y,
+                      const size_t width,
+                      const size_t height,
+                      void *data)
+{
+  opBufferTextureUpdate(ctx, buf, id, offset_x, offset_y, 0, width, height, 0, data);
+}
+
+
+void
+opBufferTextureUpdate(opContext *ctx,
+                      opBuffer *buf,
+                      const opID id,
+                      const size_t offset_x,
+                      const size_t offset_y,
+                      const size_t offset_z,
+                      const size_t width,
+                      const size_t height,
+                      const size_t depth,
+                      void *data)
+{
+  // -- Param Check -- //
+  assert(ctx);
+  assert(buf);
+
+  // Did you try bind a different resource type?
+  assert(op::type_id(id) == op::resource_type::TEXTURE);
+
+  op::command::cmd_texture_update cmd {};
+  cmd.texture_id = op::instance_id(id);
+  cmd.offset_x = offset_x;
+  cmd.offset_y = offset_y;
+  cmd.offset_z = offset_z;
+  cmd.width = width;
+  cmd.height = height;
+  cmd.depth = depth;
+  cmd.data = data;
+
+  buf->data.write_data((void*)&cmd, sizeof(cmd));
 }
 
 

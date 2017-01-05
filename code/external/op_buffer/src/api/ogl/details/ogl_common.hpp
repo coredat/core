@@ -18,9 +18,12 @@
 #define OGL_GLES2_SAMPLERS
 // #define OGL_HAS_CONTEXT_LOST_ERROR
 #else
+#define OGL_GL
 #define OGL_HAS_VAO
 #define OGL_HAS_GL_QUADS
 #define OGL_HAS_GEOMETRY_SHADER
+#define OGL_HAS_TEXTURE_1D
+#define OGL_HAS_TEXTURE_3D
 #endif
 
 
@@ -36,6 +39,9 @@
 // OGL_HAS_GL_QUADS
 // OGL_HAS_GEOMETRY_SHADER
 // OGL_HAS_CONTEXT_LOST_ERROR
+// OGL_HAS_TEXTURE_1D
+// OGL_HAS_TEXTURE_3D
+
 
 
 #endif // inc guard

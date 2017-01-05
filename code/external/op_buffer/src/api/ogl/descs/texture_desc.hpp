@@ -18,6 +18,7 @@ struct texture_desc
   GLsizei depth;
   GLenum  dimention;
   GLenum  format;
+  GLenum  type;
   GLint   internal_format;
   bool    mips;
 };
