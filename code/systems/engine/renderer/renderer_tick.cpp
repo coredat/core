@@ -64,7 +64,7 @@ initialize()
 
   // Setup opBuffer
   {
-    graphic_context   = opContextCreate();
+    graphic_context   = Data::get_context_data()->op_context;
     general_buffer    = opBufferCreate();
     debug_line_buffer = opBufferCreate();
     text_buffer       = opBufferCreate();

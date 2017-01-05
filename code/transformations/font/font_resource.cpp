@@ -29,7 +29,9 @@ namespace Font_resource {
 uint32_t
 add_new_font(const char *filename,
              Data::Font_data *font_data,
-             Data::Texture_data *texture_data)
+             Data::Texture_data *texture_data,
+             opContext *ctx,
+             opBuffer *buf)
 {
   Data::data_lock(font_data);
   Data::data_lock(texture_data);
@@ -64,19 +66,37 @@ add_new_font(const char *filename,
   uint32_t glyphs_texture_id = 0;
   uint32_t metrics_texture_id = 0;
   {
-    Ogl::Texture texture_glyphs;
-    Ogl::Texture texture_metrics;
-  
-    Ogl::texture_create_2d(&texture_glyphs, 512, 512, GL_RED, true, nullptr);
-    Ogl::texture_create_1d(&texture_metrics, 512, GL_RGBA32F, nullptr);
+//    Ogl::Texture texture_glyphs;
+//    Ogl::Texture texture_metrics;
+//  
+//    Ogl::texture_create_2d(&texture_glyphs, 512, 512, GL_RED, true, nullptr);
+//    Ogl::texture_create_1d(&texture_metrics, 512, GL_RGBA32F, nullptr);
+
+    opTextureDesc glyph_desc;
+    memset(&glyph_desc, 0, sizeof(glyph_desc));
+    glyph_desc.width = 512;
+    glyph_desc.height = 512;
+    glyph_desc.format = opPixelFormat_R8;
+    glyph_desc.dimention = opDimention_TWO;
     
-    glyphs_texture_id = Data::texture_push(texture_data);
-    Data::texture_set_texture(texture_data, glyphs_texture_id, &texture_glyphs);
-    Data::texture_set_name(texture_data, glyphs_texture_id, "font1", strlen("font1"));
+    glyphs_texture_id = opBufferTextureCreate(ctx, buf, nullptr, &glyph_desc);
     
-    metrics_texture_id = Data::texture_push(texture_data);
-    Data::texture_set_texture(texture_data, metrics_texture_id, &texture_metrics);
-    Data::texture_set_name(texture_data, metrics_texture_id, "font1_metrics", strlen("font1_metrics"));
+    opTextureDesc metrics_desc;
+    memset(&metrics_desc, 0, sizeof(metrics_desc));
+    metrics_desc.width = 512;
+    metrics_desc.format = opPixelFormat_RGBA32F;
+    metrics_desc.dimention = opDimention_ONE;
+    
+    metrics_texture_id = opBufferTextureCreate(ctx, buf, nullptr, &metrics_desc);
+    opBufferExec(ctx, buf);
+    
+//    glyphs_texture_id = Data::texture_push(texture_data);
+//    Data::texture_set_texture(texture_data, glyphs_texture_id, &texture_glyphs);
+//    Data::texture_set_name(texture_data, glyphs_texture_id, "font1", strlen("font1"));
+    
+//    metrics_texture_id = Data::texture_push(texture_data);
+//    Data::texture_set_texture(texture_data, metrics_texture_id, &texture_metrics);
+//    Data::texture_set_name(texture_data, metrics_texture_id, "font1_metrics", strlen("font1_metrics"));
   }
   
   // Font info
@@ -131,28 +151,27 @@ add_glyphs(const char *glyph_arr,
            const uint32_t font_id,
            Data::Font_data *font_data,
            Data::Font_glyph_data *glyph_data,
-           Data::Texture_data *texture_data)
+           Data::Texture_data *texture_data,
+           opContext *ctx,
+           opBuffer *buf)
 {
   Data::data_lock(font_data);
   Data::data_lock(texture_data);
   Data::data_lock(glyph_data);
   
   // Get various font infos
-  Ogl::Texture glyph_texture;
-  Ogl::Texture glyph_metrics_texture;
+  opID glyph_texture = 0;
+  opID glyph_metrics_texture = 0;
   stbtt_fontinfo info;
   Text::Font_bitmap font_bitmap;
   {
-    uint32_t texture_id = 0;
-    uint32_t glyph_metrics_texture_id = 0;
-    
     Data::font_get_font_face(font_data, font_id, &info);
-    Data::font_get_glyph_texture_id(font_data, font_id, &texture_id);
-    Data::font_get_metric_texture_id(font_data, font_id, &glyph_metrics_texture_id);
+    Data::font_get_glyph_texture_id(font_data, font_id, &glyph_texture);
+    Data::font_get_metric_texture_id(font_data, font_id, &glyph_metrics_texture);
     Data::font_get_font_bitmap(font_data, font_id, &font_bitmap);
     
-    Data::texture_get_texture(texture_data, texture_id, &glyph_texture);
-    Data::texture_get_texture(texture_data, glyph_metrics_texture_id, &glyph_metrics_texture);
+//    Data::texture_get_texture(texture_data, texture_id, &glyph_texture);
+//    Data::texture_get_texture(texture_data, glyph_metrics_texture_id, &glyph_metrics_texture);
   }
   
   for(int i = 0; i < strlen(glyph_arr); ++i)
@@ -204,13 +223,17 @@ add_glyphs(const char *glyph_arr,
       font_bitmap.bitmap_offset[0] = 0;
       font_bitmap.bitmap_offset[1] += font_bitmap.line_height;
     }
+
+    opBufferExec(ctx, buf);
+    opBufferTextureUpdate(ctx, buf, glyph_texture, font_bitmap.bitmap_offset[0], font_bitmap.bitmap_offset[1], glyph_data);
+    opBufferExec(ctx, buf);
     
-    Ogl::texture_update_texture_2d(&glyph_texture,
-                                   font_bitmap.bitmap_offset[0],
-                                   font_bitmap.bitmap_offset[1],
-                                   glyph_width,
-                                   glyph_height,
-                                   glyph_bitmap);
+//    Ogl::texture_update_texture_2d(&glyph_texture,
+//                                   font_bitmap.bitmap_offset[0],
+//                                   font_bitmap.bitmap_offset[1],
+//                                   glyph_width,
+//                                   glyph_height,
+//                                   glyph_bitmap);
     
     int kern;
     kern = stbtt_GetCodepointKernAdvance(&info, codepoint, glyph_arr[i + 1]);
@@ -241,11 +264,14 @@ add_glyphs(const char *glyph_arr,
     // Add glyph info
     Data::font_glyph_push(glyph_data, glyph_id);
     Data::font_glyph_set_character(glyph_data, glyph_id, &char_info);
+
+    opBufferTextureUpdate(ctx, buf, glyph_metrics_texture, 0, glyph_data->size * 5, glyph_data->field_character);
+    opBufferExec(ctx, buf);
     
-    Ogl::texture_update_texture_1d(&glyph_metrics_texture,
-                                   0,
-                                   glyph_data->size * 5,
-                                   glyph_data->field_character);
+//    Ogl::texture_update_texture_1d(&glyph_metrics_texture,
+//                                   0,
+//                                   glyph_data->size * 5,
+//                                   glyph_data->field_character);
   }
   
   
@@ -332,12 +358,9 @@ create_string_data(const util::generic_id this_id,
     opID glyph_metrics_texture;
     stbtt_fontinfo info;
     {
-      uint32_t texture_id = 0;
-      uint32_t glyph_metrics_texture_id = 0;
-      
       Data::font_get_font_face(font_data, font_id, &info);
-      Data::font_get_glyph_texture_id(font_data, font_id, &texture_id);
-      Data::font_get_metric_texture_id(font_data, font_id, &glyph_metrics_texture_id);
+      Data::font_get_glyph_texture_id(font_data, font_id, &glyph_texture);
+      Data::font_get_metric_texture_id(font_data, font_id, &glyph_metrics_texture);
       
 //      Data::texture_get_texture(texture_data, texture_id, &glyph_texture);
 //      Data::texture_get_texture(texture_data, glyph_metrics_texture_id, &glyph_metrics_texture);

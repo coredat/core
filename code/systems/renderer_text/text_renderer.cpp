@@ -141,8 +141,8 @@ render(const math::mat4 &view_proj_mat,
 {
   uint32_t draw_call_count = 0;
   
-  glEnable(GL_BLEND);
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+//  glEnable(GL_BLEND);
+//  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   
   opBufferRasterizerBind(buf, text_rasterizer);

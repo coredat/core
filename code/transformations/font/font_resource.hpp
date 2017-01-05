@@ -15,7 +15,9 @@ namespace Font_resource {
 uint32_t
 add_new_font(const char *filename,
              Data::Font_data *font_data,
-             Data::Texture_data *texture_data);
+             Data::Texture_data *texture_data,
+             opContext *ctx,
+             opBuffer *buf);
   
   
 void
@@ -24,7 +26,9 @@ add_glyphs(const char *glyph_arr,
            const uint32_t font_id,           
            Data::Font_data *font_data,
            Data::Font_glyph_data *font_glyph_data,
-           Data::Texture_data *texture_data);
+           Data::Texture_data *texture_data,
+           opContext *ctx,
+           opBuffer *buf);
 
 
 void

@@ -404,22 +404,32 @@ set_renderer_text(const util::generic_id this_id,
   assert(texture_data);
   assert(glyph_data);
   
-  
   // Find and add missing glyphs
-  Font_resource::add_glyphs(str, strlen(str), font_id, font_data, glyph_data, texture_data);
+  Font_resource::add_glyphs(
+    str,
+    strlen(str),
+    font_id,
+    font_data,
+    glyph_data,
+    texture_data,
+    resources->op_context,
+    resources->op_buffer
+  );
   
-  Font_resource::create_string_data(this_id,
-                                    str,
-                                    strlen(str),
-                                    font_id,
-                                    font_data,
-                                    glyph_data,
-                                    texture_data,
-                                    text_data,
-                                    transform_data,
-                                    entity_data,
-                                    resources->op_context,
-                                    resources->op_buffer);
+  Font_resource::create_string_data(
+    this_id,
+    str,
+    strlen(str),
+    font_id,
+    font_data,
+    glyph_data,
+    texture_data,
+    text_data,
+    transform_data,
+    entity_data,
+    resources->op_context,
+    resources->op_buffer
+  );
 
 }
 

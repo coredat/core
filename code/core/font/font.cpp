@@ -59,7 +59,7 @@ Font::Font(const char *filename)
 
   if(!m_font_id)
   {
-    m_font_id = Font_resource::add_new_font(filename, font_data, texture_data);
+    m_font_id = Font_resource::add_new_font(filename, font_data, texture_data, resources->op_context, resources->op_buffer);
   }
 }
 
