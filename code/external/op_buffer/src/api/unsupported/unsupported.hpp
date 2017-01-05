@@ -15,7 +15,10 @@ namespace unsupported {
 static void
 unsupported(context_data *context, void *data)
 {
-  context->log("unsupported feature");
+  op::command::cmd_unknown *cmd(
+    reinterpret_cast<op::command::cmd_unknown*>(data)
+  );
+  context->log("unsupported feature %d ", cmd->id);
   assert(false);
 }
 
