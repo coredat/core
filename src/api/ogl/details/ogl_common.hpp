@@ -8,6 +8,7 @@
 #include <GLES2/gl2.h>
 #else
 #include <OpenGL/gl3.h>
+#include <OpenGL/glext.h>
 #endif
 
 #ifdef OP_BUFFER_API_OGL_ES2

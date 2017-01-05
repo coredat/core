@@ -282,6 +282,21 @@ struct cmd_viewport_bind {
 };
 
 
+// -- Debug -- //
+
+struct cmd_debug_marker_push {
+  uint8_t id = command::DEBUG_MARKER_PUSH;
+  uint8_t size = sizeof(cmd_debug_marker_push);
+  const char *name;
+};
+
+
+struct cmd_debug_marker_pop {
+  uint8_t id = command::DEBUG_MARKER_POP;
+  uint8_t size = sizeof(cmd_debug_marker_pop);
+};
+
+
 } // ns
 } // ns
 
