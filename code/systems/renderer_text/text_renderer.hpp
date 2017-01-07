@@ -12,17 +12,14 @@ namespace Text_renderer {
 
 
 void
-initialize(opContext *ctx, opBuffer *buf);
-
-
-void
-reset();
+initialize(opContext *ctx,
+           opBuffer *buf);
 
 
 uint32_t
 render(const math::mat4 &view_proj_mat,
        const uint32_t cam_cull_mask,
-       const Draw_call calls[],
+       /*const*/ Draw_call calls[], // non cost while op buffer has no memory support.
        const uint32_t number_of_calls,
        opContext *ctx,
        opBuffer *buf);

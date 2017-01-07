@@ -12,6 +12,7 @@ namespace Text_renderer {
 struct Draw_call
 {
   float               world_matrix[16];
+  float               wvp_matrix[16]; // This is a hack while op buffer doesn't have memory support.
   opID                texture;
   opID                glyph_metrics;
   opID                string_info;
