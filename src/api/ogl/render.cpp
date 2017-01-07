@@ -44,6 +44,20 @@ render_generic(context_data *context, void *data)
       GL_UNSIGNED_INT,
       0
     );
+
+    // -- Extra Check -- //
+    #ifdef OP_BUFFER_API_OGL_EXTRA_CHECKS
+    const GLenum err_code = glGetError();
+
+    if(err_code)
+    {
+      context->log(
+        "GL Error - Draw Elements %d : %s",
+        err_code,
+        get_error_msg(err_code)
+      );
+    }
+    #endif
   }
 
   // -- Render Non Indexd -- //
@@ -60,6 +74,20 @@ render_generic(context_data *context, void *data)
     const GLsizei count = geom_desc->element_count / vert_desc->number_of_attributes;
 
     glDrawArrays(primitive, 0, count);
+
+    // -- Extra Check -- //
+    #ifdef OP_BUFFER_API_OGL_EXTRA_CHECKS
+    const GLenum err_code = glGetError();
+
+    if(err_code)
+    {
+      context->log(
+        "GL Error - Draw Arrays %d : %s",
+        err_code,
+        get_error_msg(err_code)
+      );
+    }
+    #endif
   }
 
   // -- Can't Render -- //
@@ -67,20 +95,6 @@ render_generic(context_data *context, void *data)
   else
   {
     context->log("Logic Error - No VBO/IBO has been bound");
-  }
-  #endif
-
-  // -- Extra Check -- //
-  #ifdef OP_BUFFER_API_OGL_EXTRA_CHECKS
-  const GLenum err_code = glGetError();
-
-  if(err_code)
-  {
-    context->log(
-      "GL Error - Draw Arrays %d : %s",
-      err_code,
-      get_error_msg(err_code)
-    );
   }
   #endif
 }
@@ -92,14 +106,14 @@ render_subset(context_data *context, void *data)
   // -- Param Check -- //
   assert(context);
   assert(data);
-  
+
   // -- Get Data -- //
   op::command::cmd_render_subset *cmd(
     reinterpret_cast<op::command::cmd_render_subset*>(data)
   );
 
   // -- Render -- //
-  GLenum primitive = GL_POINTS;
+  GLint primitive = GL_POINTS;
 
   if(context->rasterizer_currently_bound)
   {
@@ -110,7 +124,7 @@ render_subset(context_data *context, void *data)
     primitive = rasterizer_desc->primitive;
   }
 
-  glDrawArrays(primitive, cmd->from, cmd->to);
+  glDrawArrays(GL_POINTS, cmd->from, cmd->to);
 }
 
 

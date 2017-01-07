@@ -58,13 +58,6 @@ enum ENUM : uint8_t
   TEXTURE_READ,
   TEXTURE_BIND,
 
-  // -- Texture Filtering -- //
-
-  TEXTURE_FILTER_CREATE,
-  TEXTURE_FILTER_UPDATE,
-  TEXTURE_FILTER_DESTROY,
-  TEXTURE_FILTER_BIND,
-
   // -- Buffer -- //
 
   BUFFER_CREATE,

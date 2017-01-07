@@ -21,6 +21,14 @@ struct texture_desc
   GLenum  type;
   GLint   internal_format;
   bool    mips;
+
+  GLint   filter_min;
+  GLint   filter_mag;
+  GLfloat filter_multiplier;
+
+  GLint   wrap_s_coord;
+  GLint   wrap_t_coord;
+  GLint   wrap_r_coord;
 };
 
 

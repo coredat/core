@@ -59,11 +59,6 @@ void        opBufferTextureUpdate(opContext *ctx, opBuffer *buf, const opID id, 
 void        opBufferTextureUpdate(opContext *ctx, opBuffer *buf, const opID id, const size_t offset_x, const size_t offset_y, const size_t offset_z, const size_t width, const size_t height, const size_t depth, void *data);
 void        opBufferTextureBind(opBuffer *buf, const opID id);
 
-            // -- Texture Filter -- //
-
-opID        opBufferTextureFilterCreate(opContext *ctx, opBuffer *buf, opTextureFilterDesc *in_out_desc);
-void        opBufferTextureFilterBind(opBuffer *buf, opID id);
-
             // -- Rasterizer -- //
 
 opID        opBufferRasterizerCreate(opContext *ctx, opBuffer *buf, opRasterizerDesc *in_out_desc);

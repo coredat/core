@@ -167,6 +167,7 @@ opBufferShaderCreate(opContext *ctx,
     cmd.ps   = ps;
     cmd.name = name;
     cmd.desc = in_out_desc;
+    cmd.shader_id = op::instance_id(new_shader);
 
     printf("Do I not need to add instance ID?\n");
 
@@ -462,49 +463,6 @@ opBufferTextureBind(opBuffer *buf, const opID id)
 
   op::command::cmd_texture_bind cmd {};
   cmd.texture_id = op::instance_id(id);
-
-  buf->data.write_data((void*)&cmd, sizeof(cmd));
-}
-
-
-// -- Texture Filter -- //
-
-
-opID
-opBufferTextureFilterCreate(opContext *ctx,
-                            opBuffer *buf,
-                            opTextureFilterDesc *in_out_desc)
-{
-  // -- Param Check -- //
-  assert(ctx);
-  assert(buf);
-  assert(in_out_desc);
-
-  // -- Generate Resource -- //
-  op::context_data *ctx_data = &ctx->data;
-
-  const opID new_filter = ctx_data->add_texture_filter();
-
-  if(op::resource_is_valid(new_filter))
-  {
-    op::command::cmd_texture_filter_create cmd {};
-    cmd.desc = in_out_desc;
-
-    buf->data.write_data((void*)&cmd, sizeof(cmd));
-  }
-
-  return new_filter;
-}
-
-
-void
-opBufferTextureFilterBind(opBuffer *buf, opID id)
-{
-  // Did you try bind a different resource type?
-  assert(op::type_id(id) == op::resource_type::TEXTURE_FILTER);
-
-  op::command::cmd_texture_filter_bind cmd {};
-  cmd.texture_filter_id = op::instance_id(id);
 
   buf->data.write_data((void*)&cmd, sizeof(cmd));
 }
