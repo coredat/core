@@ -17,6 +17,7 @@ namespace {
   opID text_shader_details;
   opID text_shader_map;
   opID text_rasterizer;
+  opID text_blendmode;
   
   // Temp Hack
   opContext *temp_ctx;
@@ -68,6 +69,7 @@ initialize(opContext *ctx, opBuffer *buf)
   }
   
   opShaderDesc shader_desc;
+  memset(&shader_desc, 0, sizeof(shader_desc));
   
   text_shader = opBufferShaderCreate(
     ctx,
@@ -80,6 +82,7 @@ initialize(opContext *ctx, opBuffer *buf)
   );
   
   opShaderDataDesc shader_data_wvp_desc;
+  memset(&shader_data_wvp_desc, 0, sizeof(shader_data_wvp_desc));
   
   text_shader_wvp = opBufferShaderDataCreate
   (
@@ -91,6 +94,7 @@ initialize(opContext *ctx, opBuffer *buf)
   );
   
   opShaderDataDesc shader_data_metrics_desc;
+  memset(&shader_data_metrics_desc, 0, sizeof(shader_data_metrics_desc));
   
   text_shader_metrics = opBufferShaderDataCreate
   (
@@ -102,6 +106,7 @@ initialize(opContext *ctx, opBuffer *buf)
   );
   
   opShaderDataDesc shader_data_details_desc;
+  memset(&shader_data_details_desc, 0, sizeof(shader_data_details_desc));
   
   text_shader_details = opBufferShaderDataCreate
   (
@@ -113,6 +118,7 @@ initialize(opContext *ctx, opBuffer *buf)
   );
   
   opShaderDataDesc shader_data_map_desc;
+  memset(&shader_data_map_desc, 0, sizeof(shader_data_map_desc));
   
   text_shader_map = opBufferShaderDataCreate
   (
@@ -124,6 +130,8 @@ initialize(opContext *ctx, opBuffer *buf)
   );
   
   opRasterizerDesc rasterizer_desc;
+  memset(&rasterizer_desc, 0, sizeof(rasterizer_desc));
+  
   rasterizer_desc.cull_face     = opCullFace_BACK;
   rasterizer_desc.primitive     = opPrimitive_POINT;
   rasterizer_desc.winding_order = opWindingOrder_CCW;
@@ -134,7 +142,23 @@ initialize(opContext *ctx, opBuffer *buf)
     &rasterizer_desc
   );
   
+  opBlendDesc blend_desc;
+  memset(&blend_desc, 0, sizeof(blend_desc));
+  
+  blend_desc.enabled = opBool_TRUE;
+  
+  text_blendmode = opBufferBlendCreate(ctx, buf, &blend_desc);
+  
   opBufferExec(ctx, buf);
+  
+  // Did we load everything?
+  assert(shader_desc.status == opStatus_VALID);
+  assert(shader_data_wvp_desc.status == opStatus_VALID);
+  assert(shader_data_metrics_desc.status == opStatus_VALID);
+  assert(shader_data_details_desc.status == opStatus_VALID);
+  assert(shader_data_map_desc.status == opStatus_VALID);
+  assert(rasterizer_desc.status == opStatus_VALID);
+  assert(blend_desc.status == opStatus_VALID);
 }
 
 void
@@ -152,18 +176,16 @@ render(const math::mat4 &view_proj_mat,
        opBuffer *buf)
 {
   uint32_t draw_call_count = 0;
-  
-  glEnable(GL_BLEND);
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  
-  
+    
   opBufferDebugMarkerPush(buf, "// -- [TEXT RENDERER] -- //");
-//  opBufferDeviceReset(buf);
+  opBufferDeviceReset(buf);
+  opBufferBlendBind(buf, text_blendmode);
   opBufferRasterizerBind(buf, text_rasterizer);
   opBufferShaderBind(buf, text_shader);
   
   for(uint32_t i = 0; i < number_of_calls; ++i)
   {
+    opBufferDebugMarkerPush(buf, "// -- [RENDER STRING] -- //");
     opBufferShaderDataBind(buf, text_shader_map,      calls[i].texture);
     opBufferShaderDataBind(buf, text_shader_metrics,  calls[i].glyph_metrics);
     opBufferShaderDataBind(buf, text_shader_details,  calls[i].string_info);
@@ -173,6 +195,7 @@ render(const math::mat4 &view_proj_mat,
     
     opBufferShaderDataBind(buf, text_shader_wvp, (void*)&wvp_mat);
     opBufferRenderSubset(buf, 0, calls[i].string_size);
+    opBufferDebugMarkerPop(buf);
     
     ++draw_call_count;
   }
