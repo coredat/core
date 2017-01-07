@@ -8,6 +8,7 @@
 struct opShaderDesc
 {
   uint8_t  status;                // OUT
+  
   uint16_t number_of_samplers;    // OUT
   uint16_t number_of_uniforms;    // OUT
   uint16_t number_of_outputs;     // OUT
@@ -48,6 +49,7 @@ struct opTextureDesc
 struct opShaderDataDesc
 {
   uint8_t status;                 // OUT
+  
   uint8_t data_type;              // OUT
   uint16_t count;                 // OUT
 };
@@ -56,6 +58,7 @@ struct opShaderDataDesc
 struct opGeometryDesc
 {
   uint8_t status;                 // OUT
+  
   uint8_t access;                 // IN
 };
 
@@ -63,12 +66,15 @@ struct opGeometryDesc
 struct opIndexDesc
 {
   uint8_t status;                 // OUT
+  
   uint8_t access;                 // IN
 };
 
 
 struct opRasterizerDesc
 {
+  uint8_t  status;                // OUT
+  
   uint8_t cull_face;              // IN
   uint8_t winding_order;          // IN
   uint8_t primitive;              // IN
@@ -77,12 +83,16 @@ struct opRasterizerDesc
 
 struct opBlendDesc
 {
+  uint8_t  status;                // OUT
+  
   uint8_t enabled;                // IN
 };
 
 
 struct opTargetDesc
 {
+  uint8_t  status;                // OUT
+  
   uint8_t   pixel_format;         // IN_OUT
   uint32_t  width;                // IN
   uint32_t  height;               // IN

@@ -57,6 +57,9 @@ rasterizer_create(context_data *context, void *data)
   internal_desc->primitive     = op_primitive_to_gl_primitive(external_desc->primitive);
   internal_desc->winding_order = external_desc->winding_order == opWindingOrder_CCW ? GL_CCW : GL_CW;
   internal_desc->cull_face     = convert_cull_face(external_desc->cull_face);
+  
+  // -- Update In - Out Desc -- //
+  cmd->desc->status = opStatus_VALID;
 
   // -- Extra Logging -- //
   #ifdef OP_BUFFER_LOG_INFO

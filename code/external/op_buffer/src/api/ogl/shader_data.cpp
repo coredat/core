@@ -40,6 +40,10 @@ shader_data_create(context_data *context, void *data)
 
   // -- Loop through the uniforms looking for the uniform -- //
   const GLuint program_id = context->shader_descs[cmd->shader_id].program;
+  
+  // -- Update In-Out Desc -- //
+  opShaderDataDesc *in_out_desc = cmd->desc;
+  in_out_desc->status = opStatus_INVALID; // Marked as invalid, if found it will be remarked.
 
   for(size_t i = 0; i < context->uniform_desc_size; ++i)
   {
@@ -56,6 +60,7 @@ shader_data_create(context_data *context, void *data)
 
         // Update In-out desc
         opShaderDataDesc *in_out_desc = cmd->desc;
+        in_out_desc->status = opStatus_VALID;
         in_out_desc->count = internal_desc->count;
         in_out_desc->data_type = ogl_type_to_op(internal_desc->type);
 
