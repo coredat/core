@@ -237,6 +237,24 @@ struct cmd_rasterizer_bind {
 };
 
 
+// -- Blend -- //
+
+
+struct cmd_blend_create {
+  uint8_t id = command::BLEND_CREATE;
+  uint8_t size = sizeof(cmd_blend_create);
+  uint32_t blend_id;
+  opBlendDesc *desc;
+};
+
+
+struct cmd_blend_bind {
+  uint8_t id = command::BLEND_BIND;
+  uint8_t size = sizeof(cmd_blend_bind);
+  uint32_t blend_id;
+};
+
+
 // -- Render -- //
 
 

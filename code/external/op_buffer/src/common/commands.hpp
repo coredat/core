@@ -95,6 +95,13 @@ enum ENUM : uint8_t
   RASTERIZER_DESTROY,
   RASTERIZER_BIND,
 
+  // -- Blend -- //
+
+  BLEND_CREATE,
+  BLEND_UPDATE,
+  BLEND_DESTROY,
+  BLEND_BIND,
+
   // -- Render -- //
 
   RENDER_GENERIC,

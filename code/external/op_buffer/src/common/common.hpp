@@ -43,6 +43,7 @@ enum ENUM : uint8_t
   TEXTURE,
   TEXTURE_FILTER,
   RASTERIZER,
+  BLEND,
 };
 
 

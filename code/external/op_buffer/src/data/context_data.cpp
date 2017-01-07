@@ -168,6 +168,18 @@ context_data::initial_reserve()
                    &texture_filtering_desc_size);
   }
 
+  // Blending //
+  {
+    log("Blend desc alloc");
+    constexpr uint32_t default_blend_count = 8;
+    resource_alloc(default_blend_count,
+                   default_blend_count * sizeof(API::blend_internal_desc),
+                   alloc_cb,
+                   user_data,
+                   &blend_descs,
+                   &blend_desc_capacity,
+                   &blend_desc_size);
+  }
 }
 
 
@@ -411,6 +423,33 @@ context_data::add_rasterizer()
   );
 
   return op::generate_id(resource_type::RASTERIZER, instance);
+}
+
+
+uint32_t
+context_data::add_blend()
+{
+  // -- Member Check -- //
+  assert(blend_descs);
+  assert(blend_desc_capacity);
+
+  // -- Full -- //
+  if(blend_desc_size >= blend_desc_capacity)
+  {
+    return 0;
+  }
+
+  // -- Generate Resource -- //
+  uint32_t instance = (uint32_t)blend_desc_size;
+  blend_desc_size += 1;
+
+  memset(
+    &blend_descs[instance],
+    0,
+    sizeof(API::blend_internal_desc)
+  );
+
+  return op::generate_id(resource_type::BLEND, instance);
 }
 
 

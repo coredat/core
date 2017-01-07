@@ -335,6 +335,27 @@ get_texture_filter_mode(const GLenum mode)
 }
 
 
+// -- Blending -- //
+
+
+constexpr char gl_src_alpha[]           = "GL_SRC_ALPHA";
+constexpr char gl_one_minus_src_alpha[] = "GL_ONE_MINUS_SRC_ALPHA";
+
+
+inline const char *
+get_blend_mode_name(const GLint mode)
+{
+  switch(mode)
+  {
+    case(GL_SRC_ALPHA):             return gl_src_alpha;
+    case(GL_ONE_MINUS_SRC_ALPHA):   return gl_one_minus_src_alpha;
+
+    default:
+      return gl_unknown_enum;
+  }
+}
+
+
 } // ns
 } // ns
 

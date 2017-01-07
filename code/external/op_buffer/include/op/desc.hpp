@@ -75,6 +75,12 @@ struct opRasterizerDesc
 };
 
 
+struct opBlendDesc
+{
+  uint8_t enabled;                // IN
+};
+
+
 struct opTargetDesc
 {
   uint8_t   pixel_format;         // IN_OUT

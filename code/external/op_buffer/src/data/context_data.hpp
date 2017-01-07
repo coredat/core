@@ -75,6 +75,12 @@ struct context_data
   size_t texture_filtering_last_bind               = 0;
   bool   texture_filtering_currently_bound         = false;
 
+  API::blend_internal_desc *blend_descs = nullptr;
+  size_t blend_desc_capacity            = 0;
+  size_t blend_desc_size                = 0;
+  size_t blend_last_bind                = 0;
+  bool   blend_currently_bound          = false;
+
   // -- Callbacks -- //
 
   allocCallback     alloc_cb;
@@ -94,6 +100,7 @@ struct context_data
   uint32_t          add_vertex_format();
   uint32_t          add_rasterizer();
   uint32_t          add_texture_filter();
+  uint32_t          add_blend();
 
   // -- Alloc / Free -- //
 
