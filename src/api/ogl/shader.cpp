@@ -551,7 +551,6 @@ shader_destroy(context_data *context, void *data)
 }
 
 
-
 void
 shader_bind(context_data *context, void *data)
 {

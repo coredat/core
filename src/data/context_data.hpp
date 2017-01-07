@@ -81,6 +81,9 @@ struct context_data
   size_t blend_last_bind                = 0;
   bool   blend_currently_bound          = false;
 
+  // -- Stats -- //
+  size_t draw_calls = 0;
+
   // -- Callbacks -- //
 
   allocCallback     alloc_cb;
