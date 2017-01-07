@@ -502,7 +502,7 @@ shader_create(context_data *context, void *data)
     context->log("OP Error - Shader failed to be created");
   }
   #endif
-  
+
 //  glLabelObjectEXT(GL_PROGRAM_OBJECT_EXT, shd_id, strlen(cmd->name), cmd->name);
 
 //  glLabelObjectEXT(GL_PROGRAM_OBJECT_EXT, shd_id, strlen(cmd->name), cmd->name);
@@ -569,8 +569,6 @@ shader_bind(context_data *context, void *data)
 
   // -- Bind shader -- //
   glUseProgram(desc->program);
-
-  context->log("BIND %d", desc->program);
 
   // -- Extra Check -- //
   #ifdef OP_BUFFER_API_OGL_EXTRA_CHECKS

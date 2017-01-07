@@ -42,6 +42,9 @@ blend_create(context_data *context, void *data)
   {
     internal_desc->enabled = GL_FALSE;
   }
+  
+  // -- Update In - Out Desc -- //
+  cmd->desc->status = opStatus_VALID;  
 
   // -- Extra Logging -- //
   #ifdef OP_BUFFER_LOG_INFO

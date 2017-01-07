@@ -659,6 +659,7 @@ opBufferViewport(opBuffer *buf,
 
 // -- Debug -- //
 
+
 void
 opBufferDebugMarkerPush(opBuffer *buf, const char *name)
 {
