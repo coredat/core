@@ -17,6 +17,7 @@ struct texture_desc;
 struct rasterizer_desc;
 struct vertex_format_desc;
 struct texture_filtering_internal_desc;
+struct blend_internal_desc;
 
 
 } // ns

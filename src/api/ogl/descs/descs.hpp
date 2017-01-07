@@ -12,6 +12,7 @@
 #include "rasterizer_desc.hpp"
 #include "vertex_format_desc.hpp"
 #include "texture_filtering_internal_desc.hpp"
+#include "blend_internal_desc.hpp"
 
 
 #endif // inc guard

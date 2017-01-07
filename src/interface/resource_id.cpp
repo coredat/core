@@ -76,3 +76,10 @@ opIDIsRasterizer(const opID id)
 {
   return false;
 }
+
+
+bool
+opIDISBlend(const opID id)
+{
+  return false;
+}

@@ -554,10 +554,56 @@ void
 opBufferRasterizerBind(opBuffer *buf, const opID id)
 {
   // Did you try bind a different resource type?
+  assert(buf);
   assert(op::type_id(id) == op::resource_type::RASTERIZER);
 
   op::command::cmd_rasterizer_bind cmd {};
   cmd.rasterizer_id = op::instance_id(id);
+
+  buf->data.write_data((void*)&cmd, sizeof(cmd));
+}
+
+
+// -- Blend -- //
+
+
+opID
+opBufferBlendCreate(opContext *ctx,
+                    opBuffer *buf,
+                    opBlendDesc *in_out_desc)
+{
+  // -- Param Check -- //
+  assert(ctx);
+  assert(buf);
+  assert(in_out_desc);
+
+  // -- Generate Resource -- //
+  op::context_data *ctx_data = &ctx->data;
+
+  const opID new_blend = ctx_data->add_blend();
+
+  if(new_blend)
+  {
+    op::command::cmd_blend_create cmd {};
+    cmd.desc = in_out_desc;
+    cmd.blend_id = op::instance_id(new_blend);
+
+    buf->data.write_data((void*)&cmd, sizeof(cmd));
+  }
+
+  return new_blend;
+}
+
+
+void
+opBufferBlendBind(opBuffer *buf, const opID id)
+{
+  // -- Param Check -- //
+  assert(buf);
+  assert(op::type_id(id) == op::resource_type::BLEND);
+
+  op::command::cmd_blend_bind cmd {};
+  cmd.blend_id = op::instance_id(id);
 
   buf->data.write_data((void*)&cmd, sizeof(cmd));
 }

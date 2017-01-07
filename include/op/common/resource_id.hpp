@@ -17,6 +17,7 @@ bool      opIDIsTarget(const opID id);
 bool      opIDIsTexture(const opID id);
 bool      opIDIsTextureFilter(const opID id);
 bool      opIDIsRasterizer(const opID id);
+bool      opIDIsBlend(const opID id);
 
 
 #endif // inc guard

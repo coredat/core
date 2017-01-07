@@ -15,6 +15,7 @@
 #include "vertex_format.hpp"
 #include "texture.hpp"
 #include "rasterizer.hpp"
+#include "blend.hpp"
 #include "misc.hpp"
 #include "descs/descs.hpp"
 
@@ -111,6 +112,13 @@ initialize(
   api_array[op::command::RASTERIZER_UPDATE]  = rasterizer_update;
   api_array[op::command::RASTERIZER_DESTROY] = rasterizer_destroy;
   api_array[op::command::RASTERIZER_BIND]    = rasterizer_bind;
+
+  // -- Blend -- //
+
+  api_array[op::command::BLEND_CREATE]  = blend_create;
+  api_array[op::command::BLEND_UPDATE]  = blend_update;
+  api_array[op::command::BLEND_DESTROY] = blend_destroy;
+  api_array[op::command::BLEND_BIND]    = blend_bind;
 
   // -- Misc -- //
 

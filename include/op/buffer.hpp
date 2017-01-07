@@ -4,7 +4,6 @@
 
 #include "fwd.hpp"
 #include <stdint.h>
-#include "common/resource_id.hpp"
 
 
             // -- Buffer Management -- //
@@ -63,6 +62,11 @@ void        opBufferTextureBind(opBuffer *buf, const opID id);
 
 opID        opBufferRasterizerCreate(opContext *ctx, opBuffer *buf, opRasterizerDesc *in_out_desc);
 void        opBufferRasterizerBind(opBuffer *buf, const opID id);
+
+            // -- Blending -- //
+
+opID        opBufferBlendCreate(opContext *ctx, opBuffer *buf, opBlendDesc *in_out_desc);
+void        opBufferBlendBind(opBuffer *buf, const opID id);
 
             // -- Render -- //
 

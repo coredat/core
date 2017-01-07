@@ -1,4 +1,3 @@
-
 #ifndef STATE_INCLUDED_94905108_2872_4B1E_B37D_76F55FFE1673
 #define STATE_INCLUDED_94905108_2872_4B1E_B37D_76F55FFE1673
 
@@ -11,6 +10,11 @@
 constexpr uint8_t opStatus_PENDING  = 0;
 constexpr uint8_t opStatus_VALID    = 1;
 constexpr uint8_t opStatus_INVALID  = 2;
+
+// -- Boolean -- //
+
+constexpr uint8_t opBool_FALSE = 0;
+constexpr uint8_t opBool_TRUE  = 1;
 
 // -- Pixel Formats -- //
 

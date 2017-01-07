@@ -26,6 +26,7 @@ struct opTargetDesc;
 struct opTextureDesc;
 struct opTextureFilterDesc;
 struct opRasterizerDesc;
+struct opBlendDesc;
 
 // -- Objects -- //
 

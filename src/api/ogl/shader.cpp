@@ -393,8 +393,6 @@ shader_create(context_data *context, void *data)
 
         ++sampler_count;
 
-      //  glUniform1i(location, v0);
-
         #ifdef OP_BUFFER_LOG_INFO
         context->log("Shader Sampler: %s at %d with slot %d", curr_uni_name, location, v0);
         #endif
@@ -504,6 +502,8 @@ shader_create(context_data *context, void *data)
     context->log("OP Error - Shader failed to be created");
   }
   #endif
+  
+//  glLabelObjectEXT(GL_PROGRAM_OBJECT_EXT, shd_id, strlen(cmd->name), cmd->name);
 
 //  glLabelObjectEXT(GL_PROGRAM_OBJECT_EXT, shd_id, strlen(cmd->name), cmd->name);
 
