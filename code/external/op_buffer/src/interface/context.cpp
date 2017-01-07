@@ -24,6 +24,26 @@ opContextCreate()
 }
 
 
+// -- Stats -- //
+
+void
+opContextResetStats(opContext *ctx)
+{
+  op::context_data *ctx_data = &ctx->data;
+  ctx_data->draw_calls = 0;
+}
+
+
+size_t
+opContextDrawCallStats(const opContext *ctx)
+{
+  const op::context_data *ctx_data = &ctx->data;
+  const size_t draw_calls_count = ctx_data->draw_calls;
+
+  return draw_calls_count;
+}
+
+
 // -- Context Support -- //
 
 

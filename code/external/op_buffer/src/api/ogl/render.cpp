@@ -45,6 +45,8 @@ render_generic(context_data *context, void *data)
       0
     );
 
+    ++context->draw_calls;
+
     // -- Extra Check -- //
     #ifdef OP_BUFFER_API_OGL_EXTRA_CHECKS
     const GLenum err_code = glGetError();
@@ -74,6 +76,8 @@ render_generic(context_data *context, void *data)
     const GLsizei count = geom_desc->element_count / vert_desc->number_of_attributes;
 
     glDrawArrays(primitive, 0, count);
+
+    ++context->draw_calls;
 
     // -- Extra Check -- //
     #ifdef OP_BUFFER_API_OGL_EXTRA_CHECKS

@@ -9,6 +9,10 @@
 
 opContext*  opContextCreate();
 
+            // -- Context Stats -- //
+void        opContextResetStats(opContext *ctx);
+size_t      opContextDrawCalls(const opContext *ctx);
+
             // -- Context Support -- //
 
 uint8_t     opContext1DTextureSupport(const opContext* ctx);
