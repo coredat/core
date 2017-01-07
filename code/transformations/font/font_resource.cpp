@@ -378,6 +378,7 @@ create_string_data(const util::generic_id this_id,
     if(Data::text_draw_call_exists(text_draw_call, this_id))
     {
       opTextureDesc desc;
+      memset(&desc, 0, sizeof(desc));
       desc.format = opPixelFormat_RGB32F;
       desc.dimention = opDimention_ONE;
       desc.width = data_ptr * sizeof(float);

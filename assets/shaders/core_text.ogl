@@ -148,7 +148,7 @@ in vec2 in_ps_texture_coord;
 /*
   Uniforms
 */
-// uniform sampler2D uni_map_01;
+uniform sampler2D uni_map_01;
 uniform vec3 uni_color = vec3(1,1,1);
 
 /*
@@ -163,10 +163,10 @@ out vec4 out_frag_color;
 void
 main()
 {
-  // vec4 tex_sample = texture(uni_map_01, in_ps_texture_coord);
-  // out_frag_color = vec4(uni_color, 1.0);
+  vec4 tex_sample = texture(uni_map_01, in_ps_texture_coord);
+  out_frag_color = vec4(uni_color, tex_sample.r);
   // out_frag_color = vec4(tex_sample.rg, 1.0, 1.0);
-  out_frag_color = vec4(1,1,1,1);
+  // out_frag_color = vec4(1,1,1,1);
 }
 
 /* FRAG_SHD */

@@ -135,22 +135,6 @@ struct cmd_texture_bind {
 };
 
 
-// -- Texture Filtering -- //
-
-struct cmd_texture_filter_create {
-  uint8_t id = command::TEXTURE_FILTER_CREATE;
-  uint8_t size = sizeof(cmd_texture_filter_create);
-  uint32_t texture_filter_id;
-  opTextureFilterDesc *desc;
-};
-
-
-struct cmd_texture_filter_bind {
-  uint8_t id = command::TEXTURE_FILTER_BIND;
-  uint8_t size = sizeof(cmd_texture_filter_bind);
-  uint32_t texture_filter_id;
-};
-
 // -- Buffer -- //
 
 

@@ -153,8 +153,12 @@ render(const math::mat4 &view_proj_mat,
 {
   uint32_t draw_call_count = 0;
   
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  
+  
   opBufferDebugMarkerPush(buf, "// -- [TEXT RENDERER] -- //");
-  opBufferDeviceReset(buf);
+//  opBufferDeviceReset(buf);
   opBufferRasterizerBind(buf, text_rasterizer);
   opBufferShaderBind(buf, text_shader);
   

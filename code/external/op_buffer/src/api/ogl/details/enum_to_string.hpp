@@ -295,7 +295,7 @@ constexpr char gl_texture_wrap_mode_mirror_clamp_edge[] = "GL_MIRROR_CLAMP_TO_ED
 
 
 inline const char *
-get_texture_wrap_mode(const GLenum mode)
+get_texture_wrap_mode(const GLint mode)
 {
   switch(mode)
   {
@@ -310,6 +310,24 @@ get_texture_wrap_mode(const GLenum mode)
     #ifdef OGL_GL4
     case(GL_MIRROR_CLAMP_TO_EDGE):  return gl_texture_wrap_mode_mirror_clamp_edge;
     #endif
+
+    default:
+      return gl_unknown_enum;
+  }
+}
+
+constexpr char gl_texture_filter_nearest[]        = "GL_NEAREST";
+constexpr char gl_texture_filter_linear[]         = "GL_LINEAR";
+constexpr char gl_texture_filter_mip_linear[]     = "GL_LINEAR_MIPMAP_LINEAR";
+
+inline const char *
+get_texture_filter_mode(const GLenum mode)
+{
+  switch(mode)
+  {
+    case(GL_NEAREST):               return gl_texture_filter_nearest;
+    case(GL_LINEAR):                return gl_texture_filter_linear;
+    case(GL_LINEAR_MIPMAP_LINEAR):  return gl_texture_filter_mip_linear;
 
     default:
       return gl_unknown_enum;

@@ -195,7 +195,7 @@ shader_create(context_data *context, void *data)
   command::cmd_shader_create *cmd(
     reinterpret_cast<command::cmd_shader_create*>(data)
   );
-  
+
   ogl::shader_desc *internal_desc(
     &context->shader_descs[cmd->shader_id]
   );
@@ -330,19 +330,21 @@ shader_create(context_data *context, void *data)
     // Allocate space for array of names.
     const uint32_t number_of_chars = (uniform_count * uniform_length) + uniform_count;
     internal_desc->uniform_names = (char*)context->alloc(sizeof(char) * number_of_chars);
-    memset(internal_desc->uniform_names, 0, sizeof(char) * number_of_chars);
+    memset(internal_desc->uniform_names, 0, sizeof(char) * number_of_chars );
 
     uint32_t name_count = 0;
 
-    GLchar curr_uni_name[512];
+    constexpr GLsizei buffer_size = 512;
+    GLchar curr_uni_name[buffer_size];
+
+    // -- Extra Logging -- //
+    #ifdef OP_BUFFER_LOG_INFO
+    context->log("Shader has %d active uniforms:", uniform_count);
+    #endif
+
 
     for(GLint i = 0; i < uniform_count; ++i)
     {
-      // -- Extra Logging -- //
-      #ifdef OP_BUFFER_LOG_INFO
-      context->log("Shader has %d active uniforms:", uniform_count);
-      #endif
-
       // Reset the buffer.
       memset(curr_uni_name, 0, sizeof(curr_uni_name));
 
@@ -352,7 +354,7 @@ shader_create(context_data *context, void *data)
 
       glGetActiveUniform(shd_id,
                          i,
-                         uniform_length,
+                         buffer_size,
                          &length,
                          &size,
                          &gl_type,
@@ -391,8 +393,6 @@ shader_create(context_data *context, void *data)
 
         ++sampler_count;
 
-//        glUniform1i(location, v0);
-
         #ifdef OP_BUFFER_LOG_INFO
         context->log("Shader Sampler: %s at %d with slot %d", curr_uni_name, location, v0);
         #endif
@@ -403,7 +403,7 @@ shader_create(context_data *context, void *data)
 
         uni->index    = v0;
         uni->type     = gl_type;
-        uni->count    = 0;
+        uni->count    = location;
         uni->program  = shd_id;
 
         strlcpy(
@@ -505,6 +505,8 @@ shader_create(context_data *context, void *data)
   
 //  glLabelObjectEXT(GL_PROGRAM_OBJECT_EXT, shd_id, strlen(cmd->name), cmd->name);
 
+//  glLabelObjectEXT(GL_PROGRAM_OBJECT_EXT, shd_id, strlen(cmd->name), cmd->name);
+
   // -- Update in_out desc -- //
   cmd->desc->status = compile_link_success ? opStatus_VALID : opStatus_INVALID;
 }
@@ -567,6 +569,8 @@ shader_bind(context_data *context, void *data)
 
   // -- Bind shader -- //
   glUseProgram(desc->program);
+
+  context->log("BIND %d", desc->program);
 
   // -- Extra Check -- //
   #ifdef OP_BUFFER_API_OGL_EXTRA_CHECKS

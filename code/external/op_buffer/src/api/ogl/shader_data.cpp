@@ -172,9 +172,13 @@ shader_data_bind(context_data *context, void *data)
       glActiveTexture(GL_TEXTURE0 + desc->index);
       glBindTexture(GL_TEXTURE_1D, texture_desc->texture_id);
 
-      glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-      glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-      glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+      glUniform1i(desc->count, desc->index);
+
+      printf("NOOOi : %d, %d\n", desc->index, texture_desc->texture_id);
+
+      glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, texture_desc->wrap_s_coord);
+      glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, texture_desc->filter_mag);
+      glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, texture_desc->filter_min);
 
       break;
     }
@@ -196,33 +200,17 @@ shader_data_bind(context_data *context, void *data)
         &context->texture_descs[texture_id]
       );
 
-      const size_t texture_filter_id = context->texture_filtering_last_bind;
-      const texture_filtering_internal_desc *texture_filter_desc(
-        &context->texture_filtering_descs[texture_filter_id]
-      );
-
       glActiveTexture(GL_TEXTURE0 + desc->index);
       glBindTexture(GL_TEXTURE_2D, texture_desc->texture_id);
 
-      const GLint s_wrap(
-        op_filtering_wrap_mode(texture_filter_desc->wrap_mode_width)
-      );
-      const GLint t_wrap(
-        op_filtering_wrap_mode(texture_filter_desc->wrap_mode_width)
-      );
-      const GLint min_filter(
-        op_filtering_min_mode(texture_filter_desc->filter_mode,
-                              texture_desc->mips)
-      );
-      const GLint mag_filter(
-        op_filtering_mag_mode(texture_filter_desc->filter_mode,
-                              texture_desc->mips)
-      );
+      glUniform1i(desc->count, desc->index);
 
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, s_wrap);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, t_wrap);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag_filter);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, min_filter);
+      printf("Oi : %d, %d\n", desc->index, texture_desc->texture_id);
+
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, texture_desc->wrap_s_coord);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, texture_desc->wrap_t_coord);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, texture_desc->filter_mag);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, texture_desc->filter_min);
 
       break;
     }

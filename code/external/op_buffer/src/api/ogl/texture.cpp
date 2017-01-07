@@ -53,12 +53,23 @@ texture_create(context_data *context, void *data)
     const GLenum type           = op_pixel_format_to_type(cmd->desc->format);
     const GLenum dimention      = op_dimention_to_texture(cmd->desc->dimention);
 
+    internal_desc->wrap_s_coord = op_filtering_wrap_mode(cmd->desc->wrap_mode_width);
+    internal_desc->wrap_t_coord = op_filtering_wrap_mode(cmd->desc->wrap_mode_height);
+    internal_desc->wrap_r_coord = op_filtering_wrap_mode(cmd->desc->wrap_mode_depth);
+    internal_desc->filter_min = op_filtering_min_mode(cmd->desc->filter, cmd->desc->mips);
+    internal_desc->filter_mag = op_filtering_mag_mode(cmd->desc->filter, cmd->desc->mips);
+
     switch(cmd->desc->dimention)
     {
       #ifdef OGL_HAS_TEXTURE_1D
       case(opDimention_ONE):
       {
         glBindTexture(dimention, texture);
+
+        glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, internal_desc->wrap_s_coord);
+        glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, internal_desc->filter_mag);
+        glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, internal_desc->filter_min);
+
         glTexImage1D(dimention,
                      0,
                      internal_format,
@@ -75,6 +86,12 @@ texture_create(context_data *context, void *data)
       {
         height = 1;
         glBindTexture(GL_TEXTURE_2D, texture);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, internal_desc->wrap_s_coord);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, internal_desc->wrap_t_coord);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, internal_desc->filter_mag);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, internal_desc->filter_min);
+
         glTexImage2D(GL_TEXTURE_2D,
                      0,
                      internal_format,
@@ -141,6 +158,16 @@ texture_create(context_data *context, void *data)
     internal_desc->depth           = depth;
     internal_desc->dimention       = dimention;
 
+    // Update filtering
+    {
+      internal_desc->wrap_s_coord = op_filtering_wrap_mode(cmd->desc->wrap_mode_width);
+      internal_desc->wrap_t_coord = op_filtering_wrap_mode(cmd->desc->wrap_mode_height);
+      internal_desc->wrap_r_coord = op_filtering_wrap_mode(cmd->desc->wrap_mode_depth);
+
+      internal_desc->filter_min = op_filtering_min_mode(cmd->desc->filter, cmd->desc->mips);
+      internal_desc->filter_mag = op_filtering_mag_mode(cmd->desc->filter, cmd->desc->mips);
+    }
+
     // -- Extra Logging -- //
     #ifdef OP_BUFFER_LOG_INFO
     context->log("[");
@@ -151,6 +178,11 @@ texture_create(context_data *context, void *data)
     context->log("  Internal Format: %s", get_pixel_format_name(internal_format));
     context->log("  Format: %s", get_pixel_format_component_name(format));
     context->log("  Type: %s", get_type_name(type));
+    context->log("  Wrap Mode S: %s ", get_texture_wrap_mode(internal_desc->wrap_s_coord));
+    context->log("  Wrap Mode T: %s ", get_texture_wrap_mode(internal_desc->wrap_t_coord));
+    context->log("  Wrap Mode R: %s ", get_texture_wrap_mode(internal_desc->wrap_r_coord));
+    context->log("  Filter Min: %s", get_texture_filter_mode(internal_desc->filter_min));
+    context->log("  Filter Mag: %s", get_texture_filter_mode(internal_desc->filter_min));
     context->log("  GL ID: %d", texture);
     context->log("]");
     #endif
@@ -164,7 +196,8 @@ texture_create(context_data *context, void *data)
   #endif
 
   // -- Update In/Out Desc -- //
-  cmd->desc->status = texture ? opStatus_VALID : opStatus_INVALID;
+  cmd->desc->status      = texture ? opStatus_VALID : opStatus_INVALID;
+  cmd->desc->platform_id = static_cast<uintptr_t>(texture);
 
   // -- Extra Check -- //
   #ifdef OP_BUFFER_API_OGL_EXTRA_CHECKS

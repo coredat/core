@@ -15,7 +15,6 @@
 #include "vertex_format.hpp"
 #include "texture.hpp"
 #include "rasterizer.hpp"
-#include "texture_filter.hpp"
 #include "misc.hpp"
 #include "descs/descs.hpp"
 
@@ -91,13 +90,6 @@ initialize(
   api_array[op::command::TEXTURE_DESTROY] = texture_destroy;
   // TEXTURE_READ,
   api_array[op::command::TEXTURE_BIND]    = texture_bind;
-
-  // -- Texture Filtering -- //
-
-  api_array[op::command::TEXTURE_FILTER_CREATE]  = texture_filter_create;
-  api_array[op::command::TEXTURE_FILTER_UPDATE]  = texture_filter_update;
-  api_array[op::command::TEXTURE_FILTER_DESTROY] = texture_filter_destroy;
-  api_array[op::command::TEXTURE_FILTER_BIND]    = texture_filter_bind;
 
   // -- Target -- //
 

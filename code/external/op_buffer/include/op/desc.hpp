@@ -21,17 +21,6 @@ struct opVertexDesc
 };
 
 
-struct opTextureFilterDesc
-{
-  uint8_t filter_mode;            // IN
-  uint8_t filter_multiplier;      // IN
-
-  uint8_t wrap_mode_width;        // IN
-  uint8_t wrap_mode_height;       // IN
-  uint8_t wrap_mode_depth;        // IN
-};
-
-
 struct opTextureDesc
 {
   uint8_t status;                 // OUT
@@ -44,6 +33,15 @@ struct opTextureDesc
   uint8_t format;                 // IN_OUT
 
   uint8_t mips;                   // IN
+
+  uint8_t filter;                 // IN_OUT
+  uint8_t filter_multiplier;      // IN_OUT
+
+  uint8_t wrap_mode_width;        // IN
+  uint8_t wrap_mode_height;       // IN
+  uint8_t wrap_mode_depth;        // IN
+
+  uintptr_t platform_id;          // OUT
 };
 
 
