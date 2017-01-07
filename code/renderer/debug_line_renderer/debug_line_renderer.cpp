@@ -182,12 +182,13 @@ render(const float wvp_mat[16])
     opBuffer *buf  = temp_buffer;
     opContext *ctx = temp_ctx;
 
+    uint32_t count = 0;
+    
+    opBufferDebugMarkerPush(buf, "// -- [DEBUG LINES RENDERER] -- //");
     opBufferDeviceReset(buf);
     opBufferShaderBind(buf, line_shader_id);
     opBufferRasterizerBind(buf, line_rasterizer_id);
     opBufferShaderDataBind(buf, line_shader_wvp_id, (void*)wvp_mat);
-    
-    uint32_t count = 0;
     
     while(*curr_line_count > 0)
     {
@@ -200,6 +201,7 @@ render(const float wvp_mat[16])
       *curr_line_count -= size;
     }
     
+    opBufferDebugMarkerPop(buf);
     opBufferExec(ctx, buf);
     
     // This is double buffered because we woiuld like to defer the render beyond this function if we can.

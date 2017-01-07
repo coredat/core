@@ -262,7 +262,7 @@ texture_update(context_data *context, void *data)
   // -- Gen Mips -- //
   if(internal_desc->mips)
   {
-    glGenerateMipmap(GL_TEXTURE_2D);
+    glGenerateMipmap(internal_desc->dimention);
   }
 
   // Put packing back to what it was. //

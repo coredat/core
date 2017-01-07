@@ -167,6 +167,7 @@ opBufferShaderCreate(opContext *ctx,
     cmd.ps   = ps;
     cmd.name = name;
     cmd.desc = in_out_desc;
+    cmd.shader_id = op::instance_id(new_shader);
 
     printf("Do I not need to add instance ID?\n");
 

@@ -15,6 +15,7 @@ namespace {
   opID text_shader_wvp;
   opID text_shader_metrics;
   opID text_shader_details;
+  opID text_shader_map;
   opID text_rasterizer;
   
   // Temp Hack
@@ -54,7 +55,7 @@ initialize(opContext *ctx, opBuffer *buf)
     util::get_text_between_tags("/* VERT_SHD */", "/* VERT_SHD */", shader_code, vs_code, sizeof(vs_code));
   }
 
-  char gs_code[1024];
+  char gs_code[1 << 12];
   {
     memset(gs_code, 0, sizeof(gs_code));
     util::get_text_between_tags("/* GEO_SHD */", "/* GEO_SHD */", shader_code, gs_code, sizeof(gs_code));
@@ -111,15 +112,26 @@ initialize(opContext *ctx, opBuffer *buf)
     &shader_data_details_desc
   );
   
-  opRasterizerDesc line_rasterizer_desc;
-  line_rasterizer_desc.cull_face     = opCullFace_BACK;
-  line_rasterizer_desc.primitive     = opPrimitive_POINT;
-  line_rasterizer_desc.winding_order = opWindingOrder_CCW;
+  opShaderDataDesc shader_data_map_desc;
+  
+  text_shader_map = opBufferShaderDataCreate
+  (
+    ctx,
+    buf,
+    text_shader,
+    "uni_map_01",
+    &shader_data_map_desc
+  );
+  
+  opRasterizerDesc rasterizer_desc;
+  rasterizer_desc.cull_face     = opCullFace_BACK;
+  rasterizer_desc.primitive     = opPrimitive_POINT;
+  rasterizer_desc.winding_order = opWindingOrder_CCW;
   
   text_rasterizer = opBufferRasterizerCreate(
     ctx,
     buf,
-    &line_rasterizer_desc
+    &rasterizer_desc
   );
   
   opBufferExec(ctx, buf);
@@ -141,30 +153,29 @@ render(const math::mat4 &view_proj_mat,
 {
   uint32_t draw_call_count = 0;
   
-//  glEnable(GL_BLEND);
-//  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
-  
+  opBufferDebugMarkerPush(buf, "// -- [TEXT RENDERER] -- //");
+  opBufferDeviceReset(buf);
   opBufferRasterizerBind(buf, text_rasterizer);
   opBufferShaderBind(buf, text_shader);
   
   for(uint32_t i = 0; i < number_of_calls; ++i)
   {
-    // These need to be textures.
-    const auto metrics_id = calls[i].glyph_metrics;
-    opBufferShaderDataBind(buf, text_shader_metrics, metrics_id);
-
-    const auto string_id = calls[i].string_info;
-    opBufferShaderDataBind(buf, text_shader_details, string_id);
+    opBufferShaderDataBind(buf, text_shader_map,      calls[i].texture);
+    opBufferShaderDataBind(buf, text_shader_metrics,  calls[i].glyph_metrics);
+    opBufferShaderDataBind(buf, text_shader_details,  calls[i].string_info);
     
     const math::mat4 world_mat = math::mat4_init_with_array(calls[i].world_matrix);
-    const math::mat4 wvp_mat = math::mat4_multiply(world_mat, view_proj_mat);
+    const math::mat4 wvp_mat   = math::mat4_multiply(world_mat, view_proj_mat);
     
     opBufferShaderDataBind(buf, text_shader_wvp, (void*)&wvp_mat);
     opBufferRenderSubset(buf, 0, calls[i].string_size);
     
     ++draw_call_count;
   }
+  
+  opBufferDebugMarkerPop(buf);
+  opBufferExec(ctx, buf);
+
   
   return draw_call_count;
 }

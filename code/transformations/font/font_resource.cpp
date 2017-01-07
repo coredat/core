@@ -225,7 +225,7 @@ add_glyphs(const char *glyph_arr,
     }
 
     opBufferExec(ctx, buf);
-    opBufferTextureUpdate(ctx, buf, glyph_texture, font_bitmap.bitmap_offset[0], font_bitmap.bitmap_offset[1], glyph_data);
+    opBufferTextureUpdate(ctx, buf, glyph_texture, font_bitmap.bitmap_offset[0], font_bitmap.bitmap_offset[1], glyph_width, glyph_height, glyph_bitmap);
     opBufferExec(ctx, buf);
     
 //    Ogl::texture_update_texture_2d(&glyph_texture,
@@ -380,7 +380,7 @@ create_string_data(const util::generic_id this_id,
       opTextureDesc desc;
       desc.format = opPixelFormat_RGB32F;
       desc.dimention = opDimention_ONE;
-      desc.width = data_ptr;
+      desc.width = data_ptr * sizeof(float);
       
       const opID str_text_id = opBufferTextureCreate(ctx, buf, &str_tex_data, &desc);
       opBufferExec(ctx, buf);

@@ -99,7 +99,7 @@ render_subset(context_data *context, void *data)
   );
 
   // -- Render -- //
-  GLenum primitive = GL_POINTS;
+  GLint primitive = GL_POINTS;
 
   if(context->rasterizer_currently_bound)
   {
@@ -110,7 +110,7 @@ render_subset(context_data *context, void *data)
     primitive = rasterizer_desc->primitive;
   }
 
-  glDrawArrays(primitive, cmd->from, cmd->to);
+  glDrawArrays(GL_POINTS, cmd->from, cmd->to);
 }
 
 

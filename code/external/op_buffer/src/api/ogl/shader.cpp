@@ -192,8 +192,13 @@ shader_create(context_data *context, void *data)
   assert(data);
 
   // -- Get Data -- //
-  command::cmd_shader_create *cmd = reinterpret_cast<command::cmd_shader_create*>(data);
-  ogl::shader_desc *internal_desc = &context->shader_descs[cmd->shader_id];
+  command::cmd_shader_create *cmd(
+    reinterpret_cast<command::cmd_shader_create*>(data)
+  );
+  
+  ogl::shader_desc *internal_desc(
+    &context->shader_descs[cmd->shader_id]
+  );
   assert(internal_desc);
 
   // -- Compile And Link Shaders -- //
@@ -386,7 +391,7 @@ shader_create(context_data *context, void *data)
 
         ++sampler_count;
 
-        glUniform1i(location, v0);
+//        glUniform1i(location, v0);
 
         #ifdef OP_BUFFER_LOG_INFO
         context->log("Shader Sampler: %s at %d with slot %d", curr_uni_name, location, v0);
@@ -497,6 +502,8 @@ shader_create(context_data *context, void *data)
     context->log("OP Error - Shader failed to be created");
   }
   #endif
+  
+//  glLabelObjectEXT(GL_PROGRAM_OBJECT_EXT, shd_id, strlen(cmd->name), cmd->name);
 
   // -- Update in_out desc -- //
   cmd->desc->status = compile_link_success ? opStatus_VALID : opStatus_INVALID;
