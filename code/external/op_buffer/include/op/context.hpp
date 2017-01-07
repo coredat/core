@@ -10,8 +10,9 @@
 opContext*  opContextCreate();
 
             // -- Context Stats -- //
+
 void        opContextResetStats(opContext *ctx);
-size_t      opContextDrawCalls(const opContext *ctx);
+size_t      opContextDrawCallStats(const opContext *ctx);
 
             // -- Context Support -- //
 

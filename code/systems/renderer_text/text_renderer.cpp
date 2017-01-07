@@ -2,11 +2,8 @@
 #include <op/op.hpp>
 #include <math/mat/mat4.hpp>
 #include <utilities/file.hpp>
-#include <utilities/logging.hpp>
 #include <utilities/string_helpers.hpp>
 #include <utilities/directory.hpp>
-
-#include <OpenGL/gl3.h>
 
 
 namespace {
@@ -18,7 +15,7 @@ namespace {
   opID text_shader_map;
   opID text_rasterizer;
   opID text_blendmode;
-}
+} // anon ns
 
 
 namespace Text_renderer {
@@ -187,7 +184,7 @@ render(const math::mat4 &view_proj_mat,
     math::mat4_to_array(wvp_mat, calls[i].wvp_matrix);
   }
 
-  uint32_t draw_call_count = 0;
+  opContextResetStats(ctx);
 
   opBufferDebugMarkerPush(buf, "// -- [TEXT RENDERER] -- //");
   opBufferDeviceReset(buf);
@@ -204,15 +201,12 @@ render(const math::mat4 &view_proj_mat,
     opBufferShaderDataBind(buf, text_shader_wvp, (void*)&calls[i].wvp_matrix);
     opBufferRenderSubset(buf, 0, calls[i].string_size);
     opBufferDebugMarkerPop(buf);
-    
-    ++draw_call_count;
   }
   
   opBufferDebugMarkerPop(buf);
   opBufferExec(ctx, buf);
 
-  
-  return draw_call_count;
+  return opContextDrawCallStats(ctx);
 }
 
 
