@@ -6,8 +6,8 @@
 #include <utilities/directory.hpp>
 
 
-namespace {
-
+namespace
+{
   opID text_shader;
   opID text_shader_wvp;
   opID text_shader_metrics;

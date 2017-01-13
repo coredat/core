@@ -13,9 +13,7 @@
 
 namespace {
 
-
 std::shared_ptr<Data::Context> context_data;
-
 
 } // anon ns
 

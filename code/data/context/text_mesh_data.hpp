@@ -38,6 +38,7 @@ struct Text_mesh_data
 
   // mesh field data //
   Graphics_api::Mesh *field_mesh = nullptr;
+  
 
   // size //
   size_t size = 0;
@@ -47,6 +48,7 @@ struct Text_mesh_data
 
 // ====================== //
 // COMMON MODEL FUNCTIONS //
+
 // ====================== //
 void
 data_lock(const Text_mesh_data *data);

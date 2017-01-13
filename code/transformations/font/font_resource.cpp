@@ -16,13 +16,6 @@
 #include <stdio.h>
 
 
-namespace
-{
-
-} // anon ns
-
-
-
 namespace Font_resource {
 
 
@@ -365,6 +358,7 @@ create_string_data(const util::generic_id this_id,
 //      Data::texture_get_texture(texture_data, texture_id, &glyph_texture);
 //      Data::texture_get_texture(texture_data, glyph_metrics_texture_id, &glyph_metrics_texture);
     }
+    
     
     const math::transform transform = Entity_detail::get_transform(this_id, entity_data, transform_data);
     const math::mat4 world_mat = math::transform_get_world_matrix(transform);

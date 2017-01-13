@@ -1,0 +1,14 @@
+#ifndef TEXT_RENDERER_FWD_INCLUDED_C2A6F456_FF0B_4486_B6E5_EA016DE8EFEC
+#define TEXT_RENDERER_FWD_INCLUDED_C2A6F456_FF0B_4486_B6E5_EA016DE8EFEC
+
+
+namespace Data {
+
+
+struct Draw_call;
+
+
+} // ns
+
+
+#endif // inc guard

@@ -35,7 +35,6 @@ private:
 
   util::generic_id    m_font_id = util::generic_id_invalid();
   util::generic_id    m_text_id = util::generic_id_invalid();
-  
 };
 
 
