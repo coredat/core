@@ -5,6 +5,7 @@
 #include "fwd.hpp"
 #include <stdint.h>
 #include <utilities/alloc.hpp>
+#include <stdlib.h>
 
 
 namespace Data {
@@ -14,7 +15,10 @@ bool
 initialize(Text_renderer *renderer,
            const uint32_t font_size_hint,
            const uint32_t glyph_size_hint,
-           const uint32_t string_size_hint);
+           const uint32_t string_size_hint,
+           const util::malloc_fn malloc_fn = malloc,
+           const util::realloc_fn realloc_fn = realloc,
+           const util::free_fn free_fn = free);
 
 
 uint32_t

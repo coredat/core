@@ -21,7 +21,10 @@ bool
 initialize(Text_renderer *renderer,
            const uint32_t font_size_hint,
            const uint32_t glyph_size_hint,
-           const uint32_t string_size_hint)
+           const uint32_t string_size_hint,
+           const util::malloc_fn malloc_fn,
+           const util::realloc_fn realloc_fn,
+           const util::free_fn free_fn)
 {
   // -- Param Check -- //
   ASSERT(renderer);
@@ -43,7 +46,8 @@ initialize(Text_renderer *renderer,
   
   // -- Initialize data stores -- //
   {
-    renderer->font_keys_array =
+    renderer->font_keys_array = (uint32_t*)malloc_fn(sizeof(uint32_t) * font_size_hint);
+    
   }
   
   // -- Finished Setup -- //
