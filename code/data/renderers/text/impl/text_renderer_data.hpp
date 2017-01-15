@@ -4,6 +4,7 @@
 
 #include "text_renderer_fwd.hpp"
 #include <op/fwd.hpp>
+#include <utilities/buffer.hpp>
 #include <stdint.h>
 #include <stddef.h>
 
@@ -14,7 +15,7 @@ namespace Data {
 struct Text_renderer
 {
   uint32_t    *font_keys_array  = nullptr;
-  opID        *font_data_array  = nullptr;
+  
   
   uint32_t    *glyph_keys_array = nullptr;
   uint32_t    *glyphs_array     = nullptr;

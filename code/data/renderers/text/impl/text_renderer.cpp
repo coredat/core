@@ -58,7 +58,7 @@ initialize(Text_renderer *renderer,
 uint32_t
 add_font(const char *filename)
 {
-  
+  return 0;
 }
 
 
