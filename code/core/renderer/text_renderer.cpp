@@ -90,6 +90,7 @@ Text_renderer::set_text(const char *str)
     
     Data::data_unlock(text_mesh_data);
   }
+  
 }
 
 

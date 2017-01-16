@@ -31,7 +31,7 @@ struct Text_draw_call_data
   char *field_text = nullptr;
 
   // draw_call field data //
-  Text_renderer::Draw_call *field_draw_call = nullptr;
+  ::Text_renderer::Draw_call *field_draw_call = nullptr;
 
   // model_id field data //
   util::generic_id *field_model_id = nullptr;
@@ -111,11 +111,11 @@ char*
 text_draw_call_get_text_data(Text_draw_call_data *data);
 
 
-const Text_renderer::Draw_call*
+const ::Text_renderer::Draw_call*
 text_draw_call_get_const_draw_call_data(const Text_draw_call_data *data);
 
 
-Text_renderer::Draw_call*
+::Text_renderer::Draw_call*
 text_draw_call_get_draw_call_data(Text_draw_call_data *data);
 
 
@@ -145,11 +145,11 @@ text_draw_call_get_text_stride() { return 32; }
 
 
 bool
-text_draw_call_get_draw_call(const Text_draw_call_data *data, const uint32_t key, Text_renderer::Draw_call *return_value);
+text_draw_call_get_draw_call(const Text_draw_call_data *data, const uint32_t key, ::Text_renderer::Draw_call *return_value);
 
 
 bool
-text_draw_call_set_draw_call(const Text_draw_call_data *data, const uint32_t key, const Text_renderer::Draw_call *set_value);
+text_draw_call_set_draw_call(const Text_draw_call_data *data, const uint32_t key, const ::Text_renderer::Draw_call *set_value);
 
 
 

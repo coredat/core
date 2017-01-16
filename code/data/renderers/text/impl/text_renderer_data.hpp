@@ -12,21 +12,16 @@
 namespace Data {
 
 
-struct Text_renderer
+struct Text_renderer_data
 {
-  uint32_t    *font_keys_array  = nullptr;
+  util::buffer::data font_data;
   
+  util::buffer::data glyph_keys;
+  util::buffer::data glyph_data;
   
-  uint32_t    *glyph_keys_array = nullptr;
-  uint32_t    *glyphs_array     = nullptr;
-  
-  uint32_t    *draw_keys_array  = nullptr;
-  
-  const char  *strings_array    = nullptr;
-  Draw_call   *draw_call_arr    = nullptr;
-  
-  size_t      data_size         = 0;
-  size_t      data_capacity     = 0;
+  util::buffer::data string_keys;
+  util::buffer::data string_data;
+  util::buffer::data draw_calls;
 };
 
 

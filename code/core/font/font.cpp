@@ -4,6 +4,8 @@
 #include <data/memory/memory_data.hpp>
 #include <data/context/font_data.hpp>
 #include <data/context/texture_data.hpp>
+#include <data/renderers/text/text_renderer.hpp>
+#include <core/world/detail/world_index.hpp>
 #include <common/fixed_string_search.hpp>
 #include <utilities/string_helpers.hpp>
 #include <3rdparty/stb/stb_truetype.h>
@@ -61,6 +63,18 @@ Font::Font(const char *filename)
   {
     m_font_id = Font_resource::add_new_font(filename, font_data, texture_data, resources->op_context, resources->op_buffer);
   }
+  
+  // -- New Text Renderer -- //
+  // -- We are overriding the other font id -- //
+  std::shared_ptr<Data::World> world = Core_detail::world_index_get_world_data(1);
+  assert(world);
+  
+  m_font_id = Data::Text_renderer::add_font(
+    world->text_renderer,
+    filename,
+    resources->op_context,
+    resources->op_buffer
+  );
 }
 
 

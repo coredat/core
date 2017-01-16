@@ -11,6 +11,7 @@
 #include <core/resources/material.hpp>
 #include <core/model/model.hpp>
 #include <core/model/mesh.hpp>
+#include <core/world/detail/world_index.hpp>
 
 #include <data/context_data.hpp>
 #include <data/memory/memory_data.hpp>
@@ -26,6 +27,8 @@
 #include <data/world/text_draw_call_data.hpp>
 #include <data/context/material_data.hpp>
 #include <data/context/mesh_data.hpp>
+
+#include <data/renderers/text/text_renderer.hpp>
 
 #include <common/error_strings.hpp>
 #include <common/data_types.hpp>
@@ -155,6 +158,19 @@ set_renderer(const util::generic_id this_id,
                         text_data,
                         text_renderer.get_font_id(),
                         text_renderer.get_text_id());
+      
+      // -- New Text Renderer -- //
+      auto resources = Data::get_context_data();
+      auto world = Core_detail::world_index_get_world_data(1);
+      
+      Data::Text_renderer::set_draw_call(
+        world->text_renderer,
+        this_id,
+        text_renderer.get_font_id(),
+        "foobart",
+        resources->op_context,
+        resources->op_buffer
+      );
       
       break;
     }
@@ -430,7 +446,6 @@ set_renderer_text(const util::generic_id this_id,
     resources->op_context,
     resources->op_buffer
   );
-
 }
 
 

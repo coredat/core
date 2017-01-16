@@ -6,7 +6,7 @@
 namespace Data {
 
 
-struct Text_renderer;
+struct Text_renderer_data;
 
 
 } // ns

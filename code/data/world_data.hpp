@@ -8,6 +8,8 @@
 #include <utilities/generic_id.hpp>
 #include <utilities/generic_id.hpp>
 
+#include <data/renderers/text/fwd.hpp>
+
 
 namespace Data {
 
@@ -24,6 +26,8 @@ struct World
   Text_draw_call_data           *text_data       = nullptr;
   Collision_data                *collision_data  = nullptr;
   Light_data                    *light_data      = nullptr;
+  
+  Text_renderer_data            *text_renderer   = nullptr;
   
   Bullet_data::World            physics_world;
   

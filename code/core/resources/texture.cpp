@@ -235,7 +235,7 @@ Texture::get_width() const
   if(!m_impl->texture_id)
   {
     LOG_WARNING("No texture");
-    ASSERT_FAIL;
+    UTIL_ASSERT_FAIL;
     return 0;
   }
   
@@ -251,7 +251,7 @@ Texture::get_height() const
   if(!m_impl->texture_id)
   {
     LOG_WARNING("No texture");
-    ASSERT_FAIL;
+    UTIL_ASSERT_FAIL;
     return 0;
   }
   

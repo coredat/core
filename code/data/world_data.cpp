@@ -10,11 +10,14 @@
 #include <data/world/trigger_data.hpp>
 #include <data/world/collision_data.hpp>
 #include <data/world/light_data.hpp>
+#include <data/context_data.hpp>
 #include <core/entity/entity.hpp>
 #include <core/entity/entity_ref.hpp>
 #include <utilities/logging.hpp>
 #include <atomic>
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
+
+#include <data/renderers/text/text_renderer.hpp>
 
 
 namespace Data {
@@ -65,6 +68,13 @@ World::World(const util::generic_id instance_id, const uint32_t entity_hint)
   this->trigger_data   = trigger_data;
   this->collision_data = collision_data;
   this->light_data     = light_data;
+  
+  auto resources = get_context_data();
+  
+  this->text_renderer = Data::Text_renderer::initialize(
+    resources->op_context,
+    resources->op_buffer
+  );
 }
 
 World::~World()
