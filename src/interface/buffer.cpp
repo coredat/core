@@ -23,7 +23,7 @@ op::command::cmd_api_function api_functions[op::command::COUNT] {0};
 
 
 opBuffer*
-opBufferCreate()
+opBufferCreate(const size_t initial_size)
 {
   opBuffer *buffer = new opBuffer;
 
@@ -31,7 +31,7 @@ opBufferCreate()
   buffer->data.realloc_cb = getCallbackRealloc();
   buffer->data.destroy_cb = getCallbackFree();
   buffer->data.user_data  = getCallbackUserData();
-  buffer->data.initial_reserve();
+  buffer->data.initial_reserve(initial_size);
 
   op::unsupported::initialize(api_functions, op::command::COUNT);
   API::initialize(api_functions, op::command::COUNT);

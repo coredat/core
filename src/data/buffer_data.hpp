@@ -36,7 +36,7 @@ struct buffer_data
   reset();
 
   void
-  initial_reserve();
+  initial_reserve(const size_t size_to_initialize);
 
   void
   destroy_buffer();

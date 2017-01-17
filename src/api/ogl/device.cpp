@@ -61,6 +61,10 @@ device_reset(context_data *context, void *data)
   glDisable(GL_STENCIL_TEST);
   glFrontFace(GL_CCW);
 
+  glUseProgram(0);
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
   #ifdef OGL_HAS_VAO
   if(vao)
   {

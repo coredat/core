@@ -10,23 +10,26 @@
 opContext*  opContextCreate();
 
             // -- Context Stats -- //
+
 void        opContextResetStats(opContext *ctx);
-size_t      opContextDrawCalls(const opContext *ctx);
+size_t      opContextDrawCallStats(const opContext *ctx);
 
             // -- Context Support -- //
 
-uint8_t     opContext1DTextureSupport(const opContext* ctx);
-uint8_t     opContext3DTextureSupport(const opContext* ctx);
+uint8_t     opContext1DTextureSupport(const opContext *ctx);
+uint8_t     opContext3DTextureSupport(const opContext *ctx);
 
-uint32_t    opContext1DTextureMaxWidth(const opContext* ctx);
-uint32_t    opContext2DTextureMaxWidth(const opContext* ctx);
-uint32_t    opContext2DTextureMaxHeight(const opContext* ctx);
-uint32_t    opContext3DTextureMaxWidth(const opContext* ctx);
-uint32_t    opContext3DTextureMaxHeight(const opContext* ctx);
-uint32_t    opContext3DTextureMaxDepth(const opContext* ctx);
+uint8_t     opContextMinTextureSupport(const opContext *ctx);
 
-uint8_t     opContextAnisotropicSupport(const opContext* ctx);
-float       opContextAnisotropicMax(const opContext* ctx);
+uint32_t    opContext1DTextureMaxWidth(const opContext *ctx);
+uint32_t    opContext2DTextureMaxWidth(const opContext *ctx);
+uint32_t    opContext2DTextureMaxHeight(const opContext *ctx);
+uint32_t    opContext3DTextureMaxWidth(const opContext *ctx);
+uint32_t    opContext3DTextureMaxHeight(const opContext *ctx);
+uint32_t    opContext3DTextureMaxDepth(const opContext *ctx);
+
+uint8_t     opContextAnisotropicSupport(const opContext *ctx);
+float       opContextAnisotropicMax(const opContext *ctx);
 
 
 #endif // inc guard

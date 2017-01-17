@@ -28,11 +28,11 @@ buffer_data::reset()
 
 
 void
-buffer_data::initial_reserve()
+buffer_data::initial_reserve(const size_t size_to_initialize)
 {
   if(buffer_capacity == 0)
   {
-    constexpr size_t inital_size = 64;
+    const size_t inital_size = size_to_initialize;
     buffer_data = (uint8_t*)alloc_cb(inital_size, user_data);
 
     if(buffer_data)
@@ -82,7 +82,7 @@ buffer_data::write_data(void *data, size_t sizeof_data)
       data,
       sizeof_data
     );
-    
+
     buffer_size = (buffer_size + (sizeof_data + 15)) &~ 0x0F;
   }
   else

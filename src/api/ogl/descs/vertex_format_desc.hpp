@@ -25,6 +25,7 @@ struct vertex_format_desc
   attr_desc   attributes[max_vertex_attrs()];
   uint32_t    stride               = 0;
   uint32_t    number_of_attributes = 0;
+  uint32_t    number_of_elements   = 0;
 };
 
 
