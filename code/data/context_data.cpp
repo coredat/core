@@ -81,7 +81,7 @@ Context::Context(const Context_data_setup &setup)
   opCallbackUserData((uintptr_t)&alloc_count); 
   
   op_context = opContextCreate();
-  op_buffer  = opBufferCreate();
+  op_buffer  = opBufferCreate(2048);
 }
 
 

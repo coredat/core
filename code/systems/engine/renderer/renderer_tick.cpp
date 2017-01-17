@@ -66,13 +66,12 @@ initialize()
   // Setup opBuffer
   {
     graphic_context   = Data::get_context_data()->op_context;
-    general_buffer    = opBufferCreate();
-    debug_line_buffer = opBufferCreate();
-    text_buffer       = opBufferCreate();
+    general_buffer    = opBufferCreate(1024);
+    debug_line_buffer = opBufferCreate(1024);
+    text_buffer       = opBufferCreate(1024);
   }
   
   // Setup Context
-  
   
   opBufferDeviceCreate(graphic_context, general_buffer);
   opBufferDeviceReset(general_buffer);

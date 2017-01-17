@@ -36,8 +36,15 @@ set_draw_call(Text_renderer_data *renderer,
               const uint32_t id,
               const uint32_t font_id,
               const char *str,
+              const float world[16],
               opContext *ctx,
               opBuffer *buf);
+  
+  
+void
+update_draw_call_matrix(Text_renderer_data *renderer,
+                        const uint32_t id,
+                        const float world[16]);
 
 
 

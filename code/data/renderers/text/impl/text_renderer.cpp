@@ -10,6 +10,7 @@
 #include <utilities/directory.hpp>
 #include <utilities/bits.hpp>
 #include <utilities/id32.hpp>
+#include <utilities/assert.hpp>
 #include <op/op.hpp>
 
 #include <systems/text/font_bitmap.hpp>
@@ -278,20 +279,34 @@ set_draw_call(Text_renderer_data *renderer,
               const uint32_t id,
               const uint32_t font_id,
               const char *glyph_arr,
+              const float world_matrix[16],
               opContext *ctx,
               opBuffer *buf)
 {
-  LOG_TODO_ONCE("Check font extists first");
-  const uint32_t font_index = font_id - 1;
-  
-  Font *font = &((Font*)util::buffer::bytes(&renderer->font_data))[font_index];
-  opID glyph_texture = font->glyph_texture_id;
-  opID glyph_metrics_texture = font->metrics_texture_id;
-  stbtt_fontinfo info = font->font_info;
-  Data::Font_bitmap font_bitmap = font->bitmap_info;
-  
-  // Find and add missing glyphs
+  // Add Missing Glyphs to font
+  opID glyph_texture = 0;
+  opID glyph_metrics_texture = 0;
+  stbtt_fontinfo info;
+  Data::Font_bitmap font_bitmap;
+  const Font *curr_font = nullptr;
   {
+    const Font *fonts = (Font*)util::buffer::bytes(&renderer->font_data);
+    
+    if(font_id > util::buffer::size(&renderer->font_data))
+    {
+      LOG_ERROR("Font doesn't exist.");
+      return;
+    }
+    
+    const uint32_t font_index = font_id - 1;
+    curr_font     = &fonts[font_index];
+
+    glyph_texture         = curr_font->glyph_texture_id;
+    glyph_metrics_texture = curr_font->metrics_texture_id;
+    info                  = curr_font->font_info;
+    font_bitmap           = curr_font->bitmap_info;
+  
+    // Find and add missing glyphs
     for(int i = 0; i < strlen(glyph_arr); ++i)
     {
       const int codepoint = glyph_arr[i];
@@ -400,18 +415,36 @@ set_draw_call(Text_renderer_data *renderer,
       );
       opBufferExec(ctx, buf);
     }
-  }
+  }  // Add Missing Glyphs to font
   
   // Generate the string data
   {
+    // Check to see if it exists.
+    size_t index;
+    Data::Draw_call *dc = nullptr;
+    {
+      const uint32_t *ids = (uint32_t*)util::buffer::bytes(&renderer->string_keys);
+      const size_t id_count = util::buffer::size(&renderer->string_keys);
+      
+      if(!util::id32::linear_search(id, ids, id_count, &index))
+      {
+        util::buffer::push(&renderer->string_keys);
+        util::buffer::push(&renderer->string_data);
+        util::buffer::push(&renderer->draw_calls);
+        
+        index = util::buffer::size(&renderer->string_keys);
+      }
+      
+      Data::Draw_call *draw_calls = (Data::Draw_call*)util::buffer::bytes(&renderer->draw_calls);
+      dc = &draw_calls[index];
+      memset(dc, 0, sizeof(Data::Draw_call));
+    }
+    
     // Build new string.
     {
       float advance = 0;
-      float line = 0;
-      int data_ptr = 0;
-      
-      float str_tex_data[512];
-      memset(str_tex_data, 0, sizeof(str_tex_data));
+      float line    = 0;
+      int data_ptr  = 0;
       
       Data::Character *glyph_data = (Data::Character*)util::buffer::bytes(&renderer->glyph_data);
       const size_t glyph_data_size = util::buffer::size(&renderer->glyph_data);
@@ -419,7 +452,9 @@ set_draw_call(Text_renderer_data *renderer,
       uint32_t *glyph_keys = (uint32_t*)util::buffer::bytes(&renderer->glyph_keys);
       const size_t glyph_keys_size = util::buffer::size(&renderer->glyph_keys);
       
-
+      float str_tex_data[512];
+      memset(str_tex_data, 0, sizeof(str_tex_data));
+      
       for(int i = 0; i < strlen(glyph_arr); ++i)
       {
         char curr_char = glyph_arr[i];
@@ -445,15 +480,8 @@ set_draw_call(Text_renderer_data *renderer,
         }
       }
 
-      opID glyph_texture = font->glyph_texture_id;
-      opID glyph_metrics_texture = font->metrics_texture_id;
-      
-      LOG_TODO_ONCE("check to see if one exists already");
-      
-      util::buffer::push(&renderer->draw_calls);
-      Data::Draw_call *dc = (Data::Draw_call*)util::buffer::last(&renderer->draw_calls);
-      memset(dc, 0, sizeof(Data::Draw_call));
-    
+      opID glyph_texture = curr_font->glyph_texture_id;
+      opID glyph_metrics_texture = curr_font->metrics_texture_id;
       {
         opTextureDesc desc;
         memset(&desc, 0, sizeof(desc));
@@ -464,7 +492,7 @@ set_draw_call(Text_renderer_data *renderer,
         const opID str_text_id = opBufferTextureCreate(ctx, buf, &str_tex_data, &desc);
         opBufferExec(ctx, buf);
       
-        math::mat4 world_mat = math::mat4_id(); // Just for now
+        math::mat4 world_mat = math::mat4_init_with_array(world_matrix);
         memcpy(dc->world_matrix, &world_mat, sizeof(world_mat));
         
         dc->texture       = glyph_texture;
@@ -531,6 +559,23 @@ render(Text_renderer_data *renderer,
 //  return opContextDrawCallStats(ctx);
 }
 
+
+void
+update_draw_call_matrix(Text_renderer_data *renderer,
+                        const uint32_t id,
+                        const float world[16])
+{
+  // -- Param Check -- //
+  UTIL_ASSERT(renderer);
+  UTIL_ASSERT(id);
+  UTIL_ASSERT(world);
+
+  // Find the record //
+//  uint32_t *key_array = util::buffer::bytes(renderer->draw_calls)
+  
+  
+  // Update It //
+}
 
 } // ns
 } // ns

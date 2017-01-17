@@ -1,6 +1,7 @@
 #include <transformations/entity/entity_transform.hpp>
 #include <transformations/entity/entity_common.hpp>
 #include <transformations/entity/entity_rigidbody.hpp>
+#include <core/world/detail/world_index.hpp>
 #include <core/transform/transform.hpp>
 #include <data/world_data.hpp>
 #include <data/world/entity_data.hpp>
@@ -9,6 +10,7 @@
 #include <data/world/transform_data.hpp>
 #include <data/world/transform_data.hpp>
 #include <data/world/rigidbody_data.hpp>
+#include <data/renderers/text/text_renderer.hpp>
 #include <common/error_strings.hpp>
 #include <common/data_types.hpp>
 #include <utilities/logging.hpp>
@@ -76,6 +78,12 @@ udpate_text_renderer(const util::generic_id this_id,
     {
       const math::mat4 world_mat = math::transform_get_world_matrix(*transform);
       memcpy(text_data->field_draw_call[index].world_matrix, &world_mat, sizeof(world_mat));
+      
+      // -- New Text Renderer -- //
+      {
+        auto world = Core_detail::world_index_get_world_data(1);
+        Data::Text_renderer::update_draw_call_matrix(world->text_renderer, this_id, math::mat4_get_data(world_mat));
+      }
     }
     
     Data::data_unlock(text_data);

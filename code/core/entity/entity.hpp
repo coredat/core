@@ -24,7 +24,7 @@ public:
   explicit                      Entity();
   explicit                      Entity(Core::World &world);
   
-                                ~Entity(); 
+                                ~Entity();
   
                                 Entity(Entity&&);
   Entity&                       operator=(Entity&&);

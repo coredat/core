@@ -163,11 +163,16 @@ set_renderer(const util::generic_id this_id,
       auto resources = Data::get_context_data();
       auto world = Core_detail::world_index_get_world_data(1);
       
+      math::transform transform;
+      Data::transform_get_transform(world->transform, this_id, &transform);
+      math::mat4 world_mat = math::transform_get_world_matrix(transform);
+      
       Data::Text_renderer::set_draw_call(
         world->text_renderer,
         this_id,
         text_renderer.get_font_id(),
         "foobart",
+        math::mat4_get_data(world_mat),
         resources->op_context,
         resources->op_buffer
       );
