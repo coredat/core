@@ -10,10 +10,13 @@ namespace Data {
 
 struct Draw_call
 {
-  float     world_matrix[16];
-  opID      string_glyphs;
-  opID      glyph_lookup_texture;
-  opID      glyph_texture;
+  float               world_matrix[16];
+  float               wvp_matrix[16]; // This is a hack while op buffer doesn't have memory support.
+  opID                texture;
+  opID                glyph_metrics;
+  opID                string_info;
+  uint32_t            string_size;
+  uint32_t            cull_mask = -1;
 };
 
 

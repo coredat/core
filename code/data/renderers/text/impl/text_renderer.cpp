@@ -285,19 +285,13 @@ set_draw_call(Text_renderer_data *renderer,
   const uint32_t font_index = font_id - 1;
   
   Font *font = &((Font*)util::buffer::bytes(&renderer->font_data))[font_index];
+  opID glyph_texture = font->glyph_texture_id;
+  opID glyph_metrics_texture = font->metrics_texture_id;
+  stbtt_fontinfo info = font->font_info;
+  Data::Font_bitmap font_bitmap = font->bitmap_info;
   
   // Find and add missing glyphs
   {
-//    Data::data_lock(font_data);
-//    Data::data_lock(texture_data);
-//    Data::data_lock(glyph_data);
-    
-    // Get various font infos
-    opID glyph_texture = font->glyph_texture_id;
-    opID glyph_metrics_texture = font->metrics_texture_id;
-    stbtt_fontinfo info = font->font_info;
-    Data::Font_bitmap font_bitmap = font->bitmap_info;
-    
     for(int i = 0; i < strlen(glyph_arr); ++i)
     {
       const int codepoint = glyph_arr[i];
@@ -396,9 +390,6 @@ set_draw_call(Text_renderer_data *renderer,
       // We can now add the advance
       font_bitmap.bitmap_offset[0] += bitmap_advance + 2;
       
-//      Data::font_glyph_push(glyph_data, glyph_id);
-//      Data::font_glyph_set_character(glyph_data, glyph_id, &char_info);
-
       opBufferTextureUpdate(
         ctx,
         buf,
@@ -409,47 +400,25 @@ set_draw_call(Text_renderer_data *renderer,
       );
       opBufferExec(ctx, buf);
     }
-    
-
-      // Mess! I think this is above!
-    // Update the metrics information
-    {
-////      Data::font_set_font_bitmap(font_data, font_id, &font_bitmap);
-//      font->bitmap_info = font_bitmap;
-//      
-//      opID metric_texture_id = font->metrics_texture_id;
-////      Data::font_get_metric_texture_id(font_data, font_id, &metric_texture_id);
-//      
-////      Ogl::Texture metrics_texture;
-////      Data::texture_get_texture(texture_data, metric_texture_id, &metrics_texture);
-//    
-//      Ogl::texture_update_texture_1d(&metrics_texture, 0, glyph_data->size * (sizeof(float) * 4) * 4, glyph_data->field_character);
-//      
-//      opBufferTextureUpdate(
-//        ctx,
-//        buf,
-//        metric_texture_id,
-//        0,
-//        glyph_data->size * (sizeof(float) * 4) * 4,
-//        nullptr
-//      );
-    }
-    
   }
   
   // Generate the string data
   {
     // Build new string.
     {
-      Text::Font_bitmap font_bitmap;
-      Data::font_get_font_bitmap(font_data, font_id, &font_bitmap);
-    
       float advance = 0;
       float line = 0;
       int data_ptr = 0;
       
       float str_tex_data[512];
       memset(str_tex_data, 0, sizeof(str_tex_data));
+      
+      Data::Character *glyph_data = (Data::Character*)util::buffer::bytes(&renderer->glyph_data);
+      const size_t glyph_data_size = util::buffer::size(&renderer->glyph_data);
+      
+      uint32_t *glyph_keys = (uint32_t*)util::buffer::bytes(&renderer->glyph_keys);
+      const size_t glyph_keys_size = util::buffer::size(&renderer->glyph_keys);
+      
 
       for(int i = 0; i < strlen(glyph_arr); ++i)
       {
@@ -463,44 +432,28 @@ set_draw_call(Text_renderer_data *renderer,
         }
       
         // Find advance
-        for(int j = 0; j < glyph_data->size; ++j)
+        for(int j = 0; j < glyph_keys_size; ++j)
         {
-          if(glyph_arr[i] == glyph_data->keys[j])
+          if(glyph_arr[i] == glyph_keys[j])
           {
             str_tex_data[data_ptr++] = j;
             str_tex_data[data_ptr++] = advance;
             str_tex_data[data_ptr++] = line;
             
-            advance += glyph_data->field_character[j].advance[0];
+            advance += glyph_data[j].advance[0];
           }
         }
       }
+
+      opID glyph_texture = font->glyph_texture_id;
+      opID glyph_metrics_texture = font->metrics_texture_id;
       
-  //    Ogl::Texture glyph_texture;
-  //    Ogl::Texture glyph_metrics_texture;
-      opID glyph_texture;
-      opID glyph_metrics_texture;
-      stbtt_fontinfo info;
-      {
-        Data::font_get_font_face(font_data, font_id, &info);
-        Data::font_get_glyph_texture_id(font_data, font_id, &glyph_texture);
-        Data::font_get_metric_texture_id(font_data, font_id, &glyph_metrics_texture);
-        
-  //      Data::texture_get_texture(texture_data, texture_id, &glyph_texture);
-  //      Data::texture_get_texture(texture_data, glyph_metrics_texture_id, &glyph_metrics_texture);
-      }
+      LOG_TODO_ONCE("check to see if one exists already");
       
-      
-      const math::transform transform = Entity_detail::get_transform(this_id, entity_data, transform_data);
-      const math::mat4 world_mat = math::transform_get_world_matrix(transform);
-      
-      // If we don't have a draw call insert one.
-      if(!Data::text_draw_call_exists(text_draw_call, this_id))
-      {
-        Data::text_draw_call_push(text_draw_call, this_id);
-      }
-      
-      if(Data::text_draw_call_exists(text_draw_call, this_id))
+      util::buffer::push(&renderer->draw_calls);
+      Data::Draw_call *dc = (Data::Draw_call*)util::buffer::last(&renderer->draw_calls);
+      memset(dc, 0, sizeof(Data::Draw_call));
+    
       {
         opTextureDesc desc;
         memset(&desc, 0, sizeof(desc));
@@ -511,25 +464,15 @@ set_draw_call(Text_renderer_data *renderer,
         const opID str_text_id = opBufferTextureCreate(ctx, buf, &str_tex_data, &desc);
         opBufferExec(ctx, buf);
       
-  //      Ogl::Texture string_texture;
-  //      Ogl::texture_create_1d(&string_texture, sizeof(float) * data_ptr, GL_RGB32F, &str_tex_data);
-      
-        ::Text_renderer::Draw_call dc;
-        memcpy(dc.world_matrix, &world_mat, sizeof(world_mat));
+        math::mat4 world_mat = math::mat4_id(); // Just for now
+        memcpy(dc->world_matrix, &world_mat, sizeof(world_mat));
         
-        dc.texture       = glyph_texture;
-        dc.glyph_metrics = glyph_metrics_texture;
-        dc.string_info   = str_text_id;
-        dc.string_size   = strlen(glyph_arr);
-
-        Data::text_draw_call_set_draw_call(text_draw_call, this_id, &dc);
+        dc->texture       = glyph_texture;
+        dc->glyph_metrics = glyph_metrics_texture;
+        dc->string_info   = str_text_id;
+        dc->string_size   = strlen(glyph_arr);
       }
     }
-    
-    Data::data_unlock(text_draw_call);
-    Data::data_unlock(glyph_data);
-    Data::data_unlock(texture_data);
-    Data::data_unlock(font_data);
   }
 }
 
@@ -549,7 +492,43 @@ render(Text_renderer_data *renderer,
        opContext *ctx,
        opBuffer *buf)
 {
+  Draw_call *calls = (Draw_call*)util::buffer::bytes(&renderer->draw_calls);
+  const size_t number_of_calls = util::buffer::size(&renderer->draw_calls);
   
+  const math::mat4 view_proj_mat = math::mat4_init_with_array(view_proj);
+
+  // opBuffer is delayed so we need to store the wvp mats here until opExec is called.
+  for(uint32_t i = 0; i < number_of_calls; ++i)
+  {
+    const math::mat4 world_mat = math::mat4_init_with_array(calls[i].world_matrix);
+    const math::mat4 scale = math::mat4_scale(math::vec3_init(10));
+    const math::mat4 wvp_mat = math::mat4_multiply(scale, world_mat, view_proj_mat);
+    math::mat4_to_array(wvp_mat, calls[i].wvp_matrix);
+  }
+
+  opContextResetStats(ctx);
+
+  opBufferDebugMarkerPush(buf, "// -- [TEXT RENDERER] -- //");
+  opBufferDeviceReset(buf);
+  opBufferBlendBind(buf, text_blendmode);
+  opBufferRasterizerBind(buf, text_rasterizer);
+  opBufferShaderBind(buf, text_shader);
+  
+  for(uint32_t i = 0; i < number_of_calls; ++i)
+  {
+    opBufferDebugMarkerPush(buf, "// -- [RENDER STRING] -- //");
+    opBufferShaderDataBind(buf, text_shader_map, calls[i].texture);
+    opBufferShaderDataBind(buf, text_shader_metrics, calls[i].glyph_metrics);
+    opBufferShaderDataBind(buf, text_shader_details, calls[i].string_info);
+    opBufferShaderDataBind(buf, text_shader_wvp, (void*)&calls[i].wvp_matrix);
+    opBufferRenderSubset(buf, 0, calls[i].string_size);
+    opBufferDebugMarkerPop(buf);
+  }
+  
+  opBufferDebugMarkerPop(buf);
+  opBufferExec(ctx, buf);
+
+//  return opContextDrawCallStats(ctx);
 }
 
 

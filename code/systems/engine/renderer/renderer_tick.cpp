@@ -11,6 +11,7 @@
 #include <data/world/mesh_draw_call_data.hpp>
 #include <data/context/texture_data.hpp>
 #include <data/world/text_draw_call_data.hpp>
+#include <data/renderers/text/text_renderer.hpp>
 
 #include <renderer/debug_line_renderer/debug_line_renderer_node.hpp>
 #include <renderer/debug_line_renderer/debug_line_renderer.hpp>
@@ -276,7 +277,8 @@ think(std::shared_ptr<Data::World> world,
     
     glViewport(0, 0, width, height);
 
-    ::Text_renderer::render(view_proj, -1, world->text_data->field_draw_call, world->text_data->size, graphic_context, text_buffer);
+//    ::Text_renderer::render(view_proj, -1, world->text_data->field_draw_call, world->text_data->size, graphic_context, text_buffer);
+    Data::Text_renderer::render(world->text_renderer, math::mat4_get_data(view_proj), graphic_context, text_buffer);
   }
   
   out_tick_info->number_of_draw_calls = number_of_draw_calls;
