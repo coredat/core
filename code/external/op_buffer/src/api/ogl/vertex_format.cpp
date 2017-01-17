@@ -59,6 +59,7 @@ vertex_fmt_create(context_data *context, void *data)
     &context->vertex_format_descs[cmd->vertex_fmt_id]
   );
   assert(internal_desc);
+  memset(internal_desc, 0, sizeof(ogl::vertex_format_desc));
 
   // -- Create format -- //
   for(decltype(cmd->desc_count) i = 0; i < cmd->desc_count; ++i)
@@ -73,6 +74,7 @@ vertex_fmt_create(context_data *context, void *data)
     internal_desc->stride += (op::ogl::element_count(attr->type) * sizeof(gl_type(attr->type)));
 
     internal_desc->number_of_attributes = i + 1;
+    internal_desc->number_of_elements += op::ogl::element_count(attr->type);
   }
 
   // -- Extra Logging -- //

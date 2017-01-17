@@ -40,7 +40,7 @@ shader_data_create(context_data *context, void *data)
 
   // -- Loop through the uniforms looking for the uniform -- //
   const GLuint program_id = context->shader_descs[cmd->shader_id].program;
-  
+
   // -- Update In-Out Desc -- //
   opShaderDataDesc *in_out_desc = cmd->desc;
   in_out_desc->status = opStatus_INVALID; // Marked as invalid, if found it will be remarked.
@@ -179,9 +179,9 @@ shader_data_bind(context_data *context, void *data)
 
       glUniform1i(desc->count, desc->index);
 
-      glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, texture_desc->wrap_s_coord);
-      glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, texture_desc->filter_mag);
-      glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, texture_desc->filter_min);
+      // glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, texture_desc->wrap_s_coord);
+      // glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, texture_desc->filter_mag);
+      // glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, texture_desc->filter_min);
 
       break;
     }
@@ -207,11 +207,11 @@ shader_data_bind(context_data *context, void *data)
       glBindTexture(GL_TEXTURE_2D, texture_desc->texture_id);
 
       glUniform1i(desc->count, desc->index);
-
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, texture_desc->wrap_s_coord);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, texture_desc->wrap_t_coord);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, texture_desc->filter_mag);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, texture_desc->filter_min);
+      //
+      // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+      // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+      // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, texture_desc->filter_mag);
+      // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, texture_desc->filter_min);
 
       break;
     }

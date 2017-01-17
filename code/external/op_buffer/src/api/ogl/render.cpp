@@ -73,7 +73,7 @@ render_generic(context_data *context, void *data)
       &context->vertex_format_descs[context->vertex_format_last_bind]
     );
 
-    const GLsizei count = geom_desc->element_count / vert_desc->number_of_attributes;
+    const GLsizei count = geom_desc->element_count / vert_desc->number_of_elements;
 
     glDrawArrays(primitive, 0, count);
 

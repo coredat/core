@@ -8,7 +8,7 @@
 
             // -- Buffer Management -- //
 
-opBuffer*   opBufferCreate();
+opBuffer*   opBufferCreate(const size_t initialize_size);
 void        opBufferExec(opContext *ctx, opBuffer *buf);
 void        opBufferFlush(opBuffer *buf);
 void        opBufferReset(opBuffer *buf);

@@ -53,7 +53,7 @@ texture_create(context_data *context, void *data)
     const GLenum type           = op_pixel_format_to_type(cmd->desc->format);
     const GLenum dimention      = op_dimention_to_texture(cmd->desc->dimention);
 
-    internal_desc->wrap_s_coord = op_filtering_wrap_mode(cmd->desc->wrap_mode_width);
+    internal_desc->wrap_s_coord =  op_filtering_wrap_mode(cmd->desc->wrap_mode_width);
     internal_desc->wrap_t_coord = op_filtering_wrap_mode(cmd->desc->wrap_mode_height);
     internal_desc->wrap_r_coord = op_filtering_wrap_mode(cmd->desc->wrap_mode_depth);
     internal_desc->filter_min = op_filtering_min_mode(cmd->desc->filter, cmd->desc->mips);
@@ -66,7 +66,7 @@ texture_create(context_data *context, void *data)
       {
         glBindTexture(dimention, texture);
 
-        glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, internal_desc->wrap_s_coord);
+        glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, internal_desc->filter_mag);
         glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, internal_desc->filter_min);
 
@@ -82,13 +82,13 @@ texture_create(context_data *context, void *data)
       }
       #else
       // Simulated 1D texture.
-      case(opDimention_TWO):
+      case(opDimention_ONE):
       {
         height = 1;
         glBindTexture(GL_TEXTURE_2D, texture);
 
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, internal_desc->wrap_s_coord);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, internal_desc->wrap_t_coord);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, internal_desc->filter_mag);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, internal_desc->filter_min);
 
@@ -109,6 +109,12 @@ texture_create(context_data *context, void *data)
       case(opDimention_TWO):
       {
         glBindTexture(dimention, texture);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, internal_desc->filter_mag);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, internal_desc->filter_min);
+
         glTexImage2D(dimention,
                      0,
                      internal_format,
@@ -126,6 +132,13 @@ texture_create(context_data *context, void *data)
       case(opDimention_THREE):
       {
         glBindTexture(dimention, texture);
+
+        glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, internal_desc->filter_mag);
+        glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, internal_desc->filter_min);
+
         glTexImage3D(dimention,
                      0,
                      internal_format,
@@ -234,10 +247,12 @@ texture_update(context_data *context, void *data)
   assert(internal_desc);
 
   // -- Pixel Alignment -- //
+  #ifdef OGL_HAS_GL_RED
   if(internal_desc->format == GL_RED)
   {
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
   }
+  #endif
 
   // -- Update Resource -- //
   switch(internal_desc->dimention)
@@ -299,10 +314,12 @@ texture_update(context_data *context, void *data)
   }
 
   // Put packing back to what it was. //
+  #ifdef OGL_HAS_GL_RED
   if(internal_desc->format == GL_RED)
   {
     glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
   }
+  #endif
 
   // -- Extra Check -- //
   #ifdef OP_BUFFER_API_OGL_EXTRA_CHECKS

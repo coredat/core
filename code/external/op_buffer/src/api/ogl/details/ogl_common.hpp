@@ -25,6 +25,8 @@
 #define OGL_HAS_GEOMETRY_SHADER
 #define OGL_HAS_TEXTURE_1D
 #define OGL_HAS_TEXTURE_3D
+#define OGL_HAS_DEBUG_MARKER // temporary.
+#define OGL_HAS_GL_RED
 #endif
 
 
