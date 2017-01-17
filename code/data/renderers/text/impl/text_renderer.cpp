@@ -69,7 +69,7 @@ initialize(opContext *ctx,
     
     // Glyphs
     setup &= util::buffer::init(&renderer->glyph_keys,
-                                sizeof(uint32_t),
+                                sizeof(uint64_t),
                                 inital_glyph_size_hint,
                                 malloc_fn, realloc_fn, free_fn);
     
@@ -233,7 +233,6 @@ initialize(opContext *ctx,
     opBlendDesc blend_desc;
     {
       memset(&blend_desc, 0, sizeof(blend_desc));
-      
       blend_desc.enabled = opBool_TRUE;
       
       text_blendmode = opBufferBlendCreate(ctx, buf, &blend_desc);
@@ -264,7 +263,7 @@ initialize(opContext *ctx,
 namespace {
 
 
-uint32_t
+inline uint64_t
 create_glyph_id(const uint16_t font_id, const uint16_t codepoint)
 {
   return util::bits_pack(font_id, codepoint);
@@ -328,11 +327,11 @@ set_draw_call(Text_renderer_data *renderer,
       }
       
       // Check to see if the codepoint is already in the map.
-      const uint32_t  glyph_id        = create_glyph_id(font_id, codepoint);
-      const uint32_t *glyph_ids       = (uint32_t*)util::buffer::bytes(&renderer->glyph_keys);
+      const uint64_t  glyph_id        = create_glyph_id(font_id, codepoint);
+      const uint64_t *glyph_ids       = (uint64_t*)util::buffer::bytes(&renderer->glyph_keys);
       const size_t    glyph_ids_count = util::buffer::size(&renderer->glyph_keys);
       
-      if(util::id32::linear_search(glyph_id, glyph_ids, glyph_ids_count))
+      if(util::id::linear_search(glyph_id, glyph_ids, glyph_ids_count))
       {
         continue;
       }
@@ -395,7 +394,7 @@ set_draw_call(Text_renderer_data *renderer,
       util::buffer::push(&renderer->glyph_keys);
       util::buffer::push(&renderer->glyph_data);
       
-      uint32_t *last_id = (uint32_t*)util::buffer::last(&renderer->glyph_keys);
+      uint64_t *last_id = (uint64_t*)util::buffer::last(&renderer->glyph_keys);
       *last_id = glyph_id;
       
       Data::Character *char_info = (Data::Character*)util::buffer::last(&renderer->glyph_data);
@@ -437,7 +436,7 @@ set_draw_call(Text_renderer_data *renderer,
     float line    = 0;
     int data_ptr  = 0;
 
-    const uint32_t *glyph_keys        = (uint32_t*)util::buffer::bytes(&renderer->glyph_keys);
+    const uint64_t *glyph_keys        = (uint64_t*)util::buffer::bytes(&renderer->glyph_keys);
     const size_t glyph_keys_size      = util::buffer::size(&renderer->glyph_keys);
     const Data::Character *glyph_data = (Data::Character*)util::buffer::bytes(&renderer->glyph_data);
     
@@ -458,7 +457,9 @@ set_draw_call(Text_renderer_data *renderer,
       // Find advance
       for(int j = 0; j < glyph_keys_size; ++j)
       {
-        if(glyph_arr[i] == glyph_keys[j])
+        const uint64_t glyph_id = create_glyph_id(font_id, glyph_arr[i]);
+      
+        if(glyph_id == glyph_keys[j])
         {
           str_tex_data[data_ptr++] = j;
           str_tex_data[data_ptr++] = advance;
@@ -479,7 +480,7 @@ set_draw_call(Text_renderer_data *renderer,
         const uint32_t *ids   = (uint32_t*)util::buffer::bytes(&renderer->string_keys);
         const size_t id_count = util::buffer::size(&renderer->string_keys);
         
-        if(!util::id32::linear_search(id, ids, id_count, &index))
+        if(!util::id::linear_search(id, ids, id_count, &index))
         {
           util::buffer::push(&renderer->string_keys);
           util::buffer::push(&renderer->string_data);
@@ -603,7 +604,7 @@ update_draw_call_matrix(Text_renderer_data *renderer,
     const uint32_t *ids   = (uint32_t*)util::buffer::bytes(&renderer->string_keys);
     const size_t id_count = util::buffer::size(&renderer->string_keys);
 
-    if(!util::id32::linear_search(id, ids, id_count, &index))
+    if(!util::id::linear_search(id, ids, id_count, &index))
     {
       LOG_WARNING("This entity has no text renderer attached.");
       return;
