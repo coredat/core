@@ -6,9 +6,20 @@
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
 #include <GLES2/gl2.h>
-#else
+#elif __APPLE__
 #include <OpenGL/gl3.h>
 #include <OpenGL/glext.h>
+#elif __linux__
+#define GL_GLEXT_PROTOTYPES
+#include <GL/gl.h>
+#include <GL/glext.h>
+#elif _WIN32
+#include <GL/gl.h>
+#include <GL/glext.h>
+// Glew or somesuch needs to go here
+#else
+#include <GL/gl.h>
+#include <GL/glext.h>
 #endif
 
 #ifdef OP_BUFFER_API_OGL_ES2
@@ -25,7 +36,11 @@
 #define OGL_HAS_GEOMETRY_SHADER
 #define OGL_HAS_TEXTURE_1D
 #define OGL_HAS_TEXTURE_3D
+
+#ifdef __APPLE__
 #define OGL_HAS_DEBUG_MARKER // temporary.
+#endif
+
 #define OGL_HAS_GL_RED
 #endif
 

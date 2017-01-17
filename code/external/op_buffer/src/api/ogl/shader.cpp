@@ -406,10 +406,9 @@ shader_create(context_data *context, void *data)
         uni->count    = location;
         uni->program  = shd_id;
 
-        strlcpy(
+        strcpy(
           uni->name,
-          curr_uni_name,
-          sizeof(char) * max_uniform_name_length()
+          curr_uni_name
         );
 
         // -- Extra Check -- //
@@ -449,10 +448,9 @@ shader_create(context_data *context, void *data)
           uni->type     = gl_type;
           uni->count    = static_cast<int32_t>(size);
 
-          strlcpy(
+          strcpy(
             uni->name,
-            curr_uni_name,
-            sizeof(char) * max_uniform_name_length()
+            curr_uni_name
           );
         }
 

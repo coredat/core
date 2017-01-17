@@ -3,7 +3,10 @@
 
 
 #include "desc.hpp"
+#include "common.hpp"
 #include <stdint.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 
 inline uint8_t
@@ -19,6 +22,16 @@ opPixelFormat8WithChannels(uint8_t channels)
     default:
       return opPixelFormat_UNKNOWN;
   };
+}
+
+
+inline void
+opBasicSetup()
+{
+  opCallbackAlloc([](size_t requested_size, uintptr_t user_data){ return malloc(requested_size); });
+  opCallbackResize([](size_t requested_size, void *old_data, uintptr_t user_data){return realloc(old_data, requested_size);});
+  opCallbackDestroy([](void *data_to_destroy, uintptr_t user_data){ free(data_to_destroy);});
+  opCallbackLog([](const char *log, uintptr_t user_data){ printf("%s", log);});
 }
 
 
