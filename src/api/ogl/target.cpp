@@ -28,6 +28,9 @@ target_create(context_data *context, void *data)
   desc->clear_red   = target_info->desc->clear_red_color;
   desc->clear_green = target_info->desc->clear_green_color;
   desc->clear_blue  = target_info->desc->clear_blue_color;
+
+  // -- Set In/Out Desc -- //
+  target_info->desc->status = opStatus_VALID;
 }
 
 
