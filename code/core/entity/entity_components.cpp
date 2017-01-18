@@ -8,8 +8,12 @@
 #include <core/transform/transform.hpp>
 #include <core/physics/rigidbody.hpp>
 #include <core/renderer/renderer.hpp>
+#include <core/renderer/text_renderer.hpp>
 #include <data/world/entity_data.hpp>
 #include <data/world/camera_data.hpp>
+#include <data/world/transform_data.hpp>
+#include <data/context_data.hpp>
+#include <data/renderers/text/text_renderer.hpp>
 #include <common/data_types.hpp>
 #include <common/error_strings.hpp>
 #include <utilities/logging.hpp>
@@ -18,6 +22,7 @@
 #include <transformations/entity/entity_renderer.hpp>
 #include <transformations/entity/entity_rigidbody.hpp>
 #include <transformations/entity/entity_light.hpp>
+#include <math/math.hpp>
 
 
 namespace Core {
@@ -114,6 +119,52 @@ set_renderer(const Core::Entity_ref &ref,
                               world_data->mesh_data,
                               world_data->text_data,
                               renderer);
+  
+  return true;
+}
+
+
+bool
+set_renderer(const Core::Entity_ref &ref,
+             const Core::Text_renderer &text_renderer)
+{
+  if(!ref)
+  {
+    LOG_ERROR(Error_string::entity_is_invalid());
+    assert(false);
+    return false;
+  }
+  
+  const uint32_t entity_uint_id(ref.get_id());
+  const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(entity_uint_id);
+
+  auto world_data(Core_detail::world_index_get_world_data(entity_id.world_instance));
+  assert(world_data);
+  
+  // -- Check to see if renderer is attached -- //
+  {
+  }
+
+  // -- New Text Renderer -- //
+  {
+    auto resources = Data::get_context_data();
+    auto world = Core_detail::world_index_get_world_data(1);
+    
+    math::transform transform;
+    Data::transform_get_transform(world->transform, entity_uint_id, &transform);
+    math::mat4 world_mat = math::transform_get_world_matrix(transform);
+    
+    Data::Text_renderer::set_draw_call(
+      world->text_renderer,
+      entity_uint_id,
+      text_renderer.get_font_id(),
+      text_renderer.get_text(),
+      math::mat4_get_data(world_mat),
+      resources->op_context,
+      resources->op_buffer
+    );
+  }
+
   
   return true;
 }

@@ -40,6 +40,11 @@ bool
 set_renderer(const Core::Entity_ref &ref,
              const Core::Renderer &renderer);
   
+  
+bool
+set_renderer(const Core::Entity_ref &ref,
+             const Core::Text_renderer &text_renderer);
+  
 
 Core::Renderer
 get_renderer(const Core::Entity_ref &ref);

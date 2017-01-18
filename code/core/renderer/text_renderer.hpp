@@ -16,6 +16,8 @@ public:
   explicit            Text_renderer();
   explicit            Text_renderer(const util::generic_id font_id,
                                     const util::generic_id text_id);
+  
+                      ~Text_renderer();
 
   void                set_font(const Font &font);
   Font                get_font() const;
@@ -32,6 +34,9 @@ public:
   util::generic_id    get_text_id() const;
   
 private:
+
+  struct Impl;
+  Impl *m_impl;
 
   util::generic_id    m_font_id = util::generic_id_invalid();
   util::generic_id    m_text_id = util::generic_id_invalid();

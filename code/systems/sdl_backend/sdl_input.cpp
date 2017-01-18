@@ -404,6 +404,27 @@ process_input_messages(const SDL_Event *evt,
     case(SDL_KEYUP):
     {
       input_data->keyboard[evt->key.keysym.scancode] = Core::Button_state::up_on_frame;
+      
+      if(input_stream_callback)
+      {
+        switch(evt->key.keysym.scancode)
+        {
+          case(SDL_SCANCODE_BACKSPACE):
+          {
+            constexpr char backspace[] = "\b";
+            input_stream_callback(backspace);
+            break;
+          }
+          case(SDL_SCANCODE_RETURN):
+          case(SDL_SCANCODE_RETURN2):
+          {
+            constexpr char newline[] = "\n";
+            input_stream_callback(newline);
+            break;
+          }
+        }
+      }
+      
       break;
     } // SDL_KEYUP
     

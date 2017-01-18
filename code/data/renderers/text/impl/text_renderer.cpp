@@ -19,13 +19,13 @@
 namespace {
 
 
-opID text_shader = 0;
-opID text_shader_wvp = 0;
-opID text_shader_metrics = 0;
-opID text_shader_details = 0;
-opID text_shader_map = 0;
-opID text_rasterizer = 0;
-opID text_blendmode = 0;
+opID text_shader          = 0;
+opID text_shader_wvp      = 0;
+opID text_shader_metrics  = 0;
+opID text_shader_details  = 0;
+opID text_shader_map      = 0;
+opID text_rasterizer      = 0;
+opID text_blendmode       = 0;
 
 
 } // anon ns
@@ -264,7 +264,7 @@ namespace {
 
 
 inline uint64_t
-create_glyph_id(const uint16_t font_id, const uint16_t codepoint)
+create_glyph_id(const uint32_t font_id, const uint32_t codepoint)
 {
   return util::bits_pack(font_id, codepoint);
 }
@@ -303,21 +303,23 @@ set_draw_call(Text_renderer_data *renderer,
 
   // -- Add missing glyphs to the bitmap -- //
   
-  const Font *curr_font = nullptr;
+  Font *curr_font = nullptr;
   {
     stbtt_fontinfo info;
-    Data::Font_bitmap font_bitmap;
+    Data::Font_bitmap *font_bitmap = nullptr;
     
-    const Font *fonts = (Font*)util::buffer::bytes(&renderer->font_data);
+    Font *fonts = (Font*)util::buffer::bytes(&renderer->font_data);
     
     const uint32_t font_index = font_id - 1;
     curr_font = &fonts[font_index];
 
     info        = curr_font->font_info;
-    font_bitmap = curr_font->bitmap_info;
+    font_bitmap = &curr_font->bitmap_info;
   
     // Find and add missing glyphs
-    for(int i = 0; i < strlen(glyph_arr); ++i)
+    const size_t string_len = strlen(glyph_arr);
+    
+    for(int i = 0; i < string_len; ++i)
     {
       const int codepoint = glyph_arr[i];
       
@@ -344,7 +346,7 @@ set_draw_call(Text_renderer_data *renderer,
       unsigned char * glyph_bitmap = stbtt_GetCodepointBitmap(
         &info,
         0,
-        font_bitmap.scale,
+        font_bitmap->scale,
         codepoint,
         &glyph_width,
         &glyph_height,
@@ -352,23 +354,22 @@ set_draw_call(Text_renderer_data *renderer,
         &y_offset
       );
 
-
       int advance, left_side_bearing;
       stbtt_GetCodepointHMetrics(&info, codepoint, &advance, &left_side_bearing);
       
       const int bitmap_advance = glyph_width;
       const int width_needed = bitmap_advance + glyph_width;
       
-      if(font_bitmap.bitmap_offset[0] + width_needed > font_bitmap.bitmap_size[0])
+      if(font_bitmap->bitmap_offset[0] + width_needed > font_bitmap->bitmap_size[0])
       {
-        if(font_bitmap.bitmap_offset[1] + font_bitmap.line_height > font_bitmap.bitmap_size[1])
+        if(font_bitmap->bitmap_offset[1] + font_bitmap->line_height > font_bitmap->bitmap_size[1])
         {
           LOG_WARNING("Font map is full.");
           break;
         }
         
-        font_bitmap.bitmap_offset[0] = 0;
-        font_bitmap.bitmap_offset[1] += font_bitmap.line_height;
+        font_bitmap->bitmap_offset[0] = 0;
+        font_bitmap->bitmap_offset[1] += glyph_height;
       }
 
       opBufferExec(ctx, buf);
@@ -376,8 +377,8 @@ set_draw_call(Text_renderer_data *renderer,
         ctx,
         buf,
         curr_font->glyph_texture_id,
-        font_bitmap.bitmap_offset[0],
-        font_bitmap.bitmap_offset[1],
+        font_bitmap->bitmap_offset[0],
+        font_bitmap->bitmap_offset[1],
         glyph_width,
         glyph_height,
         glyph_bitmap
@@ -385,8 +386,8 @@ set_draw_call(Text_renderer_data *renderer,
       
       opBufferExec(ctx, buf);
       
-      int kern;
-      kern = stbtt_GetCodepointKernAdvance(&info, codepoint, glyph_arr[i + 1]);
+//      int kern;
+//      kern = stbtt_GetCodepointKernAdvance(&info, codepoint, glyph_arr[i + 1]);
       
       stbtt_FreeBitmap(glyph_bitmap, nullptr);
       
@@ -405,29 +406,31 @@ set_draw_call(Text_renderer_data *renderer,
       char_info->offset[0] = x_offset;
       char_info->offset[1] = y_offset;
 
-      char_info->advance[0] = (math::to_float(advance) * font_bitmap.scale) / math::to_float(font_bitmap.bitmap_size[0]);
-      char_info->advance[1] = (font_bitmap.line_height + font_bitmap.decsent) * font_bitmap.scale;
+      char_info->advance[0] = (math::to_float(advance) * font_bitmap->scale) / math::to_float(font_bitmap->bitmap_size[0]);
+      char_info->advance[1] = (font_bitmap->line_height + font_bitmap->decsent) * font_bitmap->scale;
       
-      char_info->uv[0] = math::to_float(font_bitmap.bitmap_offset[0]) / math::to_float(font_bitmap.bitmap_size[0]);
-      char_info->uv[1] = math::to_float(font_bitmap.bitmap_offset[1]) / math::to_float(font_bitmap.bitmap_size[1]);
+      char_info->uv[0] = math::to_float(font_bitmap->bitmap_offset[0]) / math::to_float(font_bitmap->bitmap_size[0]);
+      char_info->uv[1] = math::to_float(font_bitmap->bitmap_offset[1]) / math::to_float(font_bitmap->bitmap_size[1]);
       
-      char_info->st[0] = char_info->uv[0] + (math::to_float(glyph_width) / math::to_float(font_bitmap.bitmap_size[0]));
-      char_info->st[1] = char_info->uv[1] + (math::to_float(glyph_height) / math::to_float(font_bitmap.bitmap_size[1]));
+      char_info->st[0] = char_info->uv[0] + (math::to_float(glyph_width) / math::to_float(font_bitmap->bitmap_size[0]));
+      char_info->st[1] = char_info->uv[1] + (math::to_float(glyph_height) / math::to_float(font_bitmap->bitmap_size[1]));
       
       // We can now add the advance
-      font_bitmap.bitmap_offset[0] += bitmap_advance + 2;
+      font_bitmap->bitmap_offset[0] += bitmap_advance + 2;
       
       opBufferTextureUpdate(
         ctx,
         buf,
         curr_font->metrics_texture_id,
         0,
-        util::buffer::size(&renderer->glyph_data) * 5,
+        util::buffer::size(&renderer->glyph_data) * 4,
         util::buffer::bytes(&renderer->glyph_data)
       );
       opBufferExec(ctx, buf);
     }
   }  // Add Missing Glyphs to font
+  
+//  printf("Glyphs: %d", util::buffer::size(&renderer->glyph_keys));
   
   
   // -- Build new string and Set/Update Draw call -- //
@@ -443,7 +446,9 @@ set_draw_call(Text_renderer_data *renderer,
     float str_tex_data[512];
     memset(str_tex_data, 0, sizeof(str_tex_data));
     
-    for(int i = 0; i < strlen(glyph_arr); ++i)
+    const size_t number_of_chars = strlen(glyph_arr);
+    
+    for(int i = 0; i < number_of_chars; ++i)
     {
       char curr_char = glyph_arr[i];
       
@@ -464,6 +469,7 @@ set_draw_call(Text_renderer_data *renderer,
           str_tex_data[data_ptr++] = j;
           str_tex_data[data_ptr++] = advance;
           str_tex_data[data_ptr++] = line;
+          str_tex_data[data_ptr++] = 123;
           
           advance += glyph_data[j].advance[0];
         }
@@ -487,11 +493,13 @@ set_draw_call(Text_renderer_data *renderer,
           util::buffer::push(&renderer->draw_calls);
           
           index = util::buffer::size(&renderer->string_keys) - 1;
+          uint32_t *last_id = (uint32_t*)util::buffer::last(&renderer->string_keys);
+          
+          *last_id = id;
         }
         
         Data::Draw_call *draw_calls = (Data::Draw_call*)util::buffer::bytes(&renderer->draw_calls);
         dc = &draw_calls[index];
-        memset(dc, 0, sizeof(Data::Draw_call));
         
         // Double check all sizes are equal //
         UTIL_ASSERT(
@@ -507,16 +515,16 @@ set_draw_call(Text_renderer_data *renderer,
         opTextureDesc desc;
         memset(&desc, 0, sizeof(desc));
         
-        desc.format    = opPixelFormat_RGB32F;
+        desc.format    = opPixelFormat_RGBA32F;
         desc.dimention = opDimention_ONE;
-        desc.width     = data_ptr * sizeof(float);
+        desc.width     = 512;
         
         dc->string_info = opBufferTextureCreate(ctx, buf, &str_tex_data, &desc);
       }
       // Update
       else
       {
-        opBufferTextureUpdate(ctx, buf, dc->string_info, 0, data_ptr * sizeof(float), &str_tex_data);
+        opBufferTextureUpdate(ctx, buf, dc->string_info, 0, 512, &str_tex_data);
       }
       
       opBufferExec(ctx, buf);

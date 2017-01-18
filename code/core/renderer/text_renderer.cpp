@@ -16,6 +16,12 @@
 namespace Core {
 
 
+struct Text_renderer::Impl
+{
+  std::string m_text;
+};
+
+
 Text_renderer::Text_renderer()
 : Text_renderer(util::generic_id_invalid(),
                 util::generic_id_invalid())
@@ -25,10 +31,17 @@ Text_renderer::Text_renderer()
 
 Text_renderer::Text_renderer(const util::generic_id font_id,
                              const util::generic_id text_id)
-: m_font_id(font_id)
+: m_impl(new Impl)
+, m_font_id(font_id)
 , m_text_id(text_id)
 {
   LOG_TODO("Check these ids are valid.");
+}
+
+
+Text_renderer::~Text_renderer()
+{
+  delete m_impl;
 }
 
 
@@ -65,39 +78,14 @@ Text_renderer::get_font() const
 void
 Text_renderer::set_text(const char *str)
 {
-  auto resources = Data::get_context_data();
-  assert(resources);
-  
-  auto text_mesh_data = resources->text_mesh_data;
-  assert(text_mesh_data);
-
-  // Set the text resource
-  // But don't build the mesh
-  {
-    Data::data_lock(text_mesh_data);
-    
-    // Search for text, if it doesn't exist then add it.
-    if(!Common::fixed_string_search(str,
-                                    Data::text_mesh_get_text_data(text_mesh_data),
-                                    Data::text_mesh_get_text_stride(),
-                                    Data::text_mesh_get_size(text_mesh_data)))
-    {
-      m_text_id = Data::text_mesh_push(text_mesh_data);
-    }
-    
-    Data::text_mesh_set_text(text_mesh_data, m_text_id, str, strlen(str));
-    Data::text_mesh_set_font_id(text_mesh_data, m_text_id, &m_font_id);
-    
-    Data::data_unlock(text_mesh_data);
-  }
-  
+  m_impl->m_text = std::string(str);
 }
 
 
 const char*
 Text_renderer::get_text() const
 {
-  return "";
+  return m_impl->m_text.c_str();
 }
 
 
