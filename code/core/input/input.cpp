@@ -13,11 +13,11 @@ uintptr_t input_user_data = 0;
 Core::Input::Keyboard_stream_fn keyboard_stream_callback = nullptr;
 
 inline void
-sdl_input_stream(const char *text)
+sdl_input_stream(const uint8_t *text, const size_t size)
 {
   if(keyboard_stream_callback)
   {
-    keyboard_stream_callback(input_user_data, text);
+    keyboard_stream_callback(input_user_data, text, size);
   }
 }
 

@@ -321,7 +321,7 @@ set_draw_call(Text_renderer_data *renderer,
     
     for(int i = 0; i < string_len; ++i)
     {
-      const int codepoint = glyph_arr[i];
+      const int codepoint = (unsigned char)glyph_arr[i];
       
       if(codepoint == '\n')
       {
@@ -450,7 +450,7 @@ set_draw_call(Text_renderer_data *renderer,
     
     for(int i = 0; i < number_of_chars; ++i)
     {
-      char curr_char = glyph_arr[i];
+      const int curr_char = (unsigned char)glyph_arr[i];
       
       if(curr_char == '\n')
       {
@@ -462,7 +462,7 @@ set_draw_call(Text_renderer_data *renderer,
       // Find advance
       for(int j = 0; j < glyph_keys_size; ++j)
       {
-        const uint64_t glyph_id = create_glyph_id(font_id, glyph_arr[i]);
+        const uint64_t glyph_id = create_glyph_id(font_id, curr_char);
       
         if(glyph_id == glyph_keys[j])
         {
@@ -503,9 +503,8 @@ set_draw_call(Text_renderer_data *renderer,
         
         // Double check all sizes are equal //
         UTIL_ASSERT(
-          util::buffer::size(&renderer->string_keys) ==
-          util::buffer::size(&renderer->string_data) ==
-          util::buffer::size(&renderer->draw_calls)
+          (util::buffer::size(&renderer->string_keys) == util::buffer::size(&renderer->string_data)) &&
+          (util::buffer::size(&renderer->string_keys) == util::buffer::size(&renderer->draw_calls))
         );
       }
     

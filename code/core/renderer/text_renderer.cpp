@@ -78,6 +78,7 @@ Text_renderer::get_font() const
 void
 Text_renderer::set_text(const char *str)
 {
+  assert(m_impl);
   m_impl->m_text = std::string(str);
 }
 
@@ -85,6 +86,7 @@ Text_renderer::set_text(const char *str)
 const char*
 Text_renderer::get_text() const
 {
+  assert(m_impl);
   return m_impl->m_text.c_str();
 }
 

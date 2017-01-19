@@ -82,7 +82,7 @@ get_transform(const Core::Entity_ref &ref)
                                            world_data->entity,
                                            world_data->transform);
 
-  return Core::Transform();
+//  return Core::Transform();
 }
 
 
@@ -143,6 +143,24 @@ set_renderer(const Core::Entity_ref &ref,
   
   // -- Check to see if renderer is attached -- //
   {
+    auto entity_data = world_data->entity;
+  
+    uint32_t components = 0;
+    Data::entity_get_components(entity_data, entity_uint_id, &components);
+    
+    const uint32_t renderer_type = Common::Data_type::get_renderer_type(components);
+  
+    if(renderer_type != 0)
+    {
+      return false;
+    }
+    else
+    {
+      // Remove component
+      components &= Common::Data_type::renderer_text;
+      
+      Data::entity_set_components(entity_data, entity_uint_id, &components);
+    }
   }
 
   // -- New Text Renderer -- //

@@ -31,7 +31,7 @@ process_input_messages(const SDL_Event *evt,
   
 
 
-using Text_input_stream_fn = void(*)(const char *utf8);
+using Text_input_stream_fn = void(*)(const uint8_t *utf8_stream, const size_t size_of_stream);
 
 void
 get_text_input_stream(const Text_input_stream_fn &text_input_stream);

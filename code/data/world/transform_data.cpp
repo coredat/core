@@ -19,7 +19,6 @@ namespace Data {
 // ====================== //
 
 
-
 void
 data_lock(const Transform_data *data)
 {

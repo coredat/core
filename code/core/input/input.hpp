@@ -41,7 +41,7 @@ controllers_are_in_use(Core::Context &context);
 /*!
   Get keyboard stream
 */
-using Keyboard_stream_fn = void(*)(const uintptr_t user_data, const char *);
+using Keyboard_stream_fn = void(*)(const uintptr_t user_data, const uint8_t *utf8_stream, const size_t size_of_stream);
 
 void
 keyboard_stream(Core::Context &context,

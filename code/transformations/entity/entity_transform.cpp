@@ -70,23 +70,24 @@ udpate_text_renderer(const util::generic_id this_id,
 
   // Update mesh renderer data
   {
+    const math::mat4 world_mat = math::transform_get_world_matrix(*transform);
+  
     Data::data_lock(text_data);
   
     size_t index;
 
     if(Data::text_draw_call_exists(text_data, this_id, &index))
     {
-      const math::mat4 world_mat = math::transform_get_world_matrix(*transform);
       memcpy(text_data->field_draw_call[index].world_matrix, &world_mat, sizeof(world_mat));
-      
-      // -- New Text Renderer -- //
-      {
-        auto world = Core_detail::world_index_get_world_data(1);
-        Data::Text_renderer::update_draw_call_matrix(world->text_renderer, this_id, math::mat4_get_data(world_mat));
-      }
     }
     
     Data::data_unlock(text_data);
+    
+    // -- New Text Renderer -- //
+    {
+      auto world = Core_detail::world_index_get_world_data(1);
+      Data::Text_renderer::update_draw_call_matrix(world->text_renderer, this_id, math::mat4_get_data(world_mat));
+    }
   }
 }
 
@@ -150,7 +151,11 @@ set_transform(const util::generic_id this_id,
     }
 
     update_mesh_renderer(this_id, mesh_data, &new_transform);
-    udpate_text_renderer(this_id, text_data, &new_transform);
+    
+//    if(components & Common::Data_type::renderer_text)
+    {
+      udpate_text_renderer(this_id, text_data, &new_transform);
+    }
   }
 }
 

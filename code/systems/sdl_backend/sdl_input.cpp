@@ -412,16 +412,18 @@ process_input_messages(const SDL_Event *evt,
           case(SDL_SCANCODE_BACKSPACE):
           {
             constexpr char backspace[] = "\b";
-            input_stream_callback(backspace);
+            input_stream_callback((uint8_t*)backspace, strlen(backspace));
             break;
           }
           case(SDL_SCANCODE_RETURN):
           case(SDL_SCANCODE_RETURN2):
           {
             constexpr char newline[] = "\n";
-            input_stream_callback(newline);
+            input_stream_callback((uint8_t*)newline, strlen(newline));
             break;
           }
+          
+          default: ; // Just to shutup warning.
         }
       }
       
@@ -435,7 +437,7 @@ process_input_messages(const SDL_Event *evt,
     {
       if(input_stream_callback)
       {
-        input_stream_callback(evt->text.text);
+        input_stream_callback((uint8_t*)evt->text.text, strlen(evt->text.text));
       }
       
       break;

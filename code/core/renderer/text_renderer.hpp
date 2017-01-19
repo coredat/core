@@ -36,7 +36,7 @@ public:
 private:
 
   struct Impl;
-  Impl *m_impl;
+  Impl *m_impl = nullptr;
 
   util::generic_id    m_font_id = util::generic_id_invalid();
   util::generic_id    m_text_id = util::generic_id_invalid();
