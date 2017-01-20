@@ -14,6 +14,7 @@ public:
 
   explicit          Font();
   explicit          Font(const char *filename);
+  explicit          Font(const util::generic_id id);
   
   util::generic_id  get_id() const;
   

@@ -9,6 +9,7 @@
 #include <core/physics/rigidbody.hpp>
 #include <core/renderer/renderer.hpp>
 #include <core/renderer/text_renderer.hpp>
+#include <core/font/font.hpp>
 #include <data/world/entity_data.hpp>
 #include <data/world/camera_data.hpp>
 #include <data/world/transform_data.hpp>
@@ -82,7 +83,7 @@ get_transform(const Core::Entity_ref &ref)
                                            world_data->entity,
                                            world_data->transform);
 
-//  return Core::Transform();
+  return Core::Transform();
 }
 
 
@@ -175,7 +176,7 @@ set_renderer(const Core::Entity_ref &ref,
     Data::Text_renderer::set_draw_call(
       world->text_renderer,
       entity_uint_id,
-      text_renderer.get_font_id(),
+      text_renderer.get_font().get_id(),
       text_renderer.get_text(),
       math::mat4_get_data(world_mat),
       resources->op_context,
@@ -221,7 +222,15 @@ remove_renderer(const Core::Entity_ref &renderer)
 bool
 has_renderer(const Core::Entity_ref &ref)
 {
-  assert(false); // churn
+  assert(false);
+  return false;
+}
+
+
+bool
+has_text_renderer(const Core::Entity_ref &ref)
+{
+  assert(false);
   return false;
 }
 

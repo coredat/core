@@ -152,7 +152,7 @@ set_transform(const util::generic_id this_id,
 
     update_mesh_renderer(this_id, mesh_data, &new_transform);
     
-//    if(components & Common::Data_type::renderer_text)
+    if(components & Common::Data_type::renderer_text)
     {
       udpate_text_renderer(this_id, text_data, &new_transform);
     }

@@ -13,6 +13,9 @@ namespace Data {
 namespace Text_renderer {
 
 
+// ------------------------------------------------- Text Renderer Lifetime ---
+
+
 Text_renderer_data *
 initialize(opContext *opContext,
            opBuffer *opBuffer,
@@ -24,11 +27,17 @@ initialize(opContext *opContext,
            const util::free_fn free_fn = free);
 
 
+// --------------------------------------------------------- Font Managment ---
+
+
 uint32_t
 add_font(Text_renderer_data *renderer,
          const char *filename,
          opContext *ctx,
          opBuffer *buf);
+
+
+// ---------------------------------------------------- Draw Call Managment ---
 
 
 void
@@ -51,6 +60,9 @@ update_draw_call_matrix(Text_renderer_data *renderer,
 void
 remove_draw_call(Text_renderer_data *renderer,
                  const uint32_t id);
+
+
+// ----------------------------------------------------------------- Render ---
 
 
 void

@@ -52,6 +52,8 @@ initialize(opContext *ctx,
   UTIL_ASSERT(inital_glyph_size_hint);
   UTIL_ASSERT(inital_string_size_hint);
   UTIL_ASSERT(malloc_fn);
+  UTIL_ASSERT(realloc_fn);
+  UTIL_ASSERT(free_fn);
   
   // -- We do this so we don't have to expose the internals -- //
   void *data = malloc_fn(sizeof(Text_renderer_data));
@@ -96,6 +98,8 @@ initialize(opContext *ctx,
     
     if(!setup)
     {
+      UTIL_ASSERT(false);
+      
       util::buffer::destroy(&renderer->font_data);
       util::buffer::destroy(&renderer->glyph_keys);
       util::buffer::destroy(&renderer->glyph_data);
@@ -104,6 +108,8 @@ initialize(opContext *ctx,
       util::buffer::destroy(&renderer->draw_calls);
       
       LOG_ERROR("Failed to setup Font Renderer");
+      
+      free(data);
       
       return nullptr;
     }

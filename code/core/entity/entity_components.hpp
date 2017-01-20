@@ -58,6 +58,10 @@ bool
 has_renderer(const Core::Entity_ref &ref);
 
 
+bool
+has_text_renderer(const Core::Entity_ref &ref);
+
+
 /*
   Rigidbody Component
   --

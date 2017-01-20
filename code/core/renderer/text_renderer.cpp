@@ -12,117 +12,160 @@
 
 #include <transformations/text/rasterized_glyph_id.hpp>
 
+#include <utilities/assert.hpp>
+
 
 namespace Core {
 
 
 struct Text_renderer::Impl
 {
-  std::string m_text;
+  std::string       text;
+  util::generic_id  font_id;
 };
 
 
 Text_renderer::Text_renderer()
-: Text_renderer(util::generic_id_invalid(),
-                util::generic_id_invalid())
+: m_impl(new Impl{"", 0})
 {
+  UTIL_ASSERT(m_impl);
 }
 
 
-Text_renderer::Text_renderer(const util::generic_id font_id,
-                             const util::generic_id text_id)
-: m_impl(new Impl)
-, m_font_id(font_id)
-, m_text_id(text_id)
+Text_renderer::Text_renderer(const Font &font,
+                             const char *str)
+: Text_renderer()
 {
-  LOG_TODO("Check these ids are valid.");
+  UTIL_ASSERT(m_impl);
+  
+  set_font(font);
+  set_text(str);
 }
 
 
 Text_renderer::~Text_renderer()
 {
+  UTIL_ASSERT(m_impl);
+  
   delete m_impl;
+}
+
+
+Text_renderer::Text_renderer(const Text_renderer &other)
+: m_impl(new Impl{"", 0})
+{
+  UTIL_ASSERT(m_impl);
+  
+  set_font(other.get_font());
+  set_text(other.get_text());
+}
+
+
+Text_renderer::Text_renderer(Text_renderer &&other)
+: m_impl(new Impl{"", 0})
+{
+  UTIL_ASSERT(m_impl);
+  
+  set_font(other.get_font());
+  set_text(other.get_text());
+  
+  other.set_font(Font());
+  other.set_text("");
+}
+
+
+Text_renderer&
+Text_renderer::operator=(const Text_renderer &other)
+{
+  UTIL_ASSERT(m_impl);
+  
+  set_font(other.get_font());
+  set_text(other.get_text());
+  
+  return *this;
+}
+
+
+Text_renderer&
+Text_renderer::operator=(Text_renderer &&other)
+{
+  UTIL_ASSERT(m_impl);
+  
+  set_font(other.get_font());
+  set_text(other.get_text());
+  
+  other.set_font(Font());
+  other.set_text("");
+  
+  return *this;
 }
 
 
 void
 Text_renderer::set_font(const Font &font)
 {
-  m_font_id = font.get_id();
+  UTIL_ASSERT(m_impl);
   
-  // Set the font id for this item,
-  // but only if it exists.
-  if(m_text_id)
-  {
-    auto resources = Data::get_context_data();
-    assert(resources);
-    
-    auto text_mesh_data = resources->text_mesh_data;
-    assert(text_mesh_data);
-  
-    Data::data_lock(text_mesh_data);
-    Data::text_mesh_set_font_id(text_mesh_data, m_text_id, &m_font_id);
-    Data::data_unlock(text_mesh_data);
-  }
+  m_impl->font_id = font.get_id();
 }
 
 
 Font
 Text_renderer::get_font() const
 {
-  assert(false);
-  return Font("");
+  UTIL_ASSERT(m_impl);
+  
+  return Font(m_impl->font_id);
 }
 
 
 void
 Text_renderer::set_text(const char *str)
 {
-  assert(m_impl);
-  m_impl->m_text = std::string(str);
+  UTIL_ASSERT(m_impl);
+  
+  m_impl->text = std::string(str);
 }
 
 
 const char*
 Text_renderer::get_text() const
 {
-  assert(m_impl);
-  return m_impl->m_text.c_str();
+  UTIL_ASSERT(m_impl);
+  
+  return m_impl->text.c_str();
 }
 
 
 void
 Text_renderer::set_text_size(const uint32_t size)
 {
-  assert(false);
+  UTIL_ASSERT(m_impl);
+  
+  LOG_TODO("Not supported yet.")
+  
+  UTIL_ASSERT(false);
 }
 
 
 uint32_t
 Text_renderer::get_text_size() const
 {
-  assert(false);
+  UTIL_ASSERT(m_impl);
+  
+  LOG_TODO("Not supported yet.")
+  
+  UTIL_ASSERT(false);
+  
   return 0;
 }
 
 
 Text_renderer::operator Renderer() const
 {
-  return Renderer(Core::Renderer_type::text, m_font_id, m_text_id);
-}
-
-
-util::generic_id
-Text_renderer::get_font_id() const
-{
-  return m_font_id;
-}
-
-
-util::generic_id
-Text_renderer::get_text_id() const
-{
-  return m_text_id;
+//  return Renderer(Core::Renderer_type::text, m_font_id, m_text_id);
+  LOG_DEPRECATED("This is no longer the way todo it.")
+  return Renderer();
 }
 
 

@@ -2,7 +2,6 @@
 #define TEXT_RENDERER_DATA_INCLUDED_6452410D_FAA8_483E_A69F_30426F4BFDB1
 
 
-#include "text_renderer_fwd.hpp"
 #include <op/fwd.hpp>
 #include <utilities/buffer.hpp>
 #include <stdint.h>

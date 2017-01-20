@@ -22,7 +22,9 @@ cast_to_text_renderer(const Renderer &renderer)
 {
   assert(renderer.get_type() == Core::Renderer_type::text);
 
-  return Text_renderer(renderer.get_arg_01(), renderer.get_arg_02());
+  assert(false); // this is not the active path anymore.
+  
+  return Text_renderer();
 }
 
 

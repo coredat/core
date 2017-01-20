@@ -11,6 +11,7 @@
 #include <core/resources/material.hpp>
 #include <core/model/model.hpp>
 #include <core/model/mesh.hpp>
+#include <core/font/font.hpp>
 #include <core/world/detail/world_index.hpp>
 
 #include <data/context_data.hpp>
@@ -151,13 +152,13 @@ set_renderer(const util::generic_id this_id,
     case(Core::Renderer_type::text):
     {
       const Core::Text_renderer text_renderer(renderer);
-      set_renderer_text(this_id,
-                        "fooboo",
-                        entity_data,
-                        transform_data,
-                        text_data,
-                        text_renderer.get_font_id(),
-                        text_renderer.get_text_id());
+//      set_renderer_text(this_id,
+//                        "fooboo",
+//                        entity_data,
+//                        transform_data,
+//                        text_data,
+//                        text_renderer.get_font().get_id(),
+//                        text_renderer.get_text_id());
       
       // -- New Text Renderer -- //
       {
@@ -171,7 +172,7 @@ set_renderer(const util::generic_id this_id,
         Data::Text_renderer::set_draw_call(
           world->text_renderer,
           this_id,
-          text_renderer.get_font_id(),
+          text_renderer.get_font().get_id(),
           "foo\nbart",
           math::mat4_get_data(world_mat),
           resources->op_context,

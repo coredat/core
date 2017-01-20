@@ -78,6 +78,12 @@ Font::Font(const char *filename)
 }
 
 
+Font::Font(const util::generic_id id)
+{
+  m_font_id = id;
+}
+
+
 util::generic_id
 Font::get_id() const
 {
