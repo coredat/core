@@ -1,0 +1,7 @@
+
+
+#include \"{{name}}_data.hpp\"
+{{src_includes}}
+
+
+{{ns_start}}

@@ -1,4 +1,13 @@
 require_relative "lib/code_gen.rb"
+require_relative "lib/codegen/model.rb"
+
+
+desc "Generate Models"
+task :generate_models do |t, args|
+
+  `ruby model.rb`
+
+end
 
 
 desc "Generate the header and source for data containers."

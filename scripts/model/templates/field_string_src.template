@@ -1,0 +1,56 @@
+
+bool
+{{model_name}}_get_{{name}}(const {{model_type}} *data, const {{key_type}} key, {{type}} *return_value)
+{
+  assert(data);
+  assert(key != {{key_invalid}});
+  assert(data->{{var}});
+  assert(return_value);
+
+  // Search for its index.
+  // If we find it we can return the value.
+
+  size_t index = 0;
+
+  if({{model_name}}_exists(data, key, &index))
+  {
+    assert(index < data->size);
+
+    if(index < data->size)
+    {
+      *return_value = data->{{var}}[index];
+
+      return true;
+    }
+  }
+
+  return false;
+}
+
+
+bool
+{{model_name}}_set_{{name}}(const {{model_type}} *data, const {{key_type}} key, const {{type}} *set_value)
+{
+  assert(data);
+  assert(key != {{key_invalid}});
+  assert(data->{{var}});
+  assert(set_value);
+
+  // Search for its index.
+  // If we find it we can set the value.
+
+  size_t index = 0;
+
+  if({{model_name}}_exists(data, key, &index))
+  {
+    assert(index < data->size);
+    if(index < data->size)
+    {
+      data->{{var}}[index] = *set_value;
+
+      return true;
+    }
+  }
+
+  return false;
+}

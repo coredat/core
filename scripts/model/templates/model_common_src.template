@@ -1,0 +1,313 @@
+
+% if key_autogen == true
+namespace {
+
+// Key our keys unique.
+{{key_type}} {{name}}_model_key_instance_number{0};
+
+} // anon ns
+% end
+
+
+void
+data_lock(const {{type}} *data)
+{
+  // Not yet impl.
+}
+
+
+void
+data_unlock(const {{type}} *data)
+{
+  // Not yet impl.
+}
+
+
+bool
+{{name}}_create({{type}} *data, const size_t size_hint)
+{
+  assert(data);
+  assert(size_hint);
+
+  // Size up the capacity
+  {
+    size_t *capacity = const_cast<size_t*>(&data->capacity);
+    *capacity = size_hint;
+  }
+
+  // Allocate memory
+  bool all_alloc = true;
+  {
+    // Alloc keys
+    if(all_alloc)
+    {
+      data->keys = new {{key_type}}[size_hint];
+      assert(data->{{key_var}});
+      if(!data->{{key_var}}) { all_alloc = false; }
+      else { memset(data->keys, 0, sizeof({{key_type}}) * size_hint); }
+    }
+% fields.each do |f|
+
+    // Alloc space for {{f[:name]}}
+    if(all_alloc)
+    {
+      data->{{f[:var]}} = new {{f[:type]}}[size_hint * {{f[:count]}}];
+      assert(data->{{f[:var]}});
+      if(!data->{{f[:var]}}) { all_alloc = false; }
+      else { memset(data->{{f[:var]}}, 0, sizeof({{f[:type]}}) * size_hint * {{f[:count]}}); }
+    }
+% end
+  }
+
+  // Failed so clean up.
+  if(!all_alloc)
+  {
+    {{name}}_destroy(data);
+  }
+
+  return all_alloc;
+}
+
+
+void
+{{name}}_destroy({{type}} *data)
+{
+  // Free up the memory.
+  {
+    // Remove keys
+    if(data->{{key_var}}) { delete[] data->{{key_var}}; }
+    data->{{key_var}} = nullptr;
+% fields.each do |f|
+
+    // Remove {{f[:name]}}
+    if(data->{{f[:var]}}) { delete[] data->{{f[:var]}}; }
+    data->{{f[:var]}} = nullptr;
+% end
+  }
+
+  // Zero capacity and size
+  {
+    data->size = 0;
+
+    size_t *capacity = const_cast<size_t*>(&data->capacity);
+    *capacity = 0;
+  }
+}
+
+
+{{key_type}}
+% if key_autogen == true
+{{name}}_push({{type}} *data)
+% else
+{{name}}_push({{type}} *data, const {{key_type}} key)
+% end
+{
+  assert(data);
+  assert(data->{{key_var}});
+
+  // Do we need to resize?
+  if(data->size >= data->capacity)
+  {
+    {{name}}_resize_capacity(data, data->capacity << 1);
+  }
+
+  // Push key at the back
+  {
+    % if key_autogen == true
+    const {{key_type}} new_key = ++{{name}}_model_key_instance_number;
+    % else
+    const {{key_type}} new_key = key;
+    % end
+    data->{{key_var}}[data->size++] = new_key;
+
+    return new_key;
+  }
+
+% fields.each do |f|
+%   if f[:is_sentinal]
+  // Sentinal requires an insert point.
+  {{f[:var]}}
+%   end
+% end
+
+  return {{key_invalid}};
+}
+
+% if key_autogen != true
+bool
+{{name}}_insert({{type}} *data, const {{key_type}} key, const size_t insert_point)
+{
+  assert(data);
+  assert(data->{{key_var}});
+  assert(key);
+
+  // Do we need to resize?
+  if(data->size >= data->capacity)
+  {
+    {{name}}_resize_capacity(data, data->capacity << 1);
+  }
+
+  // Shuffle memory up
+  {
+    const size_t insert_index = insert_point + 1;
+    const size_t start_index = insert_point;
+    const size_t size_to_end = data->size - insert_point;
+
+    // Shuffle the data down
+    memmove(&data->{{key_var}}[insert_point], &data->{{key_var}}[start_index], size_to_end * sizeof(*data->{{key_var}}));
+% fields.each do |f|
+    memmove(&data->{{f[:var]}}[insert_point * {{f[:count]}}], &data->{{f[:var]}}[start_index * {{f[:count]}}], size_to_end * sizeof(*data->{{f[:var]}}) * {{f[:count]}});
+% end
+  }
+
+  // Insert new data
+  {
+    data->{{key_var}}[data->size++] = key;
+  }
+
+  return false;
+}
+% end
+
+
+bool
+{{name}}_remove({{type}} *data, const {{key_type}} key)
+{
+  size_t index_to_erase = 0;
+
+  if({{name}}_exists(data, key, &index_to_erase))
+  {
+    assert(index_to_erase < data->size);
+
+    const size_t start_index = index_to_erase + 1;
+    const size_t size_to_end = data->size - index_to_erase - 1;
+
+    --(data->size);
+
+    // Shuffle the data down
+    memmove(&data->{{key_var}}[index_to_erase], &data->{{key_var}}[start_index], size_to_end * sizeof(*data->{{key_var}}));
+% fields.each do |f|
+    memmove(&data->{{f[:var]}}[index_to_erase * {{f[:count]}}], &data->{{f[:var]}}[start_index * {{f[:count]}}], size_to_end * sizeof(*data->{{f[:var]}}) * {{f[:count]}});
+% end
+
+    return true;
+  }
+
+  return false;
+}
+
+
+bool
+{{name}}_exists(const {{type}} *data, const {{key_type}} key, size_t *out_index)
+{
+  assert(data);
+  assert(data != {{key_invalid}});
+
+  for(size_t i = 0; i < data->size; ++i)
+  {
+    if(data->{{key_var}}[i] == key)
+    {
+      if(out_index)
+      {
+        *out_index = i;
+      }
+
+      return true;
+    }
+  }
+
+  return false;
+}
+
+
+void
+{{name}}_clear({{type}} *data)
+{
+  assert(data);
+
+  data->size = 0;
+}
+
+
+bool
+{{name}}_is_empty(const {{type}} *data, const size_t size_hint)
+{
+  assert(data);
+
+  if(!data) { return false; }
+
+  return !!data->size;
+}
+
+
+size_t
+{{name}}_get_size(const {{type}} *data)
+{
+  assert(data);
+
+  if(!data) { return 0; }
+
+  return data->size;
+}
+
+
+size_t
+{{name}}_get_capacity(const {{type}} *data)
+{
+  assert(data);
+
+  if(!data) { return 0; }
+
+  return data->capacity;
+}
+
+
+bool
+{{name}}_resize_capacity({{type}} *data, const size_t size_hint)
+{
+  assert(data);
+  assert(size_hint > data->size); // Will slice data
+
+  // Create new data.
+  {{type}} new_data;
+  const bool created_new = {{name}}_create(&new_data, size_hint);
+
+  // Failed to resize.
+  if(!created_new)
+  {
+    {{name}}_destroy(&new_data);
+    return false;
+  }
+
+  // Copy over data
+  {
+    memcpy(new_data.{{key_var}}, data->{{key_var}}, sizeof({{key_type}}) * data->size);
+% fields.each do |f|
+    memcpy(new_data.{{f[:var]}}, data->{{f[:var]}}, sizeof({{f[:type]}}) * data->size * {{f[:count]}});
+% end
+  }
+
+  // Swap ptrs
+  {
+    {{key_type}} *old_keys = data->{{key_var}};
+    data->{{key_var}} = new_data.{{key_var}};
+    new_data.{{key_var}} = old_keys;
+% fields.each do |f|
+
+    {{f[:type]}} *old_{{f[:name].downcase}} = data->{{f[:var]}};
+    data->{{f[:var]}} = new_data.{{f[:var]}};
+    new_data.{{f[:var]}} = old_{{f[:name].downcase}};
+% end
+  }
+
+  // Set the Capacity
+  {
+    size_t *capacity = const_cast<size_t*>(&data->capacity);
+    *capacity = new_data.capacity;
+  }
+
+  // Destroy new data
+  {{name}}_destroy(&new_data);
+
+  return true;
+}

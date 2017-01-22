@@ -1,0 +1,14 @@
+
+
+/*
+  {{name}} Gets the pointer to the first element.
+*/
+const {{type}}*
+{{model_name}}_get_const_{{name}}_data(const {{model_type}} *data);
+
+
+/*
+  {{name}} Gets the pointer to the first element.
+*/
+{{type}}*
+{{model_name}}_get_{{name}}_data({{model_type}} *data);

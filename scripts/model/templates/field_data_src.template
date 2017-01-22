@@ -1,0 +1,28 @@
+
+
+const {{data_type}}*
+{{model_name}}_get_const_{{name}}_data(const {{model_type}} *data)
+{
+  assert(data);
+  assert(data->{{var}});
+
+%if data_type == type
+  return data->{{var}};
+% else
+  return reinterpret_cast<const {{data_type}}*>(data->{{var}});
+% end
+}
+
+
+{{data_type}}*
+{{model_name}}_get_{{name}}_data({{model_type}} *data)
+{
+  assert(data);
+  assert(data->{{var}});
+
+%if data_type == type
+  return data->{{var}};
+% else
+  return reinterpret_cast<{{data_type}}*>(data->{{var}});
+% end
+}

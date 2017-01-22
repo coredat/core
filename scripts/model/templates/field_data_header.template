@@ -1,0 +1,8 @@
+
+
+const {{data_type}}*
+{{model_name}}_get_const_{{name}}_data(const {{model_type}} *data);
+
+
+{{data_type}}*
+{{model_name}}_get_{{name}}_data({{model_type}} *data);

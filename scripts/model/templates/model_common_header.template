@@ -1,0 +1,56 @@
+void
+data_lock(const {{type}} *data);
+
+
+void
+data_unlock(const {{type}} *data);
+
+
+bool
+{{name}}_create({{type}} *data, const size_t size_hint);
+
+
+void
+{{name}}_destroy({{type}} *data);
+
+
+{{key_type}}
+% if key_autogen == true
+{{name}}_push({{type}} *data);
+% else
+{{name}}_push({{type}} *data, const {{key_type}} key);
+% end
+
+% if key_autogen != true
+
+bool
+{{name}}_insert({{type}} *data, const {{key_type}} key, const size_t insert_point);
+
+% end
+
+bool
+{{name}}_remove({{type}} *data, const {{key_type}} key);
+
+
+bool
+{{name}}_exists(const {{type}} *data, const {{key_type}} key, size_t *out_index = nullptr);
+
+
+void
+{{name}}_clear({{type}} *data);
+
+
+bool
+{{name}}_is_empty(const {{type}} *data);
+
+
+size_t
+{{name}}_get_size(const {{type}} *data);
+
+
+size_t
+{{name}}_get_capacity(const {{type}} *data);
+
+
+bool
+{{name}}_resize_capacity({{type}} *data, const size_t size_hint);
