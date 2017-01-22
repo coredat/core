@@ -1,6 +1,8 @@
 #include <transformations/camera/cam_priorities.hpp>
 #include <core/transform/transform.hpp>
-#include <data/world/transform_data.hpp>
+//#include <data/world/transform_data.hpp>
+#include <data/graph/graph.hpp>
+#include <core/world/detail/world_index.hpp>
 #include <data/world/camera_data.hpp>
 #include <data/context/texture_data.hpp>
 #include <math/transform/transform.hpp>
@@ -121,18 +123,21 @@ get_camera_transforms(const Data::Transform_data *transform_data,
                       Core::Transform out_transforms[],
                       const uint32_t size)
 {
-  Data::data_lock(transform_data);
+//  Data::data_lock(transform_data);
 
   for(uint32_t i = 0; i < size; ++i)
   {
+    
+  
     // Get the transform entity and
     math::transform trans;
-    Data::transform_get_transform(transform_data, entity_ids[i], &trans);
+//    Data::transform_get_transform(transform_data, entity_ids[i], &trans);
+    
     
     out_transforms[i] = Core::Transform(trans.position, trans.scale, trans.rotation);
   }
   
-  Data::data_unlock(transform_data);
+//  Data::data_unlock(transform_data);
 }
 
 

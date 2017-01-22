@@ -22,13 +22,14 @@
 #include <data/context/texture_data.hpp>
 #include <data/context/text_mesh_data.hpp>
 #include <data/world_data.hpp>
-#include <data/world/entity_data.hpp>
-#include <data/world/transform_data.hpp>
+//#include <data/world/entity_data.hpp>
+//#include <data/world/transform_data.hpp>
 #include <data/world/mesh_draw_call_data.hpp>
 #include <data/world/text_draw_call_data.hpp>
 #include <data/context/material_data.hpp>
 #include <data/context/mesh_data.hpp>
 
+#include <data/graph/graph.hpp>
 #include <data/renderers/text/text_renderer.hpp>
 
 #include <common/error_strings.hpp>
@@ -78,6 +79,9 @@ set_renderer(const util::generic_id this_id,
     LOG_ERROR(Error_string::resource_is_invalid());
     return;
   }
+  
+  auto world_data(Core_detail::world_index_get_world_data(1));
+  assert(world_data);
 
   // Check to see if renderer has been set.
   {
@@ -87,7 +91,7 @@ set_renderer(const util::generic_id this_id,
     Data::data_lock(entity_data);
     
     uint32_t components = 0;
-    Data::entity_get_components(entity_data, this_id, &components);
+    Data::Graph::components_get(world_data->scene_graph, this_id, &components);
     
     const uint32_t renderer_type = Common::Data_type::get_renderer_type(components);
     
@@ -130,6 +134,8 @@ set_renderer(const util::generic_id this_id,
     
     components |= renderer.get_type();
     Data::entity_set_components(entity_data, this_id, &components);
+    
+    Data::Graph::components_set(world_data->scene_graph, this_id, components);
     
     Data::data_unlock(entity_data);
   }
@@ -202,6 +208,10 @@ get_renderer(const util::generic_id this_id,
   }
 
   Core::Renderer return_renderer;
+  
+  auto world_data(Core_detail::world_index_get_world_data(1));
+  assert(world_data);
+  
 
   // Check to see if renderer has been set.
   {
@@ -210,10 +220,11 @@ get_renderer(const util::generic_id this_id,
     assert(renderer_material);
     
     Data::data_lock(renderer_material);
-    Data::data_lock(entity_data);
+//    Data::data_lock(entity_data);
     
     uint32_t components = 0;
-    Data::entity_get_components(entity_data, this_id, &components);
+//    Data::entity_get_components(entity_data, this_id, &components);
+    Data::Graph::components_get(world_data->scene_graph, this_id, &components);
     
     const uint32_t renderer_type = Common::Data_type::get_renderer_type(components);
     

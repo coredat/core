@@ -1,5 +1,5 @@
 #include "entity_callback.hpp"
-#include <data/world/entity_data.hpp>
+//#include <data/world/entity_data.hpp>
 #include <assert.h>
 
 
@@ -18,20 +18,20 @@ set_entity_collision_callback(const util::generic_id this_id,
 
   // Add / update callback
   {
-    Data::data_lock(entity_data);
+//    Data::data_lock(entity_data);
     
-    if(Data::entity_exists(entity_data, this_id))
+//    if(Data::entity_exists(entity_data, this_id))
     {
-      Callback_collision callback
-      {
-        user_data,
-        callback_ptr
-      };
+//      Callback_collision callback
+//      {
+//        user_data,
+//        callback_ptr
+//      };
       
-      Data::entity_set_collision_callback(entity_data, this_id, &callback);
+//      Data::entity_set_collision_callback(entity_data, this_id, &callback);
     }
     
-    Data::data_unlock(entity_data);
+//    Data::data_unlock(entity_data);
   }
 }
 

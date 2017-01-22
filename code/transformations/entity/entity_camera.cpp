@@ -1,6 +1,6 @@
 #include <transformations/entity/entity_camera.hpp>
 #include <core/color/color.hpp>
-#include <data/world/entity_data.hpp>
+//#include <data/world/entity_data.hpp>
 #include <data/world/camera_data.hpp>
 #include <common/data_types.hpp>
 #include <common/error_strings.hpp>

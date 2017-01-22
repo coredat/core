@@ -2,11 +2,11 @@
 #include <data/world/rigidbody_data.hpp>
 #include <data/world/pending_entity_removal_data.hpp>
 #include <data/world/camera_data.hpp>
-#include <data/world/transform_data.hpp>
+//#include <data/world/transform_data.hpp>
 #include <data/world/mesh_draw_call_data.hpp>
 #include <data/world/text_draw_call_data.hpp>
-#include <data/world/entity_data.hpp>
-#include <data/world/transform_data.hpp>
+//#include <data/world/entity_data.hpp>
+//#include <data/world/transform_data.hpp>
 #include <data/world/trigger_data.hpp>
 #include <data/world/collision_data.hpp>
 #include <data/world/light_data.hpp>
@@ -18,6 +18,7 @@
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
 
 #include <data/renderers/text/text_renderer.hpp>
+#include <data/graph/graph.hpp>
 
 
 namespace Data {
@@ -41,11 +42,11 @@ World::World(const util::generic_id instance_id, const uint32_t entity_hint)
   Data::Mesh_draw_call_data *mesh_data = new Data::Mesh_draw_call_data;
   Data::mesh_draw_call_create(mesh_data, entity_hint);
   
-  Data::Transform_data *transform_data = new Data::Transform_data;
-  Data::transform_create(transform_data, entity_hint);
-  
-  Data::Entity_data *entity_data = new Data::Entity_data;
-  Data::entity_create(entity_data, entity_hint);
+//  Data::Transform_data *transform_data = new Data::Transform_data;
+//  Data::transform_create(transform_data, entity_hint);
+//  
+//  Data::Entity_data *entity_data = new Data::Entity_data;
+//  Data::entity_create(entity_data, entity_hint);
   
   Data::Text_draw_call_data *text_draw_calls = new Data::Text_draw_call_data;
   Data::text_draw_call_create(text_draw_calls, entity_hint);
@@ -62,8 +63,8 @@ World::World(const util::generic_id instance_id, const uint32_t entity_hint)
   this->rigidbody_data = rb_data;
   this->mesh_data      = mesh_data;
   this->camera_data    = camera_data;
-  this->transform      = transform_data;
-  this->entity         = entity_data;
+//  this->transform      = transform_data;
+//  this->entity         = entity_data;
   this->text_data      = text_draw_calls;
   this->trigger_data   = trigger_data;
   this->collision_data = collision_data;
@@ -75,6 +76,8 @@ World::World(const util::generic_id instance_id, const uint32_t entity_hint)
     resources->op_context,
     resources->op_buffer
   );
+  
+  scene_graph = Data::Graph::initialize();
 }
 
 World::~World()
@@ -91,11 +94,13 @@ World::~World()
     delete this->rigidbody_data;
   }
   
-  if(this->transform)
-  {
-    Data::transform_destroy(transform);
-    delete this->transform;
-  }
+  Graph::destroy(this->scene_graph);
+  
+//  if(this->transform)
+//  {
+//    Data::transform_destroy(transform);
+//    delete this->transform;
+//  }
   
   if(this->mesh_data)
   {
@@ -109,11 +114,11 @@ World::~World()
     delete this->camera_data;
   }
   
-  if(this->entity)
-  {
-    Data::entity_destroy(entity);
-    delete this->entity;
-  }
+//  if(this->entity)
+//  {
+//    Data::entity_destroy(entity);
+//    delete this->entity;
+//  }
   
   if(this->text_data)
   {
@@ -128,6 +133,11 @@ World::~World()
   }
   
   Bullet_data::remove_and_clear(&physics_world);
+  
+  if(this->scene_graph)
+  {
+    Data::Graph::destroy(this->scene_graph);
+  }
 }
 
 
@@ -139,8 +149,10 @@ world_update_scene_graph_changes(Data::World *world_data,
   {
     const util::generic_id id = graph_changes->field_deleted_entity[i];
     
-    entity_remove(world_data->entity, id);
-    transform_remove(world_data->transform, id);
+//    entity_remove(world_data->entity, id);
+//    transform_remove(world_data->transform, id);
+
+    Data::Graph::node_remove(world_data->scene_graph, id);
     
     if(Data::mesh_draw_call_exists(world_data->mesh_data, id))
     {

@@ -21,6 +21,7 @@ set_phy_transform(const util::generic_id this_id,
 
 void
 set_rigidbody(const util::generic_id this_id,
+              Core::Transform tranform,
               const Core::Rigidbody &rigidbody,
               const Data::Transform_data *transform_data,
               Data::Entity_data *entity_data,

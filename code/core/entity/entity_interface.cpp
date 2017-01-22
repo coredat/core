@@ -11,9 +11,8 @@
 
 #include <data/world/pending_entity_removal_data.hpp>
 #include <data/world_data.hpp>
-#include <data/world/entity_data.hpp>
-#include <data/world/transform_data.hpp>
 #include <data/world/mesh_draw_call_data.hpp>
+#include <data/graph/graph.hpp>
 
 #include <common/data_types.hpp>
 
@@ -61,77 +60,13 @@ Entity_interface::Entity_interface(const Core_detail::Entity_id id)
 Entity_interface::Entity_interface(Core::World &world)
 : m_id(0)
 {
-  bool success = true;
+//  bool success = true;
  
   auto world_data = Core_detail::world_index_get_world_data(world.get_id());
  
   if(world_data)
   {
-    // Create Entity record
-    {
-      auto entity_data = world_data->entity;
-      
-      Data::data_lock(entity_data);
-      
-      entity_instance_counter++;
-      Core_detail::Entity_id entity_id;
-      
-      entity_id.entity_instance = entity_instance_counter;
-      entity_id.world_instance  = world.get_id();
-      m_id = Core_detail::entity_id_to_uint(entity_id);
-      
-      const bool added = Data::entity_push(entity_data, m_id);
-      
-      if(added && success)
-      {
-        // Zero the data.
-        const uint32_t has_transform(Common::Data_type::transform);
-        const uint32_t zero(0);
-        
-        Data::entity_set_components(entity_data, m_id, &has_transform);
-        Data::entity_set_tags(entity_data, m_id, &zero);
-        
-        const char *nilstr = "";
-        Data::entity_set_name(entity_data, m_id, nilstr, 0);
-      }
-      else
-      {
-        success = false;
-      }
-      
-      Data::data_unlock(entity_data);
-    }
-    
-    // Create Transform record
-    if(success)
-    {
-      auto transform_data = world_data->transform;
-      
-      Data::data_lock(transform_data);
-      
-      if(Data::transform_push(transform_data, m_id))
-      {
-        const math::transform trans{};
-        Data::transform_set_transform(transform_data, m_id, &trans);
-        
-        const math::aabb bounding_box{};
-        Data::transform_set_aabb(transform_data, m_id, &bounding_box);
-      }
-      else
-      {
-        success = false;
-      }
-      
-      Data::data_unlock(transform_data);
-    }
-    
-    // If we failed then destroy the entity.
-    if(!success)
-    {
-      LOG_ERROR(Error_string::entity_failed_to_construct());
-      destroy();
-      m_id = 0;
-    }
+    m_id = Data::Graph::node_add(world_data->scene_graph);
   }
   else
   {
@@ -156,12 +91,9 @@ Entity_interface::destroy()
     return;
   }
   
-  const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(m_id);
-  auto world_data = Core_detail::world_index_get_world_data(entity_id.world_instance);
-  
-  Entity_detail::destroy(m_id,
-                         world_data->entity,
-                         world_data->entity_removal);
+  auto world_data = Core_detail::world_index_get_world_data(m_id);
+
+  Data::Graph::node_remove(world_data->scene_graph, m_id);
   
   m_id = 0;
 }
@@ -175,15 +107,9 @@ Entity_interface::is_valid() const
     return false;
   }
   
-  const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(m_id);
-  auto world_data = Core_detail::world_index_get_world_data(entity_id.world_instance);
-  
-  if(!world_data)
-  {
-    return false;
-  }
-  
-  return Entity_detail::is_valid(m_id, world_data->entity);
+  auto world_data = Core_detail::world_index_get_world_data(1);
+
+  return Data::Graph::node_exists(world_data->scene_graph, m_id);
 }
 
 
@@ -205,11 +131,12 @@ Entity_interface::get_tags() const
     return 0;
   }
 
-  const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(m_id);
-  auto world_data = Core_detail::world_index_get_world_data(entity_id.world_instance);
+  auto world_data = Core_detail::world_index_get_world_data(1);
   
-  return Entity_detail::get_tags(m_id,
-                                 world_data->entity);
+  uint32_t tags = 0;
+  Data::Graph::tags_get(world_data->scene_graph, m_id, &tags);
+  
+  return tags;
 }
 
 
@@ -222,12 +149,9 @@ Entity_interface::set_user_data(const uintptr_t user_data)
     return;
   }
 
-  const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(m_id);
-  auto world_data = Core_detail::world_index_get_world_data(entity_id.world_instance);
+  auto world_data = Core_detail::world_index_get_world_data(1);
   
-  Entity_detail::set_user_data(m_id,
-                               world_data->entity,
-                               user_data);
+  Data::Graph::user_data_set(world_data->scene_graph, m_id, user_data);
 }
 
 
@@ -240,11 +164,12 @@ Entity_interface::get_user_data() const
     return 0;
   }
 
-  const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(m_id);
-  auto world_data = Core_detail::world_index_get_world_data(entity_id.world_instance);
+  auto world_data = Core_detail::world_index_get_world_data(1);
   
-  return Entity_detail::get_user_data(m_id,
-                                      world_data->entity);
+  uintptr_t user_data = 0;
+  Data::Graph::user_data_get(world_data->scene_graph, m_id, &user_data);
+  
+  return user_data;
 }
 
 
@@ -257,12 +182,12 @@ Entity_interface::has_tag(const uint32_t tag_id) const
     return false;
   }
 
-  const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(m_id);
-  auto world_data = Core_detail::world_index_get_world_data(entity_id.world_instance);
+  auto world_data = Core_detail::world_index_get_world_data(1);
   
-  return Entity_detail::has_tag(m_id,
-                                world_data->entity,
-                                tag_id);
+  uint32_t tags = 0;
+  Data::Graph::tags_get(world_data->scene_graph, m_id, &tags);
+  
+  return !!(tags & tag_id);
 }
 
 
@@ -275,12 +200,9 @@ Entity_interface::set_tags(const uint32_t set_tags)
     return;
   }
 
-  const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(m_id);
-  auto world_data = Core_detail::world_index_get_world_data(entity_id.world_instance);
-  
-  Entity_detail::set_tags(m_id,
-                          world_data->entity,
-                          set_tags);
+  auto world_data = Core_detail::world_index_get_world_data(1);
+
+  Data::Graph::tags_set(world_data->scene_graph, m_id, set_tags);
 }
 
 
@@ -293,12 +215,13 @@ Entity_interface::add_tag(const uint32_t add_tag)
     return;
   }
 
-  const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(m_id);
-  auto world_data = Core_detail::world_index_get_world_data(entity_id.world_instance);
+  auto world_data = Core_detail::world_index_get_world_data(1);
   
-  Entity_detail::add_tag(m_id,
-                         world_data->entity,
-                         add_tag);
+  uint32_t tags = 0;
+  Data::Graph::tags_get(world_data->scene_graph, m_id, &tags);
+  
+  tags = tags | add_tag;
+  Data::Graph::tags_set(world_data->scene_graph, m_id, tags);
 }
 
 
@@ -311,12 +234,13 @@ Entity_interface::remove_tag(const uint32_t tag)
     return;
   }
 
-  const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(m_id);
-  auto world_data = Core_detail::world_index_get_world_data(entity_id.world_instance);
+  auto world_data = Core_detail::world_index_get_world_data(1);
+
+  uint32_t tags = 0;
+  Data::Graph::tags_get(world_data->scene_graph, m_id, &tags);
   
-  Entity_detail::remove_tag(m_id,
-                            world_data->entity,
-                            tag);
+  tags = tags &~ tag;
+  Data::Graph::tags_set(world_data->scene_graph, m_id, tags);
 }
 
 
@@ -329,12 +253,7 @@ Entity_interface::set_name(const char *set_name)
     return;
   }
 
-  const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(m_id);
-  auto world_data = Core_detail::world_index_get_world_data(entity_id.world_instance);
-  
-  Entity_detail::set_name(m_id,
-                          world_data->entity,
-                          set_name);
+  LOG_WARNING("Not setup");
 }
 
 
@@ -346,12 +265,10 @@ Entity_interface::get_name() const
   {
     return "";
   }
-
-  const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(m_id);
-  auto world_data = Core_detail::world_index_get_world_data(entity_id.world_instance);
   
-  return Entity_detail::get_name(m_id,
-                                 world_data->entity);
+  LOG_WARNING("Not setup");
+
+  return "";
 }
 
 
@@ -374,13 +291,17 @@ Entity_interface::on_collision_callback(const uintptr_t user_data, const on_coll
     return;
   }
 
-  const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(m_id);
-  auto world_data = Core_detail::world_index_get_world_data(entity_id.world_instance);
+  auto world_data = Core_detail::world_index_get_world_data(1);
   
-  Entity_detail::set_entity_collision_callback(m_id,
-                                               world_data->entity,
-                                               (uintptr_t)callback,
-                                               user_data);
+  LOG_WARNING("Not setup")
+
+//  const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(m_id);
+//  auto world_data = Core_detail::world_index_get_world_data(entity_id.world_instance);
+//  
+//  Entity_detail::set_entity_collision_callback(m_id,
+//                                               world_data->entity,
+//                                               (uintptr_t)callback,
+//                                               user_data);
 }
 
 

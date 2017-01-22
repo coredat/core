@@ -11,8 +11,8 @@
 #include <core/transform/transform.hpp>
 #include <data/context_data.hpp>
 #include <data/world_data.hpp>
-#include <data/world/entity_data.hpp>
-#include <data/world/transform_data.hpp>
+//#include <data/world/entity_data.hpp>
+//#include <data/world/transform_data.hpp>
 #include <data/world/rigidbody_data.hpp>
 #include <data/world/trigger_data.hpp>
 #include <common/data_types.hpp>
@@ -42,6 +42,7 @@ namespace Entity_detail {
 
 void
 set_rigidbody(const util::generic_id this_id,
+              Core::Transform core_transform,
               const Core::Rigidbody &rigidbody,
               const Data::Transform_data *transform_data,
               Data::Entity_data *entity_data,
@@ -107,7 +108,7 @@ set_rigidbody(const util::generic_id this_id,
   }
 
   // Common to trigger and rigidbody.
-  const Core::Transform core_transform(get_core_transform(this_id, entity_data, transform_data));
+//  const Core::Transform core_transform(get_core_transform(this_id, entity_data, transform_data));
 
   // Add rigidbody
   if(!rigidbody.is_trigger())

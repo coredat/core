@@ -9,6 +9,11 @@
 #include <core/world/world_setup.hpp>
 
 
+/*
+  The world is going to go away in favor of a full scene graph.
+*/
+
+
 namespace Core {
 
 
@@ -52,7 +57,7 @@ public:
   size_t                get_entity_count_in_world() const;
   
   void                  set_collision_callback(Collision_callback callback);
-
+  
   Entity_ref            find_entity_by_id(const util::generic_id id) const;
   Contact               find_entity_by_ray(const Ray ray) const;
   Entity_ref            find_entity_by_name(const char *name) const;

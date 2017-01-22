@@ -4,15 +4,17 @@
 #include <core/world/detail/world_index.hpp>
 #include <core/transform/transform.hpp>
 #include <data/world_data.hpp>
-#include <data/world/entity_data.hpp>
+//#include <data/world/entity_data.hpp>
 #include <data/world/mesh_draw_call_data.hpp>
 #include <data/world/text_draw_call_data.hpp>
-#include <data/world/transform_data.hpp>
-#include <data/world/transform_data.hpp>
+#include <data/graph/graph.hpp>
+//#include <data/world/transform_data.hpp>
+//#include <data/world/transform_data.hpp>
 #include <data/world/rigidbody_data.hpp>
 #include <data/renderers/text/text_renderer.hpp>
 #include <common/error_strings.hpp>
 #include <common/data_types.hpp>
+#include <math/math.hpp>
 #include <utilities/logging.hpp>
 #include <assert.h>
 
@@ -22,21 +24,22 @@ namespace Entity_detail {
 
 namespace {
 
-inline void
-update_transform(const util::generic_id this_id,
-                 Data::Transform_data *transform_data,
-                 const math::transform *transform)
-{
-  Data::data_lock(transform_data);
 
-  size_t index;
-  if(Data::transform_exists(transform_data, this_id, &index))
-  {
-    transform_data->field_transform[index] = *transform;
-  }
-  
-  Data::data_unlock(transform_data);
-}
+//inline void
+//update_transform(const util::generic_id this_id,
+//                 Data::Transform_data *transform_data,
+//                 const math::transform *transform)
+//{
+//  Data::data_lock(transform_data);
+//
+//  size_t index;
+//  if(Data::transform_exists(transform_data, this_id, &index))
+//  {
+//    transform_data->field_transform[index] = *transform;
+//  }
+//  
+//  Data::data_unlock(transform_data);
+//}
 
 
 inline void
@@ -58,7 +61,9 @@ update_mesh_renderer(const util::generic_id this_id,
     
     Data::data_unlock(mesh_data);
   }
-}
+  
+  
+} // anon ns
 
 
 inline void
@@ -119,21 +124,25 @@ set_transform(const util::generic_id this_id,
     assert(false); return;
   }
   
+  auto world = Core_detail::world_index_get_world_data(1);
+  
   uint32_t components(0);
+  Data::Graph::components_get(world->scene_graph, this_id, &components);
   {
-    Data::data_lock(entity_data);
-    Data::entity_get_components(entity_data, this_id, &components);
-    Data::data_unlock(entity_data);
+//    Data::data_lock(entity_data);
+//    Data::entity_get_components(entity_data, this_id, &components);
+//    Data::data_unlock(entity_data);
   }
   
   // Get aabb
   math::aabb curr_aabb;
+  Data::Graph::aabb_get(world->scene_graph, this_id, &curr_aabb);
   {
-    assert(transform_data);
-  
-    Data::data_lock(transform_data);
-    Data::transform_get_aabb(transform_data, this_id, &curr_aabb);
-    Data::data_unlock(transform_data);
+//    assert(transform_data);
+//  
+//    Data::data_lock(transform_data);
+//    Data::transform_get_aabb(transform_data, this_id, &curr_aabb);
+//    Data::data_unlock(transform_data);
   }
   
   // Update all the things that want to know.
@@ -143,7 +152,7 @@ set_transform(const util::generic_id this_id,
                                                                set_transform.get_scale(),
                                                                set_transform.get_rotation());
     
-    update_transform(this_id, transform_data, &new_transform);
+//    update_transform(this_id, transform_data, &new_transform);
 
     if(inform_phys_engine && Common::Data_type::is_collidable(components))
     {
@@ -191,20 +200,23 @@ get_transform(const util::generic_id this_id,
     assert(false); return math::transform();
   }
   
+  auto world = Core_detail::world_index_get_world_data(1);
+  
   // Get Data
   math::transform return_transform;
+  Data::Graph::transform_get(world->scene_graph, this_id, &return_transform);
   {
-    Data::data_lock(transform_data);
-
-    if(!Data::transform_get_transform(transform_data,
-                                            this_id,
-                                            &return_transform))
-    {
-      assert(false);
-      LOG_WARNING(Error_string::data_not_found());
-    }
-    
-    Data::data_unlock(transform_data);
+//    Data::data_lock(transform_data);
+//
+//    if(!Data::transform_get_transform(transform_data,
+//                                            this_id,
+//                                            &return_transform))
+//    {
+//      assert(false);
+//      LOG_WARNING(Error_string::data_not_found());
+//    }
+//    
+//    Data::data_unlock(transform_data);
   }
   
   return return_transform;

@@ -72,6 +72,23 @@ node_remove(Graph_data *graph,
 }
 
 
+bool
+node_exists(Graph_data *graph, const uint32_t node)
+{
+  // -- Param Check -- //
+  UTIL_ASSERT(graph);
+  // Don't check node, it should be valid to ask if node zero is valid.
+  
+  size_t index = 0;
+  if(graph->find_index(node, &index))
+  {
+    return true;
+  }
+  
+  return false;
+}
+
+
 size_t
 node_count(Graph_data *graph)
 {

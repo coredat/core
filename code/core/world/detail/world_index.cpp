@@ -42,13 +42,14 @@ world_index_add_world_data(const uint32_t entity_size_hint)
 std::shared_ptr<Data::World>
 world_index_get_world_data(const uint32_t id)
 {
-  for(uint32_t i = 0; i < max_worlds; ++i)
-  {
-    if(world_ids[i] == id)
-    {
-      return worlds[i];
-    }
-  }
+  return worlds[0];
+//  for(uint32_t i = 0; i < max_worlds; ++i)
+//  {
+//    if(world_ids[i] == id)
+//    {
+//      return worlds[i];
+//    }
+//  }
   
   LOG_WARNING("Can't find world");
   return nullptr;

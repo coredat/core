@@ -5,8 +5,8 @@
 #include <core/color/color.hpp>
 #include <core/color/color_utils.hpp>
 #include <core/lighting/point_light.hpp>
-#include <data/world/transform_data.hpp>
-#include <data/world/entity_data.hpp>
+//#include <data/world/transform_data.hpp>
+//#include <data/world/entity_data.hpp>
 #include <data/world/light_data.hpp>
 #include <utilities/logging.hpp>
 

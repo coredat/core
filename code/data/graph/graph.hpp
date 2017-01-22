@@ -29,6 +29,12 @@ bool
 destroy(Graph_data *graph);
 
 
+// -------------------------------------------------------------[ Node Data ]--
+
+
+
+
+
 // -------------------------------------------------------[ Node Management ]--
 
 
@@ -38,6 +44,18 @@ node_add(Graph_data *graph);
 
 bool
 node_remove(Graph_data *graph, const uint32_t node);
+
+
+bool
+node_exists(Graph_data *graph, const uint32_t node);
+
+
+bool
+node_add_destroy_callback(Graph_data *graph, const uintptr_t callback);
+
+
+bool
+node_remove_destroy_callback(Graph_data *graph, const uintptr_t callback);
 
 
 size_t

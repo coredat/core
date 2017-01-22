@@ -23,7 +23,7 @@
 #include <data/world_data.hpp>
 #include <data/world/rigidbody_data.hpp>
 #include <data/world/collision_data.hpp>
-#include <data/world/entity_data.hpp>
+//#include <data/world/entity_data.hpp>
 
 
 
@@ -90,10 +90,10 @@ think(std::shared_ptr<Data::World> world, const float dt, Tick_information *out_
   */
   {
     Data::Collision_data *collision_data(world->collision_data);
-    Data::Entity_data *entity_data(world->entity);
+//    Data::Entity_data *entity_data(world->entity);
     
     Data::data_lock(collision_data);
-    Data::data_lock(entity_data);
+//    Data::data_lock(entity_data);
   
     const uint32_t number_of_collisions(Data::collision_get_size(collision_data));
     
@@ -150,16 +150,16 @@ think(std::shared_ptr<Data::World> world, const float dt, Tick_information *out_
         {
           Core::Collision collision(entity_a, contacts, curr_contact);
           
-          Entity_detail::Callback_collision collision_callback;
-          Data::entity_get_collision_callback(entity_data, util::bits_lower(this_pair), &collision_callback);
+//          Entity_detail::Callback_collision collision_callback;
+//          Data::entity_get_collision_callback(entity_data, util::bits_lower(this_pair), &collision_callback);
           
           #ifdef CORE_COLLISION_DEBUG_TEXT
           printf("Collision: %s -> %s \n", entity_a.get_name(), entity_b.get_name());
           #endif
           
-          if(collision_callback.callback_fn)
+//          if(collision_callback.callback_fn)
           {
-            ((Core::on_collision_callback_fn)collision_callback.callback_fn)(collision_callback.user_data, entity_a, collision);
+//            ((Core::on_collision_callback_fn)collision_callback.callback_fn)(collision_callback.user_data, entity_a, collision);
           }
           
           curr_contact = 0;
@@ -168,7 +168,7 @@ think(std::shared_ptr<Data::World> world, const float dt, Tick_information *out_
     }
     Data::collision_clear(collision_data);
     Data::data_unlock(collision_data);
-    Data::data_unlock(entity_data);
+//    Data::data_unlock(entity_data);
   }
 }
 

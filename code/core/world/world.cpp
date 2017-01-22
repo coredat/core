@@ -7,8 +7,8 @@
 #include <core/physics/collision.hpp>
 #include <core/common/ray.hpp>
 #include <data/context_data.hpp>
-#include <data/world/entity_data.hpp>
 #include <data/context_data/input_pool.hpp>
+#include <data/graph/graph.hpp>
 #include <core/context/detail/context_data.hpp>
 #include <common/fixed_string_search.hpp>
 #include <systems/engine/engine.hpp>
@@ -188,10 +188,9 @@ World::set_collision_callback(Collision_callback callback)
 size_t
 World::get_entity_count_in_world() const
 {
-  assert(m_impl && m_impl->world_instance_id);
-  auto world = Core_detail::world_index_get_world_data(m_impl->world_instance_id);
+  auto world = Core_detail::world_index_get_world_data(1);
 
-  return world->entity->size;
+  return Data::Graph::node_count(world->scene_graph);
 }
 
 
@@ -207,32 +206,32 @@ World::find_entities_by_tag(const uint32_t tag_id,
                             Entity_ref **out_array,
                             size_t *out_array_size)
 {
-  static Entity_ref found_ents[1024];
-  static size_t count = 0;
-  
-  count = 0;
-  
-  assert(m_impl && m_impl->world_instance_id);
-  auto world = Core_detail::world_index_get_world_data(m_impl->world_instance_id);
-  
-  // Loop through entity data and find entities.
-  auto data = world->entity;
-  
-  data_lock(data);
-  
-  for(uint32_t i = 0; i < data->size; ++i)
-  {
-    if(Data::entity_get_tags_data(data)[i])
-    {
-      found_ents[count] = Entity_ref(Core_detail::entity_id_from_uint(data->keys[i]));
-      count++;
-    }
-  }
-  
-  data_unlock(data);
-  
-  *out_array = found_ents;
-  *out_array_size = count;
+//  static Entity_ref found_ents[1024];
+//  static size_t count = 0;
+//  
+//  count = 0;
+//  
+//  assert(m_impl && m_impl->world_instance_id);
+//  auto world = Core_detail::world_index_get_world_data(m_impl->world_instance_id);
+//  
+//  // Loop through entity data and find entities.
+//  auto data = world->entity;
+//  
+//  data_lock(data);
+//  
+//  for(uint32_t i = 0; i < data->size; ++i)
+//  {
+//    if(Data::entity_get_tags_data(data)[i])
+//    {
+//      found_ents[count] = Entity_ref(Core_detail::entity_id_from_uint(data->keys[i]));
+//      count++;
+//    }
+//  }
+//  
+//  data_unlock(data);
+//  
+//  *out_array = found_ents;
+//  *out_array_size = count;
 }
 
 
@@ -249,33 +248,35 @@ World::find_entity_by_ray(const Ray ray) const
 Entity_ref
 World::find_entity_by_name(const char *name) const
 {
-  assert(m_impl && m_impl->world_instance_id);
+//  assert(m_impl && m_impl->world_instance_id);
+//
+//  auto world = Core_detail::world_index_get_world_data(m_impl->world_instance_id);
+//  assert(world);
+//
+//  Data::Entity_data *ent_data = world->entity;
+//  assert(ent_data);
+//  
+//  Entity_ref return_ref;
+//  
+//  Data::data_lock(ent_data);
+//  
+//  size_t search_index = 0;
+//  if(Common::fixed_string_search(name,
+//                                 Data::entity_get_name_data(ent_data),
+//                                 Data::entity_get_name_stride(),
+//                                 Data::entity_get_size(ent_data),
+//                                 &search_index))
+//  {
+//    return_ref = Entity_ref(
+//                  Core_detail::entity_id_from_uint(
+//                    ent_data->keys[search_index]));
+//  }
+//  
+//  Data::data_unlock(ent_data);
+//  
+//  return return_ref;
 
-  auto world = Core_detail::world_index_get_world_data(m_impl->world_instance_id);
-  assert(world);
-
-  Data::Entity_data *ent_data = world->entity;
-  assert(ent_data);
-  
-  Entity_ref return_ref;
-  
-  Data::data_lock(ent_data);
-  
-  size_t search_index = 0;
-  if(Common::fixed_string_search(name,
-                                 Data::entity_get_name_data(ent_data),
-                                 Data::entity_get_name_stride(),
-                                 Data::entity_get_size(ent_data),
-                                 &search_index))
-  {
-    return_ref = Entity_ref(
-                  Core_detail::entity_id_from_uint(
-                    ent_data->keys[search_index]));
-  }
-  
-  Data::data_unlock(ent_data);
-  
-  return return_ref;
+  return Core::Entity_ref();
 }
 
 
@@ -300,37 +301,37 @@ World::find_entities_by_name(const char *name,
                              Entity_ref **out_array,
                              size_t *out_array_size)
 {
-  static Entity_ref found_ents[1024];
-  static size_t count = 0;
-  
-  count = 0;
-  
-  assert(m_impl && m_impl->world_instance_id);
-  auto world = Core_detail::world_index_get_world_data(m_impl->world_instance_id);
-  
-  // Loop through entity data and find entities.
-  auto data = world->entity;
-  
-  Data::data_lock(data);
-  
-  for(uint32_t i = 0; i < data->size; ++i)
-  {
-    const char *test_name;
-    Data::entity_get_name(data, data->keys[i], &test_name);
-    
-    const bool found = strcmp(name, test_name) == 0;
-
-    if(found)
-    {
-      found_ents[count] = Entity_ref(Core_detail::entity_id_from_uint(data->keys[i]));
-      count++;
-    }
-  }
-  
-  Data::data_unlock(data);
-  
-  *out_array = found_ents;
-  *out_array_size = count;
+//  static Entity_ref found_ents[1024];
+//  static size_t count = 0;
+//  
+//  count = 0;
+//  
+//  assert(m_impl && m_impl->world_instance_id);
+//  auto world = Core_detail::world_index_get_world_data(m_impl->world_instance_id);
+//  
+//  // Loop through entity data and find entities.
+//  auto data = world->entity;
+//  
+//  Data::data_lock(data);
+//  
+//  for(uint32_t i = 0; i < data->size; ++i)
+//  {
+//    const char *test_name;
+//    Data::entity_get_name(data, data->keys[i], &test_name);
+//    
+//    const bool found = strcmp(name, test_name) == 0;
+//
+//    if(found)
+//    {
+//      found_ents[count] = Entity_ref(Core_detail::entity_id_from_uint(data->keys[i]));
+//      count++;
+//    }
+//  }
+//  
+//  Data::data_unlock(data);
+//  
+//  *out_array = found_ents;
+//  *out_array_size = count;
 }
 
 

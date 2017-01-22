@@ -127,8 +127,8 @@ display_world_data_menu(Data::World *world_data,
     ImGui::EndMainMenuBar();
   }
   
-  if(show_entity_list)     { display_entity_data(world_data->entity);                                   }
-  if(show_transforms)      { display_transform_data(world_data->transform);                             }
+//  if(show_entity_list)     { display_entity_data(world_data->entity);                                   }
+//  if(show_transforms)      { display_transform_data(world_data->transform);                             }
   if(show_mesh_draw_calls) { display_mesh_draw_calls(world_data->mesh_data);                            }
   if(show_camera_list)     { display_camera_data(world_data->camera_data);                              }
   if(show_world_stats)     { display_world_stats(dt, dt_mul, draw_calls, render_passes, number_of_rbs); }
@@ -150,10 +150,12 @@ display_world_data_menu(Data::World *world_data,
                        global_data->texture_data,
                        
                        world_data->camera_data,
-                       world_data->entity,
+                       nullptr,
+//                       world_data->entity,
                        world_data->mesh_data,
                        world_data->text_data,
-                       world_data->transform,
+//                       world_data->transform,
+                       nullptr,
                        world_data->rigidbody_data);
   }
   #endif

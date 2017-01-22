@@ -5,7 +5,8 @@
 #include <data/memory/memory_data.hpp>
 #include <data/context/mesh_data.hpp>
 #include <data/world_data.hpp>
-#include <data/world/entity_data.hpp>
+#include <data/graph/graph.hpp>
+//#include <data/world/entity_data.hpp>
 #include <data/world/camera_data.hpp>
 #include <data/world/light_data.hpp>
 #include <data/world/mesh_draw_call_data.hpp>
@@ -173,7 +174,7 @@ think(std::shared_ptr<Data::World> world,
     {
       Core::Transform *cam_transforms = SCRATCH_ALIGNED_ALLOC(Core::Transform, cam_data->size);
       
-      Camera_utils::get_camera_transforms(world->transform,
+      Camera_utils::get_camera_transforms(nullptr,
                                           cam_data->keys,
                                           cam_transforms,
                                           cam_data->size);
@@ -224,7 +225,9 @@ think(std::shared_ptr<Data::World> world,
       // Get cull mask.
       // This isn't particularly nice. We should already have this data to save us looking for it.
       const util::generic_id entity_id = world->mesh_data->keys[i];
-      Data::entity_get_tags(world->entity, entity_id, &draw_calls[i].cull_mask);
+//      Data::entity_get_tags(world->entity, entity_id, &draw_calls[i].cull_mask);
+      Data::Graph::tags_get(world->scene_graph, entity_id, &draw_calls[i].cull_mask);
+    
     }
   }
   

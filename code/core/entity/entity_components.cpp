@@ -10,11 +10,12 @@
 #include <core/renderer/renderer.hpp>
 #include <core/renderer/text_renderer.hpp>
 #include <core/font/font.hpp>
-#include <data/world/entity_data.hpp>
+//#include <data/world/entity_data.hpp>
 #include <data/world/camera_data.hpp>
-#include <data/world/transform_data.hpp>
+//#include <data/world/transform_data.hpp>
 #include <data/context_data.hpp>
 #include <data/renderers/text/text_renderer.hpp>
+#include <data/graph/graph.hpp>
 #include <common/data_types.hpp>
 #include <common/error_strings.hpp>
 #include <utilities/logging.hpp>
@@ -30,7 +31,7 @@ namespace Core {
 namespace Entity_component {
 
 
-// Transform Component //
+// ------------------------------------------------- [ Transform Component ] --
 
 bool
 set_transform(const Core::Entity_ref &ref,
@@ -49,9 +50,19 @@ set_transform(const Core::Entity_ref &ref,
   auto world_data(Core_detail::world_index_get_world_data(entity_id.world_instance));
   assert(world_data);
   
+  // Update Scene Graph
+  {
+    math::transform trans;
+    trans.rotation = transform.get_rotation();
+    trans.scale = transform.get_scale();
+    trans.position = transform.get_position();
+    Data::Graph::transform_set(world_data->scene_graph, entity_uint_id, trans);
+  }
+  
+  // Old stuff
   Entity_detail::set_transform(entity_uint_id,
-                               world_data->entity,
-                               world_data->transform,
+                               nullptr,
+                               nullptr,
                                world_data->rigidbody_data,
                                &world_data->physics_world,
                                world_data->trigger_data,
@@ -79,11 +90,11 @@ get_transform(const Core::Entity_ref &ref)
   auto world_data(Core_detail::world_index_get_world_data(entity_id.world_instance));
   assert(world_data);
   
-  return Entity_detail::get_core_transform(entity_uint_id,
-                                           world_data->entity,
-                                           world_data->transform);
+  // Get Scene Graph
+  math::transform trans;
+  Data::Graph::transform_get(world_data->scene_graph, entity_uint_id, &trans);
 
-  return Core::Transform();
+  return Core::Transform(trans.position, trans.scale, trans.rotation);
 }
 
 
@@ -95,7 +106,7 @@ has_transform(const Core::Entity_ref &ref)
 }
 
 
-// Renderer Component //
+// -------------------------------------------------- [ Renderer Component ] --
 
 bool
 set_renderer(const Core::Entity_ref &ref,
@@ -114,9 +125,11 @@ set_renderer(const Core::Entity_ref &ref,
   auto world_data(Core_detail::world_index_get_world_data(entity_id.world_instance));
   assert(world_data);
   
+  
+  
   Entity_detail::set_renderer(entity_uint_id,
-                              world_data->entity,
-                              world_data->transform,
+                              nullptr,
+                              nullptr,
                               world_data->mesh_data,
                               world_data->text_data,
                               renderer);
@@ -144,10 +157,11 @@ set_renderer(const Core::Entity_ref &ref,
   
   // -- Check to see if renderer is attached -- //
   {
-    auto entity_data = world_data->entity;
+//    auto entity_data = world_data->entity;
   
     uint32_t components = 0;
-    Data::entity_get_components(entity_data, entity_uint_id, &components);
+    Data::Graph::components_get(world_data->scene_graph, entity_uint_id, &components);
+//    Data::entity_get_components(entity_data, entity_uint_id, &components);
     
     const uint32_t renderer_type = Common::Data_type::get_renderer_type(components);
   
@@ -159,8 +173,8 @@ set_renderer(const Core::Entity_ref &ref,
     {
       // Remove component
       components &= Common::Data_type::renderer_text;
-      
-      Data::entity_set_components(entity_data, entity_uint_id, &components);
+      Data::Graph::components_set(world_data->scene_graph, entity_uint_id, components);
+//      Data::entity_set_components(entity_data, entity_uint_id, &components);
     }
   }
 
@@ -169,8 +183,10 @@ set_renderer(const Core::Entity_ref &ref,
     auto resources = Data::get_context_data();
     auto world = Core_detail::world_index_get_world_data(1);
     
+//    Data::transform_get_transform(world->transform, entity_uint_id, &transform);
+
     math::transform transform;
-    Data::transform_get_transform(world->transform, entity_uint_id, &transform);
+    Data::Graph::transform_get(world->scene_graph, entity_uint_id, &transform);
     math::mat4 world_mat = math::transform_get_world_matrix(transform);
     
     Data::Text_renderer::set_draw_call(
@@ -206,7 +222,7 @@ get_renderer(const Core::Entity_ref &ref)
   assert(world_data);
   
   return Entity_detail::get_renderer(entity_uint_id,
-                                     world_data->entity,
+                                     nullptr,
                                      world_data->mesh_data,
                                      world_data->text_data);
 }
@@ -235,12 +251,7 @@ has_text_renderer(const Core::Entity_ref &ref)
 }
 
 
-/*
-  Rigidbody Component
-  --
-  Attaching a rigidbody will use the use physics
-  engine to update the entities transform.
-*/
+// ------------------------------------------------- [ Rigidbody Component ] --
 
 bool
 set_rigidbody(const Core::Entity_ref &ref,
@@ -259,10 +270,17 @@ set_rigidbody(const Core::Entity_ref &ref,
   auto world_data(Core_detail::world_index_get_world_data(entity_id.world_instance));
   assert(world_data);
   
+  math::transform trans;
+  Data::Graph::transform_get(world_data->scene_graph, entity_uint_id, &trans);
+
+  Core::Transform core_trans(trans.position, trans.scale, trans.rotation);
+  
+  
   Entity_detail::set_rigidbody(entity_uint_id,
+                               core_trans,
                                rigidbody,
-                               world_data->transform,
-                               world_data->entity,
+                               nullptr,
+                               nullptr,
                                world_data->trigger_data,
                                world_data->rigidbody_data,
                                &world_data->physics_world);
@@ -288,8 +306,8 @@ get_rigidbody(const Core::Entity_ref &ref)
   assert(world_data);
   
   return Entity_detail::get_rigidbody(entity_uint_id,
-                                      world_data->entity,
-                                      world_data->transform,
+                                      nullptr,
+                                      nullptr,
                                       world_data->rigidbody_data,
                                       world_data->trigger_data);
 }
@@ -310,9 +328,7 @@ has_rigidbody(const Core::Entity_ref &ref)
 }
 
 
-/*
-  Camera component
-*/
+// ---------------------------------------------------- [ Camera Component ] --
 
 
 bool
@@ -332,13 +348,13 @@ set_camera(const Core::Entity_ref &ref,
   auto world_data(Core_detail::world_index_get_world_data(entity_id.world_instance));
   assert(world_data);
   
-  Data::Entity_data *entity_data = world_data->entity;
-  assert(entity_data);
+//  Data::Entity_data *entity_data = world_data->entity;
+//  assert(entity_data);
   
   Data::Camera_data *camera_data = world_data->camera_data;
   assert(camera_data);
 
-  Entity_detail::set_camera(entity_uint_id, entity_data, camera_data, &camera);
+  Entity_detail::set_camera(entity_uint_id, nullptr, camera_data, &camera);
   
   return true;
 }
@@ -387,13 +403,13 @@ remove_camera(const Core::Entity_ref &ref)
   auto world_data(Core_detail::world_index_get_world_data(entity_id.world_instance));
   assert(world_data);
   
-  Data::Entity_data *entity_data = world_data->entity;
-  assert(entity_data);
+//  Data::Entity_data *entity_data = world_data->entity;
+//  assert(entity_data);
 
   Data::Camera_data *cam_data(world_data->camera_data);
   assert(cam_data);
   
-  Entity_detail::remove_camera(entity_uint_id, entity_data, cam_data);
+  Entity_detail::remove_camera(entity_uint_id, nullptr, cam_data);
 }
 
 
@@ -420,10 +436,7 @@ has_camera(const Core::Entity_ref &ref)
 }
 
 
-/*
-  Light Component
-*/
-
+// ----------------------------------------------------- [ Light Component ] --
 
 bool
 set_light(const Core::Entity_ref &ref,
@@ -442,16 +455,16 @@ set_light(const Core::Entity_ref &ref,
   auto world_data(Core_detail::world_index_get_world_data(entity_id.world_instance));
   assert(world_data);
   
-  Data::Entity_data *entity_data = world_data->entity;
-  assert(entity_data);
+//  Data::Entity_data *entity_data = world_data->entity;
+//  assert(entity_data);
   
   Data::Light_data *light_data = world_data->light_data;
   assert(light_data);
   
-  Data::Transform_data *transform_data = world_data->transform;
-  assert(transform_data);
+//  Data::Transform_data *transform_data = world_data->transform;
+//  assert(transform_data);
 
-  Entity_detail::set_light(entity_uint_id, entity_data, light_data, transform_data, &light);
+  Entity_detail::set_light(entity_uint_id, nullptr, light_data, nullptr, &light);
   
   return true;
 }

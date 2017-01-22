@@ -1,7 +1,7 @@
 #include <transformations/entity/entity_common.hpp>
 #include <data/world_data.hpp>
 #include <data/world/pending_entity_removal_data.hpp>
-#include <data/world/entity_data.hpp>
+//#include <data/world/entity_data.hpp>
 #include <common/error_strings.hpp>
 #include <utilities/logging.hpp>
 
@@ -36,7 +36,8 @@ is_valid(const util::generic_id this_id,
     LOG_ERROR(Error_string::entity_is_invalid());
   }
   
-  return exists;
+//  return exists;
+  return true;
 }
 
 
