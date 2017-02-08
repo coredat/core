@@ -5,6 +5,7 @@
 #include <transformations/entity/entity_common.hpp>
 #include <transformations/physics/bullet/bullet_fwd.hpp>
 #include <data/fwd_dec_data.hpp>
+#include <data/graph/fwd.hpp>
 
 
 namespace Entity_detail {
@@ -13,7 +14,7 @@ namespace Entity_detail {
 void
 set_phy_transform(const util::generic_id this_id,
                   const Core::Transform *transform,
-                  Data::Entity_data *entity_data,
+                  Data::Graph::Graph_data *entity_data,
                   Data::Rigidbody_data *rb_data,
                   Bullet_data::World *phy_world,
                   Data::Trigger_data *trigger_data);
@@ -23,8 +24,7 @@ void
 set_rigidbody(const util::generic_id this_id,
               Core::Transform tranform,
               const Core::Rigidbody &rigidbody,
-              const Data::Transform_data *transform_data,
-              Data::Entity_data *entity_data,
+              Data::Graph::Graph_data *entity_data,
               Data::Trigger_data *trigger_data,
               Data::Rigidbody_data *rigidbody_data,
               Bullet_data::World *physics_world);
@@ -32,8 +32,7 @@ set_rigidbody(const util::generic_id this_id,
 
 Core::Rigidbody
 get_rigidbody(const util::generic_id this_id,
-              const Data::Entity_data *entity,
-              const Data::Transform_data *transforms,
+              const Data::Graph::Graph_data *entity_data,
               const Data::Rigidbody_data *rb_data,
               const Data::Trigger_data *trigger_data);
   

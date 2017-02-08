@@ -3,6 +3,7 @@
 
 
 #include <data/fwd_dec_data.hpp>
+#include <data/graph/fwd.hpp>
 #include <utilities/generic_id.hpp>
 #include <op/fwd.hpp>
 #include <stdint.h>
@@ -41,7 +42,7 @@ create_string_data(const util::generic_id this_id,
                    Data::Texture_data *texture_data,
                    Data::Text_draw_call_data *text_draw_call,
                    Data::Transform_data *transform_data,
-                   Data::Entity_data *entity_data,
+                   Data::Graph::Graph_data *entity_data,
                    opContext *ctx,
                    opBuffer *buf);
 

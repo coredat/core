@@ -4,12 +4,10 @@
 #include <core/world/detail/world_index.hpp>
 #include <core/transform/transform.hpp>
 #include <data/world_data.hpp>
-//#include <data/world/entity_data.hpp>
+#include <data/graph/graph.hpp>
 #include <data/world/mesh_draw_call_data.hpp>
 #include <data/world/text_draw_call_data.hpp>
 #include <data/graph/graph.hpp>
-//#include <data/world/transform_data.hpp>
-//#include <data/world/transform_data.hpp>
 #include <data/world/rigidbody_data.hpp>
 #include <data/renderers/text/text_renderer.hpp>
 #include <common/error_strings.hpp>
@@ -23,23 +21,6 @@ namespace Entity_detail {
 
 
 namespace {
-
-
-//inline void
-//update_transform(const util::generic_id this_id,
-//                 Data::Transform_data *transform_data,
-//                 const math::transform *transform)
-//{
-//  Data::data_lock(transform_data);
-//
-//  size_t index;
-//  if(Data::transform_exists(transform_data, this_id, &index))
-//  {
-//    transform_data->field_transform[index] = *transform;
-//  }
-//  
-//  Data::data_unlock(transform_data);
-//}
 
 
 inline void
@@ -56,7 +37,11 @@ update_mesh_renderer(const util::generic_id this_id,
     if(Data::mesh_draw_call_exists(mesh_data, this_id, &mesh_index))
     {
       const math::mat4 world_mat = math::transform_get_world_matrix(*transform);
-      memcpy(mesh_data->field_draw_call[mesh_index].world_matrix, &world_mat, sizeof(world_mat));
+      memcpy(
+        mesh_data->field_draw_call[mesh_index].world_matrix,
+        &world_mat,
+        sizeof(world_mat)
+      );
     }
     
     Data::data_unlock(mesh_data);
@@ -83,7 +68,10 @@ udpate_text_renderer(const util::generic_id this_id,
 
     if(Data::text_draw_call_exists(text_data, this_id, &index))
     {
-      memcpy(text_data->field_draw_call[index].world_matrix, &world_mat, sizeof(world_mat));
+      memcpy(
+        text_data->field_draw_call[index].world_matrix,
+        &world_mat,
+        sizeof(world_mat));
     }
     
     Data::data_unlock(text_data);
@@ -102,8 +90,7 @@ udpate_text_renderer(const util::generic_id this_id,
 
 void
 set_transform(const util::generic_id this_id,
-              Data::Entity_data *entity_data,
-              Data::Transform_data *transform_data,
+              Data::Graph::Graph_data *entity_data,
               Data::Rigidbody_data *rb_data,
               Bullet_data::World *phy_world,
               Data::Trigger_data *trigger_data,
@@ -148,10 +135,14 @@ set_transform(const util::generic_id this_id,
   // Update all the things that want to know.
   {
     // Build new transform
-    const math::transform new_transform = math::transform_init(set_transform.get_position(),
-                                                               set_transform.get_scale(),
-                                                               set_transform.get_rotation());
-    
+    const math::transform new_transform(
+      math::transform_init(
+        set_transform.get_position(),
+        set_transform.get_scale(),
+        set_transform.get_rotation()
+      )
+    );
+
 //    update_transform(this_id, transform_data, &new_transform);
 
     if(inform_phys_engine && Common::Data_type::is_collidable(components))
@@ -171,7 +162,7 @@ set_transform(const util::generic_id this_id,
 
 Core::Transform
 get_core_transform(const util::generic_id this_id,
-                   Data::Entity_data *entity_data,
+                   Data::Graph::Graph_data *entity_data,
                    const Data::Transform_data *transform_data)
 {
   assert(entity_data);
@@ -182,15 +173,21 @@ get_core_transform(const util::generic_id this_id,
     assert(false); return Core::Transform();
   }
   
-  const math::transform transform_prop = get_transform(this_id, entity_data, transform_data);
+  const math::transform transform_prop(
+    get_transform(this_id, entity_data, transform_data)
+  );
   
-  return Core::Transform(transform_prop.position, transform_prop.scale, transform_prop.rotation);
+  return Core::Transform(
+    transform_prop.position,
+    transform_prop.scale,
+    transform_prop.rotation
+  );
 }
 
 
 math::transform
 get_transform(const util::generic_id this_id,
-              Data::Entity_data *entity_data,
+              Data::Graph::Graph_data *entity_data,
               const Data::Transform_data *transform_data)
 {
   assert(transform_data);

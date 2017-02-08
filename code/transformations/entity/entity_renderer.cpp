@@ -22,8 +22,7 @@
 #include <data/context/texture_data.hpp>
 #include <data/context/text_mesh_data.hpp>
 #include <data/world_data.hpp>
-//#include <data/world/entity_data.hpp>
-//#include <data/world/transform_data.hpp>
+#include <data/graph/graph.hpp>
 #include <data/world/mesh_draw_call_data.hpp>
 #include <data/world/text_draw_call_data.hpp>
 #include <data/context/material_data.hpp>
@@ -38,6 +37,7 @@
 #include <graphics_api/vertex_format.hpp>
 #include <graphics_api/utils/geometry.hpp>
 #include <utilities/logging.hpp>
+#include <math/transform/transform.hpp>
 #include <assert.h>
 
 
@@ -46,25 +46,20 @@ namespace Entity_detail {
 
 uint32_t
 has_renderer(const util::generic_id this_id,
-             Data::Entity_data *entity_data)
+             Data::Graph::Graph_data *entity_data)
 {
-  Data::data_lock(entity_data);
-  
   uint32_t components(0);
-  Data::entity_get_components(entity_data, this_id, &components);
+  Data::Graph::components_get(entity_data, this_id, &components);
   
   const uint32_t renderer_type = Common::Data_type::get_renderer_type(components);
   
-  Data::data_unlock(entity_data);
-
   return renderer_type;
 }
 
 
 void
 set_renderer(const util::generic_id this_id,
-             Data::Entity_data *entity_data,
-             Data::Transform_data *transform_data,
+             Data::Graph::Graph_data *entity_data,
              Data::Mesh_draw_call_data *renderer_material,
              Data::Text_draw_call_data *text_data,
              const Core::Renderer &renderer)
@@ -88,19 +83,19 @@ set_renderer(const util::generic_id this_id,
     assert(entity_data);
     assert(renderer_material);
     
-    Data::data_lock(entity_data);
-    
     uint32_t components = 0;
     Data::Graph::components_get(world_data->scene_graph, this_id, &components);
     
-    const uint32_t renderer_type = Common::Data_type::get_renderer_type(components);
+    const uint32_t renderer_type(
+      Common::Data_type::get_renderer_type(components)
+    );
     
     // If exists destroy old renderer
     if(renderer_type != 0)
     {
       // Remove component
       components &= ~renderer_type;
-      Data::entity_set_components(entity_data, this_id, &components);
+      Data::Graph::components_set(entity_data, this_id, components);
     
       switch(renderer_type)
       {
@@ -121,23 +116,18 @@ set_renderer(const util::generic_id this_id,
           break;
       }
     }
-    
-    Data::data_unlock(entity_data);
   }
   
   // Set or update renderer
   {
-    Data::data_lock(entity_data);
-    
     uint32_t components = 0;
-    Data::entity_get_components(entity_data, this_id, &components);
+    Data::Graph::components_get(entity_data, this_id, &components);
     
     components |= renderer.get_type();
-    Data::entity_set_components(entity_data, this_id, &components);
+    Data::Graph::components_set(entity_data, this_id, components);
     
-    Data::Graph::components_set(world_data->scene_graph, this_id, components);
+//    Data::Graph::components_set(world_data->scene_graph, this_id, components);
     
-    Data::data_unlock(entity_data);
   }
   
   // Set renderer
@@ -148,7 +138,6 @@ set_renderer(const util::generic_id this_id,
       const Core::Material_renderer mat_renderer(renderer);
       set_renderer_material(this_id,
                             entity_data,
-                            transform_data,
                             renderer_material,
                             mat_renderer.get_material().get_id(),
                             mat_renderer.get_model().get_id());
@@ -172,7 +161,7 @@ set_renderer(const util::generic_id this_id,
         auto world = Core_detail::world_index_get_world_data(1);
         
         math::transform transform;
-        Data::transform_get_transform(world->transform, this_id, &transform);
+        Data::Graph::transform_get(entity_data, this_id, &transform);
         math::mat4 world_mat = math::transform_get_world_matrix(transform);
         
         Data::Text_renderer::set_draw_call(
@@ -198,7 +187,7 @@ set_renderer(const util::generic_id this_id,
 
 Core::Renderer
 get_renderer(const util::generic_id this_id,
-             Data::Entity_data *entity_data,
+             Data::Graph::Graph_data *entity_data,
              Data::Mesh_draw_call_data *renderer_material,
              Data::Text_draw_call_data *text_draw_call_data)
 {
@@ -248,7 +237,7 @@ get_renderer(const util::generic_id this_id,
         
         case(Core::Renderer_type::text):
         {
-          util::generic_id font_id = util::generic_id_invalid();
+//          util::generic_id font_id = util::generic_id_invalid();
           
           ::Text_renderer::Draw_call dc;
           
@@ -267,7 +256,6 @@ get_renderer(const util::generic_id this_id,
     }
     
     Data::data_unlock(renderer_material);
-    Data::data_unlock(entity_data);
   }
   
   return return_renderer;
@@ -276,8 +264,7 @@ get_renderer(const util::generic_id this_id,
 
 void
 set_renderer_material(const util::generic_id this_id,
-                      Data::Entity_data *entity_data,
-                      Data::Transform_data *transform_data,
+                      Data::Graph::Graph_data *entity_data,
                       Data::Mesh_draw_call_data *mesh_data,
                       const util::generic_id material_id,
                       const util::generic_id model_id)
@@ -299,14 +286,14 @@ set_renderer_material(const util::generic_id this_id,
     Data::data_lock(mat_data);
   
     size_t find_index;
-    Data::Mesh_renderer_draw_call *draw = nullptr;
+    Data::Mesh_renderer_draw_call draw;
     Data::Mesh_renderer_draw_call copy;
 
     // If it already exists. The data and erase the old info.
     if(Data::mesh_draw_call_exists(mesh_data, this_id, &find_index))
     {
-      Data::mesh_draw_call_get_draw_call(mesh_data, this_id, draw);
-      copy = Data::Mesh_renderer_draw_call(*draw);
+      Data::mesh_draw_call_get_draw_call(mesh_data, this_id, &draw);
+      copy = Data::Mesh_renderer_draw_call(draw);
       Data::mesh_draw_call_remove(mesh_data, this_id);
     }
     
@@ -332,7 +319,7 @@ set_renderer_material(const util::generic_id this_id,
       
       // Get the trasnform as we are insreting a new record.
       math::transform trans;
-      Data::transform_get_transform(transform_data, this_id, &trans);
+      Data::Graph::transform_get(entity_data, this_id, &trans);
       
       const math::mat4 world_mat = math::transform_get_world_matrix(trans);
       memcpy(copy.world_matrix, &world_mat, sizeof(world_mat));
@@ -378,9 +365,7 @@ set_renderer_material(const util::generic_id this_id,
   }
   
   {
-    Data::data_lock(transform_data);
-    Data::transform_set_aabb(transform_data, this_id, &return_aabb);
-    Data::data_unlock(transform_data);
+    Data::Graph::aabb_set(entity_data, this_id, return_aabb);
   }
 }
 
@@ -415,8 +400,7 @@ get_renderer_material(const util::generic_id this_id,
 void
 set_renderer_text(const util::generic_id this_id,
                   const char *str,
-                  Data::Entity_data *entity_data,
-                  Data::Transform_data *transform_data,
+                  Data::Graph::Graph_data *entity_data,
                   Data::Text_draw_call_data *text_data,
                   const util::generic_id font_id,
                   const util::generic_id model_id)
@@ -460,7 +444,7 @@ set_renderer_text(const util::generic_id this_id,
     glyph_data,
     texture_data,
     text_data,
-    transform_data,
+    nullptr,
     entity_data,
     resources->op_context,
     resources->op_buffer

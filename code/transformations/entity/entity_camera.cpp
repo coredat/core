@@ -1,6 +1,6 @@
 #include <transformations/entity/entity_camera.hpp>
 #include <core/color/color.hpp>
-//#include <data/world/entity_data.hpp>
+#include <data/graph/graph.hpp>
 #include <data/world/camera_data.hpp>
 #include <common/data_types.hpp>
 #include <common/error_strings.hpp>
@@ -12,7 +12,7 @@ namespace Entity_detail {
 
 void
 set_camera(util::generic_id const this_id,
-           Data::Entity_data *entity_data,
+           Data::Graph::Graph_data *entity_data,
            Data::Camera_data *camera_data,
            Core::Camera const *camera)
 {
@@ -23,18 +23,14 @@ set_camera(util::generic_id const this_id,
 
   // Check if Entity has camera data. If not add it.
   {
-    Data::data_lock(entity_data);
-    
     uint32_t current_data_types(0);
-    Data::entity_get_components(entity_data, this_id, &current_data_types);
+    Data::Graph::components_get(entity_data, this_id, &current_data_types);
     
     if(!Common::Data_type::has_data_type(current_data_types, Common::Data_type::camera))
     {
       current_data_types |= Common::Data_type::camera;
-      Data::entity_set_components(entity_data, this_id, &current_data_types);
+      Data::Graph::components_set(entity_data, this_id, current_data_types);
     }
-    
-    Data::data_unlock(entity_data);
   }
 
   // Add entity properties
@@ -114,7 +110,7 @@ get_camera(util::generic_id const this_id,
 
 void
 remove_camera(const util::generic_id this_id,
-              Data::Entity_data *entity_data,
+              Data::Graph::Graph_data *entity_data,
               Data::Camera_data *camera_data)
 {
   assert(this_id);
@@ -123,15 +119,11 @@ remove_camera(const util::generic_id this_id,
 
   // Remove component
   {
-    Data::data_lock(entity_data);
-    
     uint32_t current_data_types(0);
-    Data::entity_get_components(entity_data, this_id, &current_data_types);
+    Data::Graph::components_get(entity_data, this_id, &current_data_types);
     
     current_data_types &= ~Common::Data_type::camera;
-    Data::entity_set_components(entity_data, this_id, &current_data_types);
-
-    Data::data_unlock(entity_data);
+    Data::Graph::components_set(entity_data, this_id, current_data_types);
   }
 
   // Remove Camera

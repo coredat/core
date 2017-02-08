@@ -40,7 +40,7 @@ components_set(Graph_data *graph,
 
 
 bool
-components_get(Graph_data *graph,
+components_get(const Graph_data *graph,
                const uint32_t node,
                uint32_t *bitfield)
 {

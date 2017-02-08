@@ -57,7 +57,7 @@ transform_set(Graph_data *graph,
   
   
 bool
-transform_get(Graph_data *graph,
+transform_get(const Graph_data *graph,
               const uint32_t node,
               math::transform *out_transform)
 {

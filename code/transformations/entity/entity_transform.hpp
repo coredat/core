@@ -5,6 +5,7 @@
 #include <transformations/entity/entity_common.hpp>
 #include <transformations/physics/bullet/bullet_data.hpp>
 #include <data/fwd_dec_data.hpp>
+#include <data/graph/fwd.hpp>
 
 
 namespace Entity_detail {
@@ -17,8 +18,7 @@ namespace Entity_detail {
 */
 void
 set_transform(const util::generic_id this_id,
-              Data::Entity_data *entity_data,
-              Data::Transform_data *transform_data,
+              Data::Graph::Graph_data *entity_data,
               Data::Rigidbody_data *rb_data,
               Bullet_data::World *phy_world,
               Data::Trigger_data *trigger_data,
@@ -33,7 +33,7 @@ set_transform(const util::generic_id this_id,
 */
 math::transform
 get_transform(const util::generic_id this_id,
-              Data::Entity_data *entity_data,
+              Data::Graph::Graph_data *entity_data,
               const Data::Transform_data *transform_data);
 
 
@@ -42,7 +42,7 @@ get_transform(const util::generic_id this_id,
 */
 Core::Transform
 get_core_transform(const util::generic_id this_id,
-                   Data::Entity_data *entity_data,
+                   Data::Graph::Graph_data *entity_data,
                    const Data::Transform_data *transform_data);
   
 

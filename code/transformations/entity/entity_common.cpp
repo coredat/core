@@ -1,7 +1,7 @@
 #include <transformations/entity/entity_common.hpp>
 #include <data/world_data.hpp>
 #include <data/world/pending_entity_removal_data.hpp>
-//#include <data/world/entity_data.hpp>
+#include <data/graph/graph.hpp>
 #include <common/error_strings.hpp>
 #include <utilities/logging.hpp>
 
@@ -11,7 +11,7 @@ namespace Entity_detail {
 
 util::generic_id
 get_id(const util::generic_id this_id,
-       Data::Entity_data *entity_data)
+       Data::Graph::Graph_data *entity_data)
 {
   return is_valid(this_id, entity_data) ? this_id : util::generic_id_invalid();
 }
@@ -19,7 +19,7 @@ get_id(const util::generic_id this_id,
 
 bool
 is_valid(const util::generic_id this_id,
-         Data::Entity_data *entity_data,
+         Data::Graph::Graph_data *entity_data,
          const bool emit_error)
 {
   // Invalid data, means invalid entity.
@@ -27,9 +27,7 @@ is_valid(const util::generic_id this_id,
   if(!entity_data)                          { return false; }
 
   // Our id might have expired, so we need to check it.
-  Data::data_lock(entity_data);
-  const bool exists = Data::entity_exists(entity_data, this_id);
-  Data::data_unlock(entity_data);
+  const bool exists = Data::Graph::node_exists(entity_data, this_id);
   
   if(!exists && emit_error)
   {
@@ -43,7 +41,7 @@ is_valid(const util::generic_id this_id,
 
 void
 destroy(const util::generic_id this_id,
-        Data::Entity_data *entity_data,
+        Data::Graph::Graph_data *entity_data,
         Data::Pending_entity_removal_data *scene_graph_changes)
 {
   if(!is_valid(this_id, entity_data, false)) {
@@ -62,22 +60,18 @@ destroy(const util::generic_id this_id,
 
 void
 update_component(const util::generic_id this_id,
-                 Data::Entity_data *entity_data,
+                 Data::Graph::Graph_data *entity_data,
                  const uint32_t component_id)
 {
   if(!is_valid(this_id, entity_data, true)) {
     assert(false); return;
   }
  
-  Data::data_lock(entity_data);
-
-  uint32_t comps;
-  Data::entity_get_components(entity_data, this_id, &comps);
+  uint32_t comps = 0;
+  Data::Graph::components_get(entity_data, this_id, &comps);
 
   comps = comps | component_id;
-  Data::entity_set_components(entity_data, this_id, &comps);
-  
-  Data::data_unlock(entity_data);
+  Data::Graph::components_get(entity_data, this_id, &comps);
 }
 
 

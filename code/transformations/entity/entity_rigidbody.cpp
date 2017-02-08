@@ -11,8 +11,7 @@
 #include <core/transform/transform.hpp>
 #include <data/context_data.hpp>
 #include <data/world_data.hpp>
-//#include <data/world/entity_data.hpp>
-//#include <data/world/transform_data.hpp>
+#include <data/graph/graph.hpp>
 #include <data/world/rigidbody_data.hpp>
 #include <data/world/trigger_data.hpp>
 #include <common/data_types.hpp>
@@ -44,15 +43,13 @@ void
 set_rigidbody(const util::generic_id this_id,
               Core::Transform core_transform,
               const Core::Rigidbody &rigidbody,
-              const Data::Transform_data *transform_data,
-              Data::Entity_data *entity_data,
+              Data::Graph::Graph_data *entity_data,
               Data::Trigger_data *trigger_data,
               Data::Rigidbody_data *rb_data,
               Bullet_data::World *physics_world)
 {
   // Param check
   assert(entity_data);
-  assert(transform_data);
   assert(trigger_data);
   assert(rb_data);
   assert(physics_world);
@@ -64,10 +61,8 @@ set_rigidbody(const util::generic_id this_id,
   {
     if(entity_data)
     {
-      Data::data_lock(entity_data);
-      
       uint32_t components(0);
-      Data::entity_get_components(entity_data, this_id, &components);
+      Data::Graph::components_get(entity_data, this_id, &components);
       
       if(Common::Data_type::is_collidable(components))
       {
@@ -100,10 +95,8 @@ set_rigidbody(const util::generic_id this_id,
       // Reset flag as it might change between one or the other.
       {
         components |= rigidbody.is_trigger() ? Common::Data_type::trigger : Common::Data_type::rigidbody;
-        Data::entity_set_components(entity_data, this_id, &components);
+        Data::Graph::components_set(entity_data, this_id, components);
       }
-      
-      Data::data_unlock(entity_data);
     }
   }
 
@@ -157,37 +150,27 @@ set_rigidbody(const util::generic_id this_id,
 
 Core::Rigidbody
 get_rigidbody(const util::generic_id this_id,
-              const Data::Entity_data *entity,
-              const Data::Transform_data *transforms,
+              const Data::Graph::Graph_data *entity,
               const Data::Rigidbody_data *rb_data,
               const Data::Trigger_data *trigger_data)
 {
   // Param check
   assert(this_id);
   assert(entity);
-  assert(transforms);
   assert(rb_data);
   assert(trigger_data);
   
   // Get component list
   uint32_t components(0);
-  {
-    Data::data_lock(entity);
-    Data::entity_get_components(entity, this_id, &components);
-    Data::data_unlock(entity);
-  }
+  Data::Graph::components_get(entity, this_id, &components);
   
   // Get local scale
   math::vec3 entity_scale = math::vec3_one();
   {
-    Data::data_lock(transforms);
-    
     math::transform transform;
-    Data::transform_get_transform(transforms, this_id, &transform);
+    Data::Graph::transform_get(entity, this_id, &transform);
     
     entity_scale = transform.scale;
-    
-    Data::data_unlock(transforms);
   }
   
   Core::Rigidbody core_rb;
@@ -221,7 +204,7 @@ get_rigidbody(const util::generic_id this_id,
 void
 set_phy_transform(const util::generic_id this_id,
                   const Core::Transform *transform,
-                  Data::Entity_data *entity_data,
+                  Data::Graph::Graph_data *entity_data,
                   Data::Rigidbody_data *rb_data,
                   Bullet_data::World *phy_world,
                   Data::Trigger_data *trigger_data)
@@ -238,12 +221,8 @@ set_phy_transform(const util::generic_id this_id,
   bool is_trigger = false;
   bool is_rigidbody = false;
   {
-    Data::data_lock(entity_data);
-    
     uint32_t components(0);
-    Data::entity_get_components(entity_data, this_id, &components);
-    
-    Data::data_unlock(entity_data);
+    Data::Graph::components_get(entity_data, this_id, &components);
     
     is_trigger   = (components & Common::Data_type::trigger);
     is_rigidbody = (components & Common::Data_type::rigidbody);

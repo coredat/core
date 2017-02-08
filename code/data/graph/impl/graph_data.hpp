@@ -42,11 +42,11 @@ struct Graph_data
   /*
     Cache last index lookup.
   */
-  size_t last_instance = -1;
-  size_t index_cache   = 0;
+  mutable size_t last_instance = -1;
+  mutable size_t index_cache   = 0;
 
   bool
-  find_index(size_t instance, size_t *index)
+  find_index(size_t instance, size_t *index) const
   {
     if(instance == last_instance)
     {
@@ -54,7 +54,7 @@ struct Graph_data
       return true;
     }
     
-    uint32_t *ids = (uint32_t*)util::buffer::bytes(&node_ids);
+    const uint32_t *ids = (const uint32_t*)util::buffer::bytes(&node_ids);
     size_t count = util::buffer::size(&node_ids);
     
     LOG_TODO_ONCE("Make a bin search");

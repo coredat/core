@@ -1,9 +1,9 @@
 #include <transformations/rendering/material_renderer.hpp>
 #include <systems/renderer_material/material_renderer.hpp>
 #include <data/world/mesh_draw_call_data.hpp>
-#include <data/world/transform_data.hpp>
 #include <data/context/material_data.hpp>
 #include <data/memory/memory_data.hpp>
+#include <math/transform/transform.hpp>
 
 
 namespace Rendering {
@@ -25,7 +25,7 @@ material_renderer(const math::mat4 &view_mat,
 {
   /*
     Sort the draw calls into runs.
-    This is so we can bind a material, then batch render a collection of draw calls.
+    This is so we can bind a material, then batch draw calls.
   */
   struct Draw_run
   {

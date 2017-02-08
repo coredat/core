@@ -4,6 +4,7 @@
 
 #include <core/common/core_fwd.hpp>
 #include <data/fwd_dec_data.hpp>
+#include <data/graph/fwd.hpp>
 #include <utilities/generic_id.hpp>
 
 
@@ -12,16 +13,14 @@ namespace Entity_detail {
 
 void
 set_light(const util::generic_id this_id,
-          Data::Entity_data *entity_data,
+          Data::Graph::Graph_data *entity_data,
           Data::Light_data *light_data,
-          const Data::Transform_data *transform_data,
           const Core::Point_light *light);
 
 
 void
 set_light_transform(const util::generic_id this_id,
-                    const Data::Entity_data *entity_data,
-                    const Data::Transform_data *transform_data,
+                    Data::Graph::Graph_data *entity_data,
                     Data::Light_data *light_data);
 
 

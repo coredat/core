@@ -5,8 +5,7 @@
 #include <core/color/color.hpp>
 #include <core/color/color_utils.hpp>
 #include <core/lighting/point_light.hpp>
-//#include <data/world/transform_data.hpp>
-//#include <data/world/entity_data.hpp>
+#include <data/graph/graph.hpp>
 #include <data/world/light_data.hpp>
 #include <utilities/logging.hpp>
 
@@ -16,24 +15,20 @@ namespace Entity_detail {
 
 void
 set_light(const util::generic_id this_id,
-          Data::Entity_data *entity_data,
+          Data::Graph::Graph_data *entity_data,
           Data::Light_data *light_data,
-          const Data::Transform_data *transform_data,
           const Core::Point_light *light)
 {
   // Param Check
   assert(this_id);
   assert(entity_data);
   assert(light_data);
-  assert(transform_data);
   assert(light);
   
   // Add Light Component to entity
   bool entity_exists = false;
   {
-    Data::data_lock(entity_data);
-    
-    if(Data::entity_exists(entity_data, this_id))
+    if(Data::Graph::node_exists(entity_data, this_id))
     {
       entity_exists = true;
     }
@@ -42,13 +37,11 @@ set_light(const util::generic_id this_id,
     if(entity_exists)
     {
       uint32_t components = 0;
-      Data::entity_get_components(entity_data, this_id, &components);
+      Data::Graph::components_get(entity_data, this_id, &components);
       
       components |= Common::Data_type::light;
-      Data::entity_set_components(entity_data, this_id, &components);
+      Data::Graph::components_set(entity_data, this_id, components);
     }
-    
-    Data::data_unlock(entity_data);
   }
   
   // Bail if entity doesn't exist.
@@ -63,9 +56,7 @@ set_light(const util::generic_id this_id,
   // Get the transform for this entity
   math::transform transform;
   {
-    Data::data_lock(transform_data);
-    Data::transform_get_transform(transform_data, this_id, &transform);
-    Data::data_unlock(transform_data);
+    Data::Graph::transform_set(entity_data, this_id, transform);
   }
   
   // Add Light to data
@@ -103,8 +94,7 @@ set_light(const util::generic_id this_id,
 
 void
 set_light_transform(const util::generic_id this_id,
-                    const Data::Entity_data *entity_data,
-                    const Data::Transform_data *transform_data,
+                    Data::Graph::Graph_data *entity_data,
                     Data::Light_data *light_data)
 {
 }

@@ -5,9 +5,8 @@
 #include <data/context/font_glyph_data.hpp>
 #include <data/context/texture_data.hpp>
 #include <data/memory/memory_data.hpp>
-#include <data/world/entity_data.hpp>
+#include <data/graph/graph.hpp>
 #include <data/world/text_draw_call_data.hpp>
-#include <data/world/transform_data.hpp>
 #include <systems/text/character.hpp>
 #include <math/math.hpp>
 #include <utilities/logging.hpp>
@@ -298,7 +297,7 @@ create_string_data(const util::generic_id this_id,
                    Data::Texture_data *texture_data,
                    Data::Text_draw_call_data *text_draw_call,
                    Data::Transform_data *transform_data,
-                   Data::Entity_data *entity_data,
+                   Data::Graph::Graph_data *entity_data,
                    opContext *ctx,
                    opBuffer *buf)
 {
@@ -360,7 +359,9 @@ create_string_data(const util::generic_id this_id,
     }
     
     
-    const math::transform transform = Entity_detail::get_transform(this_id, entity_data, transform_data);
+    math::transform transform;
+    Data::Graph::transform_get(entity_data, this_id, &transform);
+    
     const math::mat4 world_mat = math::transform_get_world_matrix(transform);
     
     // If we don't have a draw call insert one.

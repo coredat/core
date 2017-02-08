@@ -61,8 +61,7 @@ set_transform(const Core::Entity_ref &ref,
   
   // Old stuff
   Entity_detail::set_transform(entity_uint_id,
-                               nullptr,
-                               nullptr,
+                               world_data->scene_graph,
                                world_data->rigidbody_data,
                                &world_data->physics_world,
                                world_data->trigger_data,
@@ -128,8 +127,7 @@ set_renderer(const Core::Entity_ref &ref,
   
   
   Entity_detail::set_renderer(entity_uint_id,
-                              nullptr,
-                              nullptr,
+                              world_data->scene_graph,
                               world_data->mesh_data,
                               world_data->text_data,
                               renderer);
@@ -222,7 +220,7 @@ get_renderer(const Core::Entity_ref &ref)
   assert(world_data);
   
   return Entity_detail::get_renderer(entity_uint_id,
-                                     nullptr,
+                                     world_data->scene_graph,
                                      world_data->mesh_data,
                                      world_data->text_data);
 }
@@ -279,8 +277,7 @@ set_rigidbody(const Core::Entity_ref &ref,
   Entity_detail::set_rigidbody(entity_uint_id,
                                core_trans,
                                rigidbody,
-                               nullptr,
-                               nullptr,
+                               world_data->scene_graph,
                                world_data->trigger_data,
                                world_data->rigidbody_data,
                                &world_data->physics_world);
@@ -306,7 +303,6 @@ get_rigidbody(const Core::Entity_ref &ref)
   assert(world_data);
   
   return Entity_detail::get_rigidbody(entity_uint_id,
-                                      nullptr,
                                       nullptr,
                                       world_data->rigidbody_data,
                                       world_data->trigger_data);
@@ -348,13 +344,10 @@ set_camera(const Core::Entity_ref &ref,
   auto world_data(Core_detail::world_index_get_world_data(entity_id.world_instance));
   assert(world_data);
   
-//  Data::Entity_data *entity_data = world_data->entity;
-//  assert(entity_data);
-  
   Data::Camera_data *camera_data = world_data->camera_data;
   assert(camera_data);
 
-  Entity_detail::set_camera(entity_uint_id, nullptr, camera_data, &camera);
+  Entity_detail::set_camera(entity_uint_id, world_data->scene_graph, camera_data, &camera);
   
   return true;
 }
@@ -464,7 +457,7 @@ set_light(const Core::Entity_ref &ref,
 //  Data::Transform_data *transform_data = world_data->transform;
 //  assert(transform_data);
 
-  Entity_detail::set_light(entity_uint_id, nullptr, light_data, nullptr, &light);
+  Entity_detail::set_light(entity_uint_id, world_data->scene_graph, light_data, &light);
   
   return true;
 }

@@ -3,6 +3,7 @@
 
 
 #include <transformations/entity/entity_common.hpp>
+#include <data/graph/fwd.hpp>
 
 
 namespace Entity_detail {
@@ -10,13 +11,12 @@ namespace Entity_detail {
 
 uint32_t
 has_renderer(const util::generic_id this_id,
-             Data::Entity_data *entity_data);
+             Data::Graph::Graph_data *entity_data);
 
 
 void
 set_renderer(const util::generic_id this_id,
-             Data::Entity_data *entity_data,
-             Data::Transform_data *transform_data,
+             Data::Graph::Graph_data *entity_data,
              Data::Mesh_draw_call_data *mesh_data,
              Data::Text_draw_call_data *text_data,
              const Core::Renderer &renderer);
@@ -24,15 +24,14 @@ set_renderer(const util::generic_id this_id,
   
 Core::Renderer
 get_renderer(const util::generic_id this_id,
-             Data::Entity_data *entity_data,
+             Data::Graph::Graph_data *entity_data,
              Data::Mesh_draw_call_data *renderer_material,
              Data::Text_draw_call_data *text_draw_call_data);
 
 
 void
 set_renderer_material(const util::generic_id this_id,
-                      Data::Entity_data *entity_data,
-                      Data::Transform_data *transform_data,
+                      Data::Graph::Graph_data *entity_data,
                       Data::Mesh_draw_call_data *mesh_data,
                       const util::generic_id material_id,
                       const util::generic_id model_id);
@@ -48,8 +47,7 @@ get_renderer_material(const util::generic_id this_id,
 void
 set_renderer_text(const util::generic_id this_id,
                   const char *string,
-                  Data::Entity_data *entity_data,
-                  Data::Transform_data *transform_data,
+                  Data::Graph::Graph_data *entity_data,
                   Data::Text_draw_call_data *text_data,
                   const util::generic_id font_id,
                   const util::generic_id model_id);
