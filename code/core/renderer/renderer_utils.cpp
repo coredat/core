@@ -13,7 +13,8 @@ cast_to_material_renderer(const Renderer &renderer)
 {
   assert(renderer.get_type() == Core::Renderer_type::material);
   
-  return Material_renderer(renderer.get_arg_01(), renderer.get_arg_02());
+//  return Material_renderer(renderer.get_arg_01(), renderer.get_arg_02());
+  return Material_renderer();
 }
 
 

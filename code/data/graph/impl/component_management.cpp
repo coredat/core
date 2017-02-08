@@ -17,7 +17,6 @@ components_set(Graph_data *graph,
   // -- Param Checks -- //
   UTIL_ASSERT(graph);
   UTIL_ASSERT(node);
-  UTIL_ASSERT(bitfield);
   
   // -- Get and Set Data -- //
   size_t index = 0;

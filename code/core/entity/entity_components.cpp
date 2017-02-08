@@ -33,6 +33,7 @@ namespace Entity_component {
 
 // ------------------------------------------------- [ Transform Component ] --
 
+
 bool
 set_transform(const Core::Entity_ref &ref,
               const Core::Transform &transform)
@@ -54,7 +55,7 @@ set_transform(const Core::Entity_ref &ref,
   {
     math::transform trans;
     trans.rotation = transform.get_rotation();
-    trans.scale = transform.get_scale();
+    trans.scale    = transform.get_scale();
     trans.position = transform.get_position();
     Data::Graph::transform_set(world_data->scene_graph, entity_uint_id, trans);
   }
@@ -109,7 +110,7 @@ has_transform(const Core::Entity_ref &ref)
 
 bool
 set_renderer(const Core::Entity_ref &ref,
-             const Core::Renderer &renderer)
+             const Core::Material_renderer &renderer)
 {
   if(!ref)
   {
@@ -126,11 +127,11 @@ set_renderer(const Core::Entity_ref &ref,
   
   
   
-  Entity_detail::set_renderer(entity_uint_id,
-                              world_data->scene_graph,
-                              world_data->mesh_data,
-                              world_data->text_data,
-                              renderer);
+//  Entity_detail::set_renderer(entity_uint_id,
+//                              world_data->scene_graph,
+//                              world_data->mesh_data,
+//                              world_data->text_data,
+//                              renderer);
   
   return true;
 }
@@ -155,11 +156,8 @@ set_renderer(const Core::Entity_ref &ref,
   
   // -- Check to see if renderer is attached -- //
   {
-//    auto entity_data = world_data->entity;
-  
     uint32_t components = 0;
     Data::Graph::components_get(world_data->scene_graph, entity_uint_id, &components);
-//    Data::entity_get_components(entity_data, entity_uint_id, &components);
     
     const uint32_t renderer_type = Common::Data_type::get_renderer_type(components);
   
@@ -172,7 +170,6 @@ set_renderer(const Core::Entity_ref &ref,
       // Remove component
       components &= Common::Data_type::renderer_text;
       Data::Graph::components_set(world_data->scene_graph, entity_uint_id, components);
-//      Data::entity_set_components(entity_data, entity_uint_id, &components);
     }
   }
 
@@ -181,8 +178,6 @@ set_renderer(const Core::Entity_ref &ref,
     auto resources = Data::get_context_data();
     auto world = Core_detail::world_index_get_world_data(1);
     
-//    Data::transform_get_transform(world->transform, entity_uint_id, &transform);
-
     math::transform transform;
     Data::Graph::transform_get(world->scene_graph, entity_uint_id, &transform);
     math::mat4 world_mat = math::transform_get_world_matrix(transform);

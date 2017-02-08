@@ -18,7 +18,7 @@ transform_set_callback(Graph_data *graph,
   UTIL_ASSERT(graph);
   UTIL_ASSERT(node);
   UTIL_ASSERT(callback);
- 
+  
   return false;
 }
 

@@ -57,132 +57,132 @@ has_renderer(const util::generic_id this_id,
 }
 
 
-void
-set_renderer(const util::generic_id this_id,
-             Data::Graph::Graph_data *entity_data,
-             Data::Mesh_draw_call_data *renderer_material,
-             Data::Text_draw_call_data *text_data,
-             const Core::Renderer &renderer)
-{
-  // Check valid
-  if(!is_valid(this_id, entity_data, true)) {
-    assert(false); return;
-  }
-  
-  // Renderer is valid
-  if(!renderer) {
-    LOG_ERROR(Error_string::resource_is_invalid());
-    return;
-  }
-  
-  auto world_data(Core_detail::world_index_get_world_data(1));
-  assert(world_data);
-
-  // Check to see if renderer has been set.
-  {
-    assert(entity_data);
-    assert(renderer_material);
-    
-    uint32_t components = 0;
-    Data::Graph::components_get(world_data->scene_graph, this_id, &components);
-    
-    const uint32_t renderer_type(
-      Common::Data_type::get_renderer_type(components)
-    );
-    
-    // If exists destroy old renderer
-    if(renderer_type != 0)
-    {
-      // Remove component
-      components &= ~renderer_type;
-      Data::Graph::components_set(entity_data, this_id, components);
-    
-      switch(renderer_type)
-      {
-        case(Core::Renderer_type::material):
-          Data::data_lock(renderer_material);
-          Data::mesh_draw_call_remove(renderer_material, this_id);
-          Data::data_unlock(renderer_material);
-          break;
-        
-        case(Core::Renderer_type::text):
-        // This is all wrong!
-//          World_data::data_lock(text_data);
-//          World_data::mesh_draw_call_erase(text_data, this_id);
-//          World_data::data_unlock(text_data);
-          break;
-          
-        default:
-          break;
-      }
-    }
-  }
-  
-  // Set or update renderer
-  {
-    uint32_t components = 0;
-    Data::Graph::components_get(entity_data, this_id, &components);
-    
-    components |= renderer.get_type();
-    Data::Graph::components_set(entity_data, this_id, components);
-    
-//    Data::Graph::components_set(world_data->scene_graph, this_id, components);
-    
-  }
-  
-  // Set renderer
-  switch(renderer.get_type())
-  {
-    case(Core::Renderer_type::material):
-    {
-      const Core::Material_renderer mat_renderer(renderer);
-      set_renderer_material(this_id,
-                            entity_data,
-                            renderer_material,
-                            mat_renderer.get_material().get_id(),
-                            mat_renderer.get_model().get_id());
-      break;
-    }
-    
-    case(Core::Renderer_type::text):
-    {
-      const Core::Text_renderer text_renderer(renderer);
-//      set_renderer_text(this_id,
-//                        "fooboo",
-//                        entity_data,
-//                        transform_data,
-//                        text_data,
-//                        text_renderer.get_font().get_id(),
-//                        text_renderer.get_text_id());
-      
-      // -- New Text Renderer -- //
-      {
-        auto resources = Data::get_context_data();
-        auto world = Core_detail::world_index_get_world_data(1);
-        
-        math::transform transform;
-        Data::Graph::transform_get(entity_data, this_id, &transform);
-        math::mat4 world_mat = math::transform_get_world_matrix(transform);
-        
-        Data::Text_renderer::set_draw_call(
-          world->text_renderer,
-          this_id,
-          text_renderer.get_font().get_id(),
-          "foo\nbart",
-          math::mat4_get_data(world_mat),
-          resources->op_context,
-          resources->op_buffer
-        );
-      }
-      
-      break;
-    }
-      
-    default:
-      break;
-  }
-
-}
+//void
+//set_renderer(const util::generic_id this_id,
+//             Data::Graph::Graph_data *entity_data,
+//             Data::Mesh_draw_call_data *renderer_material,
+//             Data::Text_draw_call_data *text_data,
+//             const Core::Renderer &renderer)
+//{
+//  // Check valid
+//  if(!is_valid(this_id, entity_data, true)) {
+//    assert(false); return;
+//  }
+//  
+//  // Renderer is valid
+//  if(!renderer) {
+//    LOG_ERROR(Error_string::resource_is_invalid());
+//    return;
+//  }
+//  
+//  auto world_data(Core_detail::world_index_get_world_data(1));
+//  assert(world_data);
+//
+//  // Check to see if renderer has been set.
+//  {
+//    assert(entity_data);
+//    assert(renderer_material);
+//    
+//    uint32_t components = 0;
+//    Data::Graph::components_get(world_data->scene_graph, this_id, &components);
+//    
+//    const uint32_t renderer_type(
+//      Common::Data_type::get_renderer_type(components)
+//    );
+//    
+//    // If exists destroy old renderer
+//    if(renderer_type != 0)
+//    {
+//      // Remove component
+//      components &= ~renderer_type;
+//      Data::Graph::components_set(entity_data, this_id, components);
+//    
+//      switch(renderer_type)
+//      {
+//        case(Core::Renderer_type::material):
+//          Data::data_lock(renderer_material);
+//          Data::mesh_draw_call_remove(renderer_material, this_id);
+//          Data::data_unlock(renderer_material);
+//          break;
+//        
+//        case(Core::Renderer_type::text):
+//        // This is all wrong!
+////          World_data::data_lock(text_data);
+////          World_data::mesh_draw_call_erase(text_data, this_id);
+////          World_data::data_unlock(text_data);
+//          break;
+//          
+//        default:
+//          break;
+//      }
+//    }
+//  }
+//  
+//  // Set or update renderer
+//  {
+//    uint32_t components = 0;
+//    Data::Graph::components_get(entity_data, this_id, &components);
+//    
+//    components |= renderer.get_type();
+//    Data::Graph::components_set(entity_data, this_id, components);
+//    
+////    Data::Graph::components_set(world_data->scene_graph, this_id, components);
+//    
+//  }
+//  
+//  // Set renderer
+//  switch(renderer.get_type())
+//  {
+//    case(Core::Renderer_type::material):
+//    {
+//      const Core::Material_renderer mat_renderer(renderer);
+//      set_renderer_material(this_id,
+//                            entity_data,
+//                            renderer_material,
+//                            mat_renderer.get_material().get_id(),
+//                            mat_renderer.get_model().get_id());
+//      break;
+//    }
+//    
+//    case(Core::Renderer_type::text):
+//    {
+//      const Core::Text_renderer text_renderer(renderer);
+////      set_renderer_text(this_id,
+////                        "fooboo",
+////                        entity_data,
+////                        transform_data,
+////                        text_data,
+////                        text_renderer.get_font().get_id(),
+////                        text_renderer.get_text_id());
+//      
+//      // -- New Text Renderer -- //
+//      {
+//        auto resources = Data::get_context_data();
+//        auto world = Core_detail::world_index_get_world_data(1);
+//        
+//        math::transform transform;
+//        Data::Graph::transform_get(entity_data, this_id, &transform);
+//        math::mat4 world_mat = math::transform_get_world_matrix(transform);
+//        
+//        Data::Text_renderer::set_draw_call(
+//          world->text_renderer,
+//          this_id,
+//          text_renderer.get_font().get_id(),
+//          "foo\nbart",
+//          math::mat4_get_data(world_mat),
+//          resources->op_context,
+//          resources->op_buffer
+//        );
+//      }
+//      
+//      break;
+//    }
+//      
+//    default:
+//      break;
+//  }
+//
+//}
 
 
 Core::Renderer
@@ -193,10 +193,10 @@ get_renderer(const util::generic_id this_id,
 {
   // Check valid
   if(!is_valid(this_id, entity_data, true)) {
-    assert(false); return Core::Renderer();
+    assert(false);// return Core::Renderer();
   }
 
-  Core::Renderer return_renderer;
+//  Core::Renderer return_renderer;
   
   auto world_data(Core_detail::world_index_get_world_data(1));
   assert(world_data);
@@ -230,7 +230,8 @@ get_renderer(const util::generic_id this_id,
           Data::Mesh_renderer_draw_call draw_call;
           Data::mesh_draw_call_get_draw_call(renderer_material, this_id, &draw_call);
           
-          return_renderer = Core::Material_renderer(mat_id, draw_call.model_id);
+          /*return_renderer = */
+//          return Core::Material_renderer(mat_id, draw_call.model_id);
 
           break;
         }
@@ -241,7 +242,7 @@ get_renderer(const util::generic_id this_id,
           
           ::Text_renderer::Draw_call dc;
           
-          return_renderer = Core::Text_renderer();
+//          return_renderer = Core::Text_renderer();
           
           break;
         }
@@ -258,7 +259,8 @@ get_renderer(const util::generic_id this_id,
     Data::data_unlock(renderer_material);
   }
   
-  return return_renderer;
+//  return return_renderer;
+  return Core::Renderer();
 }
 
 

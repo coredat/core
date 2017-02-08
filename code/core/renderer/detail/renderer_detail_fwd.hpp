@@ -21,4 +21,13 @@ cast_to_text_renderer(const Renderer&);
 } // ns
 
 
+namespace Core_detail {
+
+
+struct Renderer_impl;
+
+
+} // ns
+
+
 #endif // inc guard

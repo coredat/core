@@ -38,7 +38,7 @@ has_transform(const Core::Entity_ref &ref);
 
 bool
 set_renderer(const Core::Entity_ref &ref,
-             const Core::Renderer &renderer);
+             const Core::Material_renderer &renderer);
   
   
 bool

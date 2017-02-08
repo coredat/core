@@ -83,10 +83,10 @@ Material_renderer::is_valid() const
 }
 
 
-Material_renderer::operator Renderer() const
-{
-  return Renderer(Core::Renderer_type::material, m_material_id, m_model_id);
-}
+//Material_renderer::operator Renderer() const
+//{
+//  return Renderer(Core::Renderer_type::material, m_material_id, m_model_id);
+//}
 
 
 Material_renderer::operator bool() const

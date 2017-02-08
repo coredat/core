@@ -4,6 +4,7 @@
 
 #include <core/common/core_fwd.hpp>
 #include <core/common/core_types.hpp>
+#include <core/renderer/renderer.hpp>
 
 
 namespace Core {
@@ -29,7 +30,6 @@ public:
   
   bool                    is_valid() const;
   
-                          operator Renderer() const;
                           operator bool() const;
   
 private:
