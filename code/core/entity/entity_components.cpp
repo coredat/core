@@ -8,14 +8,17 @@
 #include <core/transform/transform.hpp>
 #include <core/physics/rigidbody.hpp>
 #include <core/renderer/renderer.hpp>
+#include <core/renderer/material_renderer.hpp>
 #include <core/renderer/text_renderer.hpp>
 #include <core/font/font.hpp>
-//#include <data/world/entity_data.hpp>
 #include <data/world/camera_data.hpp>
-//#include <data/world/transform_data.hpp>
 #include <data/context_data.hpp>
+#include <data/context/mesh_data.hpp>
 #include <data/renderers/text/text_renderer.hpp>
 #include <data/graph/graph.hpp>
+#include <data/context/material_data.hpp>
+#include <data/world/mesh_draw_call_data.hpp>
+#include <data/context/text_mesh_data.hpp>
 #include <common/data_types.hpp>
 #include <common/error_strings.hpp>
 #include <utilities/logging.hpp>
@@ -32,7 +35,6 @@ namespace Entity_component {
 
 
 // ------------------------------------------------- [ Transform Component ] --
-
 
 bool
 set_transform(const Core::Entity_ref &ref,
@@ -120,12 +122,128 @@ set_renderer(const Core::Entity_ref &ref,
   }
 
   const uint32_t entity_uint_id(ref.get_id());
-  const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(entity_uint_id);
+  
+  const Core_detail::Entity_id entity_id(
+    Core_detail::entity_id_from_uint(entity_uint_id)
+  );
 
-  auto world_data(Core_detail::world_index_get_world_data(entity_id.world_instance));
+  auto world_data(
+    Core_detail::world_index_get_world_data(entity_id.world_instance)
+  );
   assert(world_data);
   
+  auto entity_data = world_data->scene_graph;
   
+  auto mesh_data = world_data->mesh_data;
+  
+  auto renderer_material = world_data->mesh_data;
+
+  const auto mat_data = Data::get_context_data()->material_data;
+  assert(mat_data);
+  
+  uint32_t components = 0;
+  Data::Graph::components_get(
+    world_data->scene_graph, ref.get_id(), &components
+  );
+  
+  const uint32_t renderer_type(
+    Common::Data_type::get_renderer_type(components)
+  );
+  
+  if(renderer_type == 0)
+  {
+    const auto mat_data = Data::get_context_data()->material_data;
+    assert(mat_data);
+  
+    Data::data_lock(mesh_data);
+    Data::data_lock(mat_data);
+  
+    size_t find_index;
+    Data::Mesh_renderer_draw_call draw;
+    Data::Mesh_renderer_draw_call copy;
+
+    // If it already exists. The data and erase the old info.
+    if(Data::mesh_draw_call_exists(mesh_data, ref.get_id(), &find_index))
+    {
+      Data::mesh_draw_call_get_draw_call(mesh_data, ref.get_id(), &draw);
+      copy = Data::Mesh_renderer_draw_call(draw);
+      Data::mesh_draw_call_remove(mesh_data, ref.get_id());
+    }
+    
+    // Insert new draw call in order of material_id
+    {
+      size_t insert_point = 0;
+    
+      ::Material_renderer::Material_id this_key;
+      Data::material_get_material_hash(mat_data, renderer.get_material_id(), &this_key);
+    
+      // Loop through and find insert point
+      for(size_t i = 0; i < mesh_data->size; ++i)
+      {
+        ::Material_renderer::Material_id other_key;
+        Data::material_get_material_hash(mat_data, mesh_data->field_material_id[i], &other_key);
+
+        if(this_key > other_key)
+        {
+          insert_point = i;
+          break;
+        }
+      }
+      
+      // Get the trasnform as we are insreting a new record.
+      math::transform trans;
+      Data::Graph::transform_get(entity_data, ref.get_id(), &trans);
+      
+      const math::mat4 world_mat = math::transform_get_world_matrix(trans);
+      memcpy(copy.world_matrix, &world_mat, sizeof(world_mat));
+    
+      Data::mesh_draw_call_insert(mesh_data, ref.get_id(), insert_point);
+      
+      auto mat_id = renderer.get_material_id();
+      
+      Data::mesh_draw_call_set_material_id(mesh_data, ref.get_id(), &mat_id);
+      Data::mesh_draw_call_set_draw_call(mesh_data, ref.get_id(), &copy);
+    }
+    
+    Data::data_unlock(mat_data);
+    Data::data_unlock(mesh_data);
+  }
+  
+  // Model
+  {
+    Data::data_lock(mesh_data);
+    
+    size_t index;
+    
+    if(Data::mesh_draw_call_exists(mesh_data, ref.get_id(), &index))
+    {
+      mesh_data->field_draw_call[index].model_id = renderer.get_model_id();
+    }
+    else
+    {
+      // Has no material yet. Will insert one for the moment.
+      Data::mesh_draw_call_insert(mesh_data, ref.get_id(), 0);
+      mesh_data->field_draw_call[0].model_id = renderer.get_model_id();
+    }
+    
+    Data::data_unlock(mesh_data);
+  }
+
+  // Update aabb
+  math::aabb return_aabb;
+  {
+    Data::Mesh_data *mesh_data2 = Data::get_context_data()->mesh_data;
+    assert(mesh_data2);
+    
+    Data::data_lock(mesh_data2);
+    Data::mesh_get_aabb(mesh_data2, renderer.get_model_id(), &return_aabb);
+    Data::data_unlock(mesh_data2);
+  }
+  
+  {
+    Data::Graph::aabb_set(entity_data, ref.get_id(), return_aabb);
+  }
+
   
 //  Entity_detail::set_renderer(entity_uint_id,
 //                              world_data->scene_graph,

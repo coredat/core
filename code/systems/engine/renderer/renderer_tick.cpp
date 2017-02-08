@@ -6,7 +6,6 @@
 #include <data/context/mesh_data.hpp>
 #include <data/world_data.hpp>
 #include <data/graph/graph.hpp>
-//#include <data/world/entity_data.hpp>
 #include <data/world/camera_data.hpp>
 #include <data/world/light_data.hpp>
 #include <data/world/mesh_draw_call_data.hpp>

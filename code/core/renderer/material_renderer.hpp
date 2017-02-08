@@ -32,7 +32,7 @@ public:
   
                           operator bool() const;
   
-private:
+//private:
 
   friend class Entity;
   friend class Entity_ref;
