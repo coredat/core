@@ -32,7 +32,24 @@ destroy(Graph_data *graph);
 // -------------------------------------------------------------[ Node Data ]--
 
 
+const uint32_t*
+get_node_ids(const Graph_data *graph);
 
+
+const uint32_t*
+get_components(const Graph_data *graph);
+
+
+const uint32_t*
+get_node_tags(const Graph_data *graph);
+
+
+const math::transform*
+get_transforms(const Graph_data *graph);
+
+
+const math::aabb*
+get_aabbs(const Graph_data *graph);
 
 
 // -------------------------------------------------------[ Node Management ]--
@@ -47,7 +64,7 @@ node_remove(Graph_data *graph, const uint32_t node);
 
 
 bool
-node_exists(Graph_data *graph, const uint32_t node);
+node_exists(const Graph_data *graph, const uint32_t node);
 
 
 bool
@@ -59,7 +76,7 @@ node_remove_destroy_callback(Graph_data *graph, const uintptr_t callback);
 
 
 size_t
-node_count(Graph_data *graph);
+node_count(const Graph_data *graph);
 
 
 // -----------------------------------------------[ Node Component Bitfield ]--

@@ -14,14 +14,14 @@
 #define DEBUG_UI_TRANSFORM_DATA_INCLUDED_E76D7771_6D4A_45AF_9BF2_21421DE4D4A2
 
 
-#include <data/fwd_dec_data.hpp>
+#include <data/graph/fwd.hpp>
 
 
 namespace Debug_menu {
 
 
 void
-display_transform_data(const Data::Transform_data *data);
+display_transform_data(const Data::Graph::Graph_data *data);
 
 
 } // ns

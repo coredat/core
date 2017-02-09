@@ -71,12 +71,6 @@ struct Graph_data
 };
 
 
-
-struct Callbacks
-{
-};
-
-
 } // ns
 } // ns
 

@@ -128,7 +128,7 @@ display_world_data_menu(Data::World *world_data,
   }
   
 //  if(show_entity_list)     { display_entity_data(world_data->entity);                                   }
-//  if(show_transforms)      { display_transform_data(world_data->transform);                             }
+  if(show_transforms)      { display_transform_data(world_data->scene_graph);                           }
   if(show_mesh_draw_calls) { display_mesh_draw_calls(world_data->mesh_data);                            }
   if(show_camera_list)     { display_camera_data(world_data->camera_data);                              }
   if(show_world_stats)     { display_world_stats(dt, dt_mul, draw_calls, render_passes, number_of_rbs); }

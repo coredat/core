@@ -26,13 +26,12 @@ node_add(Graph_data *graph)
   util::buffer::push(&graph->node_aabb);
   util::buffer::push(&graph->node_components);
   util::buffer::push(&graph->node_tags);
-  util::buffer::push(&graph->node_transform);
   util::buffer::push(&graph->node_user_data);
   util::buffer::push(&graph->node_user_callbacks);
   
   // Cache as following calls will likely setup the properties //
   graph->last_instance = new_instance;
-  graph->index_cache = util::buffer::size(&graph->node_ids);
+  graph->index_cache = util::buffer::size(&graph->node_ids) - 1;
   
   return new_instance;
 }
@@ -73,7 +72,7 @@ node_remove(Graph_data *graph,
 
 
 bool
-node_exists(Graph_data *graph, const uint32_t node)
+node_exists(const Graph_data *graph, const uint32_t node)
 {
   // -- Param Check -- //
   UTIL_ASSERT(graph);
@@ -90,13 +89,51 @@ node_exists(Graph_data *graph, const uint32_t node)
 
 
 size_t
-node_count(Graph_data *graph)
+node_count(const Graph_data *graph)
 {
   // -- Param Check -- //
   UTIL_ASSERT(graph);
 
   return util::buffer::size(&graph->node_ids);
 }
+
+
+// -------------------------------------------------------------[ Node Data ]--
+
+const uint32_t*
+get_node_ids(const Graph_data *graph)
+{
+  return (const uint32_t*)util::buffer::bytes(&graph->node_ids);
+}
+
+
+const uint32_t*
+get_components(const Graph_data *graph)
+{
+  return (const uint32_t*)util::buffer::bytes(&graph->node_components);
+}
+
+
+const uint32_t*
+get_node_tags(const Graph_data *graph)
+{
+  return (const uint32_t*)util::buffer::bytes(&graph->node_tags);
+}
+
+
+const math::transform*
+get_transforms(const Graph_data *graph)
+{
+  return (const math::transform*)util::buffer::bytes(&graph->node_transform);
+}
+
+
+const math::aabb*
+get_aabbs(const Graph_data *graph)
+{
+  return (const math::aabb*)util::buffer::bytes(&graph->node_aabb);
+}
+
 
 
 } // ns

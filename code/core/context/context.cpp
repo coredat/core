@@ -75,8 +75,8 @@ Context::Context(const uint32_t width,
   
   // Initialize memory
   {
-    constexpr size_t pool_bytes    = util::convert_mb_to_bytes(64);
-    constexpr size_t scratch_bytes = util::convert_mb_to_bytes(64);
+    constexpr size_t pool_bytes    = util::convert_mb_to_bytes(128);
+    constexpr size_t scratch_bytes = util::convert_mb_to_bytes(128);
     
     Memory::memory_initialize(pool_bytes, scratch_bytes);
   }

@@ -64,20 +64,20 @@ texture_create(context_data *context, void *data)
       #ifdef OGL_HAS_TEXTURE_1D
       case(opDimention_ONE):
       {
-//        glBindTexture(dimention, texture);
-//
-//        glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-//        glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, internal_desc->filter_mag);
-//        glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, internal_desc->filter_min);
-//
-//        glTexImage1D(dimention,
-//                     0,
-//                     internal_format,
-//                     width,
-//                     0,
-//                     format,
-//                     type,
-//                     cmd->data);
+        glBindTexture(dimention, texture);
+
+        glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, internal_desc->filter_mag);
+        glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, internal_desc->filter_min);
+
+        glTexImage1D(dimention,
+                     0,
+                     internal_format,
+                     width,
+                     0,
+                     format,
+                     type,
+                     cmd->data);
         break;
       }
       #else
