@@ -283,7 +283,9 @@ Entity_interface::get_id() const
 
 
 void
-Entity_interface::on_collision_callback(const uintptr_t user_data, const on_collision_callback_fn &callback)
+Entity_interface::on_collision_callback(
+  const uintptr_t user_data,
+  const on_collision_callback_fn &callback)
 {
   // Validity check
   if(!m_id)
@@ -293,15 +295,12 @@ Entity_interface::on_collision_callback(const uintptr_t user_data, const on_coll
 
   auto world_data = Core_detail::world_index_get_world_data(1);
   
-  LOG_WARNING("Not setup")
-
-//  const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(m_id);
-//  auto world_data = Core_detail::world_index_get_world_data(entity_id.world_instance);
-//  
-//  Entity_detail::set_entity_collision_callback(m_id,
-//                                               world_data->entity,
-//                                               (uintptr_t)callback,
-//                                               user_data);
+  Data::Graph::node_add_collision_callback(
+    world_data->scene_graph,
+    m_id,
+    user_data,
+    (uintptr_t)callback
+  );
 }
 
 

@@ -23,7 +23,7 @@
 #include <data/world_data.hpp>
 #include <data/world/rigidbody_data.hpp>
 #include <data/world/collision_data.hpp>
-//#include <data/world/entity_data.hpp>
+#include <data/graph/graph.hpp>
 
 
 
@@ -151,6 +151,23 @@ think(std::shared_ptr<Data::World> world, const float dt, Tick_information *out_
         {
           Core::Collision collision(entity_a, contacts, curr_contact);
           
+          uintptr_t user_data = 0;
+          Core::on_collision_callback_fn collision_callback = nullptr;
+          
+          Data::Graph::node_get_collision_callback(
+            world->scene_graph,
+            util::bits_lower(this_pair),
+            &user_data,
+            (uintptr_t*)&collision_callback
+          );
+          
+//          Entity_detail::Callback_collision callback;
+
+
+
+//          collision_callback = nullptr;
+//          Data::Graph::node_get_
+          
 //          Entity_detail::Callback_collision collision_callback;
 //          Data::entity_get_collision_callback(entity_data, util::bits_lower(this_pair), &collision_callback);
           
@@ -158,9 +175,9 @@ think(std::shared_ptr<Data::World> world, const float dt, Tick_information *out_
           printf("Collision: %s -> %s \n", entity_a.get_name(), entity_b.get_name());
           #endif
           
-//          if(collision_callback.callback_fn)
+          if(collision_callback)
           {
-//            ((Core::on_collision_callback_fn)collision_callback.callback_fn)(collision_callback.user_data, entity_a, collision);
+            collision_callback(user_data, entity_a, collision);
           }
           
           curr_contact = 0;

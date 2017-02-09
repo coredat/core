@@ -11,6 +11,12 @@
 namespace Data {
 namespace Graph {
 
+struct Graph_callback
+{
+  uintptr_t user_data;
+  uintptr_t function_ptr;
+};
+
 
 struct Graph_data
 {
@@ -31,7 +37,7 @@ struct Graph_data
   util::buffer::data node_tags;
   util::buffer::data node_transform;
   util::buffer::data node_user_data;
-  util::buffer::data node_user_callbacks;
+  util::buffer::data node_collision_callbacks;
   
   /*
     Instance counter.

@@ -75,6 +75,24 @@ bool
 node_remove_destroy_callback(Graph_data *graph, const uintptr_t callback);
 
 
+bool
+node_add_collision_callback(Graph_data *graph,
+                            const uint32_t node,
+                            const uintptr_t user_data,
+                            const uintptr_t callback);
+  
+
+bool
+node_get_collision_callback(const Graph_data *graph,
+                            const uint32_t node,
+                            uintptr_t *user_data,
+                            uintptr_t *callback);
+
+
+bool
+node_remove_collision_callback(Graph_data *graph, const uint32_t node);
+
+
 size_t
 node_count(const Graph_data *graph);
 

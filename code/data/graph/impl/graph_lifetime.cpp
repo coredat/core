@@ -63,8 +63,8 @@ initialize(const size_t inital_graph_size,
                                 inital_graph_size,
                                 malloc_fn, realloc_fn, free_fn);
 
-    setup &= util::buffer::init(&graph->node_user_callbacks,
-                                sizeof(uintptr_t),
+    setup &= util::buffer::init(&graph->node_collision_callbacks,
+                                sizeof(Graph_callback),
                                 inital_graph_size,
                                 malloc_fn, realloc_fn, free_fn);
 
@@ -102,7 +102,7 @@ destroy(Graph_data *graph)
     util::buffer::destroy(&graph->node_transform);
     util::buffer::destroy(&graph->node_aabb);
     util::buffer::destroy(&graph->node_user_data);
-    util::buffer::destroy(&graph->node_user_callbacks);
+    util::buffer::destroy(&graph->node_collision_callbacks);
     util::buffer::destroy(&graph->node_callbacks);
 
     free_fn(graph);

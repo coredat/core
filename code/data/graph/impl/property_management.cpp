@@ -27,7 +27,7 @@ tags_set(Graph_data *graph, const uint32_t node, const uint32_t tags)
     
     UTIL_ASSERT(curr_tags);
     
-    *curr_tags = tags;
+    curr_tags[index] = tags;
     
     return true;
   }
@@ -55,7 +55,7 @@ tags_get(Graph_data *graph, const uint32_t node, uint32_t *tags)
     
     UTIL_ASSERT(curr_tags);
     
-    *curr_tags = *tags;
+    *tags = curr_tags[index];
     
     return true;
   }
