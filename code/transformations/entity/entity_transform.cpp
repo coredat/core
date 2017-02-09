@@ -132,7 +132,7 @@ set_transform(const util::generic_id this_id,
 //    Data::data_unlock(transform_data);
   }
   
-  // Update all the things that want to know.
+  // Update all the things that want to knowx.
   {
     // Build new transform
     const math::transform new_transform(

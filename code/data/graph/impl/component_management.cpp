@@ -23,13 +23,10 @@ components_set(Graph_data *graph,
   
   if(graph->find_index(node, &index))
   {
-    uint32_t *curr_bitfield(
-      (uint32_t *)util::buffer::at(&graph->node_components, index)
-    );
+    uint32_t *bit_fields = (uint32_t*)util::buffer::bytes(&graph->node_components);
+    UTIL_ASSERT(bit_fields);
     
-    UTIL_ASSERT(curr_bitfield);
-    
-    *curr_bitfield = bitfield;
+    bit_fields[index] = bitfield;
     
     return true;
   }
@@ -53,13 +50,10 @@ components_get(const Graph_data *graph,
 
   if(graph->find_index(node, &index))
   {
-    uint32_t *curr_bitfield(
-      (uint32_t *)util::buffer::at(&graph->node_components, index)
-    );
+    const uint32_t *bit_fields = (const uint32_t*)util::buffer::bytes(&graph->node_components);
+    UTIL_ASSERT(bit_fields);
     
-    UTIL_ASSERT(curr_bitfield);
-    
-    *curr_bitfield = *bitfield;
+    *bitfield = bit_fields[index];
     
     return true;
   }

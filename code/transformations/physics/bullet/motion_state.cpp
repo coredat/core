@@ -20,16 +20,16 @@ Core_motion_state::Core_motion_state(const uintptr_t user_data,
 
 
 void
-Core_motion_state::getWorldTransform(btTransform& centerOfMassWorldTrans) const
+Core_motion_state::getWorldTransform(btTransform& com_trans) const
 {
-  btDefaultMotionState::getWorldTransform(centerOfMassWorldTrans);
+  btDefaultMotionState::getWorldTransform(com_trans);
 }
 
 
 void
-Core_motion_state::setWorldTransform(const btTransform& centerOfMassWorldTrans)
+Core_motion_state::setWorldTransform(const btTransform& com_trans)
 {
-  btDefaultMotionState::setWorldTransform(centerOfMassWorldTrans);
+  btDefaultMotionState::setWorldTransform(com_trans);
   
   /*
     We need to inform our data that the transform has changed.
@@ -42,7 +42,7 @@ Core_motion_state::setWorldTransform(const btTransform& centerOfMassWorldTrans)
   
   const Core_detail::Entity_id id               = Core_detail::entity_id_from_uint((uintptr_t)m_userPointer);
   const uint32_t               this_id          = Core_detail::entity_id_to_uint(id);
-  const Core::Transform        update_transform = math::transform_from_bt(centerOfMassWorldTrans);
+  const Core::Transform        update_transform = math::transform_from_bt(com_trans);
   
   auto world_data = Core_detail::world_index_get_world_data(id.world_instance);
   
