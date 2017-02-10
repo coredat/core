@@ -54,11 +54,11 @@ struct Graph_data
   bool
   find_index(size_t instance, size_t *index) const
   {
-    if(instance == last_instance)
-    {
-      *index = index_cache;
-      return true;
-    }
+//    if(instance == last_instance)
+//    {
+//      *index = index_cache;
+//      return true;
+//    }
     
     const uint32_t *ids = (const uint32_t*)util::buffer::bytes(&node_ids);
     size_t count = util::buffer::size(&node_ids);

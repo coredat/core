@@ -416,7 +416,7 @@ get_rigidbody(const Core::Entity_ref &ref)
   assert(world_data);
   
   return Entity_detail::get_rigidbody(entity_uint_id,
-                                      nullptr,
+                                      world_data->scene_graph,
                                       world_data->rigidbody_data,
                                       world_data->trigger_data);
 }

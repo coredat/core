@@ -186,7 +186,6 @@ think(std::shared_ptr<Data::World> world, const float dt, Tick_information *out_
     }
     Data::collision_clear(collision_data);
     Data::data_unlock(collision_data);
-//    Data::data_unlock(entity_data);
   }
 }
 

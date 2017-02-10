@@ -148,7 +148,7 @@ node_get_collision_callback(const Graph_data *graph,
       (const Graph_callback*)util::buffer::bytes(&graph->node_collision_callbacks)
     );
     
-    *callback = callbacks[index].function_ptr;
+    *callback  = callbacks[index].function_ptr;
     *user_data = callbacks[index].user_data;
     
     return true;
@@ -173,7 +173,7 @@ node_remove_collision_callback(Graph_data *graph, const uint32_t node)
     );
     
     callbacks[index].function_ptr = 0;
-    callbacks[index].user_data = 0;
+    callbacks[index].user_data    = 0;
     
     return true;
   }
