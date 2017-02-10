@@ -18,6 +18,13 @@ Rigidbody::Rigidbody()
 }
 
 
+Rigidbody::Rigidbody(const Collider &collider, const float mass)
+: m_collider(collider)
+, m_mass(mass)
+{
+}
+
+
 Rigidbody::~Rigidbody()
 {
 }

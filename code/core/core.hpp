@@ -22,6 +22,10 @@
 #include "model/mesh.hpp"
 #include "resources/texture.hpp"
 #include "resources/texture_utils.hpp"
+#include "physics/physics.hpp"
+#include "physics/rigidbody.hpp"
+#include "physics/box_collider.hpp"
+#include "physics/collider.hpp"
 
 
 #endif // inc guard

@@ -11,7 +11,7 @@ namespace Core {
 struct Context_setup
 {
   uint32_t monitor_preference = 0;
-  bool vsync = false;
+  bool vsync = true;
   bool high_dpi_support = true;
   Graphics_api::Pixel_format backbuffer_fmt = Graphics_api::Pixel_format::rgb8;
 };

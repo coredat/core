@@ -11,59 +11,99 @@
 namespace Core {
 
 
-using on_collision_callback_fn = void(*)(const uintptr_t user_data, const Entity_ref ref, const Collision &collisions);
+using on_collision_callback_fn = void(*)(const uintptr_t user_data,
+                                         const Entity_ref ref,
+                                         const Collision &collisions);
 
 
 class Entity_interface
 {
 protected:
 
-                                Entity_interface();
-                                Entity_interface(Core::World &world);
-                                Entity_interface(const Core_detail::Entity_id id);
+                              Entity_interface();
+                              Entity_interface(Core::World &world);
+                              Entity_interface(const Core_detail::Entity_id id);
+                              Entity_interface(const uint32_t id);
   
-  virtual                       ~Entity_interface();
+  virtual                     ~Entity_interface();
   
-                                Entity_interface(const Entity_interface &other);
-                                Entity_interface(Entity_interface &&other);
+                              Entity_interface(const Entity_interface &other);
+                              Entity_interface(Entity_interface &&other);
 
 public:
 
-  uint32_t                      get_id() const;
+  uint32_t                    get_id() const;
   
   
-  // ** Life time ** //
-  void                          destroy();                                    //!< Marks the entity for destruction, this wont happen till then end of the frame.
-  bool                          is_valid() const;                             //!< Returns true if then entity is valid.
-                                operator bool() const;                        //!< Shorthand for is_valid()
+                              // -- Life time -- //
+  
+  void                        destroy();
+  bool                        is_valid() const;
+                              operator bool() const;
 
-  // ** General Interface ** //
-  void                          set_user_data(const uintptr_t user_data);     //!< Set user_data for the entity, can be a pointer, core doesn't callback on this.
-  uintptr_t                     get_user_data() const;                        //!< Get the current user_data.
+
+                              // -- General Interface -- //
+
+  void                        set_user_data(const uintptr_t user_data);
+  uintptr_t                   get_user_data() const;
   
-  void                          set_tags(const uint32_t set_tags);            //!< Set the tag bitfield.
-  uint32_t                      get_tags() const;                             //!< Get the current bitfeld tags for this object.
-  bool                          has_tag(const uint32_t tag_id) const;         //!< Check to see if the object has a bit set in the tags.
-  void                          add_tag(const uint32_t add_tag);              //!< Add a bit to the bitfield.
-  void                          remove_tag(const uint32_t tag);               //!< Remove a bit from the bitfield.
+  void                        set_tags(const uint32_t set_tags);
+  uint32_t                    get_tags() const;
+  bool                        has_tag(const uint32_t tag_id) const;
+  void                        add_tag(const uint32_t add_tag);
+  void                        remove_tag(const uint32_t tag);
   
-  void                          set_name(const char* set_name);               //!< Set the name of object.
-  const char*                   get_name() const;                             //!< Returns a volatile pointer to the name.
-  
-  
-  // ** Callbacks ** //
-  void                          on_collision_callback(const uintptr_t user_data, const on_collision_callback_fn &callback);
+  void                        set_name(const char* set_name);
+  const char*                 get_name() const;
   
   
-  // ** Equality ** //
-  bool                          operator ==(const Entity_interface &other) const;
-  bool                          operator !=(const Entity_interface &other) const;
+                              // -- Transform -- //
+  
+  bool                        has_transform() const;
+  Core::Transform             get_transform() const;
+  void                        set_transform(const Core::Transform &trans);
+  
+  
+                              // -- Camera  -- //
+  
+  bool                        has_camera() const;
+  Core::Camera                get_camera() const;
+  void                        set_camera(const Core::Camera &camera);
+
+  
+                              // -- Renderer -- //
+  
+  bool                        has_renderer() const;
+  
+  
+                              // -- Rigidbody -- //
+  
+  bool                        has_rigidbody() const;
+  Core::Rigidbody             get_rigidbody() const;
+  void                        set_rigidbody(const Core::Rigidbody &rb);
+  void                        on_collision_callback(
+                                const uintptr_t user_data,
+                                const on_collision_callback_fn &callback
+                              );
+  
+  
+                              // -- Lighting -- //
+  
+  bool                        has_light() const;
+  Core::Point_light           get_light() const;
+  void                        set_light(const Core::Point_light &light);
+  
+  
+                              // -- Equality -- //
+  
+  bool                        operator ==(const Entity_interface &other) const;
+  bool                        operator !=(const Entity_interface &other) const;
   
 protected:
 
-  void                          copy(const Entity_interface &other);
-  void                          move(Entity_interface &other);
-  util::generic_id              create_entity(const Core::World &world);
+  void                        copy(const Entity_interface &other);
+  void                        move(Entity_interface &other);
+  util::generic_id            create_entity(const Core::World &world);
     
 private:
 

@@ -5,6 +5,7 @@
 
 #include <core/transform/transform.hpp>
 #include <core/renderer/renderer.hpp>
+#include <core/camera/camera.hpp>
 #include <core/physics/rigidbody.hpp>
 #include <core/world/world.hpp>
 #include <core/world/detail/world_index.hpp>
@@ -22,6 +23,8 @@
 #include <transformations/entity/entity_rigidbody.hpp>
 #include <transformations/entity/entity_renderer.hpp>
 #include <transformations/entity/entity_callback.hpp>
+
+#include <core/entity/entity_components.hpp>
 
 #include <common/error_strings.hpp>
 #include <utilities/logging.hpp>
@@ -57,6 +60,11 @@ Entity_interface::Entity_interface(const Core_detail::Entity_id id)
 {
 }
 
+Entity_interface::Entity_interface(const uint32_t id)
+: m_id(id)
+{
+}
+
 Entity_interface::Entity_interface(Core::World &world)
 : m_id(0)
 {
@@ -80,7 +88,7 @@ Entity_interface::~Entity_interface()
 }
 
 
-// ** Life time ** //
+// -- Life time -- //
 
 
 void
@@ -119,7 +127,7 @@ Entity_interface::operator bool() const
 }
 
 
-// ** General Interface ** //
+// -- General Interface -- //
 
 
 uint32_t
@@ -279,13 +287,85 @@ Entity_interface::get_id() const
 }
 
 
-// ** Callbacks ** //
+// -- Transform -- //
+  
+bool
+Entity_interface::has_transform() const
+{
+  return Entity_component::has_transform(Core::Entity_ref(m_id));
+}
+
+
+Core::Transform
+Entity_interface::get_transform() const
+{
+  return Entity_component::get_transform(Core::Entity_ref(m_id));
+}
+
+
+void
+Entity_interface::set_transform(const Core::Transform &trans)
+{
+  Entity_component::set_transform(Core::Entity_ref(m_id), trans);
+}
+
+
+
+// -- Camera  -- //
+
+bool
+Entity_interface::has_camera() const
+{
+  return Entity_component::has_camera(Core::Entity_ref(m_id));
+}
+
+
+Core::Camera
+Entity_interface::get_camera() const
+{
+  return Entity_component::get_camera(Core::Entity_ref(m_id));
+}
+
+
+void
+Entity_interface::set_camera(const Core::Camera &camera)
+{
+  Entity_component::set_camera(Core::Entity_ref(m_id), camera);
+}
+
+
+
+// -- Renderer -- //
+
+
+// -- Rigidbody -- //
+
+bool
+Entity_interface::has_rigidbody() const
+{
+  return Entity_component::has_rigidbody(Core::Entity_ref(m_id));
+}
+
+
+Core::Rigidbody
+Entity_interface::get_rigidbody() const
+{
+  return Entity_component::get_rigidbody(Core::Entity_ref(m_id));
+}
+
+
+void
+Entity_interface::set_rigidbody(const Core::Rigidbody &rb)
+{
+  Entity_component::set_rigidbody(Core::Entity_ref(m_id), rb);
+}
 
 
 void
 Entity_interface::on_collision_callback(
   const uintptr_t user_data,
-  const on_collision_callback_fn &callback)
+  const on_collision_callback_fn &callback
+)
 {
   // Validity check
   if(!m_id)
@@ -304,8 +384,7 @@ Entity_interface::on_collision_callback(
 }
 
 
-// ** Equality ** //
-
+// -- Equality -- //
 
 bool
 Entity_interface::operator==(const Entity_interface &other) const
@@ -321,7 +400,7 @@ Entity_interface::operator!=(const Entity_interface &other) const
 }
 
 
-// ** Protected/private utilities ** //
+// -- Protected/private utilities -- //
 
 
 void

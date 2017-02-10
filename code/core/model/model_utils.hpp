@@ -13,6 +13,10 @@ Core::Model
 get_unit_plane_model();
 
 
+Core::Model
+get_unit_cube_model();
+
+
 } // ns
 } // ns
 

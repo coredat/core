@@ -18,6 +18,12 @@ Entity_ref::Entity_ref(const Core_detail::Entity_id id)
 }
 
 
+Entity_ref::Entity_ref(const uint32_t id)
+: Entity_interface(id)
+{
+}
+
+
 Entity_ref::Entity_ref(const Entity &entity)
 {
   copy(entity);

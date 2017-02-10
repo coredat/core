@@ -22,6 +22,7 @@ public:
   explicit                      Entity_ref();
   explicit                      Entity_ref(const Entity &entity);
   explicit                      Entity_ref(const Core_detail::Entity_id id);
+  explicit                      Entity_ref(const uint32_t id);
   
                                 ~Entity_ref();
   
