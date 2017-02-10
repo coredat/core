@@ -146,6 +146,15 @@ Shader::~Shader()
 }
 
 
+Shader&
+Shader::operator=(const Shader &other)
+{
+  this->m_impl->id = other.m_impl->id;
+  
+  return *this;
+}
+
+
 bool
 Shader::is_valid() const
 {

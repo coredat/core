@@ -23,6 +23,8 @@ public:
   
                             Shader(const Shader &shd);
   
+  Shader&                   operator=(const Shader &other);
+  
   bool                      is_valid() const;                   //!< Returns true if the shader loaded successfully.
                             operator bool() const;              //!< Alias for is_valid().
 
