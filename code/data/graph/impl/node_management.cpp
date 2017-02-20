@@ -60,6 +60,7 @@ node_remove(Graph_data *graph,
     util::buffer::erase(&graph->node_transform, index);
     util::buffer::erase(&graph->node_user_data, index);
     util::buffer::erase(&graph->node_collision_callbacks, index);
+    util::buffer::erase(&graph->node_message_callbacks, index);
     
     // Invalidate the cache //
     graph->last_instance = -1;

@@ -38,6 +38,7 @@ struct Graph_data
   util::buffer::data node_transform;
   util::buffer::data node_user_data;
   util::buffer::data node_collision_callbacks;
+  util::buffer::data node_message_callbacks;
   
   /*
     Instance counter.

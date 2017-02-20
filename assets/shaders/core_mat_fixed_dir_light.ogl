@@ -1,0 +1,132 @@
+
+
+Basic Direction Light
+--
+Renders a scene with a single directional light.
+
+
+[VERTEX]
+#version 330 core
+
+
+/*
+  Inputs
+*/
+#include "inc_in_standard_vertex_format.ogl"
+
+
+/*
+  Uniforms
+*/
+#include "inc_uniform_standard_mats.ogl"
+
+
+/*
+  Outputs
+*/
+// out vec2 in_ps_texcoord;
+// out vec3 in_ps_normal;
+// out vec3 in_ps_fragpos;
+
+// in vec4 position;   // local space
+// in vec3 normal;     // local space
+
+// the data to be sent to the fragment shader
+// out Data {
+    out vec3 normal;
+    out vec3 frag_pos;
+    out vec2 texture_coord;
+// } output;
+
+
+/*
+  Program
+*/
+void
+main()
+{
+   texture_coord = in_vs_texture_coord;
+   normal        = normalize(mat3(transpose(inverse(uni_world_mat))) * in_vs_normal);
+   frag_pos      = vec3(uni_world_mat * vec4(in_vs_position, 1.0));
+
+   gl_Position    = uni_wvp_mat * vec4(in_vs_position, 1.0);
+}
+[/VERTEX]
+
+
+
+[PIXEL]
+#version 330 core
+
+
+/*
+  Structures
+*/
+#include "inc_dir_light_structure.ogl"
+
+
+/*
+  Inputs
+*/
+// in Data {
+    in vec3 normal;
+    in vec3 frag_pos;
+    in vec2 texture_coord;
+// } input;
+
+
+/*
+  Uniforms
+*/
+#include "inc_uniform_standard_material.ogl"
+#include "inc_uniform_standard_uniforms.ogl"
+
+
+/*
+  Outputs
+*/
+out vec4 out_ps_color;
+
+
+/*
+  Test Lighting
+*/
+uniform vec3 uni_eye_position;
+
+/*
+  Program
+*/
+void
+main()
+{
+  // set the specular term to black
+  vec4 spec = vec4(0.0);
+
+  vec3 view_dir    = normalize(uni_eye_position - frag_pos);
+
+  vec3 l_dir = normalize(vec3(1,1,1));
+
+  vec4 diffuse = texture(uni_map_01, texture_coord);
+  vec4 ambient = vec4(0.1, 0.1, 0.1, 1);
+  vec4 specular = vec4(0.1, 0.1, 0.1, 1);
+  float shininess = 32;
+
+  // normalize both input vectors
+  vec3 n = normalize(normal);
+  vec3 e = normalize(view_dir);
+
+  float intensity = max(dot(n,l_dir), 0.0);
+
+  // if the vertex is lit compute the specular color
+  if (intensity > 0.0)
+  {
+      // compute the half vector
+      vec3 h = normalize(l_dir + e);
+      // compute the specular term into spec
+      float intSpec = max(dot(h,n), 0.0);
+      spec = specular * pow(intSpec,shininess);
+  }
+
+  out_ps_color = max(intensity *  diffuse + spec, ambient);
+}
+[/PIXEL]

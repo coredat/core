@@ -19,29 +19,11 @@ constexpr float sdl_touchpad_upscale = 5000.f;  // Upscale touchpad input events
 namespace Sdl {
 
 
-namespace
-{
-  inline Core::Button_state
-  button_down(const Core::Button_state *curr_state)
-  {
-    if(*curr_state == Core::Button_state::down)          { return Core::Button_state::down; }
-    if(*curr_state == Core::Button_state::down_on_frame) { return Core::Button_state::down; }
-    
-    return Core::Button_state::down_on_frame;
-  };
-  
-  inline Core::Button_state
-  button_up(const Core::Button_state *curr_state)
-  {
-    if(*curr_state == Core::Button_state::up)          { return Core::Button_state::up; }
-    if(*curr_state == Core::Button_state::up_on_frame) { return Core::Button_state::up; }
-    
-    return Core::Button_state::up_on_frame;
-  };
-  
-  
+namespace {
+
   Text_input_stream_fn input_stream_callback = nullptr;
-}
+  
+} // anon ns
 
 
 void
@@ -56,25 +38,6 @@ update_gamepad_controller(Context_data::Game_controller *controller, const uint3
 {
   SDL_GameController *sdl_controller = SDL_GameControllerOpen(controller_id);
 
-  // Left Axis
-  {
-    //const Sint16 left_x = SDL_GameControllerGetAxis(sdl_controller, SDL_CONTROLLER_AXIS_LEFTX);
-    //const Sint16 left_y = SDL_GameControllerGetAxis(sdl_controller, SDL_CONTROLLER_AXIS_LEFTY);
-    
-
-    //controller->axis[0].x = math::nearest_floor(static_cast<float>(left_x) / sdl_axis_range, sdl_axis_granularity);
-    //controller->axis[0].y = math::nearest_floor(static_cast<float>(left_y) / sdl_axis_range, sdl_axis_granularity);
-  }
-  
-  // Right Axis
-  {
-    //const Sint16 right_x = SDL_GameControllerGetAxis(sdl_controller, SDL_CONTROLLER_AXIS_RIGHTX);
-    //const Sint16 right_y = SDL_GameControllerGetAxis(sdl_controller, SDL_CONTROLLER_AXIS_RIGHTY);
-    
-    //controller->axis[1].x = math::nearest_floor(static_cast<float>(right_x) / sdl_axis_range, sdl_axis_granularity);
-    //controller->axis[1].y = math::nearest_floor(static_cast<float>(right_y) / sdl_axis_range, sdl_axis_granularity);
-  }
-  
   // Triggers
   {
     const Sint16 left_trig  = SDL_GameControllerGetAxis(sdl_controller, SDL_CONTROLLER_AXIS_TRIGGERLEFT);
@@ -82,29 +45,6 @@ update_gamepad_controller(Context_data::Game_controller *controller, const uint3
     
     controller->triggers[0] = math::nearest_floor(static_cast<float>(left_trig)  / sdl_axis_range, sdl_axis_granularity);
     controller->triggers[1] = math::nearest_floor(static_cast<float>(right_trig) / sdl_axis_range, sdl_axis_granularity);
-  }
-  
-  // Buttons
-  {
-//    Core::Button_state *button_state_0 = &controller->buttons[Core::Button::button_0];
-//    const Uint8 button_a = SDL_GameControllerGetButton(sdl_controller, SDL_CONTROLLER_BUTTON_A);
-//    *button_state_0 = button_a ? button_down(button_state_0) : button_up(button_state_0);
-//
-//    Core::Button_state *button_state_1 = &controller->buttons[Core::Button::button_1];
-//    const Uint8 button_b = SDL_GameControllerGetButton(sdl_controller, SDL_CONTROLLER_BUTTON_B);
-//    *button_state_1 = button_b ? button_down(button_state_1) : button_up(button_state_1);
-//
-//    Core::Button_state *button_state_2 = &controller->buttons[Core::Button::button_2];
-//    const Uint8 button_x = SDL_GameControllerGetButton(sdl_controller, SDL_CONTROLLER_BUTTON_X);
-//    *button_state_2 = button_x ? button_down(button_state_2) : button_up(button_state_2);
-//
-//    Core::Button_state *button_state_3 = &controller->buttons[Core::Button::button_3];
-//    const Uint8 button_y = SDL_GameControllerGetButton(sdl_controller, SDL_CONTROLLER_BUTTON_Y);
-//    *button_state_3 = button_y ? button_down(button_state_3) : button_up(button_state_3);
-//
-//    Core::Button_state *button_state_4 = &controller->buttons[Core::Button::button_4];
-//    const Uint8 button_start = SDL_GameControllerGetButton(sdl_controller, SDL_CONTROLLER_BUTTON_START);
-//    *button_state_4 = button_start ? button_down(button_state_4) : button_up(button_state_4);
   }
   
   SDL_GameControllerClose(sdl_controller);
@@ -115,7 +55,6 @@ void
 update_keyboard_controller(Context_data::Game_controller *controller)
 {
   const Uint8 *key_state = SDL_GetKeyboardState(nullptr);
-  const Uint32 mouse_state = SDL_GetMouseState(nullptr, nullptr);
   
   if(key_state)
   {
@@ -145,30 +84,6 @@ update_keyboard_controller(Context_data::Game_controller *controller)
       
       controller->axis[1].x = axis_02_x;
       controller->axis[1].y = axis_02_y;
-    }
-
-    // Keys
-    {
-      // Mouse keys
-      {
-//        Core::Button_state *button_state_0 = &controller->buttons[Core::Button::button_0];
-//        *button_state_0 = mouse_state & SDL_BUTTON(SDL_BUTTON_LEFT) ? button_down(button_state_0) : button_up(button_state_0);
-//
-//        Core::Button_state *button_state_1 = &controller->buttons[Core::Button::button_1];
-//        *button_state_1 = mouse_state & SDL_BUTTON(SDL_BUTTON_RIGHT) ? button_down(button_state_1) : button_up(button_state_1);
-//      }
-//      
-//      // Keyboard
-//      {
-//        Core::Button_state *button_state_4 = &controller->buttons[Core::Button::button_2];
-//        *button_state_4 = key_state[SDL_SCANCODE_LSHIFT] ? button_down(button_state_4) : button_up(button_state_4);
-//
-//        Core::Button_state *button_state_5 = &controller->buttons[Core::Button::button_3];
-//        *button_state_5 = key_state[SDL_SCANCODE_SPACE] ? button_down(button_state_5) : button_up(button_state_5);
-//        
-//        Core::Button_state *button_state_6 = &controller->buttons[Core::Button::button_4];
-//        *button_state_6 = key_state[SDL_SCANCODE_RETURN] ? button_down(button_state_6) : button_up(button_state_6);
-      }
     }
   }
 }

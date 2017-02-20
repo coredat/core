@@ -124,6 +124,20 @@ tags_get(Graph_data *graph, const uint32_t node, uint32_t *tags);
 
 
 bool
+message_callback_set(Graph_data *graph,
+                     const uint32_t node,
+                     const uintptr_t user_data,
+                     const uintptr_t callback_fn);
+
+
+bool
+message_callback_get(const Graph_data *graph,
+                     const uint32_t node,
+                     uintptr_t *user_data,
+                     uintptr_t *callback_fn);
+
+
+bool
 user_data_set(Graph_data *graph,
               const uint32_t node,
               const uintptr_t user_data);

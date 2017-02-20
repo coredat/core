@@ -22,7 +22,7 @@ public:
   Entity_ref      get_object() const;
   math::vec3      get_position() const;
   math::vec3      get_normal() const;
-  float           get_penetration_depth() const;
+  float           get_distance() const;
   
                   operator bool() const;
 
@@ -31,7 +31,7 @@ private:
   Entity_ref  m_contact_object;
   math::vec3  m_position;
   math::vec3  m_normal;
-  float       m_penetration_depth;
+  float       m_distance;
 
 };
 

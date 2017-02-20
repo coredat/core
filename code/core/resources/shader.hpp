@@ -13,22 +13,22 @@ class Shader final
 {
 public:
 
-  explicit                  Shader();                           //!< Creates an invalid shader.
-  explicit                  Shader(const char *filename);       //!< Loads a shader from an file, must be in tagged format.
+  explicit                  Shader();
+  explicit                  Shader(const char *filename);
   explicit                  Shader(const char *name,
                                    const char *vs,
                                    const char *gs,
-                                   const char *ps);             //!< Creates a shader from given code. gs maybe empty or null.
+                                   const char *ps);
                             ~Shader();
   
                             Shader(const Shader &shd);
   
   Shader&                   operator=(const Shader &other);
   
-  bool                      is_valid() const;                   //!< Returns true if the shader loaded successfully.
-                            operator bool() const;              //!< Alias for is_valid().
+  bool                      is_valid() const;
+                            operator bool() const;
 
-  uint32_t                  get_id() const;                     //!< Gets the internal id. this will be removed from public interface.
+  uint32_t                  get_id() const;
   
 private:
 

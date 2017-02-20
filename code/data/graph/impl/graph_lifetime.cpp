@@ -67,6 +67,11 @@ initialize(const size_t inital_graph_size,
                                 sizeof(Graph_callback),
                                 inital_graph_size,
                                 malloc_fn, realloc_fn, free_fn);
+    
+    setup &= util::buffer::init(&graph->node_message_callbacks,
+                                sizeof(Graph_callback),
+                                inital_graph_size,
+                                malloc_fn, realloc_fn, free_fn);
 
     setup &= util::buffer::init(&graph->node_callbacks,
                                 sizeof(uintptr_t),
@@ -95,18 +100,15 @@ destroy(Graph_data *graph)
 {
   if(graph)
   {
-    util::free_fn free_fn = graph->node_ids.destroy_fn;
-  
     util::buffer::destroy(&graph->node_ids);
     util::buffer::destroy(&graph->node_components);
     util::buffer::destroy(&graph->node_transform);
     util::buffer::destroy(&graph->node_aabb);
     util::buffer::destroy(&graph->node_user_data);
     util::buffer::destroy(&graph->node_collision_callbacks);
+    util::buffer::destroy(&graph->node_message_callbacks);
     util::buffer::destroy(&graph->node_callbacks);
 
-    free_fn(graph);
-    
     LOG_INFO("Scene Graph destroyed");
     
     return true;

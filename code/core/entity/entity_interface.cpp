@@ -287,6 +287,45 @@ Entity_interface::get_id() const
 }
 
 
+void
+Entity_interface::on_message_callback(const on_message_callback_fn &callback,
+                                      const uintptr_t user_data)
+{
+  auto world_data = Core_detail::world_index_get_world_data(1);
+  
+  Data::Graph::message_callback_set(
+    world_data->scene_graph,
+    m_id,
+    user_data,
+    (uintptr_t)callback
+  );
+}
+
+
+void
+Entity_interface::send_message(const uint32_t id,
+                               const uintptr_t data,
+                               const Entity_ref caller)
+{
+  auto world_data = Core_detail::world_index_get_world_data(1);
+  
+  uintptr_t user_data = 0;
+  uintptr_t callback_fn = 0;
+  
+  Data::Graph::message_callback_get(
+    world_data->scene_graph,
+    m_id,
+    &user_data,
+    &callback_fn
+  );
+  
+  if(callback_fn)
+  {
+    ((on_message_callback_fn)callback_fn)(id, data, user_data, caller);
+  }
+}
+
+
 // -- Transform -- //
   
 bool

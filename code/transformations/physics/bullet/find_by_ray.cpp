@@ -23,7 +23,9 @@ find_entity_from_ray(const Core::Ray ray,
                                            math::vec3_scale(ray.get_direction(),
                                            btScalar(ray.get_distance())))));
   
-  btCollisionWorld::ClosestRayResultCallback ray_callback(start_pos, end_pos);
+  btCollisionWorld::ClosestRayResultCallback ray_callback(
+    start_pos, end_pos
+  );
   
   phy_world->rayTest(start_pos, end_pos, ray_callback);
   
@@ -31,15 +33,28 @@ find_entity_from_ray(const Core::Ray ray,
 
   if(ray_callback.hasHit())
   {
-    // Rays shouldn't pen, so we can default it.
-    constexpr float penitration_depth(0.f);
+    // Length from ray origin to the hit point.
+    const float length(
+      math::vec3_length(
+        math::vec3_subtract(
+          ray.get_origin(),
+          math::vec3_from_bt(ray_callback.m_hitPointWorld)
+        )
+      )
+    );
   
-    const uintptr_t user_data = (uintptr_t)ray_callback.m_collisionObject->getCollisionShape()->getUserPointer();
+    const uintptr_t user_data(
+      (uintptr_t)ray_callback.m_collisionObject->getCollisionShape()->getUserPointer()
+    );
     
-    contact = Core::Contact(Core::Entity_ref(Core_detail::entity_id_from_uint(user_data)),
-                            math::vec3_from_bt(ray_callback.m_hitPointWorld),
-                            math::vec3_from_bt(ray_callback.m_hitNormalWorld),
-                            penitration_depth);
+    contact = Core::Contact(
+      Core::Entity_ref(
+        Core_detail::entity_id_from_uint(user_data)
+      ),
+      math::vec3_from_bt(ray_callback.m_hitPointWorld),
+      math::vec3_from_bt(ray_callback.m_hitNormalWorld),
+      length
+    );
   }
   
   return contact;

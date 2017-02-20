@@ -134,10 +134,10 @@ World::~World()
   
   Bullet_data::remove_and_clear(&physics_world);
   
-  if(this->scene_graph)
-  {
-    Data::Graph::destroy(this->scene_graph);
-  }
+//  if(this->scene_graph)
+//  {
+//    Data::Graph::destroy(this->scene_graph);
+//  }
 }
 
 

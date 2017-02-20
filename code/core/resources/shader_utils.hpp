@@ -9,8 +9,20 @@ namespace Core {
 namespace Shader_utils {
 
 
+/*!
+  Fullbright Shader
+  Ignores all lighting information available.
+*/
 Core::Shader
 get_fullbright_shader();
+
+
+/*!
+  Fixed Directional Light Shader
+  Has a single hardcoded directional light.
+*/
+Core::Shader
+get_fixed_directional_light_shader();
 
 
 } // ns

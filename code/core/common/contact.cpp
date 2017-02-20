@@ -16,7 +16,7 @@ Contact::Contact(const Entity_ref contact_object,
 : m_contact_object(contact_object)
 , m_position(pos)
 , m_normal(norm)
-, m_penetration_depth(pen_depth)
+, m_distance(pen_depth)
 {
 }
 
@@ -43,9 +43,9 @@ Contact::get_position() const
 
 
 float
-Contact::get_penetration_depth() const
+Contact::get_distance() const
 {
-  return m_penetration_depth;
+  return m_distance;
 }
 
 

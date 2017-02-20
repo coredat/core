@@ -26,6 +26,7 @@
 #include "physics/rigidbody.hpp"
 #include "physics/box_collider.hpp"
 #include "physics/collider.hpp"
+#include "input/controller.hpp"
 
 
 #endif // inc guard
