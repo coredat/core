@@ -18,6 +18,7 @@ using on_collision_callback_fn = void(*)(const uintptr_t user_data,
 using on_message_callback_fn = void(*)(const uint32_t id,
                                        const uintptr_t data,
                                        const uintptr_t user_data,
+                                       Entity_ref this_ref,
                                        Entity_ref caller);
 
 

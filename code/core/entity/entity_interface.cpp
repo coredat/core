@@ -321,12 +321,20 @@ Entity_interface::send_message(const uint32_t id,
   
   if(callback_fn)
   {
-    ((on_message_callback_fn)callback_fn)(id, data, user_data, caller);
+    ((on_message_callback_fn)callback_fn)
+    (
+      id,
+      data,
+      user_data,
+      Entity_ref(m_id),
+      caller
+    );
   }
 }
 
 
 // -- Transform -- //
+
   
 bool
 Entity_interface::has_transform() const
