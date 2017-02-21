@@ -15,7 +15,7 @@ class Rigidbody final
 public:
 
   explicit      Rigidbody();
-  explicit      Rigidbody(const Collider &collider, const float mass = 1.f);
+  explicit      Rigidbody(const Collider &collider, const float mass = 1.f, const bool is_trigger = false);
                 ~Rigidbody();
   
                 Rigidbody(const Rigidbody&);

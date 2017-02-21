@@ -6,6 +6,7 @@
 
 
 #include "context/context.hpp"
+#include "common/collision.hpp"
 #include "world/world.hpp"
 #include "transform/transform.hpp"
 #include "entity/entity.hpp"

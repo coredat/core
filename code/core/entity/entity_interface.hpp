@@ -73,7 +73,7 @@ public:
                                 const uint32_t id,
                                 const uintptr_t data,
                                 Core::Entity_ref caller
-                              );
+                              ) const;
   
   // -------------------------------------------------------------- [ Camera ]--
   

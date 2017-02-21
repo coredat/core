@@ -18,9 +18,13 @@ Rigidbody::Rigidbody()
 }
 
 
-Rigidbody::Rigidbody(const Collider &collider, const float mass)
+Rigidbody::Rigidbody(
+  const Collider &collider,
+  const float mass,
+  const bool is_trigger)
 : m_collider(collider)
 , m_mass(mass)
+, m_is_trigger(is_trigger)
 {
 }
 
