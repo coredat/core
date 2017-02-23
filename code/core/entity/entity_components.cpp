@@ -386,9 +386,12 @@ set_rigidbody(const Core::Entity_ref &ref,
 
   Core::Transform core_trans(trans.position, trans.scale, trans.rotation);
   
+  math::aabb aabb;
+  Data::Graph::aabb_get(world_data->scene_graph, entity_uint_id, &aabb);
   
   Entity_detail::set_rigidbody(entity_uint_id,
                                core_trans,
+                               aabb,
                                rigidbody,
                                world_data->scene_graph,
                                world_data->trigger_data,

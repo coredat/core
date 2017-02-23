@@ -2,25 +2,29 @@
 #define ENTITY_INTERFACE_INCLUDED_5B0A948B_E6ED_4694_9A78_D05FFE173BA2
 
 
-#include <core/common/core_fwd.hpp>
 #include <core/common/core_types.hpp>
+#include <core/common/core_fwd.hpp>
 #include <core/entity/detail/entity_detail_fwd.hpp>
 #include <data/fwd_dec_data.hpp>
 
 
 namespace Core {
 
+// -------------------------------------------------- [ Callback Prototypes ]--
 
 using on_collision_callback_fn = void(*)(const uintptr_t user_data,
                                          const Entity_ref ref,
                                          const Collision &collisions);
 
-using on_message_callback_fn = void(*)(const uint32_t id,
+using on_message_callback_fn = void(*)(Entity_ref to,
+                                       Entity_ref from,
+                                       const uint32_t id,
                                        const uintptr_t data,
-                                       const uintptr_t user_data,
-                                       Entity_ref this_ref,
-                                       Entity_ref caller);
+                                       const uintptr_t user_data);
 
+
+
+// ----------------------------------------------------- [ Entity Interface ]--
 
 class Entity_interface
 {
@@ -38,15 +42,13 @@ protected:
 
 public:
   
-  
-  // ------------------------------------------------------------ [ Lifetime ]--
+  // ----------------------------------------------------------- [ Lifetime ]--
   
   void                        destroy();
   bool                        is_valid() const;
                               operator bool() const;
 
-
-  // ------------------------------------------------------------- [ General ]--
+  // ------------------------------------------------------------ [ General ]--
 
   void                        set_user_data(const uintptr_t user_data);
   uintptr_t                   get_user_data() const;
@@ -62,7 +64,7 @@ public:
   
   uint32_t                    get_id() const;
   
-  // ------------------------------------------------------------ [ Messages ]--
+  // ----------------------------------------------------------- [ Messages ]--
   
   void                        on_message_callback(
                                 const on_message_callback_fn &callback,
@@ -70,29 +72,28 @@ public:
                               );
   
   void                        send_message(
+                                Core::Entity_ref to,
                                 const uint32_t id,
-                                const uintptr_t data,
-                                Core::Entity_ref caller
+                                const uintptr_t data = 0
                               ) const;
   
-  // -------------------------------------------------------------- [ Camera ]--
+  // ---------------------------------------------------------- [ Transform ]--
   
   bool                        has_transform() const;
   Core::Transform             get_transform() const;
   void                        set_transform(const Core::Transform &trans);
   
-  // -------------------------------------------------------------- [ Camera ]--
+  // ------------------------------------------------------------- [ Camera ]--
   
   bool                        has_camera() const;
   Core::Camera                get_camera() const;
   void                        set_camera(const Core::Camera &camera);
 
-  
-  // ------------------------------------------------------------ [ Renderer ]--
+  // ----------------------------------------------------------- [ Renderer ]--
   
   bool                        has_renderer() const;
   
-  // ----------------------------------------------------------- [ Rigidbody ]--
+  // ---------------------------------------------------------- [ Rigidbody ]--
   
   bool                        has_rigidbody() const;
   Core::Rigidbody             get_rigidbody() const;
@@ -102,13 +103,13 @@ public:
                                 const on_collision_callback_fn &callback
                               );
   
-  // ------------------------------------------------------------ [ Lighting ]--
+  // ----------------------------------------------------------- [ Lighting ]--
   
   bool                        has_light() const;
   Core::Point_light           get_light() const;
   void                        set_light(const Core::Point_light &light);
   
-  // ------------------------------------------------------------ [ Equality ]--
+  // ----------------------------------------------------------- [ Equality ]--
   
   bool                        operator ==(const Entity_interface &other) const;
   bool                        operator !=(const Entity_interface &other) const;

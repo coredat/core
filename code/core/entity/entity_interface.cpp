@@ -28,6 +28,7 @@
 
 #include <common/error_strings.hpp>
 #include <utilities/logging.hpp>
+#include <utilities/assert.hpp>
 
 
 namespace
@@ -38,6 +39,7 @@ namespace
 
 namespace Core {
 
+// ----------------------------------------------------- [ Entity Interface ]--
 
 Entity_interface::Entity_interface()
 {
@@ -88,7 +90,7 @@ Entity_interface::~Entity_interface()
 }
 
 
-// -- Life time -- //
+// ------------------------------------------------------------- [ Lifetime ]--
 
 
 void
@@ -127,7 +129,7 @@ Entity_interface::operator bool() const
 }
 
 
-// -- General Interface -- //
+// -------------------------------------------------------------- [ General ]--
 
 
 uint32_t
@@ -286,6 +288,7 @@ Entity_interface::get_id() const
   return m_id;
 }
 
+// ------------------------------------------------------------- [ Messages ]--
 
 void
 Entity_interface::on_message_callback(const on_message_callback_fn &callback,
@@ -303,10 +306,13 @@ Entity_interface::on_message_callback(const on_message_callback_fn &callback,
 
 
 void
-Entity_interface::send_message(const uint32_t id,
-                               const uintptr_t data,
-                               const Entity_ref caller) const
+Entity_interface::send_message(const Entity_ref to,
+                               const uint32_t id,
+                               const uintptr_t data) const
 {
+  // -- Param Check -- //
+  UTIL_ASSERT(to);
+
   auto world_data = Core_detail::world_index_get_world_data(1);
   
   uintptr_t user_data = 0;
@@ -314,7 +320,7 @@ Entity_interface::send_message(const uint32_t id,
   
   Data::Graph::message_callback_get(
     world_data->scene_graph,
-    m_id,
+    to.m_id,
     &user_data,
     &callback_fn
   );
@@ -323,17 +329,17 @@ Entity_interface::send_message(const uint32_t id,
   {
     ((on_message_callback_fn)callback_fn)
     (
+      to,
+      Core::Entity_ref(m_id),
       id,
       data,
-      user_data,
-      Entity_ref(m_id),
-      caller
+      user_data
     );
   }
 }
 
 
-// -- Transform -- //
+// ------------------------------------------------------------ [ Transform ]--
 
   
 bool
@@ -356,9 +362,7 @@ Entity_interface::set_transform(const Core::Transform &trans)
   Entity_component::set_transform(Core::Entity_ref(m_id), trans);
 }
 
-
-
-// -- Camera  -- //
+// --------------------------------------------------------------- [ Camera ]--
 
 bool
 Entity_interface::has_camera() const
@@ -381,11 +385,10 @@ Entity_interface::set_camera(const Core::Camera &camera)
 }
 
 
+// ------------------------------------------------------------- [ Renderer ]--
 
-// -- Renderer -- //
 
-
-// -- Rigidbody -- //
+// ------------------------------------------------------------ [ Rigidbody ]--
 
 bool
 Entity_interface::has_rigidbody() const
@@ -430,8 +433,9 @@ Entity_interface::on_collision_callback(
   );
 }
 
+// ------------------------------------------------------------- [ Lighting ]--
 
-// -- Equality -- //
+// ------------------------------------------------------------- [ Equality ]--
 
 bool
 Entity_interface::operator==(const Entity_interface &other) const
@@ -447,7 +451,7 @@ Entity_interface::operator!=(const Entity_interface &other) const
 }
 
 
-// -- Protected/private utilities -- //
+// ---------------------------------------------------- [ Private/Protected ]--
 
 
 void

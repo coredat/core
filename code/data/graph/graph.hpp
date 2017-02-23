@@ -180,9 +180,9 @@ aabb_set(Graph_data *graph,
 
 
 bool
-aabb_get(Graph_data *graph,
+aabb_get(const Graph_data *graph,
          const uint32_t node,
-         const math::aabb *aabb);
+         math::aabb *aabb);
   
 
   

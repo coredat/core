@@ -42,6 +42,7 @@ namespace Entity_detail {
 void
 set_rigidbody(const util::generic_id this_id,
               Core::Transform core_transform,
+              const math::aabb &aabb,
               const Core::Rigidbody &rigidbody,
               Data::Graph::Graph_data *entity_data,
               Data::Trigger_data *trigger_data,
@@ -120,7 +121,14 @@ set_rigidbody(const util::generic_id this_id,
       Data::rigidbody_set_collision_id(rb_data, this_id, &mask);
       
       Bullet_data::Rigidbody rb_details;
-      Physics_transform::create_rigidbody_from_core_rb(&core_transform, &rigidbody, &rb_details, phy_world, this_id);
+      Physics_transform::create_rigidbody_from_core_rb(
+        &core_transform,
+        aabb,
+        &rigidbody,
+        &rb_details,
+        phy_world,
+        this_id
+      );
 
       Data::rigidbody_set_rigidbody(rb_data, this_id, &rb_details);
       
@@ -139,7 +147,15 @@ set_rigidbody(const util::generic_id this_id,
       Data::trigger_push(trigger_data, this_id);
       
       Bullet_data::Trigger trigger_details;
-      Physics_transform::create_trigger_from_core_rb(&core_transform, &rigidbody, &trigger_details, phy_world, this_id);
+      Physics_transform::create_trigger_from_core_rb(
+        &core_transform,
+        aabb,
+        &rigidbody,
+        &trigger_details,
+        phy_world,
+        this_id
+      );
+      
       Data::trigger_set_trigger(trigger_data, this_id, &trigger_details);
       
       Data::data_unlock(trigger_data);

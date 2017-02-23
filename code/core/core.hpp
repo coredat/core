@@ -9,6 +9,7 @@
 #include "common/collision.hpp"
 #include "world/world.hpp"
 #include "transform/transform.hpp"
+#include "transform/transform_utils.hpp"
 #include "entity/entity.hpp"
 #include "entity/entity_ref.hpp"
 #include "entity/entity_components.hpp"

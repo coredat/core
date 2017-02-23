@@ -11,6 +11,7 @@
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
 #include <utilities/optimizations.hpp>
+#include <math/geometry/aabb.hpp>
 #include <assert.h>
 
 
@@ -53,7 +54,7 @@ generate_collision_shape(const Core::Collider &collider,
 }
 
 
-Core::Collider
+inline Core::Collider
 generate_collider(const btCollisionShape *shape,
                   const math::vec3 entity_scale)
 {
@@ -64,7 +65,23 @@ generate_collider(const btCollisionShape *shape,
 }
 
 
-} // ns
+inline btTransform
+generate_transform(const Core::Transform *trans, const math::aabb *aabb)
+{
+  const math::vec3 origin(math::aabb_get_origin(*aabb));
+  const math::vec3 offset(math::vec3_add(trans->get_position(), origin));
+  
+  return math::transform_to_bt(
+    Core::Transform(
+      offset,
+      trans->get_scale(),
+      trans->get_rotation()
+    )
+  );
+}
+
+
+} // anon ns
 
 
 namespace Physics_transform {
@@ -122,6 +139,7 @@ create_core_rb_from_rigidbody(Core::Rigidbody *out_rb,
 
 void
 create_trigger_from_core_rb(const Core::Transform *transform,
+                            const math::aabb &aabb,
                             const Core::Rigidbody *core_rb,
                             Bullet_data::Trigger *out_trigger,
                             btDynamicsWorld *phy_world,
@@ -142,15 +160,24 @@ create_trigger_from_core_rb(const Core::Transform *transform,
   // Create Collider
   btCollisionShape *bt_collider = nullptr;
   {
-    bt_collider = generate_collision_shape(core_rb->get_collider(), user_data, transform->get_scale());
+    bt_collider = generate_collision_shape(
+      core_rb->get_collider(),
+      user_data,
+      math::vec3_multiply(
+        transform->get_scale(),
+        math::aabb_get_extents(aabb)
+      )
+    );
   }
+  
+  const btTransform bt_transform = generate_transform(transform, &aabb);
   
   // Create Trigger
   btPairCachingGhostObject *bt_trigger = nullptr;
   {
     bt_trigger = new btPairCachingGhostObject;
     bt_trigger->setCollisionFlags(btGhostObject::CF_NO_CONTACT_RESPONSE);
-    bt_trigger->setWorldTransform(math::transform_to_bt(*transform));
+    bt_trigger->setWorldTransform(bt_transform);
     bt_trigger->setCollisionShape(bt_collider);
   }
   
@@ -172,6 +199,7 @@ create_trigger_from_core_rb(const Core::Transform *transform,
 
 void
 create_rigidbody_from_core_rb(const Core::Transform *transform,
+                              const math::aabb &aabb,
                               const Core::Rigidbody *core_rb,
                               Bullet_data::Rigidbody *out_rb,
                               btDynamicsWorld *phy_world,
@@ -192,16 +220,30 @@ create_rigidbody_from_core_rb(const Core::Transform *transform,
   // Create Collider
   btCollisionShape *bt_collider = nullptr;
   {
-    bt_collider = generate_collision_shape(core_rb->get_collider(), user_data, transform->get_scale());
+    bt_collider = generate_collision_shape(
+      core_rb->get_collider(),
+      user_data,
+      math::vec3_multiply(transform->get_scale(), math::aabb_get_extents(aabb))
+    );
   }
+  
+  const btTransform bt_transform = generate_transform(transform, &aabb);
   
   // Create Rigidbody
   btRigidBody   *bt_rb = nullptr;
   btMotionState *bt_mt = nullptr;
   {
     uint32_t collision_flags(0);
-    if(core_rb->is_kinematic())   { collision_flags |= btRigidBody::CF_KINEMATIC_OBJECT; }
-    if(core_rb->get_mass() == 0)  { collision_flags |= btRigidBody::CF_STATIC_OBJECT;    }
+    
+    if(core_rb->is_kinematic())
+    {
+      collision_flags |= btRigidBody::CF_KINEMATIC_OBJECT;
+    }
+    
+    if(core_rb->get_mass() == 0)
+    {
+      collision_flags |= btRigidBody::CF_STATIC_OBJECT;
+    }
 
     // Create btRigidBody and return it.
 
@@ -211,11 +253,15 @@ create_rigidbody_from_core_rb(const Core::Transform *transform,
     {
       if(user_data)
       {
-        bt_mt = new Core_motion_state(user_data, math::transform_to_bt(*transform));
+        bt_mt = new Core_motion_state(
+          user_data, bt_transform
+        );
       }
       else
       {
-        bt_mt = new btDefaultMotionState(math::transform_to_bt(*transform));
+        bt_mt = new btDefaultMotionState(
+          bt_transform
+        );
       }
     }
     
@@ -279,9 +325,17 @@ update_rigidbody_transform(Bullet_data::Rigidbody *rigidbody,
   assert(phy_world);
   assert(transform);
   
-  btDynamicsWorld  *world = phy_world->dynamics_world;
-  btRigidBody      *rb    = reinterpret_cast<btRigidBody*>(rigidbody->rigidbody_ptr);
-  btCollisionShape *shape = rb->getCollisionShape();
+  btDynamicsWorld *world(
+    phy_world->dynamics_world
+  );
+    
+  btRigidBody *rb(
+    reinterpret_cast<btRigidBody*>(rigidbody->rigidbody_ptr)
+  );
+  
+  btCollisionShape *shape(
+    rb->getCollisionShape()
+  );
   
   // Update the transform and scale.
   if(rb && shape && world && transform)

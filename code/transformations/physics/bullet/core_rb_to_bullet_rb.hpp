@@ -18,6 +18,7 @@ namespace Physics_transform {
 */
 void
 create_rigidbody_from_core_rb(const Core::Transform *transform,
+                              const math::aabb &aabb,
                               const Core::Rigidbody *core_rb,
                               Bullet_data::Rigidbody *out_rb,
                               btDynamicsWorld *phy_world,
@@ -33,6 +34,7 @@ create_rigidbody_from_core_rb(const Core::Transform *transform,
 */
 void
 create_trigger_from_core_rb(const Core::Transform *transform,
+                            const math::aabb &aabb,
                             const Core::Rigidbody *core_rb,
                             Bullet_data::Trigger *out_trigger,
                             btDynamicsWorld *phy_world,

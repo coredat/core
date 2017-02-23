@@ -23,6 +23,7 @@ set_phy_transform(const util::generic_id this_id,
 void
 set_rigidbody(const util::generic_id this_id,
               Core::Transform tranform,
+              const math::aabb &aabb,
               const Core::Rigidbody &rigidbody,
               Data::Graph::Graph_data *entity_data,
               Data::Trigger_data *trigger_data,
