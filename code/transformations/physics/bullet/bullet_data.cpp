@@ -8,7 +8,7 @@
 #include <BulletDynamics/Dynamics/btDynamicsWorld.h>
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
 #include <LinearMath/btIDebugDraw.h>
-#include <assert.h>
+#include <utilities/assert.hpp>
 
 
 namespace Bullet_data {
@@ -18,20 +18,24 @@ void
 remove_and_clear(Rigidbody *rb,
                  btDynamicsWorld *world)
 {
-  // Param check
-  assert(rb);
-  assert(world);
+  // -- Param Check -- //
+  UTIL_ASSERT(rb);
+  UTIL_ASSERT(world);
   
   {
-    btRigidBody *bt_rb = reinterpret_cast<btRigidBody*>(rb->rigidbody_ptr);
-    assert(bt_rb);
+    btRigidBody *bt_rb(
+      reinterpret_cast<btRigidBody*>(rb->rigidbody_ptr)
+    );
+    UTIL_ASSERT(bt_rb);
     
     world->removeRigidBody(bt_rb);
     delete bt_rb;
   }
   
   {
-    btMotionState *bt_mt = reinterpret_cast<btMotionState*>(rb->motion_state_ptr);
+    btMotionState *bt_mt(
+      reinterpret_cast<btMotionState*>(rb->motion_state_ptr)
+    );
     
     if(bt_mt)
     {
@@ -40,7 +44,9 @@ remove_and_clear(Rigidbody *rb,
   }
   
   {
-    btCollisionShape *bt_shape = reinterpret_cast<btCollisionShape*>(rb->shape_ptr);
+    btCollisionShape *bt_shape(
+      reinterpret_cast<btCollisionShape*>(rb->shape_ptr)
+    );
     
     if(bt_shape)
     {
@@ -57,13 +63,15 @@ void
 remove_and_clear(Trigger *trigger,
                  btDynamicsWorld *world)
 {
-  // Param check
-  assert(trigger);
-  assert(world);
+  // -- Param Check -- //
+  UTIL_ASSERT(trigger);
+  UTIL_ASSERT(world);
 
   {
-    btGhostObject *bt_gh = reinterpret_cast<btGhostObject*>(trigger->ghost_ptr);
-    assert(bt_gh);
+    btGhostObject *bt_gh(
+      reinterpret_cast<btGhostObject*>(trigger->ghost_ptr)
+    );
+    UTIL_ASSERT(bt_gh);
     
     world->removeCollisionObject(bt_gh);
     
@@ -71,7 +79,9 @@ remove_and_clear(Trigger *trigger,
   }
   
   {
-    btCollisionShape *bt_shape = reinterpret_cast<btCollisionShape*>(trigger->shape_ptr);
+    btCollisionShape *bt_shape(
+      reinterpret_cast<btCollisionShape*>(trigger->shape_ptr)
+    );
     
     if(bt_shape)
     {
@@ -132,8 +142,8 @@ setup(World *world)
     
       int debug_mode = 0
              | btIDebugDraw::DBG_DrawContactPoints
-             | btIDebugDraw::DBG_DrawAabb
-//             | btIDebugDraw::DBG_DrawWireframe
+//             | btIDebugDraw::DBG_DrawAabb
+             | btIDebugDraw::DBG_DrawWireframe
              ;
   };
   

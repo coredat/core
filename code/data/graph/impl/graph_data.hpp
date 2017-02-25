@@ -25,7 +25,6 @@ struct Graph_data
   /*
     Internal use.
   */
-  
   util::buffer::data node_callbacks;
   util::buffer::data node_aabb;
   util::buffer::data node_components;
@@ -33,7 +32,6 @@ struct Graph_data
   /*
     External and Internal use.
   */
-  
   util::buffer::data node_tags;
   util::buffer::data node_transform;
   util::buffer::data node_user_data;
@@ -43,7 +41,6 @@ struct Graph_data
   /*
     Instance counter.
   */
-  
   size_t node_instance_counter = 0;
   
   /*

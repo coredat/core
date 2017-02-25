@@ -27,8 +27,7 @@ get_collisions(
       if(i != j)
       {
         math::aabb aabb_b = aabbs[j];
-//        math::aabb_scale(aabb_b, transforms[j].scale);
-        
+//        math::aabb_scale(aabb_b, transforms[j].scale);        
 //        aabb_b.origin = transforms[j].position;
         
         if(math::aabb_intersection_test(aabb_a, aabb_b))

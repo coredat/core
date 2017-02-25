@@ -2,8 +2,6 @@
 
 #include <transformations/entity/entity_transform.hpp>
 
-#include <renderer/debug_line_renderer/debug_line_renderer_node.hpp>
-#include <renderer/debug_line_renderer/debug_line_renderer.hpp>
 #include <transformations/physics/bullet/bullet_math_extensions.hpp>
 #include <transformations/physics/bullet/trigger_collisions.hpp>
 #include <transformations/physics/collision_point.hpp>
