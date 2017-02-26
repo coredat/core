@@ -22,9 +22,9 @@ initialize(opContext *opContext,
            const size_t inital_font_size_hint = 4,
            const size_t inital_glyph_size_hint = 32,
            const size_t inital_string_size_hint = 16,
-           const util::malloc_fn malloc_fn = malloc,
-           const util::realloc_fn realloc_fn = realloc,
-           const util::free_fn free_fn = free);
+           const lib::malloc_fn malloc_fn = malloc,
+           const lib::realloc_fn realloc_fn = realloc,
+           const lib::free_fn free_fn = free);
 
 
 // --------------------------------------------------------- Font Managment ---

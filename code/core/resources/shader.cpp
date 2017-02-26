@@ -3,8 +3,7 @@
 #include <common/fixed_string_search.hpp>
 #include <data/context_data.hpp>
 #include <data/context/shader_data.hpp>
-#include <utilities/generic_id.hpp>
-#include <utilities/string_helpers.hpp>
+#include <utilities/string.hpp>
 #include <graphics_api/utils/shader_utils.hpp>
 #include <graphics_api/ogl/ogl_shader.hpp>
 #include <assert.h>
@@ -15,7 +14,7 @@ namespace Core {
 
 struct Shader::Impl
 {
-  util::generic_id id = util::generic_id_invalid();
+  uint32_t id = 0;
 };
 
 
@@ -33,7 +32,7 @@ namespace
   /*
     This inserts the data into the shader_data resource.
   */
-  inline util::generic_id
+  inline uint32_t
   push_new_shader(const char *shader_name,
                   const char *vs_code,
                   const char *gs_code,
@@ -47,7 +46,7 @@ namespace
     auto shd_data = data->shader_data;
     assert(shd_data);
   
-    util::generic_id return_id = util::generic_id_invalid();
+    uint32_t return_id = 0;
 
     // Check if shader already exists.
     {
@@ -78,7 +77,7 @@ namespace
         {
           Data::data_lock(data->shader_data);
           
-          const util::generic_id id = Data::shader_push(data->shader_data);
+          const uint32_t id = Data::shader_push(data->shader_data);
           Data::shader_set_name(data->shader_data, id, shader_name, strlen(shader_name));
           Data::shader_set_shader(data->shader_data, id, &shader);
           
@@ -106,13 +105,13 @@ Shader::Shader(const char *filename)
   if(filename)
   {
     // Check file exists first
-    if(!util::file::exists(filename))
+    if(!lib::file::exists(filename))
     {
       LOG_ERROR(Error_string::file_not_found());
       return;
     }
   
-    const std::string name = util::get_filename_from_path(filename);
+    const std::string name = lib::string::get_dir_from_filepath(filename);
     
     Gfx_util::Shader_code code = Gfx_util::shader_code_from_tagged_file(filename);
     
@@ -158,7 +157,7 @@ Shader::operator=(const Shader &other)
 bool
 Shader::is_valid() const
 {
-  return m_impl->id != util::generic_id_invalid();
+  return m_impl->id != 0;
 }
 
 

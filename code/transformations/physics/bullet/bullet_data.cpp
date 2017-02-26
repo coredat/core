@@ -19,14 +19,14 @@ remove_and_clear(Rigidbody *rb,
                  btDynamicsWorld *world)
 {
   // -- Param Check -- //
-  UTIL_ASSERT(rb);
-  UTIL_ASSERT(world);
+  LIB_ASSERT(rb);
+  LIB_ASSERT(world);
   
   {
     btRigidBody *bt_rb(
       reinterpret_cast<btRigidBody*>(rb->rigidbody_ptr)
     );
-    UTIL_ASSERT(bt_rb);
+    LIB_ASSERT(bt_rb);
     
     world->removeRigidBody(bt_rb);
     delete bt_rb;
@@ -64,14 +64,14 @@ remove_and_clear(Trigger *trigger,
                  btDynamicsWorld *world)
 {
   // -- Param Check -- //
-  UTIL_ASSERT(trigger);
-  UTIL_ASSERT(world);
+  LIB_ASSERT(trigger);
+  LIB_ASSERT(world);
 
   {
     btGhostObject *bt_gh(
       reinterpret_cast<btGhostObject*>(trigger->ghost_ptr)
     );
-    UTIL_ASSERT(bt_gh);
+    LIB_ASSERT(bt_gh);
     
     world->removeCollisionObject(bt_gh);
     

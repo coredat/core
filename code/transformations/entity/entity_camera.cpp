@@ -11,7 +11,7 @@ namespace Entity_detail {
 
 
 void
-set_camera(util::generic_id const this_id,
+set_camera(uint32_t const this_id,
            Data::Graph::Graph_data *entity_data,
            Data::Camera_data *camera_data,
            Core::Camera const *camera)
@@ -74,7 +74,7 @@ set_camera(util::generic_id const this_id,
 
 
 void
-get_camera(util::generic_id const this_id,
+get_camera(uint32_t const this_id,
            Data::Camera_data const *camera_data,
            Core::Camera *out_camera)
 {
@@ -109,7 +109,7 @@ get_camera(util::generic_id const this_id,
 
 
 void
-remove_camera(const util::generic_id this_id,
+remove_camera(const uint32_t this_id,
               Data::Graph::Graph_data *entity_data,
               Data::Camera_data *camera_data)
 {
@@ -136,7 +136,7 @@ remove_camera(const util::generic_id this_id,
   
 
 bool
-has_camera(const util::generic_id this_id,
+has_camera(const uint32_t this_id,
            Data::Camera_data *camera_data)
 {
   assert(this_id);

@@ -12,7 +12,6 @@
 
 #include <stdint.h>
 #include <stddef.h>
-#include <utilities/generic_id.hpp>
 #include <graphics_api/mesh.hpp>
 
 
@@ -34,7 +33,7 @@ struct Text_mesh_data
   uint32_t *field_text_size = nullptr;
 
   // font_id field data //
-  util::generic_id *field_font_id = nullptr;
+  uint32_t *field_font_id = nullptr;
 
   // mesh field data //
   Graphics_api::Mesh *field_mesh = nullptr;
@@ -120,11 +119,11 @@ uint32_t*
 text_mesh_get_text_size_data(Text_mesh_data *data);
 
 
-const util::generic_id*
+const uint32_t*
 text_mesh_get_const_font_id_data(const Text_mesh_data *data);
 
 
-util::generic_id*
+uint32_t*
 text_mesh_get_font_id_data(Text_mesh_data *data);
 
 
@@ -164,11 +163,11 @@ text_mesh_set_text_size(const Text_mesh_data *data, const uint32_t key, const ui
 
 
 bool
-text_mesh_get_font_id(const Text_mesh_data *data, const uint32_t key, util::generic_id *return_value);
+text_mesh_get_font_id(const Text_mesh_data *data, const uint32_t key, uint32_t *return_value);
 
 
 bool
-text_mesh_set_font_id(const Text_mesh_data *data, const uint32_t key, const util::generic_id *set_value);
+text_mesh_set_font_id(const Text_mesh_data *data, const uint32_t key, const uint32_t *set_value);
 
 
 

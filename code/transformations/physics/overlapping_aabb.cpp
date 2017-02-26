@@ -7,7 +7,6 @@
 #include <systems/physics_engine/collision/axis_collidable.hpp>
 #include <systems/physics_engine/collision/collision_pairs.hpp>
 #include <systems/physics_engine/collision/aabb_overlap.hpp>
-#include <utilities/generic_id.hpp>
 #include <utilities/logging.hpp>
 
 
@@ -15,13 +14,13 @@ namespace Transformation {
 
 
 void
-get_overlapping(const util::generic_id ids[],
+get_overlapping(const uint32_t ids[],
                 const uint64_t collision_ids[],
                 const math::aabb colliders[],
                 const math::transform transforms[],
                 const size_t number_of_bounds,
                 Physics::Collision::Axis_collidable *volatile_out_axis_collidables[],
-                util::generic_id * volatile_out_ids[],
+                uint32_t * volatile_out_ids[],
                 size_t *volatile_out_size)
 {
   // Do the sweep and prune stages.
@@ -38,7 +37,7 @@ get_overlapping(const util::generic_id ids[],
   static int32_t size_hint = 2048; // Huristic below will increase this size.
 
   int32_t count = 0;
-  util::generic_id *result_id = SCRATCH_ALLOC(util::generic_id, size_hint);
+  uint32_t *result_id = SCRATCH_ALLOC(uint32_t, size_hint);
   Physics::Collision::Axis_collidable *result_collidable = SCRATCH_ALLOC(Physics::Collision::Axis_collidable, size_hint);
   
   uint32_t prune_stack = 0;

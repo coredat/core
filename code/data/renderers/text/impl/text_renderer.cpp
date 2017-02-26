@@ -6,12 +6,14 @@
 #include <utilities/assert.hpp>
 #include <utilities/logging.hpp>
 #include <utilities/file.hpp>
-#include <utilities/string_helpers.hpp>
+#include <utilities/string.hpp>
 #include <utilities/directory.hpp>
 #include <utilities/bits.hpp>
-#include <utilities/id32.hpp>
+#include <utilities/id.hpp>
 #include <utilities/assert.hpp>
+#include <utilities/platform.hpp>
 #include <op/op.hpp>
+#include <data/common/directories.hpp>
 
 #include <systems/text/font_bitmap.hpp>
 
@@ -41,19 +43,19 @@ initialize(opContext *ctx,
            const size_t inital_font_size_hint,
            const size_t inital_glyph_size_hint,
            const size_t inital_string_size_hint,
-           const util::malloc_fn malloc_fn,
-           const util::realloc_fn realloc_fn,
-           const util::free_fn free_fn)
+           const lib::malloc_fn malloc_fn,
+           const lib::realloc_fn realloc_fn,
+           const lib::free_fn free_fn)
 {
   // -- Param Check -- //
-  UTIL_ASSERT(ctx);
-  UTIL_ASSERT(buf);
-  UTIL_ASSERT(inital_font_size_hint);
-  UTIL_ASSERT(inital_glyph_size_hint);
-  UTIL_ASSERT(inital_string_size_hint);
-  UTIL_ASSERT(malloc_fn);
-  UTIL_ASSERT(realloc_fn);
-  UTIL_ASSERT(free_fn);
+  LIB_ASSERT(ctx);
+  LIB_ASSERT(buf);
+  LIB_ASSERT(inital_font_size_hint);
+  LIB_ASSERT(inital_glyph_size_hint);
+  LIB_ASSERT(inital_string_size_hint);
+  LIB_ASSERT(malloc_fn);
+  LIB_ASSERT(realloc_fn);
+  LIB_ASSERT(free_fn);
   
   // -- We do this so we don't have to expose the internals -- //
   void *data = malloc_fn(sizeof(Text_renderer_data));
@@ -64,48 +66,48 @@ initialize(opContext *ctx,
     bool setup = true;
     
     // Fonts
-    setup &= util::buffer::init(&renderer->font_data,
+    setup &= lib::buffer::init(&renderer->font_data,
                                 sizeof(Font),
                                 inital_font_size_hint,
                                 malloc_fn, realloc_fn, free_fn);
     
     // Glyphs
-    setup &= util::buffer::init(&renderer->glyph_keys,
+    setup &= lib::buffer::init(&renderer->glyph_keys,
                                 sizeof(uint64_t),
                                 inital_glyph_size_hint,
                                 malloc_fn, realloc_fn, free_fn);
     
-    setup &= util::buffer::init(&renderer->glyph_data,
+    setup &= lib::buffer::init(&renderer->glyph_data,
                                 sizeof(Data::Character),
                                 inital_glyph_size_hint,
                                 malloc_fn, realloc_fn, free_fn);
     
     // Strings
-    setup &= util::buffer::init(&renderer->string_keys,
+    setup &= lib::buffer::init(&renderer->string_keys,
                                 sizeof(uint32_t),
                                 inital_string_size_hint,
                                 malloc_fn, realloc_fn, free_fn);
     
-    setup &= util::buffer::init(&renderer->string_data,
+    setup &= lib::buffer::init(&renderer->string_data,
                                 sizeof(char),
                                 inital_string_size_hint * 32,
                                 malloc_fn, realloc_fn, free_fn);
     
-    setup &= util::buffer::init(&renderer->draw_calls,
+    setup &= lib::buffer::init(&renderer->draw_calls,
                                 sizeof(Draw_call),
                                 inital_string_size_hint,
                                 malloc_fn, realloc_fn, free_fn);
     
     if(!setup)
     {
-      UTIL_ASSERT(false);
+      LIB_ASSERT(false);
       
-      util::buffer::destroy(&renderer->font_data);
-      util::buffer::destroy(&renderer->glyph_keys);
-      util::buffer::destroy(&renderer->glyph_data);
-      util::buffer::destroy(&renderer->string_keys);
-      util::buffer::destroy(&renderer->string_data);
-      util::buffer::destroy(&renderer->draw_calls);
+      lib::buffer::destroy(&renderer->font_data);
+      lib::buffer::destroy(&renderer->glyph_keys);
+      lib::buffer::destroy(&renderer->glyph_data);
+      lib::buffer::destroy(&renderer->string_keys);
+      lib::buffer::destroy(&renderer->string_data);
+      lib::buffer::destroy(&renderer->draw_calls);
       
       LOG_ERROR("Failed to setup Font Renderer");
       
@@ -118,36 +120,36 @@ initialize(opContext *ctx,
   // -- Initialize shader -- //
   if(text_shader == 0)
   {
-    char core_text_shd_path[MAX_FILE_PATH_SIZE];
+    char core_text_shd_path[LIB_MAX_FILE_PATH_SIZE];
     {
       memset(core_text_shd_path, 0, sizeof(core_text_shd_path));
-      strcat(core_text_shd_path, util::dir::resource_path());
-      strcat(core_text_shd_path, "assets/shaders/core_text.ogl");
+      strcat(core_text_shd_path, Common::Dir::assets());
+      strcat(core_text_shd_path, "shaders/core_text.ogl");
     }
     
     char shader_code[1 << 12];
     {
       memset(shader_code, 0, sizeof(shader_code));
-      util::file::get_contents_from_file(core_text_shd_path, shader_code, sizeof(shader_code));
+      lib::file::get_contents(core_text_shd_path, shader_code, sizeof(shader_code));
       assert(strlen(shader_code));
     }
     
     char vs_code[1024];
     {
       memset(vs_code, 0, sizeof(vs_code));
-      util::get_text_between_tags("/* VERT_SHD */", "/* VERT_SHD */", shader_code, vs_code, sizeof(vs_code));
+      lib::string::get_text_between_tags("/* VERT_SHD */", "/* VERT_SHD */", shader_code, vs_code, sizeof(vs_code));
     }
 
     char gs_code[1 << 12];
     {
       memset(gs_code, 0, sizeof(gs_code));
-      util::get_text_between_tags("/* GEO_SHD */", "/* GEO_SHD */", shader_code, gs_code, sizeof(gs_code));
+      lib::string::get_text_between_tags("/* GEO_SHD */", "/* GEO_SHD */", shader_code, gs_code, sizeof(gs_code));
     }
     
     char fs_code[1024];
     {
       memset(fs_code, 0, sizeof(fs_code));
-      util::get_text_between_tags("/* FRAG_SHD */", "/* FRAG_SHD */", shader_code, fs_code, sizeof(fs_code));
+      lib::string::get_text_between_tags("/* FRAG_SHD */", "/* FRAG_SHD */", shader_code, fs_code, sizeof(fs_code));
     }
     
     opShaderDesc shader_desc;
@@ -249,13 +251,13 @@ initialize(opContext *ctx,
     
     // Did we load everything?
     {
-      UTIL_ASSERT(shader_desc.status == opStatus_VALID);
-      UTIL_ASSERT(shader_data_wvp_desc.status == opStatus_VALID);
-      UTIL_ASSERT(shader_data_metrics_desc.status == opStatus_VALID);
-      UTIL_ASSERT(shader_data_details_desc.status == opStatus_VALID);
-      UTIL_ASSERT(shader_data_map_desc.status == opStatus_VALID);
-      UTIL_ASSERT(rasterizer_desc.status == opStatus_VALID);
-      UTIL_ASSERT(blend_desc.status == opStatus_VALID);
+      LIB_ASSERT(shader_desc.status == opStatus_VALID);
+      LIB_ASSERT(shader_data_wvp_desc.status == opStatus_VALID);
+      LIB_ASSERT(shader_data_metrics_desc.status == opStatus_VALID);
+      LIB_ASSERT(shader_data_details_desc.status == opStatus_VALID);
+      LIB_ASSERT(shader_data_map_desc.status == opStatus_VALID);
+      LIB_ASSERT(rasterizer_desc.status == opStatus_VALID);
+      LIB_ASSERT(blend_desc.status == opStatus_VALID);
     }
   }
   
@@ -272,7 +274,7 @@ namespace {
 inline uint64_t
 create_glyph_id(const uint32_t font_id, const uint32_t codepoint)
 {
-  return util::bits_pack(font_id, codepoint);
+  return lib::bits::pack3232(font_id, codepoint);
 }
 
 
@@ -289,18 +291,18 @@ set_draw_call(Text_renderer_data *renderer,
               opBuffer *buf)
 {
   // -- Param Check -- //
-  UTIL_ASSERT(renderer);
-  UTIL_ASSERT(id);
-  UTIL_ASSERT(font_id);
-  UTIL_ASSERT(glyph_arr);
-  UTIL_ASSERT(world_matrix);
-  UTIL_ASSERT(ctx);
-  UTIL_ASSERT(buf);
+  LIB_ASSERT(renderer);
+  LIB_ASSERT(id);
+  LIB_ASSERT(font_id);
+  LIB_ASSERT(glyph_arr);
+  LIB_ASSERT(world_matrix);
+  LIB_ASSERT(ctx);
+  LIB_ASSERT(buf);
 
 
   // -- Check if we have the font -- //
   // Note: This isn't a great check but since we can't remove fonts its ok.
-  if(font_id > util::buffer::size(&renderer->font_data))
+  if(font_id > lib::buffer::size(&renderer->font_data))
   {
     LOG_ERROR("Font doesn't exist.");
     return;
@@ -314,7 +316,7 @@ set_draw_call(Text_renderer_data *renderer,
     stbtt_fontinfo info;
     Data::Font_bitmap *font_bitmap = nullptr;
     
-    Font *fonts = (Font*)util::buffer::bytes(&renderer->font_data);
+    Font *fonts = (Font*)lib::buffer::bytes(&renderer->font_data);
     
     const uint32_t font_index = font_id - 1;
     curr_font = &fonts[font_index];
@@ -336,10 +338,10 @@ set_draw_call(Text_renderer_data *renderer,
       
       // Check to see if the codepoint is already in the map.
       const uint64_t  glyph_id        = create_glyph_id(font_id, codepoint);
-      const uint64_t *glyph_ids       = (uint64_t*)util::buffer::bytes(&renderer->glyph_keys);
-      const size_t    glyph_ids_count = util::buffer::size(&renderer->glyph_keys);
+      const uint64_t *glyph_ids       = (uint64_t*)lib::buffer::bytes(&renderer->glyph_keys);
+      const size_t    glyph_ids_count = lib::buffer::size(&renderer->glyph_keys);
       
-      if(util::id::linear_search(glyph_id, glyph_ids, glyph_ids_count))
+      if(lib::id::linear_search(glyph_id, glyph_ids, glyph_ids_count))
       {
         continue;
       }
@@ -398,13 +400,13 @@ set_draw_call(Text_renderer_data *renderer,
       stbtt_FreeBitmap(glyph_bitmap, nullptr);
       
       // Add glyph info
-      util::buffer::push(&renderer->glyph_keys);
-      util::buffer::push(&renderer->glyph_data);
+      lib::buffer::push(&renderer->glyph_keys);
+      lib::buffer::push(&renderer->glyph_data);
       
-      uint64_t *last_id = (uint64_t*)util::buffer::last(&renderer->glyph_keys);
+      uint64_t *last_id = (uint64_t*)lib::buffer::last(&renderer->glyph_keys);
       *last_id = glyph_id;
       
-      Data::Character *char_info = (Data::Character*)util::buffer::last(&renderer->glyph_data);
+      Data::Character *char_info = (Data::Character*)lib::buffer::last(&renderer->glyph_data);
       
       char_info->size[0] = glyph_width;
       char_info->size[1] = glyph_height;
@@ -429,14 +431,14 @@ set_draw_call(Text_renderer_data *renderer,
         buf,
         curr_font->metrics_texture_id,
         0,
-        util::buffer::size(&renderer->glyph_data) * 4,
-        util::buffer::bytes(&renderer->glyph_data)
+        lib::buffer::size(&renderer->glyph_data) * 4,
+        lib::buffer::bytes(&renderer->glyph_data)
       );
       opBufferExec(ctx, buf);
     }
   }  // Add Missing Glyphs to font
   
-//  printf("Glyphs: %d", util::buffer::size(&renderer->glyph_keys));
+//  printf("Glyphs: %d", lib::buffer::size(&renderer->glyph_keys));
   
   
   // -- Build new string and Set/Update Draw call -- //
@@ -445,9 +447,9 @@ set_draw_call(Text_renderer_data *renderer,
     float line    = 0;
     int data_ptr  = 0;
 
-    const uint64_t *glyph_keys        = (uint64_t*)util::buffer::bytes(&renderer->glyph_keys);
-    const size_t glyph_keys_size      = util::buffer::size(&renderer->glyph_keys);
-    const Data::Character *glyph_data = (Data::Character*)util::buffer::bytes(&renderer->glyph_data);
+    const uint64_t *glyph_keys        = (uint64_t*)lib::buffer::bytes(&renderer->glyph_keys);
+    const size_t glyph_keys_size      = lib::buffer::size(&renderer->glyph_keys);
+    const Data::Character *glyph_data = (Data::Character*)lib::buffer::bytes(&renderer->glyph_data);
     
     float str_tex_data[512];
     memset(str_tex_data, 0, sizeof(str_tex_data));
@@ -489,28 +491,28 @@ set_draw_call(Text_renderer_data *renderer,
       {
         size_t index = 0;
         
-        const uint32_t *ids   = (uint32_t*)util::buffer::bytes(&renderer->string_keys);
-        const size_t id_count = util::buffer::size(&renderer->string_keys);
+        const uint32_t *ids   = (uint32_t*)lib::buffer::bytes(&renderer->string_keys);
+        const size_t id_count = lib::buffer::size(&renderer->string_keys);
         
-        if(!util::id::linear_search(id, ids, id_count, &index))
+        if(!lib::id::linear_search(id, ids, id_count, &index))
         {
-          util::buffer::push(&renderer->string_keys);
-          util::buffer::push(&renderer->string_data);
-          util::buffer::push(&renderer->draw_calls);
+          lib::buffer::push(&renderer->string_keys);
+          lib::buffer::push(&renderer->string_data);
+          lib::buffer::push(&renderer->draw_calls);
           
-          index = util::buffer::size(&renderer->string_keys) - 1;
-          uint32_t *last_id = (uint32_t*)util::buffer::last(&renderer->string_keys);
+          index = lib::buffer::size(&renderer->string_keys) - 1;
+          uint32_t *last_id = (uint32_t*)lib::buffer::last(&renderer->string_keys);
           
           *last_id = id;
         }
         
-        Data::Draw_call *draw_calls = (Data::Draw_call*)util::buffer::bytes(&renderer->draw_calls);
+        Data::Draw_call *draw_calls = (Data::Draw_call*)lib::buffer::bytes(&renderer->draw_calls);
         dc = &draw_calls[index];
         
         // Double check all sizes are equal //
-        UTIL_ASSERT(
-          (util::buffer::size(&renderer->string_keys) == util::buffer::size(&renderer->string_data)) &&
-          (util::buffer::size(&renderer->string_keys) == util::buffer::size(&renderer->draw_calls))
+        LIB_ASSERT(
+          (lib::buffer::size(&renderer->string_keys) == lib::buffer::size(&renderer->string_data)) &&
+          (lib::buffer::size(&renderer->string_keys) == lib::buffer::size(&renderer->draw_calls))
         );
       }
     
@@ -549,7 +551,7 @@ void
 remove_draw_call(Text_renderer_data *renderer,
                  const uint32_t id)
 {
-  UTIL_ASSERT(false); // not impled yet.
+  LIB_ASSERT(false); // not impled yet.
 }
 
 
@@ -559,8 +561,8 @@ render(Text_renderer_data *renderer,
        opContext *ctx,
        opBuffer *buf)
 {
-  Draw_call *calls = (Draw_call*)util::buffer::bytes(&renderer->draw_calls);
-  const size_t number_of_calls = util::buffer::size(&renderer->draw_calls);
+  Draw_call *calls = (Draw_call*)lib::buffer::bytes(&renderer->draw_calls);
+  const size_t number_of_calls = lib::buffer::size(&renderer->draw_calls);
   
   const math::mat4 view_proj_mat = math::mat4_init_with_array(view_proj);
 
@@ -605,25 +607,25 @@ update_draw_call_matrix(Text_renderer_data *renderer,
                         const float world[16])
 {
   // -- Param Check -- //
-  UTIL_ASSERT(renderer);
-  UTIL_ASSERT(id);
-  UTIL_ASSERT(world);
+  LIB_ASSERT(renderer);
+  LIB_ASSERT(id);
+  LIB_ASSERT(world);
 
   // -- Find the record -- //
   Data::Draw_call *dc = nullptr;
   {
     size_t index = 0;
 
-    const uint32_t *ids   = (uint32_t*)util::buffer::bytes(&renderer->string_keys);
-    const size_t id_count = util::buffer::size(&renderer->string_keys);
+    const uint32_t *ids   = (uint32_t*)lib::buffer::bytes(&renderer->string_keys);
+    const size_t id_count = lib::buffer::size(&renderer->string_keys);
 
-    if(!util::id::linear_search(id, ids, id_count, &index))
+    if(!lib::id::linear_search(id, ids, id_count, &index))
     {
       LOG_WARNING("This entity has no text renderer attached.");
       return;
     }
     
-    Data::Draw_call *draw_calls = (Data::Draw_call*)util::buffer::bytes(&renderer->draw_calls);
+    Data::Draw_call *draw_calls = (Data::Draw_call*)lib::buffer::bytes(&renderer->draw_calls);
     dc = &draw_calls[index];
   }
   

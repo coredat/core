@@ -24,7 +24,7 @@
 namespace Data {
 
 
-World::World(const util::generic_id instance_id, const uint32_t entity_hint)
+World::World(const uint32_t instance_id, const uint32_t entity_hint)
 : world_instance_id(instance_id)
 {
   Data::Pending_entity_removal_data *graph_changes = new Data::Pending_entity_removal_data();
@@ -147,7 +147,7 @@ world_update_scene_graph_changes(Data::World *world_data,
 {
   for(uint32_t i = 0; i < graph_changes->size; ++i)
   {
-    const util::generic_id id = graph_changes->field_deleted_entity[i];
+    const uint32_t id = graph_changes->field_deleted_entity[i];
     
 //    entity_remove(world_data->entity, id);
 //    transform_remove(world_data->transform, id);

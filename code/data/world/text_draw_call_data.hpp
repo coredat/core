@@ -13,7 +13,6 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <systems/renderer_text/text_draw_call.hpp>
-#include <utilities/generic_id.hpp>
 
 
 namespace Data {
@@ -34,7 +33,7 @@ struct Text_draw_call_data
   ::Text_renderer::Draw_call *field_draw_call = nullptr;
 
   // model_id field data //
-  util::generic_id *field_model_id = nullptr;
+  uint32_t *field_model_id = nullptr;
 
   // size //
   size_t size = 0;
@@ -119,11 +118,11 @@ text_draw_call_get_const_draw_call_data(const Text_draw_call_data *data);
 text_draw_call_get_draw_call_data(Text_draw_call_data *data);
 
 
-const util::generic_id*
+const uint32_t*
 text_draw_call_get_const_model_id_data(const Text_draw_call_data *data);
 
 
-util::generic_id*
+uint32_t*
 text_draw_call_get_model_id_data(Text_draw_call_data *data);
 
 
@@ -155,11 +154,11 @@ text_draw_call_set_draw_call(const Text_draw_call_data *data, const uint32_t key
 
 
 bool
-text_draw_call_get_model_id(const Text_draw_call_data *data, const uint32_t key, util::generic_id *return_value);
+text_draw_call_get_model_id(const Text_draw_call_data *data, const uint32_t key, uint32_t *return_value);
 
 
 bool
-text_draw_call_set_model_id(const Text_draw_call_data *data, const uint32_t key, const util::generic_id *set_value);
+text_draw_call_set_model_id(const Text_draw_call_data *data, const uint32_t key, const uint32_t *set_value);
 
 
 

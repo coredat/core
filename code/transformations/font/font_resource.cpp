@@ -10,7 +10,7 @@
 #include <systems/text/character.hpp>
 #include <math/math.hpp>
 #include <utilities/logging.hpp>
-#include <utilities/string_helpers.hpp>
+#include <utilities/string.hpp>
 #include <op/op.hpp>
 #include <stdio.h>
 
@@ -118,7 +118,7 @@ add_new_font(const char *filename,
   {
     char font_name[256];
     memset(font_name, 0, sizeof(font_name));
-    util::filename_from_path(filename, font_name);
+    lib::string::filename_from_path(filename, font_name);
   
     font_id = Data::font_push(font_data);
     
@@ -288,7 +288,7 @@ add_glyphs(const char *glyph_arr,
 
 
 void
-create_string_data(const util::generic_id this_id,
+create_string_data(const uint32_t this_id,
                    const char *glyph_arr,
                    const size_t glyph_arr_count,
                    const uint32_t font_id,

@@ -7,7 +7,7 @@ namespace Entity_detail {
 
 
 void
-set_entity_collision_callback(const util::generic_id this_id,
+set_entity_collision_callback(const uint32_t this_id,
                               Data::Entity_data *entity_data,
                               const uintptr_t callback_ptr,
                               const uintptr_t user_data)

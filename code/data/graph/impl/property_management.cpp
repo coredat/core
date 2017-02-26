@@ -12,9 +12,9 @@ bool
 tags_set(Graph_data *graph, const uint32_t node, const uint32_t tags)
 {
   // -- Param Checks -- //
-  UTIL_ASSERT(graph);
-  UTIL_ASSERT(node);
-  UTIL_ASSERT(tags);
+  LIB_ASSERT(graph);
+  LIB_ASSERT(node);
+  LIB_ASSERT(tags);
   
   // -- Get and Set Data -- //
   size_t index = 0;
@@ -22,10 +22,10 @@ tags_set(Graph_data *graph, const uint32_t node, const uint32_t tags)
   if(graph->find_index(node, &index))
   {
     uint32_t *curr_tags(
-      (uint32_t *)util::buffer::bytes(&graph->node_tags)
+      (uint32_t *)lib::buffer::bytes(&graph->node_tags)
     );
     
-    UTIL_ASSERT(curr_tags);
+    LIB_ASSERT(curr_tags);
     
     curr_tags[index] = tags;
     
@@ -40,9 +40,9 @@ bool
 tags_get(Graph_data *graph, const uint32_t node, uint32_t *tags)
 {
  // -- Param Checks -- //
- UTIL_ASSERT(graph);
- UTIL_ASSERT(node);
- UTIL_ASSERT(tags);
+ LIB_ASSERT(graph);
+ LIB_ASSERT(node);
+ LIB_ASSERT(tags);
  
   // -- Get Data -- //
   size_t index = 0;
@@ -50,10 +50,10 @@ tags_get(Graph_data *graph, const uint32_t node, uint32_t *tags)
   if(graph->find_index(node, &index))
   {
     uint32_t *curr_tags(
-      (uint32_t *)util::buffer::bytes(&graph->node_tags)
+      (uint32_t *)lib::buffer::bytes(&graph->node_tags)
     );
     
-    UTIL_ASSERT(curr_tags);
+    LIB_ASSERT(curr_tags);
     
     *tags = curr_tags[index];
     
@@ -71,8 +71,8 @@ message_callback_set(Graph_data *graph,
                      const uintptr_t callback_fn)
 {
   // -- Param Checks -- //
-  UTIL_ASSERT(graph);
-  UTIL_ASSERT(node);
+  LIB_ASSERT(graph);
+  LIB_ASSERT(node);
   
   // -- Get and Set Data -- //
   size_t index = 0;
@@ -80,10 +80,10 @@ message_callback_set(Graph_data *graph,
   if(graph->find_index(node, &index))
   {
     Graph_callback *graph_cb(
-      (Graph_callback*)util::buffer::bytes(&graph->node_message_callbacks)
+      (Graph_callback*)lib::buffer::bytes(&graph->node_message_callbacks)
     );
     
-    UTIL_ASSERT(graph_cb);
+    LIB_ASSERT(graph_cb);
     
     graph_cb[index].user_data = user_data;
     graph_cb[index].function_ptr = callback_fn;
@@ -102,10 +102,10 @@ message_callback_get(const Graph_data *graph,
                      uintptr_t *callback_fn)
 {
   // -- Param Checks -- //
-  UTIL_ASSERT(graph);
-  UTIL_ASSERT(node);
-  UTIL_ASSERT(user_data);
-  UTIL_ASSERT(callback_fn);
+  LIB_ASSERT(graph);
+  LIB_ASSERT(node);
+  LIB_ASSERT(user_data);
+  LIB_ASSERT(callback_fn);
   
   // -- Get Data -- //
   size_t index = 0;
@@ -113,10 +113,10 @@ message_callback_get(const Graph_data *graph,
   if(graph->find_index(node, &index))
   {
     Graph_callback *graph_cb(
-      (Graph_callback*)util::buffer::bytes(&graph->node_message_callbacks)
+      (Graph_callback*)lib::buffer::bytes(&graph->node_message_callbacks)
     );
     
-    UTIL_ASSERT(graph_cb);
+    LIB_ASSERT(graph_cb);
     
     *user_data = graph_cb[index].user_data;
     *callback_fn = graph_cb[index].function_ptr;
@@ -134,9 +134,9 @@ user_data_set(Graph_data *graph,
               const uintptr_t user_data)
 {
   // -- Param Checks -- //
-  UTIL_ASSERT(graph);
-  UTIL_ASSERT(node);
-  UTIL_ASSERT(user_data);
+  LIB_ASSERT(graph);
+  LIB_ASSERT(node);
+  LIB_ASSERT(user_data);
   
   // -- Get and Set Data -- //
   size_t index = 0;
@@ -144,10 +144,10 @@ user_data_set(Graph_data *graph,
   if(graph->find_index(node, &index))
   {
     uintptr_t *curr_user_data(
-      (uintptr_t *)util::buffer::bytes(&graph->node_user_data)
+      (uintptr_t *)lib::buffer::bytes(&graph->node_user_data)
     );
     
-    UTIL_ASSERT(curr_user_data);
+    LIB_ASSERT(curr_user_data);
     
     curr_user_data[index] = user_data;
     
@@ -164,9 +164,9 @@ user_data_get(Graph_data *graph,
               uintptr_t *user_data)
 {
   // -- Param Checks -- //
-  UTIL_ASSERT(graph);
-  UTIL_ASSERT(node);
-  UTIL_ASSERT(user_data);
+  LIB_ASSERT(graph);
+  LIB_ASSERT(node);
+  LIB_ASSERT(user_data);
   
   // -- Get Data -- //
   size_t index = 0;
@@ -174,10 +174,10 @@ user_data_get(Graph_data *graph,
   if(graph->find_index(node, &index))
   {
     uintptr_t *curr_user_data(
-      (uintptr_t *)util::buffer::bytes(&graph->node_user_data)
+      (uintptr_t *)lib::buffer::bytes(&graph->node_user_data)
     );
     
-    UTIL_ASSERT(curr_user_data);
+    LIB_ASSERT(curr_user_data);
     
     *user_data = curr_user_data[index];
     

@@ -6,8 +6,7 @@
 #include <data/memory/memory_data.hpp>
 #include <data/context_data.hpp>
 #include <utilities/logging.hpp>
-#include <utilities/conversion.hpp>
-#include <utilities/threading.hpp>
+#include <utilities/convert.hpp>
 #include <common/error_strings.hpp>
 #include <transformations/input/frame_update.hpp>
 #include <math/general/general.hpp>
@@ -26,7 +25,7 @@ namespace {
   
   // only one instance allowed in an application lifetime.
   // This could change, just right now no need.
-  atomic_bool instance_created(false);
+  std::atomic_bool instance_created(false);
   
   Context_data::Input_pool core_input;
 } // anon ns
@@ -75,8 +74,8 @@ Context::Context(const uint32_t width,
   
   // Initialize memory
   {
-    constexpr size_t pool_bytes    = util::convert_mb_to_bytes(128);
-    constexpr size_t scratch_bytes = util::convert_mb_to_bytes(128);
+    constexpr size_t pool_bytes    = lib::convert::mb_to_bytes(128);
+    constexpr size_t scratch_bytes = lib::convert::mb_to_bytes(128);
     
     Memory::memory_initialize(pool_bytes, scratch_bytes);
   }

@@ -62,10 +62,10 @@ initialize()
 //    char filepath[2048];
 //    memset(filepath, 0, sizeof(filepath));
 //    
-//    strcat(filepath, util::get_resource_path().c_str());
+//    strcat(filepath, lib::get_resource_path().c_str());
 //    strcat(filepath, "assets/models/unit_cube.obj");
 //    
-//    util::obj_model model = util::load_obj(filepath);
+//    lib::obj_model model = lib::load_obj(filepath);
     
   }
 

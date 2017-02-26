@@ -6,7 +6,7 @@
 #include <utilities/buffer.hpp>
 #include <utilities/logging.hpp>
 #include <utilities/file.hpp>
-#include <utilities/string_helpers.hpp>
+#include <utilities/string.hpp>
 
 
 namespace Data {
@@ -92,15 +92,15 @@ add_font(Text_renderer_data *renderer,
   }
   
   // Generate font data.
-  util::buffer::push(&renderer->font_data);
-  const uint32_t font_id = util::buffer::size(&renderer->font_data);
+  lib::buffer::push(&renderer->font_data);
+  const uint32_t font_id = lib::buffer::size(&renderer->font_data);
   {
     const uint32_t index = font_id - 1;
     
-    Font *font = &((Font*)util::buffer::bytes(&renderer->font_data))[index];
+    Font *font = &((Font*)lib::buffer::bytes(&renderer->font_data))[index];
   
     memset(font->name, 0, sizeof(font->name));
-    util::filename_from_path(filename, font->name, sizeof(font->name));
+    lib::string::filename_from_path(filename, font->name, sizeof(font->name));
     
     font->glyph_texture_id = glyphs_texture_id;
     font->metrics_texture_id = metrics_texture_id;

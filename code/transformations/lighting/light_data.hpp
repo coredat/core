@@ -2,7 +2,7 @@
 #define LIGHT_DATA_INCLUDED_C3947FB2_FBB6_46CA_BEE4_70EE694DF181
 
 
-#include <utilities/alignment.hpp>
+#include <utilities/packing.hpp>
 
 
 namespace Lighting {

@@ -311,7 +311,7 @@ Entity_interface::send_message(const Entity_ref to,
                                const uintptr_t data) const
 {
   // -- Param Check -- //
-  UTIL_ASSERT(to);
+  LIB_ASSERT(to);
 
   auto world_data = Core_detail::world_index_get_world_data(1);
   

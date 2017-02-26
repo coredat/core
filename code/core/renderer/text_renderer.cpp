@@ -21,14 +21,14 @@ namespace Core {
 struct Text_renderer::Impl
 {
   std::string       text;
-  util::generic_id  font_id;
+  uint32_t  font_id;
 };
 
 
 Text_renderer::Text_renderer()
 : m_impl(new Impl{"", 0})
 {
-  UTIL_ASSERT(m_impl);
+  LIB_ASSERT(m_impl);
 }
 
 
@@ -36,7 +36,7 @@ Text_renderer::Text_renderer(const Font &font,
                              const char *str)
 : Text_renderer()
 {
-  UTIL_ASSERT(m_impl);
+  LIB_ASSERT(m_impl);
   
   set_font(font);
   set_text(str);
@@ -45,7 +45,7 @@ Text_renderer::Text_renderer(const Font &font,
 
 Text_renderer::~Text_renderer()
 {
-  UTIL_ASSERT(m_impl);
+  LIB_ASSERT(m_impl);
   
   delete m_impl;
 }
@@ -54,7 +54,7 @@ Text_renderer::~Text_renderer()
 Text_renderer::Text_renderer(const Text_renderer &other)
 : m_impl(new Impl{"", 0})
 {
-  UTIL_ASSERT(m_impl);
+  LIB_ASSERT(m_impl);
   
   set_font(other.get_font());
   set_text(other.get_text());
@@ -64,7 +64,7 @@ Text_renderer::Text_renderer(const Text_renderer &other)
 Text_renderer::Text_renderer(Text_renderer &&other)
 : m_impl(new Impl{"", 0})
 {
-  UTIL_ASSERT(m_impl);
+  LIB_ASSERT(m_impl);
   
   set_font(other.get_font());
   set_text(other.get_text());
@@ -77,7 +77,7 @@ Text_renderer::Text_renderer(Text_renderer &&other)
 Text_renderer&
 Text_renderer::operator=(const Text_renderer &other)
 {
-  UTIL_ASSERT(m_impl);
+  LIB_ASSERT(m_impl);
   
   set_font(other.get_font());
   set_text(other.get_text());
@@ -89,7 +89,7 @@ Text_renderer::operator=(const Text_renderer &other)
 Text_renderer&
 Text_renderer::operator=(Text_renderer &&other)
 {
-  UTIL_ASSERT(m_impl);
+  LIB_ASSERT(m_impl);
   
   set_font(other.get_font());
   set_text(other.get_text());
@@ -104,7 +104,7 @@ Text_renderer::operator=(Text_renderer &&other)
 void
 Text_renderer::set_font(const Font &font)
 {
-  UTIL_ASSERT(m_impl);
+  LIB_ASSERT(m_impl);
   
   m_impl->font_id = font.get_id();
 }
@@ -113,7 +113,7 @@ Text_renderer::set_font(const Font &font)
 Font
 Text_renderer::get_font() const
 {
-  UTIL_ASSERT(m_impl);
+  LIB_ASSERT(m_impl);
   
   return Font(m_impl->font_id);
 }
@@ -122,7 +122,7 @@ Text_renderer::get_font() const
 void
 Text_renderer::set_text(const char *str)
 {
-  UTIL_ASSERT(m_impl);
+  LIB_ASSERT(m_impl);
   
   m_impl->text = std::string(str);
 }
@@ -131,7 +131,7 @@ Text_renderer::set_text(const char *str)
 const char*
 Text_renderer::get_text() const
 {
-  UTIL_ASSERT(m_impl);
+  LIB_ASSERT(m_impl);
   
   return m_impl->text.c_str();
 }
@@ -140,22 +140,22 @@ Text_renderer::get_text() const
 void
 Text_renderer::set_text_size(const uint32_t size)
 {
-  UTIL_ASSERT(m_impl);
+  LIB_ASSERT(m_impl);
   
   LOG_TODO("Not supported yet.")
   
-  UTIL_ASSERT(false);
+  LIB_ASSERT(false);
 }
 
 
 uint32_t
 Text_renderer::get_text_size() const
 {
-  UTIL_ASSERT(m_impl);
+  LIB_ASSERT(m_impl);
   
   LOG_TODO("Not supported yet.")
   
-  UTIL_ASSERT(false);
+  LIB_ASSERT(false);
   
   return 0;
 }

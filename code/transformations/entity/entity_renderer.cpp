@@ -45,7 +45,7 @@ namespace Entity_detail {
 
 
 uint32_t
-has_renderer(const util::generic_id this_id,
+has_renderer(const uint32_t this_id,
              Data::Graph::Graph_data *entity_data)
 {
   uint32_t components(0);
@@ -58,7 +58,7 @@ has_renderer(const util::generic_id this_id,
 
 
 //void
-//set_renderer(const util::generic_id this_id,
+//set_renderer(const uint32_t this_id,
 //             Data::Graph::Graph_data *entity_data,
 //             Data::Mesh_draw_call_data *renderer_material,
 //             Data::Text_draw_call_data *text_data,
@@ -186,7 +186,7 @@ has_renderer(const util::generic_id this_id,
 
 
 Core::Renderer
-get_renderer(const util::generic_id this_id,
+get_renderer(const uint32_t this_id,
              Data::Graph::Graph_data *entity_data,
              Data::Mesh_draw_call_data *renderer_material,
              Data::Text_draw_call_data *text_draw_call_data)
@@ -224,7 +224,7 @@ get_renderer(const util::generic_id this_id,
       {
         case(Core::Renderer_type::material):
         {
-          util::generic_id mat_id = util::generic_id_invalid();
+          uint32_t mat_id = 0;
           Data::mesh_draw_call_get_material_id(renderer_material, this_id, &mat_id);
           
           Data::Mesh_renderer_draw_call draw_call;
@@ -238,7 +238,7 @@ get_renderer(const util::generic_id this_id,
         
         case(Core::Renderer_type::text):
         {
-//          util::generic_id font_id = util::generic_id_invalid();
+//          uint32_t font_id = 0;
           
           ::Text_renderer::Draw_call dc;
           
@@ -265,11 +265,11 @@ get_renderer(const util::generic_id this_id,
 
 
 void
-set_renderer_material(const util::generic_id this_id,
+set_renderer_material(const uint32_t this_id,
                       Data::Graph::Graph_data *entity_data,
                       Data::Mesh_draw_call_data *mesh_data,
-                      const util::generic_id material_id,
-                      const util::generic_id model_id)
+                      const uint32_t material_id,
+                      const uint32_t model_id)
 {
   // Check valid
   if(!is_valid(this_id, entity_data, true)) {
@@ -373,10 +373,10 @@ set_renderer_material(const util::generic_id this_id,
 
 
 void
-get_renderer_material(const util::generic_id this_id,
+get_renderer_material(const uint32_t this_id,
                       Data::Mesh_draw_call_data *mesh_data,
-                      util::generic_id *out_material_id,
-                      util::generic_id *out_model_id)
+                      uint32_t *out_material_id,
+                      uint32_t *out_model_id)
 {
   // Material and Mesh
   {
@@ -400,12 +400,12 @@ get_renderer_material(const util::generic_id this_id,
 
 
 void
-set_renderer_text(const util::generic_id this_id,
+set_renderer_text(const uint32_t this_id,
                   const char *str,
                   Data::Graph::Graph_data *entity_data,
                   Data::Text_draw_call_data *text_data,
-                  const util::generic_id font_id,
-                  const util::generic_id model_id)
+                  const uint32_t font_id,
+                  const uint32_t model_id)
 {
   // Check valid
   if(!is_valid(this_id, entity_data, true)) {

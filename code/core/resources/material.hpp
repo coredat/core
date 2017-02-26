@@ -19,7 +19,7 @@ private:
 
   friend class Material_renderer;
 
-  explicit              Material(const util::generic_id mat_id);
+  explicit              Material(const uint32_t mat_id);
 
 public:
 

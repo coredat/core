@@ -2,14 +2,13 @@
 #include <core/renderer/renderer.hpp>
 #include <core/resources/material.hpp>
 #include <core/model/model.hpp>
-#include <utilities/generic_id.hpp>
 
 
 namespace Core {
 
 
-Material_renderer::Material_renderer(const util::generic_id mat_id,
-                                     const util::generic_id model_id)
+Material_renderer::Material_renderer(const uint32_t mat_id,
+                                     const uint32_t model_id)
 : m_material_id(mat_id)
 , m_model_id(model_id)
 {
@@ -24,7 +23,7 @@ Material_renderer::Material_renderer(const Material &material,
 
 
 Material_renderer::Material_renderer()
-: Material_renderer(util::generic_id_invalid(), util::generic_id_invalid())
+: Material_renderer(0, 0)
 {
 }
 
@@ -62,14 +61,14 @@ Material_renderer::get_model() const
 }
 
 
-util::generic_id
+uint32_t
 Material_renderer::get_material_id() const
 {
   return m_material_id;
 }
 
 
-util::generic_id
+uint32_t
 Material_renderer::get_model_id() const
 {
   return m_model_id;
@@ -79,7 +78,7 @@ Material_renderer::get_model_id() const
 bool
 Material_renderer::is_valid() const
 {
-  return (m_material_id != util::generic_id_invalid() && m_model_id != util::generic_id_invalid());
+  return (m_material_id != 0 && m_model_id != 0);
 }
 
 

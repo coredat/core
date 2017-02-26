@@ -29,7 +29,7 @@ material_renderer(const math::mat4 &view_mat,
   */
   struct Draw_run
   {
-    util::generic_id  material_id = 0;
+    uint32_t  material_id = 0;
     uint32_t          start_point = 0;
     uint32_t          size = 0;
   };

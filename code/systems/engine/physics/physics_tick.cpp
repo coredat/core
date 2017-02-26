@@ -22,6 +22,7 @@
 #include <data/world/rigidbody_data.hpp>
 #include <data/world/collision_data.hpp>
 #include <data/graph/graph.hpp>
+#include <utilities/id.hpp>
 
 
 
@@ -45,7 +46,7 @@ initialize(std::shared_ptr<Data::World> world)
   world->physics_world.dynamics_world->getBroadphase()->getOverlappingPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
   
   world->physics_world.dynamics_world->setInternalTickCallback(Physics_transform::trigger_callback,
-                                                util::generic_id_to_ptr(world->world_instance_id),
+                                                lib::id::id_to_ptr(world->world_instance_id),
                                                 true);
 }
 
@@ -103,10 +104,10 @@ think(std::shared_ptr<Data::World> world, const float dt, Tick_information *out_
     {
       const uint64_t this_pair = collision_data->field_entity_pair[i];
       
-      const Core_detail::Entity_id entity_a_id = Core_detail::entity_id_from_uint(util::bits_lower(this_pair));
+      const Core_detail::Entity_id entity_a_id = Core_detail::entity_id_from_uint(lib::bits::lower32(this_pair));
       const Core::Entity_ref entity_a(entity_a_id);
       
-      const Core_detail::Entity_id entity_b_id = Core_detail::entity_id_from_uint(util::bits_upper(this_pair));
+      const Core_detail::Entity_id entity_b_id = Core_detail::entity_id_from_uint(lib::bits::upper32(this_pair));
       const Core::Entity_ref entity_b(entity_b_id);
       
       if(!entity_a || !entity_b)
@@ -154,7 +155,7 @@ think(std::shared_ptr<Data::World> world, const float dt, Tick_information *out_
           
           Data::Graph::node_get_collision_callback(
             world->scene_graph,
-            util::bits_lower(this_pair),
+            lib::bits::lower32(this_pair),
             &user_data,
             (uintptr_t*)&collision_callback
           );
@@ -167,7 +168,7 @@ think(std::shared_ptr<Data::World> world, const float dt, Tick_information *out_
 //          Data::Graph::node_get_
           
 //          Entity_detail::Callback_collision collision_callback;
-//          Data::entity_get_collision_callback(entity_data, util::bits_lower(this_pair), &collision_callback);
+//          Data::entity_get_collision_callback(entity_data, lib::bits_lower(this_pair), &collision_callback);
           
           #ifdef CORE_COLLISION_DEBUG_TEXT
           printf("Collision: %s -> %s \n", entity_a.get_name(), entity_b.get_name());

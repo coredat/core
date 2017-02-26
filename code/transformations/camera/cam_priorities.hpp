@@ -8,7 +8,6 @@
 #include <data/graph/graph.hpp>
 #include <graphics_api/ogl/ogl_frame_buffer.hpp>
 #include <math/mat/mat4.hpp>
-#include <utilities/generic_id.hpp>
 #include <stdint.h>
 #include <stddef.h>
 
@@ -55,7 +54,7 @@ calculate_camera_runs(const Data::Camera_data *cam_data,
 
 void
 get_camera_transforms(const Data::Graph::Graph_data *transform_data,
-                      const util::generic_id entity_ids[],
+                      const uint32_t entity_ids[],
                       Core::Transform out_transforms[],
                       const uint32_t size);
 

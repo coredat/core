@@ -9,21 +9,21 @@
 namespace Entity_detail {
 
 
-util::generic_id
-get_id(const util::generic_id this_id,
+uint32_t
+get_id(const uint32_t this_id,
        Data::Graph::Graph_data *entity_data)
 {
-  return is_valid(this_id, entity_data) ? this_id : util::generic_id_invalid();
+  return is_valid(this_id, entity_data) ? this_id : 0;
 }
 
 
 bool
-is_valid(const util::generic_id this_id,
+is_valid(const uint32_t this_id,
          Data::Graph::Graph_data *entity_data,
          const bool emit_error)
 {
   // Invalid data, means invalid entity.
-  if(this_id == util::generic_id_invalid()) { return false; }
+  if(this_id == 0) { return false; }
   if(!entity_data)                          { return false; }
 
   // Our id might have expired, so we need to check it.
@@ -40,7 +40,7 @@ is_valid(const util::generic_id this_id,
 
 
 void
-destroy(const util::generic_id this_id,
+destroy(const uint32_t this_id,
         Data::Graph::Graph_data *entity_data,
         Data::Pending_entity_removal_data *scene_graph_changes)
 {
@@ -59,7 +59,7 @@ destroy(const util::generic_id this_id,
 
 
 void
-update_component(const util::generic_id this_id,
+update_component(const uint32_t this_id,
                  Data::Graph::Graph_data *entity_data,
                  const uint32_t component_id)
 {

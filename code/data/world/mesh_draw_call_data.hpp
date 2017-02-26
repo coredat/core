@@ -12,7 +12,6 @@
 
 #include <stdint.h>
 #include <stddef.h>
-#include <utilities/generic_id.hpp>
 #include "todo.hpp"
 
 
@@ -31,7 +30,7 @@ struct Mesh_draw_call_data
   Mesh_renderer_draw_call *field_draw_call = nullptr;
 
   // material_id field data //
-  util::generic_id *field_material_id = nullptr;
+  uint32_t *field_material_id = nullptr;
 
   // size //
   size_t size = 0;
@@ -108,11 +107,11 @@ Mesh_renderer_draw_call*
 mesh_draw_call_get_draw_call_data(Mesh_draw_call_data *data);
 
 
-const util::generic_id*
+const uint32_t*
 mesh_draw_call_get_const_material_id_data(const Mesh_draw_call_data *data);
 
 
-util::generic_id*
+uint32_t*
 mesh_draw_call_get_material_id_data(Mesh_draw_call_data *data);
 
 
@@ -132,11 +131,11 @@ mesh_draw_call_set_draw_call(const Mesh_draw_call_data *data, const uint32_t key
 
 
 bool
-mesh_draw_call_get_material_id(const Mesh_draw_call_data *data, const uint32_t key, util::generic_id *return_value);
+mesh_draw_call_get_material_id(const Mesh_draw_call_data *data, const uint32_t key, uint32_t *return_value);
 
 
 bool
-mesh_draw_call_set_material_id(const Mesh_draw_call_data *data, const uint32_t key, const util::generic_id *set_value);
+mesh_draw_call_set_material_id(const Mesh_draw_call_data *data, const uint32_t key, const uint32_t *set_value);
 
 
 

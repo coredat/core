@@ -10,8 +10,8 @@
 #include <data/world/trigger_data.hpp>
 #include <data/world_data.hpp>
 #include <utilities/logging.hpp>
-#include <utilities/generic_id.hpp>
 #include <utilities/bits.hpp>
+#include <utilities/id.hpp>
 
 //#define EXTRA_DEBUG_INFO_TRIGGER_CALLBACK
 
@@ -32,7 +32,7 @@ trigger_callback(btDynamicsWorld *dynamicsWorld,
   assert(dynamicsWorld->getWorldUserInfo());
 
   // Data Get / Check
-  const util::generic_id world_id = util::generic_id_from_ptr(dynamicsWorld->getWorldUserInfo());
+  const uint32_t world_id = lib::id::id_from_ptr(dynamicsWorld->getWorldUserInfo());
   
   if(!world_id)
   {
@@ -117,7 +117,7 @@ trigger_callback(btDynamicsWorld *dynamicsWorld,
             
             Data::collision_set_collision_point(collision_data, collision_id, &contact);
             
-            const uint64_t entity_pair(util::bits_pack(entity_id_a, entity_id_b));
+            const uint64_t entity_pair(lib::bits::pack3232(entity_id_a, entity_id_b));
             Data::collision_set_entity_pair(collision_data, collision_id, &entity_pair);
           }
           
@@ -225,7 +225,7 @@ trigger_callback(btDynamicsWorld *dynamicsWorld,
               
               Data::collision_set_collision_point(collision_data, collision_id, &contact);
               
-              const uint64_t entity_pair(util::bits_pack(entity_id_a, entity_id_b));
+              const uint64_t entity_pair(lib::bits::pack3232(entity_id_a, entity_id_b));
               Data::collision_set_entity_pair(collision_data, collision_id, &entity_pair);
             }
           } // for contact_count
@@ -276,7 +276,7 @@ trigger_callback(btDynamicsWorld *dynamicsWorld,
             
             Data::collision_set_collision_point(collision_data, collision_id, &contact);
             
-            const uint64_t entity_pair(util::bits_pack(entity_id_a, entity_id_b));
+            const uint64_t entity_pair(lib::bits::pack3232(entity_id_a, entity_id_b));
             Data::collision_set_entity_pair(collision_data, collision_id, &entity_pair);
           }
         }
@@ -298,7 +298,7 @@ trigger_callback(btDynamicsWorld *dynamicsWorld,
             
             Data::collision_set_collision_point(collision_data, collision_id, &contact);
             
-            const uint64_t entity_pair(util::bits_pack(entity_id_b, entity_id_a));
+            const uint64_t entity_pair(lib::bits::pack3232(entity_id_b, entity_id_a));
             Data::collision_set_entity_pair(collision_data, collision_id, &entity_pair);
           }
         }

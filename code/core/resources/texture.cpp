@@ -5,7 +5,7 @@
 #include <common/error_strings.hpp>
 #include <transformations/texture/create_texture.hpp>
 #include <utilities/logging.hpp>
-#include <utilities/string_helpers.hpp>
+#include <utilities/string.hpp>
 #include <utilities/assert.hpp>
 
 
@@ -14,17 +14,17 @@ namespace Core {
 
 struct Texture::Impl
 {
-  util::generic_id texture_id;
+  uint32_t texture_id;
 };
 
 
 Texture::Texture()
-: Texture(util::generic_id_invalid())
+: Texture(uint32_t{0})
 {
 }
 
 
-Texture::Texture(const util::generic_id id)
+Texture::Texture(const uint32_t id)
 : m_impl(new Impl{id})
 {
   if(!id)
@@ -45,7 +45,7 @@ Texture::Texture(const util::generic_id id)
     if(!Data::texture_exists(texture_data, id))
     {
       LOG_WARNING(Error_string::resource_is_invalid());
-      m_impl->texture_id = util::generic_id_invalid();
+      m_impl->texture_id = 0;
     }
 
     Data::data_unlock(texture_data);
@@ -57,9 +57,9 @@ Texture::Texture(const char *filepath)
 : m_impl(new Impl)
 {
   const std::string file(filepath);
-  const std::string name(util::get_filename_from_path(filepath));
+  const std::string name(lib::string::get_dir_from_filepath(filepath));
 
-  if(!util::file::exists(filepath))
+  if(!lib::file::exists(filepath))
   {
     LOG_ERROR(Error_string::file_not_found());
     return;
@@ -99,7 +99,7 @@ Texture::Texture(const char *filepath)
       {
         Data::data_lock(tex_data);
         
-        const util::generic_id id = Data::texture_push(tex_data);
+        const uint32_t id = Data::texture_push(tex_data);
         Data::texture_set_name(tex_data, id, name.c_str(), strlen(name.c_str()));
         Data::texture_set_texture(tex_data, id, &new_texture);
         
@@ -136,7 +136,7 @@ Texture::Texture(const uint32_t width,
     {
       Data::data_lock(tex_data);
       
-      const util::generic_id id = Data::texture_push(tex_data);
+      const uint32_t id = Data::texture_push(tex_data);
       Data::texture_set_name(tex_data, id, "user_defined", strlen("user_defined"));
       Data::texture_set_texture(tex_data, id, &new_texture);
       
@@ -190,7 +190,7 @@ Texture::operator=(Texture &&other)
 namespace
 {
   Ogl::Texture
-  get_texture_data(const util::generic_id id)
+  get_texture_data(const uint32_t id)
   {
     auto resources = Data::get_context_data();
     assert(resources);
@@ -235,7 +235,7 @@ Texture::get_width() const
   if(!m_impl->texture_id)
   {
     LOG_WARNING("No texture");
-    UTIL_ASSERT_FAIL;
+    LIB_ASSERT_FAIL;
     return 0;
   }
   
@@ -251,7 +251,7 @@ Texture::get_height() const
   if(!m_impl->texture_id)
   {
     LOG_WARNING("No texture");
-    UTIL_ASSERT_FAIL;
+    LIB_ASSERT_FAIL;
     return 0;
   }
   
@@ -272,7 +272,7 @@ Texture::operator bool() const
 }
 
 
-util::generic_id
+uint32_t
 Texture::get_id() const
 {
   if(m_impl)

@@ -4,7 +4,6 @@
 
 #include <data/fwd_dec_data.hpp>
 #include <data/graph/fwd.hpp>
-#include <utilities/generic_id.hpp>
 #include <op/fwd.hpp>
 #include <stdint.h>
 #include <stddef.h>
@@ -33,7 +32,7 @@ add_glyphs(const char *glyph_arr,
 
 
 void
-create_string_data(const util::generic_id this_id,
+create_string_data(const uint32_t this_id,
                    const char *glyph_arr,
                    const size_t glyph_arr_count,
                    const uint32_t font_id,

@@ -2,7 +2,6 @@
 #define ENTITY_COMMON_INCLUDED_861E3180_911C_4588_AA68_98BD4F51CD3E
 
 
-#include <utilities/generic_id.hpp>
 #include <core/common/core_fwd.hpp>
 #include <data/fwd_dec_data.hpp>
 #include <data/graph/fwd.hpp>
@@ -12,25 +11,25 @@
 namespace Entity_detail {
 
 
-util::generic_id
-get_id(const util::generic_id this_id,
+uint32_t
+get_id(const uint32_t this_id,
        Data::Graph::Graph_data *entity_data);
 
 
 bool
-is_valid(const util::generic_id this_id,
+is_valid(const uint32_t this_id,
          Data::Graph::Graph_data *entity_data,
          const bool emit_error = false);
 
 
 void
-destroy(const util::generic_id this_id,
+destroy(const uint32_t this_id,
         Data::Graph::Graph_data *entity_data,
         Data::Pending_entity_removal_data *scene_graph_changes);
 
 
 void
-update_component(const util::generic_id this_id,
+update_component(const uint32_t this_id,
                  Data::Graph::Graph_data *entity_data,
                  const uint32_t component_id);
 

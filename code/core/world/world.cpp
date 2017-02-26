@@ -26,7 +26,7 @@ struct World::Impl
 {
   uint32_t           world_instance_id  = 0;
   Core::Context      *context           = nullptr;
-  util::timer        dt_timer;
+  lib::milliseconds  dt_timer           = 0;
   float              dt                 = 0.f;
   float              dt_mul             = 1.f;
   float              running_time       = 0.f;
@@ -42,7 +42,7 @@ struct World::Impl
     that_one->context            = nullptr;
     
     this_one->dt_timer           = that_one->dt_timer;
-    that_one->dt_timer           = util::timer();
+    that_one->dt_timer           = 0;
     
     this_one->dt                 = that_one->dt;
     that_one->dt                 = 0.f;
@@ -64,7 +64,7 @@ World::World(Context &ctx, const World_setup setup)
 {
   m_impl->world_instance_id = Core_detail::world_index_add_world_data(setup.entity_pool_size);
   m_impl->context = &ctx;
-  m_impl->dt_timer.start();
+  m_impl->dt_timer = lib::timer::get_current_time();
   
   Engine::initialize(Core_detail::world_index_get_world_data(m_impl->world_instance_id));
 }
@@ -129,8 +129,10 @@ World::think()
 {
   // Calculate delta_time
   {
-    const util::milliseconds frame_time = m_impl->dt_timer.split();
-    m_impl->dt = static_cast<float>(frame_time) / 1000.f;
+    const lib::milliseconds now = lib::timer::get_current_time();
+    const lib::milliseconds frame_time = lib::timer::get_delta(m_impl->dt_timer, now);
+    m_impl->dt = lib::timer::to_seconds(frame_time);
+    m_impl->dt_timer = now;
     
     m_impl->running_time += m_impl->dt;
   }
@@ -195,7 +197,7 @@ World::get_entity_count_in_world() const
 
 
 Entity_ref
-World::find_entity_by_id(const util::generic_id id) const
+World::find_entity_by_id(const uint32_t id) const
 {
   return Entity_ref(Core_detail::entity_id_from_uint(id));
 }

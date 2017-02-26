@@ -14,7 +14,7 @@ namespace Entity_detail {
 
 
 void
-set_light(const util::generic_id this_id,
+set_light(const uint32_t this_id,
           Data::Graph::Graph_data *entity_data,
           Data::Light_data *light_data,
           const Core::Point_light *light)
@@ -93,7 +93,7 @@ set_light(const util::generic_id this_id,
 
 
 void
-set_light_transform(const util::generic_id this_id,
+set_light_transform(const uint32_t this_id,
                     Data::Graph::Graph_data *entity_data,
                     Data::Light_data *light_data)
 {

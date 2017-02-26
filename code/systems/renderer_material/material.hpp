@@ -5,7 +5,6 @@
 #include <graphics_api/ogl/ogl_shader.hpp>
 #include <graphics_api/ogl/ogl_shader_uniform.hpp>
 #include <graphics_api/ogl/ogl_texture.hpp>
-#include <utilities/generic_id.hpp>
 
 
 namespace Material_renderer {
@@ -15,17 +14,17 @@ struct Material
 {
   Ogl::Shader shader;
 
-  util::generic_id map_01_id = 0;
+  uint32_t map_01_id = 0;
   Ogl::Texture map_01;
   Ogl::Uniform map_01_index;
 
-  util::generic_id map_02_id = 0;
+  uint32_t map_02_id = 0;
   Ogl::Uniform map_02_index;
 
-  util::generic_id map_03_id = 0;
+  uint32_t map_03_id = 0;
   Ogl::Uniform map_03_index;
 
-  util::generic_id map_04_id = 0;
+  uint32_t map_04_id = 0;
   Ogl::Uniform map_04_index;
 
   Ogl::Uniform light_array;

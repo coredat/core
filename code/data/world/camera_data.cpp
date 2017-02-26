@@ -79,19 +79,19 @@ camera_create(Camera_data *data, const size_t size_hint)
     // Alloc space for texture_id
     if(all_alloc)
     {
-      data->field_texture_id = new util::generic_id[size_hint * 1];
+      data->field_texture_id = new uint32_t[size_hint * 1];
       assert(data->field_texture_id);
       if(!data->field_texture_id) { all_alloc = false; }
-      else { memset(data->field_texture_id, 0, sizeof(util::generic_id) * size_hint * 1); }
+      else { memset(data->field_texture_id, 0, sizeof(uint32_t) * size_hint * 1); }
     }
 
     // Alloc space for post_process_id
     if(all_alloc)
     {
-      data->field_post_process_id = new util::generic_id[size_hint * 1];
+      data->field_post_process_id = new uint32_t[size_hint * 1];
       assert(data->field_post_process_id);
       if(!data->field_post_process_id) { all_alloc = false; }
-      else { memset(data->field_post_process_id, 0, sizeof(util::generic_id) * size_hint * 1); }
+      else { memset(data->field_post_process_id, 0, sizeof(uint32_t) * size_hint * 1); }
     }
   }
 
@@ -317,8 +317,8 @@ camera_resize_capacity(Camera_data *data, const size_t size_hint)
     memcpy(new_data.keys, data->keys, sizeof(uint32_t) * data->size);
     memcpy(new_data.field_priority, data->field_priority, sizeof(uint32_t) * data->size * 1);
     memcpy(new_data.field_properties, data->field_properties, sizeof(Camera_util::Camera_properties) * data->size * 1);
-    memcpy(new_data.field_texture_id, data->field_texture_id, sizeof(util::generic_id) * data->size * 1);
-    memcpy(new_data.field_post_process_id, data->field_post_process_id, sizeof(util::generic_id) * data->size * 1);
+    memcpy(new_data.field_texture_id, data->field_texture_id, sizeof(uint32_t) * data->size * 1);
+    memcpy(new_data.field_post_process_id, data->field_post_process_id, sizeof(uint32_t) * data->size * 1);
   }
 
   // Swap ptrs
@@ -335,11 +335,11 @@ camera_resize_capacity(Camera_data *data, const size_t size_hint)
     data->field_properties = new_data.field_properties;
     new_data.field_properties = old_properties;
 
-    util::generic_id *old_texture_id = data->field_texture_id;
+    uint32_t *old_texture_id = data->field_texture_id;
     data->field_texture_id = new_data.field_texture_id;
     new_data.field_texture_id = old_texture_id;
 
-    util::generic_id *old_post_process_id = data->field_post_process_id;
+    uint32_t *old_post_process_id = data->field_post_process_id;
     data->field_post_process_id = new_data.field_post_process_id;
     new_data.field_post_process_id = old_post_process_id;
   }
@@ -403,7 +403,7 @@ camera_get_properties_data(Camera_data *data)
 }
 
 
-const util::generic_id*
+const uint32_t*
 camera_get_const_texture_id_data(const Camera_data *data)
 {
   assert(data);
@@ -413,7 +413,7 @@ camera_get_const_texture_id_data(const Camera_data *data)
 }
 
 
-util::generic_id*
+uint32_t*
 camera_get_texture_id_data(Camera_data *data)
 {
   assert(data);
@@ -423,7 +423,7 @@ camera_get_texture_id_data(Camera_data *data)
 }
 
 
-const util::generic_id*
+const uint32_t*
 camera_get_const_post_process_id_data(const Camera_data *data)
 {
   assert(data);
@@ -433,7 +433,7 @@ camera_get_const_post_process_id_data(const Camera_data *data)
 }
 
 
-util::generic_id*
+uint32_t*
 camera_get_post_process_id_data(Camera_data *data)
 {
   assert(data);
@@ -563,7 +563,7 @@ camera_set_properties(const Camera_data *data, const uint32_t key, const Camera_
 
 
 bool
-camera_get_texture_id(const Camera_data *data, const uint32_t key, util::generic_id *return_value)
+camera_get_texture_id(const Camera_data *data, const uint32_t key, uint32_t *return_value)
 {
   assert(data);
   assert(key != 0);
@@ -592,7 +592,7 @@ camera_get_texture_id(const Camera_data *data, const uint32_t key, util::generic
 
 
 bool
-camera_set_texture_id(const Camera_data *data, const uint32_t key, const util::generic_id *set_value)
+camera_set_texture_id(const Camera_data *data, const uint32_t key, const uint32_t *set_value)
 {
   assert(data);
   assert(key != 0);
@@ -620,7 +620,7 @@ camera_set_texture_id(const Camera_data *data, const uint32_t key, const util::g
 
 
 bool
-camera_get_post_process_id(const Camera_data *data, const uint32_t key, util::generic_id *return_value)
+camera_get_post_process_id(const Camera_data *data, const uint32_t key, uint32_t *return_value)
 {
   assert(data);
   assert(key != 0);
@@ -649,7 +649,7 @@ camera_get_post_process_id(const Camera_data *data, const uint32_t key, util::ge
 
 
 bool
-camera_set_post_process_id(const Camera_data *data, const uint32_t key, const util::generic_id *set_value)
+camera_set_post_process_id(const Camera_data *data, const uint32_t key, const uint32_t *set_value)
 {
   assert(data);
   assert(key != 0);

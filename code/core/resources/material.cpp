@@ -19,7 +19,7 @@ namespace Core {
 
 struct Material::Impl
 {
-  util::generic_id material_id;
+  uint32_t material_id;
 };
 
 
@@ -29,7 +29,7 @@ Material::Material()
 }
 
 
-Material::Material(const util::generic_id id)
+Material::Material(const uint32_t id)
 : m_impl(new Impl{id})
 {
 }
@@ -68,7 +68,7 @@ Material::Material(const char *name)
     }
     else
     {
-      const util::generic_id id = Data::material_push(mat_data);
+      const uint32_t id = Data::material_push(mat_data);
       Data::material_set_name(mat_data, id, name, strlen(name));
       
       // Set instance id in the hash key
@@ -283,7 +283,7 @@ Material::get_map_01() const
   ::Material_renderer::Material mat;
   Data::material_get_material(mat_data, m_impl->material_id, &mat);
   
-  const util::generic_id map_id = mat.map_01_id;
+  const uint32_t map_id = mat.map_01_id;
   
   Data::data_unlock(mat_data);
   Data::data_unlock(tex_data);

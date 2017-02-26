@@ -1,5 +1,5 @@
 #include <common/fixed_string_search.hpp>
-#include <utilities/string_helpers.hpp>
+#include <utilities/string.hpp>
 
 
 namespace Common {

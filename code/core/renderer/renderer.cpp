@@ -27,9 +27,9 @@ Renderer::Renderer(uint32_t id)
 //
 //
 //Renderer::Renderer(const uint32_t renderer_type,
-//                   const util::generic_id arg_01,
-//                   const util::generic_id arg_02,
-//                   const util::generic_id arg_03)
+//                   const uint32_t arg_01,
+//                   const uint32_t arg_02,
+//                   const uint32_t arg_03)
 //: m_renderer_type(renderer_type)
 //, m_arg_01(arg_01)
 //, m_arg_02(arg_02)
@@ -76,21 +76,21 @@ Renderer::Renderer(uint32_t id)
 //}
 //
 //
-//util::generic_id
+//uint32_t
 //Renderer::get_arg_01() const
 //{
 //  return m_arg_01;
 //}
 //
 //
-//util::generic_id
+//uint32_t
 //Renderer::get_arg_02() const
 //{
 //  return m_arg_02;
 //}
 //
 //
-//util::generic_id
+//uint32_t
 //Renderer::get_arg_03() const
 //{
 //  return m_arg_03;

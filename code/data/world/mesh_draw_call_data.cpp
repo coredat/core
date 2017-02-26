@@ -70,10 +70,10 @@ mesh_draw_call_create(Mesh_draw_call_data *data, const size_t size_hint)
     // Alloc space for material_id
     if(all_alloc)
     {
-      data->field_material_id = new util::generic_id[size_hint * 1];
+      data->field_material_id = new uint32_t[size_hint * 1];
       assert(data->field_material_id);
       if(!data->field_material_id) { all_alloc = false; }
-      else { memset(data->field_material_id, 0, sizeof(util::generic_id) * size_hint * 1); }
+      else { memset(data->field_material_id, 0, sizeof(uint32_t) * size_hint * 1); }
     }
   }
 
@@ -286,7 +286,7 @@ mesh_draw_call_resize_capacity(Mesh_draw_call_data *data, const size_t size_hint
   {
     memcpy(new_data.keys, data->keys, sizeof(uint32_t) * data->size);
     memcpy(new_data.field_draw_call, data->field_draw_call, sizeof(Mesh_renderer_draw_call) * data->size * 1);
-    memcpy(new_data.field_material_id, data->field_material_id, sizeof(util::generic_id) * data->size * 1);
+    memcpy(new_data.field_material_id, data->field_material_id, sizeof(uint32_t) * data->size * 1);
   }
 
   // Swap ptrs
@@ -299,7 +299,7 @@ mesh_draw_call_resize_capacity(Mesh_draw_call_data *data, const size_t size_hint
     data->field_draw_call = new_data.field_draw_call;
     new_data.field_draw_call = old_draw_call;
 
-    util::generic_id *old_material_id = data->field_material_id;
+    uint32_t *old_material_id = data->field_material_id;
     data->field_material_id = new_data.field_material_id;
     new_data.field_material_id = old_material_id;
   }
@@ -343,7 +343,7 @@ mesh_draw_call_get_draw_call_data(Mesh_draw_call_data *data)
 }
 
 
-const util::generic_id*
+const uint32_t*
 mesh_draw_call_get_const_material_id_data(const Mesh_draw_call_data *data)
 {
   assert(data);
@@ -353,7 +353,7 @@ mesh_draw_call_get_const_material_id_data(const Mesh_draw_call_data *data)
 }
 
 
-util::generic_id*
+uint32_t*
 mesh_draw_call_get_material_id_data(Mesh_draw_call_data *data)
 {
   assert(data);
@@ -426,7 +426,7 @@ mesh_draw_call_set_draw_call(const Mesh_draw_call_data *data, const uint32_t key
 
 
 bool
-mesh_draw_call_get_material_id(const Mesh_draw_call_data *data, const uint32_t key, util::generic_id *return_value)
+mesh_draw_call_get_material_id(const Mesh_draw_call_data *data, const uint32_t key, uint32_t *return_value)
 {
   assert(data);
   assert(key != 0);
@@ -455,7 +455,7 @@ mesh_draw_call_get_material_id(const Mesh_draw_call_data *data, const uint32_t k
 
 
 bool
-mesh_draw_call_set_material_id(const Mesh_draw_call_data *data, const uint32_t key, const util::generic_id *set_value)
+mesh_draw_call_set_material_id(const Mesh_draw_call_data *data, const uint32_t key, const uint32_t *set_value)
 {
   assert(data);
   assert(key != 0);

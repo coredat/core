@@ -94,19 +94,19 @@ font_create(Font_data *data, const size_t size_hint)
     // Alloc space for glyph_texture_id
     if(all_alloc)
     {
-      data->field_glyph_texture_id = new util::generic_id[size_hint * 1];
+      data->field_glyph_texture_id = new uint32_t[size_hint * 1];
       assert(data->field_glyph_texture_id);
       if(!data->field_glyph_texture_id) { all_alloc = false; }
-      else { memset(data->field_glyph_texture_id, 0, sizeof(util::generic_id) * size_hint * 1); }
+      else { memset(data->field_glyph_texture_id, 0, sizeof(uint32_t) * size_hint * 1); }
     }
 
     // Alloc space for metric_texture_id
     if(all_alloc)
     {
-      data->field_metric_texture_id = new util::generic_id[size_hint * 1];
+      data->field_metric_texture_id = new uint32_t[size_hint * 1];
       assert(data->field_metric_texture_id);
       if(!data->field_metric_texture_id) { all_alloc = false; }
-      else { memset(data->field_metric_texture_id, 0, sizeof(util::generic_id) * size_hint * 1); }
+      else { memset(data->field_metric_texture_id, 0, sizeof(uint32_t) * size_hint * 1); }
     }
   }
 
@@ -303,8 +303,8 @@ font_resize_capacity(Font_data *data, const size_t size_hint)
     memcpy(new_data.field_name, data->field_name, sizeof(char) * data->size * 32);
     memcpy(new_data.field_font_face, data->field_font_face, sizeof(stbtt_fontinfo) * data->size * 1);
     memcpy(new_data.field_font_bitmap, data->field_font_bitmap, sizeof(Text::Font_bitmap) * data->size * 1);
-    memcpy(new_data.field_glyph_texture_id, data->field_glyph_texture_id, sizeof(util::generic_id) * data->size * 1);
-    memcpy(new_data.field_metric_texture_id, data->field_metric_texture_id, sizeof(util::generic_id) * data->size * 1);
+    memcpy(new_data.field_glyph_texture_id, data->field_glyph_texture_id, sizeof(uint32_t) * data->size * 1);
+    memcpy(new_data.field_metric_texture_id, data->field_metric_texture_id, sizeof(uint32_t) * data->size * 1);
   }
 
   // Swap ptrs
@@ -325,11 +325,11 @@ font_resize_capacity(Font_data *data, const size_t size_hint)
     data->field_font_bitmap = new_data.field_font_bitmap;
     new_data.field_font_bitmap = old_font_bitmap;
 
-    util::generic_id *old_glyph_texture_id = data->field_glyph_texture_id;
+    uint32_t *old_glyph_texture_id = data->field_glyph_texture_id;
     data->field_glyph_texture_id = new_data.field_glyph_texture_id;
     new_data.field_glyph_texture_id = old_glyph_texture_id;
 
-    util::generic_id *old_metric_texture_id = data->field_metric_texture_id;
+    uint32_t *old_metric_texture_id = data->field_metric_texture_id;
     data->field_metric_texture_id = new_data.field_metric_texture_id;
     new_data.field_metric_texture_id = old_metric_texture_id;
   }
@@ -413,7 +413,7 @@ font_get_font_bitmap_data(Font_data *data)
 }
 
 
-const util::generic_id*
+const uint32_t*
 font_get_const_glyph_texture_id_data(const Font_data *data)
 {
   assert(data);
@@ -423,7 +423,7 @@ font_get_const_glyph_texture_id_data(const Font_data *data)
 }
 
 
-util::generic_id*
+uint32_t*
 font_get_glyph_texture_id_data(Font_data *data)
 {
   assert(data);
@@ -433,7 +433,7 @@ font_get_glyph_texture_id_data(Font_data *data)
 }
 
 
-const util::generic_id*
+const uint32_t*
 font_get_const_metric_texture_id_data(const Font_data *data)
 {
   assert(data);
@@ -443,7 +443,7 @@ font_get_const_metric_texture_id_data(const Font_data *data)
 }
 
 
-util::generic_id*
+uint32_t*
 font_get_metric_texture_id_data(Font_data *data)
 {
   assert(data);
@@ -630,7 +630,7 @@ font_set_font_bitmap(const Font_data *data, const uint32_t key, const Text::Font
 
 
 bool
-font_get_glyph_texture_id(const Font_data *data, const uint32_t key, util::generic_id *return_value)
+font_get_glyph_texture_id(const Font_data *data, const uint32_t key, uint32_t *return_value)
 {
   assert(data);
   assert(key != 0);
@@ -659,7 +659,7 @@ font_get_glyph_texture_id(const Font_data *data, const uint32_t key, util::gener
 
 
 bool
-font_set_glyph_texture_id(const Font_data *data, const uint32_t key, const util::generic_id *set_value)
+font_set_glyph_texture_id(const Font_data *data, const uint32_t key, const uint32_t *set_value)
 {
   assert(data);
   assert(key != 0);
@@ -687,7 +687,7 @@ font_set_glyph_texture_id(const Font_data *data, const uint32_t key, const util:
 
 
 bool
-font_get_metric_texture_id(const Font_data *data, const uint32_t key, util::generic_id *return_value)
+font_get_metric_texture_id(const Font_data *data, const uint32_t key, uint32_t *return_value)
 {
   assert(data);
   assert(key != 0);
@@ -716,7 +716,7 @@ font_get_metric_texture_id(const Font_data *data, const uint32_t key, util::gene
 
 
 bool
-font_set_metric_texture_id(const Font_data *data, const uint32_t key, const util::generic_id *set_value)
+font_set_metric_texture_id(const Font_data *data, const uint32_t key, const uint32_t *set_value)
 {
   assert(data);
   assert(key != 0);

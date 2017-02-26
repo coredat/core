@@ -118,7 +118,7 @@ protected:
 
   void                        copy(const Entity_interface &other);
   void                        move(Entity_interface &other);
-  util::generic_id            create_entity(const Core::World &world);
+  uint32_t            create_entity(const Core::World &world);
     
 private:
 

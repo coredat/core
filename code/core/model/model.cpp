@@ -9,7 +9,7 @@
 #include <utilities/file.hpp>
 #include <utilities/obj_model_loader.hpp>
 #include <utilities/logging.hpp>
-#include <utilities/string_helpers.hpp>
+#include <utilities/string.hpp>
 #include <graphics_api/mesh.hpp>
 
 
@@ -49,7 +49,7 @@ Model::Model(const uint32_t id)
     if(!Data::mesh_exists(mesh_data, id))
     {
       LOG_WARNING(Error_string::resource_is_invalid());
-      m_impl->mesh_id = util::generic_id_invalid();
+      m_impl->mesh_id = 0;
     }
 
     Data::data_unlock(mesh_data);
@@ -61,9 +61,9 @@ Model::Model(const char *filename)
 : m_impl(new Impl)
 {
   const std::string file(filename);
-  const std::string name(util::get_filename_from_path(file));
+  const std::string name(lib::string::get_dir_from_filepath(file));
   
-  if(!util::file::exists(filename))
+  if(!lib::file::exists(filename))
   {
     LOG_ERROR(Error_string::file_not_found());
     return;
@@ -77,7 +77,7 @@ Model::Model(const char *filename)
 
   // Check if id already exists, avoid loading the mesh again.
   {
-    m_impl->mesh_id = util::generic_id_invalid();
+    m_impl->mesh_id = 0;
   
     Data::data_lock(mesh_data);
     
@@ -104,7 +104,7 @@ Model::Model(const char *filename)
     }
   }
   
-  const util::obj_model model(util::load_obj(file));
+  const lib::obj_model model(lib::load_obj(file));
   
   // No data.
   if(model.meshes.empty())
@@ -120,7 +120,7 @@ Model::Model(const char *filename)
     std::vector<float> norm(std::begin(model.meshes.at(0).normals), std::end(model.meshes.at(0).normals));
     std::vector<float> tex_c(std::begin(model.meshes.at(0).uvs), std::end(model.meshes.at(0).uvs));
     std::vector<uint32_t> ind(std::begin(model.meshes.at(0).index), std::end(model.meshes.at(0).index));
-    const util::gl_mesh imported_mesh = util::create_open_gl_mesh(pos, tex_c, norm, ind);
+    const lib::gl_mesh imported_mesh = lib::create_open_gl_mesh(pos, tex_c, norm, ind);
 
     // Create graphics mesh and insert it.
     {
@@ -135,7 +135,7 @@ Model::Model(const char *filename)
       
       Data::data_lock(mesh_data);
       
-      const util::generic_id id = Data::mesh_push(mesh_data);
+      const uint32_t id = Data::mesh_push(mesh_data);
       Data::mesh_set_mesh(mesh_data, id, &mesh);
       Data::mesh_set_aabb(mesh_data, id, &model_aabb);
       Data::mesh_set_name(mesh_data, id, name.c_str(), strlen(name.c_str()));

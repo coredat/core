@@ -8,7 +8,7 @@ namespace Debug_menu {
 
 
 void
-display_memory_useage(util::memory_pool *data)
+display_memory_useage(lib::memory_pool *data)
 {
   ImGui::Begin("Memory Useage");
   {
@@ -16,10 +16,10 @@ display_memory_useage(util::memory_pool *data)
   
     ImGui::BeginChild("scrolling", ImVec2(0,45), true, ImGuiWindowFlags_HorizontalScrollbar);
     
-    const size_t num_buttons = util::memory_pool_get_number_of_chunks(data);
+    const size_t num_buttons = lib::memory_pool_get_number_of_chunks(data);
     for (size_t n = 0; n < num_buttons; n++)
     {
-      util::memory_chunk chunk = util::memory_pool_get_chunk_by_index(data, n);
+      lib::memory_chunk chunk = lib::memory_pool_get_chunk_by_index(data, n);
     
       if (n > 0) ImGui::SameLine();
       ImGui::PushID(n * 1000);

@@ -13,7 +13,6 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <systems/camera/camera_properties.hpp>
-#include <utilities/generic_id.hpp>
 
 
 namespace Data {
@@ -34,10 +33,10 @@ struct Camera_data
   Camera_util::Camera_properties *field_properties = nullptr;
 
   // texture_id field data //
-  util::generic_id *field_texture_id = nullptr;
+  uint32_t *field_texture_id = nullptr;
 
   // post_process_id field data //
-  util::generic_id *field_post_process_id = nullptr;
+  uint32_t *field_post_process_id = nullptr;
 
   // size //
   size_t size = 0;
@@ -122,19 +121,19 @@ Camera_util::Camera_properties*
 camera_get_properties_data(Camera_data *data);
 
 
-const util::generic_id*
+const uint32_t*
 camera_get_const_texture_id_data(const Camera_data *data);
 
 
-util::generic_id*
+uint32_t*
 camera_get_texture_id_data(Camera_data *data);
 
 
-const util::generic_id*
+const uint32_t*
 camera_get_const_post_process_id_data(const Camera_data *data);
 
 
-util::generic_id*
+uint32_t*
 camera_get_post_process_id_data(Camera_data *data);
 
 
@@ -164,21 +163,21 @@ camera_set_properties(const Camera_data *data, const uint32_t key, const Camera_
 
 
 bool
-camera_get_texture_id(const Camera_data *data, const uint32_t key, util::generic_id *return_value);
+camera_get_texture_id(const Camera_data *data, const uint32_t key, uint32_t *return_value);
 
 
 bool
-camera_set_texture_id(const Camera_data *data, const uint32_t key, const util::generic_id *set_value);
+camera_set_texture_id(const Camera_data *data, const uint32_t key, const uint32_t *set_value);
 
 
 
 
 bool
-camera_get_post_process_id(const Camera_data *data, const uint32_t key, util::generic_id *return_value);
+camera_get_post_process_id(const Camera_data *data, const uint32_t key, uint32_t *return_value);
 
 
 bool
-camera_set_post_process_id(const Camera_data *data, const uint32_t key, const util::generic_id *set_value);
+camera_set_post_process_id(const Camera_data *data, const uint32_t key, const uint32_t *set_value);
 
 
 

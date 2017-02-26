@@ -5,33 +5,32 @@
 #include <core/common/core_fwd.hpp>
 #include <data/fwd_dec_data.hpp>
 #include <data/graph/fwd.hpp>
-#include <utilities/generic_id.hpp>
 
 
 namespace Entity_detail {
 
 
 void
-set_camera(const util::generic_id this_id,
+set_camera(const uint32_t this_id,
            Data::Graph::Graph_data *entity_data,
            Data::Camera_data *camera_data,
            const Core::Camera *camera);
 
 
 void
-get_camera(const util::generic_id this_id,
+get_camera(const uint32_t this_id,
            const Data::Camera_data *camera_data,
            Core::Camera *out_camera);
 
 
 void
-remove_camera(const util::generic_id this_id,
+remove_camera(const uint32_t this_id,
               Data::Graph::Graph_data *entity_data,
               Data::Camera_data *camera_data);
   
 
 bool
-has_camera(const util::generic_id this_id,
+has_camera(const uint32_t this_id,
            Data::Camera_data *camera_data);
 
 

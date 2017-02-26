@@ -8,7 +8,7 @@ namespace Text {
 uint32_t
 create_glyph_id(const uint16_t font_id, const uint16_t codepoint)
 {
-  return util::bits_pack(font_id, codepoint);
+  return lib::bits::pack3232(font_id, codepoint);
 }
 
 

@@ -15,8 +15,8 @@ aabb_set(Graph_data *graph,
          const math::aabb aabb)
 {
   // -- Param Check -- //
-  UTIL_ASSERT(graph);
-  UTIL_ASSERT(node);
+  LIB_ASSERT(graph);
+  LIB_ASSERT(node);
   
   // -- Get and Set Data -- //
   size_t index = 0;
@@ -24,10 +24,10 @@ aabb_set(Graph_data *graph,
   if(graph->find_index(node, &index))
   {
     math::aabb *aabbs(
-      (math::aabb *)util::buffer::bytes(&graph->node_aabb)
+      (math::aabb *)lib::buffer::bytes(&graph->node_aabb)
     );
     
-    UTIL_ASSERT(aabbs);
+    LIB_ASSERT(aabbs);
     
     aabbs[index] = aabb;
     
@@ -44,9 +44,9 @@ aabb_get(const Graph_data *graph,
          math::aabb *aabb)
 {
   // -- Param Check -- //
-  UTIL_ASSERT(graph);
-  UTIL_ASSERT(node);
-  UTIL_ASSERT(aabb);
+  LIB_ASSERT(graph);
+  LIB_ASSERT(node);
+  LIB_ASSERT(aabb);
   
   // -- Get and Set Data -- //
   size_t index = 0;
@@ -54,10 +54,10 @@ aabb_get(const Graph_data *graph,
   if(graph->find_index(node, &index))
   {
     const math::aabb *aabbs(
-      (const math::aabb *)util::buffer::bytes(&graph->node_aabb)
+      (const math::aabb *)lib::buffer::bytes(&graph->node_aabb)
     );
     
-    UTIL_ASSERT(aabbs);
+    LIB_ASSERT(aabbs);
     
     *aabb = aabbs[index];
     

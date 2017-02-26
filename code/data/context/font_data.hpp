@@ -14,7 +14,6 @@
 #include <stddef.h>
 #include <3rdparty/stb/stb_truetype.h>
 #include <systems/text/font_bitmap.hpp>
-#include <utilities/generic_id.hpp>
 
 
 namespace Data {
@@ -38,10 +37,10 @@ struct Font_data
   Text::Font_bitmap *field_font_bitmap = nullptr;
 
   // glyph_texture_id field data //
-  util::generic_id *field_glyph_texture_id = nullptr;
+  uint32_t *field_glyph_texture_id = nullptr;
 
   // metric_texture_id field data //
-  util::generic_id *field_metric_texture_id = nullptr;
+  uint32_t *field_metric_texture_id = nullptr;
 
   // size //
   size_t size = 0;
@@ -130,19 +129,19 @@ Text::Font_bitmap*
 font_get_font_bitmap_data(Font_data *data);
 
 
-const util::generic_id*
+const uint32_t*
 font_get_const_glyph_texture_id_data(const Font_data *data);
 
 
-util::generic_id*
+uint32_t*
 font_get_glyph_texture_id_data(Font_data *data);
 
 
-const util::generic_id*
+const uint32_t*
 font_get_const_metric_texture_id_data(const Font_data *data);
 
 
-util::generic_id*
+uint32_t*
 font_get_metric_texture_id_data(Font_data *data);
 
 
@@ -184,21 +183,21 @@ font_set_font_bitmap(const Font_data *data, const uint32_t key, const Text::Font
 
 
 bool
-font_get_glyph_texture_id(const Font_data *data, const uint32_t key, util::generic_id *return_value);
+font_get_glyph_texture_id(const Font_data *data, const uint32_t key, uint32_t *return_value);
 
 
 bool
-font_set_glyph_texture_id(const Font_data *data, const uint32_t key, const util::generic_id *set_value);
+font_set_glyph_texture_id(const Font_data *data, const uint32_t key, const uint32_t *set_value);
 
 
 
 
 bool
-font_get_metric_texture_id(const Font_data *data, const uint32_t key, util::generic_id *return_value);
+font_get_metric_texture_id(const Font_data *data, const uint32_t key, uint32_t *return_value);
 
 
 bool
-font_set_metric_texture_id(const Font_data *data, const uint32_t key, const util::generic_id *set_value);
+font_set_metric_texture_id(const Font_data *data, const uint32_t key, const uint32_t *set_value);
 
 
 

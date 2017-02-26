@@ -3,8 +3,10 @@
 #include <math/general/general.hpp>
 #include <utilities/directory.hpp>
 #include <utilities/file.hpp>
-#include <utilities/string_helpers.hpp>
+#include <utilities/string.hpp>
 #include <utilities/logging.hpp>
+#include <utilities/platform.hpp>
+#include <data/common/directories.hpp>
 #include <assert.h>
 #include <stddef.h>
 
@@ -71,35 +73,35 @@ initialize(opContext *ctx, opBuffer *buf)
   
   flip_line_data();
 
-  char debug_lines_shd_path[MAX_FILE_PATH_SIZE];
+  char debug_lines_shd_path[LIB_MAX_FILE_PATH_SIZE];
   {
     memset(debug_lines_shd_path, 0, sizeof(debug_lines_shd_path));
-    strcat(debug_lines_shd_path, util::dir::resource_path());
-    strcat(debug_lines_shd_path, "assets/shaders/core_debug_line.ogl");
+    strcat(debug_lines_shd_path, Common::Dir::assets());
+    strcat(debug_lines_shd_path, "shaders/core_debug_line.ogl");
   }
   
   char shader_code[2048];
   {
     memset(shader_code, 0, sizeof(shader_code));
-    util::file::get_contents_from_file(debug_lines_shd_path, shader_code, sizeof(shader_code));
+    lib::file::get_contents(debug_lines_shd_path, shader_code, sizeof(shader_code));
   }
   
   char vs_code[1024];
   {
     memset(vs_code, 0, sizeof(vs_code));
-    util::get_text_between_tags("/* VERT_SHD */", "/* VERT_SHD */", shader_code, vs_code, sizeof(vs_code));
+    lib::string::get_text_between_tags("/* VERT_SHD */", "/* VERT_SHD */", shader_code, vs_code, sizeof(vs_code));
   }
 
   char gs_code[1024];
   {
     memset(gs_code, 0, sizeof(gs_code));
-    util::get_text_between_tags("/* GEO_SHD */", "/* GEO_SHD */", shader_code, gs_code, sizeof(gs_code));
+    lib::string::get_text_between_tags("/* GEO_SHD */", "/* GEO_SHD */", shader_code, gs_code, sizeof(gs_code));
   }
   
   char fs_code[1024];
   {
     memset(fs_code, 0, sizeof(fs_code));
-    util::get_text_between_tags("/* FRAG_SHD */", "/* FRAG_SHD */", shader_code, fs_code, sizeof(fs_code));
+    lib::string::get_text_between_tags("/* FRAG_SHD */", "/* FRAG_SHD */", shader_code, fs_code, sizeof(fs_code));
   }
   
   opShaderDesc shader_desc;

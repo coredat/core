@@ -3,7 +3,7 @@
 
 
 #include <utilities/buffer.hpp>
-#include <utilities/id32.hpp>
+#include <utilities/id.hpp>
 #include <utilities/logging.hpp>
 #include <stddef.h>
 
@@ -20,23 +20,23 @@ struct Graph_callback
 
 struct Graph_data
 {
-  util::buffer::data node_ids;
+  lib::buffer::data node_ids;
   
   /*
     Internal use.
   */
-  util::buffer::data node_callbacks;
-  util::buffer::data node_aabb;
-  util::buffer::data node_components;
+  lib::buffer::data node_callbacks;
+  lib::buffer::data node_aabb;
+  lib::buffer::data node_components;
   
   /*
     External and Internal use.
   */
-  util::buffer::data node_tags;
-  util::buffer::data node_transform;
-  util::buffer::data node_user_data;
-  util::buffer::data node_collision_callbacks;
-  util::buffer::data node_message_callbacks;
+  lib::buffer::data node_tags;
+  lib::buffer::data node_transform;
+  lib::buffer::data node_user_data;
+  lib::buffer::data node_collision_callbacks;
+  lib::buffer::data node_message_callbacks;
   
   /*
     Instance counter.
@@ -58,12 +58,12 @@ struct Graph_data
 //      return true;
 //    }
     
-    const uint32_t *ids = (const uint32_t*)util::buffer::bytes(&node_ids);
-    size_t count = util::buffer::size(&node_ids);
+    const uint32_t *ids = (const uint32_t*)lib::buffer::bytes(&node_ids);
+    size_t count = lib::buffer::size(&node_ids);
     
     LOG_TODO_ONCE("Make a bin search");
     
-    if(util::id::linear_search(instance, ids, count, &index_cache))
+    if(lib::id::linear_search(instance, ids, count, &index_cache))
     {
       *index = index_cache;
       return true;

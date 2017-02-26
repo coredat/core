@@ -3,7 +3,6 @@
 
 
 #include <math/math.hpp>
-#include <utilities/generic_id.hpp>
 
 
 namespace Physics_engine {
@@ -11,14 +10,14 @@ namespace Physics_engine {
 
 struct Collision_pair
 {
-  util::generic_id obj_a;
-  util::generic_id obj_b;
+  uint32_t obj_a;
+  uint32_t obj_b;
 };
 
 
 void
 get_collisions(
-  const util::generic_id ids[],
+  const uint32_t ids[],
   const math::transform transforms[],
   const math::aabb aabbs[],
   const uint32_t number_of_entities_to_test,
@@ -30,7 +29,7 @@ get_collisions(
 
 void
 get_collisions(
-  const util::generic_id ids[],
+  const uint32_t ids[],
   const math::transform transforms[],
   const math::aabb aabbs[],
   const uint32_t number_of_entities_to_test,

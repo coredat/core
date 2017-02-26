@@ -5,7 +5,6 @@
 #include <math/geometry/geometry_types.hpp>
 #include <math/transform/transform_types.hpp>
 #include <systems/physics_engine/collision/axis_collidable.hpp>
-#include <utilities/generic_id.hpp>
 #include <stdint.h>
 
 
@@ -17,13 +16,13 @@ namespace Transformation {
   the results are only valid for one frame.
 */
 void
-get_overlapping(const util::generic_id ids[],
+get_overlapping(const uint32_t ids[],
                 const uint64_t collision_ids[],
                 const math::aabb colliders[],
                 const math::transform transforms[],
                 const size_t number_of_bounds,
                 Physics::Collision::Axis_collidable *volatile_out_axis_collidables[],
-                util::generic_id *volatile_out_ids[],
+                uint32_t *volatile_out_ids[],
                 size_t *volatile_out_size);
 
 

@@ -26,7 +26,7 @@ Post_process::Post_process(const char *name)
   // Search to see if it exists, else add a new one.
   auto post_data = Data::get_context_data()->post_process_data;
   
-  util::generic_id search_id = util::generic_id_invalid();
+  uint32_t search_id = 0;
   Data::data_lock(post_data);
   
   if(Common::fixed_string_search(name,

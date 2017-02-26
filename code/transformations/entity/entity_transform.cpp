@@ -24,7 +24,7 @@ namespace {
 
 
 inline void
-update_mesh_renderer(const util::generic_id this_id,
+update_mesh_renderer(const uint32_t this_id,
                      Data::Mesh_draw_call_data *mesh_data,
                      const math::transform *transform)
 {
@@ -52,7 +52,7 @@ update_mesh_renderer(const util::generic_id this_id,
 
 
 inline void
-udpate_text_renderer(const util::generic_id this_id,
+udpate_text_renderer(const uint32_t this_id,
                      Data::Text_draw_call_data *text_data,
                      const math::transform *transform)
 {
@@ -89,7 +89,7 @@ udpate_text_renderer(const util::generic_id this_id,
 
 
 void
-set_transform(const util::generic_id this_id,
+set_transform(const uint32_t this_id,
               Data::Graph::Graph_data *entity_data,
               Data::Rigidbody_data *rb_data,
               Bullet_data::World *phy_world,
@@ -161,7 +161,7 @@ set_transform(const util::generic_id this_id,
 
 
 Core::Transform
-get_core_transform(const util::generic_id this_id,
+get_core_transform(const uint32_t this_id,
                    Data::Graph::Graph_data *entity_data,
                    const Data::Transform_data *transform_data)
 {
@@ -186,7 +186,7 @@ get_core_transform(const util::generic_id this_id,
 
 
 math::transform
-get_transform(const util::generic_id this_id,
+get_transform(const uint32_t this_id,
               Data::Graph::Graph_data *entity_data,
               const Data::Transform_data *transform_data)
 {

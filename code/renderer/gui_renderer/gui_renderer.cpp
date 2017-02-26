@@ -11,7 +11,9 @@
 #include <graphics_api/utils/shader_utils.hpp>
 #include <graphics_api/ogl/ogl_blend.hpp>
 #include <utilities/directory.hpp>
+#include <utilities/platform.hpp>
 #include <utilities/file.hpp>
+#include <data/common/directories.hpp>
 #include <assert.h>
 
 
@@ -40,12 +42,12 @@ initialize()
 
   // Load shader
   {
-    char shader_path[MAX_FILE_PATH_SIZE];
+    char shader_path[LIB_MAX_FILE_PATH_SIZE];
     {
       memset(shader_path, 0, sizeof(shader_path));
       
-      strcat(shader_path, util::dir::resource_path());
-      strcat(shader_path, "assets/shaders/gui.ogl");
+      strcat(shader_path, Common::Dir::assets());
+      strcat(shader_path, "shaders/gui.ogl");
     }
     
     const auto gui_code = Graphics_api::Util::shader_code_from_tagged_file(shader_path);

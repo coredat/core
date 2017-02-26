@@ -7,7 +7,7 @@
 #include <data/renderers/text/text_renderer.hpp>
 #include <core/world/detail/world_index.hpp>
 #include <common/fixed_string_search.hpp>
-#include <utilities/string_helpers.hpp>
+#include <utilities/string.hpp>
 #include <3rdparty/stb/stb_truetype.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -44,7 +44,7 @@ Font::Font(const char *filename)
 
   char font_name[256];
   memset(font_name, 0, sizeof(font_name));
-  util::filename_from_path(filename, font_name);
+  lib::string::filename_from_path(filename, font_name);
   
   size_t search_id = 0;
   if(Common::fixed_string_search(font_name,
@@ -78,13 +78,13 @@ Font::Font(const char *filename)
 }
 
 
-Font::Font(const util::generic_id id)
+Font::Font(const uint32_t id)
 {
   m_font_id = id;
 }
 
 
-util::generic_id
+uint32_t
 Font::get_id() const
 {
   return m_font_id;

@@ -13,7 +13,7 @@ class Texture final
 public:
 
   explicit            Texture();                              //!< Creates an invalid texture
-  explicit            Texture(const util::generic_id id);     //!< Creates a texture from an existing id. Internal use only, this will be removed from public interface.
+  explicit            Texture(const uint32_t id);     //!< Creates a texture from an existing id. Internal use only, this will be removed from public interface.
   explicit            Texture(const char * filepath);         //!< Loads a texture from a file name. Check exists() for the result.
   explicit            Texture(const uint32_t width,
                               const uint32_t height,
@@ -41,7 +41,7 @@ public:
   bool                exists() const;                         //!< Returns true if the texture loaded successfully.
                       operator bool() const;                  //!< Alias for exists().
   
-  util::generic_id    get_id() const;
+  uint32_t    get_id() const;
   
 private:
 

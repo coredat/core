@@ -14,13 +14,13 @@ public:
 
   explicit          Font();
   explicit          Font(const char *filename);
-  explicit          Font(const util::generic_id id);
+  explicit          Font(const uint32_t id);
   
-  util::generic_id  get_id() const;
+  uint32_t  get_id() const;
   
 private:
 
-  util::generic_id m_font_id = 0;
+  uint32_t m_font_id = 0;
 
 };
 

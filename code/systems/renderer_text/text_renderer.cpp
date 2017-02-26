@@ -2,8 +2,10 @@
 #include <op/op.hpp>
 #include <math/mat/mat4.hpp>
 #include <utilities/file.hpp>
-#include <utilities/string_helpers.hpp>
+#include <utilities/string.hpp>
 #include <utilities/directory.hpp>
+#include <utilities/platform.hpp>
+#include <data/common/directories.hpp>
 
 
 namespace
@@ -25,36 +27,36 @@ void
 initialize(opContext *ctx,
            opBuffer *buf)
 {
-  char core_text_shd_path[MAX_FILE_PATH_SIZE];
+  char core_text_shd_path[LIB_MAX_FILE_PATH_SIZE];
   {
     memset(core_text_shd_path, 0, sizeof(core_text_shd_path));
-    strcat(core_text_shd_path, util::dir::resource_path());
-    strcat(core_text_shd_path, "assets/shaders/core_text.ogl");
+    strcat(core_text_shd_path, Common::Dir::assets());
+    strcat(core_text_shd_path, "shaders/core_text.ogl");
   }
   
   char shader_code[1 << 12];
   {
     memset(shader_code, 0, sizeof(shader_code));
-    util::file::get_contents_from_file(core_text_shd_path, shader_code, sizeof(shader_code));
+    lib::file::get_contents(core_text_shd_path, shader_code, sizeof(shader_code));
     assert(strlen(shader_code));
   }
   
   char vs_code[1024];
   {
     memset(vs_code, 0, sizeof(vs_code));
-    util::get_text_between_tags("/* VERT_SHD */", "/* VERT_SHD */", shader_code, vs_code, sizeof(vs_code));
+    lib::string::get_text_between_tags("/* VERT_SHD */", "/* VERT_SHD */", shader_code, vs_code, sizeof(vs_code));
   }
 
   char gs_code[1 << 12];
   {
     memset(gs_code, 0, sizeof(gs_code));
-    util::get_text_between_tags("/* GEO_SHD */", "/* GEO_SHD */", shader_code, gs_code, sizeof(gs_code));
+    lib::string::get_text_between_tags("/* GEO_SHD */", "/* GEO_SHD */", shader_code, gs_code, sizeof(gs_code));
   }
   
   char fs_code[1024];
   {
     memset(fs_code, 0, sizeof(fs_code));
-    util::get_text_between_tags("/* FRAG_SHD */", "/* FRAG_SHD */", shader_code, fs_code, sizeof(fs_code));
+    lib::string::get_text_between_tags("/* FRAG_SHD */", "/* FRAG_SHD */", shader_code, fs_code, sizeof(fs_code));
   }
   
   opShaderDesc shader_desc;

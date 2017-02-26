@@ -13,14 +13,14 @@ namespace Data {
 
 struct Text_renderer_data
 {
-  util::buffer::data font_data;
+  lib::buffer::data font_data;
   
-  util::buffer::data glyph_keys;
-  util::buffer::data glyph_data;
+  lib::buffer::data glyph_keys;
+  lib::buffer::data glyph_data;
   
-  util::buffer::data string_keys;
-  util::buffer::data string_data;
-  util::buffer::data draw_calls;
+  lib::buffer::data string_keys;
+  lib::buffer::data string_data;
+  lib::buffer::data draw_calls;
 };
 
 

@@ -14,8 +14,8 @@ class Material_renderer final
 {
 public:
 
-  explicit                Material_renderer(const util::generic_id mat_id,
-                                            const util::generic_id model_id); // make private or something like that.
+  explicit                Material_renderer(const uint32_t mat_id,
+                                            const uint32_t model_id); // make private or something like that.
   
   explicit                Material_renderer(const Material &material,
                                             const Model &model);
@@ -38,13 +38,13 @@ public:
   friend class Entity;
   friend class Entity_ref;
 
-  util::generic_id        get_material_id() const;
-  util::generic_id        get_model_id() const;
+  uint32_t        get_material_id() const;
+  uint32_t        get_model_id() const;
   
 private:
 
-  util::generic_id m_material_id = util::generic_id_invalid();
-  util::generic_id m_model_id    = util::generic_id_invalid();
+  uint32_t m_material_id = 0;
+  uint32_t m_model_id    = 0;
 
 }; // class
 

@@ -223,7 +223,7 @@ think(std::shared_ptr<Data::World> world,
       
       // Get cull mask.
       // This isn't particularly nice. We should already have this data to save us looking for it.
-      const util::generic_id entity_id = world->mesh_data->keys[i];
+      const uint32_t entity_id = world->mesh_data->keys[i];
 //      Data::entity_get_tags(world->entity, entity_id, &draw_calls[i].cull_mask);
       Data::Graph::tags_get(world->scene_graph, entity_id, &draw_calls[i].cull_mask);
     

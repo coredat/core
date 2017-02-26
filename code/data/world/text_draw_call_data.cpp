@@ -79,10 +79,10 @@ text_draw_call_create(Text_draw_call_data *data, const size_t size_hint)
     // Alloc space for model_id
     if(all_alloc)
     {
-      data->field_model_id = new util::generic_id[size_hint * 1];
+      data->field_model_id = new uint32_t[size_hint * 1];
       assert(data->field_model_id);
       if(!data->field_model_id) { all_alloc = false; }
-      else { memset(data->field_model_id, 0, sizeof(util::generic_id) * size_hint * 1); }
+      else { memset(data->field_model_id, 0, sizeof(uint32_t) * size_hint * 1); }
     }
   }
 
@@ -302,7 +302,7 @@ text_draw_call_resize_capacity(Text_draw_call_data *data, const size_t size_hint
     memcpy(new_data.keys, data->keys, sizeof(uint32_t) * data->size);
     memcpy(new_data.field_text, data->field_text, sizeof(char) * data->size * 32);
     memcpy(new_data.field_draw_call, data->field_draw_call, sizeof(Text_renderer::Draw_call) * data->size * 1);
-    memcpy(new_data.field_model_id, data->field_model_id, sizeof(util::generic_id) * data->size * 1);
+    memcpy(new_data.field_model_id, data->field_model_id, sizeof(uint32_t) * data->size * 1);
   }
 
   // Swap ptrs
@@ -319,7 +319,7 @@ text_draw_call_resize_capacity(Text_draw_call_data *data, const size_t size_hint
     data->field_draw_call = new_data.field_draw_call;
     new_data.field_draw_call = old_draw_call;
 
-    util::generic_id *old_model_id = data->field_model_id;
+    uint32_t *old_model_id = data->field_model_id;
     data->field_model_id = new_data.field_model_id;
     new_data.field_model_id = old_model_id;
   }
@@ -383,7 +383,7 @@ text_draw_call_get_draw_call_data(Text_draw_call_data *data)
 }
 
 
-const util::generic_id*
+const uint32_t*
 text_draw_call_get_const_model_id_data(const Text_draw_call_data *data)
 {
   assert(data);
@@ -393,7 +393,7 @@ text_draw_call_get_const_model_id_data(const Text_draw_call_data *data)
 }
 
 
-util::generic_id*
+uint32_t*
 text_draw_call_get_model_id_data(Text_draw_call_data *data)
 {
   assert(data);
@@ -523,7 +523,7 @@ text_draw_call_set_draw_call(const Text_draw_call_data *data, const uint32_t key
 
 
 bool
-text_draw_call_get_model_id(const Text_draw_call_data *data, const uint32_t key, util::generic_id *return_value)
+text_draw_call_get_model_id(const Text_draw_call_data *data, const uint32_t key, uint32_t *return_value)
 {
   assert(data);
   assert(key != 0);
@@ -552,7 +552,7 @@ text_draw_call_get_model_id(const Text_draw_call_data *data, const uint32_t key,
 
 
 bool
-text_draw_call_set_model_id(const Text_draw_call_data *data, const uint32_t key, const util::generic_id *set_value)
+text_draw_call_set_model_id(const Text_draw_call_data *data, const uint32_t key, const uint32_t *set_value)
 {
   assert(data);
   assert(key != 0);

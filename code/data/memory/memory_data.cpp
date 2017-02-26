@@ -1,12 +1,13 @@
 #include <data/memory/memory_data.hpp>
-#include <utilities/memory.hpp>
+#include <utilities/memory_pool.hpp>
+#include <utilities/alignment.hpp>
 #include <assert.h>
 
 
 namespace
 {
-  util::memory_pool   memory_pool;
-  util::memory_chunk  scratch_chunk;
+  lib::memory_pool   memory_pool;
+  lib::memory_chunk  scratch_chunk;
   
   void                *scratch_pointer       = nullptr;
   void                *scratch_pointer_start = nullptr;
@@ -26,8 +27,8 @@ memory_initialize(const size_t pool_bytes, const size_t scratch_size)
 {
   if(!memory_pool.header)
   {
-    memory_pool           = util::memory_pool_create(pool_bytes + scratch_size);
-    scratch_chunk         = util::memory_pool_get_chunk(&memory_pool, scratch_size, "scratch");
+    memory_pool           = lib::memory_pool_create(pool_bytes + scratch_size);
+    scratch_chunk         = lib::memory_pool_get_chunk(&memory_pool, scratch_size, "scratch");
     scratch_pointer       = scratch_chunk.chunk_start;
     scratch_pointer_start = scratch_pointer;
     scratch_capacity      = scratch_chunk.bytes_in_chunk;
@@ -60,7 +61,7 @@ scratch_alloc(const size_t bytes)
     
     void *ptr = scratch_pointer;
     
-    scratch_pointer = util::mem_offset(scratch_pointer, bytes);
+    scratch_pointer = (void*)lib::align::mem_offset((uintptr_t)scratch_pointer, bytes);
     
     return ptr;
   }
@@ -75,37 +76,37 @@ scratch_alloc_aligned(const size_t bytes)
 {
   void *ptr = scratch_alloc(bytes + 16);
   
-  return util::mem_next_16byte_boundry(ptr);
+  return (void*)lib::align::get_boundry_16((uintptr_t)ptr);
 }
 
 
-util::memory_chunk
+lib::memory_chunk
 request_memory_chunk(const size_t bytes, const char *name)
 {
   assert(bytes);
 
   if(memory_pool.header)
   {
-    return util::memory_pool_get_chunk(&memory_pool, bytes, name);
+    return lib::memory_pool_get_chunk(&memory_pool, bytes, name);
   }
   
-  return util::memory_chunk();
+  return lib::memory_chunk();
 }
 
 
 void
-return_memory_chunk(util::memory_chunk *chunk)
+return_memory_chunk(lib::memory_chunk *chunk)
 {
   assert(chunk);
 
   if(chunk && memory_pool.header)
   {
-    util::memory_pool_return_chunk(&memory_pool, chunk);
+    lib::memory_pool_return_chunk(&memory_pool, chunk);
   }
 }
 
 
-util::memory_pool*
+lib::memory_pool*
 _get_pool()
 {
   return &memory_pool;

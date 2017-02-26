@@ -46,7 +46,7 @@ scratch_alloc_aligned(const size_t bytes);
 /*!
   Get a chunk of memory for a pool to make to use.
 */
-util::memory_chunk
+lib::memory_chunk
 request_memory_chunk(const size_t bytes, const char *name);
 
 
@@ -54,13 +54,13 @@ request_memory_chunk(const size_t bytes, const char *name);
   Return a chunk to the pool.
 */
 void
-return_memory_chunk(util::memory_chunk *chunk);
+return_memory_chunk(lib::memory_chunk *chunk);
 
 
 /*!
   For debug only. Use request_memory_chunk if you want memory.
 */
-util::memory_pool*
+lib::memory_pool*
 _get_pool();
 
 

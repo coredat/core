@@ -13,15 +13,15 @@ namespace Graph {
 
 Graph_data*
 initialize(const size_t inital_graph_size,
-           const util::malloc_fn malloc_fn,
-           const util::realloc_fn realloc_fn,
-           const util::free_fn free_fn)
+           const lib::malloc_fn malloc_fn,
+           const lib::realloc_fn realloc_fn,
+           const lib::free_fn free_fn)
 {
   // -- Param Check -- //
-  UTIL_ASSERT(inital_graph_size);
-  UTIL_ASSERT(malloc_fn);
-  UTIL_ASSERT(realloc_fn);
-  UTIL_ASSERT(free_fn);
+  LIB_ASSERT(inital_graph_size);
+  LIB_ASSERT(malloc_fn);
+  LIB_ASSERT(realloc_fn);
+  LIB_ASSERT(free_fn);
   
   // -- We do this so we don't have to expose the internals -- //
   void *data = malloc_fn(sizeof(Graph_data));
@@ -33,54 +33,54 @@ initialize(const size_t inital_graph_size,
   {
     bool setup = true;
     
-    setup &= util::buffer::init(&graph->node_ids,
+    setup &= lib::buffer::init(&graph->node_ids,
                                 sizeof(uint32_t),
                                 inital_graph_size,
                                 malloc_fn, realloc_fn, free_fn);
 
-    setup &= util::buffer::init(&graph->node_components,
+    setup &= lib::buffer::init(&graph->node_components,
                                 sizeof(uint32_t),
                                 inital_graph_size,
                                 malloc_fn, realloc_fn, free_fn);
     
-    setup &= util::buffer::init(&graph->node_transform,
+    setup &= lib::buffer::init(&graph->node_transform,
                                 sizeof(math::transform),
                                 inital_graph_size,
                                 malloc_fn, realloc_fn, free_fn);
 
-    setup &= util::buffer::init(&graph->node_aabb,
+    setup &= lib::buffer::init(&graph->node_aabb,
                                 sizeof(math::aabb),
                                 inital_graph_size,
                                 malloc_fn, realloc_fn, free_fn);
 
-    setup &= util::buffer::init(&graph->node_tags,
+    setup &= lib::buffer::init(&graph->node_tags,
                                 sizeof(uint32_t),
                                 inital_graph_size,
                                 malloc_fn, realloc_fn, free_fn);
 
-    setup &= util::buffer::init(&graph->node_user_data,
+    setup &= lib::buffer::init(&graph->node_user_data,
                                 sizeof(uintptr_t),
                                 inital_graph_size,
                                 malloc_fn, realloc_fn, free_fn);
 
-    setup &= util::buffer::init(&graph->node_collision_callbacks,
+    setup &= lib::buffer::init(&graph->node_collision_callbacks,
                                 sizeof(Graph_callback),
                                 inital_graph_size,
                                 malloc_fn, realloc_fn, free_fn);
     
-    setup &= util::buffer::init(&graph->node_message_callbacks,
+    setup &= lib::buffer::init(&graph->node_message_callbacks,
                                 sizeof(Graph_callback),
                                 inital_graph_size,
                                 malloc_fn, realloc_fn, free_fn);
 
-    setup &= util::buffer::init(&graph->node_callbacks,
+    setup &= lib::buffer::init(&graph->node_callbacks,
                                 sizeof(uintptr_t),
                                 inital_graph_size,
                                 malloc_fn, realloc_fn, free_fn);
     
     if(!setup)
     {
-      UTIL_ASSERT(false);
+      LIB_ASSERT(false);
       LOG_ERROR("Failed to setup Scene Graph");
     
       destroy(graph);
@@ -100,14 +100,14 @@ destroy(Graph_data *graph)
 {
   if(graph)
   {
-    util::buffer::destroy(&graph->node_ids);
-    util::buffer::destroy(&graph->node_components);
-    util::buffer::destroy(&graph->node_transform);
-    util::buffer::destroy(&graph->node_aabb);
-    util::buffer::destroy(&graph->node_user_data);
-    util::buffer::destroy(&graph->node_collision_callbacks);
-    util::buffer::destroy(&graph->node_message_callbacks);
-    util::buffer::destroy(&graph->node_callbacks);
+    lib::buffer::destroy(&graph->node_ids);
+    lib::buffer::destroy(&graph->node_components);
+    lib::buffer::destroy(&graph->node_transform);
+    lib::buffer::destroy(&graph->node_aabb);
+    lib::buffer::destroy(&graph->node_user_data);
+    lib::buffer::destroy(&graph->node_collision_callbacks);
+    lib::buffer::destroy(&graph->node_message_callbacks);
+    lib::buffer::destroy(&graph->node_callbacks);
 
     LOG_INFO("Scene Graph destroyed");
     

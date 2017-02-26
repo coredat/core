@@ -1,5 +1,5 @@
 #include <data/memory/scratch_stream.hpp>
-#include <utilities/memory.hpp>
+#include <utilities/alignment.hpp>
 #include <utilities/logging.hpp>
 #include <cstring>
 
@@ -40,7 +40,7 @@ open()
   void *next_slot = nullptr;
 
   // 16 bytes align data
-  next_slot = util::mem_next_16byte_boundry(curr_data);
+  next_slot = (void*)lib::align::get_boundry_16((uintptr_t)curr_data);
   
   return next_slot;
 }

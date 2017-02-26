@@ -20,9 +20,9 @@ namespace Graph {
 
 Graph_data*
 initialize(const size_t inital_graph_size = 1024,
-           const util::malloc_fn malloc_fn = malloc,
-           const util::realloc_fn realloc_fn = realloc,
-           const util::free_fn free_fn = free);
+           const lib::malloc_fn malloc_fn = malloc,
+           const lib::realloc_fn realloc_fn = realloc,
+           const lib::free_fn free_fn = free);
 
 
 bool

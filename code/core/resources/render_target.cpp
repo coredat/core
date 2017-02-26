@@ -12,7 +12,7 @@ namespace Core {
 
 struct Render_target::Impl
 {
-  util::generic_id texture_id = 0;
+  uint32_t texture_id = 0;
 };
 
 
@@ -47,7 +47,7 @@ Render_target::Render_target(const uint32_t width,
   {
     Data::data_lock(texture_data);
     
-    const util::generic_id id = Data::texture_push(texture_data);
+    const uint32_t id = Data::texture_push(texture_data);
     Data::texture_set_name(texture_data, id, "Render Target", strlen("Render Target"));
     Data::texture_set_render_target(texture_data, id, &fbo);
     Data::texture_set_texture(texture_data, id, &fbo.color_buffer[0]);

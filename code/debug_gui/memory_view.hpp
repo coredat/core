@@ -9,7 +9,7 @@ namespace Debug_menu {
 
 
 void
-display_memory_useage(util::memory_pool *data);
+display_memory_useage(lib::memory_pool *data);
 
 
 } // ns

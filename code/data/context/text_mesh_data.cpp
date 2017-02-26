@@ -85,10 +85,10 @@ text_mesh_create(Text_mesh_data *data, const size_t size_hint)
     // Alloc space for font_id
     if(all_alloc)
     {
-      data->field_font_id = new util::generic_id[size_hint * 1];
+      data->field_font_id = new uint32_t[size_hint * 1];
       assert(data->field_font_id);
       if(!data->field_font_id) { all_alloc = false; }
-      else { memset(data->field_font_id, 0, sizeof(util::generic_id) * size_hint * 1); }
+      else { memset(data->field_font_id, 0, sizeof(uint32_t) * size_hint * 1); }
     }
 
     // Alloc space for mesh
@@ -288,7 +288,7 @@ text_mesh_resize_capacity(Text_mesh_data *data, const size_t size_hint)
     memcpy(new_data.keys, data->keys, sizeof(uint32_t) * data->size);
     memcpy(new_data.field_text, data->field_text, sizeof(char) * data->size * 32);
     memcpy(new_data.field_text_size, data->field_text_size, sizeof(uint32_t) * data->size * 1);
-    memcpy(new_data.field_font_id, data->field_font_id, sizeof(util::generic_id) * data->size * 1);
+    memcpy(new_data.field_font_id, data->field_font_id, sizeof(uint32_t) * data->size * 1);
     memcpy(new_data.field_mesh, data->field_mesh, sizeof(Graphics_api::Mesh) * data->size * 1);
   }
 
@@ -306,7 +306,7 @@ text_mesh_resize_capacity(Text_mesh_data *data, const size_t size_hint)
     data->field_text_size = new_data.field_text_size;
     new_data.field_text_size = old_text_size;
 
-    util::generic_id *old_font_id = data->field_font_id;
+    uint32_t *old_font_id = data->field_font_id;
     data->field_font_id = new_data.field_font_id;
     new_data.field_font_id = old_font_id;
 
@@ -374,7 +374,7 @@ text_mesh_get_text_size_data(Text_mesh_data *data)
 }
 
 
-const util::generic_id*
+const uint32_t*
 text_mesh_get_const_font_id_data(const Text_mesh_data *data)
 {
   assert(data);
@@ -384,7 +384,7 @@ text_mesh_get_const_font_id_data(const Text_mesh_data *data)
 }
 
 
-util::generic_id*
+uint32_t*
 text_mesh_get_font_id_data(Text_mesh_data *data)
 {
   assert(data);
@@ -534,7 +534,7 @@ text_mesh_set_text_size(const Text_mesh_data *data, const uint32_t key, const ui
 
 
 bool
-text_mesh_get_font_id(const Text_mesh_data *data, const uint32_t key, util::generic_id *return_value)
+text_mesh_get_font_id(const Text_mesh_data *data, const uint32_t key, uint32_t *return_value)
 {
   assert(data);
   assert(key != 0);
@@ -563,7 +563,7 @@ text_mesh_get_font_id(const Text_mesh_data *data, const uint32_t key, util::gene
 
 
 bool
-text_mesh_set_font_id(const Text_mesh_data *data, const uint32_t key, const util::generic_id *set_value)
+text_mesh_set_font_id(const Text_mesh_data *data, const uint32_t key, const uint32_t *set_value)
 {
   assert(data);
   assert(key != 0);

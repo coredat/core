@@ -5,8 +5,6 @@
 #include <core/entity/entity_fwd.hpp>
 #include <data/fwd_dec_data.hpp>
 #include <transformations/physics/bullet/bullet_data.hpp>
-#include <utilities/generic_id.hpp>
-#include <utilities/generic_id.hpp>
 
 #include <data/graph/fwd.hpp>
 #include <data/renderers/text/fwd.hpp>
@@ -33,12 +31,12 @@ struct World
   
   Bullet_data::World            physics_world;
   
-  util::generic_id world_instance_id = 0;
+  uint32_t world_instance_id = 0;
   
   World(const World&) = delete;
   World& operator=(const World&) = delete;
   
-  explicit World(const util::generic_id world_instance_id, const uint32_t size_hint);
+  explicit World(const uint32_t world_instance_id, const uint32_t size_hint);
   ~World();
   
 }; // struct

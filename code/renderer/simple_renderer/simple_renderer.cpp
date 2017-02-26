@@ -8,7 +8,9 @@
 #include <graphics_api/ogl/ogl_vertex_format.hpp>
 #include <graphics_api/utils/shader_utils.hpp>
 #include <utilities/directory.hpp>
+#include <utilities/platform.hpp>
 #include <utilities/file.hpp>
+#include <data/common/directories.hpp>
 #include <assert.h>
 
 
@@ -43,16 +45,16 @@ initialize()
 
   // Load shaders
   {
-    char full_shader_path[MAX_FILE_PATH_SIZE];
-    char dir_shader_path[MAX_FILE_PATH_SIZE];
+    char full_shader_path[LIB_MAX_FILE_PATH_SIZE];
+    char dir_shader_path[LIB_MAX_FILE_PATH_SIZE];
     {
       memset(full_shader_path, 0, sizeof(full_shader_path));
       memset(dir_shader_path, 0, sizeof(dir_shader_path));
       
-      strcat(full_shader_path, util::dir::resource_path());
-      strcat(full_shader_path, "assets/shaders/basic_fullbright.ogl");
+      strcat(full_shader_path, Common::Dir::assets());
+      strcat(full_shader_path, "shaders/basic_fullbright.ogl");
       
-      strcat(dir_shader_path, util::dir::resource_path());
+      strcat(dir_shader_path, Common::Dir::assets());
       strcat(dir_shader_path, "assets/shaders/basic_dir_light.ogl");
     }
     

@@ -12,7 +12,7 @@ namespace Entity_detail {
 
 
 void
-set_phy_transform(const util::generic_id this_id,
+set_phy_transform(const uint32_t this_id,
                   const Core::Transform *transform,
                   Data::Graph::Graph_data *entity_data,
                   Data::Rigidbody_data *rb_data,
@@ -21,7 +21,7 @@ set_phy_transform(const util::generic_id this_id,
 
 
 void
-set_rigidbody(const util::generic_id this_id,
+set_rigidbody(const uint32_t this_id,
               Core::Transform tranform,
               const math::aabb &aabb,
               const Core::Rigidbody &rigidbody,
@@ -32,14 +32,14 @@ set_rigidbody(const util::generic_id this_id,
   
 
 Core::Rigidbody
-get_rigidbody(const util::generic_id this_id,
+get_rigidbody(const uint32_t this_id,
               const Data::Graph::Graph_data *entity_data,
               const Data::Rigidbody_data *rb_data,
               const Data::Trigger_data *trigger_data);
   
 
 void
-apply_force(const util::generic_id this_id,
+apply_force(const uint32_t this_id,
             const Data::Rigidbody_data *rb_data,
             const math::vec3 direction,
             const float power);

@@ -15,9 +15,9 @@ transform_set_callback(Graph_data *graph,
                        const transform_callback_fn callback)
 {
   // -- Param Check -- //
-  UTIL_ASSERT(graph);
-  UTIL_ASSERT(node);
-  UTIL_ASSERT(callback);
+  LIB_ASSERT(graph);
+  LIB_ASSERT(node);
+  LIB_ASSERT(callback);
   
   return false;
 }
@@ -29,8 +29,8 @@ transform_set(Graph_data *graph,
               const math::transform transform)
 {
   // -- Param Check -- //
-  UTIL_ASSERT(graph);
-  UTIL_ASSERT(node);
+  LIB_ASSERT(graph);
+  LIB_ASSERT(node);
 
   // -- Get and Set Data -- //
   size_t index = 0;
@@ -38,10 +38,10 @@ transform_set(Graph_data *graph,
   if(graph->find_index(node, &index))
   {
     math::transform *curr_trans(
-      (math::transform*)util::buffer::at(&graph->node_transform, index)
+      (math::transform*)lib::buffer::at(&graph->node_transform, index)
     );
     
-    UTIL_ASSERT(curr_trans);
+    LIB_ASSERT(curr_trans);
     
     *curr_trans = transform;
     
@@ -62,8 +62,8 @@ transform_get(const Graph_data *graph,
               math::transform *out_transform)
 {
   // -- Param Check -- //
-  UTIL_ASSERT(graph);
-  UTIL_ASSERT(node);
+  LIB_ASSERT(graph);
+  LIB_ASSERT(node);
 
   // -- Get Data -- //
   size_t index = 0;
@@ -71,10 +71,10 @@ transform_get(const Graph_data *graph,
   if(graph->find_index(node, &index))
   {
     math::transform *curr_trans(
-      (math::transform*)util::buffer::at(&graph->node_transform, index)
+      (math::transform*)lib::buffer::at(&graph->node_transform, index)
     );
     
-    UTIL_ASSERT(curr_trans);
+    LIB_ASSERT(curr_trans);
     
     *out_transform = *curr_trans;
     

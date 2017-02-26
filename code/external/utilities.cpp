@@ -3,8 +3,4 @@
 */
 
 
-#define UTIL_BUFFER_IMPL
-#include <utilities/buffer.hpp>
-
-#define UTIL_ID32_IMPL
-#include <utilities/id32.hpp>
+#include <utilities/util_impl.hpp>
