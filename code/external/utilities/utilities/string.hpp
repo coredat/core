@@ -1,3 +1,10 @@
+/*
+  String
+  --
+  String helpers
+
+  Copyright: public-domain
+*/
 #ifndef STRING_HELPERS_INCLUDED_CC0C05E9_7D4D_4A69_B002_6E59BDC031B9
 #define STRING_HELPERS_INCLUDED_CC0C05E9_7D4D_4A69_B002_6E59BDC031B9
 
@@ -11,7 +18,7 @@
 #include "file.hpp"
 
 
-namespace util {
+namespace lib {
 
 
 // Get filename from path
@@ -56,21 +63,6 @@ get_dir_from_filepath(const std::string &filepath)
 }
 
 
-// Stip out the filepath and return the filename
-inline std::string
-get_filename_from_path(const std::string &filepath)
-{
-  auto loc = filepath.find_last_of("/");
-
-  if(loc != std::string::npos)
-  {
-    return filepath.substr(loc + 1, filepath.size() - loc);
-  }
-
-  return ""; // Found no seperator}
-}
-
-
 /*
   This will search a string for and #include "file" declerations
   and then search for those files from the given directories to search.
@@ -98,9 +90,9 @@ hash_include_string(const std::string &string_to_search, const std::vector<std::
     {
       const std::string path = dir + filename;
       std::string contents;
-      contents.resize(file::bytes_in_file(path.c_str()));
+      contents.resize(file::bytes(path.c_str()));
 
-      file::get_contents_from_file(path.c_str(), &contents[0], contents.size());
+      file::get_contents(path.c_str(), &contents[0], contents.size());
       const std::size_t find      = result.find(include);
 
       if(find != std::string::npos)
