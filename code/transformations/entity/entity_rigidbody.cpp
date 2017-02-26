@@ -254,6 +254,10 @@ set_phy_transform(const uint32_t this_id,
   // New transform.
   const btTransform trans(math::transform_to_bt(*transform));
   
+  math::aabb aabb;
+  Data::Graph::aabb_get(entity_data, this_id, &aabb);
+  
+  
   if(is_rigidbody)
   {
     Data::data_lock(rb_data);
@@ -261,10 +265,13 @@ set_phy_transform(const uint32_t this_id,
     Bullet_data::Rigidbody rigidbody;
     Data::rigidbody_get_rigidbody(rb_data, this_id, &rigidbody);
     
-    Physics_transform::update_rigidbody_transform(&rigidbody,
-                                                  phy_world,
-                                                  &trans,
-                                                  math::vec3_to_bt(transform->get_scale()));
+    Physics_transform::update_rigidbody_transform(
+      &rigidbody,
+      phy_world,
+      &aabb,
+      &trans,
+      math::vec3_to_bt(transform->get_scale())
+    );
     
     Data::data_unlock(rb_data);
   }
@@ -275,7 +282,11 @@ set_phy_transform(const uint32_t this_id,
     Bullet_data::Trigger trigger;
     Data::trigger_get_trigger(trigger_data, this_id, &trigger);
     
-    Physics_transform::update_trigger_transform(&trigger, &trans);
+    Physics_transform::update_trigger_transform(
+      &trigger,
+      math::vec3_to_bt(transform->get_scale()),
+      &trans
+    );
     
     Data::data_unlock(trigger_data);
   }

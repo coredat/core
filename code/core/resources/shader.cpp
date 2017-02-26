@@ -4,6 +4,7 @@
 #include <data/context_data.hpp>
 #include <data/context/shader_data.hpp>
 #include <utilities/string.hpp>
+#include <utilities/platform.hpp>
 #include <graphics_api/utils/shader_utils.hpp>
 #include <graphics_api/ogl/ogl_shader.hpp>
 #include <assert.h>
@@ -19,7 +20,7 @@ struct Shader::Impl
 
 
 Shader::Shader()
-: Shader("")
+: m_impl(new Impl)
 {
 }
 
@@ -110,12 +111,13 @@ Shader::Shader(const char *filename)
       LOG_ERROR(Error_string::file_not_found());
       return;
     }
-  
-    const std::string name = lib::string::get_dir_from_filepath(filename);
     
+    char name[LIB_MAX_FILE_PATH_SIZE]{0};
+    lib::string::filename_from_path(filename, name, sizeof(name) * LIB_MAX_FILE_PATH_SIZE);
+        
     Gfx_util::Shader_code code = Gfx_util::shader_code_from_tagged_file(filename);
     
-    m_impl->id = push_new_shader(name.c_str(),
+    m_impl->id = push_new_shader(name,
                                  code.vs_code.c_str(),
                                  code.gs_code.c_str(),
                                  code.ps_code.c_str());

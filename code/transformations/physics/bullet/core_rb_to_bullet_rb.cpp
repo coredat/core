@@ -19,9 +19,10 @@ namespace {
 
 
 inline btCollisionShape*
-generate_collision_shape(const Core::Collider &collider,
-                         const uintptr_t user_data,
-                         const math::vec3 scale)
+generate_collision_shape(
+  const Core::Collider &collider,
+  const uintptr_t user_data,
+  const math::vec3 scale)
 {
   switch(collider.get_type())
   {
@@ -55,8 +56,9 @@ generate_collision_shape(const Core::Collider &collider,
 
 
 inline Core::Collider
-generate_collider(const btCollisionShape *shape,
-                  const math::vec3 entity_scale)
+generate_collider(
+  const btCollisionShape *shape,
+  const math::vec3 entity_scale)
 {
   const math::vec3 local_scale = math::vec3_from_bt(shape->getLocalScaling());
   const math::vec3 extents = math::vec3_divide(entity_scale, local_scale);
@@ -298,18 +300,27 @@ create_rigidbody_from_core_rb(const Core::Transform *transform,
 
 void
 update_trigger_transform(Bullet_data::Trigger *trigger,
+                         const btVector3 scale,
                          const btTransform *transform)
 {
-  // Param Check
+  // -- Param Check -- //
   assert(trigger);
   assert(transform);
   
-  btGhostObject *ghost = reinterpret_cast<btGhostObject*>(trigger->ghost_ptr);
+  // -- Get Data -- //
+  btGhostObject *ghost(
+    reinterpret_cast<btGhostObject*>(trigger->ghost_ptr)
+  );
   
-  // Update Transform
-  if(ghost && transform)
+  btCollisionShape *shape(
+    ghost->getCollisionShape()
+  );
+  
+  // -- Update Transforms -- //
+  if(ghost && shape && transform)
   {
     ghost->setWorldTransform(*transform);
+    shape->setLocalScaling(shape->getLocalScaling() * scale);
   }
 }
 
@@ -317,6 +328,7 @@ update_trigger_transform(Bullet_data::Trigger *trigger,
 void
 update_rigidbody_transform(Bullet_data::Rigidbody *rigidbody,
                            Bullet_data::World *phy_world,
+                           const math::aabb *aabb,
                            const btTransform *transform,
                            const btVector3 scale)
 {
@@ -350,7 +362,7 @@ update_rigidbody_transform(Bullet_data::Rigidbody *rigidbody,
     // Update the transform
     {
       rb->setWorldTransform(*transform);
-      shape->setLocalScaling(scale);
+      shape->setLocalScaling(shape->getLocalScaling() * scale);
     }
     
     // Update the mass / inertia

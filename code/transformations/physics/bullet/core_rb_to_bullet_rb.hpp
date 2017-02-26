@@ -66,6 +66,7 @@ create_core_rb_from_rigidbody(Core::Rigidbody *out_rb,
 */
 void
 update_trigger_transform(Bullet_data::Trigger *trigger,
+                         const btVector3 scale,
                          const btTransform *transform);
 
 
@@ -76,6 +77,7 @@ update_trigger_transform(Bullet_data::Trigger *trigger,
 void
 update_rigidbody_transform(Bullet_data::Rigidbody *rigidbody,
                            Bullet_data::World *world,
+                           const math::aabb *aabb,
                            const btTransform *transform,
                            const btVector3 scale);
   
