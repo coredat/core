@@ -1,3 +1,15 @@
+/*
+  Buffer
+  --
+  A generic memory buffer. This handles allocation requests.
+
+  Warning
+  --
+  This is a typeless buffer it can lead to some unexpected things. Consider
+  using a std::vector or something else instead, I made this for some fun really.
+
+  Copyright: public-domain
+*/
 #ifndef BUFFER_INCLUDED_7FE56F1E_1D98_4770_B828_7CCB3764E0F9
 #define BUFFER_INCLUDED_7FE56F1E_1D98_4770_B828_7CCB3764E0F9
 
@@ -7,7 +19,7 @@
 #include "alloc.hpp"
 
 
-namespace util {
+namespace lib {
 namespace buffer {
 
 
@@ -17,9 +29,9 @@ struct data
   size_t            byte_count    = 0;
   size_t            bytes_used    = 0;
   size_t            byte_stride   = 1;
-  util::malloc_fn   allocate_fn   = nullptr;
-  util::realloc_fn  reallocate_fn = nullptr;
-  util::free_fn     destroy_fn    = nullptr;
+  lib::malloc_fn    allocate_fn   = nullptr;
+  lib::realloc_fn   reallocate_fn = nullptr;
+  lib::free_fn      destroy_fn    = nullptr;
 };
 
 
@@ -27,12 +39,13 @@ struct data
   Interface
 */
 
+
 bool    init(data *buf,
              const size_t stride,
              const size_t init_elem_count,
-             const util::malloc_fn alloc = malloc,
-             const util::realloc_fn resize = realloc,
-             const util::free_fn destroy = free);
+             const lib::malloc_fn alloc = malloc,
+             const lib::realloc_fn resize = realloc,
+             const lib::free_fn destroy = free);
 void    destroy(data *buf);
 bool    empty(const data *buf);
 size_t  size(const data *buf);
@@ -44,7 +57,11 @@ void    insert(data *buf, const size_t index);
 void    clear(data *buf);
 void    erase(data *buf, const size_t index);
 void*   bytes(data *buf);
+const void*   bytes(const data *buf);
 void*   last(data *buf);
+const void*   last(const data *buf);
+void*   at(data *buf, const size_t index);
+const void*   at(const data *buf, const size_t index);
 
 
 } // ns
@@ -57,14 +74,14 @@ void*   last(data *buf);
   Implimentation
 */
 
-#ifdef UTIL_BUFFER_IMPL
+#ifdef LIB_BUFFER_IMPL
 
 
 #include <stdint.h>
 #include <string.h>
 
 
-namespace util {
+namespace lib {
 namespace buffer {
 
 
@@ -72,9 +89,9 @@ bool
 init(data *buf,
      const size_t stride,
      const size_t init_elem_count,
-     const util::malloc_fn alloc,
-     const util::realloc_fn resize,
-     const util::free_fn destroy)
+     const lib::malloc_fn alloc,
+     const lib::realloc_fn resize,
+     const lib::free_fn destroy)
 {
   if(buf->data != nullptr)
   {
@@ -157,12 +174,12 @@ push(data *buf)
 {
   if(buf->data)
   {
-    const size_t buf_size = buf->bytes_used;
-
     if(buf->bytes_used >= buf->byte_count)
     {
       reserve(buf, size(buf) << 1);
     }
+    
+    memset(&buf->data[buf->bytes_used], 0, buf->byte_stride);
 
     buf->bytes_used += buf->byte_stride;
   }
@@ -237,11 +254,41 @@ bytes(data *buf)
 }
 
 
+const void*
+bytes(const data *buf)
+{
+  return bytes(const_cast<data*>(buf));
+}
+
+
 void*
 last(data *buf)
 {
   return buf->bytes_used ? (void*)&buf->data[buf->bytes_used - buf->byte_stride] : nullptr;
 }
+
+
+const void*
+last(const data *buf)
+{
+  return last(const_cast<data*>(buf));
+}
+
+
+
+void*
+at(data *buf, const size_t i)
+{
+  return &buf->data[buf->byte_stride * i];
+}
+
+
+const void*
+at(const data *buf, const size_t i)
+{
+  return at(const_cast<data*>(buf), i);
+}
+
 
 
 } // ns
