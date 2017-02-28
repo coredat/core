@@ -25,7 +25,10 @@ initialize(const size_t inital_graph_size,
   
   // -- We do this so we don't have to expose the internals -- //
   void *data = malloc_fn(sizeof(Graph_data));
+  LIB_ASSERT(data);
+  
   Graph_data *graph = new(data) Graph_data();
+  LIB_ASSERT(graph);
   
   graph->node_instance_counter = 1; // Root node is 1;
   

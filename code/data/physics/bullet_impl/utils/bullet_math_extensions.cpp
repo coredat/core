@@ -1,9 +1,7 @@
-#include <transformations/physics/bullet/bullet_math_extensions.hpp>
 #include <LinearMath/btVector3.h>
 #include <LinearMath/btTransform.h>
 #include <core/transform/transform.hpp>
-#include <math/quat/quat.hpp>
-#include <math/vec/vec3.hpp>
+#include <math/math.hpp>
 
 
 namespace math {
@@ -26,6 +24,45 @@ vec3_to_bt(const math::vec3 vec)
 
 
 btTransform
+transform_to_bt(const math::transform &math_trans)
+{
+  btTransform trans;
+  trans.setIdentity();
+  
+  // Rotation
+  {
+    const math::mat3 rot_mat(
+      math::quat_get_rotation_matrix(math_trans.rotation)
+    );
+    
+    const math::mat3 rot_mat_tr(
+      math::mat3_get_transpose(rot_mat)
+    );
+    
+    const math::quat bt_rot(
+      math::quat_init_with_mat3(rot_mat_tr)
+    );
+    
+    trans.setRotation(
+      btQuaternion(
+        btScalar(math::get_x(bt_rot)),
+        btScalar(math::get_y(bt_rot)),
+        btScalar(math::get_z(bt_rot)),
+        btScalar(math::get_w(bt_rot))
+      )
+    );
+  }
+  
+  // Position
+  {
+    trans.setOrigin(math::vec3_to_bt(math_trans.position));
+  }
+
+  return trans;
+}
+
+
+btTransform
 transform_to_bt(const Core::Transform &core_trans)
 {
   btTransform trans;
@@ -33,14 +70,26 @@ transform_to_bt(const Core::Transform &core_trans)
   
   // Rotation
   {
-    const math::mat3 rot_mat    = math::quat_get_rotation_matrix(core_trans.get_rotation());
-    const math::mat3 rot_mat_tr = math::mat3_get_transpose(rot_mat);
-    const math::quat bt_rot     = math::quat_init_with_mat3(rot_mat_tr);
+    const math::mat3 rot_mat(
+      math::quat_get_rotation_matrix(core_trans.get_rotation())
+    );
     
-    trans.setRotation(btQuaternion(btScalar(math::get_x(bt_rot)),
-                                   btScalar(math::get_y(bt_rot)),
-                                   btScalar(math::get_z(bt_rot)),
-                                   btScalar(math::get_w(bt_rot))));
+    const math::mat3 rot_mat_tr(
+      math::mat3_get_transpose(rot_mat)
+    );
+    
+    const math::quat bt_rot(
+      math::quat_init_with_mat3(rot_mat_tr)
+    );
+    
+    trans.setRotation(
+      btQuaternion(
+        btScalar(math::get_x(bt_rot)),
+        btScalar(math::get_y(bt_rot)),
+        btScalar(math::get_z(bt_rot)),
+        btScalar(math::get_w(bt_rot))
+      )
+    );
   }
   
   // Position
@@ -50,7 +99,6 @@ transform_to_bt(const Core::Transform &core_trans)
 
   return trans;
 }
-
 
 Core::Transform
 transform_from_bt(const btTransform &transform)

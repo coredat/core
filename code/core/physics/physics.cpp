@@ -17,10 +17,10 @@ apply_force(Core::Entity_ref ref,
   const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(ref.get_id());
   auto world_data = Core_detail::world_index_get_world_data(entity_id.world_instance);
 
-  Entity_detail::apply_force(ref.get_id(),
-                             world_data->rigidbody_data,
-                             world_direction,
-                             force);
+//  Entity_detail::apply_force(ref.get_id(),
+//                             world_data->rigidbody_data,
+//                             world_direction,
+//                             force);
 }
 
 

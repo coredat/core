@@ -3,7 +3,7 @@
 
 
 #include <core/transform/transform_fwd.hpp>
-#include <math/vec/vec_fwd.hpp>
+#include <math/fwd.hpp>
 
 
 class btVector3;
@@ -19,6 +19,10 @@ vec3_from_bt(const btVector3 &bt_vec);
 
 btVector3
 vec3_to_bt(const math::vec3 vec);
+
+
+btTransform
+transform_to_bt(const math::transform &bt_trans);
 
 
 btTransform

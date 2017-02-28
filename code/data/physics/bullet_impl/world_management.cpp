@@ -1,84 +1,41 @@
-#include "physics_tick.hpp"
-
-#include <transformations/entity/entity_transform.hpp>
-
-//#include <transformations/physics/bullet/bullet_math_extensions.hpp>
-//#include <transformations/physics/bullet/trigger_collisions.hpp>
-//#include <transformations/physics/collision_point.hpp>
-
-#include <BulletCollision/CollisionDispatch/btGhostObject.h>
-#include <BulletCollision/CollisionDispatch/btCollisionObject.h>
-#include <utilities/bits.hpp>
-#include <utilities/logging.hpp>
-
-// Don't want core here! - Callback???
-#include <core/common/collision.hpp>
-#include <core/transform/transform.hpp>
-#include <core/entity/detail/entity_id.hpp>
-#include <core/entity/entity_ref.hpp>
-#include <core/entity/entity_components.hpp>
-
-#include <data/world_data.hpp>
-#include <data/world/rigidbody_data.hpp>
-#include <data/world/collision_data.hpp>
-#include <data/graph/graph.hpp>
-#include <utilities/id.hpp>
+#include "../physics.hpp"
+#include "../config_physics.hpp"
+#include "physics_data.hpp"
+#include <math/math.hpp>
+#include <utilities/assert.hpp>
 
 
+// ------------------------------------------------------[ Physics Lifetime ]--
 
 
-namespace {
-
-
-// This state needs to go because its accross worlds
-Core::Collision_callback callback_hack;
-
-} // anon ns
-
-
-namespace Engine {
-namespace Physics_tick {
+namespace Data {
+namespace Physics {
 
 
 void
-initialize(std::shared_ptr<Data::World> world)
+world_set_gravity(Physics_data *phys, const math::vec3 gravity)
 {
-//  world->physics_world.dynamics_world->getBroadphase()->getOverlappingPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
-//  
-//  world->physics_world.dynamics_world->setInternalTickCallback(Physics_transform::trigger_callback,
-//                                                lib::id::id_to_ptr(world->world_instance_id),
-//                                                true);
+  LIB_ASSERT(false); // not impl
 }
 
 
 void
-collision_callback(Core::Collision_callback callback)
+world_think(Physics_data *phys)
 {
-  callback_hack = callback;
-};
+  // -- Param Check -- //
+  LIB_ASSERT(phys);
 
-
-void
-think(std::shared_ptr<Data::World> world, const float dt, Tick_information *out_tick_info)
-{
-//  
-//  /*
-//    Update the physics world
-//  */
-//    {
-//      world->physics_world.dynamics_world->stepSimulation(1 / 60.f, 500);
-//      world->physics_world.dynamics_world->debugDrawWorld();
-//    }
-//
-//  
-//  /*
-//    Check collisions
-//  */
-//  {
-//  
-//  }
-//
-//
+  // Tick the world
+  {
+    phys->dynamics_world->stepSimulation(phys->time_step, 500);
+  }
+  
+  // Draw the debug info
+  if(Physics::g_display_debug_info)
+  {
+    phys->dynamics_world->debugDrawWorld();
+  }
+  
 //  /*
 //    Dispatch Collisions
 //    --
@@ -184,14 +141,25 @@ think(std::shared_ptr<Data::World> world, const float dt, Tick_information *out_
 //      }
 //    }
 //    Data::collision_clear(collision_data);
-//    Data::data_unlock(collision_data);
-//  }
+//    Data::data_unlock(collision_data);  
 }
 
 
-void
-de_initialize()
+void*
+world_get_colliding_items(Physics_data *phys)
 {
+  return nullptr;
+}
+
+
+void*
+world_find_with_ray(
+  Physics_data *data,
+  const math::vec3 origin,
+  const math::vec3 direction,
+  const uint32_t max_return)
+{
+  return nullptr;
 }
 
 

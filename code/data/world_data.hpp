@@ -4,9 +4,8 @@
 
 #include <core/entity/entity_fwd.hpp>
 #include <data/fwd_dec_data.hpp>
-#include <transformations/physics/bullet/bullet_data.hpp>
-
 #include <data/graph/fwd.hpp>
+#include <data/physics/fwd.hpp>
 #include <data/renderers/text/fwd.hpp>
 
 
@@ -15,8 +14,6 @@ namespace Data {
 
 struct World
 {
-//  Transform_data                *transform       = nullptr;
-//  Entity_data                   *entity          = nullptr;
   Pending_entity_removal_data   *entity_removal  = nullptr;
   Camera_data                   *camera_data     = nullptr;
   Rigidbody_data                *rigidbody_data  = nullptr;
@@ -28,8 +25,7 @@ struct World
   
   Text_renderer_data            *text_renderer   = nullptr;
   Graph::Graph_data             *scene_graph     = nullptr;
-  
-  Bullet_data::World            physics_world;
+  Physics::Physics_data         *physics         = nullptr;
   
   uint32_t world_instance_id = 0;
   

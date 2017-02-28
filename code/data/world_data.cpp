@@ -19,6 +19,7 @@
 
 #include <data/renderers/text/text_renderer.hpp>
 #include <data/graph/graph.hpp>
+#include <data/physics/physics.hpp>
 
 
 namespace Data {
@@ -57,7 +58,7 @@ World::World(const uint32_t instance_id, const uint32_t entity_hint)
   Data::Light_data *light_data = new Data::Light_data;
   Data::light_create(light_data, entity_hint);
   
-  Bullet_data::setup(&physics_world);
+//  Bullet_data::setup(&physics_world);
   
   this->entity_removal = graph_changes;
   this->rigidbody_data = rb_data;
@@ -78,6 +79,7 @@ World::World(const uint32_t instance_id, const uint32_t entity_hint)
   );
   
   scene_graph = Data::Graph::initialize();
+  physics = Data::Physics::initialize();
 }
 
 World::~World()
@@ -120,19 +122,19 @@ World::~World()
 //    delete this->entity;
 //  }
   
-  if(this->text_data)
-  {
-    Data::text_draw_call_destroy(text_data);
-    delete this->text_data;
-  }
+//  if(this->text_data)
+//  {
+//    Data::text_draw_call_destroy(text_data);
+//    delete this->text_data;
+//  }
+//  
+//  if(this->trigger_data)
+//  {
+//    Data::trigger_destroy(trigger_data);
+//    delete this->trigger_data;
+//  }
   
-  if(this->trigger_data)
-  {
-    Data::trigger_destroy(trigger_data);
-    delete this->trigger_data;
-  }
-  
-  Bullet_data::remove_and_clear(&physics_world);
+//  Bullet_data::remove_and_clear(&physics_world);
   
 //  if(this->scene_graph)
 //  {
@@ -149,9 +151,6 @@ world_update_scene_graph_changes(Data::World *world_data,
   {
     const uint32_t id = graph_changes->field_deleted_entity[i];
     
-//    entity_remove(world_data->entity, id);
-//    transform_remove(world_data->transform, id);
-
     Data::Graph::node_remove(world_data->scene_graph, id);
     
     if(Data::mesh_draw_call_exists(world_data->mesh_data, id))
@@ -166,38 +165,10 @@ world_update_scene_graph_changes(Data::World *world_data,
       }
     }
 
-    // Remove RB
+    // Remove RB/Trigger
     {
-      Data::Rigidbody_data *rb_data = world_data->rigidbody_data;
-      Data::data_lock(rb_data);
-      
-      if(Data::rigidbody_exists(rb_data, id))
-      {
-        Bullet_data::Rigidbody rigidbody;
-        Data::rigidbody_get_rigidbody(rb_data, id, &rigidbody);
-        
-        Bullet_data::remove_and_clear(&rigidbody, world_data->physics_world.dynamics_world);
-        
-        Data::rigidbody_remove(rb_data, id);
-      }
-      
-      Data::data_unlock(rb_data);
-    }
-    
-    // Remove Trigger
-    {
-      Data::Trigger_data *trigger_data = world_data->trigger_data;
-      Data::data_lock(trigger_data);
-      
-      if(Data::trigger_exists(trigger_data, id))
-      {
-        Bullet_data::Trigger trigger;
-        Data::trigger_get_trigger(trigger_data, id, &trigger);
-        
-        Bullet_data::remove_and_clear(&trigger, world_data->physics_world.dynamics_world);
-      }
-      
-      Data::data_unlock(trigger_data);
+      Data::Physics::rigidbody_remove(world_data->physics, id);
+      Data::Physics::trigger_remove(world_data->physics, id);
     }
   }
 }

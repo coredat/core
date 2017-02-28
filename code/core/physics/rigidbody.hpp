@@ -15,14 +15,19 @@ class Rigidbody final
 public:
 
   explicit      Rigidbody();
-  explicit      Rigidbody(const Collider &collider, const float mass = 1.f, const bool is_trigger = false);
+  explicit      Rigidbody(
+                  const Collider &collider,
+                  const float mass = 1.f,
+                  const bool is_trigger = false);
                 ~Rigidbody();
   
                 Rigidbody(const Rigidbody&);
   
   uint32_t      get_rb_id() const;
   uint32_t      get_rb_mask() const;
-  void          set_collision_mask(const uint32_t rb_id, const uint32_t rb_collides_with_ids);
+  void          set_collision_mask(
+                  const uint32_t rb_id,
+                  const uint32_t rb_collides_with_ids);
   
   bool          is_kinematic() const;
   void          set_is_kinematic(const bool set);

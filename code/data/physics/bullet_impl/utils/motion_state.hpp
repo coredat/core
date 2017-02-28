@@ -5,7 +5,7 @@
 #include <btBulletDynamicsCommon.h>
 
 
-namespace Physics_transform {
+namespace Bullet_detail {
 
 
 ATTRIBUTE_ALIGNED16(struct) Core_motion_state : public btDefaultMotionState

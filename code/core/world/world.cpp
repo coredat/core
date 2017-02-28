@@ -9,14 +9,13 @@
 #include <data/context_data.hpp>
 #include <data/context_data/input_pool.hpp>
 #include <data/graph/graph.hpp>
+#include <data/physics/physics.hpp>
 #include <core/context/detail/context_data.hpp>
 #include <common/fixed_string_search.hpp>
 #include <systems/engine/engine.hpp>
 #include <systems/engine/tick_information.hpp>
 #include <debug_gui/debug_menu.hpp>
-#include <transformations/physics/bullet/find_by_ray.hpp>
-#include <utilities/timer.hpp>
-#include <utilities/logging.hpp>
+#include <utilities/utilities.hpp>
 
 
 namespace Core {
@@ -242,8 +241,12 @@ World::find_entity_by_ray(const Ray ray) const
 {
   assert(m_impl && m_impl->world_instance_id);
   auto world = Core_detail::world_index_get_world_data(m_impl->world_instance_id);
+
+  Data::Physics::Physics_data *phys = world->physics;
   
-  return Physics_transform::find_entity_from_ray(ray, world->physics_world.dynamics_world);
+  LOG_TODO_ONCE("Find by ray");
+  
+  return Contact();
 }
 
 
@@ -289,12 +292,13 @@ World::find_entities_by_ray(const Ray ray,
 {
   assert(m_impl && m_impl->world_instance_id);
   auto world = Core_detail::world_index_get_world_data(m_impl->world_instance_id);
-  
-  Physics_transform::find_entities_from_ray(
-    ray,
-    world->physics_world.dynamics_world,
-    contacts,
-    out_array_size);
+
+  LOG_TODO_ONCE("Find by ray");  
+//  Physics_transform::find_entities_from_ray(
+//    ray,
+//    world->physics_world.dynamics_world,
+//    contacts,
+//    out_array_size);
 }
 
 

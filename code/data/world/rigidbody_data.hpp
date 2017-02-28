@@ -12,7 +12,20 @@
 
 #include <stdint.h>
 #include <stddef.h>
-#include <transformations/physics/bullet/bullet_data.hpp>
+
+
+namespace Bullet_data {
+
+
+struct Rigidbody
+{
+  uintptr_t rigidbody_ptr    = 0;
+  uintptr_t shape_ptr        = 0;
+  uintptr_t motion_state_ptr = 0;
+};
+
+
+}
 
 
 namespace Data {

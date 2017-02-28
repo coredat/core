@@ -12,8 +12,26 @@
 
 #include <stdint.h>
 #include <stddef.h>
-#include <transformations/physics/bullet/bullet_data.hpp>
 
+namespace Bullet_data {
+
+
+/*!
+  Bullet works on 'you allocate you destroy' philosophy
+  --
+  These are all the allocations for a rigidbody.
+  --
+  We store them as uintptr_t's because this structure is used
+  inside a model, and by convention thats how we store raw pointers.
+*/
+
+struct Trigger
+{
+  uintptr_t ghost_ptr = 0;
+  uintptr_t shape_ptr = 0;
+};
+
+}
 
 namespace Data {
 

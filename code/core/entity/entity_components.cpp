@@ -19,14 +19,18 @@
 #include <data/context/material_data.hpp>
 #include <data/world/mesh_draw_call_data.hpp>
 #include <data/context/text_mesh_data.hpp>
+#include <data/physics/physics.hpp>
+#include <data/physics/config_rigidbody.hpp>
+#include <data/physics/config_trigger.hpp>
+#include <data/physics/config_collider.hpp>
 #include <common/data_types.hpp>
 #include <common/error_strings.hpp>
-#include <utilities/logging.hpp>
 #include <transformations/entity/entity_camera.hpp>
 #include <transformations/entity/entity_transform.hpp>
 #include <transformations/entity/entity_renderer.hpp>
 #include <transformations/entity/entity_rigidbody.hpp>
 #include <transformations/entity/entity_light.hpp>
+#include <utilities/utilities.hpp>
 #include <math/math.hpp>
 
 
@@ -66,7 +70,7 @@ set_transform(const Core::Entity_ref &ref,
   Entity_detail::set_transform(entity_uint_id,
                                world_data->scene_graph,
                                world_data->rigidbody_data,
-                               &world_data->physics_world,
+                               nullptr,
                                world_data->trigger_data,
                                world_data->mesh_data,
                                world_data->text_data,
@@ -375,28 +379,60 @@ set_rigidbody(const Core::Entity_ref &ref,
     return false;
   }
 
-  const uint32_t entity_uint_id(ref.get_id());
-  const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(entity_uint_id);
+  const uint32_t this_id(ref.get_id());
+  const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(this_id);
 
   auto world_data(Core_detail::world_index_get_world_data(entity_id.world_instance));
   assert(world_data);
   
+  // -- Get Data -- //
+  Data::Graph::Graph_data *graph = world_data->scene_graph;
+  LIB_ASSERT(graph);
+  
+  Data::Physics::Physics_data *phys = world_data->physics;
+  LIB_ASSERT(phys);
+  
+  LOG_TODO_ONCE("Check first to see if we already have an rb/trigger");
+  
+  // -- Get Transforms and Set RB -- //
   math::transform trans;
-  Data::Graph::transform_get(world_data->scene_graph, entity_uint_id, &trans);
-
-  Core::Transform core_trans(trans.position, trans.scale, trans.rotation);
+  Data::Graph::transform_get(graph, this_id, &trans);
   
   math::aabb aabb;
-  Data::Graph::aabb_get(world_data->scene_graph, entity_uint_id, &aabb);
+  Data::Graph::aabb_get(graph, this_id, &aabb);
   
-  Entity_detail::set_rigidbody(entity_uint_id,
-                               core_trans,
-                               aabb,
-                               rigidbody,
-                               world_data->scene_graph,
-                               world_data->trigger_data,
-                               world_data->rigidbody_data,
-                               &world_data->physics_world);
+  // -- Build RB and Collider -- //
+  const Core::Collider core_coll = rigidbody.get_collider();
+  
+  Data::Physics::Collider_config coll;
+  coll.type = core_coll.get_type() == Core::Collider::Type::box ?  Data::Physics::Collider_type::box : Data::Physics::Collider_type::unknown;
+  coll.args[0] = core_coll.get_arg_01();
+  coll.args[1] = core_coll.get_arg_02();
+  coll.args[2] = core_coll.get_arg_03();
+  
+  if(!rigidbody.is_trigger())
+  {
+    Data::Physics::Rigidbody_config rb;
+    rb.mass = rigidbody.get_mass();
+    rb.is_kinematic = rigidbody.is_kinematic();
+    
+    Data::Physics::rigidbody_add(phys, this_id, &rb, &coll, &trans, &aabb);
+  }
+  else
+  {
+    Data::Physics::Trigger_config trig;
+    
+    Data::Physics::trigger_add(phys, this_id, &trig, &coll, &trans, &aabb);
+  }
+  
+//  Entity_detail::set_rigidbody(entity_uint_id,
+//                               core_trans,
+//                               aabb,
+//                               rigidbody,
+//                               world_data->scene_graph,
+//                               world_data->trigger_data,
+//                               world_data->rigidbody_data,
+//                               &world_data->physics_world);
   
   return true;
 }
@@ -405,23 +441,27 @@ set_rigidbody(const Core::Entity_ref &ref,
 Core::Rigidbody
 get_rigidbody(const Core::Entity_ref &ref)
 {
-  if(!ref)
-  {
-    LOG_ERROR(Error_string::entity_is_invalid());
-    assert(false);
-    return Core::Rigidbody();
-  }
+  return Core::Rigidbody();
 
-  const uint32_t entity_uint_id(ref.get_id());
-  const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(entity_uint_id);
-
-  auto world_data(Core_detail::world_index_get_world_data(entity_id.world_instance));
-  assert(world_data);
-  
-  return Entity_detail::get_rigidbody(entity_uint_id,
-                                      world_data->scene_graph,
-                                      world_data->rigidbody_data,
-                                      world_data->trigger_data);
+//  if(!ref)
+//  {
+//    LOG_ERROR(Error_string::entity_is_invalid());
+//    assert(false);
+//    return Core::Rigidbody();
+//  }
+//
+//  const uint32_t entity_uint_id(ref.get_id());
+//  const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(entity_uint_id);
+//
+//  auto world_data(Core_detail::world_index_get_world_data(entity_id.world_instance));
+//  assert(world_data);
+//  
+//  return Entity_detail::get_rigidbody(
+//    entity_uint_id,
+//    world_data->scene_graph,
+//    world_data->rigidbody_data,
+//    world_data->trigger_data
+//  );
 }
 
 

@@ -5,6 +5,7 @@
 #include <core/transform/transform.hpp>
 #include <data/world_data.hpp>
 #include <data/graph/graph.hpp>
+#include <data/physics/physics.hpp>
 #include <data/world/mesh_draw_call_data.hpp>
 #include <data/world/text_draw_call_data.hpp>
 #include <data/graph/graph.hpp>
@@ -92,7 +93,7 @@ void
 set_transform(const uint32_t this_id,
               Data::Graph::Graph_data *entity_data,
               Data::Rigidbody_data *rb_data,
-              Bullet_data::World *phy_world,
+              Data::Physics::Physics_data *phy_world,
               Data::Trigger_data *trigger_data,
               Data::Mesh_draw_call_data *mesh_data,
               Data::Text_draw_call_data *text_data,
@@ -147,7 +148,7 @@ set_transform(const uint32_t this_id,
 
     if(inform_phys_engine && Common::Data_type::is_collidable(components))
     {
-      Entity_detail::set_phy_transform(this_id, &set_transform, entity_data, rb_data, phy_world, trigger_data);
+//      Entity_detail::set_phy_transform(this_id, &set_transform, entity_data, rb_data, phy_world, trigger_data);
     }
 
     update_mesh_renderer(this_id, mesh_data, &new_transform);

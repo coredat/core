@@ -1,5 +1,5 @@
-#include <transformations/physics/bullet/motion_state.hpp>
-#include <transformations/physics/bullet/bullet_math_extensions.hpp>
+#include "motion_state.hpp"
+#include "bullet_math_extensions.hpp"
 #include <transformations/entity/entity_transform.hpp>
 #include <core/entity/detail/entity_id.hpp>
 #include <core/world/detail/world_index.hpp>
@@ -7,7 +7,7 @@
 #include <data/graph/graph.hpp>
 
 
-namespace Physics_transform {
+namespace Bullet_detail {
 
 
 Core_motion_state::Core_motion_state(const uintptr_t user_data,

@@ -12,7 +12,24 @@
 
 #include <stdint.h>
 #include <stddef.h>
-#include <transformations/physics/collision_point.hpp>
+
+
+#include <math/vec/vec_types.hpp>
+
+
+namespace Physics_transform {
+
+
+struct Collision_point
+{
+  float penitration;
+  math::vec3 point;
+  math::vec3 normal;
+};
+
+
+} // ns
+
 
 
 namespace Data {
