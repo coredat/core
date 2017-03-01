@@ -101,7 +101,7 @@ bool
 Rigidbody::is_kinematic() const
 {
 //  assert(m_impl);
-  return m_is_dynamic;
+  return !m_is_dynamic;
 }
 
 

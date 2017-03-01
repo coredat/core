@@ -4,10 +4,33 @@
 #include "../config_collider.hpp"
 #include "utils/convert.hpp"
 #include "utils/motion_state.hpp"
+#include "utils/bullet_math_extensions.hpp"
 #include "physics_data.hpp"
 #include <utilities/assert.hpp>
 #include <utilities/logging.hpp>
 #include <utilities/key.hpp>
+
+
+namespace {
+
+inline uint32_t
+get_bt_collision_flags(const Data::Physics::Rigidbody_config *rb_conf)
+{
+  uint32_t collision_flags(0);
+
+  if(rb_conf->is_kinematic)
+  {
+    collision_flags |= btRigidBody::CF_KINEMATIC_OBJECT;
+  }
+  if(rb_conf->mass == 0.f)
+  {
+    collision_flags |= btRigidBody::CF_STATIC_OBJECT;
+  }
+  
+  return collision_flags;
+}
+
+} // anon ns
 
 
 // ------------------------------------------------------[ Physics Lifetime ]--
@@ -83,17 +106,6 @@ rigidbody_add(
   // Create Rigidbody
   btRigidBody *bt_rb = nullptr;
   {
-    uint32_t collision_flags(0);
-    
-    if(rb->is_kinematic)
-    {
-      collision_flags |= btRigidBody::CF_KINEMATIC_OBJECT;
-    }
-    if(rb->mass == 0.f)
-    {
-      collision_flags |= btRigidBody::CF_STATIC_OBJECT;
-    }
-    
     const btScalar mass(rb->mass);
     btVector3 inertia(0.f, 0.f, 0.f);
     
@@ -110,6 +122,7 @@ rigidbody_add(
     rb_ci.m_restitution = 0;
 
     bt_rb = new btRigidBody(rb_ci);
+    bt_rb->setCollisionFlags(get_bt_collision_flags(rb));
   }
   
   // Check we have all we need
@@ -152,10 +165,73 @@ void
 rigidbody_update(
   Physics_data *phys,
   const uint32_t id,
-  const Rigidbody_config *rb,
+  const Rigidbody_config *rb_config,
   const Collider_config *collider,
-  const math::transform *transform)
+  const math::transform *transform,
+  const math::aabb *aabb)
 {
+  // -- Param Check -- //
+  LIB_ASSERT(phys);
+  LIB_ASSERT(id);
+  
+  // Find RB //
+  size_t index = 0;
+  
+  if(!lib::key::linear_search(
+    id,
+    phys->rb_ids.data(),
+    phys->rb_ids.size(),
+    &index))
+  {
+    LOG_ERROR("Rigidbody ID not found to be able to update.");
+    LIB_ASSERT(false);
+    return;
+  }
+  
+  Rigidbody internal_rb = phys->rb_data[index];
+  
+  btRigidBody *bt_rb = (btRigidBody*)internal_rb.rigidbody_ptr;
+  LIB_ASSERT(bt_rb);
+  
+  // Remove from the world while we update it.
+  phys->dynamics_world->removeRigidBody(bt_rb);
+  
+  // Config Update
+  if(rb_config)
+  {
+    btVector3 inertia(0.f,0.f,0.f);
+    bt_rb->setMassProps(rb_config->mass, inertia);
+    bt_rb->setCollisionFlags(get_bt_collision_flags(rb_config));
+  }
+  
+  // Collider Update
+  if(collider)
+  {
+    // Hot swap not supported yet.
+//    LIB_ASSERT(false);
+  }
+  
+  // Transform Update
+  LIB_ASSERT(transform && aabb); // Need both to update transform
+  
+  if(transform && aabb)
+  {
+    bt_rb->setCenterOfMassTransform(
+      Bullet_detail::generate_transform(transform, aabb)
+    );
+    
+    bt_rb->getCollisionShape()->setLocalScaling(
+      math::vec3_to_bt(
+        math::vec3_multiply(
+          transform->scale,
+          math::aabb_get_extents(*aabb)
+        )
+      )
+    );
+  }
+  
+  // Add back to the world.
+  phys->dynamics_world->addRigidBody(bt_rb);
   
 }
 

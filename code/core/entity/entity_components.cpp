@@ -378,7 +378,7 @@ set_rigidbody(const Core::Entity_ref &ref,
     assert(false);
     return false;
   }
-
+  
   const uint32_t this_id(ref.get_id());
   const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(this_id);
 
@@ -392,7 +392,27 @@ set_rigidbody(const Core::Entity_ref &ref,
   Data::Physics::Physics_data *phys = world_data->physics;
   LIB_ASSERT(phys);
   
-  LOG_TODO_ONCE("Check first to see if we already have an rb/trigger");
+  // -- Check/Set Components -- //
+  uint32_t comps = 0;
+  {
+    Data::Graph::components_get(graph, this_id, &comps);
+
+    // Triggers and RB's are treated differently.
+    if(Common::Data_type::is_collidable(comps))
+    {
+      // Remove if there is a discrepency.
+      if(rigidbody.is_trigger() && (comps & Common::Data_type::rigidbody))
+      {
+        Data::Physics::rigidbody_remove(phys, this_id);
+        comps &= ~(Common::Data_type::rigidbody);
+      }
+      else if(!rigidbody.is_trigger() && (comps & Common::Data_type::trigger))
+      {
+        Data::Physics::trigger_remove(phys, this_id);
+        comps &= ~(Common::Data_type::trigger);
+      }
+    }
+  }
   
   // -- Get Transforms and Set RB -- //
   math::transform trans;
@@ -416,23 +436,34 @@ set_rigidbody(const Core::Entity_ref &ref,
     rb.mass = rigidbody.get_mass();
     rb.is_kinematic = rigidbody.is_kinematic();
     
-    Data::Physics::rigidbody_add(phys, this_id, &rb, &coll, &trans, &aabb);
+    if(comps & Common::Data_type::rigidbody)
+    {
+      Data::Physics::rigidbody_update(phys, this_id, &rb, &coll, &trans, &aabb);
+    }
+    else
+    {
+      Data::Physics::rigidbody_add(phys, this_id, &rb, &coll, &trans, &aabb);
+      
+      comps |= Common::Data_type::rigidbody;
+      Data::Graph::components_set(graph, this_id, comps);
+    }
   }
   else
   {
     Data::Physics::Trigger_config trig;
     
-    Data::Physics::trigger_add(phys, this_id, &trig, &coll, &trans, &aabb);
+    if(comps & Common::Data_type::trigger)
+    {
+      Data::Physics::trigger_udpate(phys, this_id, &trig, &coll, &trans, &aabb);
+    }
+    else
+    {
+      Data::Physics::trigger_add(phys, this_id, &trig, &coll, &trans, &aabb);
+      
+      comps |= Common::Data_type::trigger;
+      Data::Graph::components_set(graph, this_id, comps);
+    }
   }
-  
-//  Entity_detail::set_rigidbody(entity_uint_id,
-//                               core_trans,
-//                               aabb,
-//                               rigidbody,
-//                               world_data->scene_graph,
-//                               world_data->trigger_data,
-//                               world_data->rigidbody_data,
-//                               &world_data->physics_world);
   
   return true;
 }
