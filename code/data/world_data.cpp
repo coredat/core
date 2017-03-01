@@ -18,6 +18,7 @@
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
 
 #include <data/renderers/text/text_renderer.hpp>
+#include <renderer/debug_line.hpp>
 #include <data/graph/graph.hpp>
 #include <data/physics/physics.hpp>
 
@@ -80,6 +81,44 @@ World::World(const uint32_t instance_id, const uint32_t entity_hint)
   
   scene_graph = Data::Graph::initialize();
   physics = Data::Physics::initialize();
+  
+  Data::Physics::debug_draw_wireframes(physics, true);
+  Data::Physics::debug_draw_contact_points(physics, true);
+  
+  Data::Physics::debug_draw_line_cb(physics, [](
+    const math::vec3 start,
+    const math::vec3 end,
+    const math::vec3 color)
+    {
+      Renderer::debug_line(start, end, color);
+    }
+  );
+  
+  Data::Physics::debug_draw_point_cb(physics, [](
+    const math::vec3 pos,
+    const math::vec3 color)
+    {
+      constexpr float size = 0.05f;
+    
+      Renderer::debug_line(
+        math::vec3_add(pos, math::vec3_init(0,size,0)),
+        math::vec3_subtract(pos, math::vec3_init(0,size,0)),
+        color
+      );
+      
+      Renderer::debug_line(
+        math::vec3_add(pos, math::vec3_init(size,0,0)),
+        math::vec3_subtract(pos, math::vec3_init(size,0,0)),
+        color
+      );
+      
+      Renderer::debug_line(
+        math::vec3_add(pos, math::vec3_init(0,0,size)),
+        math::vec3_subtract(pos, math::vec3_init(0,0,size)),
+        color
+      );
+    }
+  );
 }
 
 World::~World()

@@ -10,6 +10,7 @@
 #include <data/context_data/input_pool.hpp>
 #include <data/graph/graph.hpp>
 #include <data/physics/physics.hpp>
+#include <data/physics/contact.hpp>
 #include <core/context/detail/context_data.hpp>
 #include <common/fixed_string_search.hpp>
 #include <systems/engine/engine.hpp>
@@ -145,13 +146,14 @@ World::think()
     auto world = Core_detail::world_index_get_world_data(m_impl->world_instance_id);
     assert(world);
 
-    Engine::think(world,
-                  resources,
-                  m_impl->dt,
-                  m_impl->running_time,
-                  m_impl->context->get_width(),
-                  m_impl->context->get_height(),
-                  &tick_info);
+    Engine::think(
+      world,
+      resources,
+      m_impl->dt,
+      m_impl->running_time,
+      m_impl->context->get_width(),
+      m_impl->context->get_height(),
+      &tick_info);
   }
   
   /*
@@ -164,12 +166,14 @@ World::think()
     auto world = Core_detail::world_index_get_world_data(m_impl->world_instance_id);
   
     Debug_menu::display_global_data_menu(m_impl->context->get_context_data()->input_pool);
-    Debug_menu::display_world_data_menu(world.get(),
-                                        m_impl->dt,
-                                        m_impl->dt_mul,
-                                        12345,
-                                        tick_info.number_of_draw_calls,
-                                        tick_info.camera_runs);
+    Debug_menu::display_world_data_menu(
+      world.get(),
+      m_impl->dt,
+      m_impl->dt_mul,
+      12345,
+      tick_info.number_of_draw_calls,
+      tick_info.camera_runs
+    );
   }
   #endif
 }
@@ -244,7 +248,30 @@ World::find_entity_by_ray(const Ray ray) const
 
   Data::Physics::Physics_data *phys = world->physics;
   
-  LOG_TODO_ONCE("Find by ray");
+  uint32_t contacts = 0;
+  Data::Physics::Contact contact;
+  
+  Data::Physics::world_find_with_ray(
+    phys,
+    ray.get_origin(),
+    math::vec3_scale(
+      ray.get_direction(),
+      ray.get_distance()
+    ),
+    &contact,
+    1,
+    &contacts
+  );
+  
+  if(contacts)
+  {
+    return Contact(
+      Core::Entity_ref(contact.user_data),
+      contact.contact_point,
+      contact.contact_normal,
+      contact.distance
+    );
+  }
   
   return Contact();
 }

@@ -14,4 +14,10 @@ class btTransform;
 class btVector3;
 
 
+namespace Bullet_detail
+{
+  struct Debug_drawer;
+};
+
+
 #endif // inc guard

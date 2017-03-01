@@ -14,9 +14,6 @@ namespace Data {
 namespace Physics {
 
 
-extern bool g_display_debug_info;
-
-
 struct Physics_config
 {
   uint32_t inital_rb_count;

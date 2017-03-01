@@ -4,6 +4,7 @@
 
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
+#include "utils/debug_renderer.hpp"
 #include <utilities/array.hpp>
 #include <stdint.h>
 
@@ -34,6 +35,10 @@ struct Physics_data
   btCollisionDispatcher               *dispatcher       = nullptr;
   btSequentialImpulseConstraintSolver *solver           = nullptr;
   btDiscreteDynamicsWorld             *dynamics_world   = nullptr;
+  
+  #ifndef NDEBUG
+  Bullet_detail::Debug_drawer         debug_drawer;
+  #endif
   
   lib::array<uint32_t, 0>             rb_ids;
   lib::array<Rigidbody, 0>            rb_data;

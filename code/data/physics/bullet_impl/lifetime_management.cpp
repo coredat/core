@@ -8,9 +8,6 @@
 // ------------------------------------------------------[ Physics Lifetime ]--
 
 
-bool Data::Physics::g_display_debug_info = true;
-
-
 namespace Data {
 namespace Physics {
 
@@ -35,61 +32,9 @@ initialize(
   
   // -- Setup the Phys World -- //
   {
-//    struct Debug_drawer : public btIDebugDraw
-//    {
-//      void
-//      drawLine(const btVector3& from,
-//               const btVector3& to,
-//               const btVector3& color)
-//      {
-//        Core::Debug::debug_line(math::vec3_from_bt(from), math::vec3_from_bt(to), 0XFF0000FF);
-//      }
-//      
-//      void
-//      drawContactPoint(const btVector3& PointOnB,
-//                       const btVector3& normalOnB,
-//                       btScalar distance,
-//                       int lifeTime,
-//                       const btVector3& color)
-//      {
-//        Core::Debug::draw_axis_cross(math::vec3_from_bt(PointOnB));
-//      }
-//
-//      void
-//      reportErrorWarning(const char* warningString)
-//      {
-//      }
-//
-//      void
-//      draw3dText(const btVector3& location,
-//                 const char* textString)
-//      {
-//      }
-//      
-//      void
-//      setDebugMode(int mode)
-//      {
-//        debug_mode = mode;
-//      }
-//      
-//      int
-//      getDebugMode() const
-//      {
-//        return debug_mode;
-//      }
-//      
-//        int debug_mode = 0
-//               | btIDebugDraw::DBG_DrawContactPoints
-//  //             | btIDebugDraw::DBG_DrawAabb
-//               | btIDebugDraw::DBG_DrawWireframe
-//               ;
-//    };
-//    
-//    static Debug_drawer debug_drawer;
-
     // Param check
     assert(world);
-
+  
     world->broadphase        = new btDbvtBroadphase();
     world->solver            = new btSequentialImpulseConstraintSolver;
     world->collision_config  = new btDefaultCollisionConfiguration();
@@ -101,16 +46,12 @@ initialize(
     
     btGImpactCollisionAlgorithm::registerAlgorithm(world->dispatcher);
     world->dynamics_world->setGravity(btVector3(0.f, -10.f, 0.f));
-//    world->dynamics_world->setDebugDrawer(&debug_drawer);
-
-    world->time_step = config.time_step;
     
-    // Set the default debug view.
     #ifndef NDEBUG
-    Data::Physics::g_display_debug_info = true;
-    #else
-    Data::Physics::g_display_debug_info = false;
+    world->dynamics_world->setDebugDrawer(&world->debug_drawer);
     #endif
+
+    world->time_step = config.time_step;    
   }
   
   // -- Setup data containers -- //

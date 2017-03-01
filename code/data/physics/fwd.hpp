@@ -11,6 +11,7 @@ struct Physics_config;
 struct Rigidbody_config;
 struct Trigger_config;
 struct Collider_config;
+struct Contact;
 
 
 } // ns

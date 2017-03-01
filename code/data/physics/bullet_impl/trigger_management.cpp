@@ -74,7 +74,9 @@ trigger_add(
     Bullet_detail::generate_transform(transform, aabb)
   );
 
-  LOG_TODO_ONCE("Dry! All steps up to here are same as rb!");
+  LOG_TODO_ONCE(
+    "Dry! All steps up to here are same as rb!"
+  );
   
   // Create Trigger
   btPairCachingGhostObject *bt_trigger = nullptr;

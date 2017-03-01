@@ -6,12 +6,27 @@
 #include "config_physics.hpp"
 #include <math/math.hpp>
 #include <utilities/alloc.hpp>
+#include <utilities/array.hpp>
 #include <stdint.h>
 #include <stdlib.h>
 
 
 namespace Data {
 namespace Physics {
+
+
+// ------------------------------------------------------------ [ Callbacks ]--
+
+
+using draw_line_fn = void(*)(
+  const math::vec3 start,
+  const math::vec3 end,
+  const math::vec3 color);
+
+
+using draw_point_fn = void(*)(
+  const math::vec3 point,
+  const math::vec3 color);
 
 
 // ---------------------------------------------------[ Lifetime Management ]--
@@ -44,12 +59,37 @@ void*
 world_get_colliding_items(Physics_data *phys);
 
 
-void*
+void
 world_find_with_ray(
-  Physics_data *data,
+  Physics_data *phys,
   const math::vec3 origin,
-  const math::vec3 direction,
-  const uint32_t max_return = -1);
+  const math::vec3 scaled_direction,
+  Contact *out_contacts,
+  const uint32_t contacts_count,
+  uint32_t *out_number_of_contacts);
+
+
+// ------------------------------------------------------------ [ Debugging ]--
+
+
+void
+debug_draw_bounding_boxes(Physics_data *phys, const bool set);
+
+
+void
+debug_draw_wireframes(Physics_data *phys, const bool set);
+
+
+void
+debug_draw_contact_points(Physics_data *phys, const bool set);
+
+
+void
+debug_draw_line_cb(Physics_data *phys, const draw_line_fn cb);
+
+
+void
+debug_draw_point_cb(Physics_data *phys, const draw_point_fn cb);
 
 
 // --------------------------------------------------[ Rigidbody Management ]--

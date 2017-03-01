@@ -1,8 +1,10 @@
 #include "../physics.hpp"
+#include "../contact.hpp"
 #include "../config_physics.hpp"
 #include "physics_data.hpp"
+#include "utils/bullet_math_extensions.hpp"
 #include <math/math.hpp>
-#include <utilities/assert.hpp>
+#include <utilities/utilities.hpp>
 
 
 // ------------------------------------------------------[ Physics Lifetime ]--
@@ -31,10 +33,10 @@ world_think(Physics_data *phys)
   }
   
   // Draw the debug info
-  if(Physics::g_display_debug_info)
-  {
-    phys->dynamics_world->debugDrawWorld();
-  }
+  #ifndef NDEBUG
+  phys->dynamics_world->debugDrawWorld();
+  #endif
+  
   
 //  /*
 //    Dispatch Collisions
@@ -152,14 +154,64 @@ world_get_colliding_items(Physics_data *phys)
 }
 
 
-void*
+void
 world_find_with_ray(
-  Physics_data *data,
+  Physics_data *phys,
   const math::vec3 origin,
-  const math::vec3 direction,
-  const uint32_t max_return)
+  const math::vec3 scaled_direction,
+  Contact *out_contacts,
+  const uint32_t contacts_count,
+  uint32_t *out_number_of_contacts)
 {
-  return nullptr;
+  // -- Param Utils -- //
+  LIB_ASSERT(phys);
+  LIB_ASSERT(out_contacts);
+  LIB_ASSERT(contacts_count > 0);
+  LIB_ASSERT(out_number_of_contacts);
+  
+  // Convert to bullet
+  const btVector3 start_pos(
+    math::vec3_to_bt(origin)
+  );
+  
+  const btVector3 end_pos(
+    math::vec3_to_bt(
+      math::vec3_add(
+        origin,
+        scaled_direction
+      )
+    )
+  );
+  
+  btCollisionWorld::ClosestRayResultCallback ray_callback(
+    start_pos, end_pos
+  );
+  
+  phys->dynamics_world->rayTest(start_pos, end_pos, ray_callback);
+
+  if(ray_callback.hasHit())
+  {
+    // Length from ray origin to the hit point.
+    const float length(
+      math::vec3_length(
+        math::vec3_subtract(
+          origin,
+          math::vec3_from_bt(ray_callback.m_hitPointWorld)
+        )
+      )
+    );
+  
+    const uintptr_t user_data(
+      (uintptr_t)ray_callback.m_collisionObject->getCollisionShape()->getUserPointer()
+    );
+    
+    out_contacts[0].contact_point  = math::vec3_from_bt(ray_callback.m_hitPointWorld);
+    out_contacts[0].contact_normal = math::vec3_from_bt(ray_callback.m_hitNormalWorld);
+    out_contacts[0].distance       = length;
+    out_contacts[0].user_data      = user_data;
+    
+    *out_number_of_contacts = 1;
+  }
 }
 
 

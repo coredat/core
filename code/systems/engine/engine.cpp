@@ -4,6 +4,7 @@
 #include "renderer/renderer_debug_tick.hpp"
 #include "scene_graph/scene_graph_tick.hpp"
 #include <data/world_data.hpp>
+#include <data/physics/physics.hpp>
 #include <utilities/logging.hpp>
 
 
@@ -50,6 +51,9 @@ think(const std::shared_ptr<Data::World> world_data,
     We should get to a point where rendering and physics can operate on different threads.
   */
   Physics_tick::think(world_data, dt, out_tick_info);
+  
+  Data::Physics::world_think(world_data->physics);
+  
   Renderer_tick::think(world_data, resource_data, dt, running_time, width, height, out_tick_info);
   Renderer_debug_tick::think(world_data, resource_data, dt, running_time, width, height);
 }
