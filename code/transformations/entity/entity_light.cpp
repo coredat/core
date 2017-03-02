@@ -56,7 +56,7 @@ set_light(const uint32_t this_id,
   // Get the transform for this entity
   math::transform transform;
   {
-    Data::Graph::transform_set(entity_data, this_id, transform);
+    Data::Graph::transform_set(entity_data, this_id, &transform);
   }
   
   // Add Light to data

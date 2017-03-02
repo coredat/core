@@ -92,6 +92,21 @@ void
 debug_draw_point_cb(Physics_data *phys, const draw_point_fn cb);
 
 
+// ------------------------------------------------------[ Transform setter ]--
+
+
+void
+transform_set(
+  Physics_data *phys,
+  const uint32_t id,
+  const math::transform *transform
+);
+
+
+void
+transform_callback_id(Physics_data *phys, const uint32_t callback_id);
+
+
 // --------------------------------------------------[ Rigidbody Management ]--
 
 

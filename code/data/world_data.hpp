@@ -2,6 +2,7 @@
 #define WORLD_POOLS_INCLUDED_2B096887_2423_4C5D_A56C_2F59C3FBFBBC
 
 
+#include <stdint.h>
 #include <core/entity/entity_fwd.hpp>
 #include <data/fwd_dec_data.hpp>
 #include <data/graph/fwd.hpp>

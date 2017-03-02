@@ -94,12 +94,21 @@ generate_transform(
   const math::transform *trans,
   const math::aabb *aabb)
 {
-  const math::vec3 origin(math::aabb_get_origin(*aabb));
-  const math::vec3 offset(math::vec3_add(trans->position, origin));
+  const btTransform bt_trans = math::transform_to_bt(*trans);
   
-  return math::transform_to_bt(
-    math::transform_init(offset, trans->scale, trans->rotation)
-  );
+  math::vec3 rotated_origin = math::quat_rotate_point(trans->rotation, math::aabb_get_origin(*aabb));
+  
+  const btVector3 origin = math::vec3_to_bt(rotated_origin);
+  const btVector3 offset_pos = bt_trans.getOrigin() + origin;
+  
+  return btTransform(bt_trans.getRotation(), offset_pos);
+  
+//  const math::vec3 origin(math::aabb_get_origin(*aabb));
+//  const math::vec3 offset(math::vec3_add(trans->position, origin));
+//  
+//  return math::transform_to_bt(
+//    math::transform_init(offset, trans->scale, trans->rotation)
+//  );
 }
 
 

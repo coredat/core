@@ -1,10 +1,12 @@
 #include "motion_state.hpp"
 #include "bullet_math_extensions.hpp"
+#include "../physics_data.hpp"
 #include <transformations/entity/entity_transform.hpp>
 #include <core/entity/detail/entity_id.hpp>
 #include <core/world/detail/world_index.hpp>
 #include <core/transform/transform.hpp>
 #include <data/graph/graph.hpp>
+#include <utilities/utilities.hpp>
 
 
 namespace Bullet_detail {
@@ -56,6 +58,14 @@ Core_motion_state::setWorldTransform(const btTransform& com_trans)
     update_transform.get_rotation()
   );
   
+  // Why is the graph even here!
+  Data::Graph::transform_set(
+    world_data->scene_graph,
+    this_id, &curr_transform,
+    world_data->physics->transform_callback_id
+  );
+  
+  LOG_WARNING_ONCE("Old set transform needs to go.");
   Entity_detail::set_transform((uintptr_t)m_userPointer,
                                world_data->scene_graph,
                                nullptr,

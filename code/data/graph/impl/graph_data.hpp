@@ -2,9 +2,7 @@
 #define GRAPH_DATA_INCLUDED_D0BAF703_5E6E_4A89_B194_85E7210667C2
 
 
-#include <utilities/buffer.hpp>
-#include <utilities/id.hpp>
-#include <utilities/logging.hpp>
+#include <utilities/utilities.hpp>
 #include <stddef.h>
 
 
@@ -63,7 +61,7 @@ struct Graph_data
     
     LOG_TODO_ONCE("Make a bin search");
     
-    if(lib::id::linear_search(instance, ids, count, &index_cache))
+    if(lib::key::linear_search(instance, ids, count, &index_cache))
     {
       *index = index_cache;
       return true;
@@ -72,6 +70,8 @@ struct Graph_data
     LOG_FATAL("Can't find this Node");
     return false;
   }
+  
+  lib::array<Graph_callback, 4> transform_callbacks;
 };
 
 

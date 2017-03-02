@@ -161,10 +161,18 @@ user_data_get(
 // -------------------------------------------------------[ Node Transforms ]--
 
 
-bool
+using transform_callback_fn =
+  void
+  (*)
+  (const uint32_t node,
+   const math::transform *transform,
+   const uintptr_t user_data);
+
+
+uint32_t
 transform_set_callback(
   Graph_data *graph,
-  const uint32_t node,
+  const uintptr_t user_data,
   const transform_callback_fn callback);
 
 
@@ -172,7 +180,8 @@ bool
 transform_set(
   Graph_data *graph,
   const uint32_t node,
-  const math::transform transform);
+  const math::transform *transform,
+  const uint32_t from_callback = -1);
   
   
 bool

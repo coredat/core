@@ -136,6 +136,12 @@ trigger_udpate(
   const math::transform *transform,
   const math::aabb *aabb)
 {
+  // -- Param Check -- //
+  LIB_ASSERT(phys);
+  LIB_ASSERT(id);
+
+  // not impl yet.
+  LIB_ASSERT(false);
 }
 
 

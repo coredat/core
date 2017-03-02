@@ -46,6 +46,8 @@ struct Physics_data
   lib::array<uint32_t, 0>             trigger_ids;
   lib::array<Trigger, 0>              trigger_data;
   
+  uint32_t                            transform_callback_id = -1;
+  
   float time_step;
 };
 

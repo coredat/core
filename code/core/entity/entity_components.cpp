@@ -63,7 +63,7 @@ set_transform(const Core::Entity_ref &ref,
     trans.rotation = transform.get_rotation();
     trans.scale    = transform.get_scale();
     trans.position = transform.get_position();
-    Data::Graph::transform_set(world_data->scene_graph, entity_uint_id, trans);
+    Data::Graph::transform_set(world_data->scene_graph, entity_uint_id, &trans);
   }
   
   // Old stuff

@@ -85,6 +85,19 @@ World::World(const uint32_t instance_id, const uint32_t entity_hint)
   Data::Physics::debug_draw_wireframes(physics, true);
   Data::Physics::debug_draw_contact_points(physics, true);
   
+  const uint32_t phys_transform_callback_id = Data::Graph::transform_set_callback(
+    scene_graph,
+    (uintptr_t)physics,
+    [](const uint32_t node,
+       const math::transform *transform,
+       const uintptr_t user_data)
+  {
+    Data::Physics::Physics_data *phys = (Data::Physics::Physics_data*)user_data;
+    Data::Physics::transform_set(phys, node, transform);
+  });
+  
+  Data::Physics::transform_callback_id(physics, phys_transform_callback_id);
+  
   Data::Physics::debug_draw_line_cb(physics, [](
     const math::vec3 start,
     const math::vec3 end,

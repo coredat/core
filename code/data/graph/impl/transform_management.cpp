@@ -9,24 +9,27 @@ namespace Data {
 namespace Graph {
 
 
-bool
+uint32_t
 transform_set_callback(Graph_data *graph,
-                       const uint32_t node,
+                       const uintptr_t user_data,
                        const transform_callback_fn callback)
 {
   // -- Param Check -- //
   LIB_ASSERT(graph);
-  LIB_ASSERT(node);
   LIB_ASSERT(callback);
   
-  return false;
+  graph->transform_callbacks.emplace_back(user_data, (uintptr_t)callback);
+  
+  return graph->transform_callbacks.size();
 }
 
 
 bool
-transform_set(Graph_data *graph,
-              const uint32_t node,
-              const math::transform transform)
+transform_set(
+  Graph_data *graph,
+  const uint32_t node,
+  const math::transform *transform,
+  const uint32_t from_callback)
 {
   // -- Param Check -- //
   LIB_ASSERT(graph);
@@ -43,11 +46,21 @@ transform_set(Graph_data *graph,
     
     LIB_ASSERT(curr_trans);
     
-    *curr_trans = transform;
+    *curr_trans = *transform;
     
     // Callback //
-    
-    LOG_TODO_ONCE("Callbacks");
+    for(uint32_t i = 0; i < (uint32_t)graph->transform_callbacks.size(); ++i)
+    {
+      if(i != from_callback - 1)
+      {
+        Graph_callback* cb = graph->transform_callbacks.data();
+        ((transform_callback_fn)(cb[i].function_ptr))(
+          node,
+          transform,
+          cb[i].user_data
+        );
+      }
+    }
     
     return true;
   }

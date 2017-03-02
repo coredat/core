@@ -93,7 +93,8 @@ rigidbody_add(
   
   // Generate transform
   const btTransform bt_transform(
-    Bullet_detail::generate_transform(transform, aabb)
+//    Bullet_detail::generate_transform(transform, aabb)
+    math::transform_to_bt(*transform)
   );
   
   // Generate motion state
@@ -123,6 +124,8 @@ rigidbody_add(
 
     bt_rb = new btRigidBody(rb_ci);
     bt_rb->setCollisionFlags(get_bt_collision_flags(rb));
+    bt_rb->setCenterOfMassTransform(Bullet_detail::generate_transform(transform, aabb));
+    bt_rb->setWorldTransform(bt_transform);
   }
   
   // Check we have all we need
@@ -212,8 +215,6 @@ rigidbody_update(
   }
   
   // Transform Update
-  LIB_ASSERT(transform && aabb); // Need both to update transform
-  
   if(transform && aabb)
   {
     bt_rb->setCenterOfMassTransform(
@@ -228,6 +229,10 @@ rigidbody_update(
         )
       )
     );
+  }
+  else if(transform && !aabb)
+  {
+    bt_rb->setWorldTransform(math::transform_to_bt(*transform));
   }
   
   // Add back to the world.
