@@ -1,7 +1,7 @@
 #include "../graph.hpp"
 #include "graph_data.hpp"
-#include <utilities/assert.hpp>
-#include <utilities/logging.hpp>
+#include <utilities/utilities.hpp>
+#include <math/math.hpp>
 
 
 // -------------------------------------------------------[ Node Management ]--
@@ -19,22 +19,29 @@ node_add(Graph_data *graph)
   
   // -- Add New Node -- //
 
-  const uint32_t new_instance = graph->node_instance_counter++;
+  const uint32_t new_instance = ++graph->node_instance_counter;
   
-  lib::buffer::push(&graph->node_ids);
-  uint32_t *id = (uint32_t*)lib::buffer::last(&graph->node_ids);
-  *id = new_instance;
+  graph->node_ids.emplace_back(new_instance);
   
-  lib::buffer::push(&graph->node_callbacks);
-  lib::buffer::push(&graph->node_aabb);
-  lib::buffer::push(&graph->node_components);
-  lib::buffer::push(&graph->node_tags);
-  lib::buffer::push(&graph->node_user_data);
-  lib::buffer::push(&graph->node_collision_callbacks);
+  graph->node_callbacks.emplace_back(uintptr_t{0},uintptr_t{0});
+  graph->node_aabb.emplace_back(
+    math::vec3_zero(),
+    math::vec3_zero()
+  );
+  graph->node_components.emplace_back(uint32_t{0});
+  graph->node_tags.emplace_back(uint32_t{0});
+  graph->node_transform.emplace_back(
+    math::vec3_zero(),
+    math::vec3_one(),
+    math::quat_init()
+  );
+  graph->node_user_data.emplace_back(uintptr_t{0});
+  graph->node_collision_callbacks.emplace_back(uintptr_t{0},uintptr_t{0});
+  graph->node_message_callbacks.emplace_back(uintptr_t{0},uintptr_t{0});
   
   // Cache as following calls will likely setup the properties //
   graph->last_instance = new_instance;
-  graph->index_cache = lib::buffer::size(&graph->node_ids) - 1;
+  graph->index_cache = graph->node_ids.size() - 1;
   
   return new_instance;
 }
@@ -53,14 +60,14 @@ node_remove(Graph_data *graph,
   
   if(graph->find_index(node, &index))
   {
-    lib::buffer::erase(&graph->node_ids, index);
-    lib::buffer::erase(&graph->node_aabb, index);
-    lib::buffer::erase(&graph->node_components, index);
-    lib::buffer::erase(&graph->node_tags, index);
-    lib::buffer::erase(&graph->node_transform, index);
-    lib::buffer::erase(&graph->node_user_data, index);
-    lib::buffer::erase(&graph->node_collision_callbacks, index);
-    lib::buffer::erase(&graph->node_message_callbacks, index);
+    graph->node_ids.erase(index);
+    graph->node_aabb.erase(index);
+    graph->node_components.erase(index);
+    graph->node_tags.erase(index);
+    graph->node_transform.erase(index);
+    graph->node_user_data.erase(index);
+    graph->node_collision_callbacks.erase(index);
+    graph->node_message_callbacks.erase(index);
     
     // Invalidate the cache //
     graph->last_instance = -1;
@@ -98,7 +105,7 @@ node_count(const Graph_data *graph)
   // -- Param Check -- //
   LIB_ASSERT(graph);
 
-  return lib::buffer::size(&graph->node_ids);
+  return graph->node_ids.size();
 }
 
 
@@ -117,7 +124,7 @@ node_add_collision_callback(Graph_data *graph,
   if(graph->find_index(node, &index))
   {
     Graph_callback *callbacks(
-      (Graph_callback*)lib::buffer::bytes(&graph->node_collision_callbacks)
+      graph->node_collision_callbacks.data()
     );
     
     callbacks[index].function_ptr = callback;
@@ -146,7 +153,7 @@ node_get_collision_callback(const Graph_data *graph,
   if(graph->find_index(node, &index))
   {
     const Graph_callback *callbacks(
-      (const Graph_callback*)lib::buffer::bytes(&graph->node_collision_callbacks)
+      graph->node_collision_callbacks.data()
     );
     
     *callback  = callbacks[index].function_ptr;
@@ -170,7 +177,7 @@ node_remove_collision_callback(Graph_data *graph, const uint32_t node)
   if(graph->find_index(node, &index))
   {
     Graph_callback *callbacks(
-      (Graph_callback*)lib::buffer::bytes(&graph->node_collision_callbacks)
+      graph->node_collision_callbacks.data()
     );
     
     callbacks[index].function_ptr = 0;
@@ -197,35 +204,35 @@ namespace Graph {
 const uint32_t*
 get_node_ids(const Graph_data *graph)
 {
-  return (const uint32_t*)lib::buffer::bytes(&graph->node_ids);
+  return (const uint32_t*)graph->node_ids.data();
 }
 
 
 const uint32_t*
 get_components(const Graph_data *graph)
 {
-  return (const uint32_t*)lib::buffer::bytes(&graph->node_components);
+  return (const uint32_t*)graph->node_components.data();
 }
 
 
 const uint32_t*
 get_node_tags(const Graph_data *graph)
 {
-  return (const uint32_t*)lib::buffer::bytes(&graph->node_tags);
+  return (const uint32_t*)graph->node_tags.data();
 }
 
 
 const math::transform*
 get_transforms(const Graph_data *graph)
 {
-  return (const math::transform*)lib::buffer::bytes(&graph->node_transform);
+  return (const math::transform*)graph->node_transform.data();
 }
 
 
 const math::aabb*
 get_aabbs(const Graph_data *graph)
 {
-  return (const math::aabb*)lib::buffer::bytes(&graph->node_aabb);
+  return (const math::aabb*)graph->node_aabb.data();
 }
 
 

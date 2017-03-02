@@ -41,12 +41,12 @@ transform_set(
   if(graph->find_index(node, &index))
   {
     math::transform *curr_trans(
-      (math::transform*)lib::buffer::at(&graph->node_transform, index)
+      graph->node_transform.data()
     );
     
     LIB_ASSERT(curr_trans);
     
-    *curr_trans = *transform;
+    curr_trans[index] = *transform;
     
     // Callback //
     for(uint32_t i = 0; i < (uint32_t)graph->transform_callbacks.size(); ++i)
@@ -83,13 +83,13 @@ transform_get(const Graph_data *graph,
   
   if(graph->find_index(node, &index))
   {
-    math::transform *curr_trans(
-      (math::transform*)lib::buffer::at(&graph->node_transform, index)
+    const math::transform *curr_trans(
+      graph->node_transform.data()
     );
     
     LIB_ASSERT(curr_trans);
     
-    *out_transform = *curr_trans;
+    *out_transform = curr_trans[index];
     
     return true;
   }

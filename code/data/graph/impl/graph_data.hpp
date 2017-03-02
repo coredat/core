@@ -3,11 +3,22 @@
 
 
 #include <utilities/utilities.hpp>
+#include <math/math.hpp>
 #include <stddef.h>
+
+
+namespace {
+
+
+constexpr size_t init_stack_size = 0;
+
+
+} // anon ns
 
 
 namespace Data {
 namespace Graph {
+
 
 struct Graph_callback
 {
@@ -18,23 +29,23 @@ struct Graph_callback
 
 struct Graph_data
 {
-  lib::buffer::data node_ids;
+  lib::array<uint32_t, init_stack_size> node_ids;
   
   /*
     Internal use.
   */
-  lib::buffer::data node_callbacks;
-  lib::buffer::data node_aabb;
-  lib::buffer::data node_components;
+  lib::array<Graph_callback, init_stack_size> node_callbacks;
+  lib::array<math::aabb, init_stack_size> node_aabb;
+  lib::array<uint32_t, init_stack_size> node_components;
   
   /*
     External and Internal use.
   */
-  lib::buffer::data node_tags;
-  lib::buffer::data node_transform;
-  lib::buffer::data node_user_data;
-  lib::buffer::data node_collision_callbacks;
-  lib::buffer::data node_message_callbacks;
+  lib::array<uint32_t, init_stack_size> node_tags;
+  lib::array<math::transform, init_stack_size> node_transform;
+  lib::array<uintptr_t, init_stack_size> node_user_data;
+  lib::array<Graph_callback, init_stack_size> node_collision_callbacks;
+  lib::array<Graph_callback, init_stack_size> node_message_callbacks;
   
   /*
     Instance counter.
@@ -56,8 +67,8 @@ struct Graph_data
 //      return true;
 //    }
     
-    const uint32_t *ids = (const uint32_t*)lib::buffer::bytes(&node_ids);
-    size_t count = lib::buffer::size(&node_ids);
+    const uint32_t *ids = node_ids.data();
+    size_t count = node_ids.size();
     
     LOG_TODO_ONCE("Make a bin search");
     

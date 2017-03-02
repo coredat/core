@@ -36,51 +36,6 @@ initialize(const size_t inital_graph_size,
   {
     bool setup = true;
     
-    setup &= lib::buffer::init(&graph->node_ids,
-                                sizeof(uint32_t),
-                                inital_graph_size,
-                                malloc_fn, realloc_fn, free_fn);
-
-    setup &= lib::buffer::init(&graph->node_components,
-                                sizeof(uint32_t),
-                                inital_graph_size,
-                                malloc_fn, realloc_fn, free_fn);
-    
-    setup &= lib::buffer::init(&graph->node_transform,
-                                sizeof(math::transform),
-                                inital_graph_size,
-                                malloc_fn, realloc_fn, free_fn);
-
-    setup &= lib::buffer::init(&graph->node_aabb,
-                                sizeof(math::aabb),
-                                inital_graph_size,
-                                malloc_fn, realloc_fn, free_fn);
-
-    setup &= lib::buffer::init(&graph->node_tags,
-                                sizeof(uint32_t),
-                                inital_graph_size,
-                                malloc_fn, realloc_fn, free_fn);
-
-    setup &= lib::buffer::init(&graph->node_user_data,
-                                sizeof(uintptr_t),
-                                inital_graph_size,
-                                malloc_fn, realloc_fn, free_fn);
-
-    setup &= lib::buffer::init(&graph->node_collision_callbacks,
-                                sizeof(Graph_callback),
-                                inital_graph_size,
-                                malloc_fn, realloc_fn, free_fn);
-    
-    setup &= lib::buffer::init(&graph->node_message_callbacks,
-                                sizeof(Graph_callback),
-                                inital_graph_size,
-                                malloc_fn, realloc_fn, free_fn);
-
-    setup &= lib::buffer::init(&graph->node_callbacks,
-                                sizeof(uintptr_t),
-                                inital_graph_size,
-                                malloc_fn, realloc_fn, free_fn);
-    
     if(!setup)
     {
       LIB_ASSERT(false);
@@ -103,15 +58,6 @@ destroy(Graph_data *graph)
 {
   if(graph)
   {
-    lib::buffer::destroy(&graph->node_ids);
-    lib::buffer::destroy(&graph->node_components);
-    lib::buffer::destroy(&graph->node_transform);
-    lib::buffer::destroy(&graph->node_aabb);
-    lib::buffer::destroy(&graph->node_user_data);
-    lib::buffer::destroy(&graph->node_collision_callbacks);
-    lib::buffer::destroy(&graph->node_message_callbacks);
-    lib::buffer::destroy(&graph->node_callbacks);
-
     LOG_INFO("Scene Graph destroyed");
     
     return true;

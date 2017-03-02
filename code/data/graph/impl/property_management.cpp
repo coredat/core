@@ -22,7 +22,7 @@ tags_set(Graph_data *graph, const uint32_t node, const uint32_t tags)
   if(graph->find_index(node, &index))
   {
     uint32_t *curr_tags(
-      (uint32_t *)lib::buffer::bytes(&graph->node_tags)
+      graph->node_tags.data()
     );
     
     LIB_ASSERT(curr_tags);
@@ -50,7 +50,7 @@ tags_get(Graph_data *graph, const uint32_t node, uint32_t *tags)
   if(graph->find_index(node, &index))
   {
     uint32_t *curr_tags(
-      (uint32_t *)lib::buffer::bytes(&graph->node_tags)
+      graph->node_tags.data()
     );
     
     LIB_ASSERT(curr_tags);
@@ -80,7 +80,7 @@ message_callback_set(Graph_data *graph,
   if(graph->find_index(node, &index))
   {
     Graph_callback *graph_cb(
-      (Graph_callback*)lib::buffer::bytes(&graph->node_message_callbacks)
+      graph->node_message_callbacks.data()
     );
     
     LIB_ASSERT(graph_cb);
@@ -112,8 +112,8 @@ message_callback_get(const Graph_data *graph,
   
   if(graph->find_index(node, &index))
   {
-    Graph_callback *graph_cb(
-      (Graph_callback*)lib::buffer::bytes(&graph->node_message_callbacks)
+    const Graph_callback *graph_cb(
+      graph->node_message_callbacks.data()
     );
     
     LIB_ASSERT(graph_cb);
@@ -144,7 +144,7 @@ user_data_set(Graph_data *graph,
   if(graph->find_index(node, &index))
   {
     uintptr_t *curr_user_data(
-      (uintptr_t *)lib::buffer::bytes(&graph->node_user_data)
+      graph->node_user_data.data()
     );
     
     LIB_ASSERT(curr_user_data);
@@ -174,7 +174,7 @@ user_data_get(Graph_data *graph,
   if(graph->find_index(node, &index))
   {
     uintptr_t *curr_user_data(
-      (uintptr_t *)lib::buffer::bytes(&graph->node_user_data)
+      graph->node_user_data.data()
     );
     
     LIB_ASSERT(curr_user_data);

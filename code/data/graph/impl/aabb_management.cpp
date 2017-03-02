@@ -24,7 +24,7 @@ aabb_set(Graph_data *graph,
   if(graph->find_index(node, &index))
   {
     math::aabb *aabbs(
-      (math::aabb *)lib::buffer::bytes(&graph->node_aabb)
+      graph->node_aabb.data()
     );
     
     LIB_ASSERT(aabbs);
@@ -54,7 +54,7 @@ aabb_get(const Graph_data *graph,
   if(graph->find_index(node, &index))
   {
     const math::aabb *aabbs(
-      (const math::aabb *)lib::buffer::bytes(&graph->node_aabb)
+      graph->node_aabb.data()
     );
     
     LIB_ASSERT(aabbs);
