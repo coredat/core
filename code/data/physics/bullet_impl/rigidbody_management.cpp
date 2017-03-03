@@ -119,8 +119,8 @@ rigidbody_add(
       inertia
     );
     
-    rb_ci.m_friction = 0.9;
-    rb_ci.m_restitution = 0;
+    rb_ci.m_friction = 0.7f;
+    rb_ci.m_restitution = 0.4f;
 
     bt_rb = new btRigidBody(rb_ci);
     bt_rb->setCollisionFlags(get_bt_collision_flags(rb));
@@ -246,6 +246,52 @@ rigidbody_remove(
   Physics_data *phys,
   const uint32_t id)
 {
+  // -- Param Check -- //
+  LIB_ASSERT(phys);
+  LIB_ASSERT(id);
+  
+
+  // -- Remove RB From World -- //
+  LIB_ASSERT(false);
+}
+
+
+void
+rigidbody_apply_force(
+  const Physics_data *phys,
+  const uint32_t id,
+  const math::vec3 world_direction,
+  const float force)
+{
+  // -- Param Check -- //
+  LIB_ASSERT(phys);
+  LIB_ASSERT(id);
+  LIB_ASSERT(math::vec3_length(world_direction));
+  LIB_ASSERT(force > 0.f);
+  
+  size_t index = 0;
+  
+  if(!lib::key::linear_search(
+    id,
+    phys->rb_ids.data(),
+    phys->rb_ids.size(),
+    &index))
+  {
+    LOG_ERROR("This Entity already has a rigidbody.");
+    return;
+  }
+  
+  // -- Apply Force --/
+  {
+    btRigidBody *bt_rb = (btRigidBody*)phys->rb_data[index].rigidbody_ptr;
+  
+    const btVector3 bt_dir   = btVector3(math::vec3_to_bt(world_direction));
+    const btVector3 bt_force = bt_dir * force;
+    const btVector3 rel_pos(0,0,0);
+
+    bt_rb->activate(true);
+    bt_rb->applyForce(bt_force, rel_pos);
+  }
 }
 
 

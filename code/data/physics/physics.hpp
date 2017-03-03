@@ -136,6 +136,15 @@ void
 rigidbody_remove(Physics_data *phys, const uint32_t id);
 
 
+void
+rigidbody_apply_force(
+  const Physics_data *phys,
+  const uint32_t id,
+  const math::vec3 world_direction,
+  const float force
+);
+
+
 // ----------------------------------------------------[ Trigger Management ]--
 
 

@@ -52,7 +52,10 @@ set_transform(const Core::Entity_ref &ref,
   }
 
   const uint32_t entity_uint_id(ref.get_id());
-  const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(entity_uint_id);
+  
+  const Core_detail::Entity_id entity_id(
+    Core_detail::entity_id_from_uint(entity_uint_id)
+  );
 
   auto world_data(Core_detail::world_index_get_world_data(entity_id.world_instance));
   assert(world_data);
@@ -91,7 +94,9 @@ get_transform(const Core::Entity_ref &ref)
   }
 
   const uint32_t entity_uint_id(ref.get_id());
-  const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(entity_uint_id);
+  const Core_detail::Entity_id entity_id(
+    Core_detail::entity_id_from_uint(entity_uint_id)
+  );
 
   auto world_data(Core_detail::world_index_get_world_data(entity_id.world_instance));
   assert(world_data);
@@ -271,7 +276,9 @@ set_renderer(const Core::Entity_ref &ref,
   }
   
   const uint32_t entity_uint_id(ref.get_id());
-  const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(entity_uint_id);
+  const Core_detail::Entity_id entity_id(
+    Core_detail::entity_id_from_uint(entity_uint_id)
+  );
 
   auto world_data(Core_detail::world_index_get_world_data(entity_id.world_instance));
   assert(world_data);
@@ -279,9 +286,15 @@ set_renderer(const Core::Entity_ref &ref,
   // -- Check to see if renderer is attached -- //
   {
     uint32_t components = 0;
-    Data::Graph::components_get(world_data->scene_graph, entity_uint_id, &components);
+    Data::Graph::components_get(
+      world_data->scene_graph,
+      entity_uint_id,
+      &components
+    );
     
-    const uint32_t renderer_type = Common::Data_type::get_renderer_type(components);
+    const uint32_t renderer_type(
+      Common::Data_type::get_renderer_type(components)
+    );
   
     if(renderer_type != 0)
     {
@@ -291,7 +304,11 @@ set_renderer(const Core::Entity_ref &ref,
     {
       // Remove component
       components &= Common::Data_type::renderer_text;
-      Data::Graph::components_set(world_data->scene_graph, entity_uint_id, components);
+      Data::Graph::components_set(
+        world_data->scene_graph,
+        entity_uint_id,
+        components
+      );
     }
   }
 
@@ -331,7 +348,9 @@ get_renderer(const Core::Entity_ref &ref)
   }
 
   const uint32_t entity_uint_id(ref.get_id());
-  const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(entity_uint_id);
+  const Core_detail::Entity_id entity_id(
+    Core_detail::entity_id_from_uint(entity_uint_id)
+  );
 
   auto world_data(Core_detail::world_index_get_world_data(entity_id.world_instance));
   assert(world_data);
@@ -380,7 +399,9 @@ set_rigidbody(const Core::Entity_ref &ref,
   }
   
   const uint32_t this_id(ref.get_id());
-  const Core_detail::Entity_id entity_id = Core_detail::entity_id_from_uint(this_id);
+  const Core_detail::Entity_id entity_id(
+    Core_detail::entity_id_from_uint(this_id)
+  );
 
   auto world_data(Core_detail::world_index_get_world_data(entity_id.world_instance));
   assert(world_data);
@@ -425,11 +446,12 @@ set_rigidbody(const Core::Entity_ref &ref,
   const Core::Collider core_coll = rigidbody.get_collider();
   
   Data::Physics::Collider_config coll;
-  coll.type = core_coll.get_type() == Core::Collider::Type::box ?  Data::Physics::Collider_type::box : Data::Physics::Collider_type::unknown;
+  coll.type = core_coll.get_type() == Core::Collider::Type::box ? Data::Physics::Collider_type::box : Data::Physics::Collider_type::unknown;
   coll.args[0] = core_coll.get_arg_01();
   coll.args[1] = core_coll.get_arg_02();
   coll.args[2] = core_coll.get_arg_03();
   
+  // -- Add or Update Trigger / Rigidbody -- //
   if(!rigidbody.is_trigger())
   {
     Data::Physics::Rigidbody_config rb;
