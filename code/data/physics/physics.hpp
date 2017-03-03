@@ -92,7 +92,7 @@ void
 debug_draw_point_cb(Physics_data *phys, const draw_point_fn cb);
 
 
-// ------------------------------------------------------[ Transform setter ]--
+// ------------------------------------------------------[ Transform Setter ]--
 
 
 void

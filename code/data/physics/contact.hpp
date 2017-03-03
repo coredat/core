@@ -19,6 +19,11 @@ struct Contact
 };
 
 
+struct Collision
+{
+};
+
+
 } // ns
 } // ns
 

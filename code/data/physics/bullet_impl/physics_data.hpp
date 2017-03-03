@@ -2,6 +2,7 @@
 #define PHYISCS_DATA_INCLUDED_F50C8767_EF70_417B_AB25_2D84A48A2416
 
 
+#include "../contact.hpp"
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 #include "utils/debug_renderer.hpp"
@@ -45,6 +46,10 @@ struct Physics_data
   
   lib::array<uint32_t, 0>             trigger_ids;
   lib::array<Trigger, 0>              trigger_data;
+  
+  lib::array<int, 0>                  collisions_enter;
+  lib::array<int, 0>                  collisions_current;
+  lib::array<int, 0>                  collisions_exit;
   
   uint32_t                            transform_callback_id = -1;
   

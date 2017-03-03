@@ -249,7 +249,6 @@ rigidbody_remove(
   // -- Param Check -- //
   LIB_ASSERT(phys);
   LIB_ASSERT(id);
-  
 
   // -- Remove RB From World -- //
   LIB_ASSERT(false);
