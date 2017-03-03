@@ -16,7 +16,7 @@
 #include <random>
 
 
-namespace math {
+_MATH_NS_OPEN
 
 
 // ** INTERFACE ** //
@@ -65,6 +65,11 @@ MATH_GENR_INLINE uint32_t           to_uint(const float x);
 MATH_GENR_INLINE float              rand_range(const float start, const float end);
 MATH_GENR_INLINE uint32_t           rand_range(const uint32_t start, const uint32_t end);
 MATH_GENR_INLINE int32_t            rand_range(const int32_t start, const int32_t end);
+
+
+// ** Other waves ** //
+
+MATH_GENR_INLINE float              square_wave(const float time);
 
 
 // ** Other general ** //
@@ -421,7 +426,17 @@ rand_range(const int32_t start, const int32_t end)
 }
 
 
-} // namespace
+// ** Other waves ** //
+
+float
+square_wave(const float time)
+{
+  // Im sure we can do this without calling sin
+  return sign(sin(time));
+}
+
+
+_MATH_NS_CLOSE
 
 
 #endif // include guard
