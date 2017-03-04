@@ -3,15 +3,7 @@
 #include "font_data.hpp"
 #include "text_renderer_data.hpp"
 #include <math/math.hpp>
-#include <utilities/assert.hpp>
-#include <utilities/logging.hpp>
-#include <utilities/file.hpp>
-#include <utilities/string.hpp>
-#include <utilities/directory.hpp>
-#include <utilities/bits.hpp>
-#include <utilities/id.hpp>
-#include <utilities/assert.hpp>
-#include <utilities/platform.hpp>
+#include <utilities/utilities.hpp>
 #include <op/op.hpp>
 #include <data/common/directories.hpp>
 
@@ -341,7 +333,7 @@ set_draw_call(Text_renderer_data *renderer,
       const uint64_t *glyph_ids       = (uint64_t*)lib::buffer::bytes(&renderer->glyph_keys);
       const size_t    glyph_ids_count = lib::buffer::size(&renderer->glyph_keys);
       
-      if(lib::id::linear_search(glyph_id, glyph_ids, glyph_ids_count))
+      if(lib::key::linear_search(glyph_id, glyph_ids, glyph_ids_count))
       {
         continue;
       }
@@ -494,7 +486,7 @@ set_draw_call(Text_renderer_data *renderer,
         const uint32_t *ids   = (uint32_t*)lib::buffer::bytes(&renderer->string_keys);
         const size_t id_count = lib::buffer::size(&renderer->string_keys);
         
-        if(!lib::id::linear_search(id, ids, id_count, &index))
+        if(!lib::key::linear_search(id, ids, id_count, &index))
         {
           lib::buffer::push(&renderer->string_keys);
           lib::buffer::push(&renderer->string_data);
@@ -619,7 +611,7 @@ update_draw_call_matrix(Text_renderer_data *renderer,
     const uint32_t *ids   = (uint32_t*)lib::buffer::bytes(&renderer->string_keys);
     const size_t id_count = lib::buffer::size(&renderer->string_keys);
 
-    if(!lib::id::linear_search(id, ids, id_count, &index))
+    if(!lib::key::linear_search(id, ids, id_count, &index))
     {
       LOG_WARNING("This entity has no text renderer attached.");
       return;

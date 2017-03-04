@@ -5,9 +5,8 @@
 #include "utils/convert.hpp"
 #include "utils/motion_state.hpp"
 #include "physics_data.hpp"
-#include <utilities/assert.hpp>
-#include <utilities/logging.hpp>
-#include <utilities/key.hpp>
+#include <utilities/utilities.hpp>
+#include <math/math.hpp>
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
 
 

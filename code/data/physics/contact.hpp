@@ -15,7 +15,7 @@ struct Contact
   math::vec3    contact_point;
   math::vec3    contact_normal;
   float         distance; // for collisions this is pen depth, for ray this is distance.
-  uintptr_t     user_data;
+  uint64_t      collision_a_b;
 };
 
 

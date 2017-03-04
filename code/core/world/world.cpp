@@ -19,6 +19,41 @@
 #include <utilities/utilities.hpp>
 
 
+namespace {
+
+
+inline Core::Contact
+to_core_contact(const Data::Physics::Contact *contact)
+{
+  return Core::Contact(
+    Core::Entity_ref(lib::bits::upper32(contact->collision_a_b)),
+    contact->contact_point,
+    contact->contact_normal,
+    contact->distance
+  );
+}
+
+inline Core::Collision
+to_core_collision(const Data::Physics::Contact contacts[], const size_t count)
+{
+  Core::Contact core_contacts[8];
+  
+  for(int i = 0; i < (count > 8 ? 8 : count); ++i)
+  {
+    core_contacts[i] = to_core_contact(&contacts[i]);
+  }
+
+  return Core::Collision(
+    Core::Entity_ref(lib::bits::upper32(contacts[0].collision_a_b)),
+    core_contacts,
+    count > 8 ? 8 : count
+  );
+}
+
+
+} // anon ns
+
+
 namespace Core {
 
 
@@ -127,7 +162,12 @@ World::get_time_running() const
 void
 World::think()
 {
-  // Calculate delta_time
+  auto world = Core_detail::world_index_get_world_data(m_impl->world_instance_id);
+  LIB_ASSERT(world);
+
+  /*
+    Calculate Delta time.
+  */
   {
     const lib::milliseconds now = lib::timer::get_current_time();
     const lib::milliseconds frame_time = lib::timer::get_delta(m_impl->dt_timer, now);
@@ -137,14 +177,14 @@ World::think()
     m_impl->running_time += m_impl->dt;
   }
 
-  // Engine Think
+  /*
+    Engine thing.
+    Most of this can go I think, or at least be brought into here.
+  */
   Engine::Tick_information tick_info;
   {
     auto resources = Data::get_context_data();
-    assert(resources);
-    
-    auto world = Core_detail::world_index_get_world_data(m_impl->world_instance_id);
-    assert(world);
+    LIB_ASSERT(resources);
 
     Engine::think(
       world,
@@ -154,6 +194,49 @@ World::think()
       m_impl->context->get_width(),
       m_impl->context->get_height(),
       &tick_info);
+  }
+  
+  /*
+    Distro Collisions
+  */
+  {
+    Data::Physics::Physics_data *phys = world->physics;
+    LIB_ASSERT(phys);
+    
+    Data::Graph::Graph_data *graph = world->scene_graph;
+    LIB_ASSERT(graph);
+    
+    const size_t coll_count(
+      Data::Physics::world_get_number_of_colliding_items(phys)
+    );
+    
+    const Data::Physics::Contact *contacts(
+      Data::Physics::world_get_colliding_items(phys)
+    );
+    
+    for(size_t i = 0; i < coll_count; ++i)
+    {
+      uintptr_t collision_callback = 0;
+      uintptr_t user_data = 0;
+      
+      const uint32_t this_id = lib::bits::lower32(contacts[i].collision_a_b);
+      
+      Data::Graph::node_get_collision_callback(
+        graph,
+        this_id,
+        &user_data,
+        &collision_callback
+      );
+
+      if(collision_callback)
+      {
+        ((on_collision_callback_fn)collision_callback)(
+          user_data,
+          Entity_ref(this_id),
+          to_core_collision(&contacts[i], 1)
+        );
+      }
+    }
   }
   
   /*
@@ -265,12 +348,7 @@ World::find_entity_by_ray(const Ray ray) const
   
   if(contacts)
   {
-    return Contact(
-      Core::Entity_ref(contact.user_data),
-      contact.contact_point,
-      contact.contact_normal,
-      contact.distance
-    );
+    return to_core_contact(&contact);
   }
   
   return Contact();

@@ -48,7 +48,7 @@ struct Physics_data
   lib::array<Trigger, 0>              trigger_data;
   
   lib::array<int, 0>                  collisions_enter;
-  lib::array<int, 0>                  collisions_current;
+  lib::array<Contact, 0>              collisions_current;
   lib::array<int, 0>                  collisions_exit;
   
   uint32_t                            transform_callback_id = -1;

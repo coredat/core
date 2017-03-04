@@ -6,9 +6,8 @@
 #include "utils/motion_state.hpp"
 #include "utils/bullet_math_extensions.hpp"
 #include "physics_data.hpp"
-#include <utilities/assert.hpp>
-#include <utilities/logging.hpp>
-#include <utilities/key.hpp>
+#include <utilities/utilities.hpp>
+#include <math/math.hpp>
 
 
 namespace {
@@ -124,8 +123,10 @@ rigidbody_add(
 
     bt_rb = new btRigidBody(rb_ci);
     bt_rb->setCollisionFlags(get_bt_collision_flags(rb));
-    bt_rb->setCenterOfMassTransform(Bullet_detail::generate_transform(transform, aabb));
     bt_rb->setWorldTransform(bt_transform);
+    bt_rb->setCenterOfMassTransform(
+      Bullet_detail::generate_transform(transform, aabb)
+    );
   }
   
   // Check we have all we need

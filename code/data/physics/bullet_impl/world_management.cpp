@@ -18,7 +18,13 @@ namespace Physics {
 void
 world_set_gravity(Physics_data *phys, const math::vec3 gravity)
 {
-  LIB_ASSERT(false); // not impl
+  // -- Param Check -- //
+  LIB_ASSERT(phys);
+  
+  // -- Set Gravity -- //
+  phys->dynamics_world->setGravity(
+    math::vec3_to_bt(gravity)
+  );
 }
 
 
@@ -38,382 +44,202 @@ world_think(Physics_data *phys)
   phys->dynamics_world->debugDrawWorld();
   #endif
   
-  // Collisions //
+  /*
+    Common var for getting trigger and rigidbody collisions.
+  */
+  constexpr size_t contact_stack_count = 64;
+  using Contact_array = lib::array<Contact, contact_stack_count>;
   
-//  auto                   world_data(Core_detail::world_index_get_world_data(world_id));
-//  Data::Collision_data  *collision_data(world_data->collision_data);
-//  Data::Trigger_data    *trigger_data(world_data->trigger_data);
-//  
-//  if(!world_data || !collision_data || !trigger_data)
-//  {
-//    LOG_FATAL("Missing Data");
-//    return;
-//  }
+  Contact_array frame_contacts;
+  btDynamicsWorld *dyn_world = phys->dynamics_world;
   
-  
-//  /*
-//    Trigger Collisions
-//  */
-//  {
-//    const size_t trigger_count(phys->trigger_data.size());
-//    
-////    for(size_t t = 0; t < trigger_count; ++t)
-//    for(auto &trig : phys->trigger_data)
-//    {
-//      uintptr_t ghost_trigger(trig.ghost_ptr);
-//      
-//      btPairCachingGhostObject *ghost_object(reinterpret_cast<btPairCachingGhostObject*>(ghost_trigger));
-//      
-//      if(!ghost_object)
-//      {
-//        LOG_ERROR_ONCE("Null trigger found.");
-//        continue;
-//      }
-//    
-//      struct callback : public btCollisionWorld::ContactResultCallback
-//      {
-//        virtual	btScalar
-//        addSingleResult(btManifoldPoint &manifold,
-//                        const btCollisionObjectWrapper* collision_shape_a,
-//                        int partId0,
-//                        int index0,
-//                        const btCollisionObjectWrapper* collision_shape_b,
-//                        int partId1,
-//                        int index1)
-//        {
-//          // http://bulletphysics.org/Bullet/phpBB3/viewtopic.php?t=5982#p20990
-//          constexpr btScalar unused_return = 1.f;
-//        
-//          const uintptr_t entity_id_a((uintptr_t)collision_shape_a->getCollisionShape()->getUserPointer());
-//          const uintptr_t entity_id_b((uintptr_t)collision_shape_b->getCollisionShape()->getUserPointer());
-//          
-////          #ifdef EXTRA_DEBUG_INFO_TRIGGER_CALLBACK
-////          Core::Entity_ref ref_a(Core_detail::entity_id_from_uint(entity_id_a));
-////          Core::Entity_ref ref_b(Core_detail::entity_id_from_uint(entity_id_b));
-////          #endif
-//          
-//          if(!entity_id_a || !entity_id_b)
-//          {
-//            LOG_WARNING_ONCE("Found a collision shape with no user-data");
-//            return unused_return;
-//          }
-//          
-//          const float penitration(manifold.getDistance());
-//          
-//          if(penitration < 0.f)
-//          {
-//            const uint32_t collision_id(Data::collision_push(collision_data));
-//            const float direction = 1.f;
-//
-//            Physics_transform::Collision_point contact
-//            {
-//              penitration * direction,
-//              math::vec3_from_bt(manifold.m_positionWorldOnA),
-//              math::vec3_from_bt(manifold.m_normalWorldOnB)
-//            };
-//            
-//            Data::collision_set_collision_point(collision_data, collision_id, &contact);
-//            
-//            const uint64_t entity_pair(lib::bits::pack3232(entity_id_a, entity_id_b));
-//            Data::collision_set_entity_pair(collision_data, collision_id, &entity_pair);
-//          }
-//          
-//          return unused_return;
-//        }
-//        
-//        Data::Collision_data *collision_data;
-//      };
-//
-//      callback cb;
-//      cb.collision_data = collision_data;
-//
-//      dynamicsWorld->contactTest(ghost_object, cb);
-//    
-//    }
-//  }
-//  
-//  /*
-//    Trigger Collisions
-//    --
-//    For each trigger check overlapping pairs.
-//  */
-//  {
-//    const size_t trigger_count(Data::trigger_get_size(trigger_data));
-//
-//    // Disabling this for the moment.
-//    for(size_t t = trigger_count; t < trigger_count; ++t)
-////    for(size_t t = 0; t < trigger_count; ++t)
-//    {
-//      uintptr_t ghost_trigger(Data::trigger_get_trigger_data(trigger_data)[t].ghost_ptr);
-//      
-//      btPairCachingGhostObject *ghost_object(reinterpret_cast<btPairCachingGhostObject*>(ghost_trigger));
-//      
-//      if(!ghost_object)
-//      {
-//        LOG_ERROR_ONCE("Null trigger found.");
-//        continue;
-//      }
-//      
-//      const btBroadphasePairArray &pair_array(ghost_object->getOverlappingPairCache()->getOverlappingPairArray());
-//      
-//      const int pair_count(pair_array.size());
-//      
-//      for(int p = 0; p < pair_count; ++p)
-//      {
-//        const btBroadphasePair &pair(pair_array[p]);
-//        const btBroadphasePair *collision_pair(dynamicsWorld->getPairCache()->findPair(pair.m_pProxy0, pair.m_pProxy1));
-//        
-//        if(!collision_pair)
-//        {
-//          continue;
-//        }
-//        
-//        btManifoldArray manifold_array;
-//        
-//        if(collision_pair->m_algorithm)
-//        {
-//          collision_pair->m_algorithm->getAllContactManifolds(manifold_array);
-//        }
-//        
-//        const int manifold_count = manifold_array.size();
-//        
-//        for(int m = 0; m < manifold_count; ++m)
-//        {
-//          const btPersistentManifold *manifold(manifold_array[m]);
-//          const uintptr_t             entity_id_a((uintptr_t)manifold->getBody0()->getCollisionShape()->getUserPointer());
-//          const uintptr_t             entity_id_b((uintptr_t)manifold->getBody1()->getCollisionShape()->getUserPointer());
-//
-//          #ifdef EXTRA_DEBUG_INFO_TRIGGER_CALLBACK
-//          auto trans_00(manifold->getBody0()->getWorldTransform());
-//          auto trans_01(manifold->getBody1()->getWorldTransform());
-//          #endif
-//          
-//          if(!entity_id_a || !entity_id_b)
-//          {
-//            LOG_WARNING_ONCE("Found a collision shape with no user-data");
-//            continue;
-//          }
-//          
-//          const bool     is_first_body(manifold->getBody0() == ghost_object);
-//          const btScalar direction(is_first_body ? -1.0 : 1.0);
-//          
-//          const int contact_count(manifold->getNumContacts());
-//
-//          for(int p = 0; p < contact_count; ++p)
-//          {
-//            const btManifoldPoint &pt(manifold->getContactPoint(p));
-//            const float            penitration(pt.getDistance());
-//            
-//            if(penitration < 0.f)
-//            {
-//              #ifdef EXTRA_DEBUG_INFO_TRIGGER_CALLBACK
-//              Core::Entity_ref ref_a(Core_detail::entity_id_from_uint(entity_id_a));
-//              Core::Entity_ref ref_b(Core_detail::entity_id_from_uint(entity_id_b));
-//              #endif
-//              
-//              const uint32_t collision_id(Data::collision_push(collision_data));
-//              
-//              Physics_transform::Collision_point contact
-//              {
-//                penitration * direction,
-//                math::vec3_from_bt(pt.getPositionWorldOnA()),
-//                math::vec3_from_bt(pt.m_normalWorldOnB)
-//              };
-//              
-//              Data::collision_set_collision_point(collision_data, collision_id, &contact);
-//              
-//              const uint64_t entity_pair(lib::bits::pack3232(entity_id_a, entity_id_b));
-//              Data::collision_set_entity_pair(collision_data, collision_id, &entity_pair);
-//            }
-//          } // for contact_count
-//        } // for manifold_count
-//      } // for pair_count
-//    } // for trigger_count
-  
-    /*
-      Non Trigger Collisions
-      --
-    */
+  /*
+    Trigger Collisions
+  */
+  {
+    for(auto &trig : phys->trigger_data)
     {
-      btDynamicsWorld *dyn_world = phys->dynamics_world;
-      btDispatcher *dispatcher   = dyn_world->getDispatcher();
+      uintptr_t ghost_trigger(trig.ghost_ptr);
       
-      const int manifold_count = dispatcher->getNumManifolds();
+      btPairCachingGhostObject *ghost_object(
+        reinterpret_cast<btPairCachingGhostObject*>(ghost_trigger)
+      );
       
-      for(int i = 0; i < manifold_count; ++i)
+      if(!ghost_object)
       {
-        const btPersistentManifold *contact_manifold(
-          dispatcher->getManifoldByIndexInternal(i)
-        );
-        
-        // Get Colliding Objects //
-        uint32_t entity_id_a = 0;
-        uint32_t entity_id_b = 0;
+        LOG_ERROR_ONCE("Null trigger found.");
+        continue;
+      }
+    
+      struct callback : public btCollisionWorld::ContactResultCallback
+      {
+        btScalar
+        addSingleResult(
+          btManifoldPoint &manifold,
+          const btCollisionObjectWrapper* collision_shape_a,
+          int partId0,
+          int index0,
+          const btCollisionObjectWrapper* collision_shape_b,
+          int partId1,
+          int index1) override
         {
-          const btCollisionObject* obj_a(
-            static_cast<const btCollisionObject*>(contact_manifold->getBody0())
-          );
-
-          const btCollisionObject* obj_b(
-            static_cast<const btCollisionObject*>(contact_manifold->getBody1())
+          // -- Param Check -- //
+          LIB_ASSERT(collision_shape_a);
+          LIB_ASSERT(collision_shape_b);
+          LIB_ASSERT(this->trigger_contacts);
+        
+          // -- Design Error -- //
+          // http://bulletphysics.org/Bullet/phpBB3/viewtopic.php?t=5982#p20990
+          constexpr btScalar unused_return = 1.f;
+        
+          // -- Get Entities -- //
+          const uint32_t entity_id_a = lib::key::id_from_ptr(
+            collision_shape_a->getCollisionShape()->getUserPointer()
           );
           
-          LIB_ASSERT(obj_a);
-          LIB_ASSERT(obj_b);
-          
-          entity_id_a = (uint32_t)obj_a->getCollisionShape()->getUserPointer();
-          entity_id_b = (uint32_t)obj_b->getCollisionShape()->getUserPointer();
-        }
-        LIB_ASSERT(entity_id_a);
-        LIB_ASSERT(entity_id_b);
+          const uint32_t entity_id_b = lib::key::id_from_ptr(
+            collision_shape_b->getCollisionShape()->getUserPointer()
+          );
 
-        // Get The Collision Info //
-        const int contact_count = contact_manifold->getNumContacts();
-        
-        for (int j = 0; j < contact_count; j++)
-        {
-          const btManifoldPoint& pt = contact_manifold->getContactPoint(j);
-          const float penitration = pt.getDistance();
+          if(!entity_id_a || !entity_id_b)
+          {
+            LOG_WARNING_ONCE("Found a collision shape with no user-data");
+            return unused_return;
+          }
+          
+          const float penitration(manifold.getDistance());
           
           if(penitration < 0.f)
           {
-//            const uint32_t collision_id(Data::collision_push(collision_data));
+            const float direction = 1.f;
             
-//            Physics_transform::Collision_point contact
-//            {
-//              penitration,
-//              math::vec3_from_bt(pt.getPositionWorldOnA()),
-//              math::vec3_from_bt(pt.m_normalWorldOnB)
-//            };
-//            
-//            Data::collision_set_collision_point(collision_data, collision_id, &contact);
-            
-//            const uint64_t entity_pair(lib::bits::pack3232(entity_id_a, entity_id_b));
-//            Data::collision_set_entity_pair(collision_data, collision_id, &entity_pair);
-
-//            const uint64_t entity_pair(lib::bits::pack3232(entity_id_b, entity_id_a));
-//            Data::collision_set_entity_pair(collision_data, collision_id, &entity_pair);
+            trigger_contacts->emplace_back(
+              math::vec3_from_bt(manifold.getPositionWorldOnA()),
+              math::vec3_from_bt(manifold.m_normalWorldOnB),
+              penitration * direction,
+              lib::bits::pack3232(entity_id_a, entity_id_b)
+            );
           }
+          
+          return unused_return;
+        }
+        
+        Contact_array *trigger_contacts = nullptr;
+      };
+
+      callback cb;
+      cb.trigger_contacts = &frame_contacts;
+
+      dyn_world->contactTest(ghost_object, cb);
+    }
+  }
+  
+  /*
+    Non Trigger Collisions
+    --
+  */
+  {
+    btDispatcher *dispatcher = dyn_world->getDispatcher();
+    const int manifold_count = dispatcher->getNumManifolds();
+    
+    for(int i = 0; i < manifold_count; ++i)
+    {
+      const btPersistentManifold *contact_manifold(
+        dispatcher->getManifoldByIndexInternal(i)
+      );
+      
+      // Get Colliding Objects //
+      uint32_t entity_id_a = 0;
+      uint32_t entity_id_b = 0;
+      {
+        const btCollisionObject* obj_a(
+          static_cast<const btCollisionObject*>(contact_manifold->getBody0())
+        );
+
+        const btCollisionObject* obj_b(
+          static_cast<const btCollisionObject*>(contact_manifold->getBody1())
+        );
+        
+        LIB_ASSERT(obj_a);
+        LIB_ASSERT(obj_b);
+        
+        entity_id_a = lib::key::id_from_ptr(
+          obj_a->getCollisionShape()->getUserPointer()
+        );
+        
+        entity_id_b = lib::key::id_from_ptr(
+          obj_b->getCollisionShape()->getUserPointer()
+        );
+      }
+      LIB_ASSERT(entity_id_a);
+      LIB_ASSERT(entity_id_b);
+
+      // Get The Collision Info //
+      const int contact_count = contact_manifold->getNumContacts();
+      
+      for (int j = 0; j < contact_count; j++)
+      {
+        const btManifoldPoint& pt = contact_manifold->getContactPoint(j);
+        const float penitration = pt.getDistance();
+        
+        if(penitration < 0.f)
+        {
+          frame_contacts.emplace_back(
+            math::vec3_from_bt(pt.getPositionWorldOnA()),
+            math::vec3_from_bt(pt.m_normalWorldOnB),
+            penitration,
+            lib::bits::pack3232(entity_id_a, entity_id_b)
+          );
+          
+          frame_contacts.emplace_back(
+            math::vec3_from_bt(pt.getPositionWorldOnB()),
+            math::vec3_scale(math::vec3_from_bt(pt.m_normalWorldOnB), -1),
+            penitration,
+            lib::bits::pack3232(entity_id_b, entity_id_a)
+          );
         }
       }
     }
-
+  } // Rigidbody Collisions with other rigidbodies.
   
   /*
-    Dispatch Collisions
+    Process the contacts
     --
-    Don't like the use of Core:: here.
-    Where possible we should dump the information into an array, and let core apply
-    the transformation to the data to generate Core::Collisions.
-    
-    Also don't like the callback here. World think should check if any collisions then fire its own callback.
+    Will need to process enter/exit right now just push them into current.
   */
-//  {
-//    Data::Collision_data *collision_data(world->collision_data);
-//    Data::Entity_data *entity_data(world->entity);
+  {
+    #ifndef NDEBUG
+    const size_t number_of_contacts = frame_contacts.size();
+    if(number_of_contacts > contact_stack_count)
     
-//    Data::data_lock(collision_data);
-//    Data::data_lock(entity_data);
+    {
+      LOG_INFO_ONCE(
+        "Contacts broke the allocated stack size, heap was used."
+      );
+    }
+    #endif
   
-//    const uint32_t number_of_collisions(Data::collision_get_size(collision_data));
+    phys->collisions_current.clear();
     
-    
-    
-//    uint32_t curr_contact(0);
-//    Core::Contact contacts[Core::Collision_detail::get_max_contacts()];
-//    
-//    for(uint32_t i = 0; i < number_of_collisions; ++i)
-//    {
-//      const uint64_t this_pair = collision_data->field_entity_pair[i];
-//      
-//      const Core_detail::Entity_id entity_a_id = Core_detail::entity_id_from_uint(lib::bits::lower32(this_pair));
-//      const Core::Entity_ref entity_a(entity_a_id);
-//      
-//      const Core_detail::Entity_id entity_b_id = Core_detail::entity_id_from_uint(lib::bits::upper32(this_pair));
-//      const Core::Entity_ref entity_b(entity_b_id);
-//      
-//      if(!entity_a || !entity_b)
-//      {
-//        LOG_WARNING_ONCE("We have an invalid entity in the collision.")
-//        continue;
-//      }
-//      
-//      // Add contact
-//      if(curr_contact < Core::Collision_detail::get_max_contacts())
-//      {
-//        Physics_transform::Collision_point collision_pt(Data::collision_get_collision_point_data(collision_data)[curr_contact + i]);
-//        
-//        contacts[curr_contact] = Core::Contact(entity_b,
-//                                                 collision_pt.point,
-//                                                 collision_pt.normal,
-//                                                 collision_pt.penitration);
-//
-//      }
-//      else
-//      {
-//        LOG_WARNING_ONCE("We have more contacts than can report");
-//      }
-//      
-//      ++curr_contact;
-//      
-//      // If the next contact is different or we are at the end
-//      // Then dispatch the callback.
-//      
-//      uint64_t next_pair(0);
-//      if((i + 1) < number_of_collisions)
-//      {
-//        next_pair = collision_data->field_entity_pair[i + 1];
-//      }
-//      
-//      if(this_pair != next_pair)
-//      {
-//        // Dispatch Collision
-//        if(curr_contact > 0)
-//        {
-//          Core::Collision collision(entity_a, contacts, curr_contact);
-//          
-//          uintptr_t user_data = 0;
-//          Core::on_collision_callback_fn collision_callback = nullptr;
-//          
-//          Data::Graph::node_get_collision_callback(
-//            world->scene_graph,
-//            lib::bits::lower32(this_pair),
-//            &user_data,
-//            (uintptr_t*)&collision_callback
-//          );
-//          
-////          Entity_detail::Callback_collision callback;
-//
-//
-//
-////          collision_callback = nullptr;
-////          Data::Graph::node_get_
-//          
-////          Entity_detail::Callback_collision collision_callback;
-////          Data::entity_get_collision_callback(entity_data, lib::bits_lower(this_pair), &collision_callback);
-//          
-//          #ifdef CORE_COLLISION_DEBUG_TEXT
-//          printf("Collision: %s -> %s \n", entity_a.get_name(), entity_b.get_name());
-//          #endif
-//          
-//          if(collision_callback)
-//          {
-//            collision_callback(user_data, entity_a, collision);
-//          }
-//          
-//          curr_contact = 0;
-//        }
-//      }
-//    }
-//    Data::collision_clear(collision_data);
-//    Data::data_unlock(collision_data);
+    for(const auto &frame : frame_contacts)
+    {
+      phys->collisions_current.emplace_back(frame);
+    }
+  }
 }
 
 
-void*
-world_get_colliding_items(Physics_data *phys)
+size_t
+world_get_number_of_colliding_items(const Physics_data *phys)
 {
-  return nullptr;
+  return phys->collisions_current.size();
+}
+
+
+const Contact*
+world_get_colliding_items(const Physics_data *phys)
+{
+  return phys->collisions_current.data();
 }
 
 
@@ -464,14 +290,16 @@ world_find_with_ray(
       )
     );
   
-    const uintptr_t user_data(
-      (uintptr_t)ray_callback.m_collisionObject->getCollisionShape()->getUserPointer()
+    const uint32_t entity_id(
+      lib::key::id_from_ptr(
+        ray_callback.m_collisionObject->getCollisionShape()->getUserPointer()
+      )
     );
     
     out_contacts[0].contact_point  = math::vec3_from_bt(ray_callback.m_hitPointWorld);
     out_contacts[0].contact_normal = math::vec3_from_bt(ray_callback.m_hitNormalWorld);
     out_contacts[0].distance       = length;
-    out_contacts[0].user_data      = user_data;
+    out_contacts[0].collision_a_b  = lib::bits::pack3232(0, entity_id);
     
     *out_number_of_contacts = 1;
   }

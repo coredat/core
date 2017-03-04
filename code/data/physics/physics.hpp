@@ -4,9 +4,8 @@
 
 #include "fwd.hpp"
 #include "config_physics.hpp"
-#include <math/math.hpp>
+#include <math/fwd.hpp>
 #include <utilities/alloc.hpp>
-#include <utilities/array.hpp>
 #include <stdint.h>
 #include <stdlib.h>
 
@@ -55,8 +54,12 @@ void
 world_think(Physics_data *phys);
 
 
-void*
-world_get_colliding_items(Physics_data *phys);
+size_t
+world_get_number_of_colliding_items(const Physics_data *phys);
+
+
+const Contact*
+world_get_colliding_items(const Physics_data *phys);
 
 
 void

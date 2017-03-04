@@ -40,9 +40,11 @@ namespace Entity_component {
 
 // ------------------------------------------------- [ Transform Component ] --
 
+
 bool
-set_transform(const Core::Entity_ref &ref,
-              const Core::Transform &transform)
+set_transform(
+  const Core::Entity_ref &ref,
+  const Core::Transform &transform)
 {
   if(!ref)
   {
@@ -118,6 +120,7 @@ has_transform(const Core::Entity_ref &ref)
 
 
 // -------------------------------------------------- [ Renderer Component ] --
+
 
 bool
 set_renderer(const Core::Entity_ref &ref,
@@ -639,6 +642,7 @@ has_camera(const Core::Entity_ref &ref)
 
 
 // ----------------------------------------------------- [ Light Component ] --
+
 
 bool
 set_light(const Core::Entity_ref &ref,
