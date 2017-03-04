@@ -127,8 +127,8 @@ public:
   push_back(const T &item)
   {
     m_end < m_capacity ?
-        _fast_push(item) :
-        _slow_push(item);
+        _fast_push(static_cast<T>(item)) :
+        _slow_push(static_cast<T>(item));
   }
 
   template<typename ...Args>
