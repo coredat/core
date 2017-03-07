@@ -45,8 +45,16 @@ const uint32_t*
 get_node_tags(const Graph_data *graph);
 
 
+const uintptr_t*
+get_user_data(const Graph_data *graph);
+
+
 const math::transform*
-get_transforms(const Graph_data *graph);
+get_world_transforms(const Graph_data *graph);
+
+
+const math::transform*
+get_local_transforms(const Graph_data *graph);
 
 
 const math::aabb*
@@ -57,7 +65,19 @@ get_aabbs(const Graph_data *graph);
 
 
 uint32_t
-node_add(Graph_data *graph);
+node_add(Graph_data *graph, const uint32_t parent = 0);
+
+
+uint32_t
+node_get_parent(Graph_data *graph, const uint32_t node);
+
+
+uint32_t
+node_get_child_count(Graph_data *graph, const uint32_t node);
+
+
+uint32_t*
+node_get_children(Graph_data *graph, const uint32_t node);
 
 
 bool

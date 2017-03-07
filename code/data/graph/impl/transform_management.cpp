@@ -41,7 +41,7 @@ transform_set(
   if(graph->find_index(node, &index))
   {
     math::transform *curr_trans(
-      graph->node_transform.data()
+      graph->node_world_transform.data()
     );
     
     LIB_ASSERT(curr_trans);
@@ -77,6 +77,7 @@ transform_get(const Graph_data *graph,
   // -- Param Check -- //
   LIB_ASSERT(graph);
   LIB_ASSERT(node);
+  LIB_ASSERT(out_transform);
 
   // -- Get Data -- //
   size_t index = 0;
@@ -84,7 +85,7 @@ transform_get(const Graph_data *graph,
   if(graph->find_index(node, &index))
   {
     const math::transform *curr_trans(
-      graph->node_transform.data()
+      graph->node_world_transform.data()
     );
     
     LIB_ASSERT(curr_trans);

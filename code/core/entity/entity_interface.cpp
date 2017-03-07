@@ -27,14 +27,7 @@
 #include <core/entity/entity_components.hpp>
 
 #include <common/error_strings.hpp>
-#include <utilities/logging.hpp>
-#include <utilities/assert.hpp>
-
-
-namespace
-{
-  std::atomic<uint32_t> entity_instance_counter(0);
-}
+#include <utilities/utilities.hpp>
 
 
 namespace Core {

@@ -30,8 +30,6 @@ initialize(const size_t inital_graph_size,
   Graph_data *graph = new(data) Graph_data();
   LIB_ASSERT(graph);
   
-  graph->node_instance_counter = 1; // Root node is 1;
-  
   // -- Initalize buffers and get memory -- //
   {
     bool setup = true;
@@ -46,6 +44,9 @@ initialize(const size_t inital_graph_size,
       return nullptr;
     }
   }
+  
+//  node_add(graph, 0); // Do we need an actual node?
+  graph->node_instance_counter = 1;
   
   LOG_INFO("Scene Graph setup successfully");
   

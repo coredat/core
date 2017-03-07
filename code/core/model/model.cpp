@@ -61,7 +61,10 @@ Model::Model(const char *filename)
 : m_impl(new Impl)
 {
   const std::string file(filename);
-  const std::string name(lib::string::get_dir_from_filepath(file));
+  
+  char name[512];
+  memset(name, 0, sizeof(name));
+  lib::string::filename_from_path(filename, name, 512);
   
   if(!lib::file::exists(filename))
   {
@@ -83,7 +86,7 @@ Model::Model(const char *filename)
     
     size_t search_id = 0;
     
-    if(Common::fixed_string_search(name.c_str(),
+    if(Common::fixed_string_search(name,
                                    Data::mesh_get_name_data(mesh_data),
                                    Data::mesh_get_name_stride(),
                                    Data::mesh_get_size(mesh_data),
@@ -138,7 +141,7 @@ Model::Model(const char *filename)
       const uint32_t id = Data::mesh_push(mesh_data);
       Data::mesh_set_mesh(mesh_data, id, &mesh);
       Data::mesh_set_aabb(mesh_data, id, &model_aabb);
-      Data::mesh_set_name(mesh_data, id, name.c_str(), strlen(name.c_str()));
+      Data::mesh_set_name(mesh_data, id, name, strlen(name));
       
       m_impl->mesh_id = id;
 

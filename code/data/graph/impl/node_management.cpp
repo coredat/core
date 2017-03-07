@@ -12,32 +12,157 @@ namespace Graph {
 
 
 uint32_t
-node_add(Graph_data *graph)
+node_add(Graph_data *graph, const uint32_t parent_id)
 {
   // -- Param Check -- //
   LIB_ASSERT(graph);
   
-  // -- Add New Node -- //
+  // -- Find parent -- //
+  size_t insert_point = 0;
+  bool has_parent = false;
+  {
+    const uint32_t *node_data = graph->node_ids.data();
+    const size_t    node_count = graph->node_ids.size();
+  
+    if(lib::key::linear_search(
+        parent_id,
+        node_data,
+        node_count,
+        &insert_point))
+    {
+      insert_point += 1;
+      has_parent = true;
+    }
+    else
+    {
+      insert_point = graph->node_ids.size();
+    }
+  }
+  
+  // -- Insert New Entity -- //
+  const uint32_t new_instance = graph->node_instance_counter++;
+  
+  const size_t node_count = graph->node_ids.size();
+  
+  if(insert_point < node_count)
+  {
+    graph->node_ids.insert(
+      insert_point,
+      new_instance
+    );
+    
+    graph->parent_ids.insert(
+      insert_point,
+      parent_id
+    );
+    
+    graph->node_callbacks.insert(
+      insert_point,
+      uintptr_t{0},
+      uintptr_t{0}
+    );
+    
+    graph->node_aabb.insert(
+      insert_point,
+      math::vec3_zero(),
+      math::vec3_zero()
+    );
+    
+    graph->node_components.insert(
+      insert_point,
+      uint32_t{0}
+    );
+    
+    graph->node_tags.insert(
+      insert_point,
+      uint32_t{0}
+    );
+    
+    graph->node_world_transform.insert(
+      insert_point,
+      math::vec3_zero(),
+      math::vec3_one(),
+      math::quat_init()
+    );
+    
+    graph->node_world_transform.insert(
+      insert_point,
+      math::vec3_zero(),
+      math::vec3_one(),
+      math::quat_init()
+    );
+    
+    graph->node_user_data.insert(
+      insert_point,
+      uintptr_t{0}
+    );
+    
+    graph->node_collision_callbacks.insert(
+      insert_point,
+      uintptr_t{0},
+      uintptr_t{0}
+    );
 
-  const uint32_t new_instance = ++graph->node_instance_counter;
-  
-  graph->node_ids.emplace_back(new_instance);
-  
-  graph->node_callbacks.emplace_back(uintptr_t{0},uintptr_t{0});
-  graph->node_aabb.emplace_back(
-    math::vec3_zero(),
-    math::vec3_zero()
-  );
-  graph->node_components.emplace_back(uint32_t{0});
-  graph->node_tags.emplace_back(uint32_t{0});
-  graph->node_transform.emplace_back(
-    math::vec3_zero(),
-    math::vec3_one(),
-    math::quat_init()
-  );
-  graph->node_user_data.emplace_back(uintptr_t{0});
-  graph->node_collision_callbacks.emplace_back(uintptr_t{0},uintptr_t{0});
-  graph->node_message_callbacks.emplace_back(uintptr_t{0},uintptr_t{0});
+    graph->node_message_callbacks.insert(
+      insert_point,
+      uintptr_t{0},
+      uintptr_t{0}
+    );
+  }
+  else
+  {
+    graph->node_ids.emplace_back(
+      new_instance
+    );
+    
+    graph->parent_ids.emplace_back(
+      parent_id
+    );
+    
+    graph->node_callbacks.emplace_back(
+      uintptr_t{0},
+      uintptr_t{0}
+    );
+    
+    graph->node_aabb.emplace_back(
+      math::vec3_zero(),
+      math::vec3_zero()
+    );
+    
+    graph->node_components.emplace_back(
+      uint32_t{0}
+    );
+    
+    graph->node_tags.emplace_back(
+      uint32_t{0}
+    );
+    
+    graph->node_world_transform.emplace_back(
+      math::vec3_zero(),
+      math::vec3_one(),
+      math::quat_init()
+    );
+    
+    graph->node_world_transform.emplace_back(
+      math::vec3_zero(),
+      math::vec3_one(),
+      math::quat_init()
+    );
+    
+    graph->node_user_data.emplace_back(
+      uintptr_t{0}
+    );
+    
+    graph->node_collision_callbacks.emplace_back(
+      uintptr_t{0},
+      uintptr_t{0}
+    );
+
+    graph->node_message_callbacks.emplace_back(
+      uintptr_t{0},
+      uintptr_t{0}
+    );
+  }
   
   // Cache as following calls will likely setup the properties //
   graph->last_instance = new_instance;
@@ -61,10 +186,12 @@ node_remove(Graph_data *graph,
   if(graph->find_index(node, &index))
   {
     graph->node_ids.erase(index);
+    graph->parent_ids.erase(index);
     graph->node_aabb.erase(index);
     graph->node_components.erase(index);
     graph->node_tags.erase(index);
-    graph->node_transform.erase(index);
+    graph->node_world_transform.erase(index);
+    graph->node_local_transform.erase(index);
     graph->node_user_data.erase(index);
     graph->node_collision_callbacks.erase(index);
     graph->node_message_callbacks.erase(index);
@@ -204,35 +331,49 @@ namespace Graph {
 const uint32_t*
 get_node_ids(const Graph_data *graph)
 {
-  return (const uint32_t*)graph->node_ids.data();
+  return graph->node_ids.data();
 }
 
 
 const uint32_t*
 get_components(const Graph_data *graph)
 {
-  return (const uint32_t*)graph->node_components.data();
+  return graph->node_components.data();
 }
 
 
 const uint32_t*
 get_node_tags(const Graph_data *graph)
 {
-  return (const uint32_t*)graph->node_tags.data();
+  return graph->node_tags.data();
+}
+
+
+const uintptr_t*
+get_user_data(const Graph_data *graph)
+{
+  return graph->node_user_data.data();
 }
 
 
 const math::transform*
-get_transforms(const Graph_data *graph)
+get_world_transforms(const Graph_data *graph)
 {
-  return (const math::transform*)graph->node_transform.data();
+  return graph->node_world_transform.data();
+}
+
+
+const math::transform*
+get_local_transforms(const Graph_data *graph)
+{
+  return graph->node_local_transform.data();
 }
 
 
 const math::aabb*
 get_aabbs(const Graph_data *graph)
 {
-  return (const math::aabb*)graph->node_aabb.data();
+  return graph->node_aabb.data();
 }
 
 
