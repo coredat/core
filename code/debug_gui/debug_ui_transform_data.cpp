@@ -33,7 +33,7 @@ display_transform_data(const Data::Graph::Graph_data *data)
     const size_t data_size = Data::Graph::node_count(data);
     
     const uint32_t *ids = Data::Graph::get_node_ids(data);
-    const math::transform *transforms = Data::Graph::get_transforms(data);
+    const math::transform *transforms = Data::Graph::get_world_transforms(data);
     const math::aabb *aabbs = Data::Graph::get_aabbs(data);
     
     

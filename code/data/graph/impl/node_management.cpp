@@ -19,7 +19,6 @@ node_add(Graph_data *graph, const uint32_t parent_id)
   
   // -- Find parent -- //
   size_t insert_point = 0;
-  bool has_parent = false;
   {
     const uint32_t *node_data = graph->node_ids.data();
     const size_t    node_count = graph->node_ids.size();
@@ -31,7 +30,6 @@ node_add(Graph_data *graph, const uint32_t parent_id)
         &insert_point))
     {
       insert_point += 1;
-      has_parent = true;
     }
     else
     {
@@ -40,7 +38,7 @@ node_add(Graph_data *graph, const uint32_t parent_id)
   }
   
   // -- Insert New Entity -- //
-  const uint32_t new_instance = graph->node_instance_counter++;
+  const uint32_t new_instance = ++graph->node_instance_counter;
   
   const size_t node_count = graph->node_ids.size();
   
