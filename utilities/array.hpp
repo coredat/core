@@ -122,7 +122,7 @@ public:
       _fast_push(static_cast<T&&>(item)) :
       _slow_push(static_cast<T&&>(item));
   }
-
+  
   void
   push_back(const T &item)
   {
@@ -139,7 +139,7 @@ public:
       _fast_emplace(args...) :
       _slow_emplace(args...);
   }
-
+  
   T*
   insert(const size_t i, const T &item)
   {
