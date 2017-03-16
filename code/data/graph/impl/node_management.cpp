@@ -78,7 +78,7 @@ namespace Graph {
 
 
 uint32_t
-node_add(Graph_data *graph)
+node_add(Graph_data *graph, const math::transform *local_trans)
 {
   // -- Param Check -- //
   LIB_ASSERT(graph);
@@ -106,7 +106,7 @@ bool
 node_set_parent(
   Graph_data *graph,
   const uint32_t this_id,
-  const uint32_t parent)
+  const uint32_t parent_id)
 {
   // -- Param Check -- //
   LIB_ASSERT(graph);

@@ -65,7 +65,7 @@ get_aabbs(const Graph_data *graph);
 
 
 uint32_t
-node_add(Graph_data *graph);
+node_add(Graph_data *graph, const math::transform *local_trans = nullptr);
 
 
 bool
