@@ -281,7 +281,69 @@ Entity_interface::get_id() const
   return m_id;
 }
 
+
+// ------------------------------------------------------------ [ Relations ]--
+
+
+bool
+Entity_interface::set_parent(const Core::Entity_ref other)
+{
+  auto world_data = Core_detail::world_index_get_world_data(1);
+  
+  const bool success = Data::Graph::node_set_parent(
+    world_data->scene_graph,
+    m_id,
+    other.get_id()
+  );
+  
+  return success;
+}
+
+
+Core::Entity_ref
+Entity_interface::get_parent() const
+{
+  auto world_data = Core_detail::world_index_get_world_data(1);
+  
+  const uint32_t parent_id = Data::Graph::node_get_parent(
+    world_data->scene_graph,
+    m_id
+  );
+  
+  return Core::Entity_ref(parent_id);
+}
+
+
+  
+uint32_t
+Entity_interface::get_child_count() const
+{
+  auto world_data = Core_detail::world_index_get_world_data(1);
+  
+  return Data::Graph::node_get_child_count(
+    world_data->scene_graph,
+    m_id
+  );
+}
+
+
+Core::Entity_ref
+Entity_interface::get_child(const size_t i)
+{
+  auto world_data = Core_detail::world_index_get_world_data(1);
+  
+  const uint32_t child = Data::Graph::node_get_child(
+    world_data->scene_graph,
+    m_id,
+    i
+  );
+  
+  return Core::Entity_ref(child);
+}
+
+
 // ------------------------------------------------------------- [ Messages ]--
+
 
 void
 Entity_interface::on_message_callback(const on_message_callback_fn &callback,

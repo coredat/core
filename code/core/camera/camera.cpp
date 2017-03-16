@@ -27,7 +27,7 @@ Camera::Camera(const uint32_t width,
 , m_near_plane(near_plane)
 , m_far_plane(far_plane)
 , m_clear_flags(Camera_clear::color | Camera_clear::depth)
-, m_clear_color(0)
+, m_clear_color(0x223300FF)
 , m_cull_mask(-1)
 , m_priority(1)
 {

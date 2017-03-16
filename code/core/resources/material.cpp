@@ -35,6 +35,17 @@ Material::Material(const uint32_t id)
 }
 
 
+Material::Material(
+  const char *name,
+  const Shader &shader,
+  const Texture &texture)
+: Material(name)
+{
+  set_shader(shader);
+  set_map_01(texture);
+}
+
+
 Material::Material(const char *name)
 : m_impl(new Impl())
 {

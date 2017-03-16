@@ -29,8 +29,13 @@ struct Graph_callback
 
 struct Graph_data
 {
-  lib::array<uint32_t, init_stack_size> node_ids;
-  lib::array<uint32_t, init_stack_size> parent_ids;
+  /*
+    Graph guts
+  */
+  lib::array<uint32_t>        node_ids;
+  lib::array<uint64_t>        node_data;
+  lib::array<math::transform> local_transforms;
+  lib::array<math::transform> world_transforms;
   
   /*
     Internal use.

@@ -42,13 +42,17 @@ protected:
 
 public:
   
+  
   // ----------------------------------------------------------- [ Lifetime ]--
+  
   
   void                        destroy();
   bool                        is_valid() const;
                               operator bool() const;
 
+
   // ------------------------------------------------------------ [ General ]--
+
 
   void                        set_user_data(const uintptr_t user_data);
   uintptr_t                   get_user_data() const;
@@ -64,7 +68,19 @@ public:
   
   uint32_t                    get_id() const;
   
+  
+  // ---------------------------------------------------------- [ Relations ]--
+  
+  
+  bool                        set_parent(const Core::Entity_ref other);
+  Core::Entity_ref            get_parent() const;
+  
+  uint32_t                    get_child_count() const;
+  Core::Entity_ref            get_child(const size_t i);
+  
+  
   // ----------------------------------------------------------- [ Messages ]--
+  
   
   void                        on_message_callback(
                                 const on_message_callback_fn &callback,
@@ -77,23 +93,31 @@ public:
                                 const uintptr_t data = 0
                               ) const;
   
+  
   // ---------------------------------------------------------- [ Transform ]--
+  
   
   bool                        has_transform() const;
   Core::Transform             get_transform() const;
   void                        set_transform(const Core::Transform &trans);
   
+  
   // ------------------------------------------------------------- [ Camera ]--
+  
   
   bool                        has_camera() const;
   Core::Camera                get_camera() const;
   void                        set_camera(const Core::Camera &camera);
 
+  
   // ----------------------------------------------------------- [ Renderer ]--
+  
   
   bool                        has_renderer() const;
   
+  
   // ---------------------------------------------------------- [ Rigidbody ]--
+  
   
   bool                        has_rigidbody() const;
   Core::Rigidbody             get_rigidbody() const;
@@ -103,13 +127,17 @@ public:
                                 const on_collision_callback_fn &callback
                               );
   
+  
   // ----------------------------------------------------------- [ Lighting ]--
+  
   
   bool                        has_light() const;
   Core::Point_light           get_light() const;
   void                        set_light(const Core::Point_light &light);
   
+  
   // ----------------------------------------------------------- [ Equality ]--
+  
   
   bool                        operator ==(const Entity_interface &other) const;
   bool                        operator !=(const Entity_interface &other) const;

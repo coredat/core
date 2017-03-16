@@ -25,6 +25,9 @@ public:
 
   explicit              Material();
   explicit              Material(const char *name);
+  explicit              Material(const char *name,
+                                 const Shader &shader,
+                                 const Texture &texture);
                         ~Material();
   
                         Material(const Material &mat);

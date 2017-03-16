@@ -65,7 +65,11 @@ get_aabbs(const Graph_data *graph);
 
 
 uint32_t
-node_add(Graph_data *graph, const uint32_t parent = 0);
+node_add(Graph_data *graph);
+
+
+bool
+node_set_parent(Graph_data *graph, const uint32_t node, const uint32_t parent);
 
 
 uint32_t
@@ -76,8 +80,8 @@ uint32_t
 node_get_child_count(Graph_data *graph, const uint32_t node);
 
 
-uint32_t*
-node_get_children(Graph_data *graph, const uint32_t node);
+uint32_t
+node_get_child(Graph_data *graph, const uint32_t node, const size_t i);
 
 
 bool
