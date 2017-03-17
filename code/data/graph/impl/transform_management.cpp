@@ -10,9 +10,10 @@ namespace Graph {
 
 
 uint32_t
-transform_set_callback(Graph_data *graph,
-                       const uintptr_t user_data,
-                       const transform_callback_fn callback)
+transform_set_callback(
+  Graph_data *graph,
+  const uintptr_t user_data,
+  const transform_callback_fn callback)
 {
   // -- Param Check -- //
   LIB_ASSERT(graph);
@@ -41,7 +42,7 @@ transform_set(
   if(graph->find_index(node, &index))
   {
     math::transform *curr_trans(
-      graph->node_world_transform.data()
+      graph->world_transforms.data()
     );
     
     LIB_ASSERT(curr_trans);
@@ -85,7 +86,7 @@ transform_get(const Graph_data *graph,
   if(graph->find_index(node, &index))
   {
     const math::transform *curr_trans(
-      graph->node_world_transform.data()
+      graph->world_transforms.data()
     );
     
     LIB_ASSERT(curr_trans);

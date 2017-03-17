@@ -92,6 +92,10 @@ bool
 node_exists(const Graph_data *graph, const uint32_t node);
 
 
+size_t
+node_count(const Graph_data *graph);
+
+
 bool
 node_add_destroy_callback(Graph_data *graph, const uintptr_t callback);
 
@@ -118,10 +122,6 @@ node_get_collision_callback(
 
 bool
 node_remove_collision_callback(Graph_data *graph, const uint32_t node);
-
-
-size_t
-node_count(const Graph_data *graph);
 
 
 // -----------------------------------------------[ Node Component Bitfield ]--

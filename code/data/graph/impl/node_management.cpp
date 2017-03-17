@@ -98,6 +98,47 @@ node_add(Graph_data *graph, const math::transform *local_trans)
   graph->local_transforms.insert(insert_point, *trans);
   graph->world_transforms.insert(insert_point, *trans);
 
+  graph->node_callbacks.insert(
+    insert_point,
+    Graph_callback{
+      uintptr_t{0},
+      uintptr_t{0}
+    }
+  );
+  
+  graph->node_aabb.insert(
+    insert_point,
+    math::aabb_init()
+  );
+  
+  graph->node_components.insert(
+    insert_point,
+    uint32_t{0}
+  );
+  
+  graph->node_tags.insert(
+    insert_point,
+    uint32_t{0}
+  );
+
+  graph->node_user_data.insert(
+    insert_point,
+    uintptr_t{0}
+  );
+  
+  graph->node_collision_callbacks.insert(
+    insert_point,
+    Graph_callback{ uintptr_t{0},
+    uintptr_t{0}}
+  );
+
+  graph->node_message_callbacks.insert(
+    insert_point,
+    Graph_callback{uintptr_t{0},
+    uintptr_t{0}}
+  );
+
+
   return new_instance;
 }
 
@@ -181,8 +222,8 @@ node_set_parent(
       {
         if(!lib::key::linear_search(
           parent_id,
-          graph->nodes.data(),
-          graph->nodes.size(),
+          graph->node_ids.data(),
+          graph->node_ids.size(),
           &parent_index))
         {
           return false;
@@ -199,7 +240,7 @@ node_set_parent(
     /*
       Insert the data into the new positions.
     */
-    graph->nodes.insert(
+    graph->node_ids.insert(
       insert_index,
       move_nodes.data(),
       nodes_to_move
@@ -296,7 +337,7 @@ node_get_parent(Graph_data *graph, const uint32_t node)
   size_t index = 0;
   
   if(lib::key::linear_search(
-      this_id,
+      node,
       graph->node_ids.data(),
       graph->node_ids.size(),
       &index)
@@ -316,7 +357,7 @@ node_get_child_count(Graph_data *graph, const uint32_t node)
   size_t index = 0;
   
   if(lib::key::linear_search(
-      this_id,
+      node,
       graph->node_ids.data(),
       graph->node_ids.size(),
       &index))
@@ -351,6 +392,24 @@ node_remove(Graph_data *graph, const uint32_t node)
 bool
 node_exists(const Graph_data *graph, const uint32_t node)
 {
+  bool found = false;
+  
+  if(lib::key::linear_search(
+    node,
+    graph->node_ids.data(),
+    graph->node_ids.size()))
+  {
+    found = true;
+  }
+  
+  return found;
+}
+
+
+size_t
+node_count(const Graph_data *graph)
+{
+  return graph->node_ids.size();
 }
 
 
@@ -700,14 +759,14 @@ get_user_data(const Graph_data *graph)
 const math::transform*
 get_world_transforms(const Graph_data *graph)
 {
-  return graph->node_world_transform.data();
+  return graph->world_transforms.data();
 }
 
 
 const math::transform*
 get_local_transforms(const Graph_data *graph)
 {
-  return graph->node_local_transform.data();
+  return graph->local_transforms.data();
 }
 
 

@@ -7,15 +7,6 @@
 #include <stddef.h>
 
 
-namespace {
-
-
-constexpr size_t init_stack_size = 0;
-
-
-} // anon ns
-
-
 namespace Data {
 namespace Graph {
 
@@ -40,19 +31,17 @@ struct Graph_data
   /*
     Internal use.
   */
-  lib::array<Graph_callback, init_stack_size> node_callbacks;
-  lib::array<math::aabb, init_stack_size> node_aabb;
-  lib::array<uint32_t, init_stack_size> node_components;
+  lib::array<Graph_callback> node_callbacks;
+  lib::array<math::aabb> node_aabb;
+  lib::array<uint32_t> node_components;
   
   /*
     External and Internal use.
   */
-  lib::array<uint32_t, init_stack_size> node_tags;
-  lib::array<math::transform, init_stack_size> node_world_transform;
-  lib::array<math::transform, init_stack_size> node_local_transform;
-  lib::array<uintptr_t, init_stack_size> node_user_data;
-  lib::array<Graph_callback, init_stack_size> node_collision_callbacks;
-  lib::array<Graph_callback, init_stack_size> node_message_callbacks;
+  lib::array<uint32_t> node_tags;
+  lib::array<uintptr_t> node_user_data;
+  lib::array<Graph_callback> node_collision_callbacks;
+  lib::array<Graph_callback> node_message_callbacks;
   
   /*
     Instance counter.
